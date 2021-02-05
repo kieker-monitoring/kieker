@@ -17,7 +17,8 @@
 package kieker.model.system.model;
 
 /**
- * This class represents an execution within the trace analysis tool.
+ * This class represents an execution of an operation of an allocated component.
+ * The class is used within the trace analysis tool.
  *
  * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used
  * for the timestamps are made

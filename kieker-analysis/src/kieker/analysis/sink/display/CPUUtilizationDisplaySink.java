@@ -34,7 +34,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.8
  */
-public class CPUUtilizationDisplayFilter extends AbstractConsumerStage<CPUUtilizationRecord> {
+public class CPUUtilizationDisplaySink extends AbstractConsumerStage<CPUUtilizationRecord> {
 
 	public static final String TOTAL_UTILIZATION = "totalUtilization";
 	public static final String IDLE = "idle";
@@ -59,7 +59,7 @@ public class CPUUtilizationDisplayFilter extends AbstractConsumerStage<CPUUtiliz
 	 * @param recordsTimeUnit
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
-	public CPUUtilizationDisplayFilter(final int numberOfEntries, final Number[] warningIntervals, final TimeUnit recordsTimeUnit) {
+	public CPUUtilizationDisplaySink(final int numberOfEntries, final Number[] warningIntervals, final TimeUnit recordsTimeUnit) {
 		this.warningIntervals = warningIntervals.clone();
 		this.recordsTimeUnit = recordsTimeUnit;
 
@@ -83,12 +83,12 @@ public class CPUUtilizationDisplayFilter extends AbstractConsumerStage<CPUUtiliz
 		this.meterGauge.setIntervals(id, Arrays.asList(this.warningIntervals), Arrays.asList("66cc66", "E7E658", "cc6666"));
 		this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
 
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, minutesAndSeconds, record.getTotalUtilization() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IDLE, minutesAndSeconds, record.getIdle() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, minutesAndSeconds, record.getIrq() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, minutesAndSeconds, record.getNice() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, minutesAndSeconds, record.getSystem() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, minutesAndSeconds, record.getUser() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.TOTAL_UTILIZATION, minutesAndSeconds, record.getTotalUtilization() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.IDLE, minutesAndSeconds, record.getIdle() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.IRQ, minutesAndSeconds, record.getIrq() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.NICE, minutesAndSeconds, record.getNice() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.SYSTEM, minutesAndSeconds, record.getSystem() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplaySink.USER, minutesAndSeconds, record.getUser() * 100);
 	}
 
 	@Display(name = "Meter Gauge CPU total utilization Display")

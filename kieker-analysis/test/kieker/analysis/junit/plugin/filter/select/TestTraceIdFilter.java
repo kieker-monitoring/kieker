@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.stage.select.traceidfilter.TraceIdFilter;
+import kieker.analysis.stage.select.traceidfilter.TraceIdFilterOld;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -62,7 +62,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
-		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
+		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
@@ -96,7 +96,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
-		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
+		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
@@ -124,7 +124,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final TraceIdFilter traceidFilter = new TraceIdFilter(true, new Long[0]); // i.e. pass all
+		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(true, new TreeSet<>()); // i.e. pass all
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,

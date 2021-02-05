@@ -22,7 +22,9 @@ package kieker.tools.trace.analysis;
  * @author Robert von Massow, Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 replaced in new toot setup
  */
+@Deprecated
 public final class StringConstants {
 
 	/** Command for the input directories containing monitoring records. */

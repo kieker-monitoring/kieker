@@ -37,7 +37,7 @@ import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysis.trace.graph.dot.DotTraceGraphFileWriterStage;
-import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.tt.recordreading.ReadingComposite;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
@@ -91,7 +91,7 @@ public class ExampleConfiguration extends Configuration {
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel,
+		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 

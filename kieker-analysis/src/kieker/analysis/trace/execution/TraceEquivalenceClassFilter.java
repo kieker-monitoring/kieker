@@ -15,12 +15,13 @@
  ***************************************************************************/
 package kieker.analysis.trace.execution;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.MessageTrace;
@@ -34,7 +35,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.2
  */
-public class TraceEquivalenceClassFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
+public class TraceEquivalenceClassFilter extends AbstractTraceProcessingStage<ExecutionTrace> {
 
 	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
@@ -47,6 +48,7 @@ public class TraceEquivalenceClassFilter extends AbstractTraceProcessingFilter<E
 
 	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
 	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
+	private final OutputPort<Map<ExecutionTrace, Integer>> equivalenceMapOutputPort = this.createOutputPort();
 
 	private final TraceEquivalenceClassModes equivalenceMode;
 
@@ -132,5 +134,24 @@ public class TraceEquivalenceClassFilter extends AbstractTraceProcessingFilter<E
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}
 		return map;
+	}
+
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		this.equivalenceMapOutputPort.send(this.getEquivalenceClassMap());
+		super.onTerminating();
+	}
+
+	public OutputPort<Map<ExecutionTrace, Integer>> getEquivalenceMapOutputPort() {
+		return this.equivalenceMapOutputPort;
+	}
+
+	public OutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+		return this.executionTraceOutputPort;
+	}
+
+	public OutputPort<MessageTrace> getMessageTraceOutputPort() {
+		return this.messageTraceOutputPort;
 	}
 }

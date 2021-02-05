@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.analysis.trace.execution.ExecutionEventProcessingException;
 import kieker.common.util.dataformat.LoggingTimestampConverter;
 import kieker.model.repository.SystemModelRepository;
@@ -36,15 +36,20 @@ import kieker.model.system.model.exceptions.InvalidTraceException;
 import teetime.framework.OutputPort;
 
 /**
- * This is a trace reconstruction filter.
- * TODO documentation.
+ * Uses the incoming data to enrich the connected repository with the reconstructed traces.
+ *
+ * Input port: @{link Execution}
+ * Output port:
+ * - messageTraceOutputPort @{link MessageTrace}
+ * - executionTraceOutputPort @{link ExecutionTrace}
+ * - invalidExecutionTraceOutputPort @{linke InvalidExecutiontrace}
  *
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to teetime
  *
  * @since 1.1
  */
-public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Execution> {
+public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execution> {
 
 	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
 	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
@@ -102,7 +107,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 	 *            max time duration for a trace, if null
 	 *            Long.MAX_VALUE
 	 */
-	public TraceReconstructionFilter(final SystemModelRepository repository, final TimeUnit timeunit,
+	public TraceReconstructionStage(final SystemModelRepository repository, final TimeUnit timeunit,
 			final boolean ignoreInvalidTraces, final Long maxTraceDuration) {
 		super(repository);
 
@@ -180,22 +185,19 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 				this.logger.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
-
 	}
 
 	/**
-	 * Transforms the execution trace is delivers the trace to the output ports of
-	 * this filter (message trace and execution trace output ports, or invalid
+	 * Transforms the execution trace is delivers the trace to the output ports
+	 * of this filter (message trace and execution trace output ports, or invalid
 	 * execution trace output port respectively).
 	 *
 	 * @param executionTrace
 	 *            The execution trace to transform.
 	 *
 	 * @throws ExecutionEventProcessingException
-	 *             if the passed execution trace is
-	 *             invalid and this filter is
-	 *             configured to fail on the
-	 *             occurrence of invalid traces.
+	 *             if the passed execution trace is invalid and this filter is
+	 *             configured to fail on the occurrence of invalid traces.
 	 */
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
@@ -230,7 +232,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					this.logger.warn("Filter configurred to terminate on first invalid trace.");
+					this.logger.warn("Filter was configured to terminate at the *first* invalid trace.");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
 					this.logger.error(transformationError); // do not pass 'ex' to log.error because this makes the
@@ -274,13 +276,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 
 	@Override
 	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
 		synchronized (this) {
 			try {
 				this.terminated = true;
 				this.processTimeoutQueue();
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				this.logger.error("Error processing timeout queue", ex);
+				this.logger.error("Error processing timeout queue: {}", ex);
 			}
 		}
 		super.onTerminating();

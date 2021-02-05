@@ -54,11 +54,11 @@ import teetime.framework.OutputPort;
  *
  * @since 1.6
  */
-public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter<TraceEventRecords> {
+public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTraceProcessingStage<TraceEventRecords> {
 
 	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
 	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
-	private final OutputPort<InvalidExecutionTrace> invlaidExecutionTraceOutputPort = this
+	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = this
 			.createOutputPort(InvalidExecutionTrace.class);
 
 	private final boolean enhanceJavaConstructors;
@@ -75,7 +75,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 * @param enhanceCallDetection
 	 * @param ignoreAssumedCalls
 	 */
-	public TraceEventRecords2ExecutionAndMessageTraceFilter(final SystemModelRepository repository,
+	public TraceEventRecords2ExecutionAndMessageTraceStage(final SystemModelRepository repository,
 			final boolean enhanceJavaConstructors, final boolean enhanceCallDetection,
 			final boolean ignoreAssumedCalls) {
 		super(repository);
@@ -83,6 +83,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		this.enhanceJavaConstructors = enhanceJavaConstructors;
 		this.enhanceCallDetection = enhanceCallDetection;
 		this.ignoreAssumedCalls = ignoreAssumedCalls;
+	}
+
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		super.onTerminating();
 	}
 
 	@Override
@@ -110,7 +116,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 						traceId);
 				continue; // simply ignore wrong event
 			}
-			try { // handle all cases (more specific classes should be handled before less
+			try { // handle all cases (more specific classes must be handled before less
 					// specific ones)
 					// Before Events
 				if (BeforeConstructorEvent.class.isAssignableFrom(event.getClass())) {
@@ -140,7 +146,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				}
 			} catch (final InvalidTraceException ex) {
 				this.logger.error("Failed to reconstruct trace.", ex);
-				this.invlaidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
+				this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 				return;
 			}
 		}
@@ -154,7 +160,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			this.logger.warn("Failed to convert to message trace: {}", ex.getMessage()); // do not pass 'ex' to log.warn
 																							// because this makes the
 																							// output verbose (#584)
-			this.invlaidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
+			this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 		}
 	}
 
@@ -162,8 +168,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		return this.executionTraceOutputPort;
 	}
 
-	public OutputPort<InvalidExecutionTrace> getInvlaidExecutionTraceOutputPort() {
-		return this.invlaidExecutionTraceOutputPort;
+	public OutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
+		return this.invalidExecutionTraceOutputPort;
 	}
 
 	public OutputPort<MessageTrace> getMessageTraceOutputPort() {
@@ -267,7 +273,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			} else {
 				executionContext = classSignature;
 			}
-			final Execution execution = AbstractTraceAnalysisFilter.createExecutionByEntityNames(
+			final Execution execution = AbstractTraceAnalysisStage.createExecutionByEntityNames(
 					this.systemModelRepository, hostname, executionContext,
 					fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(), traceId,
 					sessionId, eoi, ess, tin, tout, assumed);

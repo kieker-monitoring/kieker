@@ -67,7 +67,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/** The name of the property determining the behavior of a full list. */
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
 	/** The default value for the behavior of a full list (drop oldest). */
-	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
+	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "DROP_OLDEST"; // must really be a String here
 
 	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
@@ -83,11 +83,11 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 */
 	public enum ListFullBehavior {
 		/** Drops the oldest entry. */
-		dropOldest,
+		DROP_OLDEST,
 		/** Ignores the given entry. */
-		ignore,
+		IGNORE,
 		/** Throws a runtime exception. */
-		error;
+		ERROR;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
 		} catch (final IllegalArgumentException ex) {
 			this.logger.warn("{} is no valid list full behavior! Using 'ignore' instead.", strListFullBehavior);
-			tmpListFullBehavior = ListFullBehavior.ignore;
+			tmpListFullBehavior = ListFullBehavior.IGNORE;
 		}
 		this.listFullBehavior = tmpListFullBehavior;
 
@@ -135,7 +135,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 			}
 		} else {
 			switch (this.listFullBehavior) {
-			case dropOldest:
+			case DROP_OLDEST:
 				synchronized (this.list) {
 					this.list.add(data);
 					if (this.list.size() > this.maxNumberOfEntries) {
@@ -143,14 +143,14 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					}
 				}
 				break;
-			case ignore:
+			case IGNORE:
 				synchronized (this.list) {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					}
 				}
 				break;
-			case error:
+			case ERROR:
 				synchronized (this.list) {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);

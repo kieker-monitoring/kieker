@@ -74,6 +74,8 @@ in the process.
 
   kieker.tools.source=kieker.tools.source.LogsReaderCompositeStage
   kieker.tools.source.LogsReaderCompositeStage.logDirectories=$INPUT_DIR
+  ## Buffer size
+  kieker.tools.source.LogsReaderCompositeStage.bufferSize = 8192
 
 .. code-block:: shell
 

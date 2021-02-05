@@ -107,7 +107,7 @@ task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: '
 // FIXME
 task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [rootProject.emfJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-jar.jar"
 	}
 	// from configurations.amqp
 
@@ -123,7 +123,7 @@ task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 
 // FIXME
 task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [rootProject.emfJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-jar.jar"
 	}
 	//from configurations.kafka
 
@@ -170,7 +170,7 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 // JVM sampler example
 task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}*.jar"
 	}
 	into 'monitoring/sampler-jvm/lib/'
 }
@@ -183,7 +183,7 @@ task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLib
 // Spring tutorial example
 task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-jar.jar"
 	}
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
@@ -199,7 +199,7 @@ task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copy
 // 
 task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-jar.jar"
 	}
 	into 'monitoring/probe-manual/lib/'
 }
@@ -247,7 +247,7 @@ task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: '
 
 task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-jar.jar"
 	}
 	into 'analysis/trace-analysis/lib/'
 }

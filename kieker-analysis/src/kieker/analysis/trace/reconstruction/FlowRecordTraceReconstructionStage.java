@@ -38,11 +38,11 @@ import teetime.stage.basic.AbstractTransformation;
  * @since 1.14
  *
  */
-public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, Trace> {
+public class FlowRecordTraceReconstructionStage extends AbstractTransformation<IFlowRecord, Trace> {
 
 	private final TraceReconstructor traceReconstructor;
 
-	public TraceReconstructorStage(final DeploymentModel deploymentModel, final TemporalUnit temporalUnit) {
+	public FlowRecordTraceReconstructionStage(final DeploymentModel deploymentModel, final TemporalUnit temporalUnit) {
 		this.traceReconstructor = new TraceReconstructor(deploymentModel, temporalUnit);
 	}
 

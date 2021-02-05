@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.tt.reader.filesystem.util.MappingException;
-import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.IMonitoringRecord;
@@ -47,25 +46,17 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 
 	public static final int DEFAULT_BUFFER_SIZE = 102400;
 
-	private static final String CHARSET = PREFIX + "charset";
-
-	private static final String DEFAULT_CHARSET = "UTF-8";
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatEventDeserializer.class);
 
 	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
 
 	private final CharBuffer charBuffer;
 
-	private final String charset; // NOPMD will be used for a future feature
-
 	private long lineNumber;
 
-	public DatEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
-		super(configuration, registry);
-		final int bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
-		this.charBuffer = CharBuffer.allocate(bufferSize);
-		this.charset = configuration.getStringProperty(CHARSET, DEFAULT_CHARSET);
+	public DatEventDeserializer(final Integer bufferSize, final ReaderRegistry<String> registry) {
+		super(registry);
+		this.charBuffer = CharBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize); // NOCS
 	}
 
 	@Override
@@ -114,8 +105,6 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 	 *             record creation failed
 	 * @throws UnknownRecordTypeException
 	 *             record type is unknown
-	 *
-	 *             TODO for UTF-8 strings this will not work properly, as these might use 2 bytes
 	 */
 	private int processBuffer(final byte[] buffer, final int offset,
 			final int numOfBufferedBytes, final OutputPort<IMonitoringRecord> outputPort) {

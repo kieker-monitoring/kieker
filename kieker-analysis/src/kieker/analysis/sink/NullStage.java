@@ -18,8 +18,6 @@ package kieker.analysis.sink;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.common.record.IMonitoringRecord;
-
 import teetime.framework.AbstractConsumerStage;
 
 /**
@@ -30,12 +28,15 @@ import teetime.framework.AbstractConsumerStage;
  * @since 1.15
  *
  */
-public class NullStage extends AbstractConsumerStage<IMonitoringRecord> {
+public class NullStage extends AbstractConsumerStage<Object> {
+
+	public static final int DEFAULT_REPORT_INTERVAL = 100000;
 
 	private long count;
 	private final boolean silent;
 
-	private final Map<Class<? extends IMonitoringRecord>, Integer> types = new HashMap<>(); // NOPMD no concurrent access
+	private final Map<Class<? extends Object>, Integer> types = new HashMap<>(); // NOPMD no concurrent access
+	private final int reportInterval;
 
 	/**
 	 * Null stage.
@@ -44,23 +45,45 @@ public class NullStage extends AbstractConsumerStage<IMonitoringRecord> {
 	 *            silent operations.
 	 */
 	public NullStage(final boolean silent) {
+		this(silent, DEFAULT_REPORT_INTERVAL);
+	}
+
+	/**
+	 * Null stage.
+	 *
+	 * @param silent
+	 *            silent operations.
+	 * @param reportInterval
+	 *            number of records to be received before logging
+	 */
+	public NullStage(final boolean silent, final int reportInterval) {
 		this.silent = silent;
+		this.reportInterval = reportInterval;
 	}
 
 	@Override
-	protected void execute(final IMonitoringRecord record) {
+	protected void onTerminating() {
+		this.logger.debug("Terminatiing {}", this.getClass().getCanonicalName());
+		super.onTerminating();
+	}
+
+	@Override
+	protected void execute(final Object record) {
 		if (!this.silent) {
 			Integer counter = this.types.get(record.getClass());
 			if (counter == null) {
 				counter = 1;
-				this.types.put(record.getClass(), counter);
 			} else {
 				counter++;
 			}
+			this.types.put(record.getClass(), counter);
 
 			this.count++;
-			if ((this.count % 100000) == 0) {
+			if ((this.count % this.reportInterval) == 0) {
 				this.logger.info("{} records received.", this.count);
+			}
+			if ((counter % this.reportInterval) == 0) {
+				this.logger.info("{} {} records received.", counter, record.getClass());
 			}
 		}
 	}
@@ -69,7 +92,7 @@ public class NullStage extends AbstractConsumerStage<IMonitoringRecord> {
 		return this.count;
 	}
 
-	public Map<Class<? extends IMonitoringRecord>, Integer> getTypes() {
+	public Map<Class<? extends Object>, Integer> getTypes() {
 		return this.types;
 	}
 

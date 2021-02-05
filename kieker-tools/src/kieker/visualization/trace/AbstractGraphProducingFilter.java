@@ -23,6 +23,8 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphEleme
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
 
+import teetime.framework.OutputPort;
+
 /**
  * Abstract superclass for graph-producing filters.
  *
@@ -43,6 +45,8 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
 
+	private final OutputPort<G> outputPort = this.createOutputPort();
+
 	/**
 	 * Creates a new graph-producing filter using the given configuration and the
 	 * given graph.
@@ -57,10 +61,9 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		this.graph = graph;
 	}
 
-	// @Override
-	// public void onTerminating() {
-	// this.outputPort.send(this.getGraph());
-	// }
+	public OutputPort<G> getOutputPort() {
+		return this.outputPort;
+	}
 
 	/**
 	 * Delivers the graph stored in this filter.

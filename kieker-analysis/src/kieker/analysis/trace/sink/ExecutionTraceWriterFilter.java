@@ -17,10 +17,11 @@ package kieker.analysis.trace.sink;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 
@@ -33,12 +34,14 @@ import kieker.model.system.model.ExecutionTrace;
  *
  * @since 1.2
  */
-public class ExecutionTraceWriterFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
+public class ExecutionTraceWriterFilter extends AbstractTraceProcessingStage<ExecutionTrace> {
 
 	private static final String ENCODING = "UTF-8";
 
 	private final String outputFilename;
 	private final PrintStream printStream;
+
+	private final OutputStream stream;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -55,7 +58,8 @@ public class ExecutionTraceWriterFilter extends AbstractTraceProcessingFilter<Ex
 		super(repository);
 
 		this.outputFilename = outputFile.getCanonicalPath();
-		this.printStream = new PrintStream(Files.newOutputStream(outputFile.toPath()), false, ENCODING);
+		this.stream = Files.newOutputStream(outputFile.toPath());
+		this.printStream = new PrintStream(this.stream, false, ENCODING);
 	}
 
 	@Override
@@ -65,20 +69,29 @@ public class ExecutionTraceWriterFilter extends AbstractTraceProcessingFilter<Ex
 		this.logger.debug("Wrote {} execution trace{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), this.outputFilename); // NOCS
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void onTerminating() {
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
 		if (this.printStream != null) {
-			this.printStream.close();
+			try {
+				this.printStream.flush();
+				this.stream.flush();
+				this.printStream.close();
+				this.stream.close();
+			} catch (final IOException e) {
+				this.logger.error("Cannot write execution trace: {}", e.getLocalizedMessage());
+			}
 		}
+		super.onTerminating();
 	}
 
 	@Override
-	protected void execute(final ExecutionTrace executionTrace) throws Exception {
-		ExecutionTraceWriterFilter.this.printStream.println(executionTrace.toString());
-		ExecutionTraceWriterFilter.this.reportSuccess(executionTrace.getTraceId());
+	protected void execute(final ExecutionTrace executionTrace) {
+		this.logger.debug("size {}", executionTrace.getLength());
+		final String data = executionTrace.toString();
+		this.printStream.println(data);
+		this.printStream.flush();
+		this.reportSuccess(executionTrace.getTraceId());
 	}
 
 }

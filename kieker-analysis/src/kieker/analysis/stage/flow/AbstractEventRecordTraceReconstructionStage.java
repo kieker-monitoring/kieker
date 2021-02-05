@@ -63,7 +63,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.6
  */
-public abstract class AbstractEventRecordTraceReconstructionFilter extends AbstractStage {
+public abstract class AbstractEventRecordTraceReconstructionStage extends AbstractStage {
 	/** Output port delivering the valid traces. */
 	private final OutputPort<TraceEventRecords> validTracesOutputPort = this.createOutputPort(TraceEventRecords.class);
 
@@ -94,7 +94,7 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 	 * @param maxTraceTimeout
 	 *            max trace timeout, if set to Long.MAX_VALUE no timeout is used
 	 */
-	public AbstractEventRecordTraceReconstructionFilter(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
+	public AbstractEventRecordTraceReconstructionStage(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
 			final long maxTraceTimeout) {
 		super();
 		this.timeunit = timeUnit;
@@ -113,7 +113,7 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 
 	@Override
 	protected void execute() throws Exception {
-		if (!this.hasTimeout) {
+		if (this.hasTimeout) {
 			final Long timestamp = this.timestampsInputPort.receive();
 			if (timestamp != null) {
 				synchronized (this) {
@@ -147,48 +147,26 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 	 *            The new record to handle.
 	 */
 	protected void newFlowRecordEvent(final IFlowRecord record) {
-		final Long traceId;
-		TraceBuffer traceBuffer;
-		final long loggingTimestamp;
 		if (record instanceof TraceMetadata) {
-			traceId = ((TraceMetadata) record).getTraceId();
-			traceBuffer = this.traceId2trace.get(traceId);
-			if (traceBuffer == null) { // first record for this id!
-				synchronized (this) {
-					traceBuffer = this.traceId2trace.get(traceId);
-					if (traceBuffer == null) { // NOCS (DCL)
-						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
-						this.traceId2trace.put(traceId, traceBuffer);
-					}
-				}
-			}
-			traceBuffer.setTrace((TraceMetadata) record);
-			loggingTimestamp = -1;
+			this.newTraceMetadataEvent((TraceMetadata) record);
 		} else if (record instanceof AbstractTraceEvent) {
-			traceId = ((AbstractTraceEvent) record).getTraceId();
-			traceBuffer = this.traceId2trace.get(traceId);
-			if (traceBuffer == null) { // first record for this id!
-				synchronized (this) {
-					traceBuffer = this.traceId2trace.get(traceId);
-					if (traceBuffer == null) { // NOCS (DCL)
-						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
-						this.traceId2trace.put(traceId, traceBuffer);
-					}
-				}
-			}
-			traceBuffer.insertEvent((AbstractTraceEvent) record);
-			loggingTimestamp = ((AbstractTraceEvent) record).getTimestamp();
+			this.newAbstractTraceEvent((AbstractTraceEvent) record);
 		} else {
+			this.logger.error("Received illegal IFlowRecord event of type {}", record.getClass());
 			return; // invalid type which should not happen due to the specified eventTypes
 		}
+	}
+
+	private void handleTrace(final TraceBuffer traceBuffer, final long traceId) {
 		if (traceBuffer.isFinished()) {
 			synchronized (this) { // has to be synchronized because of timeout cleanup
 				this.traceId2trace.remove(traceId);
 			}
 			this.validTracesOutputPort.send(traceBuffer.toTraceEvents());
 		}
+	}
+
+	private void handleTimeoutQueue(final long loggingTimestamp) {
 		if (this.hasTimeout) {
 			synchronized (this) {
 				// can we assume a rough order of logging timestamps? (yes, except with DB
@@ -201,11 +179,47 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 		}
 	}
 
+	private void newTraceMetadataEvent(final TraceMetadata record) {
+		final Long traceId = record.getTraceId();
+		TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
+		if (traceBuffer == null) { // first record for this id!
+			synchronized (this) {
+				traceBuffer = this.traceId2trace.get(traceId);
+				if (traceBuffer == null) { // NOCS (DCL)
+					traceBuffer = new TraceBuffer();
+					traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
+					this.traceId2trace.put(traceId, traceBuffer);
+				}
+			}
+		}
+		traceBuffer.setTrace(record);
+		this.handleTrace(traceBuffer, traceId);
+		this.handleTimeoutQueue(-1);
+	}
+
+	private void newAbstractTraceEvent(final AbstractTraceEvent event) {
+		final Long traceId = event.getTraceId();
+		TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
+		if (traceBuffer == null) { // first record for this id!
+			synchronized (this) {
+				traceBuffer = this.traceId2trace.get(traceId);
+				if (traceBuffer == null) { // NOCS (DCL)
+					traceBuffer = new TraceBuffer();
+					traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
+					this.traceId2trace.put(traceId, traceBuffer);
+				}
+			}
+		}
+		traceBuffer.insertEvent(event);
+		this.handleTrace(traceBuffer, traceId);
+		this.handleTimeoutQueue(event.getTimestamp());
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onTerminating() {
+	protected void onTerminating() {
 		synchronized (this) {
 			final Collection<Long> sortedTraceIds = this.getSortedTraceIds(this.traceId2trace.keySet());
 
@@ -222,7 +236,7 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 				}
 			}
 
-			this.traceId2trace.clear();
+			// this.traceId2trace.clear();
 		}
 		super.onTerminating();
 	}
@@ -363,72 +377,76 @@ public abstract class AbstractEventRecordTraceReconstructionFilter extends Abstr
 				this.beforeEventStack.addLast((BeforeOperationEvent) event);
 				this.eventQueue.add(event);
 			} else if (event instanceof AfterOperationEvent) {
-				while ((!this.beforeEventStack.getLast().getOperationSignature()
-						.equals(((AfterOperationEvent) event).getOperationSignature()))
-						&& (!(this.beforeEventStack.getLast().getClassSignature())
-								.equals(((AfterOperationEvent) event).getClassSignature()))) {
-					final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
-					final String opSignature = beforeEvent.getOperationSignature();
-					final String classSignature = beforeEvent.getClassSignature();
-					final long timestamp = event.getTimestamp();
-					final long traceID = event.getTraceId();
-
-					if (beforeEvent instanceof BeforeConstructorObjectEvent) {
-						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature,
-								((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
-					} else if (beforeEvent instanceof BeforeConstructorEvent) {
-						this.eventQueue.add(
-								new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
-					} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
-						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature,
-								((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
-					} else {
-						this.eventQueue.add(
-								new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
-					}
-					this.beforeEventStack.removeLast();
-					orderIndex++;
-				}
-
-				this.beforeEventStack.removeLast();
-				// true as long as no events repaired, event passes without orderIndex
-				// adjustment
-				if (!alreadyRepairedSomeEvents && ((orderIndex - 1) == this.maxOrderIndex)) {
-					this.eventQueue.add(event);
+				if (this.beforeEventStack.isEmpty()) {
+					LOGGER.error("AfterEvent on empty BeforeEvent queue. {} ", event.toString());
 				} else {
-					final String opSignature = ((AfterOperationEvent) event).getOperationSignature();
-					final String classSignature = ((AfterOperationEvent) event).getClassSignature();
-					final long timestamp = event.getTimestamp();
-					final long traceID = event.getTraceId();
+					while ((!this.beforeEventStack.getLast().getOperationSignature()
+							.equals(((AfterOperationEvent) event).getOperationSignature()))
+							&& (!(this.beforeEventStack.getLast().getClassSignature())
+									.equals(((AfterOperationEvent) event).getClassSignature()))) {
+						final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
+						final String opSignature = beforeEvent.getOperationSignature();
+						final String classSignature = beforeEvent.getClassSignature();
+						final long timestamp = event.getTimestamp();
+						final long traceID = event.getTraceId();
 
-					if (event instanceof AfterConstructorFailedObjectEvent) {
-						this.eventQueue.add(new AfterConstructorFailedObjectEvent(timestamp, traceID, orderIndex,
-								opSignature, classSignature, ((AfterConstructorFailedObjectEvent) event).getCause(),
-								((AfterConstructorFailedObjectEvent) event).getObjectId()));
-					} else if (event instanceof AfterConstructorObjectEvent) {
-						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature, ((AfterConstructorObjectEvent) event).getObjectId()));
-					} else if (event instanceof AfterConstructorFailedEvent) {
-						this.eventQueue.add(new AfterConstructorFailedEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature, ((AfterConstructorFailedEvent) event).getCause()));
-					} else if (event instanceof AfterConstructorEvent) {
-						this.eventQueue.add(
-								new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
-					} else if (event instanceof AfterOperationFailedObjectEvent) {
-						this.eventQueue.add(new AfterOperationFailedObjectEvent(timestamp, traceID, orderIndex,
-								opSignature, classSignature, ((AfterOperationFailedObjectEvent) event).getCause(),
-								((AfterOperationFailedObjectEvent) event).getObjectId()));
-					} else if (event instanceof AfterOperationObjectEvent) {
-						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature, ((AfterOperationObjectEvent) event).getObjectId()));
-					} else if (event instanceof AfterOperationFailedEvent) {
-						this.eventQueue.add(new AfterOperationFailedEvent(timestamp, traceID, orderIndex, opSignature,
-								classSignature, ((AfterOperationFailedEvent) event).getCause()));
+						if (beforeEvent instanceof BeforeConstructorObjectEvent) {
+							this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature,
+									((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+						} else if (beforeEvent instanceof BeforeConstructorEvent) {
+							this.eventQueue.add(
+									new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
+							this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature,
+									((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+						} else {
+							this.eventQueue.add(
+									new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						}
+						this.beforeEventStack.removeLast();
+						orderIndex++;
+					}
+
+					this.beforeEventStack.removeLast();
+					// true as long as no events repaired, event passes without orderIndex
+					// adjustment
+					if (!alreadyRepairedSomeEvents && ((orderIndex - 1) == this.maxOrderIndex)) {
+						this.eventQueue.add(event);
 					} else {
-						this.eventQueue.add(
-								new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						final String opSignature = ((AfterOperationEvent) event).getOperationSignature();
+						final String classSignature = ((AfterOperationEvent) event).getClassSignature();
+						final long timestamp = event.getTimestamp();
+						final long traceID = event.getTraceId();
+
+						if (event instanceof AfterConstructorFailedObjectEvent) {
+							this.eventQueue.add(new AfterConstructorFailedObjectEvent(timestamp, traceID, orderIndex,
+									opSignature, classSignature, ((AfterConstructorFailedObjectEvent) event).getCause(),
+									((AfterConstructorFailedObjectEvent) event).getObjectId()));
+						} else if (event instanceof AfterConstructorObjectEvent) {
+							this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature, ((AfterConstructorObjectEvent) event).getObjectId()));
+						} else if (event instanceof AfterConstructorFailedEvent) {
+							this.eventQueue.add(new AfterConstructorFailedEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature, ((AfterConstructorFailedEvent) event).getCause()));
+						} else if (event instanceof AfterConstructorEvent) {
+							this.eventQueue.add(
+									new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						} else if (event instanceof AfterOperationFailedObjectEvent) {
+							this.eventQueue.add(new AfterOperationFailedObjectEvent(timestamp, traceID, orderIndex,
+									opSignature, classSignature, ((AfterOperationFailedObjectEvent) event).getCause(),
+									((AfterOperationFailedObjectEvent) event).getObjectId()));
+						} else if (event instanceof AfterOperationObjectEvent) {
+							this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature, ((AfterOperationObjectEvent) event).getObjectId()));
+						} else if (event instanceof AfterOperationFailedEvent) {
+							this.eventQueue.add(new AfterOperationFailedEvent(timestamp, traceID, orderIndex, opSignature,
+									classSignature, ((AfterOperationFailedEvent) event).getCause()));
+						} else {
+							this.eventQueue.add(
+									new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						}
 					}
 				}
 			}

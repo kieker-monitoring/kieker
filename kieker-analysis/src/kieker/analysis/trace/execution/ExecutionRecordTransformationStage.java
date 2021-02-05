@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.trace.execution;
 
-import kieker.analysis.trace.AbstractTraceAnalysisFilter;
+import kieker.analysis.trace.AbstractTraceAnalysisStage;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
@@ -35,9 +35,9 @@ import teetime.framework.OutputPort;
  * @author Andre van Hoorn
  * @author Reiner Jung -- teetime port
  *
- * @since 1.1
+ * @since 1.15
  */
-public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter<OperationExecutionRecord> {
+public class ExecutionRecordTransformationStage extends AbstractTraceAnalysisStage<OperationExecutionRecord> {
 
 	private final OutputPort<Execution> outputPort = this.createOutputPort(Execution.class);
 
@@ -47,7 +47,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 * @param repository
 	 *            system model repository
 	 */
-	public ExecutionRecordTransformationFilter(final SystemModelRepository repository) {
+	public ExecutionRecordTransformationStage(final SystemModelRepository repository) {
 		super(repository);
 	}
 
@@ -72,6 +72,16 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 				operationExecutionRecord.getEss(), operationExecutionRecord.getTin(),
 				operationExecutionRecord.getTout(), false);
 		this.outputPort.send(execution);
+	}
+
+	public OutputPort<Execution> getOutputPort() {
+		return this.outputPort;
+	}
+
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		super.onTerminating();
 	}
 
 }

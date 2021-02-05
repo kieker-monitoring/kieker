@@ -13,39 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.stage.select.traceidfilter;
 
-import kieker.analysis.stage.select.traceidfilter.components.OperationExecutionTraceIdFilter;
-import kieker.analysis.stage.select.traceidfilter.components.TraceEventTraceIdFilter;
-import kieker.analysis.stage.select.traceidfilter.components.TraceMetadataTraceIdFilter;
+import java.util.Set;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 
-import teetime.framework.CompositeStage;
-import teetime.framework.InputPort;
+import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
-import teetime.stage.MultipleInstanceOfFilter;
-import teetime.stage.basic.merger.Merger;
 
 /**
  * Allows to filter Traces about their traceIds.
  *
  * This class has exactly one input port and two output ports. If the received object
- * contains the defined traceID, the object is delivered unmodified to the matchingTraceIdOutputPort otherwise to the mismatchingTraceIdOutputPort.
+ * contains the defined traceID, the object is delivered unmodified to the
+ * matchingTraceIdOutputPort otherwise to the mismatchingTraceIdOutputPort.
  *
- * @author Andre van Hoorn, Jan Waller, Lars Bluemke
- *
- * @since 1.2
+ * @author Andre van Hoorn, Jan Waller, Lars Bluemke, Reiner Jung
+ * @since 1.15
  */
-public class TraceIdFilter extends CompositeStage {
+public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
-	private final InputPort<IMonitoringRecord> monitoringRecordsCombinedInputPort;
+	private final boolean acceptAllTraces;
+	private final Set<Long> selectedTraceIds;
 
-	private final OutputPort<IMonitoringRecord> matchingTraceIdOutputPort;
-	private final OutputPort<IMonitoringRecord> mismatchingTraceIdOutputPort;
+	private final OutputPort<IMonitoringRecord> matchingTraceIdOutputPort = this.createOutputPort();
+	private final OutputPort<IMonitoringRecord> mismatchingTraceIdOutputPort = this.createOutputPort();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -55,43 +51,62 @@ public class TraceIdFilter extends CompositeStage {
 	 * @param selectedTraceIds
 	 *            Determining which trace IDs should be accepted by this filter.
 	 */
-	public TraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
-		// Initialize the internal filters
-		final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter = new MultipleInstanceOfFilter<>();
-		final TraceMetadataTraceIdFilter traceMetadataFilter = new TraceMetadataTraceIdFilter(acceptAllTraces, selectedTraceIds);
-		final TraceEventTraceIdFilter traceEventFilter = new TraceEventTraceIdFilter(acceptAllTraces, selectedTraceIds);
-		final OperationExecutionTraceIdFilter operationExecutionFilter = new OperationExecutionTraceIdFilter(acceptAllTraces, selectedTraceIds);
-
-		final Merger<IMonitoringRecord> matchingMerger = new Merger<>();
-		final Merger<IMonitoringRecord> mismatchingMerger = new Merger<>();
-
-		// Assign ports
-		this.monitoringRecordsCombinedInputPort = this.createInputPort(instanceOfFilter.getInputPort());
-		this.matchingTraceIdOutputPort = this.createOutputPort(matchingMerger.getOutputPort());
-		this.mismatchingTraceIdOutputPort = this.createOutputPort(mismatchingMerger.getOutputPort());
-
-		// Connect the internal filters
-		this.connectPorts(instanceOfFilter.getOutputPortForType(TraceMetadata.class), traceMetadataFilter.getInputPort());
-		this.connectPorts(instanceOfFilter.getOutputPortForType(AbstractTraceEvent.class), traceEventFilter.getInputPort());
-		this.connectPorts(instanceOfFilter.getOutputPortForType(OperationExecutionRecord.class), operationExecutionFilter.getInputPort());
-
-		this.connectPorts(traceMetadataFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
-		this.connectPorts(traceEventFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
-		this.connectPorts(operationExecutionFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
-
-		this.connectPorts(traceMetadataFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
-		this.connectPorts(traceEventFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
-		this.connectPorts(operationExecutionFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
+	public TraceIdFilter(final boolean acceptAllTraces, final Set<Long> selectedTraceIds) {
+		this.acceptAllTraces = acceptAllTraces;
+		this.selectedTraceIds = selectedTraceIds;
 	}
 
-	public InputPort<IMonitoringRecord> getMonitoringRecordsCombinedInputPort() {
-		return this.monitoringRecordsCombinedInputPort;
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminatiing {}", this.getClass().getCanonicalName());
+		super.onTerminating();
 	}
 
+	@Override
+	protected void execute(final IMonitoringRecord element) throws Exception {
+		if (element instanceof OperationExecutionRecord) {
+			this.process((OperationExecutionRecord) element);
+		} else if (element instanceof ITraceRecord) {
+			this.process((ITraceRecord) element);
+		} else if (element instanceof TraceMetadata) {
+			this.process((TraceMetadata) element);
+		}
+	}
+
+	private void process(final TraceMetadata element) {
+		if (this.acceptId(element.getTraceId())) {
+			this.matchingTraceIdOutputPort.send(element);
+		} else {
+			this.mismatchingTraceIdOutputPort.send(element);
+		}
+	}
+
+	private void process(final ITraceRecord element) {
+		if (this.acceptId(element.getTraceId())) {
+			this.matchingTraceIdOutputPort.send(element);
+		} else {
+			this.mismatchingTraceIdOutputPort.send(element);
+		}
+	}
+
+	private void process(final OperationExecutionRecord element) {
+		if (this.acceptId(element.getTraceId())) {
+			this.matchingTraceIdOutputPort.send(element);
+		} else {
+			this.mismatchingTraceIdOutputPort.send(element);
+		}
+	}
+
+	private final boolean acceptId(final long traceId) {
+		return this.acceptAllTraces || this.selectedTraceIds.contains(traceId);
+	}
+
+	/** Returns the output port delivering the records with matching IDs. */
 	public OutputPort<IMonitoringRecord> getMatchingTraceIdOutputPort() {
 		return this.matchingTraceIdOutputPort;
 	}
 
+	/** Returns the output port delivering the records with the non matching IDs. */
 	public OutputPort<IMonitoringRecord> getMismatchingTraceIdOutputPort() {
 		return this.mismatchingTraceIdOutputPort;
 	}

@@ -71,6 +71,20 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 		this.serviceStage = new RestServiceStage(hostname, port, accessRestrictionHandler);
 	}
 
+	/**
+	 * Create a source composite stage for rest services.
+	 *
+	 * @param hostname
+	 *            hostname to listen to
+	 * @param port
+	 *            port to listen on
+	 * @param accessHandler
+	 *            controls access to the rest service
+	 */
+	public RestServiceCompositeStage(final String hostname, final int port, final IAccessHandler accessHandler) {
+		this.serviceStage = new RestServiceStage(hostname, port, accessHandler);
+	}
+
 	@Override
 	public OutputPort<IMonitoringRecord> getOutputPort() {
 		return this.serviceStage.getOutputPort();

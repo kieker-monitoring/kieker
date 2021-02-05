@@ -33,7 +33,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.8
  */
-public class MemSwapUtilizationDisplayFilter extends AbstractConsumerStage<MemSwapUsageRecord> {
+public class MemSwapUtilizationDisplaySink extends AbstractConsumerStage<MemSwapUsageRecord> {
 
 	public static final String MEM_FREE = "memFree";
 	public static final String MEM_TOTAL = "memTotal";
@@ -56,7 +56,7 @@ public class MemSwapUtilizationDisplayFilter extends AbstractConsumerStage<MemSw
 	 * @param recordsTimeUnit
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
-	public MemSwapUtilizationDisplayFilter(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
+	public MemSwapUtilizationDisplaySink(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
@@ -84,18 +84,18 @@ public class MemSwapUtilizationDisplayFilter extends AbstractConsumerStage<MemSw
 		final String id = record.getHostname();
 
 		// Sets Entries in MB instead of Bytes
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, minutesAndSeconds, record.getMemFree() / 1048576);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_TOTAL, minutesAndSeconds, record.getMemTotal() / 1048576);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, minutesAndSeconds, record.getMemUsed() / 1048576);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, minutesAndSeconds, record.getSwapFree() / 1048576);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_TOTAL, minutesAndSeconds, record.getSwapTotal() / 1048576);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, minutesAndSeconds, record.getSwapUsed() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.MEM_FREE, minutesAndSeconds, record.getMemFree() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.MEM_TOTAL, minutesAndSeconds, record.getMemTotal() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.MEM_USED, minutesAndSeconds, record.getMemUsed() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.SWAP_FREE, minutesAndSeconds, record.getSwapFree() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.SWAP_TOTAL, minutesAndSeconds, record.getSwapTotal() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplaySink.SWAP_USED, minutesAndSeconds, record.getSwapUsed() / 1048576);
 
-		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, record.getMemFree());
-		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, record.getMemUsed());
+		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplaySink.MEM_FREE, record.getMemFree());
+		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplaySink.MEM_USED, record.getMemUsed());
 
-		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, record.getSwapFree());
-		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, record.getSwapUsed());
+		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplaySink.SWAP_FREE, record.getSwapFree());
+		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplaySink.SWAP_USED, record.getSwapUsed());
 	}
 
 	@Display(name = "XYPlot Memory utilization Display")

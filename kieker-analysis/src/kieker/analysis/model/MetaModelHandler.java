@@ -301,12 +301,8 @@ public final class MetaModelHandler {
 
 			// Run through all repositories and create the model counterparts.
 			for (final AbstractRepository repository : repositories) {
-				final MIRepository mRepository = factory.createRepository();
-				mRepository.setId(EcoreUtil.generateUUID());
-				mRepository.setClassname(repository.getClass().getName());
-				mRepository.getProperties().addAll(MetaModelHandler.convertProperties(repository.getCurrentConfiguration(), factory));
+				final MIRepository mRepository = MetaModelHandler.createRepository(repository, factory);
 				mProject.getRepositories().add(mRepository);
-
 				// Remember the mapping.
 				repositoryMap.put(repository, mRepository);
 			}
@@ -402,6 +398,15 @@ public final class MetaModelHandler {
 		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)
 			throw new AnalysisConfigurationException("Failed to retrieve current configuration of AnalysisCopntroller.", ex);
 		}
+	}
+
+	private static MIRepository createRepository(final AbstractRepository repository, final MAnalysisMetaModelFactory factory) {
+		final MIRepository mRepository = factory.createRepository();
+		mRepository.setId(EcoreUtil.generateUUID());
+		mRepository.setClassname(repository.getClass().getName());
+		mRepository.getProperties().addAll(MetaModelHandler.convertProperties(repository.getCurrentConfiguration(), factory));
+
+		return mRepository;
 	}
 
 	/**

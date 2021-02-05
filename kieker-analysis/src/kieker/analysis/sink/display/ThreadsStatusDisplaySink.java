@@ -30,7 +30,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.10
  */
-public class ThreadsStatusDisplayFilter extends AbstractConsumerStage<ThreadsStatusRecord> {
+public class ThreadsStatusDisplaySink extends AbstractConsumerStage<ThreadsStatusRecord> {
 
 	public static final String TOTAL_THREADS = "Total Threads";
 	public static final String THREADS = "Threads";
@@ -49,7 +49,7 @@ public class ThreadsStatusDisplayFilter extends AbstractConsumerStage<ThreadsSta
 	 * @param recordsTimeUnit
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
-	public ThreadsStatusDisplayFilter(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
+	public ThreadsStatusDisplaySink(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
@@ -74,10 +74,10 @@ public class ThreadsStatusDisplayFilter extends AbstractConsumerStage<ThreadsSta
 
 		final String id = record.getHostname() + " - " + record.getVmName();
 
-		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplayFilter.THREADS, minutesAndSeconds, record.getThreadCount());
-		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplayFilter.TOTAL_THREADS, minutesAndSeconds, record.getTotalStartedThreadCount());
-		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplayFilter.PEAK_THREADS, minutesAndSeconds, record.getPeakThreadCount());
-		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplayFilter.DAEMON_THREADS, minutesAndSeconds, record.getDaemonThreadCount());
+		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplaySink.THREADS, minutesAndSeconds, record.getThreadCount());
+		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplaySink.TOTAL_THREADS, minutesAndSeconds, record.getTotalStartedThreadCount());
+		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplaySink.PEAK_THREADS, minutesAndSeconds, record.getPeakThreadCount());
+		this.xyplot.setEntry(id + " - " + ThreadsStatusDisplaySink.DAEMON_THREADS, minutesAndSeconds, record.getDaemonThreadCount());
 	}
 
 	@Display(name = "XYPlot Display")

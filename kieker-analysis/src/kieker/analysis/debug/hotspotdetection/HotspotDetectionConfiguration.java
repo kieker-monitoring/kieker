@@ -24,7 +24,7 @@ import kieker.analysis.model.DeploymentModelAssemblerStage;
 import kieker.analysis.model.TypeModelAssemblerStage;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
-import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.tt.recordreading.ReadingComposite;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
@@ -66,7 +66,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 				assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel,
 				deploymentModel);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel,
+		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(deploymentModel,
 				ChronoUnit.NANOS);
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 

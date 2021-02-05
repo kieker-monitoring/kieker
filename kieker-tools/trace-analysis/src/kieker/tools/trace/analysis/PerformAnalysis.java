@@ -17,9 +17,11 @@ package kieker.tools.trace.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -88,7 +90,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Reiner Jung
  *
  * @since 0.95a
+ * @deprecated since 1.15 can be remove after porting to TeeTime
  */
+@Deprecated
 public class PerformAnalysis {
 
 	private static final String ENCODING = "UTF-8";
@@ -97,19 +101,19 @@ public class PerformAnalysis {
 	private final AnalysisController analysisController = new AnalysisController();
 
 	private final Logger logger; // NOPMD legacy dependency
-	private final TraceAnalysisConfiguration settings;
+	private final TraceAnalysisParameters parameters;
 
 	/**
 	 * Create analysis configuration.
 	 *
 	 * @param logger
 	 *            logger to be used
-	 * @param settings
+	 * @param parameters
 	 *            configuration settings
 	 */
-	public PerformAnalysis(final Logger logger, final TraceAnalysisConfiguration settings) {
+	public PerformAnalysis(final Logger logger, final TraceAnalysisParameters parameters) {
 		this.logger = logger;
-		this.settings = settings;
+		this.parameters = parameters;
 	}
 
 	/**
@@ -154,96 +158,91 @@ public class PerformAnalysis {
 					systemEntityFactory);
 
 			// fill list of msgTraceProcessingComponents:
-			if (this.settings.isPrintMessageTraces()) {
+			if (this.parameters.isPrintMessageTraces()) {
 				numRequestedTasks++;
 				this.createComponentPrintMsgTrace(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.isPrintExecutionTraces()) {
+			if (this.parameters.isPrintExecutionTraces()) {
 				numRequestedTasks++;
 				this.createComponentPrintExecTrace(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.isPrintInvalidExecutionTraces()) {
+			if (this.parameters.isPrintInvalidExecutionTraces()) {
 				numRequestedTasks++;
 				this.createPrintInvalidExecutionTraces(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.isPlotDeploymentSequenceDiagrams()) {
+			if (this.parameters.isPlotDeploymentSequenceDiagrams()) {
 				numRequestedTasks++;
 				this.createPlotDeploymentSequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.isPlotAssemblySequenceDiagrams()) {
+			if (this.parameters.isPlotAssemblySequenceDiagrams()) {
 				numRequestedTasks++;
 				this.createPlotAssemblySequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
-
 			}
 
-			if (this.settings.getPlotDeploymentComponentDependencyGraph() != null) {
+			if (this.parameters.getPlotDeploymentComponentDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.getPlotAssemblyComponentDependencyGraph() != null) {
+			if (this.parameters.getPlotAssemblyComponentDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
-
 			}
 
-			if (this.settings.isPlotContainerDependencyGraph()) {
+			if (this.parameters.isPlotContainerDependencyGraph()) {
 				numRequestedTasks++;
 				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.getPlotDeploymentOperationDependencyGraph() != null) {
+			if (this.parameters.getPlotDeploymentOperationDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.getPlotAssemblyOperationDependencyGraph() != null) {
+			if (this.parameters.getPlotAssemblyOperationDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (this.settings.isPlotCallTrees()) {
+			if (this.parameters.isPlotCallTrees()) {
 				numRequestedTasks++;
 				final TraceCallTreeFilter componentPlotTraceCallTrees = this.createTraceCallTreeFilter(pathPrefix, systemEntityFactory, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter);
-
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
 
-			if (this.settings.isPlotAggregatedDeploymentCallTree()) {
+			if (this.parameters.isPlotAggregatedDeploymentCallTree()) {
 				numRequestedTasks++;
 				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
-
 			}
 
-			if (this.settings.isPlotAggregatedAssemblyCallTree()) {
+			if (this.parameters.isPlotAggregatedAssemblyCallTree()) {
 				numRequestedTasks++;
 				final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = this.createAggrAssemblyCompOpCallTreeFilter(pathPrefix,
 						systemEntityFactory,
 						mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter);
-
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
 			}
-			if (this.settings.isPrintDeploymentEquivalenceClasses()) {
+			if (this.parameters.isPrintDeploymentEquivalenceClasses()) {
 				numRequestedTasks++;
 				// the actual execution of the task is performed below
 			}
-			if (this.settings.isPrintSystemModel()) {
+			if (this.parameters.isPrintSystemModel()) {
 				numRequestedTasks++;
 			}
 
@@ -260,13 +259,13 @@ public class PerformAnalysis {
 
 			successfulExecution = this.checkTerminationState(pathPrefix, allTraceProcessingComponents);
 
-			if (successfulExecution && this.settings.isPrintDeploymentEquivalenceClasses()) {
+			if (successfulExecution && this.parameters.isPrintDeploymentEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + StringConstants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
-			if (successfulExecution && this.settings.isPrintAssemblyEquivalenceClasses()) {
+			if (successfulExecution && this.parameters.isPrintAssemblyEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + StringConstants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
@@ -292,7 +291,7 @@ public class PerformAnalysis {
 	}
 
 	private boolean checkTerminationState(final String pathPrefix, final List<AbstractTraceProcessingFilter> allTraceProcessingComponents)
-			throws Exception {
+			throws AnalysisTerminationException, AnalysisConfigurationException, IOException {
 		boolean retVal = true;
 
 		int numErrorCount = 0;
@@ -319,8 +318,8 @@ public class PerformAnalysis {
 				this.logger.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
 			}
 		}
-		if (!this.settings.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
-			throw new Exception(numErrorCount + " errors occured in trace processing components");
+		if (!this.parameters.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
+			throw new AnalysisTerminationException(numErrorCount + " errors occured in trace processing components");
 		}
 
 		return retVal;
@@ -340,14 +339,14 @@ public class PerformAnalysis {
 	}
 
 	private String computePrefix() {
-		if (this.settings.getOutputDir() != null) {
-			if (this.settings.getPrefix() != null) {
-				return this.settings.getOutputDir() + File.separator + this.settings.getPrefix();
+		if (this.parameters.getOutputDir() != null) {
+			if (this.parameters.getPrefix() != null) {
+				return this.parameters.getOutputDir() + File.separator + this.parameters.getPrefix();
 			} else {
-				return this.settings.getOutputDir() + File.separator;
+				return this.parameters.getOutputDir() + File.separator;
 			}
-		} else if (this.settings.getPrefix() != null) {
-			return this.settings.getPrefix();
+		} else if (this.parameters.getPrefix() != null) {
+			return this.parameters.getPrefix();
 		} else {
 			return "";
 		}
@@ -393,7 +392,7 @@ public class PerformAnalysis {
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 		componentPlotAggregatedCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-				this.booleanToString(this.settings.isShortLabels()));
+				this.booleanToString(this.parameters.isShortLabels()));
 		componentPlotAggregatedCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
 				pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
@@ -423,7 +422,7 @@ public class PerformAnalysis {
 		final OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration,
 				this.analysisController);
 
-		this.addDecorators(this.settings.getPlotAssemblyOperationDependencyGraph(), componentPlotAssemblyOperationDepGraph);
+		this.addDecorators(this.parameters.getPlotAssemblyOperationDependencyGraph(), componentPlotAssemblyOperationDepGraph);
 
 		this.analysisController.connect(mtReconstrFilter,
 				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -458,7 +457,7 @@ public class PerformAnalysis {
 		final OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration,
 				this.analysisController);
 
-		this.addDecorators(this.settings.getPlotDeploymentOperationDependencyGraph(), componentPlotAllocationOperationDepGraph);
+		this.addDecorators(this.parameters.getPlotDeploymentOperationDependencyGraph(), componentPlotAllocationOperationDepGraph);
 
 		this.analysisController.connect(mtReconstrFilter,
 				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -526,7 +525,7 @@ public class PerformAnalysis {
 		final ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration,
 				this.analysisController);
 
-		this.addDecorators(this.settings.getPlotAssemblyComponentDependencyGraph(), componentPlotAssemblyComponentDepGraph);
+		this.addDecorators(this.parameters.getPlotAssemblyComponentDependencyGraph(), componentPlotAssemblyComponentDepGraph);
 
 		this.analysisController.connect(mtReconstrFilter,
 				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -560,7 +559,7 @@ public class PerformAnalysis {
 		final ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration,
 				this.analysisController);
 
-		this.addDecorators(this.settings.getPlotDeploymentComponentDependencyGraph(), componentPlotAllocationComponentDepGraph);
+		this.addDecorators(this.parameters.getPlotDeploymentComponentDependencyGraph(), componentPlotAllocationComponentDepGraph);
 
 		this.analysisController.connect(mtReconstrFilter,
 				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -601,7 +600,7 @@ public class PerformAnalysis {
 				SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
 		componentPlotAssemblySeqDiagrConfig.setProperty(
 				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-				this.booleanToString(this.settings.isShortLabels()));
+				this.booleanToString(this.parameters.isShortLabels()));
 
 		final SequenceDiagramFilter componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig,
 				this.analysisController);
@@ -633,7 +632,7 @@ public class PerformAnalysis {
 				SequenceDiagramFilter.SDModes.ALLOCATION.toString());
 		componentPlotAllocationSeqDiagrConfig.setProperty(
 				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-				this.booleanToString(this.settings.isShortLabels()));
+				this.booleanToString(this.parameters.isShortLabels()));
 
 		final SequenceDiagramFilter componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig,
 				this.analysisController);
@@ -782,7 +781,7 @@ public class PerformAnalysis {
 
 		TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = null; // must not be instantiate it here, due to
 																			// side-effects in the constructor
-		if (this.settings.isPrintAssemblyEquivalenceClasses()) {
+		if (this.parameters.isPrintAssemblyEquivalenceClasses()) {
 			/**
 			 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
 			 * case this options is requested.
@@ -826,7 +825,7 @@ public class PerformAnalysis {
 				TraceEquivalenceClassModes.ALLOCATION.toString());
 		TraceEquivalenceClassFilter traceAllocationEquivClassFilter = null; // must not be instantiate it here, due
 																			// to side-effects in the constructor
-		if (this.settings.isPrintDeploymentEquivalenceClasses()) {
+		if (this.parameters.isPrintDeploymentEquivalenceClasses()) {
 			/**
 			 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
 			 * case this options is requested.
@@ -869,7 +868,7 @@ public class PerformAnalysis {
 				StringConstants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
 		configurationEventTrace2ExecutionTraceFilter.setProperty(
 				TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
-				this.booleanToString(this.settings.isIgnoreAssumedCalls()));
+				this.booleanToString(this.parameters.isIgnoreAssumedCalls()));
 
 		// EventTrace2ExecutionTraceFilter has no configuration properties
 		final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(
@@ -900,7 +899,7 @@ public class PerformAnalysis {
 				VisualizationConstants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 		configurationEventRecordTraceCounter.setProperty(
 				EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
-				this.booleanToString(!this.settings.isIgnoreInvalidTraces()));
+				this.booleanToString(!this.parameters.isIgnoreInvalidTraces()));
 
 		final EventRecordTraceCounter eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter,
 				this.analysisController);
@@ -932,9 +931,9 @@ public class PerformAnalysis {
 		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 				TimeUnit.MILLISECONDS.name());
 		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-				this.longToString(this.settings.getMaxTraceDuration()));
+				this.longToString(this.parameters.getMaxTraceDuration()));
 		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
-				this.booleanToString(this.settings.isIgnoreInvalidTraces()));
+				this.booleanToString(this.parameters.isIgnoreInvalidTraces()));
 
 		final TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
 
@@ -965,16 +964,16 @@ public class PerformAnalysis {
 				TimeUnit.MILLISECONDS.name());
 		configurationEventRecordTraceGenerationFilter.setProperty(
 				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-				this.longToString(this.settings.getMaxTraceDuration()));
+				this.longToString(this.parameters.getMaxTraceDuration()));
 		configurationEventRecordTraceGenerationFilter.setProperty(
 				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-				this.booleanToString(this.settings.isRepairEventBasedTraces()));
+				this.booleanToString(this.parameters.isRepairEventBasedTraces()));
 
 		final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
 				configurationEventRecordTraceGenerationFilter, this.analysisController);
 
 		final String outputPortName;
-		if (this.settings.isInvertTraceIdFilter()) {
+		if (this.parameters.isInvertTraceIdFilter()) {
 			outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH;
 		} else {
 			outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MATCH;
@@ -1001,7 +1000,7 @@ public class PerformAnalysis {
 				StringConstants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 		final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig,
 				this.analysisController);
-		if (this.settings.isInvertTraceIdFilter()) {
+		if (this.parameters.isInvertTraceIdFilter()) {
 			this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH,
 					execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 		} else {
@@ -1024,7 +1023,7 @@ public class PerformAnalysis {
 	private TraceIdFilter createTraceIdFilter(final TimestampFilter timestampFilter) throws IllegalStateException, AnalysisConfigurationException {
 		// Create the trace ID filter and connect to the timestamp filter's output port
 		final Configuration configTraceIdFilterFlow = new Configuration();
-		if (this.settings.getSelectedTraces().isEmpty()) {
+		if (this.parameters.getSelectedTraces().isEmpty()) {
 			configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
 					Boolean.TRUE.toString());
 		} else {
@@ -1032,7 +1031,7 @@ public class PerformAnalysis {
 					Boolean.FALSE.toString());
 			configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
 					Configuration
-							.toProperty(this.settings.getSelectedTraces().toArray(new Long[this.settings.getSelectedTraces().size()])));
+							.toProperty(this.parameters.getSelectedTraces().toArray(new Long[this.parameters.getSelectedTraces().size()])));
 		}
 
 		final TraceIdFilter traceIdFilter = new TraceIdFilter(configTraceIdFilterFlow, this.analysisController);
@@ -1047,10 +1046,10 @@ public class PerformAnalysis {
 		// Create the timestamp filter and connect to the reader's output port
 		final Configuration configTimestampFilter = new Configuration();
 		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-				this.longToString(this.settings.getIgnoreExecutionsBeforeDate()));
+				this.longToString(this.parameters.getIgnoreExecutionsBeforeDate()));
 
 		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-				this.longToString(this.settings.getIgnoreExecutionsAfterDate()));
+				this.longToString(this.parameters.getIgnoreExecutionsAfterDate()));
 
 		final TimestampFilter timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
 
@@ -1064,7 +1063,8 @@ public class PerformAnalysis {
 
 	private FSReader createReader() {
 		final Configuration conf = new Configuration(null);
-		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(ConvertLegacyValues.fileListToStringArray(this.settings.getInputDirs())));
+		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS,
+				Configuration.toProperty(ConvertLegacyValues.fileListToStringArray(this.parameters.getInputDirs())));
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
 		return new FSReader(conf, this.analysisController);
 	}
@@ -1152,7 +1152,7 @@ public class PerformAnalysis {
 				new File(pathPrefix + StringConstants.CALL_TREE_FN_PREFIX)
 						.getCanonicalPath());
 		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-				this.booleanToString(this.settings.isShortLabels()));
+				this.booleanToString(this.parameters.isShortLabels()));
 		componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PLOTCALLTREE_COMPONENT_NAME);
 
@@ -1195,7 +1195,7 @@ public class PerformAnalysis {
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 		componentPlotAssemblyCallTreeConfig.setProperty(
-				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, this.booleanToString(this.settings.isShortLabels()));
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, this.booleanToString(this.parameters.isShortLabels()));
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
 				pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
@@ -1240,14 +1240,14 @@ public class PerformAnalysis {
 			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
 			// Add a trace coloring filter, if necessary
-			if (this.settings.getTraceColoringFile() != null) {
-				final String coloringFileName = this.settings.getTraceColoringFile().getAbsolutePath();
+			if (this.parameters.getTraceColoringFile() != null) {
+				final String coloringFileName = this.parameters.getTraceColoringFile().getAbsolutePath();
 				lastFilter = PerformAnalysis.createTraceColoringFilter(producer, coloringFileName, this.analysisController);
 			}
 
 			// Add a description filter, if necessary
-			if (this.settings.getAddDescriptions() != null) {
-				final String descriptionsFileName = this.settings.getAddDescriptions().getAbsolutePath();
+			if (this.parameters.getAddDescriptions() != null) {
+				final String descriptionsFileName = this.parameters.getAddDescriptions().getAbsolutePath();
 				if (lastFilter != null) {
 					lastFilter = PerformAnalysis.createDescriptionDecoratorFilter(lastFilter, descriptionsFileName,
 							this.analysisController);
@@ -1286,9 +1286,9 @@ public class PerformAnalysis {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, pathPrefix);
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.settings.isShortLabels()));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.parameters.isShortLabels()));
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS,
-				String.valueOf(this.settings.isIncludeSelfLoops()));
+				String.valueOf(this.parameters.isIncludeSelfLoops()));
 		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, this.analysisController);
 		this.analysisController.connect(plugin, plugin.getGraphOutputPortName(), graphWriter,
@@ -1365,7 +1365,7 @@ public class PerformAnalysis {
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
 		PrintStream ps = null;
 		try {
-			ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
+			ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, ENCODING);
 			int numClasses = 0;
 			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD
 																										// (UseConcurrentHashMap)

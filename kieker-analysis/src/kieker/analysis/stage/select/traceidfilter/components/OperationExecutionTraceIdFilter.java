@@ -16,6 +16,8 @@
 
 package kieker.analysis.stage.select.traceidfilter.components;
 
+import java.util.Set;
+
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
@@ -27,7 +29,15 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
  */
 public class OperationExecutionTraceIdFilter extends AbstractTraceIdFilter<OperationExecutionRecord> {
 
-	public OperationExecutionTraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
+	/**
+	 * Create a OperationExecutionTraceIdFilter stage.
+	 *
+	 * @param acceptAllTraces
+	 *            if true, accept all traces (the filter has no effect)
+	 * @param selectedTraceIds
+	 *            list of trace ids to accept
+	 */
+	public OperationExecutionTraceIdFilter(final boolean acceptAllTraces, final Set<Long> selectedTraceIds) {
 		super(acceptAllTraces, selectedTraceIds);
 	}
 

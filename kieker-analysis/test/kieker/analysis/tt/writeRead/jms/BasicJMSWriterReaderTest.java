@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.source.jms.JMSReaderStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -55,9 +56,9 @@ public class BasicJMSWriterReaderTest {
 		// empty constructor
 	}
 
-	@Ignore
+	@Ignore // NOPMD ignore this test, as it is broken. Port either to a integration test or to a proper Junit test
 	@Test
-	public void testWriteRead() throws InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
+	public void testWriteRead() throws InterruptedException, AnalysisConfigurationException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> inputRecords = this.provideEvents();
 
 		// Create monitoring controller for JMSWriter
@@ -137,7 +138,7 @@ public class BasicJMSWriterReaderTest {
 		private final List<IMonitoringRecord> outputElements;
 
 		public JMSReaderThread(final String jmsProviderUrl, final String jmsDestination,
-				final String jmsFactoryLookupName) {
+				final String jmsFactoryLookupName) throws AnalysisConfigurationException {
 			this.jmsReaderStage = new JMSReaderStage(jmsProviderUrl, jmsDestination, jmsFactoryLookupName);
 			this.outputElements = new LinkedList<>();
 		}

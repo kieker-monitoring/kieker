@@ -36,7 +36,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.13
  */
-public class ThreadEvent2TraceEventFilter extends AbstractConsumerStage<IMonitoringRecord> {
+public class ThreadEvent2TraceEventStage extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort(IMonitoringRecord.class);
 
@@ -44,7 +44,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractConsumerStage<IMonitor
 	private final Map<Long, MonitoredTrace> monitoredTraces = new HashMap<>(); // NOPMD (not thread-safe)
 	private int currentTraceId; // NOPMD (not thread-safe)
 
-	public ThreadEvent2TraceEventFilter() {
+	public ThreadEvent2TraceEventStage() {
 		super();
 	}
 

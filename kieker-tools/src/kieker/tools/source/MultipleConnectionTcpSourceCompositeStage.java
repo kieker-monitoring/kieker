@@ -59,7 +59,7 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 	private final MultipleConnectionTcpSourceStage reader;
 
 	/**
-	 * Create a composite reader stage.
+	 * Create a composite reader stage for TCP connections.
 	 *
 	 * @param configuration
 	 *            configuration parameters
@@ -76,6 +76,21 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 		final Class<?>[] classes = null;
 		final ITraceMetadataRewriter rewriter = InstantiationFactory.getInstance(configuration).create(ITraceMetadataRewriter.class,
 				rewriterClassName, classes);
+		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
+	}
+
+	/**
+	 * Create a composite reader stage for TCP connections
+	 * .
+	 *
+	 * @param inputPort
+	 *            the input port to listen to
+	 * @param capacity
+	 *            internal ready buffer size, the buffer size must be at least as big as the largest incoming event
+	 * @param rewriter
+	 *            trace record metadata rewriter, (necessary when multiple sources send traces).
+	 */
+	public MultipleConnectionTcpSourceCompositeStage(final int inputPort, final int capacity, final ITraceMetadataRewriter rewriter) {
 		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
 	}
 

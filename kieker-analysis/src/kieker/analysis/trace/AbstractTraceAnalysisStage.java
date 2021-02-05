@@ -35,11 +35,11 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.15
  */
-public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerStage<T> {
+public abstract class AbstractTraceAnalysisStage<T> extends AbstractConsumerStage<T> {
 
 	private volatile SystemModelRepository systemModelRepository;
 
-	public AbstractTraceAnalysisFilter(final SystemModelRepository systemModelRepository) {
+	public AbstractTraceAnalysisStage(final SystemModelRepository systemModelRepository) {
 		this.systemModelRepository = systemModelRepository;
 	}
 
@@ -93,7 +93,7 @@ public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerSta
 			final String executionContainerName, final String assemblyComponentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi,
 			final int ess, final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(systemModelRepository, executionContainerName,
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(systemModelRepository, executionContainerName,
 				assemblyComponentTypeName, assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess,
 				tin, tout, assumed);
 	}
@@ -102,7 +102,7 @@ public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerSta
 			final String assemblyComponentTypeName, final String componentTypeName, final Signature operationSignature,
 			final long traceId, final String sessionId, final int eoi, final int ess, final long tin, final long tout,
 			final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository,
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemModelRepository,
 				executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId,
 				sessionId, eoi, ess, tin, tout, assumed);
 	}
@@ -111,7 +111,7 @@ public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerSta
 			final String assemblyComponentTypeName, final Signature operationSignature, final long traceId,
 			final String sessionId, final int eoi, final int ess, final long tin, final long tout,
 			final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository,
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemModelRepository,
 				executionContainerName, assemblyComponentTypeName, assemblyComponentTypeName, operationSignature,
 				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
