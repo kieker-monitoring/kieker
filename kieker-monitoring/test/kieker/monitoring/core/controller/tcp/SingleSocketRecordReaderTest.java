@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
@@ -48,6 +49,7 @@ import kieker.common.registry.writer.WriterRegistry;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SingleSocketRecordReader.class, AbstractTcpReader.class, SocketChannel.class })
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class SingleSocketRecordReaderTest {
 
 	private static final int RECEIVING_PORT = 1234;
