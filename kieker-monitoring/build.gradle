@@ -103,9 +103,13 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:apache-jsp:9.4.28.v20200408'
 	
+	testImplementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+	
 	testImplementation project(':kieker-common').sourceSets.test.output
 	
 	implementation group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
+	
+	integrationTestCompile 'junit:junit:4.13'
 }
 
 task iajc(dependsOn: classes) {
@@ -134,6 +138,36 @@ task iajc(dependsOn: classes) {
         }
     }   
 }
+
+sourceSets {
+    jarIntegrationTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+        
+        compileClasspath += sourceSets.test.output
+        runtimeClasspath += sourceSets.test.output
+        
+        java {
+        	srcDirs = [ 'integrationTest' ]
+        }
+    }
+}
+
+configurations {
+    jarIntegrationTestImplementation.extendsFrom testImplementation
+    jarIntegrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task jarIntegrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.jarIntegrationTest.output.classesDirs
+    classpath = sourceSets.jarIntegrationTest.runtimeClasspath
+    dependsOn rootProject.aspectJJar
+}
+
+
 
 //compileJava.doLast {
 //    tasks.iajc.execute()
