@@ -17,11 +17,11 @@
 package kieker.analysis.model;
 
 import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * @author Sören Henning

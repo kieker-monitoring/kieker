@@ -18,8 +18,8 @@ package kieker.analysis.statistics;
 
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.statistics.calculating.CountCalculator;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  *

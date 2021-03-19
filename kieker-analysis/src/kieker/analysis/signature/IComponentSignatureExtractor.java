@@ -16,7 +16,7 @@
 
 package kieker.analysis.signature;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.ComponentType;
 
 /**
  * A {@link IComponentSignatureExtractor} sets the package name and the name of a {@link ComponentType} based on its signature.

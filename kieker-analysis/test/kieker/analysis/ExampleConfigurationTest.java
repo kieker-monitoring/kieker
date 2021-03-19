@@ -30,9 +30,9 @@ import org.junit.Test;
 
 import kieker.analysis.model.DeploymentModelPrinter;
 import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
 
 import teetime.framework.Execution;
 

@@ -21,10 +21,10 @@ import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.util.ObjectIdentifierRegistry;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * @author Sören Henning

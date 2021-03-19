@@ -27,9 +27,9 @@ import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysis.statistics.Units;
 import kieker.analysis.util.ComposedKey;
 import kieker.analysis.util.ObjectIdentifierRegistry;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionModel;
 
 /**
  * Abstract template class for dependency graph builders. To use this abstract builder,

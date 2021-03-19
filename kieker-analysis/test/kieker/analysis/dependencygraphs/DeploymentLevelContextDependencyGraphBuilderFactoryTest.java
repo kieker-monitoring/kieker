@@ -25,8 +25,8 @@ import kieker.analysis.graph.dependency.DeploymentLevelContextDependencyGraphBui
 import kieker.analysis.graph.dependency.DeploymentLevelContextDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
 import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
 
 /**
  * @author Sören Henning

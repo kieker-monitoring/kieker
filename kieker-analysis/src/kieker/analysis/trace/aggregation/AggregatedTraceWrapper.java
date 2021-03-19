@@ -16,7 +16,7 @@
 
 package kieker.analysis.trace.aggregation;
 
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.Trace;
 
 /**
  * This is wrapper class for aggregated traces that also contains a specific trace to which the

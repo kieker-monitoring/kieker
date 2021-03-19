@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.trace.Trace;
 
 /**
  * Reconstruct traces based on the incoming instances of {@code IFlowRecord}.

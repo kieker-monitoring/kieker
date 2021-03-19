@@ -16,14 +16,14 @@
 
 package kieker.analysis.model;
 
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyFactory;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.assembly.AssemblyOperation;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Sören Henning

@@ -19,7 +19,7 @@ package kieker.analysis.graph.dependency;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysis.util.stage.trigger.Trigger;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.ExecutionModel;
 
 import teetime.stage.basic.AbstractTransformation;
 

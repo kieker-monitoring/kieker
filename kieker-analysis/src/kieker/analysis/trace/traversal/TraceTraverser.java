@@ -19,8 +19,8 @@ package kieker.analysis.trace.traversal;
 import java.util.Collection;
 import java.util.Collections;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
 
 /**
  * A class that traverses {@link Trace}s along with one or multiple

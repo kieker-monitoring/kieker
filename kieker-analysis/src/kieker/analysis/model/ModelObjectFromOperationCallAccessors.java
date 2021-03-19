@@ -19,9 +19,9 @@ package kieker.analysis.model;
 import java.util.function.Function;
 
 import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * Utility class for functions ({@link Function}) to access the model objects from operation calls.

@@ -28,9 +28,9 @@ import org.junit.Test;
 import kieker.analysis.model.TypeModelAssembler;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Sören Henning

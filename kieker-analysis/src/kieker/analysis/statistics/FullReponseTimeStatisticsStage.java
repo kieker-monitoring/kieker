@@ -18,7 +18,7 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  *

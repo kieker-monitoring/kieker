@@ -16,8 +16,8 @@
 
 package kieker.analysis.model;
 
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 import teetime.stage.basic.AbstractFilter;
 
