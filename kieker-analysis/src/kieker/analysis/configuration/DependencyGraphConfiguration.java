@@ -33,12 +33,13 @@ import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.model.StaticModelsAssemblerStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
+import kieker.analysis.source.file.DirectoryReaderStage;
+import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
-import kieker.analysis.tt.recordreading.ReadingComposite;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
@@ -98,7 +99,9 @@ public class DependencyGraphConfiguration extends Configuration {
 			final File exportDirectory) {
 		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
-		final ReadingComposite reader = new ReadingComposite(importDirectory);
+		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
+		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 81920);
+
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
@@ -125,7 +128,8 @@ public class DependencyGraphConfiguration extends Configuration {
 						.createForDeploymentLevelOperationDependencyGraph());
 		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
 
-		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
+		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
+		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
 		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
