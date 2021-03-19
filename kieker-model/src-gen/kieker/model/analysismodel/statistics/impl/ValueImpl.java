@@ -22,7 +22,7 @@ import kieker.model.analysismodel.statistics.Value;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.statistics.impl.ValueImpl#getTimestamp <em>Timestamp</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.ValueImpl#getTimestamp <em>Timestamp</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,7 +32,6 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	 * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getTimestamp()
 	 * @generated
 	 * @ordered
@@ -43,7 +42,6 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	 * The cached value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getTimestamp()
 	 * @generated
 	 * @ordered
@@ -53,7 +51,6 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected ValueImpl() {
@@ -63,7 +60,6 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -74,9 +70,9 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public Instant getTimestamp() {
 		return timestamp;
 	}
@@ -84,9 +80,9 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setTimestamp(Instant newTimestamp) {
 		Instant oldTimestamp = timestamp;
 		timestamp = newTimestamp;
@@ -97,14 +93,13 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case StatisticsPackage.VALUE__TIMESTAMP:
-			return getTimestamp();
+			case StatisticsPackage.VALUE__TIMESTAMP:
+				return getTimestamp();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -112,15 +107,14 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case StatisticsPackage.VALUE__TIMESTAMP:
-			setTimestamp((Instant) newValue);
-			return;
+			case StatisticsPackage.VALUE__TIMESTAMP:
+				setTimestamp((Instant)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -128,15 +122,14 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case StatisticsPackage.VALUE__TIMESTAMP:
-			setTimestamp(TIMESTAMP_EDEFAULT);
-			return;
+			case StatisticsPackage.VALUE__TIMESTAMP:
+				setTimestamp(TIMESTAMP_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -144,14 +137,13 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case StatisticsPackage.VALUE__TIMESTAMP:
-			return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
+			case StatisticsPackage.VALUE__TIMESTAMP:
+				return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -159,15 +151,13 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (timestamp: ");
 		result.append(timestamp);
 		result.append(')');

@@ -18,6 +18,7 @@ import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
 import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
@@ -33,14 +34,12 @@ import kieker.model.analysismodel.type.impl.TypePackageImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass executionModelEClass = null;
@@ -48,7 +47,6 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass deployedOperationsPairToAggregatedInvocationMapEntryEClass = null;
@@ -56,23 +54,27 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass aggregatedInvocationEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aggregatedStorageAccessEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static
+	 * <p>Note: the correct way to create the package is via the static
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#eNS_URI
 	 * @see #init()
@@ -85,55 +87,44 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
-	 * <p>
-	 * This method is used to initialize {@link ExecutionPackage#eINSTANCE} when that field is accessed.
+	 *
+	 * <p>This method is used to initialize {@link ExecutionPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static ExecutionPackage init() {
-		if (isInited)
-			return (ExecutionPackage) EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
+		if (isInited) return (ExecutionPackage)EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ExecutionPackageImpl
-				? EPackage.Registry.INSTANCE.get(eNS_URI)
-				: new ExecutionPackageImpl());
+		Object registeredExecutionPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ExecutionPackageImpl theExecutionPackage = registeredExecutionPackage instanceof ExecutionPackageImpl ? (ExecutionPackageImpl)registeredExecutionPackage : new ExecutionPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(AnalysismodelPackage.eNS_URI) instanceof AnalysismodelPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI)
-						: AnalysismodelPackage.eINSTANCE);
-		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI)
-						: StatisticsPackage.eINSTANCE);
-		TypePackageImpl theTypePackage = (TypePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI)
-				: TypePackage.eINSTANCE);
-		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI)
-						: AssemblyPackage.eINSTANCE);
-		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(DeploymentPackage.eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI)
-						: DeploymentPackage.eINSTANCE);
-		TracePackageImpl theTracePackage = (TracePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI)
-				: TracePackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(registeredPackage instanceof AnalysismodelPackageImpl ? registeredPackage : AnalysismodelPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(registeredPackage instanceof StatisticsPackageImpl ? registeredPackage : StatisticsPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		TypePackageImpl theTypePackage = (TypePackageImpl)(registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(registeredPackage instanceof AssemblyPackageImpl ? registeredPackage : AssemblyPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
+		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theExecutionPackage.createPackageContents();
@@ -164,9 +155,9 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getExecutionModel() {
 		return executionModelEClass;
 	}
@@ -174,19 +165,19 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getExecutionModel_AggregatedInvocations() {
-		return (EReference) executionModelEClass.getEStructuralFeatures().get(0);
+		return (EReference)executionModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getDeployedOperationsPairToAggregatedInvocationMapEntry() {
 		return deployedOperationsPairToAggregatedInvocationMapEntryEClass;
 	}
@@ -194,29 +185,29 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDeployedOperationsPairToAggregatedInvocationMapEntry_Key() {
-		return (EAttribute) deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Value() {
-		return (EReference) deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getAggregatedInvocation() {
 		return aggregatedInvocationEClass;
 	}
@@ -224,52 +215,99 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getAggregatedInvocation_Source() {
-		return (EReference) aggregatedInvocationEClass.getEStructuralFeatures().get(0);
+		return (EReference)aggregatedInvocationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getAggregatedInvocation_Target() {
-		return (EReference) aggregatedInvocationEClass.getEStructuralFeatures().get(1);
+		return (EReference)aggregatedInvocationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public ExecutionFactory getExecutionFactory() {
-		return (ExecutionFactory) getEFactoryInstance();
+	@Override
+	public EAttribute getAggregatedInvocation_Sources() {
+		return (EAttribute)aggregatedInvocationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
+	 */
+	@Override
+	public EClass getAggregatedStorageAccess() {
+		return aggregatedStorageAccessEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAggregatedStorageAccess_Storage() {
+		return (EReference)aggregatedStorageAccessEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAggregatedStorageAccess_Code() {
+		return (EReference)aggregatedStorageAccessEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAggregatedStorageAccess_Sources() {
+		return (EAttribute)aggregatedStorageAccessEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ExecutionFactory getExecutionFactory() {
+		return (ExecutionFactory)getEFactoryInstance();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is
+	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
-			return;
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -283,27 +321,30 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		aggregatedInvocationEClass = createEClass(AGGREGATED_INVOCATION);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__SOURCE);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__TARGET);
+		createEAttribute(aggregatedInvocationEClass, AGGREGATED_INVOCATION__SOURCES);
+
+		aggregatedStorageAccessEClass = createEClass(AGGREGATED_STORAGE_ACCESS);
+		createEReference(aggregatedStorageAccessEClass, AGGREGATED_STORAGE_ACCESS__STORAGE);
+		createEReference(aggregatedStorageAccessEClass, AGGREGATED_STORAGE_ACCESS__CODE);
+		createEAttribute(aggregatedStorageAccessEClass, AGGREGATED_STORAGE_ACCESS__SOURCES);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This
+	 * Complete the initialization of the package and its meta-model.  This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
-			return;
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -312,8 +353,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage) EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
-		DeploymentPackage theDeploymentPackage = (DeploymentPackage) EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -323,27 +364,26 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(executionModelEClass, ExecutionModel.class, "ExecutionModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getExecutionModel_AggregatedInvocations(), this.getDeployedOperationsPairToAggregatedInvocationMapEntry(), null, "aggregatedInvocations",
-				null, 0, -1, ExecutionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-				!IS_DERIVED, !IS_ORDERED);
+		initEReference(getExecutionModel_AggregatedInvocations(), this.getDeployedOperationsPairToAggregatedInvocationMapEntry(), null, "aggregatedInvocations", null, 0, -1, ExecutionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(deployedOperationsPairToAggregatedInvocationMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedInvocationMapEntry", !IS_ABSTRACT,
-				!IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(deployedOperationsPairToAggregatedInvocationMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedInvocationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		EGenericType g1 = createEGenericType(theAnalysismodelPackage.getComposedKey());
 		EGenericType g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
-		initEAttribute(getDeployedOperationsPairToAggregatedInvocationMapEntry_Key(), g1, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedOperationsPairToAggregatedInvocationMapEntry_Value(), this.getAggregatedInvocation(), null, "value", null, 0, 1, Map.Entry.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDeployedOperationsPairToAggregatedInvocationMapEntry_Key(), g1, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedOperationsPairToAggregatedInvocationMapEntry_Value(), this.getAggregatedInvocation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aggregatedInvocationEClass, AggregatedInvocation.class, "AggregatedInvocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAggregatedInvocation_Source(), theDeploymentPackage.getDeployedOperation(), null, "source", null, 0, 1, AggregatedInvocation.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAggregatedInvocation_Target(), theDeploymentPackage.getDeployedOperation(), null, "target", null, 0, 1, AggregatedInvocation.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAggregatedInvocation_Source(), theDeploymentPackage.getDeployedOperation(), null, "source", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAggregatedInvocation_Target(), theDeploymentPackage.getDeployedOperation(), null, "target", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAggregatedInvocation_Sources(), ecorePackage.getEString(), "sources", null, 0, -1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(aggregatedStorageAccessEClass, AggregatedStorageAccess.class, "AggregatedStorageAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAggregatedStorageAccess_Storage(), theDeploymentPackage.getDeployedStorage(), null, "storage", null, 0, 1, AggregatedStorageAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAggregatedStorageAccess_Code(), theDeploymentPackage.getDeployedOperation(), null, "code", null, 0, 1, AggregatedStorageAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAggregatedStorageAccess_Sources(), ecorePackage.getEString(), "sources", null, 0, -1, AggregatedStorageAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } // ExecutionPackageImpl

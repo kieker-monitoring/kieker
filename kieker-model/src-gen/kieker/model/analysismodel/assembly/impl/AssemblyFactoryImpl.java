@@ -18,7 +18,6 @@ import kieker.model.analysismodel.assembly.*;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory {
@@ -26,16 +25,16 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static AssemblyFactory init() {
 		try {
-			AssemblyFactory theAssemblyFactory = (AssemblyFactory) EPackage.Registry.INSTANCE.getEFactory(AssemblyPackage.eNS_URI);
+			AssemblyFactory theAssemblyFactory = (AssemblyFactory)EPackage.Registry.INSTANCE.getEFactory(AssemblyPackage.eNS_URI);
 			if (theAssemblyFactory != null) {
 				return theAssemblyFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new AssemblyFactoryImpl();
@@ -45,7 +44,6 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public AssemblyFactoryImpl() {
@@ -55,33 +53,29 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case AssemblyPackage.ASSEMBLY_MODEL:
-			return createAssemblyModel();
-		case AssemblyPackage.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY:
-			return (EObject) createEStringToAssemblyComponentMapEntry();
-		case AssemblyPackage.ASSEMBLY_COMPONENT:
-			return createAssemblyComponent();
-		case AssemblyPackage.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY:
-			return (EObject) createEStringToAssemblyOperationMapEntry();
-		case AssemblyPackage.ASSEMBLY_OPERATION:
-			return createAssemblyOperation();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case AssemblyPackage.ASSEMBLY_MODEL: return createAssemblyModel();
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY: return (EObject)createEStringToAssemblyComponentMapEntry();
+			case AssemblyPackage.ASSEMBLY_COMPONENT: return createAssemblyComponent();
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY: return (EObject)createEStringToAssemblyOperationMapEntry();
+			case AssemblyPackage.ASSEMBLY_OPERATION: return createAssemblyOperation();
+			case AssemblyPackage.ASSEMBLY_STORAGE: return createAssemblyStorage();
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY: return (EObject)createEStringToAssemblyStorageMapEntry();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AssemblyModel createAssemblyModel() {
 		AssemblyModelImpl assemblyModel = new AssemblyModelImpl();
 		return assemblyModel;
@@ -90,7 +84,6 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, AssemblyComponent> createEStringToAssemblyComponentMapEntry() {
@@ -101,9 +94,9 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AssemblyComponent createAssemblyComponent() {
 		AssemblyComponentImpl assemblyComponent = new AssemblyComponentImpl();
 		return assemblyComponent;
@@ -112,7 +105,6 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, AssemblyOperation> createEStringToAssemblyOperationMapEntry() {
@@ -123,9 +115,9 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AssemblyOperation createAssemblyOperation() {
 		AssemblyOperationImpl assemblyOperation = new AssemblyOperationImpl();
 		return assemblyOperation;
@@ -134,17 +126,37 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public AssemblyPackage getAssemblyPackage() {
-		return (AssemblyPackage) getEPackage();
+	@Override
+	public AssemblyStorage createAssemblyStorage() {
+		AssemblyStorageImpl assemblyStorage = new AssemblyStorageImpl();
+		return assemblyStorage;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
+	 */
+	public Map.Entry<String, AssemblyStorage> createEStringToAssemblyStorageMapEntry() {
+		EStringToAssemblyStorageMapEntryImpl eStringToAssemblyStorageMapEntry = new EStringToAssemblyStorageMapEntryImpl();
+		return eStringToAssemblyStorageMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AssemblyPackage getAssemblyPackage() {
+		return (AssemblyPackage)getEPackage();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @deprecated
 	 * @generated
 	 */

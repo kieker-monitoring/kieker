@@ -18,7 +18,6 @@ import kieker.model.analysismodel.deployment.*;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFactory {
@@ -26,16 +25,16 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static DeploymentFactory init() {
 		try {
-			DeploymentFactory theDeploymentFactory = (DeploymentFactory) EPackage.Registry.INSTANCE.getEFactory(DeploymentPackage.eNS_URI);
+			DeploymentFactory theDeploymentFactory = (DeploymentFactory)EPackage.Registry.INSTANCE.getEFactory(DeploymentPackage.eNS_URI);
 			if (theDeploymentFactory != null) {
 				return theDeploymentFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new DeploymentFactoryImpl();
@@ -45,7 +44,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public DeploymentFactoryImpl() {
@@ -55,37 +53,31 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case DeploymentPackage.DEPLOYMENT_MODEL:
-			return createDeploymentModel();
-		case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY:
-			return (EObject) createEStringToDeploymentContextMapEntry();
-		case DeploymentPackage.DEPLOYMENT_CONTEXT:
-			return createDeploymentContext();
-		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY:
-			return (EObject) createEStringToDeployedComponentMapEntry();
-		case DeploymentPackage.DEPLOYED_COMPONENT:
-			return createDeployedComponent();
-		case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY:
-			return (EObject) createEStringToDeployedOperationMapEntry();
-		case DeploymentPackage.DEPLOYED_OPERATION:
-			return createDeployedOperation();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case DeploymentPackage.DEPLOYMENT_MODEL: return createDeploymentModel();
+			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: return (EObject)createEStringToDeploymentContextMapEntry();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT: return createDeploymentContext();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: return (EObject)createEStringToDeployedComponentMapEntry();
+			case DeploymentPackage.DEPLOYED_COMPONENT: return createDeployedComponent();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: return (EObject)createEStringToDeployedOperationMapEntry();
+			case DeploymentPackage.DEPLOYED_OPERATION: return createDeployedOperation();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY: return (EObject)createEStringToDeployedStorageMapEntry();
+			case DeploymentPackage.DEPLOYED_STORAGE: return createDeployedStorage();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public DeploymentModel createDeploymentModel() {
 		DeploymentModelImpl deploymentModel = new DeploymentModelImpl();
 		return deploymentModel;
@@ -94,7 +86,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeploymentContext> createEStringToDeploymentContextMapEntry() {
@@ -105,9 +96,9 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public DeploymentContext createDeploymentContext() {
 		DeploymentContextImpl deploymentContext = new DeploymentContextImpl();
 		return deploymentContext;
@@ -116,7 +107,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeployedComponent> createEStringToDeployedComponentMapEntry() {
@@ -127,9 +117,9 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public DeployedComponent createDeployedComponent() {
 		DeployedComponentImpl deployedComponent = new DeployedComponentImpl();
 		return deployedComponent;
@@ -138,7 +128,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeployedOperation> createEStringToDeployedOperationMapEntry() {
@@ -149,9 +138,9 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public DeployedOperation createDeployedOperation() {
 		DeployedOperationImpl deployedOperation = new DeployedOperationImpl();
 		return deployedOperation;
@@ -160,17 +149,37 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
-	public DeploymentPackage getDeploymentPackage() {
-		return (DeploymentPackage) getEPackage();
+	public Map.Entry<String, DeployedStorage> createEStringToDeployedStorageMapEntry() {
+		EStringToDeployedStorageMapEntryImpl eStringToDeployedStorageMapEntry = new EStringToDeployedStorageMapEntryImpl();
+		return eStringToDeployedStorageMapEntry;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
+	 */
+	@Override
+	public DeployedStorage createDeployedStorage() {
+		DeployedStorageImpl deployedStorage = new DeployedStorageImpl();
+		return deployedStorage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DeploymentPackage getDeploymentPackage() {
+		return (DeploymentPackage)getEPackage();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @deprecated
 	 * @generated
 	 */

@@ -11,7 +11,7 @@ package kieker.model.analysismodel.statistics;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.statistics.LongValue#getMeasurement <em>Measurement</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.LongValue#getMeasurement <em>Measurement</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getLongValue()
@@ -27,7 +27,6 @@ public interface LongValue extends Value {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Measurement</em>' attribute.
 	 * @see #setMeasurement(long)
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getLongValue_Measurement()
@@ -40,9 +39,7 @@ public interface LongValue extends Value {
 	 * Sets the value of the '{@link kieker.model.analysismodel.statistics.LongValue#getMeasurement <em>Measurement</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Measurement</em>' attribute.
+	 * @param value the new value of the '<em>Measurement</em>' attribute.
 	 * @see #getMeasurement()
 	 * @generated
 	 */

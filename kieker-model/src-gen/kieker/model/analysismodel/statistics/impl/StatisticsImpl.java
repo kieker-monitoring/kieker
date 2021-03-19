@@ -24,7 +24,7 @@ import kieker.model.analysismodel.statistics.TimeSeries;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getTimeSeries <em>Time Series</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getTimeSeries <em>Time Series</em>}</li>
  * </ul>
  *
  * @generated
@@ -34,7 +34,6 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * The cached value of the '{@link #getTimeSeries() <em>Time Series</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getTimeSeries()
 	 * @generated
 	 * @ordered
@@ -44,7 +43,6 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected StatisticsImpl() {
@@ -54,7 +52,6 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,9 +62,9 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EList<TimeSeries<?, ?>> getTimeSeries() {
 		if (timeSeries == null) {
 			timeSeries = new EObjectResolvingEList<TimeSeries<?, ?>>(TimeSeries.class, this, StatisticsPackage.STATISTICS__TIME_SERIES);
@@ -78,14 +75,13 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case StatisticsPackage.STATISTICS__TIME_SERIES:
-			return getTimeSeries();
+			case StatisticsPackage.STATISTICS__TIME_SERIES:
+				return getTimeSeries();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -93,17 +89,16 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case StatisticsPackage.STATISTICS__TIME_SERIES:
-			getTimeSeries().clear();
-			getTimeSeries().addAll((Collection<? extends TimeSeries<?, ?>>) newValue);
-			return;
+			case StatisticsPackage.STATISTICS__TIME_SERIES:
+				getTimeSeries().clear();
+				getTimeSeries().addAll((Collection<? extends TimeSeries<?, ?>>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -111,15 +106,14 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case StatisticsPackage.STATISTICS__TIME_SERIES:
-			getTimeSeries().clear();
-			return;
+			case StatisticsPackage.STATISTICS__TIME_SERIES:
+				getTimeSeries().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -127,14 +121,13 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case StatisticsPackage.STATISTICS__TIME_SERIES:
-			return timeSeries != null && !timeSeries.isEmpty();
+			case StatisticsPackage.STATISTICS__TIME_SERIES:
+				return timeSeries != null && !timeSeries.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -15,9 +15,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getName <em>Name</em>}</li>
- * <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getUnit <em>Unit</em>}</li>
- * <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getValues <em>Values</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getUnit <em>Unit</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.TimeSeries#getValues <em>Values</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries()
@@ -33,7 +33,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries_Name()
 	 * @model id="true" changeable="false"
@@ -49,7 +48,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Unit</em>' attribute.
 	 * @see #setUnit(Object)
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries_Unit()
@@ -62,9 +60,7 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	 * Sets the value of the '{@link kieker.model.analysismodel.statistics.TimeSeries#getUnit <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Unit</em>' attribute.
+	 * @param value the new value of the '<em>Unit</em>' attribute.
 	 * @see #getUnit()
 	 * @generated
 	 */
@@ -78,7 +74,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Values</em>' reference list.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries_Values()
 	 * @model

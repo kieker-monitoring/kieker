@@ -15,10 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.ComponentType#getName <em>Name</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getProvidedStorages <em>Provided Storages</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.type.TypePackage#getComponentType()
@@ -34,7 +35,6 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_Signature()
@@ -47,9 +47,7 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Signature</em>' attribute.
+	 * @param value the new value of the '<em>Signature</em>' attribute.
 	 * @see #getSignature()
 	 * @generated
 	 */
@@ -65,11 +63,9 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_ProvidedOperations()
-	 * @model mapType="kieker.model.analysismodel.type.EStringToOperationTypeMapEntry<org.eclipse.emf.ecore.EString,
-	 *        kieker.model.analysismodel.type.OperationType>" ordered="false"
+	 * @model mapType="kieker.model.analysismodel.type.EStringToOperationTypeMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;" ordered="false"
 	 * @generated
 	 */
 	EMap<String, OperationType> getProvidedOperations();
@@ -82,7 +78,6 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_Name()
@@ -95,9 +90,7 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.ComponentType#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Name</em>' attribute.
+	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -111,7 +104,6 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Package</em>' attribute.
 	 * @see #setPackage(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_Package()
@@ -124,12 +116,23 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Package</em>' attribute.
+	 * @param value the new value of the '<em>Package</em>' attribute.
 	 * @see #getPackage()
 	 * @generated
 	 */
 	void setPackage(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Provided Storages</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.model.analysismodel.type.StorageType},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Provided Storages</em>' map.
+	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_ProvidedStorages()
+	 * @model mapType="kieker.model.analysismodel.type.EStringToStorageTypeMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.StorageType&gt;" ordered="false"
+	 * @generated
+	 */
+	EMap<String, StorageType> getProvidedStorages();
 
 } // ComponentType

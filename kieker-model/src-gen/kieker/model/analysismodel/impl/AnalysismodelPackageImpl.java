@@ -4,8 +4,6 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-
-import kieker.analysis.util.ComposedKey;
 import kieker.model.analysismodel.AnalysismodelFactory;
 import kieker.model.analysismodel.AnalysismodelPackage;
 import kieker.model.analysismodel.assembly.AssemblyPackage;
@@ -20,7 +18,7 @@ import kieker.model.analysismodel.trace.TracePackage;
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
 import kieker.model.analysismodel.type.TypePackage;
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
-
+import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -30,14 +28,12 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class AnalysismodelPackageImpl extends EPackageImpl implements AnalysismodelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EDataType instantEDataType = null;
@@ -45,7 +41,6 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EDataType durationEDataType = null;
@@ -53,7 +48,6 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EDataType composedKeyEDataType = null;
@@ -62,14 +56,12 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static
+	 * <p>Note: the correct way to create the package is via the static
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.model.analysismodel.AnalysismodelPackage#eNS_URI
 	 * @see #init()
@@ -82,55 +74,44 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
-	 * <p>
-	 * This method is used to initialize {@link AnalysismodelPackage#eINSTANCE} when that field is accessed.
+	 *
+	 * <p>This method is used to initialize {@link AnalysismodelPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static AnalysismodelPackage init() {
-		if (isInited)
-			return (AnalysismodelPackage) EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		if (isInited) return (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
 
 		// Obtain or create and register package
-		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof AnalysismodelPackageImpl
-				? EPackage.Registry.INSTANCE.get(eNS_URI)
-				: new AnalysismodelPackageImpl());
+		Object registeredAnalysismodelPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		AnalysismodelPackageImpl theAnalysismodelPackage = registeredAnalysismodelPackage instanceof AnalysismodelPackageImpl ? (AnalysismodelPackageImpl)registeredAnalysismodelPackage : new AnalysismodelPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI)
-						: StatisticsPackage.eINSTANCE);
-		TypePackageImpl theTypePackage = (TypePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI)
-				: TypePackage.eINSTANCE);
-		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI)
-						: AssemblyPackage.eINSTANCE);
-		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(DeploymentPackage.eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI)
-						: DeploymentPackage.eINSTANCE);
-		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ExecutionPackage.eNS_URI) instanceof ExecutionPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI)
-						: ExecutionPackage.eINSTANCE);
-		TracePackageImpl theTracePackage = (TracePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI)
-				: TracePackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(registeredPackage instanceof StatisticsPackageImpl ? registeredPackage : StatisticsPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		TypePackageImpl theTypePackage = (TypePackageImpl)(registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(registeredPackage instanceof AssemblyPackageImpl ? registeredPackage : AssemblyPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
+		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
+		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theAnalysismodelPackage.createPackageContents();
@@ -161,9 +142,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -171,9 +152,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EDataType getDuration() {
 		return durationEDataType;
 	}
@@ -181,9 +162,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EDataType getComposedKey() {
 		return composedKeyEDataType;
 	}
@@ -191,32 +172,29 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AnalysismodelFactory getAnalysismodelFactory() {
-		return (AnalysismodelFactory) getEFactoryInstance();
+		return (AnalysismodelFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is
+	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
-			return;
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create data types
@@ -228,22 +206,19 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This
+	 * Complete the initialization of the package and its meta-model.  This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
-			return;
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -252,12 +227,12 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		StatisticsPackage theStatisticsPackage = (StatisticsPackage) EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
-		TypePackage theTypePackage = (TypePackage) EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
-		AssemblyPackage theAssemblyPackage = (AssemblyPackage) EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
-		DeploymentPackage theDeploymentPackage = (DeploymentPackage) EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
-		ExecutionPackage theExecutionPackage = (ExecutionPackage) EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
-		TracePackage theTracePackage = (TracePackage) EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
+		StatisticsPackage theStatisticsPackage = (StatisticsPackage)EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		TypePackage theTypePackage = (TypePackage)EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		AssemblyPackage theAssemblyPackage = (AssemblyPackage)EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
+		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		ExecutionPackage theExecutionPackage = (ExecutionPackage)EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
+		TracePackage theTracePackage = (TracePackage)EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theStatisticsPackage);

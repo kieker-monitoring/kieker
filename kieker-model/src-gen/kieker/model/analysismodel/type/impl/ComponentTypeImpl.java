@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.StorageType;
 import kieker.model.analysismodel.type.TypePackage;
 
 /**
@@ -28,10 +29,11 @@ import kieker.model.analysismodel.type.TypePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getSignature <em>Signature</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getProvidedOperations <em>Provided Operations</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getName <em>Name</em>}</li>
- * <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getPackage <em>Package</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getSignature <em>Signature</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getProvidedOperations <em>Provided Operations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getPackage <em>Package</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl#getProvidedStorages <em>Provided Storages</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,7 +43,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -52,7 +53,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -63,7 +63,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The cached value of the '{@link #getProvidedOperations() <em>Provided Operations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getProvidedOperations()
 	 * @generated
 	 * @ordered
@@ -74,7 +73,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -85,7 +83,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -96,7 +93,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The default value of the '{@link #getPackage() <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getPackage()
 	 * @generated
 	 * @ordered
@@ -107,7 +103,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * The cached value of the '{@link #getPackage() <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getPackage()
 	 * @generated
 	 * @ordered
@@ -115,9 +110,18 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	protected String package_ = PACKAGE_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getProvidedStorages() <em>Provided Storages</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @see #getProvidedStorages()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<String, StorageType> providedStorages;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ComponentTypeImpl() {
@@ -127,7 +131,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -138,9 +141,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public String getSignature() {
 		return signature;
 	}
@@ -148,9 +151,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setSignature(String newSignature) {
 		String oldSignature = signature;
 		signature = newSignature;
@@ -161,13 +164,12 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EMap<String, OperationType> getProvidedOperations() {
 		if (providedOperations == null) {
-			providedOperations = new EcoreEMap<String, OperationType>(TypePackage.Literals.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY,
-					EStringToOperationTypeMapEntryImpl.class, this, TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS);
+			providedOperations = new EcoreEMap<String,OperationType>(TypePackage.Literals.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY, EStringToOperationTypeMapEntryImpl.class, this, TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS);
 		}
 		return providedOperations;
 	}
@@ -175,9 +177,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -185,9 +187,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -198,9 +200,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public String getPackage() {
 		return package_;
 	}
@@ -208,9 +210,9 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setPackage(String newPackage) {
 		String oldPackage = package_;
 		package_ = newPackage;
@@ -221,14 +223,28 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 * @generated
+	 */
+	@Override
+	public EMap<String, StorageType> getProvidedStorages() {
+		if (providedStorages == null) {
+			providedStorages = new EcoreEMap<String,StorageType>(TypePackage.Literals.ESTRING_TO_STORAGE_TYPE_MAP_ENTRY, EStringToStorageTypeMapEntryImpl.class, this, TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES);
+		}
+		return providedStorages;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-			return ((InternalEList<?>) getProvidedOperations()).basicRemove(otherEnd, msgs);
+			case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
+				return ((InternalEList<?>)getProvidedOperations()).basicRemove(otherEnd, msgs);
+			case TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES:
+				return ((InternalEList<?>)getProvidedStorages()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -236,23 +252,23 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case TypePackage.COMPONENT_TYPE__SIGNATURE:
-			return getSignature();
-		case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-			if (coreType)
-				return getProvidedOperations();
-			else
-				return getProvidedOperations().map();
-		case TypePackage.COMPONENT_TYPE__NAME:
-			return getName();
-		case TypePackage.COMPONENT_TYPE__PACKAGE:
-			return getPackage();
+			case TypePackage.COMPONENT_TYPE__SIGNATURE:
+				return getSignature();
+			case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
+				if (coreType) return getProvidedOperations();
+				else return getProvidedOperations().map();
+			case TypePackage.COMPONENT_TYPE__NAME:
+				return getName();
+			case TypePackage.COMPONENT_TYPE__PACKAGE:
+				return getPackage();
+			case TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES:
+				if (coreType) return getProvidedStorages();
+				else return getProvidedStorages().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -260,24 +276,26 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case TypePackage.COMPONENT_TYPE__SIGNATURE:
-			setSignature((String) newValue);
-			return;
-		case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-			((EStructuralFeature.Setting) getProvidedOperations()).set(newValue);
-			return;
-		case TypePackage.COMPONENT_TYPE__NAME:
-			setName((String) newValue);
-			return;
-		case TypePackage.COMPONENT_TYPE__PACKAGE:
-			setPackage((String) newValue);
-			return;
+			case TypePackage.COMPONENT_TYPE__SIGNATURE:
+				setSignature((String)newValue);
+				return;
+			case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
+				((EStructuralFeature.Setting)getProvidedOperations()).set(newValue);
+				return;
+			case TypePackage.COMPONENT_TYPE__NAME:
+				setName((String)newValue);
+				return;
+			case TypePackage.COMPONENT_TYPE__PACKAGE:
+				setPackage((String)newValue);
+				return;
+			case TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES:
+				((EStructuralFeature.Setting)getProvidedStorages()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -285,24 +303,26 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case TypePackage.COMPONENT_TYPE__SIGNATURE:
-			setSignature(SIGNATURE_EDEFAULT);
-			return;
-		case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-			getProvidedOperations().clear();
-			return;
-		case TypePackage.COMPONENT_TYPE__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case TypePackage.COMPONENT_TYPE__PACKAGE:
-			setPackage(PACKAGE_EDEFAULT);
-			return;
+			case TypePackage.COMPONENT_TYPE__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
+			case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
+				getProvidedOperations().clear();
+				return;
+			case TypePackage.COMPONENT_TYPE__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case TypePackage.COMPONENT_TYPE__PACKAGE:
+				setPackage(PACKAGE_EDEFAULT);
+				return;
+			case TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES:
+				getProvidedStorages().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -310,20 +330,21 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case TypePackage.COMPONENT_TYPE__SIGNATURE:
-			return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
-		case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-			return providedOperations != null && !providedOperations.isEmpty();
-		case TypePackage.COMPONENT_TYPE__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case TypePackage.COMPONENT_TYPE__PACKAGE:
-			return PACKAGE_EDEFAULT == null ? package_ != null : !PACKAGE_EDEFAULT.equals(package_);
+			case TypePackage.COMPONENT_TYPE__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
+			case TypePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
+				return providedOperations != null && !providedOperations.isEmpty();
+			case TypePackage.COMPONENT_TYPE__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case TypePackage.COMPONENT_TYPE__PACKAGE:
+				return PACKAGE_EDEFAULT == null ? package_ != null : !PACKAGE_EDEFAULT.equals(package_);
+			case TypePackage.COMPONENT_TYPE__PROVIDED_STORAGES:
+				return providedStorages != null && !providedStorages.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -331,15 +352,13 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (signature: ");
 		result.append(signature);
 		result.append(", name: ");

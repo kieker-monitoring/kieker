@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents <em>Assembly Components</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents <em>Assembly Components</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyModel()
@@ -33,11 +33,9 @@ public interface AssemblyModel extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Assembly Components</em>' map.
 	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyModel_AssemblyComponents()
-	 * @model mapType="kieker.model.analysismodel.assembly.EStringToAssemblyComponentMapEntry<org.eclipse.emf.ecore.EString,
-	 *        kieker.model.analysismodel.assembly.AssemblyComponent>" ordered="false"
+	 * @model mapType="kieker.model.analysismodel.assembly.EStringToAssemblyComponentMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.assembly.AssemblyComponent&gt;" ordered="false"
 	 * @generated
 	 */
 	EMap<String, AssemblyComponent> getAssemblyComponents();

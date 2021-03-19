@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.trace.Trace#getTraceID <em>Trace ID</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.Trace#getRootOperationCall <em>Root Operation Call</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.Trace#getTraceID <em>Trace ID</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.Trace#getRootOperationCall <em>Root Operation Call</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.trace.TracePackage#getTrace()
@@ -30,7 +30,6 @@ public interface Trace extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Trace ID</em>' attribute.
 	 * @see #setTraceID(long)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getTrace_TraceID()
@@ -43,9 +42,7 @@ public interface Trace extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.Trace#getTraceID <em>Trace ID</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Trace ID</em>' attribute.
+	 * @param value the new value of the '<em>Trace ID</em>' attribute.
 	 * @see #getTraceID()
 	 * @generated
 	 */
@@ -59,7 +56,6 @@ public interface Trace extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Root Operation Call</em>' containment reference.
 	 * @see #setRootOperationCall(OperationCall)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getTrace_RootOperationCall()
@@ -69,13 +65,10 @@ public interface Trace extends EObject {
 	OperationCall getRootOperationCall();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.trace.Trace#getRootOperationCall <em>Root Operation Call</em>}' containment
-	 * reference.
+	 * Sets the value of the '{@link kieker.model.analysismodel.trace.Trace#getRootOperationCall <em>Root Operation Call</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Root Operation Call</em>' containment reference.
+	 * @param value the new value of the '<em>Root Operation Call</em>' containment reference.
 	 * @see #getRootOperationCall()
 	 * @generated
 	 */

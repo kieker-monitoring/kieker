@@ -4,10 +4,9 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-
-import kieker.analysis.util.ComposedKey;
 import kieker.model.analysismodel.*;
 
+import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -21,7 +20,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class AnalysismodelFactoryImpl extends EFactoryImpl implements AnalysismodelFactory {
@@ -29,16 +27,16 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static AnalysismodelFactory init() {
 		try {
-			AnalysismodelFactory theAnalysismodelFactory = (AnalysismodelFactory) EPackage.Registry.INSTANCE.getEFactory(AnalysismodelPackage.eNS_URI);
+			AnalysismodelFactory theAnalysismodelFactory = (AnalysismodelFactory)EPackage.Registry.INSTANCE.getEFactory(AnalysismodelPackage.eNS_URI);
 			if (theAnalysismodelFactory != null) {
 				return theAnalysismodelFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new AnalysismodelFactoryImpl();
@@ -48,7 +46,6 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public AnalysismodelFactoryImpl() {
@@ -58,71 +55,66 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case AnalysismodelPackage.INSTANT:
-			return createInstantFromString(eDataType, initialValue);
-		case AnalysismodelPackage.DURATION:
-			return createDurationFromString(eDataType, initialValue);
-		case AnalysismodelPackage.COMPOSED_KEY:
-			return createComposedKeyFromString(eDataType, initialValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case AnalysismodelPackage.INSTANT:
+				return createInstantFromString(eDataType, initialValue);
+			case AnalysismodelPackage.DURATION:
+				return createDurationFromString(eDataType, initialValue);
+			case AnalysismodelPackage.COMPOSED_KEY:
+				return createComposedKeyFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case AnalysismodelPackage.INSTANT:
-			return convertInstantToString(eDataType, instanceValue);
-		case AnalysismodelPackage.DURATION:
-			return convertDurationToString(eDataType, instanceValue);
-		case AnalysismodelPackage.COMPOSED_KEY:
-			return convertComposedKeyToString(eDataType, instanceValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case AnalysismodelPackage.INSTANT:
+				return convertInstantToString(eDataType, instanceValue);
+			case AnalysismodelPackage.DURATION:
+				return convertDurationToString(eDataType, instanceValue);
+			case AnalysismodelPackage.COMPOSED_KEY:
+				return convertComposedKeyToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Instant createInstantFromString(EDataType eDataType, String initialValue) {
-		return (Instant) super.createFromString(eDataType, initialValue);
+		return (Instant)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertInstantToString(EDataType eDataType, Object instanceValue) {
@@ -132,17 +124,15 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public Duration createDurationFromString(EDataType eDataType, String initialValue) {
-		return (Duration) super.createFromString(eDataType, initialValue);
+		return (Duration)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertDurationToString(EDataType eDataType, Object instanceValue) {
@@ -152,17 +142,15 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public ComposedKey<?, ?> createComposedKeyFromString(EDataType eDataType, String initialValue) {
-		return (ComposedKey<?, ?>) super.createFromString(initialValue);
+		return (ComposedKey<?, ?>)super.createFromString(initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertComposedKeyToString(EDataType eDataType, Object instanceValue) {
@@ -172,17 +160,16 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AnalysismodelPackage getAnalysismodelPackage() {
-		return (AnalysismodelPackage) getEPackage();
+		return (AnalysismodelPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

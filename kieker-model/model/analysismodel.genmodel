@@ -13,7 +13,7 @@
       <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//ComposedKey/F"/>
       <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//ComposedKey/S"/>
     </genDataTypes>
-    <nestedGenPackages prefix="Statistics" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Statistics" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//statistics">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//statistics/PredefinedUnits">
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/PredefinedUnits/CPU_UTIL"/>
@@ -50,7 +50,7 @@
         <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//statistics/Unit/V"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Type" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Type" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//type">
       <genClasses ecoreClass="analysismodel.ecore#//type/TypeModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/TypeModel/componentTypes"/>
@@ -88,7 +88,7 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/StorageType/type"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Assembly" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Assembly" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//assembly">
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyModel/assemblyComponents"/>
@@ -124,7 +124,7 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToAssemblyStorageMapEntry/value"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Deployment" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Deployment" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//deployment">
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeploymentModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeploymentModel/deploymentContexts"/>
@@ -172,7 +172,7 @@
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Execution" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Execution" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//execution">
       <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>
@@ -196,7 +196,7 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/AggregatedStorageAccess/sources"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Trace" basePackage="kieker.analysisteetime.model.analysismodel"
+    <nestedGenPackages prefix="Trace" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//trace">
       <genClasses ecoreClass="analysismodel.ecore#//trace/Trace">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/Trace/traceID"/>

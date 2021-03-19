@@ -5,6 +5,7 @@ package kieker.model.analysismodel.execution;
 import org.eclipse.emf.ecore.EObject;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,8 +16,9 @@ import kieker.model.analysismodel.deployment.DeployedOperation;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSource <em>Source</em>}</li>
- * <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getTarget <em>Target</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSource <em>Source</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getTarget <em>Target</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSources <em>Sources</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation()
@@ -32,7 +34,6 @@ public interface AggregatedInvocation extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Source</em>' reference.
 	 * @see #setSource(DeployedOperation)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation_Source()
@@ -45,9 +46,7 @@ public interface AggregatedInvocation extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSource <em>Source</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Source</em>' reference.
+	 * @param value the new value of the '<em>Source</em>' reference.
 	 * @see #getSource()
 	 * @generated
 	 */
@@ -61,7 +60,6 @@ public interface AggregatedInvocation extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Target</em>' reference.
 	 * @see #setTarget(DeployedOperation)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation_Target()
@@ -74,12 +72,22 @@ public interface AggregatedInvocation extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.AggregatedInvocation#getTarget <em>Target</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Target</em>' reference.
+	 * @param value the new value of the '<em>Target</em>' reference.
 	 * @see #getTarget()
 	 * @generated
 	 */
 	void setTarget(DeployedOperation value);
+
+	/**
+	 * Returns the value of the '<em><b>Sources</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sources</em>' attribute list.
+	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation_Sources()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getSources();
 
 } // AggregatedInvocation

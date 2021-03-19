@@ -26,8 +26,8 @@ import kieker.model.analysismodel.deployment.DeploymentPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getName <em>Name</em>}</li>
- * <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getComponents <em>Components</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,7 +37,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -47,7 +46,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -58,7 +56,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getComponents() <em>Components</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getComponents()
 	 * @generated
 	 * @ordered
@@ -68,7 +65,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DeploymentContextImpl() {
@@ -78,7 +74,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -89,13 +84,12 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EMap<String, DeployedComponent> getComponents() {
 		if (components == null) {
-			components = new EcoreEMap<String, DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY,
-					EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
+			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
 		}
 		return components;
 	}
@@ -103,9 +97,9 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -113,9 +107,9 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -126,14 +120,13 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-			return ((InternalEList<?>) getComponents()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+				return ((InternalEList<?>)getComponents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -141,19 +134,16 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-			return getName();
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-			if (coreType)
-				return getComponents();
-			else
-				return getComponents().map();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				return getName();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+				if (coreType) return getComponents();
+				else return getComponents().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -161,19 +151,18 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-			setName((String) newValue);
-			return;
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-			((EStructuralFeature.Setting) getComponents()).set(newValue);
-			return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				setName((String)newValue);
+				return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+				((EStructuralFeature.Setting)getComponents()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -181,18 +170,17 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-			getComponents().clear();
-			return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+				getComponents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,16 +188,15 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-			return components != null && !components.isEmpty();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+				return components != null && !components.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -217,15 +204,13 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
 		result.append(')');

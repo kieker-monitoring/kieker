@@ -21,7 +21,6 @@ import kieker.model.analysismodel.assembly.*;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * 
  * @see kieker.model.analysismodel.assembly.AssemblyPackage
  * @generated
  */
@@ -30,7 +29,6 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected static AssemblyPackage modelPackage;
@@ -39,7 +37,6 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public AssemblySwitch() {
@@ -52,9 +49,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param ePackage
-	 *            the package in question.
+	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
@@ -67,52 +62,55 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-		case AssemblyPackage.ASSEMBLY_MODEL: {
-			AssemblyModel assemblyModel = (AssemblyModel) theEObject;
-			T result = caseAssemblyModel(assemblyModel);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case AssemblyPackage.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY: {
-			@SuppressWarnings("unchecked")
-			Map.Entry<String, AssemblyComponent> eStringToAssemblyComponentMapEntry = (Map.Entry<String, AssemblyComponent>) theEObject;
-			T result = caseEStringToAssemblyComponentMapEntry(eStringToAssemblyComponentMapEntry);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case AssemblyPackage.ASSEMBLY_COMPONENT: {
-			AssemblyComponent assemblyComponent = (AssemblyComponent) theEObject;
-			T result = caseAssemblyComponent(assemblyComponent);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case AssemblyPackage.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY: {
-			@SuppressWarnings("unchecked")
-			Map.Entry<String, AssemblyOperation> eStringToAssemblyOperationMapEntry = (Map.Entry<String, AssemblyOperation>) theEObject;
-			T result = caseEStringToAssemblyOperationMapEntry(eStringToAssemblyOperationMapEntry);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case AssemblyPackage.ASSEMBLY_OPERATION: {
-			AssemblyOperation assemblyOperation = (AssemblyOperation) theEObject;
-			T result = caseAssemblyOperation(assemblyOperation);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		default:
-			return defaultCase(theEObject);
+			case AssemblyPackage.ASSEMBLY_MODEL: {
+				AssemblyModel assemblyModel = (AssemblyModel)theEObject;
+				T result = caseAssemblyModel(assemblyModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, AssemblyComponent> eStringToAssemblyComponentMapEntry = (Map.Entry<String, AssemblyComponent>)theEObject;
+				T result = caseEStringToAssemblyComponentMapEntry(eStringToAssemblyComponentMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ASSEMBLY_COMPONENT: {
+				AssemblyComponent assemblyComponent = (AssemblyComponent)theEObject;
+				T result = caseAssemblyComponent(assemblyComponent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, AssemblyOperation> eStringToAssemblyOperationMapEntry = (Map.Entry<String, AssemblyOperation>)theEObject;
+				T result = caseEStringToAssemblyOperationMapEntry(eStringToAssemblyOperationMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ASSEMBLY_OPERATION: {
+				AssemblyOperation assemblyOperation = (AssemblyOperation)theEObject;
+				T result = caseAssemblyOperation(assemblyOperation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ASSEMBLY_STORAGE: {
+				AssemblyStorage assemblyStorage = (AssemblyStorage)theEObject;
+				T result = caseAssemblyStorage(assemblyStorage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, AssemblyStorage> eStringToAssemblyStorageMapEntry = (Map.Entry<String, AssemblyStorage>)theEObject;
+				T result = caseEStringToAssemblyStorageMapEntry(eStringToAssemblyStorageMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			default: return defaultCase(theEObject);
 		}
 	}
 
@@ -122,9 +120,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -139,9 +135,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EString To Assembly Component Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -156,9 +150,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Component</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -173,9 +165,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EString To Assembly Operation Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -190,9 +180,7 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Operation</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -202,14 +190,42 @@ public class AssemblySwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Storage</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Storage</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAssemblyStorage(AssemblyStorage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Assembly Storage Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Assembly Storage Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToAssemblyStorageMapEntry(Map.Entry<String, AssemblyStorage> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated

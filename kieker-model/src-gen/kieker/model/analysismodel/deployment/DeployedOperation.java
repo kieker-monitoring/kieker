@@ -15,7 +15,7 @@ import kieker.model.analysismodel.assembly.AssemblyOperation;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation()
@@ -31,7 +31,6 @@ public interface DeployedOperation extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Assembly Operation</em>' reference.
 	 * @see #setAssemblyOperation(AssemblyOperation)
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_AssemblyOperation()
@@ -41,13 +40,10 @@ public interface DeployedOperation extends EObject {
 	AssemblyOperation getAssemblyOperation();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}'
-	 * reference.
+	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Assembly Operation</em>' reference.
+	 * @param value the new value of the '<em>Assembly Operation</em>' reference.
 	 * @see #getAssemblyOperation()
 	 * @generated
 	 */
@@ -56,11 +52,7 @@ public interface DeployedOperation extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null)
-	 *        {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn
-	 *        (DeployedComponent) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
 	 * @generated
 	 */
 	DeployedComponent getComponent();

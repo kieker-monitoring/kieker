@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.util;
+package kieker.model.analysismodel.util;
 
 import java.util.Map;
 

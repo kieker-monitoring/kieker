@@ -16,12 +16,12 @@
 
 package kieker.analysis.model;
 
-import kieker.analysis.util.ComposedKey;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.util.ComposedKey;
 
 /**
  * @author Sören Henning

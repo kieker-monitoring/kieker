@@ -27,7 +27,7 @@ import kieker.model.analysismodel.deployment.DeploymentPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentModelImpl#getDeploymentContexts <em>Deployment Contexts</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentModelImpl#getDeploymentContexts <em>Deployment Contexts</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,7 +37,6 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getDeploymentContexts()
 	 * @generated
 	 * @ordered
@@ -47,7 +46,6 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected DeploymentModelImpl() {
@@ -57,7 +55,6 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,13 +65,12 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EMap<String, DeploymentContext> getDeploymentContexts() {
 		if (deploymentContexts == null) {
-			deploymentContexts = new EcoreEMap<String, DeploymentContext>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY,
-					EStringToDeploymentContextMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS);
+			deploymentContexts = new EcoreEMap<String,DeploymentContext>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY, EStringToDeploymentContextMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS);
 		}
 		return deploymentContexts;
 	}
@@ -82,14 +78,13 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
-			return ((InternalEList<?>) getDeploymentContexts()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				return ((InternalEList<?>)getDeploymentContexts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,17 +92,14 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
-			if (coreType)
-				return getDeploymentContexts();
-			else
-				return getDeploymentContexts().map();
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				if (coreType) return getDeploymentContexts();
+				else return getDeploymentContexts().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -115,15 +107,14 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
-			((EStructuralFeature.Setting) getDeploymentContexts()).set(newValue);
-			return;
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				((EStructuralFeature.Setting)getDeploymentContexts()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -131,15 +122,14 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
-			getDeploymentContexts().clear();
-			return;
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				getDeploymentContexts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -147,14 +137,13 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
-			return deploymentContexts != null && !deploymentContexts.isEmpty();
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				return deploymentContexts != null && !deploymentContexts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -40,14 +40,12 @@ import kieker.model.analysismodel.type.impl.TypePackageImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass statisticsEClass = null;
@@ -55,7 +53,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass timeSeriesEClass = null;
@@ -63,7 +60,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass valueEClass = null;
@@ -71,7 +67,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass intValueEClass = null;
@@ -79,7 +74,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass longValueEClass = null;
@@ -87,7 +81,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass floatValueEClass = null;
@@ -95,7 +88,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass doubleValueEClass = null;
@@ -103,7 +95,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EClass unitEClass = null;
@@ -111,7 +102,6 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private EEnum predefinedUnitsEEnum = null;
@@ -120,14 +110,12 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>
-	 * Note: the correct way to create the package is via the static
+	 * <p>Note: the correct way to create the package is via the static
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#eNS_URI
 	 * @see #init()
@@ -140,55 +128,44 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
-	 * <p>
-	 * This method is used to initialize {@link StatisticsPackage#eINSTANCE} when that field is accessed.
+	 *
+	 * <p>This method is used to initialize {@link StatisticsPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static StatisticsPackage init() {
-		if (isInited)
-			return (StatisticsPackage) EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		if (isInited) return (StatisticsPackage)EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
 
 		// Obtain or create and register package
-		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof StatisticsPackageImpl
-				? EPackage.Registry.INSTANCE.get(eNS_URI)
-				: new StatisticsPackageImpl());
+		Object registeredStatisticsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		StatisticsPackageImpl theStatisticsPackage = registeredStatisticsPackage instanceof StatisticsPackageImpl ? (StatisticsPackageImpl)registeredStatisticsPackage : new StatisticsPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(AnalysismodelPackage.eNS_URI) instanceof AnalysismodelPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI)
-						: AnalysismodelPackage.eINSTANCE);
-		TypePackageImpl theTypePackage = (TypePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI)
-				: TypePackage.eINSTANCE);
-		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI)
-						: AssemblyPackage.eINSTANCE);
-		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(DeploymentPackage.eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI)
-						: DeploymentPackage.eINSTANCE);
-		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl) (EPackage.Registry.INSTANCE
-				.getEPackage(ExecutionPackage.eNS_URI) instanceof ExecutionPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI)
-						: ExecutionPackage.eINSTANCE);
-		TracePackageImpl theTracePackage = (TracePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl
-				? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI)
-				: TracePackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(registeredPackage instanceof AnalysismodelPackageImpl ? registeredPackage : AnalysismodelPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		TypePackageImpl theTypePackage = (TypePackageImpl)(registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(registeredPackage instanceof AssemblyPackageImpl ? registeredPackage : AssemblyPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
+		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
+		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theStatisticsPackage.createPackageContents();
@@ -219,9 +196,9 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getStatistics() {
 		return statisticsEClass;
 	}
@@ -229,19 +206,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getStatistics_TimeSeries() {
-		return (EReference) statisticsEClass.getEStructuralFeatures().get(0);
+		return (EReference)statisticsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getTimeSeries() {
 		return timeSeriesEClass;
 	}
@@ -249,39 +226,39 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTimeSeries_Name() {
-		return (EAttribute) timeSeriesEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)timeSeriesEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTimeSeries_Unit() {
-		return (EAttribute) timeSeriesEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)timeSeriesEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EReference getTimeSeries_Values() {
-		return (EReference) timeSeriesEClass.getEStructuralFeatures().get(2);
+		return (EReference)timeSeriesEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getValue() {
 		return valueEClass;
 	}
@@ -289,19 +266,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getValue_Timestamp() {
-		return (EAttribute) valueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)valueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getIntValue() {
 		return intValueEClass;
 	}
@@ -309,19 +286,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIntValue_Measurement() {
-		return (EAttribute) intValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)intValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getLongValue() {
 		return longValueEClass;
 	}
@@ -329,19 +306,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getLongValue_Measurement() {
-		return (EAttribute) longValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)longValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getFloatValue() {
 		return floatValueEClass;
 	}
@@ -349,19 +326,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFloatValue_Measurement() {
-		return (EAttribute) floatValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)floatValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getDoubleValue() {
 		return doubleValueEClass;
 	}
@@ -369,19 +346,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDoubleValue_Measurement() {
-		return (EAttribute) doubleValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute)doubleValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EClass getUnit() {
 		return unitEClass;
 	}
@@ -389,9 +366,9 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public EEnum getPredefinedUnits() {
 		return predefinedUnitsEEnum;
 	}
@@ -399,32 +376,29 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public StatisticsFactory getStatisticsFactory() {
-		return (StatisticsFactory) getEFactoryInstance();
+		return (StatisticsFactory)getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package. This method is
+	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
-			return;
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -460,22 +434,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This
+	 * Complete the initialization of the package and its meta-model.  This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
-			return;
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -484,7 +455,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage) EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter timeSeriesEClass_V = addETypeParameter(timeSeriesEClass, "V");
@@ -514,37 +485,28 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
-		initEReference(getStatistics_TimeSeries(), g1, null, "timeSeries", null, 0, -1, Statistics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStatistics_TimeSeries(), g1, null, "timeSeries", null, 0, -1, Statistics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(timeSeriesEClass, TimeSeries.class, "TimeSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTimeSeries_Name(), ecorePackage.getEString(), "name", null, 0, 1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE,
-				!IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTimeSeries_Unit(), ecorePackage.getEJavaObject(), "unit", null, 0, 1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTimeSeries_Name(), ecorePackage.getEString(), "name", null, 0, 1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTimeSeries_Unit(), ecorePackage.getEJavaObject(), "unit", null, 0, 1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(timeSeriesEClass_V);
-		initEReference(getTimeSeries_Values(), g1, null, "values", null, 0, -1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTimeSeries_Values(), g1, null, "values", null, 0, -1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(valueEClass, Value.class, "Value", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getValue_Timestamp(), theAnalysismodelPackage.getInstant(), "timestamp", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getValue_Timestamp(), theAnalysismodelPackage.getInstant(), "timestamp", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(intValueEClass, IntValue.class, "IntValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIntValue_Measurement(), ecorePackage.getEInt(), "measurement", null, 0, 1, IntValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntValue_Measurement(), ecorePackage.getEInt(), "measurement", null, 0, 1, IntValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(longValueEClass, LongValue.class, "LongValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLongValue_Measurement(), ecorePackage.getELong(), "measurement", null, 0, 1, LongValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLongValue_Measurement(), ecorePackage.getELong(), "measurement", null, 0, 1, LongValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(floatValueEClass, FloatValue.class, "FloatValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFloatValue_Measurement(), ecorePackage.getEFloat(), "measurement", null, 0, 1, FloatValue.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFloatValue_Measurement(), ecorePackage.getEFloat(), "measurement", null, 0, 1, FloatValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(doubleValueEClass, DoubleValue.class, "DoubleValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDoubleValue_Measurement(), ecorePackage.getEDouble(), "measurement", null, 0, 1, DoubleValue.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDoubleValue_Measurement(), ecorePackage.getEDouble(), "measurement", null, 0, 1, DoubleValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitEClass, Unit.class, "Unit", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

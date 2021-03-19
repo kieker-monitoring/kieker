@@ -19,7 +19,6 @@ import kieker.model.analysismodel.statistics.*;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * 
  * @see kieker.model.analysismodel.statistics.StatisticsPackage
  * @generated
  */
@@ -28,7 +27,6 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected static StatisticsPackage modelPackage;
@@ -37,7 +35,6 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public StatisticsSwitch() {
@@ -50,9 +47,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param ePackage
-	 *            the package in question.
+	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
@@ -65,79 +60,65 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-		case StatisticsPackage.STATISTICS: {
-			Statistics statistics = (Statistics) theEObject;
-			T result = caseStatistics(statistics);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.TIME_SERIES: {
-			TimeSeries<?, ?> timeSeries = (TimeSeries<?, ?>) theEObject;
-			T result = caseTimeSeries(timeSeries);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.VALUE: {
-			Value value = (Value) theEObject;
-			T result = caseValue(value);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.INT_VALUE: {
-			IntValue intValue = (IntValue) theEObject;
-			T result = caseIntValue(intValue);
-			if (result == null)
-				result = caseValue(intValue);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.LONG_VALUE: {
-			LongValue longValue = (LongValue) theEObject;
-			T result = caseLongValue(longValue);
-			if (result == null)
-				result = caseValue(longValue);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.FLOAT_VALUE: {
-			FloatValue floatValue = (FloatValue) theEObject;
-			T result = caseFloatValue(floatValue);
-			if (result == null)
-				result = caseValue(floatValue);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.DOUBLE_VALUE: {
-			DoubleValue doubleValue = (DoubleValue) theEObject;
-			T result = caseDoubleValue(doubleValue);
-			if (result == null)
-				result = caseValue(doubleValue);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case StatisticsPackage.UNIT: {
-			Unit<?> unit = (Unit<?>) theEObject;
-			T result = caseUnit(unit);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		default:
-			return defaultCase(theEObject);
+			case StatisticsPackage.STATISTICS: {
+				Statistics statistics = (Statistics)theEObject;
+				T result = caseStatistics(statistics);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.TIME_SERIES: {
+				TimeSeries<?, ?> timeSeries = (TimeSeries<?, ?>)theEObject;
+				T result = caseTimeSeries(timeSeries);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.VALUE: {
+				Value value = (Value)theEObject;
+				T result = caseValue(value);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.INT_VALUE: {
+				IntValue intValue = (IntValue)theEObject;
+				T result = caseIntValue(intValue);
+				if (result == null) result = caseValue(intValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.LONG_VALUE: {
+				LongValue longValue = (LongValue)theEObject;
+				T result = caseLongValue(longValue);
+				if (result == null) result = caseValue(longValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.FLOAT_VALUE: {
+				FloatValue floatValue = (FloatValue)theEObject;
+				T result = caseFloatValue(floatValue);
+				if (result == null) result = caseValue(floatValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.DOUBLE_VALUE: {
+				DoubleValue doubleValue = (DoubleValue)theEObject;
+				T result = caseDoubleValue(doubleValue);
+				if (result == null) result = caseValue(doubleValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.UNIT: {
+				Unit<?> unit = (Unit<?>)theEObject;
+				T result = caseUnit(unit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			default: return defaultCase(theEObject);
 		}
 	}
 
@@ -147,9 +128,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Statistics</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -164,9 +143,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Time Series</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -181,9 +158,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -198,9 +173,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Int Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -215,9 +188,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Long Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -232,9 +203,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Float Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -249,9 +218,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Double Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -266,9 +233,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -283,9 +248,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated

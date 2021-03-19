@@ -17,7 +17,6 @@ import kieker.model.analysismodel.statistics.*;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * 
  * @generated
  */
 public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFactory {
@@ -25,16 +24,16 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public static StatisticsFactory init() {
 		try {
-			StatisticsFactory theStatisticsFactory = (StatisticsFactory) EPackage.Registry.INSTANCE.getEFactory(StatisticsPackage.eNS_URI);
+			StatisticsFactory theStatisticsFactory = (StatisticsFactory)EPackage.Registry.INSTANCE.getEFactory(StatisticsPackage.eNS_URI);
 			if (theStatisticsFactory != null) {
 				return theStatisticsFactory;
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new StatisticsFactoryImpl();
@@ -44,7 +43,6 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public StatisticsFactoryImpl() {
@@ -54,67 +52,58 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case StatisticsPackage.STATISTICS:
-			return createStatistics();
-		case StatisticsPackage.TIME_SERIES:
-			return createTimeSeries();
-		case StatisticsPackage.INT_VALUE:
-			return createIntValue();
-		case StatisticsPackage.LONG_VALUE:
-			return createLongValue();
-		case StatisticsPackage.FLOAT_VALUE:
-			return createFloatValue();
-		case StatisticsPackage.DOUBLE_VALUE:
-			return createDoubleValue();
-		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			case StatisticsPackage.STATISTICS: return createStatistics();
+			case StatisticsPackage.TIME_SERIES: return createTimeSeries();
+			case StatisticsPackage.INT_VALUE: return createIntValue();
+			case StatisticsPackage.LONG_VALUE: return createLongValue();
+			case StatisticsPackage.FLOAT_VALUE: return createFloatValue();
+			case StatisticsPackage.DOUBLE_VALUE: return createDoubleValue();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case StatisticsPackage.PREDEFINED_UNITS:
-			return createPredefinedUnitsFromString(eDataType, initialValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case StatisticsPackage.PREDEFINED_UNITS:
+				return createPredefinedUnitsFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case StatisticsPackage.PREDEFINED_UNITS:
-			return convertPredefinedUnitsToString(eDataType, instanceValue);
-		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			case StatisticsPackage.PREDEFINED_UNITS:
+				return convertPredefinedUnitsToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public Statistics createStatistics() {
 		StatisticsImpl statistics = new StatisticsImpl();
 		return statistics;
@@ -123,9 +112,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public <V extends Value, U extends Unit<V>> TimeSeries<V, U> createTimeSeries() {
 		TimeSeriesImpl<V, U> timeSeries = new TimeSeriesImpl<V, U>();
 		return timeSeries;
@@ -134,9 +123,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public IntValue createIntValue() {
 		IntValueImpl intValue = new IntValueImpl();
 		return intValue;
@@ -145,9 +134,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public LongValue createLongValue() {
 		LongValueImpl longValue = new LongValueImpl();
 		return longValue;
@@ -156,9 +145,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public FloatValue createFloatValue() {
 		FloatValueImpl floatValue = new FloatValueImpl();
 		return floatValue;
@@ -167,9 +156,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public DoubleValue createDoubleValue() {
 		DoubleValueImpl doubleValue = new DoubleValueImpl();
 		return doubleValue;
@@ -178,20 +167,17 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public PredefinedUnits createPredefinedUnitsFromString(EDataType eDataType, String initialValue) {
 		PredefinedUnits result = PredefinedUnits.get(initialValue);
-		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public String convertPredefinedUnitsToString(EDataType eDataType, Object instanceValue) {
@@ -201,17 +187,16 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public StatisticsPackage getStatisticsPackage() {
-		return (StatisticsPackage) getEPackage();
+		return (StatisticsPackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @deprecated
 	 * @generated
 	 */

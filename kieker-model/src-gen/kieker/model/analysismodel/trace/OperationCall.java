@@ -20,17 +20,17 @@ import kieker.model.analysismodel.deployment.DeployedOperation;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getOperation <em>Operation</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getParent <em>Parent</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getChildren <em>Children</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getDuration <em>Duration</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getStart <em>Start</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToParent <em>Dur Ratio To Parent</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getStackDepth <em>Stack Depth</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getOrderIndex <em>Order Index</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}</li>
- * <li>{@link kieker.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getOperation <em>Operation</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getChildren <em>Children</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getDuration <em>Duration</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getStart <em>Start</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToParent <em>Dur Ratio To Parent</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getStackDepth <em>Stack Depth</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getOrderIndex <em>Order Index</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall()
@@ -46,7 +46,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Operation</em>' reference.
 	 * @see #setOperation(DeployedOperation)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Operation()
@@ -59,9 +58,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getOperation <em>Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Operation</em>' reference.
+	 * @param value the new value of the '<em>Operation</em>' reference.
 	 * @see #getOperation()
 	 * @generated
 	 */
@@ -76,7 +73,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Parent</em>' reference.
 	 * @see #setParent(OperationCall)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Parent()
@@ -90,9 +86,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getParent <em>Parent</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Parent</em>' reference.
+	 * @param value the new value of the '<em>Parent</em>' reference.
 	 * @see #getParent()
 	 * @generated
 	 */
@@ -108,7 +102,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Children</em>' reference list.
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Children()
 	 * @see kieker.model.analysismodel.trace.OperationCall#getParent
@@ -125,7 +118,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Duration</em>' attribute.
 	 * @see #setDuration(Duration)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Duration()
@@ -138,9 +130,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getDuration <em>Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Duration</em>' attribute.
+	 * @param value the new value of the '<em>Duration</em>' attribute.
 	 * @see #getDuration()
 	 * @generated
 	 */
@@ -154,7 +144,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Start</em>' attribute.
 	 * @see #setStart(Instant)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Start()
@@ -167,9 +156,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getStart <em>Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Start</em>' attribute.
+	 * @param value the new value of the '<em>Start</em>' attribute.
 	 * @see #getStart()
 	 * @generated
 	 */
@@ -183,7 +170,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Dur Ratio To Parent</em>' attribute.
 	 * @see #setDurRatioToParent(float)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_DurRatioToParent()
@@ -196,9 +182,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToParent <em>Dur Ratio To Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Dur Ratio To Parent</em>' attribute.
+	 * @param value the new value of the '<em>Dur Ratio To Parent</em>' attribute.
 	 * @see #getDurRatioToParent()
 	 * @generated
 	 */
@@ -212,7 +196,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Dur Ratio To Root Parent</em>' attribute.
 	 * @see #setDurRatioToRootParent(float)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_DurRatioToRootParent()
@@ -222,13 +205,10 @@ public interface OperationCall extends EObject {
 	float getDurRatioToRootParent();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}'
-	 * attribute.
+	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Dur Ratio To Root Parent</em>' attribute.
+	 * @param value the new value of the '<em>Dur Ratio To Root Parent</em>' attribute.
 	 * @see #getDurRatioToRootParent()
 	 * @generated
 	 */
@@ -242,7 +222,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Stack Depth</em>' attribute.
 	 * @see #setStackDepth(int)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_StackDepth()
@@ -255,9 +234,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getStackDepth <em>Stack Depth</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Stack Depth</em>' attribute.
+	 * @param value the new value of the '<em>Stack Depth</em>' attribute.
 	 * @see #getStackDepth()
 	 * @generated
 	 */
@@ -271,7 +248,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Order Index</em>' attribute.
 	 * @see #setOrderIndex(int)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_OrderIndex()
@@ -284,9 +260,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getOrderIndex <em>Order Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Order Index</em>' attribute.
+	 * @param value the new value of the '<em>Order Index</em>' attribute.
 	 * @see #getOrderIndex()
 	 * @generated
 	 */
@@ -301,7 +275,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Failed</em>' attribute.
 	 * @see #setFailed(boolean)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Failed()
@@ -314,9 +287,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Failed</em>' attribute.
+	 * @param value the new value of the '<em>Failed</em>' attribute.
 	 * @see #isFailed()
 	 * @generated
 	 */
@@ -330,7 +301,6 @@ public interface OperationCall extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Failed Cause</em>' attribute.
 	 * @see #setFailedCause(String)
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_FailedCause()
@@ -343,9 +313,7 @@ public interface OperationCall extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Failed Cause</em>' attribute.
+	 * @param value the new value of the '<em>Failed Cause</em>' attribute.
 	 * @see #getFailedCause()
 	 * @generated
 	 */

@@ -27,7 +27,7 @@ import kieker.model.analysismodel.type.OperationType;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,7 +37,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getOperationType() <em>Operation Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getOperationType()
 	 * @generated
 	 * @ordered
@@ -47,7 +46,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected AssemblyOperationImpl() {
@@ -57,7 +55,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -68,13 +65,13 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public OperationType getOperationType() {
 		if (operationType != null && operationType.eIsProxy()) {
-			InternalEObject oldOperationType = (InternalEObject) operationType;
-			operationType = (OperationType) eResolveProxy(oldOperationType);
+			InternalEObject oldOperationType = (InternalEObject)operationType;
+			operationType = (OperationType)eResolveProxy(oldOperationType);
 			if (operationType != oldOperationType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
@@ -86,7 +83,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public OperationType basicGetOperationType() {
@@ -96,9 +92,9 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public void setOperationType(OperationType newOperationType) {
 		OperationType oldOperationType = operationType;
 		operationType = newOperationType;
@@ -109,34 +105,32 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
+	@Override
 	public AssemblyComponent getAssemblyComponent() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
 			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
 			if (containerContainer != null) {
-				return (AssemblyComponent) containerContainer;
+				return (AssemblyComponent) containerContainer ;
 			}
 		}
 		return null;
-
+		
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-			if (resolve)
-				return getOperationType();
-			return basicGetOperationType();
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				if (resolve) return getOperationType();
+				return basicGetOperationType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -144,15 +138,14 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-			setOperationType((OperationType) newValue);
-			return;
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				setOperationType((OperationType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -160,15 +153,14 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-			setOperationType((OperationType) null);
-			return;
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				setOperationType((OperationType)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -176,14 +168,13 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-			return operationType != null;
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				return operationType != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -191,14 +182,13 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-		case AssemblyPackage.ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT:
-			return getAssemblyComponent();
+			case AssemblyPackage.ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT:
+				return getAssemblyComponent();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
