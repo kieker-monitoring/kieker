@@ -125,7 +125,7 @@ public class DirectoryScannerStageIntegrationTest {
 	 */
 	@Test
 	public void testEmptyArrayOfDirectories() {
-		final DirectoryScannerStage producer = new DirectoryScannerStage(null);
+		final DirectoryScannerStage producer = new DirectoryScannerStage((List<File>) null);
 		StageTester.test(producer).start();
 
 		Assert.assertThat(producer.getOutputPort(), StageTester.producesNothing());

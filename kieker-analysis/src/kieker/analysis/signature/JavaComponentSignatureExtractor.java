@@ -16,7 +16,7 @@
 
 package kieker.analysis.signature;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.ComponentType;
 
 /**
  * A {@link IComponentSignatureExtractor} that uses the Java signature style.

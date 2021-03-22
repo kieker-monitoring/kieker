@@ -18,11 +18,11 @@ package kieker.analysis.model;
 
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.IOperationRecord;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Sören Henning

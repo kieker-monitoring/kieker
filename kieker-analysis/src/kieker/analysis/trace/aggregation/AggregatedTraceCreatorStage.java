@@ -16,7 +16,7 @@
 
 package kieker.analysis.trace.aggregation;
 
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.Trace;
 
 import teetime.stage.basic.AbstractTransformation;
 

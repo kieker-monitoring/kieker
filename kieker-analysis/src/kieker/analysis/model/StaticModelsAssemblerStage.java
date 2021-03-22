@@ -17,13 +17,13 @@
 package kieker.analysis.model;
 
 import kieker.analysis.signature.SignatureExtractor;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.IFlowRecord;
+import kieker.model.analysismodel.assembly.AssemblyFactory;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.deployment.DeploymentFactory;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypeModel;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;

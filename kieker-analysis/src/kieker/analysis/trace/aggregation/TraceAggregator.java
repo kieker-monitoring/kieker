@@ -21,9 +21,9 @@ import java.util.Map;
 
 import com.google.common.base.Equivalence;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TraceFactory;
 
 /**
  * This class creates aggregated traces from normal {@link Trace}s. Traces are aggregated if they

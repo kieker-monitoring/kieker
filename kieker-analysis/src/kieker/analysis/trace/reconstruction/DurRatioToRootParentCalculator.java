@@ -17,7 +17,7 @@
 package kieker.analysis.trace.reconstruction;
 
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * @author Sören Henning

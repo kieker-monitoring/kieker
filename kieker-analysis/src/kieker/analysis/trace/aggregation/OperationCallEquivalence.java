@@ -23,8 +23,8 @@ import java.util.stream.IntStream;
 
 import com.google.common.base.Equivalence;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * This class defines an equivalence for {@link OperationCall}s using the class {@link Equivalence}. Therefore,

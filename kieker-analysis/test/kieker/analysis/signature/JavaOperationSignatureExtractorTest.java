@@ -26,8 +26,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypeFactory;
 
 /**
  * @author Sören Henning
@@ -54,7 +54,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersAndParameters() { // NOPMD (assert is placed in separate method)
@@ -68,7 +68,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersWithParameters() { // NOPMD (assert is placed in separate method)
@@ -82,7 +82,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersWithFullQualifiedParameters() { // NOPMD (assert is placed in separate method)
@@ -96,7 +96,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithMultipleModifiersWithoutParameters() { // NOPMD (assert is placed in separate method)
@@ -110,7 +110,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)
@@ -124,7 +124,7 @@ public class JavaOperationSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * {@link kieker.analysis.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractNestedFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)

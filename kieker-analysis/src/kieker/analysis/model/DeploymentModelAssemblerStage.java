@@ -16,12 +16,12 @@
 
 package kieker.analysis.model;
 
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.deployment.DeploymentModel;
 
 import teetime.stage.basic.AbstractFilter;
 

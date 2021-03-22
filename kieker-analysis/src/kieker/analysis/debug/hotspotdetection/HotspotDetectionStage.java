@@ -27,8 +27,8 @@ import java.util.Map;
 
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.trace.traversal.TraceTraverser;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
 
 import teetime.framework.AbstractConsumerStage;
 
