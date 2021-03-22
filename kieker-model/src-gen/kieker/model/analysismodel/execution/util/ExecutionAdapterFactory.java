@@ -5,6 +5,7 @@ package kieker.model.analysismodel.execution.util;
 import java.util.Map;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.*;
+import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -72,7 +73,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createExecutionModelAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<kieker.model.analysismodel.util.ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
 				return createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter();
 			}
 			@Override
@@ -82,6 +83,10 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAggregatedStorageAccess(AggregatedStorageAccess object) {
 				return createAggregatedStorageAccessAdapter();
+			}
+			@Override
+			public Adapter caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> object) {
+				return createDeployedOperationsPairToAggregatedStorageAccessMapEntryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -155,6 +160,20 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAggregatedStorageAccessAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createDeployedOperationsPairToAggregatedStorageAccessMapEntryAdapter() {
 		return null;
 	}
 

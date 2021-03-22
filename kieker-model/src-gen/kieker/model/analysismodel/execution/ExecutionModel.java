@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.execution;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getAggregatedStorageAccesses <em>Aggregated Storage Accesses</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.execution.ExecutionPackage#getExecutionModel()
@@ -39,6 +41,19 @@ public interface ExecutionModel extends EObject {
 	 * @model mapType="kieker.model.analysismodel.execution.DeployedOperationsPairToAggregatedInvocationMapEntry&lt;kieker.model.analysismodel.ComposedKey&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;, kieker.model.analysismodel.execution.AggregatedInvocation&gt;" ordered="false"
 	 * @generated
 	 */
-	EMap<kieker.model.analysismodel.util.ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations();
+	EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations();
+
+	/**
+	 * Returns the value of the '<em><b>Aggregated Storage Accesses</b></em>' map.
+	 * The key is of type {@link kieker.model.analysismodel.util.ComposedKey<kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation>},
+	 * and the value is of type {@link kieker.model.analysismodel.execution.AggregatedStorageAccess},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Aggregated Storage Accesses</em>' map.
+	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getExecutionModel_AggregatedStorageAccesses()
+	 * @model mapType="kieker.model.analysismodel.execution.DeployedOperationsPairToAggregatedStorageAccessMapEntry&lt;kieker.model.analysismodel.ComposedKey&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;, kieker.model.analysismodel.execution.AggregatedStorageAccess&gt;" ordered="false"
+	 * @generated
+	 */
+	EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getAggregatedStorageAccesses();
 
 } // ExecutionModel

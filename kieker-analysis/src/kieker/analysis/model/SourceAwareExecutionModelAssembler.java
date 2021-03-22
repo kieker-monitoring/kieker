@@ -28,14 +28,17 @@ import kieker.model.analysismodel.util.ComposedKey;
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler implements IExecutionModelAssembler {
+public class SourceAwareExecutionModelAssembler implements IExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionModel executionModel) {
+	private final String dataSource;
+
+	public SourceAwareExecutionModelAssembler(final ExecutionModel executionModel, final String dataSource) {
 		this.executionModel = executionModel;
+		this.dataSource = dataSource;
 	}
 
 	@Override
@@ -53,8 +56,14 @@ public class ExecutionModelAssembler implements IExecutionModelAssembler {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
 			invocation.setTarget(target);
+			invocation.getSources().add(this.dataSource);
 
 			this.executionModel.getAggregatedInvocations().put(key, invocation);
+		} else {
+			final AggregatedInvocation element = this.executionModel.getAggregatedInvocations().get(key);
+			if (!element.getSources().contains(this.dataSource)) {
+				element.getSources().add(this.dataSource);
+			}
 		}
 	}
 

@@ -50,8 +50,8 @@
         <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//statistics/Unit/V"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Type" basePackage="kieker.model.analysismodel"
-        disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//type">
+    <nestedGenPackages prefix="Type" basePackage="kieker.model.analysismodel" disposableProviderFactory="true"
+        ecorePackage="analysismodel.ecore#//type">
       <genClasses ecoreClass="analysismodel.ecore#//type/TypeModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/TypeModel/componentTypes"/>
       </genClasses>
@@ -174,8 +174,13 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Execution" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//execution">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//execution/EDirection">
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/READ"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/WRITE"/>
+      </genEnums>
       <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedStorageAccesses"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/key"/>
@@ -194,10 +199,15 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedStorageAccess/code"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/AggregatedStorageAccess/sources"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/AggregatedStorageAccess/direction"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedStorageAccessMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedStorageAccessMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedStorageAccessMapEntry/value"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Trace" basePackage="kieker.model.analysismodel"
-        disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//trace">
+    <nestedGenPackages prefix="Trace" basePackage="kieker.model.analysismodel" disposableProviderFactory="true"
+        ecorePackage="analysismodel.ecore#//trace">
       <genClasses ecoreClass="analysismodel.ecore#//trace/Trace">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/Trace/traceID"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//trace/Trace/rootOperationCall"/>

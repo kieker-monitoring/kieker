@@ -4,8 +4,10 @@ package kieker.model.analysismodel.execution.impl;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -28,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedStorageAccesses <em>Aggregated Storage Accesses</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,7 +44,17 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<kieker.model.analysismodel.util.ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
+	protected EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
+
+	/**
+	 * The cached value of the '{@link #getAggregatedStorageAccesses() <em>Aggregated Storage Accesses</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAggregatedStorageAccesses()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> aggregatedStorageAccesses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,11 +81,24 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<kieker.model.analysismodel.util.ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
+	public EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<kieker.model.analysismodel.util.ComposedKey<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
+			aggregatedInvocations = new EcoreEMap<ComposedKey<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
+		if (aggregatedStorageAccesses == null) {
+			aggregatedStorageAccesses = new EcoreEMap<ComposedKey<DeployedOperation, DeployedOperation>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
+		}
+		return aggregatedStorageAccesses;
 	}
 
 	/**
@@ -85,6 +111,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return ((InternalEList<?>)getAggregatedInvocations()).basicRemove(otherEnd, msgs);
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
+				return ((InternalEList<?>)getAggregatedStorageAccesses()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -100,6 +128,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				if (coreType) return getAggregatedInvocations();
 				else return getAggregatedInvocations().map();
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
+				if (coreType) return getAggregatedStorageAccesses();
+				else return getAggregatedStorageAccesses().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -114,6 +145,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				((EStructuralFeature.Setting)getAggregatedInvocations()).set(newValue);
+				return;
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
+				((EStructuralFeature.Setting)getAggregatedStorageAccesses()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -130,6 +164,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				getAggregatedInvocations().clear();
 				return;
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
+				getAggregatedStorageAccesses().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -144,6 +181,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return aggregatedInvocations != null && !aggregatedInvocations.isEmpty();
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
+				return aggregatedStorageAccesses != null && !aggregatedStorageAccesses.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

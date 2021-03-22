@@ -4,6 +4,7 @@ package kieker.model.analysismodel.execution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -76,13 +77,22 @@ public interface ExecutionPackage extends EPackage {
 	int EXECUTION_MODEL__AGGREGATED_INVOCATIONS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Aggregated Storage Accesses</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES = 1;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_MODEL_FEATURE_COUNT = 1;
+	int EXECUTION_MODEL_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Model</em>' class.
@@ -232,13 +242,22 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_STORAGE_ACCESS__SOURCES = 2;
 
 	/**
+	 * The feature id for the '<em><b>Direction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AGGREGATED_STORAGE_ACCESS__DIRECTION = 3;
+
+	/**
 	 * The number of structural features of the '<em>Aggregated Storage Access</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_STORAGE_ACCESS_FEATURE_COUNT = 3;
+	int AGGREGATED_STORAGE_ACCESS_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Aggregated Storage Access</em>' class.
@@ -248,6 +267,62 @@ public interface ExecutionPackage extends EPackage {
 	 * @ordered
 	 */
 	int AGGREGATED_STORAGE_ACCESS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl <em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl
+	 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
+	 * @generated
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY = 4;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.execution.EDirection
+	 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getEDirection()
+	 * @generated
+	 */
+	int EDIRECTION = 5;
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.execution.ExecutionModel <em>Model</em>}'.
@@ -269,6 +344,17 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getExecutionModel_AggregatedInvocations();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.execution.ExecutionModel#getAggregatedStorageAccesses <em>Aggregated Storage Accesses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Aggregated Storage Accesses</em>'.
+	 * @see kieker.model.analysismodel.execution.ExecutionModel#getAggregatedStorageAccesses()
+	 * @see #getExecutionModel()
+	 * @generated
+	 */
+	EReference getExecutionModel_AggregatedStorageAccesses();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}'.
@@ -391,6 +477,61 @@ public interface ExecutionPackage extends EPackage {
 	EAttribute getAggregatedStorageAccess_Sources();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getDirection <em>Direction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Direction</em>'.
+	 * @see kieker.model.analysismodel.execution.AggregatedStorageAccess#getDirection()
+	 * @see #getAggregatedStorageAccess()
+	 * @generated
+	 */
+	EAttribute getAggregatedStorageAccess_Direction();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="kieker.model.analysismodel.ComposedKey&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;"
+	 *        valueType="kieker.model.analysismodel.execution.AggregatedStorageAccess" valueContainment="true"
+	 * @generated
+	 */
+	EClass getDeployedOperationsPairToAggregatedStorageAccessMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
+	 * @generated
+	 */
+	EAttribute getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
+	 * @generated
+	 */
+	EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value();
+
+	/**
+	 * Returns the meta object for enum '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>EDirection</em>'.
+	 * @see kieker.model.analysismodel.execution.EDirection
+	 * @generated
+	 */
+	EEnum getEDirection();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -430,6 +571,14 @@ public interface ExecutionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EXECUTION_MODEL__AGGREGATED_INVOCATIONS = eINSTANCE.getExecutionModel_AggregatedInvocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Aggregated Storage Accesses</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES = eINSTANCE.getExecutionModel_AggregatedStorageAccesses();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedInvocationMapEntryImpl <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}' class.
@@ -524,6 +673,50 @@ public interface ExecutionPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute AGGREGATED_STORAGE_ACCESS__SOURCES = eINSTANCE.getAggregatedStorageAccess_Sources();
+
+		/**
+		 * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute AGGREGATED_STORAGE_ACCESS__DIRECTION = eINSTANCE.getAggregatedStorageAccess_Direction();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl <em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl
+		 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
+		 * @generated
+		 */
+		EClass DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.execution.EDirection
+		 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getEDirection()
+		 * @generated
+		 */
+		EEnum EDIRECTION = eINSTANCE.getEDirection();
 
 	}
 

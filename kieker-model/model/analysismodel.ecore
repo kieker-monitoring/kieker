@@ -229,6 +229,9 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
           ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry"
           containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedStorageAccesses"
+          ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedStorageAccessMapEntry"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedInvocationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -252,6 +255,22 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="code" eType="#//deployment/DeployedOperation"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="sources" upperBound="-1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//execution/EDirection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedStorageAccessMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
+        <eGenericType eClassifier="#//ComposedKey">
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//execution/AggregatedStorageAccess"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EDirection">
+      <eLiterals name="READ"/>
+      <eLiterals name="WRITE" value="1"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"

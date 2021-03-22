@@ -21,7 +21,7 @@ import java.util.Map;
 import com.google.common.base.Objects;
 
 /**
- * Class representing a key (e.g., for a {@link Map}) that consists of two elements.
+ * Class representing a key (e.g., for a {@link Map}) that consists of three elements.
  *
  * @param <F>
  *            First element's type
