@@ -44,3 +44,5 @@ plugin.xml
 .idea/
 *.iml
 *.iws
+
+**/output-html/**
