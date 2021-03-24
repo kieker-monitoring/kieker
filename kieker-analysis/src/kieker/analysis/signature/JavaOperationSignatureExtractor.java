@@ -16,9 +16,9 @@
 
 package kieker.analysis.signature;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * A {@link IOperationSignatureExtractor} that uses the Java signature style.

@@ -16,7 +16,7 @@
 
 package kieker.analysis.trace.traversal;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * @author Sören Henning

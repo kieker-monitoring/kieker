@@ -17,6 +17,7 @@ package kieker.analysis.source.file;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.List;
 
 import teetime.framework.AbstractProducerStage;
@@ -43,6 +44,17 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 	 */
 	public DirectoryScannerStage(final List<File> directories) { // NOPMD passing array is not an issue here, read only
 		this.directories = directories;
+	}
+
+	/**
+	 * Create a directory scanner for a single directory.
+	 *
+	 * @param directory
+	 *            the single directory
+	 */
+	public DirectoryScannerStage(final File directory) {
+		this.directories = new ArrayList<>();
+		this.directories.add(directory);
 	}
 
 	/**

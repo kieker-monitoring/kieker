@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analysismodel" nsURI="platform:/resource/Kieker/model/analysismodel.ecore"
+    nsPrefix="analysismodel">
+  <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComposedKey" instanceClassName="kieker.model.analysismodel.util.ComposedKey">
+    <eTypeParameters name="F"/>
+    <eTypeParameters name="S"/>
+  </eClassifiers>
+  <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
+      nsPrefix="statistics">
+    <eClassifiers xsi:type="ecore:EClass" name="Statistics">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
+        <eGenericType eClassifier="#//statistics/TimeSeries">
+          <eTypeArguments/>
+          <eTypeArguments/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeSeries">
+      <eTypeParameters name="V">
+        <eBounds eClassifier="#//statistics/Value"/>
+      </eTypeParameters>
+      <eTypeParameters name="U">
+        <eBounds eClassifier="#//statistics/Unit">
+          <eTypeArguments eTypeParameter="#//statistics/TimeSeries/V"/>
+        </eBounds>
+      </eTypeParameters>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          changeable="false" iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1">
+        <eGenericType eTypeParameter="#//statistics/TimeSeries/V"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="#//Instant"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LongValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FloatValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DoubleValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Unit" abstract="true" interface="true">
+      <eTypeParameters name="V">
+        <eBounds eClassifier="#//statistics/Value"/>
+      </eTypeParameters>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PredefinedUnits">
+      <eLiterals name="CPU_UTIL"/>
+      <eLiterals name="RESPONSE_TIME"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="type" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/type"
+      nsPrefix="type">
+    <eClassifiers xsi:type="ecore:EClass" name="TypeModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" ordered="false"
+          upperBound="-1" eType="#//type/EStringToComponentTypeMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToComponentTypeMapEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//type/ComponentType"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComponentType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" ordered="false"
+          upperBound="-1" eType="#//type/EStringToOperationTypeMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="package" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedStorages" ordered="false"
+          upperBound="-1" eType="#//type/EStringToStorageTypeMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToOperationTypeMapEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//type/OperationType"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToStorageTypeMapEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//type/StorageType"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationType">
+      <eOperations name="getComponentType" eType="#//type/ComponentType">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (ComponentType) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterTypes" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StorageType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="assembly" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/assembly"
+      nsPrefix="assembly">
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponents" ordered="false"
+          upperBound="-1" eType="#//assembly/EStringToAssemblyComponentMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyComponentMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyComponent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyComponent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperations" ordered="false"
+          upperBound="-1" eType="#//assembly/EStringToAssemblyOperationMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//type/ComponentType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorages" ordered="false"
+          upperBound="-1" eType="#//assembly/EStringToAssemblyStorageMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyOperationMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyOperation"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyOperation">
+      <eOperations name="getAssemblyComponent" eType="#//assembly/AssemblyComponent">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//type/OperationType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyStorage">
+      <eOperations name="getAssemblyComponent" eType="#//assembly/AssemblyComponent">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//type/StorageType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyStorageMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyStorage"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
+      nsPrefix="deployment">
+    <eClassifiers xsi:type="ecore:EClass" name="DeploymentModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" ordered="false"
+          upperBound="-1" eType="#//deployment/EStringToDeploymentContextMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeploymentContextMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeploymentContext"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeploymentContext">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
+          upperBound="-1" eType="#//deployment/EStringToDeployedComponentMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedComponentMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedComponent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
+      <eOperations name="getDeploymentContext" eType="#//deployment/DeploymentContext">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentContext) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponent" eType="#//assembly/AssemblyComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
+          ordered="false" upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedStorages" ordered="false"
+          upperBound="-1" eType="#//deployment/EStringToDeployedStorageMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedOperationMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedOperation"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperation">
+      <eOperations name="getComponent" eType="#//deployment/DeployedComponent">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyOperation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedStorageMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedStorage"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedStorage">
+      <eOperations name="getComponent" eType="#//deployment/DeployedComponent">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyStorage"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
+      nsPrefix="execution">
+    <eClassifiers xsi:type="ecore:EClass" name="ExecutionModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
+          ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedStorageAccesses"
+          ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedStorageAccessMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedInvocationMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
+        <eGenericType eClassifier="#//ComposedKey">
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//execution/AggregatedInvocation"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AggregatedInvocation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sources" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AggregatedStorageAccess">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storage" eType="#//deployment/DeployedStorage"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="code" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sources" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//execution/EDirection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedStorageAccessMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
+        <eGenericType eClassifier="#//ComposedKey">
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//execution/AggregatedStorageAccess"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EDirection">
+      <eLiterals name="READ"/>
+      <eLiterals name="WRITE" value="1"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"
+      nsPrefix="trace">
+    <eClassifiers xsi:type="ecore:EClass" name="Trace">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" ordered="false"
+          eType="#//trace/OperationCall" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//trace/OperationCall"
+          eOpposite="#//trace/OperationCall/children"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//trace/OperationCall" eOpposite="#//trace/OperationCall/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="#//Duration"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="#//Instant"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="durRatioToParent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="durRatioToRootParent"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stackDepth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="failed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="failedCause" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

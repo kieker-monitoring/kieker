@@ -16,7 +16,7 @@
 
 package kieker.analysis.signature;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * A {@link IOperationSignatureExtractor} sets the list of modifiers, the return type, the name and

@@ -16,19 +16,19 @@
 
 package kieker.analysis.model;
 
-import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.util.ComposedKey;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler {
+public class ExecutionModelAssembler implements IExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
@@ -38,6 +38,7 @@ public class ExecutionModelAssembler {
 		this.executionModel = executionModel;
 	}
 
+	@Override
 	public void addOperationCall(final OperationCall operationCall) {
 		// Check if operationCall is an entry operation call. If so than source is null
 		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
