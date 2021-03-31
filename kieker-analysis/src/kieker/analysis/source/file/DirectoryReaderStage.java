@@ -100,6 +100,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			return new XZDecompressionFilter();
 		} else if (FSUtil.ZIP_FILE_EXTENSION.equals(extension)) {
 			return new ZipDecompressionFilter();
+		} else if (FSUtil.BZIP2_FILE_EXTENSION.equals(extension)) {
+			return new Bzip2DEcompressionFilter();
 		} else {
 			return new NoneDecompressionFilter();
 		}
