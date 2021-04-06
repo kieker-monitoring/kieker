@@ -546,8 +546,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EReference getEObjectToStatisticsMapEntry_Key() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
+	public EAttribute getEObjectToStatisticsMapEntry_Key() {
+		return (EAttribute)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -557,7 +557,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 */
 	@Override
 	public EReference getEObjectToStatisticsMapEntry_Value() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -669,8 +669,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		createEReference(statisticsModelEClass, STATISTICS_MODEL__STATISTICS);
 
 		eObjectToStatisticsMapEntryEClass = createEClass(EOBJECT_TO_STATISTICS_MAP_ENTRY);
-		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY);
 		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE);
+		createEAttribute(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY);
 
 		timeSeriesStatisticsEClass = createEClass(TIME_SERIES_STATISTICS);
 		createEReference(timeSeriesStatisticsEClass, TIME_SERIES_STATISTICS__TIME_SERIES);
@@ -769,8 +769,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		initEReference(getStatisticsModel_Statistics(), this.getEObjectToStatisticsMapEntry(), null, "statistics", null, 0, -1, StatisticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eObjectToStatisticsMapEntryEClass, Map.Entry.class, "EObjectToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEObjectToStatisticsMapEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEObjectToStatisticsMapEntry_Value(), this.getStatistics(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEObjectToStatisticsMapEntry_Key(), ecorePackage.getEJavaObject(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(timeSeriesStatisticsEClass, TimeSeriesStatistics.class, "TimeSeriesStatistics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getTimeSeries());

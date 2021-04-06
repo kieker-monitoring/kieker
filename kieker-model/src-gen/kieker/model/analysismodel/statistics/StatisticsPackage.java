@@ -575,22 +575,22 @@ public interface StatisticsPackage extends EPackage {
 	int EOBJECT_TO_STATISTICS_MAP_ENTRY = 12;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = 0;
-
-	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = 1;
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = 1;
 
 	/**
 	 * The number of structural features of the '<em>EObject To Statistics Map Entry</em>' class.
@@ -963,22 +963,23 @@ public interface StatisticsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>EObject To Statistics Map Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyType="org.eclipse.emf.ecore.EObject" keyContainment="true"
+	 * @model features="value key" 
 	 *        valueType="kieker.model.analysismodel.statistics.Statistics" valueContainment="true"
+	 *        keyDataType="org.eclipse.emf.ecore.EJavaObject"
 	 * @generated
 	 */
 	EClass getEObjectToStatisticsMapEntry();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Key</em>'.
+	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEObjectToStatisticsMapEntry()
 	 * @generated
 	 */
-	EReference getEObjectToStatisticsMapEntry_Key();
+	EAttribute getEObjectToStatisticsMapEntry_Key();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -1306,12 +1307,12 @@ public interface StatisticsPackage extends EPackage {
 		EClass EOBJECT_TO_STATISTICS_MAP_ENTRY = eINSTANCE.getEObjectToStatisticsMapEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
+		EAttribute EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
 
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.

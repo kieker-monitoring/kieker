@@ -11,7 +11,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -42,7 +41,7 @@ public class StatisticsModelImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<EObject, Statistics> statistics;
+	protected EMap<Object, Statistics> statistics;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,9 +68,9 @@ public class StatisticsModelImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public EMap<EObject, Statistics> getStatistics() {
+	public EMap<Object, Statistics> getStatistics() {
 		if (statistics == null) {
-			statistics = new EcoreEMap<EObject,Statistics>(StatisticsPackage.Literals.EOBJECT_TO_STATISTICS_MAP_ENTRY, EObjectToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS_MODEL__STATISTICS);
+			statistics = new EcoreEMap<Object,Statistics>(StatisticsPackage.Literals.EOBJECT_TO_STATISTICS_MAP_ENTRY, EObjectToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS_MODEL__STATISTICS);
 		}
 		return statistics;
 	}

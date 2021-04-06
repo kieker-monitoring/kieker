@@ -25,15 +25,15 @@ import org.eclipse.emf.ecore.EObject;
 public interface StatisticsModel extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Statistics</b></em>' map.
-	 * The key is of type {@link org.eclipse.emf.ecore.EObject},
+	 * The key is of type {@link java.lang.Object},
 	 * and the value is of type {@link kieker.model.analysismodel.statistics.Statistics},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Statistics</em>' map.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatisticsModel_Statistics()
-	 * @model mapType="kieker.model.analysismodel.statistics.EObjectToStatisticsMapEntry&lt;org.eclipse.emf.ecore.EObject, kieker.model.analysismodel.statistics.Statistics&gt;"
+	 * @model mapType="kieker.model.analysismodel.statistics.EObjectToStatisticsMapEntry&lt;org.eclipse.emf.ecore.EJavaObject, kieker.model.analysismodel.statistics.Statistics&gt;"
 	 * @generated
 	 */
-	EMap<EObject, Statistics> getStatistics();
+	EMap<Object, Statistics> getStatistics();
 
 } // StatisticsModel

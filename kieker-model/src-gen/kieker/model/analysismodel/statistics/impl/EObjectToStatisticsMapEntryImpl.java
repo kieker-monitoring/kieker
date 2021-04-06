@@ -26,23 +26,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl#getTypedKey <em>Key</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,Statistics> {
-	/**
-	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypedKey()
-	 * @generated
-	 * @ordered
-	 */
-	protected EObject key;
-
+public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Object,Statistics> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -52,6 +42,26 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @ordered
 	 */
 	protected Statistics value;
+
+	/**
+	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypedKey()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Object KEY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypedKey()
+	 * @generated
+	 * @ordered
+	 */
+	protected Object key = KEY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -77,7 +87,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EObject getTypedKey() {
+	public Object getTypedKey() {
 		return key;
 	}
 
@@ -86,33 +96,11 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedKey(EObject newKey, NotificationChain msgs) {
-		EObject oldKey = key;
+	public void setTypedKey(Object newKey) {
+		Object oldKey = key;
 		key = newKey;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, newKey);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTypedKey(EObject newKey) {
-		if (newKey != key) {
-			NotificationChain msgs = null;
-			if (key != null)
-				msgs = ((InternalEObject)key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, null, msgs);
-			if (newKey != null)
-				msgs = ((InternalEObject)newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, null, msgs);
-			msgs = basicSetTypedKey(newKey, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, newKey, newKey));
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
 	}
 
 	/**
@@ -166,8 +154,6 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				return basicSetTypedKey(null, msgs);
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				return basicSetTypedValue(null, msgs);
 		}
@@ -182,10 +168,10 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				return getTypedKey();
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				return getTypedValue();
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
+				return getTypedKey();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -198,11 +184,11 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				setTypedKey((EObject)newValue);
-				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				setTypedValue((Statistics)newValue);
+				return;
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
+				setTypedKey(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -216,11 +202,11 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				setTypedKey((EObject)null);
-				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				setTypedValue((Statistics)null);
+				return;
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
+				setTypedKey(KEY_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -234,12 +220,28 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				return key != null;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				return value != null;
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
+				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (key: ");
+		result.append(key);
+		result.append(')');
+		return result.toString();
 	}
 
 	/**
@@ -279,7 +281,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public EObject getKey() {
+	public Object getKey() {
 		return getTypedKey();
 	}
 
@@ -289,7 +291,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public void setKey(EObject key) {
+	public void setKey(Object key) {
 		setTypedKey(key);
 	}
 
@@ -321,9 +323,9 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<EObject, Statistics> getEMap() {
+	public EMap<Object, Statistics> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<EObject, Statistics>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<Object, Statistics>)container.eGet(eContainmentFeature());
 	}
 
 } //EObjectToStatisticsMapEntryImpl

@@ -145,7 +145,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<EObject, Statistics> eObjectToStatisticsMapEntry = (Map.Entry<EObject, Statistics>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<Object, Statistics> eObjectToStatisticsMapEntry = (Map.Entry<Object, Statistics>)theEObject;
 				T result = caseEObjectToStatisticsMapEntry(eObjectToStatisticsMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -351,7 +351,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEObjectToStatisticsMapEntry(Map.Entry<EObject, Statistics> object) {
+	public T caseEObjectToStatisticsMapEntry(Map.Entry<Object, Statistics> object) {
 		return null;
 	}
 

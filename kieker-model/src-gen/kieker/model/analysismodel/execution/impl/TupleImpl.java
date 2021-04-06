@@ -164,11 +164,22 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 		if (value != null) {
 			if (value instanceof Tuple) {
 				final Tuple<?, ?> key = (Tuple<?, ?>) value;
-				return this.first.equals(key.getFirst()) && this.second.equals(key.getSecond());
-			} else
-				return false; 
-		} else
-			return false;
+		                if (this.first == null && key.getFirst() == null) {
+		                	if (this.second == null && key.getSecond() == null) {
+						return true;
+					} else if (this.second != null && key.getSecond() != null) {
+		 				return this.second.equals(key.getSecond());
+					}
+				} else if (this.first != null && key.getFirst() != null) {
+					if (this.second == null && key.getSecond() == null) {
+						return this.first.equals(key.getFirst()) ;
+					} else if (this.second != null && key.getSecond() != null) {
+						return this.first.equals(key.getFirst()) && this.second.equals(key.getSecond());
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
