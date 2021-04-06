@@ -3,8 +3,11 @@
 package kieker.model.analysismodel.execution.impl;
 
 import java.util.Map;
+
 import kieker.model.analysismodel.deployment.DeployedOperation;
+
 import kieker.model.analysismodel.execution.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -204,4 +207,4 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 		return ExecutionPackage.eINSTANCE;
 	}
 
-} // ExecutionFactoryImpl
+} //ExecutionFactoryImpl

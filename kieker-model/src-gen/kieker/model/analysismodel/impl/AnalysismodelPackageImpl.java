@@ -4,22 +4,37 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
+
 import kieker.model.analysismodel.AnalysismodelFactory;
 import kieker.model.analysismodel.AnalysismodelPackage;
+
 import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
 import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
 import kieker.model.analysismodel.execution.ExecutionPackage;
+
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
 import kieker.model.analysismodel.trace.TracePackage;
+
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
 import kieker.model.analysismodel.type.TypePackage;
+
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -230,4 +245,4 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		createResource(eNS_URI);
 	}
 
-} // AnalysismodelPackageImpl
+} //AnalysismodelPackageImpl

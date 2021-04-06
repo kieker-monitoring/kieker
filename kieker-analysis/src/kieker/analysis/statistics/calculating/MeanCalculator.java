@@ -14,39 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.statistics;
+package kieker.analysis.statistics.calculating;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.Record;
 
 /**
+ * @param <T>
+ *            Type of elements
  *
  * @author Sören Henning
  *
  * @since 1.14
- *
  */
-public class StatisticsModel {
+public class MeanCalculator<T> implements ICalculator<T> {
 
-	private final Map<Object, Statistics> model = new HashMap<>(); // NOPMD (no concurrent access intended)
-
-	public StatisticsModel() {
-		// Create statistics model
+	public MeanCalculator() {
+		// Create Calculator
 	}
 
-	public Map<Object, Statistics> getModel() {
-		return this.model;
-	}
-
-	public Statistics get(final Object key) {
-		Objects.requireNonNull(key, "Key must not be null");
-		return this.model.computeIfAbsent(key, x -> new Statistics());
-	}
-
-	public boolean has(final Object key) {
-		Objects.requireNonNull(key, "Unit must not be null");
-		return this.model.containsKey(key);
+	@Override
+	public void calculate(final Record statistic, final T input, final Object modelObject) {
+		final Long total = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
+		final Long count = (Long) statistic.getProperties().get(EPropertyType.COUNT);
+		if ((total != null) && (count != null)) {
+			final Long avg = total / count;
+			statistic.getProperties().put(EPropertyType.MEAN, avg);
+		}
 	}
 
 }

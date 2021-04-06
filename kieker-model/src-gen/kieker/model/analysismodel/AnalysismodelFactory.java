@@ -30,4 +30,4 @@ public interface AnalysismodelFactory extends EFactory {
 	 */
 	AnalysismodelPackage getAnalysismodelPackage();
 
-} // AnalysismodelFactory
+} //AnalysismodelFactory

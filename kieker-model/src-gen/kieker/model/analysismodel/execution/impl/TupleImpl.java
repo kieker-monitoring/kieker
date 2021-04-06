@@ -4,16 +4,19 @@ package kieker.model.analysismodel.execution.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Tuple;
+
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.Tuple;
 
 /**
  * <!-- begin-user-doc -->
@@ -265,4 +268,4 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 		return super.eInvoke(operationID, arguments);
 	}
 
-} // TupleImpl
+} //TupleImpl

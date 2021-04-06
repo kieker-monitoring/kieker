@@ -2,6 +2,10 @@
  */
 package kieker.model.analysismodel.type.impl;
 
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.TypeModel;
+import kieker.model.analysismodel.type.TypePackage;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -14,10 +18,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.type.ComponentType;
-import kieker.model.analysismodel.type.TypeModel;
-import kieker.model.analysismodel.type.TypePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -148,4 +148,4 @@ public class TypeModelImpl extends MinimalEObjectImpl.Container implements TypeM
 		return super.eIsSet(featureID);
 	}
 
-} // TypeModelImpl
+} //TypeModelImpl

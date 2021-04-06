@@ -4,22 +4,16 @@ package kieker.model.analysismodel.execution.impl;
 
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.ETypeParameter;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import kieker.model.analysismodel.AnalysismodelPackage;
+
 import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
 import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.EDirection;
@@ -27,13 +21,31 @@ import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
 import kieker.model.analysismodel.execution.Tuple;
+
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
 import kieker.model.analysismodel.trace.TracePackage;
+
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
 import kieker.model.analysismodel.type.TypePackage;
+
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -224,8 +236,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Key() {
-		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
+	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Value() {
+		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -234,8 +246,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Value() {
-		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
+	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Key() {
+		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -344,6 +356,16 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value() {
+		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key() {
 		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(1);
 	}
@@ -396,16 +418,6 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	@Override
 	public EOperation getTuple__HashCode() {
 		return tupleEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value() {
-		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -565,4 +577,4 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		addEEnumLiteral(eDirectionEEnum, EDirection.WRITE);
 	}
 
-} // ExecutionPackageImpl
+} //ExecutionPackageImpl

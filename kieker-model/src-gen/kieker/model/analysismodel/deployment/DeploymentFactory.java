@@ -75,4 +75,4 @@ public interface DeploymentFactory extends EFactory {
 	 */
 	DeploymentPackage getDeploymentPackage();
 
-} // DeploymentFactory
+} //DeploymentFactory

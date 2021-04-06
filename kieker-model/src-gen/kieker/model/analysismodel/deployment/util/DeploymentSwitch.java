@@ -4,12 +4,12 @@ package kieker.model.analysismodel.deployment.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.deployment.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import kieker.model.analysismodel.deployment.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -277,4 +277,4 @@ public class DeploymentSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // DeploymentSwitch
+} //DeploymentSwitch

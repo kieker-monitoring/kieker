@@ -4,7 +4,9 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
+
 import kieker.model.analysismodel.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -154,4 +156,4 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 		return AnalysismodelPackage.eINSTANCE;
 	}
 
-} // AnalysismodelFactoryImpl
+} //AnalysismodelFactoryImpl

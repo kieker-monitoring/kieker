@@ -4,6 +4,11 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.util.Collection;
 
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.statistics.TimeSeries;
+import kieker.model.analysismodel.statistics.Unit;
+import kieker.model.analysismodel.statistics.Value;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
@@ -14,11 +19,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.TimeSeries;
-import kieker.model.analysismodel.statistics.Unit;
-import kieker.model.analysismodel.statistics.Value;
 
 /**
  * <!-- begin-user-doc -->
@@ -243,4 +243,4 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 		return result.toString();
 	}
 
-} // TimeSeriesImpl
+} //TimeSeriesImpl

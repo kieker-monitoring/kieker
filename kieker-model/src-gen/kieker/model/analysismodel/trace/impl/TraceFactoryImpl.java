@@ -2,6 +2,8 @@
  */
 package kieker.model.analysismodel.trace.impl;
 
+import kieker.model.analysismodel.trace.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -9,8 +11,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import kieker.model.analysismodel.trace.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -106,4 +106,4 @@ public class TraceFactoryImpl extends EFactoryImpl implements TraceFactory {
 		return TracePackage.eINSTANCE;
 	}
 
-} // TraceFactoryImpl
+} //TraceFactoryImpl

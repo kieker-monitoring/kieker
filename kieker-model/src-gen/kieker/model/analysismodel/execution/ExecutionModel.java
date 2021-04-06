@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.execution;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
+
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -30,10 +31,6 @@ public interface ExecutionModel extends EObject {
 	 * The key is of type {@link kieker.model.analysismodel.execution.Tuple<kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation>},
 	 * and the value is of type {@link kieker.model.analysismodel.execution.AggregatedInvocation},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Aggregated Invocations</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Aggregated Invocations</em>' map.
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getExecutionModel_AggregatedInvocations()

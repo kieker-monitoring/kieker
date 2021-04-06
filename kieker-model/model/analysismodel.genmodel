@@ -11,13 +11,31 @@
     <genDataTypes ecoreDataType="analysismodel.ecore#//Duration"/>
     <nestedGenPackages prefix="Statistics" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//statistics">
-      <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//statistics/PredefinedUnits">
-        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/PredefinedUnits/CPU_UTIL"/>
-        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/PredefinedUnits/RESPONSE_TIME"/>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//statistics/EPredefinedUnits">
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPredefinedUnits/CPU_UTIL"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPredefinedUnits/RESPONSE_TIME"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//statistics/EPropertyType">
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/MIN"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/MAX"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/MEAN"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/MEDIAN"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/TOTAL"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//statistics/EPropertyType/COUNT"/>
       </genEnums>
       <genClasses ecoreClass="analysismodel.ecore#//statistics/Statistics">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/Statistics/timeSeries"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/Statistics/statistics"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/UnitsToStatisticsMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//statistics/UnitsToStatisticsMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/UnitsToStatisticsMapEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/Record">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/Record/properties"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/EPropertyTypeToValue">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//statistics/EPropertyTypeToValue/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/EPropertyTypeToValue/value"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//statistics/TimeSeries">
         <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//statistics/TimeSeries/V"/>
@@ -44,6 +62,17 @@
       </genClasses>
       <genClasses image="false" ecoreClass="analysismodel.ecore#//statistics/Unit">
         <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//statistics/Unit/V"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/StatisticsModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/StatisticsModel/statistics"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/EObjectToStatisticsMapEntry">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/EObjectToStatisticsMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/EObjectToStatisticsMapEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/TimeSeriesStatistics">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/TimeSeriesStatistics/timeSeries"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Type" basePackage="kieker.model.analysismodel" disposableProviderFactory="true"

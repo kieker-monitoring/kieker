@@ -3,8 +3,11 @@
 package kieker.model.analysismodel.execution.util;
 
 import java.util.Map;
+
 import kieker.model.analysismodel.deployment.DeployedOperation;
+
 import kieker.model.analysismodel.execution.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -213,4 +216,4 @@ public class ExecutionSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // ExecutionSwitch
+} //ExecutionSwitch

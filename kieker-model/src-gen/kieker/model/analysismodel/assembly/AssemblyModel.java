@@ -28,10 +28,6 @@ public interface AssemblyModel extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.assembly.AssemblyComponent},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assembly Components</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assembly Components</em>' map.
 	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyModel_AssemblyComponents()

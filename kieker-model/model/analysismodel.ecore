@@ -7,12 +7,21 @@
   <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
       nsPrefix="statistics">
     <eClassifiers xsi:type="ecore:EClass" name="Statistics">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
-        <eGenericType eClassifier="#//statistics/TimeSeries">
-          <eTypeArguments/>
-          <eTypeArguments/>
-        </eGenericType>
-      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statistics" upperBound="-1"
+          eType="#//statistics/UnitsToStatisticsMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UnitsToStatisticsMapEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//statistics/EPredefinedUnits"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//statistics/Record"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Record">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//statistics/EPropertyTypeToValue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EPropertyTypeToValue" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//statistics/EPropertyType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="TimeSeries">
       <eTypeParameters name="V">
@@ -50,9 +59,35 @@
         <eBounds eClassifier="#//statistics/Value"/>
       </eTypeParameters>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="PredefinedUnits">
+    <eClassifiers xsi:type="ecore:EEnum" name="EPredefinedUnits">
       <eLiterals name="CPU_UTIL"/>
       <eLiterals name="RESPONSE_TIME"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EPropertyType">
+      <eLiterals name="MIN"/>
+      <eLiterals name="MAX"/>
+      <eLiterals name="MEAN"/>
+      <eLiterals name="MEDIAN"/>
+      <eLiterals name="TOTAL"/>
+      <eLiterals name="COUNT"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StatisticsModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statistics" upperBound="-1"
+          eType="#//statistics/EObjectToStatisticsMapEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EObjectToStatisticsMapEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//statistics/Statistics"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeSeriesStatistics">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
+        <eGenericType eClassifier="#//statistics/TimeSeries">
+          <eTypeArguments/>
+          <eTypeArguments/>
+        </eGenericType>
+      </eStructuralFeatures>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="type" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/type"

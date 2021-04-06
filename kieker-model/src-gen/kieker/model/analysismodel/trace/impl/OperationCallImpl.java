@@ -7,6 +7,11 @@ import java.time.Instant;
 
 import java.util.Collection;
 
+import kieker.model.analysismodel.deployment.DeployedOperation;
+
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.TracePackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -20,10 +25,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.trace.TracePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -784,4 +785,4 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 		return result.toString();
 	}
 
-} // OperationCallImpl
+} //OperationCallImpl

@@ -19,9 +19,8 @@ package kieker.analysis.statistics.calculating;
 import java.util.Optional;
 import java.util.function.Function;
 
-import kieker.analysis.statistics.IProperty;
-import kieker.analysis.statistics.Properties;
-import kieker.analysis.statistics.Statistic;
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.Record;
 
 /**
  *
@@ -35,8 +34,6 @@ import kieker.analysis.statistics.Statistic;
  */
 public class MaxCalculator<T> implements ICalculator<T> {
 
-	private static final IProperty MAX_PROPERTY = Properties.MAX;
-
 	private final Function<T, Long> valueAccessor;
 
 	public MaxCalculator(final Function<T, Long> valueAccessor) {
@@ -44,11 +41,11 @@ public class MaxCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
+	public void calculate(final Record statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Optional<Long> oldMax = Optional.ofNullable(statistic.getProperty(MAX_PROPERTY));
+		final Optional<Long> oldMax = Optional.ofNullable((Long) statistic.getProperties().get(EPropertyType.MAX));
 		if (!oldMax.isPresent() || (value > oldMax.get())) {
-			statistic.setProperty(MAX_PROPERTY, value);
+			statistic.getProperties().put(EPropertyType.MAX, value);
 		}
 	}
 

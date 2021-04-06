@@ -2,14 +2,14 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import kieker.model.analysismodel.statistics.LongValue;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import kieker.model.analysismodel.statistics.LongValue;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -161,4 +161,4 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 		return result.toString();
 	}
 
-} // LongValueImpl
+} //LongValueImpl

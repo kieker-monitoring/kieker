@@ -2,7 +2,7 @@
  */
 package kieker.model.analysismodel.statistics;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.Statistics#getTimeSeries <em>Time Series</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.Statistics#getStatistics <em>Statistics</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatistics()
@@ -24,19 +24,16 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Statistics extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Time Series</b></em>' reference list.
-	 * The list contents are of type {@link kieker.model.analysismodel.statistics.TimeSeries}<code>&lt;?, ?&gt;</code>.
+	 * Returns the value of the '<em><b>Statistics</b></em>' map.
+	 * The key is of type {@link kieker.model.analysismodel.statistics.EPredefinedUnits},
+	 * and the value is of type {@link kieker.model.analysismodel.statistics.Record},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time Series</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Series</em>' reference list.
-	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatistics_TimeSeries()
-	 * @model
+	 * @return the value of the '<em>Statistics</em>' map.
+	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatistics_Statistics()
+	 * @model mapType="kieker.model.analysismodel.statistics.UnitsToStatisticsMapEntry&lt;kieker.model.analysismodel.statistics.EPredefinedUnits, kieker.model.analysismodel.statistics.Record&gt;"
 	 * @generated
 	 */
-	EList<TimeSeries<?, ?>> getTimeSeries();
+	EMap<EPredefinedUnits, Record> getStatistics();
 
 } // Statistics

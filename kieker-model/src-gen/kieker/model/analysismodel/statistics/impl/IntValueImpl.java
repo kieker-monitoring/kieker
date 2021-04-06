@@ -2,14 +2,14 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import kieker.model.analysismodel.statistics.IntValue;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import kieker.model.analysismodel.statistics.IntValue;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -161,4 +161,4 @@ public class IntValueImpl extends ValueImpl implements IntValue {
 		return result.toString();
 	}
 
-} // IntValueImpl
+} //IntValueImpl

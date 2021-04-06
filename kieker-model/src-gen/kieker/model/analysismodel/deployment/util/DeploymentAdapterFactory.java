@@ -4,14 +4,14 @@ package kieker.model.analysismodel.deployment.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.deployment.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.deployment.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,7 +67,8 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeploymentSwitch<Adapter> modelSwitch = new DeploymentSwitch<Adapter>() {
+	protected DeploymentSwitch<Adapter> modelSwitch =
+		new DeploymentSwitch<Adapter>() {
 			@Override
 			public Adapter caseDeploymentModel(DeploymentModel object) {
 				return createDeploymentModelAdapter();
@@ -122,6 +123,7 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.deployment.DeploymentModel <em>Model</em>}'.
@@ -261,4 +263,4 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // DeploymentAdapterFactory
+} //DeploymentAdapterFactory

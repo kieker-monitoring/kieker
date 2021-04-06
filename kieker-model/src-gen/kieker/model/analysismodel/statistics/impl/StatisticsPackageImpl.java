@@ -2,6 +2,48 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import java.util.Map;
+
+import kieker.model.analysismodel.AnalysismodelPackage;
+
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+
+import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
+import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
+import kieker.model.analysismodel.execution.ExecutionPackage;
+
+import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
+import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
+import kieker.model.analysismodel.statistics.DoubleValue;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.FloatValue;
+import kieker.model.analysismodel.statistics.IntValue;
+import kieker.model.analysismodel.statistics.LongValue;
+import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.Statistics;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.statistics.TimeSeries;
+import kieker.model.analysismodel.statistics.TimeSeriesStatistics;
+import kieker.model.analysismodel.statistics.Unit;
+import kieker.model.analysismodel.statistics.Value;
+
+import kieker.model.analysismodel.trace.TracePackage;
+
+import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
+import kieker.model.analysismodel.type.TypePackage;
+
+import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -11,30 +53,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import kieker.model.analysismodel.AnalysismodelPackage;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
-import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
-import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
-import kieker.model.analysismodel.statistics.DoubleValue;
-import kieker.model.analysismodel.statistics.FloatValue;
-import kieker.model.analysismodel.statistics.IntValue;
-import kieker.model.analysismodel.statistics.LongValue;
-import kieker.model.analysismodel.statistics.PredefinedUnits;
-import kieker.model.analysismodel.statistics.Statistics;
-import kieker.model.analysismodel.statistics.StatisticsFactory;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.TimeSeries;
-import kieker.model.analysismodel.statistics.Unit;
-import kieker.model.analysismodel.statistics.Value;
-import kieker.model.analysismodel.trace.TracePackage;
-import kieker.model.analysismodel.trace.impl.TracePackageImpl;
-import kieker.model.analysismodel.type.TypePackage;
-import kieker.model.analysismodel.type.impl.TypePackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,6 +67,27 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	private EClass statisticsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass unitsToStatisticsMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass recordEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ePropertyTypeToValueEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -104,7 +143,35 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EEnum predefinedUnitsEEnum = null;
+	private EClass statisticsModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eObjectToStatisticsMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass timeSeriesStatisticsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum ePredefinedUnitsEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum ePropertyTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -209,8 +276,88 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EReference getStatistics_TimeSeries() {
+	public EReference getStatistics_Statistics() {
 		return (EReference)statisticsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getUnitsToStatisticsMapEntry() {
+		return unitsToStatisticsMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUnitsToStatisticsMapEntry_Key() {
+		return (EAttribute)unitsToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getUnitsToStatisticsMapEntry_Value() {
+		return (EReference)unitsToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRecord() {
+		return recordEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRecord_Properties() {
+		return (EReference)recordEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEPropertyTypeToValue() {
+		return ePropertyTypeToValueEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEPropertyTypeToValue_Key() {
+		return (EAttribute)ePropertyTypeToValueEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEPropertyTypeToValue_Value() {
+		return (EAttribute)ePropertyTypeToValueEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -369,8 +516,88 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EEnum getPredefinedUnits() {
-		return predefinedUnitsEEnum;
+	public EClass getStatisticsModel() {
+		return statisticsModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getStatisticsModel_Statistics() {
+		return (EReference)statisticsModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEObjectToStatisticsMapEntry() {
+		return eObjectToStatisticsMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEObjectToStatisticsMapEntry_Key() {
+		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEObjectToStatisticsMapEntry_Value() {
+		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getTimeSeriesStatistics() {
+		return timeSeriesStatisticsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTimeSeriesStatistics_TimeSeries() {
+		return (EReference)timeSeriesStatisticsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getEPredefinedUnits() {
+		return ePredefinedUnitsEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getEPropertyType() {
+		return ePropertyTypeEEnum;
 	}
 
 	/**
@@ -403,7 +630,18 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 
 		// Create classes and their features
 		statisticsEClass = createEClass(STATISTICS);
-		createEReference(statisticsEClass, STATISTICS__TIME_SERIES);
+		createEReference(statisticsEClass, STATISTICS__STATISTICS);
+
+		unitsToStatisticsMapEntryEClass = createEClass(UNITS_TO_STATISTICS_MAP_ENTRY);
+		createEAttribute(unitsToStatisticsMapEntryEClass, UNITS_TO_STATISTICS_MAP_ENTRY__KEY);
+		createEReference(unitsToStatisticsMapEntryEClass, UNITS_TO_STATISTICS_MAP_ENTRY__VALUE);
+
+		recordEClass = createEClass(RECORD);
+		createEReference(recordEClass, RECORD__PROPERTIES);
+
+		ePropertyTypeToValueEClass = createEClass(EPROPERTY_TYPE_TO_VALUE);
+		createEAttribute(ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__KEY);
+		createEAttribute(ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__VALUE);
 
 		timeSeriesEClass = createEClass(TIME_SERIES);
 		createEAttribute(timeSeriesEClass, TIME_SERIES__NAME);
@@ -427,8 +665,19 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 
 		unitEClass = createEClass(UNIT);
 
+		statisticsModelEClass = createEClass(STATISTICS_MODEL);
+		createEReference(statisticsModelEClass, STATISTICS_MODEL__STATISTICS);
+
+		eObjectToStatisticsMapEntryEClass = createEClass(EOBJECT_TO_STATISTICS_MAP_ENTRY);
+		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY);
+		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE);
+
+		timeSeriesStatisticsEClass = createEClass(TIME_SERIES_STATISTICS);
+		createEReference(timeSeriesStatisticsEClass, TIME_SERIES_STATISTICS__TIME_SERIES);
+
 		// Create enums
-		predefinedUnitsEEnum = createEEnum(PREDEFINED_UNITS);
+		ePredefinedUnitsEEnum = createEEnum(EPREDEFINED_UNITS);
+		ePropertyTypeEEnum = createEEnum(EPROPERTY_TYPE);
 	}
 
 	/**
@@ -480,12 +729,18 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(statisticsEClass, Statistics.class, "Statistics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getTimeSeries());
-		g2 = createEGenericType();
-		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType();
-		g1.getETypeArguments().add(g2);
-		initEReference(getStatistics_TimeSeries(), g1, null, "timeSeries", null, 0, -1, Statistics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStatistics_Statistics(), this.getUnitsToStatisticsMapEntry(), null, "statistics", null, 0, -1, Statistics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(unitsToStatisticsMapEntryEClass, Map.Entry.class, "UnitsToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUnitsToStatisticsMapEntry_Key(), this.getEPredefinedUnits(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitsToStatisticsMapEntry_Value(), this.getRecord(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(recordEClass, Record.class, "Record", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRecord_Properties(), this.getEPropertyTypeToValue(), null, "properties", null, 0, -1, Record.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(ePropertyTypeToValueEClass, Map.Entry.class, "EPropertyTypeToValue", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEPropertyTypeToValue_Key(), this.getEPropertyType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEPropertyTypeToValue_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(timeSeriesEClass, TimeSeries.class, "TimeSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTimeSeries_Name(), ecorePackage.getEString(), "name", null, 0, 1, TimeSeries.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -510,10 +765,33 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 
 		initEClass(unitEClass, Unit.class, "Unit", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(statisticsModelEClass, StatisticsModel.class, "StatisticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStatisticsModel_Statistics(), this.getEObjectToStatisticsMapEntry(), null, "statistics", null, 0, -1, StatisticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eObjectToStatisticsMapEntryEClass, Map.Entry.class, "EObjectToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEObjectToStatisticsMapEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEObjectToStatisticsMapEntry_Value(), this.getStatistics(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(timeSeriesStatisticsEClass, TimeSeriesStatistics.class, "TimeSeriesStatistics", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(this.getTimeSeries());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getTimeSeriesStatistics_TimeSeries(), g1, null, "timeSeries", null, 0, -1, TimeSeriesStatistics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
-		initEEnum(predefinedUnitsEEnum, PredefinedUnits.class, "PredefinedUnits");
-		addEEnumLiteral(predefinedUnitsEEnum, PredefinedUnits.CPU_UTIL);
-		addEEnumLiteral(predefinedUnitsEEnum, PredefinedUnits.RESPONSE_TIME);
+		initEEnum(ePredefinedUnitsEEnum, EPredefinedUnits.class, "EPredefinedUnits");
+		addEEnumLiteral(ePredefinedUnitsEEnum, EPredefinedUnits.CPU_UTIL);
+		addEEnumLiteral(ePredefinedUnitsEEnum, EPredefinedUnits.RESPONSE_TIME);
+
+		initEEnum(ePropertyTypeEEnum, EPropertyType.class, "EPropertyType");
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.MIN);
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.MAX);
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.MEAN);
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.MEDIAN);
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.TOTAL);
+		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.COUNT);
 	}
 
-} // StatisticsPackageImpl
+} //StatisticsPackageImpl

@@ -19,6 +19,9 @@ package kieker.analysis.statistics;
 import java.util.function.Function;
 
 import kieker.analysis.statistics.calculating.ICalculator;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  *
@@ -32,11 +35,11 @@ import kieker.analysis.statistics.calculating.ICalculator;
 public class StatisticsDecorator<T> {
 
 	private final StatisticsModel statisticsModel;
-	private final IUnit unit;
+	private final EPredefinedUnits unit;
 	private final ICalculator<T> statisticCalculator;
 	private final Function<T, Object> objectAccesor;
 
-	public StatisticsDecorator(final StatisticsModel statisticsModel, final IUnit unit, final ICalculator<T> statisticCalculator,
+	public StatisticsDecorator(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
 			final Function<T, Object> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;
@@ -46,7 +49,7 @@ public class StatisticsDecorator<T> {
 
 	public void decorate(final T input) {
 		final Object object = this.objectAccesor.apply(input);
-		final Statistic statistic = this.statisticsModel.get(object).getStatistic(this.unit);
+		final Record statistic = this.statisticsModel.getStatistics().get(object).getStatistics().get(this.unit);
 		this.statisticCalculator.calculate(statistic, input, object);
 	}
 

@@ -13,11 +13,11 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each operation of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.model.analysismodel.statistics.StatisticsFactory
@@ -68,13 +68,13 @@ public interface StatisticsPackage extends EPackage {
 	int STATISTICS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Time Series</b></em>' reference list.
+	 * The feature id for the '<em><b>Statistics</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATISTICS__TIME_SERIES = 0;
+	int STATISTICS__STATISTICS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Statistics</em>' class.
@@ -95,6 +95,135 @@ public interface StatisticsPackage extends EPackage {
 	int STATISTICS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.UnitsToStatisticsMapEntryImpl <em>Units To Statistics Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.impl.UnitsToStatisticsMapEntryImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getUnitsToStatisticsMapEntry()
+	 * @generated
+	 */
+	int UNITS_TO_STATISTICS_MAP_ENTRY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNITS_TO_STATISTICS_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNITS_TO_STATISTICS_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Units To Statistics Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNITS_TO_STATISTICS_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Units To Statistics Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNITS_TO_STATISTICS_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.RecordImpl <em>Record</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.impl.RecordImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getRecord()
+	 * @generated
+	 */
+	int RECORD = 2;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RECORD__PROPERTIES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RECORD_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RECORD_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyTypeToValue()
+	 * @generated
+	 */
+	int EPROPERTY_TYPE_TO_VALUE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EPROPERTY_TYPE_TO_VALUE__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EPROPERTY_TYPE_TO_VALUE__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EProperty Type To Value</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EPROPERTY_TYPE_TO_VALUE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EProperty Type To Value</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EPROPERTY_TYPE_TO_VALUE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.TimeSeriesImpl <em>Time Series</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -102,7 +231,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getTimeSeries()
 	 * @generated
 	 */
-	int TIME_SERIES = 1;
+	int TIME_SERIES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -157,7 +286,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 2;
+	int VALUE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
@@ -194,7 +323,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getIntValue()
 	 * @generated
 	 */
-	int INT_VALUE = 3;
+	int INT_VALUE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
@@ -240,7 +369,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getLongValue()
 	 * @generated
 	 */
-	int LONG_VALUE = 4;
+	int LONG_VALUE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
@@ -286,7 +415,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getFloatValue()
 	 * @generated
 	 */
-	int FLOAT_VALUE = 5;
+	int FLOAT_VALUE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
@@ -332,7 +461,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getDoubleValue()
 	 * @generated
 	 */
-	int DOUBLE_VALUE = 6;
+	int DOUBLE_VALUE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
@@ -378,7 +507,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getUnit()
 	 * @generated
 	 */
-	int UNIT = 7;
+	int UNIT = 10;
 
 	/**
 	 * The number of structural features of the '<em>Unit</em>' class.
@@ -399,14 +528,145 @@ public interface StatisticsPackage extends EPackage {
 	int UNIT_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.PredefinedUnits <em>Predefined Units</em>}' enum.
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.StatisticsModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.statistics.PredefinedUnits
-	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getPredefinedUnits()
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsModelImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticsModel()
 	 * @generated
 	 */
-	int PREDEFINED_UNITS = 8;
+	int STATISTICS_MODEL = 11;
+
+	/**
+	 * The feature id for the '<em><b>Statistics</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATISTICS_MODEL__STATISTICS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATISTICS_MODEL_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATISTICS_MODEL_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEObjectToStatisticsMapEntry()
+	 * @generated
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY = 12;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EObject To Statistics Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EObject To Statistics Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EOBJECT_TO_STATISTICS_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.TimeSeriesStatisticsImpl <em>Time Series Statistics</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.impl.TimeSeriesStatisticsImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getTimeSeriesStatistics()
+	 * @generated
+	 */
+	int TIME_SERIES_STATISTICS = 13;
+
+	/**
+	 * The feature id for the '<em><b>Time Series</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_SERIES_STATISTICS__TIME_SERIES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Time Series Statistics</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_SERIES_STATISTICS_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Time Series Statistics</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TIME_SERIES_STATISTICS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.EPredefinedUnits <em>EPredefined Units</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.EPredefinedUnits
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPredefinedUnits()
+	 * @generated
+	 */
+	int EPREDEFINED_UNITS = 14;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.EPropertyType <em>EProperty Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.statistics.EPropertyType
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyType()
+	 * @generated
+	 */
+	int EPROPERTY_TYPE = 15;
+
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.Statistics <em>Statistics</em>}'.
@@ -419,15 +679,104 @@ public interface StatisticsPackage extends EPackage {
 	EClass getStatistics();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.statistics.Statistics#getTimeSeries <em>Time Series</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.Statistics#getStatistics <em>Statistics</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Time Series</em>'.
-	 * @see kieker.model.analysismodel.statistics.Statistics#getTimeSeries()
+	 * @return the meta object for the map '<em>Statistics</em>'.
+	 * @see kieker.model.analysismodel.statistics.Statistics#getStatistics()
 	 * @see #getStatistics()
 	 * @generated
 	 */
-	EReference getStatistics_TimeSeries();
+	EReference getStatistics_Statistics();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Units To Statistics Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Units To Statistics Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="kieker.model.analysismodel.statistics.EPredefinedUnits"
+	 *        valueType="kieker.model.analysismodel.statistics.Record" valueContainment="true"
+	 * @generated
+	 */
+	EClass getUnitsToStatisticsMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getUnitsToStatisticsMapEntry()
+	 * @generated
+	 */
+	EAttribute getUnitsToStatisticsMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getUnitsToStatisticsMapEntry()
+	 * @generated
+	 */
+	EReference getUnitsToStatisticsMapEntry_Value();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.Record <em>Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Record</em>'.
+	 * @see kieker.model.analysismodel.statistics.Record
+	 * @generated
+	 */
+	EClass getRecord();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.Record#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Properties</em>'.
+	 * @see kieker.model.analysismodel.statistics.Record#getProperties()
+	 * @see #getRecord()
+	 * @generated
+	 */
+	EReference getRecord_Properties();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EProperty Type To Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EProperty Type To Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="kieker.model.analysismodel.statistics.EPropertyType"
+	 *        valueDataType="org.eclipse.emf.ecore.EJavaObject"
+	 * @generated
+	 */
+	EClass getEPropertyTypeToValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEPropertyTypeToValue()
+	 * @generated
+	 */
+	EAttribute getEPropertyTypeToValue_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEPropertyTypeToValue()
+	 * @generated
+	 */
+	EAttribute getEPropertyTypeToValue_Value();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.TimeSeries <em>Time Series</em>}'.
@@ -588,14 +937,100 @@ public interface StatisticsPackage extends EPackage {
 	EClass getUnit();
 
 	/**
-	 * Returns the meta object for enum '{@link kieker.model.analysismodel.statistics.PredefinedUnits <em>Predefined Units</em>}'.
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.StatisticsModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Predefined Units</em>'.
-	 * @see kieker.model.analysismodel.statistics.PredefinedUnits
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.model.analysismodel.statistics.StatisticsModel
 	 * @generated
 	 */
-	EEnum getPredefinedUnits();
+	EClass getStatisticsModel();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.StatisticsModel#getStatistics <em>Statistics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Statistics</em>'.
+	 * @see kieker.model.analysismodel.statistics.StatisticsModel#getStatistics()
+	 * @see #getStatisticsModel()
+	 * @generated
+	 */
+	EReference getStatisticsModel_Statistics();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EObject To Statistics Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EObject To Statistics Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyType="org.eclipse.emf.ecore.EObject" keyContainment="true"
+	 *        valueType="kieker.model.analysismodel.statistics.Statistics" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEObjectToStatisticsMapEntry();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEObjectToStatisticsMapEntry()
+	 * @generated
+	 */
+	EReference getEObjectToStatisticsMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEObjectToStatisticsMapEntry()
+	 * @generated
+	 */
+	EReference getEObjectToStatisticsMapEntry_Value();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.TimeSeriesStatistics <em>Time Series Statistics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Time Series Statistics</em>'.
+	 * @see kieker.model.analysismodel.statistics.TimeSeriesStatistics
+	 * @generated
+	 */
+	EClass getTimeSeriesStatistics();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.statistics.TimeSeriesStatistics#getTimeSeries <em>Time Series</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Time Series</em>'.
+	 * @see kieker.model.analysismodel.statistics.TimeSeriesStatistics#getTimeSeries()
+	 * @see #getTimeSeriesStatistics()
+	 * @generated
+	 */
+	EReference getTimeSeriesStatistics_TimeSeries();
+
+	/**
+	 * Returns the meta object for enum '{@link kieker.model.analysismodel.statistics.EPredefinedUnits <em>EPredefined Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>EPredefined Units</em>'.
+	 * @see kieker.model.analysismodel.statistics.EPredefinedUnits
+	 * @generated
+	 */
+	EEnum getEPredefinedUnits();
+
+	/**
+	 * Returns the meta object for enum '{@link kieker.model.analysismodel.statistics.EPropertyType <em>EProperty Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>EProperty Type</em>'.
+	 * @see kieker.model.analysismodel.statistics.EPropertyType
+	 * @generated
+	 */
+	EEnum getEPropertyType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -610,11 +1045,11 @@ public interface StatisticsPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each operation of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -631,12 +1066,82 @@ public interface StatisticsPackage extends EPackage {
 		EClass STATISTICS = eINSTANCE.getStatistics();
 
 		/**
-		 * The meta object literal for the '<em><b>Time Series</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Statistics</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference STATISTICS__TIME_SERIES = eINSTANCE.getStatistics_TimeSeries();
+		EReference STATISTICS__STATISTICS = eINSTANCE.getStatistics_Statistics();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.UnitsToStatisticsMapEntryImpl <em>Units To Statistics Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.impl.UnitsToStatisticsMapEntryImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getUnitsToStatisticsMapEntry()
+		 * @generated
+		 */
+		EClass UNITS_TO_STATISTICS_MAP_ENTRY = eINSTANCE.getUnitsToStatisticsMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNITS_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getUnitsToStatisticsMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference UNITS_TO_STATISTICS_MAP_ENTRY__VALUE = eINSTANCE.getUnitsToStatisticsMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.RecordImpl <em>Record</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.impl.RecordImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getRecord()
+		 * @generated
+		 */
+		EClass RECORD = eINSTANCE.getRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RECORD__PROPERTIES = eINSTANCE.getRecord_Properties();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyTypeToValue()
+		 * @generated
+		 */
+		EClass EPROPERTY_TYPE_TO_VALUE = eINSTANCE.getEPropertyTypeToValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EPROPERTY_TYPE_TO_VALUE__KEY = eINSTANCE.getEPropertyTypeToValue_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EPROPERTY_TYPE_TO_VALUE__VALUE = eINSTANCE.getEPropertyTypeToValue_Value();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.TimeSeriesImpl <em>Time Series</em>}' class.
@@ -773,15 +1278,87 @@ public interface StatisticsPackage extends EPackage {
 		EClass UNIT = eINSTANCE.getUnit();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.PredefinedUnits <em>Predefined Units</em>}' enum.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.StatisticsModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.statistics.PredefinedUnits
-		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getPredefinedUnits()
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsModelImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticsModel()
 		 * @generated
 		 */
-		EEnum PREDEFINED_UNITS = eINSTANCE.getPredefinedUnits();
+		EClass STATISTICS_MODEL = eINSTANCE.getStatisticsModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Statistics</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STATISTICS_MODEL__STATISTICS = eINSTANCE.getStatisticsModel_Statistics();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEObjectToStatisticsMapEntry()
+		 * @generated
+		 */
+		EClass EOBJECT_TO_STATISTICS_MAP_ENTRY = eINSTANCE.getEObjectToStatisticsMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = eINSTANCE.getEObjectToStatisticsMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.TimeSeriesStatisticsImpl <em>Time Series Statistics</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.impl.TimeSeriesStatisticsImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getTimeSeriesStatistics()
+		 * @generated
+		 */
+		EClass TIME_SERIES_STATISTICS = eINSTANCE.getTimeSeriesStatistics();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Series</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TIME_SERIES_STATISTICS__TIME_SERIES = eINSTANCE.getTimeSeriesStatistics_TimeSeries();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.EPredefinedUnits <em>EPredefined Units</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.EPredefinedUnits
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPredefinedUnits()
+		 * @generated
+		 */
+		EEnum EPREDEFINED_UNITS = eINSTANCE.getEPredefinedUnits();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.EPropertyType <em>EProperty Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.statistics.EPropertyType
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyType()
+		 * @generated
+		 */
+		EEnum EPROPERTY_TYPE = eINSTANCE.getEPropertyType();
 
 	}
 
-} // StatisticsPackage
+} //StatisticsPackage

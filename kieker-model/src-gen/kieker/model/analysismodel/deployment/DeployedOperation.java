@@ -2,9 +2,9 @@
  */
 package kieker.model.analysismodel.deployment;
 
-import org.eclipse.emf.ecore.EObject;
-
 import kieker.model.analysismodel.assembly.AssemblyOperation;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,10 +26,6 @@ public interface DeployedOperation extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Assembly Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assembly Operation</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assembly Operation</em>' reference.
 	 * @see #setAssemblyOperation(AssemblyOperation)

@@ -3,8 +3,11 @@
 package kieker.model.analysismodel.execution.util;
 
 import java.util.Map;
+
 import kieker.model.analysismodel.deployment.DeployedOperation;
+
 import kieker.model.analysismodel.execution.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -66,7 +69,8 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ExecutionSwitch<Adapter> modelSwitch = new ExecutionSwitch<Adapter>() {
+	protected ExecutionSwitch<Adapter> modelSwitch =
+		new ExecutionSwitch<Adapter>() {
 			@Override
 			public Adapter caseExecutionModel(ExecutionModel object) {
 				return createExecutionModelAdapter();
@@ -109,6 +113,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.ExecutionModel <em>Model</em>}'.
@@ -206,4 +211,4 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // ExecutionAdapterFactory
+} //ExecutionAdapterFactory

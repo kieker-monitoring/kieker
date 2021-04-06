@@ -66,4 +66,4 @@ public interface ExecutionFactory extends EFactory {
 	 */
 	ExecutionPackage getExecutionPackage();
 
-} // ExecutionFactory
+} //ExecutionFactory

@@ -4,12 +4,12 @@ package kieker.model.analysismodel.assembly.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.assembly.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import kieker.model.analysismodel.assembly.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -235,4 +235,4 @@ public class AssemblySwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // AssemblySwitch
+} //AssemblySwitch

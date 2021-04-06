@@ -16,7 +16,7 @@
 
 package kieker.analysis.statistics.calculating;
 
-import kieker.analysis.statistics.Statistic;
+import kieker.model.analysismodel.statistics.Record;
 
 /**
  *
@@ -34,6 +34,6 @@ public interface ICalculator<I> {
 	/**
 	 * @since 1.14
 	 */
-	public void calculate(final Statistic statistic, final I input, final Object modelObject);
+	public void calculate(final Record statistic, final I input, final Object modelObject);
 
 }
