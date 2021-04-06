@@ -8,9 +8,11 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import kieker.model.analysismodel.AnalysismodelPackage;
@@ -24,6 +26,7 @@ import kieker.model.analysismodel.execution.EDirection;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -73,6 +76,13 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	private EClass deployedOperationsPairToAggregatedStorageAccessMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass tupleEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -214,8 +224,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDeployedOperationsPairToAggregatedInvocationMapEntry_Key() {
-		return (EAttribute)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
+	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Key() {
+		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -225,7 +235,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 */
 	@Override
 	public EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Value() {
-		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference)deployedOperationsPairToAggregatedInvocationMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -334,8 +344,58 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key() {
-		return (EAttribute)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(0);
+	public EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key() {
+		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getTuple() {
+		return tupleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTuple_First() {
+		return (EReference)tupleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTuple_Second() {
+		return (EReference)tupleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTuple__Equals__Object() {
+		return tupleEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getTuple__HashCode() {
+		return tupleEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -345,7 +405,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 */
 	@Override
 	public EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value() {
-		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference)deployedOperationsPairToAggregatedStorageAccessMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -392,8 +452,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		createEReference(executionModelEClass, EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
 
 		deployedOperationsPairToAggregatedInvocationMapEntryEClass = createEClass(DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY);
-		createEAttribute(deployedOperationsPairToAggregatedInvocationMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY);
 		createEReference(deployedOperationsPairToAggregatedInvocationMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE);
+		createEReference(deployedOperationsPairToAggregatedInvocationMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY);
 
 		aggregatedInvocationEClass = createEClass(AGGREGATED_INVOCATION);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__SOURCE);
@@ -407,8 +467,14 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		createEAttribute(aggregatedStorageAccessEClass, AGGREGATED_STORAGE_ACCESS__DIRECTION);
 
 		deployedOperationsPairToAggregatedStorageAccessMapEntryEClass = createEClass(DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY);
-		createEAttribute(deployedOperationsPairToAggregatedStorageAccessMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY);
 		createEReference(deployedOperationsPairToAggregatedStorageAccessMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE);
+		createEReference(deployedOperationsPairToAggregatedStorageAccessMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY);
+
+		tupleEClass = createEClass(TUPLE);
+		createEReference(tupleEClass, TUPLE__FIRST);
+		createEReference(tupleEClass, TUPLE__SECOND);
+		createEOperation(tupleEClass, TUPLE___EQUALS__OBJECT);
+		createEOperation(tupleEClass, TUPLE___HASH_CODE);
 
 		// Create enums
 		eDirectionEEnum = createEEnum(EDIRECTION);
@@ -438,10 +504,11 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
 		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
 
 		// Create type parameters
+		ETypeParameter tupleEClass_F = addETypeParameter(tupleEClass, "F");
+		ETypeParameter tupleEClass_S = addETypeParameter(tupleEClass, "S");
 
 		// Set bounds for type parameters
 
@@ -453,13 +520,13 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEReference(getExecutionModel_AggregatedStorageAccesses(), this.getDeployedOperationsPairToAggregatedStorageAccessMapEntry(), null, "aggregatedStorageAccesses", null, 0, -1, ExecutionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(deployedOperationsPairToAggregatedInvocationMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedInvocationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		EGenericType g1 = createEGenericType(theAnalysismodelPackage.getComposedKey());
+		initEReference(getDeployedOperationsPairToAggregatedInvocationMapEntry_Value(), this.getAggregatedInvocation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		EGenericType g1 = createEGenericType(this.getTuple());
 		EGenericType g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
-		initEAttribute(getDeployedOperationsPairToAggregatedInvocationMapEntry_Key(), g1, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedOperationsPairToAggregatedInvocationMapEntry_Value(), this.getAggregatedInvocation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedOperationsPairToAggregatedInvocationMapEntry_Key(), g1, null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aggregatedInvocationEClass, AggregatedInvocation.class, "AggregatedInvocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAggregatedInvocation_Source(), theDeploymentPackage.getDeployedOperation(), null, "source", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -473,13 +540,24 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEAttribute(getAggregatedStorageAccess_Direction(), this.getEDirection(), "direction", null, 0, 1, AggregatedStorageAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedOperationsPairToAggregatedStorageAccessMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedStorageAccessMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(theAnalysismodelPackage.getComposedKey());
-		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
-		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
-		g1.getETypeArguments().add(g2);
-		initEAttribute(getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key(), g1, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value(), this.getAggregatedStorageAccess(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getTuple());
+		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
+		g1.getETypeArguments().add(g2);
+		initEReference(getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key(), g1, null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(tupleEClass, Tuple.class, "Tuple", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(tupleEClass_F);
+		initEReference(getTuple_First(), g1, null, "first", null, 0, 1, Tuple.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(tupleEClass_S);
+		initEReference(getTuple_Second(), g1, null, "second", null, 0, 1, Tuple.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getTuple__Equals__Object(), ecorePackage.getEBoolean(), "equals", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEJavaObject(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getTuple__HashCode(), ecorePackage.getEInt(), "hashCode", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(eDirectionEEnum, EDirection.class, "EDirection");

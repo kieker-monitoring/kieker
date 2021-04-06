@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
 import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
+import kieker.analysis.plugin.reader.depcompression.Bzip2DecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.DeflateDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.GZipDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.NoneDecompressionFilter;
@@ -101,7 +102,7 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 		} else if (FSUtil.ZIP_FILE_EXTENSION.equals(extension)) {
 			return new ZipDecompressionFilter();
 		} else if (FSUtil.BZIP2_FILE_EXTENSION.equals(extension)) {
-			return new Bzip2DEcompressionFilter();
+			return new Bzip2DecompressionFilter();
 		} else {
 			return new NoneDecompressionFilter();
 		}

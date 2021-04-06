@@ -75,16 +75,6 @@ public interface AnalysismodelPackage extends EPackage {
 	int DURATION = 1;
 
 	/**
-	 * The meta object id for the '<em>Composed Key</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.util.ComposedKey
-	 * @see kieker.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
-	 * @generated
-	 */
-	int COMPOSED_KEY = 2;
-
-	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,17 +95,6 @@ public interface AnalysismodelPackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getDuration();
-
-	/**
-	 * Returns the meta object for data type '{@link kieker.model.analysismodel.util.ComposedKey <em>Composed Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Composed Key</em>'.
-	 * @see kieker.model.analysismodel.util.ComposedKey
-	 * @model instanceClass="kieker.model.analysismodel.util.ComposedKey" typeParameters="F S"
-	 * @generated
-	 */
-	EDataType getComposedKey();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -159,16 +138,6 @@ public interface AnalysismodelPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType DURATION = eINSTANCE.getDuration();
-
-		/**
-		 * The meta object literal for the '<em>Composed Key</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.util.ComposedKey
-		 * @see kieker.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
-		 * @generated
-		 */
-		EDataType COMPOSED_KEY = eINSTANCE.getComposedKey();
 
 	}
 

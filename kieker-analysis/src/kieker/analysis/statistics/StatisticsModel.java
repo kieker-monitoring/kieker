@@ -35,6 +35,10 @@ public class StatisticsModel {
 		// Create statistics model
 	}
 
+	public Map<Object, Statistics> getModel() {
+		return this.model;
+	}
+
 	public Statistics get(final Object key) {
 		Objects.requireNonNull(key, "Key must not be null");
 		return this.model.computeIfAbsent(key, x -> new Statistics());

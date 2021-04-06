@@ -7,7 +7,7 @@ import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.util.ComposedKey;
+import kieker.model.analysismodel.execution.Tuple;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -44,7 +44,7 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
+	protected EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
 
 	/**
 	 * The cached value of the '{@link #getAggregatedStorageAccesses() <em>Aggregated Storage Accesses</em>}' map.
@@ -54,7 +54,7 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> aggregatedStorageAccesses;
+	protected EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> aggregatedStorageAccesses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -81,9 +81,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
+	public EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<ComposedKey<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
+			aggregatedInvocations = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
 	}
@@ -94,9 +94,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
+	public EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
 		if (aggregatedStorageAccesses == null) {
-			aggregatedStorageAccesses = new EcoreEMap<ComposedKey<DeployedOperation, DeployedOperation>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
+			aggregatedStorageAccesses = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
 		}
 		return aggregatedStorageAccesses;
 	}

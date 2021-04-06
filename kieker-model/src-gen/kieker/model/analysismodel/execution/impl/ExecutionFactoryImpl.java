@@ -5,7 +5,6 @@ package kieker.model.analysismodel.execution.impl;
 import java.util.Map;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.*;
-import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -64,6 +63,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 			case ExecutionPackage.AGGREGATED_INVOCATION: return createAggregatedInvocation();
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS: return createAggregatedStorageAccess();
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY: return (EObject)createDeployedOperationsPairToAggregatedStorageAccessMapEntry();
+			case ExecutionPackage.TUPLE: return createTuple();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -115,7 +115,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> createDeployedOperationsPairToAggregatedInvocationMapEntry() {
+	public Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> createDeployedOperationsPairToAggregatedInvocationMapEntry() {
 		DeployedOperationsPairToAggregatedInvocationMapEntryImpl deployedOperationsPairToAggregatedInvocationMapEntry = new DeployedOperationsPairToAggregatedInvocationMapEntryImpl();
 		return deployedOperationsPairToAggregatedInvocationMapEntry;
 	}
@@ -147,9 +147,20 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> createDeployedOperationsPairToAggregatedStorageAccessMapEntry() {
+	public Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> createDeployedOperationsPairToAggregatedStorageAccessMapEntry() {
 		DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl deployedOperationsPairToAggregatedStorageAccessMapEntry = new DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl();
 		return deployedOperationsPairToAggregatedStorageAccessMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public <F, S> Tuple<F, S> createTuple() {
+		TupleImpl<F, S> tuple = new TupleImpl<F, S>();
+		return tuple;
 	}
 
 	/**

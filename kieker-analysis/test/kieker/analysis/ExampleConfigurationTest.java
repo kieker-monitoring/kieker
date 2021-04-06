@@ -32,7 +32,7 @@ import kieker.analysis.model.DeploymentModelPrinter;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
-import kieker.model.analysismodel.util.ComposedKey;
+import kieker.model.analysismodel.execution.Tuple;
 
 import teetime.framework.Execution;
 
@@ -100,7 +100,7 @@ public class ExampleConfigurationTest {
 
 		// StatisticsModel statisticsModel = configuration.getStatisticsModel();
 
-		final EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
+		final EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();
 		// contains [1, 1, 50] in any order
 		Assert.assertThat(aggregatedInvocations.values().size(), CoreMatchers.is(3));
