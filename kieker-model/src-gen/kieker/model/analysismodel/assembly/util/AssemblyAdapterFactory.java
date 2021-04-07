@@ -4,14 +4,14 @@ package kieker.model.analysismodel.assembly.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.assembly.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.assembly.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,7 +67,8 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AssemblySwitch<Adapter> modelSwitch = new AssemblySwitch<Adapter>() {
+	protected AssemblySwitch<Adapter> modelSwitch =
+		new AssemblySwitch<Adapter>() {
 			@Override
 			public Adapter caseAssemblyModel(AssemblyModel object) {
 				return createAssemblyModelAdapter();
@@ -114,6 +115,7 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.assembly.AssemblyModel <em>Model</em>}'.
@@ -225,4 +227,4 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // AssemblyAdapterFactory
+} //AssemblyAdapterFactory

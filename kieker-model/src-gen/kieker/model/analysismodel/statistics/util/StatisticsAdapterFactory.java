@@ -2,14 +2,16 @@
  */
 package kieker.model.analysismodel.statistics.util;
 
+import java.util.Map;
+
+import kieker.model.analysismodel.statistics.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.statistics.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -65,10 +67,23 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected StatisticsSwitch<Adapter> modelSwitch = new StatisticsSwitch<Adapter>() {
+	protected StatisticsSwitch<Adapter> modelSwitch =
+		new StatisticsSwitch<Adapter>() {
 			@Override
 			public Adapter caseStatistics(Statistics object) {
 				return createStatisticsAdapter();
+			}
+			@Override
+			public Adapter caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, Record> object) {
+				return createUnitsToStatisticsMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseRecord(Record object) {
+				return createRecordAdapter();
+			}
+			@Override
+			public Adapter caseEPropertyTypeToValue(Map.Entry<EPropertyType, Object> object) {
+				return createEPropertyTypeToValueAdapter();
 			}
 			@Override
 			public <V extends Value, U extends Unit<V>> Adapter caseTimeSeries(TimeSeries<V, U> object) {
@@ -99,6 +114,18 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 				return createUnitAdapter();
 			}
 			@Override
+			public Adapter caseStatisticsModel(StatisticsModel object) {
+				return createStatisticsModelAdapter();
+			}
+			@Override
+			public Adapter caseEObjectToStatisticsMapEntry(Map.Entry<Object, Statistics> object) {
+				return createEObjectToStatisticsMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseTimeSeriesStatistics(TimeSeriesStatistics object) {
+				return createTimeSeriesStatisticsAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -117,6 +144,7 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Statistics <em>Statistics</em>}'.
 	 * <!-- begin-user-doc -->
@@ -128,6 +156,48 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStatisticsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Units To Statistics Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createUnitsToStatisticsMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Record <em>Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.Record
+	 * @generated
+	 */
+	public Adapter createRecordAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EProperty Type To Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEPropertyTypeToValueAdapter() {
 		return null;
 	}
 
@@ -230,6 +300,48 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.StatisticsModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.StatisticsModel
+	 * @generated
+	 */
+	public Adapter createStatisticsModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EObject To Statistics Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEObjectToStatisticsMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.TimeSeriesStatistics <em>Time Series Statistics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.TimeSeriesStatistics
+	 * @generated
+	 */
+	public Adapter createTimeSeriesStatisticsAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for the default case.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null.
@@ -241,4 +353,4 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // StatisticsAdapterFactory
+} //StatisticsAdapterFactory

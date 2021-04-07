@@ -4,15 +4,15 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.time.Instant;
 
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.statistics.Value;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.Value;
 
 /**
  * <!-- begin-user-doc -->
@@ -164,4 +164,4 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 		return result.toString();
 	}
 
-} // ValueImpl
+} //ValueImpl

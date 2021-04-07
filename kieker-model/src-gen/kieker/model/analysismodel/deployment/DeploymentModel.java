@@ -28,10 +28,6 @@ public interface DeploymentModel extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeploymentContext},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Deployment Contexts</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Deployment Contexts</em>' map.
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel_DeploymentContexts()

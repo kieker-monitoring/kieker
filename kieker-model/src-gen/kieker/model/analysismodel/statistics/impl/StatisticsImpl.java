@@ -2,19 +2,23 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import java.util.Collection;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.Statistics;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
-import kieker.model.analysismodel.statistics.Statistics;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.TimeSeries;
+import org.eclipse.emf.ecore.util.EcoreEMap;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,21 +28,21 @@ import kieker.model.analysismodel.statistics.TimeSeries;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getTimeSeries <em>Time Series</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getStatistics <em>Statistics</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class StatisticsImpl extends MinimalEObjectImpl.Container implements Statistics {
 	/**
-	 * The cached value of the '{@link #getTimeSeries() <em>Time Series</em>}' reference list.
+	 * The cached value of the '{@link #getStatistics() <em>Statistics</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTimeSeries()
+	 * @see #getStatistics()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<TimeSeries<?, ?>> timeSeries;
+	protected EMap<EPredefinedUnits, Record> statistics;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -65,11 +69,25 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * @generated
 	 */
 	@Override
-	public EList<TimeSeries<?, ?>> getTimeSeries() {
-		if (timeSeries == null) {
-			timeSeries = new EObjectResolvingEList<TimeSeries<?, ?>>(TimeSeries.class, this, StatisticsPackage.STATISTICS__TIME_SERIES);
+	public EMap<EPredefinedUnits, Record> getStatistics() {
+		if (statistics == null) {
+			statistics = new EcoreEMap<EPredefinedUnits,Record>(StatisticsPackage.Literals.UNITS_TO_STATISTICS_MAP_ENTRY, UnitsToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS__STATISTICS);
 		}
-		return timeSeries;
+		return statistics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case StatisticsPackage.STATISTICS__STATISTICS:
+				return ((InternalEList<?>)getStatistics()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -80,8 +98,9 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__TIME_SERIES:
-				return getTimeSeries();
+			case StatisticsPackage.STATISTICS__STATISTICS:
+				if (coreType) return getStatistics();
+				else return getStatistics().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,13 +110,11 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__TIME_SERIES:
-				getTimeSeries().clear();
-				getTimeSeries().addAll((Collection<? extends TimeSeries<?, ?>>)newValue);
+			case StatisticsPackage.STATISTICS__STATISTICS:
+				((EStructuralFeature.Setting)getStatistics()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -111,8 +128,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__TIME_SERIES:
-				getTimeSeries().clear();
+			case StatisticsPackage.STATISTICS__STATISTICS:
+				getStatistics().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -126,10 +143,10 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__TIME_SERIES:
-				return timeSeries != null && !timeSeries.isEmpty();
+			case StatisticsPackage.STATISTICS__STATISTICS:
+				return statistics != null && !statistics.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} // StatisticsImpl
+} //StatisticsImpl

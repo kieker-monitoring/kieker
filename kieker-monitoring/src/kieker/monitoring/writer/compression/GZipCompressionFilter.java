@@ -24,7 +24,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
- * Zip compression filter for the writer pool.
+ * Gzip compression filter for the writer pool.
  *
  * @author Reiner Jung
  *

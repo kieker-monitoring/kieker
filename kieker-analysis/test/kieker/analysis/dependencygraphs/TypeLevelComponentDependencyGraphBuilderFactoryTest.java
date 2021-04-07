@@ -24,9 +24,10 @@ import org.junit.Test;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelComponentDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelComponentDependencyGraphBuilderFactory;
-import kieker.analysis.statistics.StatisticsModel;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning
@@ -37,7 +38,7 @@ public class TypeLevelComponentDependencyGraphBuilderFactoryTest {
 
 	private TypeLevelComponentDependencyGraphBuilderFactory factory;
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final StatisticsModel statisticsModel = new StatisticsModel();
+	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();;
 
 	public TypeLevelComponentDependencyGraphBuilderFactoryTest() {
 		super();

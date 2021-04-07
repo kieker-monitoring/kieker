@@ -2,6 +2,10 @@
  */
 package kieker.model.analysismodel.deployment.impl;
 
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -14,10 +18,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.deployment.DeploymentContext;
-import kieker.model.analysismodel.deployment.DeploymentModel;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -148,4 +148,4 @@ public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements
 		return super.eIsSet(featureID);
 	}
 
-} // DeploymentModelImpl
+} //DeploymentModelImpl

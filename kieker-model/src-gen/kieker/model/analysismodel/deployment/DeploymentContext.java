@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.deployment;
 
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -24,29 +25,8 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeploymentContext extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Components</b></em>' map.
-	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeployedComponent},
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Components</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Components</em>' map.
-	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Components()
-	 * @model mapType="kieker.model.analysismodel.deployment.EStringToDeployedComponentMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.deployment.DeployedComponent&gt;" ordered="false"
-	 * @generated
-	 */
-	EMap<String, DeployedComponent> getComponents();
-
-	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
@@ -65,5 +45,18 @@ public interface DeploymentContext extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Components</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeployedComponent},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Components</em>' map.
+	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Components()
+	 * @model mapType="kieker.model.analysismodel.deployment.EStringToDeployedComponentMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.deployment.DeployedComponent&gt;" ordered="false"
+	 * @generated
+	 */
+	EMap<String, DeployedComponent> getComponents();
 
 } // DeploymentContext

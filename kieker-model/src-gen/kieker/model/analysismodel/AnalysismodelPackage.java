@@ -10,11 +10,11 @@ import org.eclipse.emf.ecore.EPackage;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each operation of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.model.analysismodel.AnalysismodelFactory
@@ -74,15 +74,6 @@ public interface AnalysismodelPackage extends EPackage {
 	 */
 	int DURATION = 1;
 
-	/**
-	 * The meta object id for the '<em>Composed Key</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.util.ComposedKey
-	 * @see kieker.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
-	 * @generated
-	 */
-	int COMPOSED_KEY = 2;
 
 	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
@@ -107,17 +98,6 @@ public interface AnalysismodelPackage extends EPackage {
 	EDataType getDuration();
 
 	/**
-	 * Returns the meta object for data type '{@link kieker.model.analysismodel.util.ComposedKey <em>Composed Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Composed Key</em>'.
-	 * @see kieker.model.analysismodel.util.ComposedKey
-	 * @model instanceClass="kieker.model.analysismodel.util.ComposedKey" typeParameters="F S"
-	 * @generated
-	 */
-	EDataType getComposedKey();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -130,11 +110,11 @@ public interface AnalysismodelPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each operation of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -160,16 +140,6 @@ public interface AnalysismodelPackage extends EPackage {
 		 */
 		EDataType DURATION = eINSTANCE.getDuration();
 
-		/**
-		 * The meta object literal for the '<em>Composed Key</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.util.ComposedKey
-		 * @see kieker.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
-		 * @generated
-		 */
-		EDataType COMPOSED_KEY = eINSTANCE.getComposedKey();
-
 	}
 
-} // AnalysismodelPackage
+} //AnalysismodelPackage

@@ -66,4 +66,4 @@ public interface TypeFactory extends EFactory {
 	 */
 	TypePackage getTypePackage();
 
-} // TypeFactory
+} //TypeFactory

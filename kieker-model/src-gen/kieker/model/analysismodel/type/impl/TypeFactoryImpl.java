@@ -4,6 +4,8 @@ package kieker.model.analysismodel.type.impl;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.type.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -11,8 +13,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import kieker.model.analysismodel.type.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -165,4 +165,4 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 		return TypePackage.eINSTANCE;
 	}
 
-} // TypeFactoryImpl
+} //TypeFactoryImpl

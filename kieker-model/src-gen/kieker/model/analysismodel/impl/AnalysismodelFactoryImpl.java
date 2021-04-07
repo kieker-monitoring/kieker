@@ -4,9 +4,9 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
+
 import kieker.model.analysismodel.*;
 
-import kieker.model.analysismodel.util.ComposedKey;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -77,8 +77,6 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 				return createInstantFromString(eDataType, initialValue);
 			case AnalysismodelPackage.DURATION:
 				return createDurationFromString(eDataType, initialValue);
-			case AnalysismodelPackage.COMPOSED_KEY:
-				return createComposedKeyFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -96,8 +94,6 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 				return convertInstantToString(eDataType, instanceValue);
 			case AnalysismodelPackage.DURATION:
 				return convertDurationToString(eDataType, instanceValue);
-			case AnalysismodelPackage.COMPOSED_KEY:
-				return convertComposedKeyToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -144,24 +140,6 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComposedKey<?, ?> createComposedKeyFromString(EDataType eDataType, String initialValue) {
-		return (ComposedKey<?, ?>)super.createFromString(initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertComposedKeyToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(instanceValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public AnalysismodelPackage getAnalysismodelPackage() {
 		return (AnalysismodelPackage)getEPackage();
@@ -178,4 +156,4 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 		return AnalysismodelPackage.eINSTANCE;
 	}
 
-} // AnalysismodelFactoryImpl
+} //AnalysismodelFactoryImpl

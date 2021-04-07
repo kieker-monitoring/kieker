@@ -2,14 +2,14 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import kieker.model.analysismodel.statistics.DoubleValue;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import kieker.model.analysismodel.statistics.DoubleValue;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -161,4 +161,4 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 		return result.toString();
 	}
 
-} // DoubleValueImpl
+} //DoubleValueImpl

@@ -48,4 +48,4 @@ public interface TraceFactory extends EFactory {
 	 */
 	TracePackage getTracePackage();
 
-} // TraceFactory
+} //TraceFactory
