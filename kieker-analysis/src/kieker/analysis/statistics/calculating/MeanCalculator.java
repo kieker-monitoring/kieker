@@ -16,9 +16,8 @@
 
 package kieker.analysis.statistics.calculating;
 
-import kieker.analysis.statistics.IProperty;
-import kieker.analysis.statistics.Properties;
-import kieker.analysis.statistics.Statistic;
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.Record;
 
 /**
  * @param <T>
@@ -28,23 +27,19 @@ import kieker.analysis.statistics.Statistic;
  *
  * @since 1.14
  */
-public class AverageCalculator<T> implements ICalculator<T> {
+public class MeanCalculator<T> implements ICalculator<T> {
 
-	private static final IProperty TOTAL_PROPERTY = Properties.TOTAL;
-	private static final IProperty COUNT_PROPERTY = Properties.COUNT;
-	private static final IProperty AVERAGE_PROPERTY = Properties.AVERAGE;
-
-	public AverageCalculator() {
+	public MeanCalculator() {
 		// Create Calculator
 	}
 
 	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final Long total = statistic.getProperty(TOTAL_PROPERTY);
-		final Long count = statistic.getProperty(COUNT_PROPERTY);
+	public void calculate(final Record statistic, final T input, final Object modelObject) {
+		final Long total = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
+		final Long count = (Long) statistic.getProperties().get(EPropertyType.COUNT);
 		if ((total != null) && (count != null)) {
-			final long avg = total / count;
-			statistic.setProperty(AVERAGE_PROPERTY, avg);
+			final Long avg = total / count;
+			statistic.getProperties().put(EPropertyType.MEAN, avg);
 		}
 	}
 

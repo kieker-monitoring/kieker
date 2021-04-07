@@ -4,25 +4,29 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeployedStorage;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.assembly.AssemblyComponent;
-import kieker.model.analysismodel.deployment.DeployedComponent;
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.deployment.DeployedStorage;
-import kieker.model.analysismodel.deployment.DeploymentContext;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -215,7 +219,6 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -285,4 +288,4 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 		return super.eInvoke(operationID, arguments);
 	}
 
-} // DeployedComponentImpl
+} //DeployedComponentImpl

@@ -2,6 +2,9 @@
  */
 package kieker.model.analysismodel.assembly.impl;
 
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -14,9 +17,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.assembly.AssemblyComponent;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -328,4 +328,4 @@ public class EStringToAssemblyComponentMapEntryImpl extends MinimalEObjectImpl.C
 		return container == null ? null : (EMap<String, AssemblyComponent>)container.eGet(eContainmentFeature());
 	}
 
-} // EStringToAssemblyComponentMapEntryImpl
+} //EStringToAssemblyComponentMapEntryImpl

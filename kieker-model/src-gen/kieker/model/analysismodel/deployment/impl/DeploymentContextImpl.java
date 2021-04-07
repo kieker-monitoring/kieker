@@ -2,21 +2,24 @@
  */
 package kieker.model.analysismodel.deployment.impl;
 
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.deployment.DeployedComponent;
-import kieker.model.analysismodel.deployment.DeploymentContext;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,6 +45,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected static final String NAME_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -87,19 +91,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public EMap<String, DeployedComponent> getComponents() {
-		if (components == null) {
-			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
-		}
-		return components;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -115,6 +106,19 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_CONTEXT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EMap<String, DeployedComponent> getComponents() {
+		if (components == null) {
+			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
+		}
+		return components;
 	}
 
 	/**
@@ -153,7 +157,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -217,4 +220,4 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 		return result.toString();
 	}
 
-} // DeploymentContextImpl
+} //DeploymentContextImpl

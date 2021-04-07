@@ -28,10 +28,6 @@ public interface TypeModel extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.type.ComponentType},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Component Types</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Component Types</em>' map.
 	 * @see kieker.model.analysismodel.type.TypePackage#getTypeModel_ComponentTypes()

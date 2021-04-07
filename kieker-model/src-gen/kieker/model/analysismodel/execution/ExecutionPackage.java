@@ -5,6 +5,7 @@ package kieker.model.analysismodel.execution;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -13,11 +14,11 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each operation of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.model.analysismodel.execution.ExecutionFactory
@@ -114,22 +115,22 @@ public interface ExecutionPackage extends EPackage {
 	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY = 1;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY = 0;
-
-	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE = 1;
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY = 1;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>' class.
@@ -279,22 +280,22 @@ public interface ExecutionPackage extends EPackage {
 	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY = 4;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = 0;
-
-	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE = 1;
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = 1;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>' class.
@@ -315,6 +316,70 @@ public interface ExecutionPackage extends EPackage {
 	int DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.execution.impl.TupleImpl <em>Tuple</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.execution.impl.TupleImpl
+	 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getTuple()
+	 * @generated
+	 */
+	int TUPLE = 5;
+
+	/**
+	 * The feature id for the '<em><b>First</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE__FIRST = 0;
+
+	/**
+	 * The feature id for the '<em><b>Second</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE__SECOND = 1;
+
+	/**
+	 * The number of structural features of the '<em>Tuple</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE_FEATURE_COUNT = 2;
+
+	/**
+	 * The operation id for the '<em>Equals</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE___EQUALS__OBJECT = 0;
+
+	/**
+	 * The operation id for the '<em>Hash Code</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE___HASH_CODE = 1;
+
+	/**
+	 * The number of operations of the '<em>Tuple</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUPLE_OPERATION_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -322,7 +387,8 @@ public interface ExecutionPackage extends EPackage {
 	 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getEDirection()
 	 * @generated
 	 */
-	int EDIRECTION = 5;
+	int EDIRECTION = 6;
+
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.execution.ExecutionModel <em>Model</em>}'.
@@ -362,22 +428,12 @@ public interface ExecutionPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyDataType="kieker.model.analysismodel.ComposedKey&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;"
+	 * @model features="value key" 
 	 *        valueType="kieker.model.analysismodel.execution.AggregatedInvocation" valueContainment="true"
+	 *        keyType="kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;" keyContainment="true"
 	 * @generated
 	 */
 	EClass getDeployedOperationsPairToAggregatedInvocationMapEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getDeployedOperationsPairToAggregatedInvocationMapEntry()
-	 * @generated
-	 */
-	EAttribute getDeployedOperationsPairToAggregatedInvocationMapEntry_Key();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -389,6 +445,17 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Value();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getDeployedOperationsPairToAggregatedInvocationMapEntry()
+	 * @generated
+	 */
+	EReference getDeployedOperationsPairToAggregatedInvocationMapEntry_Key();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.execution.AggregatedInvocation <em>Aggregated Invocation</em>}'.
@@ -493,22 +560,12 @@ public interface ExecutionPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyDataType="kieker.model.analysismodel.ComposedKey&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;"
+	 * @model features="value key" 
 	 *        valueType="kieker.model.analysismodel.execution.AggregatedStorageAccess" valueContainment="true"
+	 *        keyType="kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;" keyContainment="true"
 	 * @generated
 	 */
 	EClass getDeployedOperationsPairToAggregatedStorageAccessMapEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
-	 * @generated
-	 */
-	EAttribute getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -520,6 +577,69 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getDeployedOperationsPairToAggregatedStorageAccessMapEntry()
+	 * @generated
+	 */
+	EReference getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.execution.Tuple <em>Tuple</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tuple</em>'.
+	 * @see kieker.model.analysismodel.execution.Tuple
+	 * @generated
+	 */
+	EClass getTuple();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.execution.Tuple#getFirst <em>First</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>First</em>'.
+	 * @see kieker.model.analysismodel.execution.Tuple#getFirst()
+	 * @see #getTuple()
+	 * @generated
+	 */
+	EReference getTuple_First();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.execution.Tuple#getSecond <em>Second</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Second</em>'.
+	 * @see kieker.model.analysismodel.execution.Tuple#getSecond()
+	 * @see #getTuple()
+	 * @generated
+	 */
+	EReference getTuple_Second();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.model.analysismodel.execution.Tuple#equals(java.lang.Object) <em>Equals</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Equals</em>' operation.
+	 * @see kieker.model.analysismodel.execution.Tuple#equals(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getTuple__Equals__Object();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.model.analysismodel.execution.Tuple#hashCode() <em>Hash Code</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Hash Code</em>' operation.
+	 * @see kieker.model.analysismodel.execution.Tuple#hashCode()
+	 * @generated
+	 */
+	EOperation getTuple__HashCode();
 
 	/**
 	 * Returns the meta object for enum '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}'.
@@ -544,11 +664,11 @@ public interface ExecutionPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each operation of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -591,20 +711,20 @@ public interface ExecutionPackage extends EPackage {
 		EClass DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY = eINSTANCE.getDeployedOperationsPairToAggregatedInvocationMapEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY = eINSTANCE.getDeployedOperationsPairToAggregatedInvocationMapEntry_Key();
-
-		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE = eINSTANCE.getDeployedOperationsPairToAggregatedInvocationMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY = eINSTANCE.getDeployedOperationsPairToAggregatedInvocationMapEntry_Key();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.AggregatedInvocationImpl <em>Aggregated Invocation</em>}' class.
@@ -693,20 +813,62 @@ public interface ExecutionPackage extends EPackage {
 		EClass DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
-
-		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY = eINSTANCE.getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.TupleImpl <em>Tuple</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.execution.impl.TupleImpl
+		 * @see kieker.model.analysismodel.execution.impl.ExecutionPackageImpl#getTuple()
+		 * @generated
+		 */
+		EClass TUPLE = eINSTANCE.getTuple();
+
+		/**
+		 * The meta object literal for the '<em><b>First</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TUPLE__FIRST = eINSTANCE.getTuple_First();
+
+		/**
+		 * The meta object literal for the '<em><b>Second</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TUPLE__SECOND = eINSTANCE.getTuple_Second();
+
+		/**
+		 * The meta object literal for the '<em><b>Equals</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TUPLE___EQUALS__OBJECT = eINSTANCE.getTuple__Equals__Object();
+
+		/**
+		 * The meta object literal for the '<em><b>Hash Code</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TUPLE___HASH_CODE = eINSTANCE.getTuple__HashCode();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.EDirection <em>EDirection</em>}' enum.
@@ -720,4 +882,4 @@ public interface ExecutionPackage extends EPackage {
 
 	}
 
-} // ExecutionPackage
+} //ExecutionPackage

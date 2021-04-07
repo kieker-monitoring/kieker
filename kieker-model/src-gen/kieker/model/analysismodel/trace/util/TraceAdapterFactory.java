@@ -2,14 +2,14 @@
  */
 package kieker.model.analysismodel.trace.util;
 
+import kieker.model.analysismodel.trace.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.trace.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -65,7 +65,8 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TraceSwitch<Adapter> modelSwitch = new TraceSwitch<Adapter>() {
+	protected TraceSwitch<Adapter> modelSwitch =
+		new TraceSwitch<Adapter>() {
 			@Override
 			public Adapter caseTrace(Trace object) {
 				return createTraceAdapter();
@@ -92,6 +93,7 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.trace.Trace <em>Trace</em>}'.
@@ -133,4 +135,4 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // TraceAdapterFactory
+} //TraceAdapterFactory

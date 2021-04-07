@@ -19,9 +19,10 @@ package kieker.analysis.model;
 import java.util.function.Function;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.util.ComposedKey;
 
 /**
  * Utility class for functions ({@link Function}) to access the model objects from operation calls.
@@ -53,7 +54,9 @@ public final class ModelObjectFromOperationCallAccessors {
 			// Check if operationCall is an entry operation call. If so than source is null
 			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
 			final DeployedOperation target = operationCall.getOperation();
-			final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
+			final Tuple<DeployedOperation, DeployedOperation> key = ExecutionFactory.eINSTANCE.createTuple();
+			key.setFirst(source);
+			key.setSecond(target);
 			return executionModel.getAggregatedInvocations().get(key);
 		};
 	}

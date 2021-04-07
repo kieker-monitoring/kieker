@@ -2,6 +2,9 @@
  */
 package kieker.model.analysismodel.type.impl;
 
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypePackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -14,9 +17,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.type.OperationType;
-import kieker.model.analysismodel.type.TypePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -328,4 +328,4 @@ public class EStringToOperationTypeMapEntryImpl extends MinimalEObjectImpl.Conta
 		return container == null ? null : (EMap<String, OperationType>)container.eGet(eContainmentFeature());
 	}
 
-} // EStringToOperationTypeMapEntryImpl
+} //EStringToOperationTypeMapEntryImpl

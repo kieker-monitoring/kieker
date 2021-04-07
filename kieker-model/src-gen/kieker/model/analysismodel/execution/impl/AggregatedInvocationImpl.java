@@ -3,8 +3,16 @@
 package kieker.model.analysismodel.execution.impl;
 
 import java.util.Collection;
+
+import kieker.model.analysismodel.deployment.DeployedOperation;
+
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionPackage;
+
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -12,9 +20,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.AggregatedInvocation;
-import kieker.model.analysismodel.execution.ExecutionPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -256,9 +261,20 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 		return super.eIsSet(featureID);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public String toString() {
-		return String.format("%s: [%s->%s]", this.getClass().getName(), source, target);
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (sources: ");
+		result.append(sources);
+		result.append(')');
+		return result.toString();
 	}
 
-} // AggregatedInvocationImpl
+} //AggregatedInvocationImpl

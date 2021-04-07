@@ -2,11 +2,11 @@
  */
 package kieker.model.analysismodel.assembly;
 
+import kieker.model.analysismodel.type.ComponentType;
+
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.type.ComponentType;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,10 +32,6 @@ public interface AssemblyComponent extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.assembly.AssemblyOperation},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assembly Operations</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assembly Operations</em>' map.
 	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_AssemblyOperations()
@@ -47,10 +43,6 @@ public interface AssemblyComponent extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Component Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Component Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Component Type</em>' reference.
 	 * @see #setComponentType(ComponentType)

@@ -4,6 +4,8 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.deployment.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -11,8 +13,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import kieker.model.analysismodel.deployment.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -188,4 +188,4 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 		return DeploymentPackage.eINSTANCE;
 	}
 
-} // DeploymentFactoryImpl
+} //DeploymentFactoryImpl

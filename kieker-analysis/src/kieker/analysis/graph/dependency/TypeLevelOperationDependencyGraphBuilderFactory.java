@@ -16,8 +16,8 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.statistics.StatisticsModel;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning

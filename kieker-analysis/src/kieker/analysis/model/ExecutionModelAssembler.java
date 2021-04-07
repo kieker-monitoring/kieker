@@ -20,8 +20,8 @@ import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.util.ComposedKey;
 
 /**
  * @author Sören Henning
@@ -48,7 +48,9 @@ public class ExecutionModelAssembler implements IExecutionModelAssembler {
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
-		final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
+		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
+		key.setFirst(source);
+		key.setSecond(target);
 		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);

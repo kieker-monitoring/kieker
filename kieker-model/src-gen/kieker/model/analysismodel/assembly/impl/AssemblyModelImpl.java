@@ -2,6 +2,10 @@
  */
 package kieker.model.analysismodel.assembly.impl;
 
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -14,10 +18,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import kieker.model.analysismodel.assembly.AssemblyComponent;
-import kieker.model.analysismodel.assembly.AssemblyModel;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -148,4 +148,4 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 		return super.eIsSet(featureID);
 	}
 
-} // AssemblyModelImpl
+} //AssemblyModelImpl

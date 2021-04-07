@@ -4,6 +4,37 @@ package kieker.model.analysismodel.assembly.impl;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.AnalysismodelPackage;
+
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyFactory;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.assembly.AssemblyOperation;
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+import kieker.model.analysismodel.assembly.AssemblyStorage;
+
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
+import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
+import kieker.model.analysismodel.execution.ExecutionPackage;
+
+import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
+import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+
+import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
+import kieker.model.analysismodel.trace.TracePackage;
+
+import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
+import kieker.model.analysismodel.type.TypePackage;
+
+import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -11,25 +42,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import kieker.model.analysismodel.AnalysismodelPackage;
-import kieker.model.analysismodel.assembly.AssemblyComponent;
-import kieker.model.analysismodel.assembly.AssemblyFactory;
-import kieker.model.analysismodel.assembly.AssemblyModel;
-import kieker.model.analysismodel.assembly.AssemblyOperation;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.AssemblyStorage;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
-import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
-import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
-import kieker.model.analysismodel.trace.TracePackage;
-import kieker.model.analysismodel.trace.impl.TracePackageImpl;
-import kieker.model.analysismodel.type.TypePackage;
-import kieker.model.analysismodel.type.impl.TypePackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -506,4 +518,4 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEReference(getEStringToAssemblyStorageMapEntry_Value(), this.getAssemblyStorage(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} // AssemblyPackageImpl
+} //AssemblyPackageImpl

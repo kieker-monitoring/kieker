@@ -39,6 +39,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String ZIP_FILE_EXTENSION = ".zip";
 	/** The extension of Kieker's defalted record files. */
 	public static final String DEFLATE_FILE_EXTENSION = ".df";
+	/** The extension of Kieker's bzip2ed record files. */
+	public static final String BZIP2_FILE_EXTENSION = ".bz2";
 	/** The extension of Kieker's gzipped record files. */
 	public static final String GZIP_FILE_EXTENSION = ".gz";
 	/** The extension of Kieker's xz record files. */
