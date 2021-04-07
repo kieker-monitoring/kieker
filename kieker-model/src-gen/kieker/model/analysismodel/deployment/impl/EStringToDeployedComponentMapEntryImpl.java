@@ -2,6 +2,9 @@
  */
 package kieker.model.analysismodel.deployment.impl;
 
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -14,9 +17,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.deployment.DeployedComponent;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -328,4 +328,4 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 		return container == null ? null : (EMap<String, DeployedComponent>)container.eGet(eContainmentFeature());
 	}
 
-} // EStringToDeployedComponentMapEntryImpl
+} //EStringToDeployedComponentMapEntryImpl

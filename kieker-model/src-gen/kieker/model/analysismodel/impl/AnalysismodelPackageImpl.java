@@ -4,21 +4,34 @@ package kieker.model.analysismodel.impl;
 
 import java.time.Duration;
 import java.time.Instant;
+
 import kieker.model.analysismodel.AnalysismodelFactory;
 import kieker.model.analysismodel.AnalysismodelPackage;
+
 import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
 import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
 import kieker.model.analysismodel.execution.ExecutionPackage;
+
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
 import kieker.model.analysismodel.trace.TracePackage;
+
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
 import kieker.model.analysismodel.type.TypePackage;
+
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
-import kieker.model.analysismodel.util.ComposedKey;
+
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -44,13 +57,6 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @generated
 	 */
 	private EDataType durationEDataType = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EDataType composedKeyEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -165,16 +171,6 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @generated
 	 */
 	@Override
-	public EDataType getComposedKey() {
-		return composedKeyEDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public AnalysismodelFactory getAnalysismodelFactory() {
 		return (AnalysismodelFactory)getEFactoryInstance();
 	}
@@ -200,7 +196,6 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
-		composedKeyEDataType = createEDataType(COMPOSED_KEY);
 	}
 
 	/**
@@ -245,10 +240,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(durationEDataType, Duration.class, "Duration", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(composedKeyEDataType, ComposedKey.class, "ComposedKey", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);
 	}
 
-} // AnalysismodelPackageImpl
+} //AnalysismodelPackageImpl

@@ -66,4 +66,4 @@ public interface AssemblyFactory extends EFactory {
 	 */
 	AssemblyPackage getAssemblyPackage();
 
-} // AssemblyFactory
+} //AssemblyFactory

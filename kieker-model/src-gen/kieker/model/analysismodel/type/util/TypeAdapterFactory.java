@@ -4,14 +4,14 @@ package kieker.model.analysismodel.type.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.type.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.type.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,7 +67,8 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypeSwitch<Adapter> modelSwitch = new TypeSwitch<Adapter>() {
+	protected TypeSwitch<Adapter> modelSwitch =
+		new TypeSwitch<Adapter>() {
 			@Override
 			public Adapter caseTypeModel(TypeModel object) {
 				return createTypeModelAdapter();
@@ -114,6 +115,7 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.type.TypeModel <em>Model</em>}'.
@@ -225,4 +227,4 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // TypeAdapterFactory
+} //TypeAdapterFactory

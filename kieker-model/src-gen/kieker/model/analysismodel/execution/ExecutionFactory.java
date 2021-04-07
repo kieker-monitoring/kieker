@@ -49,6 +49,15 @@ public interface ExecutionFactory extends EFactory {
 	AggregatedStorageAccess createAggregatedStorageAccess();
 
 	/**
+	 * Returns a new object of class '<em>Tuple</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Tuple</em>'.
+	 * @generated
+	 */
+	<F, S> Tuple<F, S> createTuple();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -57,4 +66,4 @@ public interface ExecutionFactory extends EFactory {
 	 */
 	ExecutionPackage getExecutionPackage();
 
-} // ExecutionFactory
+} //ExecutionFactory

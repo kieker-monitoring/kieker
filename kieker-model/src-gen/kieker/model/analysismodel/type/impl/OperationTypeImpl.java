@@ -6,6 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
 
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypePackage;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
@@ -14,11 +18,8 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
-import kieker.model.analysismodel.type.ComponentType;
-import kieker.model.analysismodel.type.OperationType;
-import kieker.model.analysismodel.type.TypePackage;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -389,4 +390,4 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 		return result.toString();
 	}
 
-} // OperationTypeImpl
+} //OperationTypeImpl

@@ -39,7 +39,6 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 public final class SamplingController extends AbstractController implements ISamplingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SamplingController.class);
 
-	/** Executes the {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s. */
 	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
 	/**

@@ -10,14 +10,14 @@ import org.eclipse.emf.common.util.Enumerator;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the literals of the enumeration '<em><b>Predefined Units</b></em>',
+ * A representation of the literals of the enumeration '<em><b>EPredefined Units</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see kieker.model.analysismodel.statistics.StatisticsPackage#getPredefinedUnits()
+ * @see kieker.model.analysismodel.statistics.StatisticsPackage#getEPredefinedUnits()
  * @model
  * @generated
  */
-public enum PredefinedUnits implements Enumerator {
+public enum EPredefinedUnits implements Enumerator {
 	/**
 	 * The '<em><b>CPU UTIL</b></em>' literal object.
 	 * <!-- begin-user-doc -->
@@ -41,10 +41,6 @@ public enum PredefinedUnits implements Enumerator {
 	/**
 	 * The '<em><b>CPU UTIL</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>CPU UTIL</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #CPU_UTIL
 	 * @model
@@ -56,10 +52,6 @@ public enum PredefinedUnits implements Enumerator {
 	/**
 	 * The '<em><b>RESPONSE TIME</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>RESPONSE TIME</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #RESPONSE_TIME
 	 * @model
@@ -69,35 +61,36 @@ public enum PredefinedUnits implements Enumerator {
 	public static final int RESPONSE_TIME_VALUE = 0;
 
 	/**
-	 * An array of all the '<em><b>Predefined Units</b></em>' enumerators.
+	 * An array of all the '<em><b>EPredefined Units</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final PredefinedUnits[] VALUES_ARRAY = new PredefinedUnits[] {
+	private static final EPredefinedUnits[] VALUES_ARRAY =
+		new EPredefinedUnits[] {
 			CPU_UTIL,
 			RESPONSE_TIME,
 		};
 
 	/**
-	 * A public read-only list of all the '<em><b>Predefined Units</b></em>' enumerators.
+	 * A public read-only list of all the '<em><b>EPredefined Units</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<PredefinedUnits> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<EPredefinedUnits> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Predefined Units</b></em>' literal with the specified literal value.
+	 * Returns the '<em><b>EPredefined Units</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param literal the literal.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static PredefinedUnits get(String literal) {
+	public static EPredefinedUnits get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			PredefinedUnits result = VALUES_ARRAY[i];
+			EPredefinedUnits result = VALUES_ARRAY[i];
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -106,16 +99,16 @@ public enum PredefinedUnits implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Predefined Units</b></em>' literal with the specified name.
+	 * Returns the '<em><b>EPredefined Units</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param name the name.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static PredefinedUnits getByName(String name) {
+	public static EPredefinedUnits getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			PredefinedUnits result = VALUES_ARRAY[i];
+			EPredefinedUnits result = VALUES_ARRAY[i];
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -124,14 +117,14 @@ public enum PredefinedUnits implements Enumerator {
 	}
 
 	/**
-	 * Returns the '<em><b>Predefined Units</b></em>' literal with the specified integer value.
+	 * Returns the '<em><b>EPredefined Units</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the integer value.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static PredefinedUnits get(int value) {
+	public static EPredefinedUnits get(int value) {
 		switch (value) {
 			case CPU_UTIL_VALUE: return CPU_UTIL;
 		}
@@ -165,7 +158,7 @@ public enum PredefinedUnits implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private PredefinedUnits(int value, String name, String literal) {
+	private EPredefinedUnits(int value, String name, String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -211,5 +204,5 @@ public enum PredefinedUnits implements Enumerator {
 	public String toString() {
 		return literal;
 	}
-
-} // PredefinedUnits
+	
+} //EPredefinedUnits

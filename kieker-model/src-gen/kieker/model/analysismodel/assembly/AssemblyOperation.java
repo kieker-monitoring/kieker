@@ -2,9 +2,9 @@
  */
 package kieker.model.analysismodel.assembly;
 
-import org.eclipse.emf.ecore.EObject;
-
 import kieker.model.analysismodel.type.OperationType;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,10 +26,6 @@ public interface AssemblyOperation extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Operation Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Operation Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operation Type</em>' reference.
 	 * @see #setOperationType(OperationType)

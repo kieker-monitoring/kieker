@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.type;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -29,10 +30,6 @@ public interface OperationType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Signature</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
@@ -55,10 +52,6 @@ public interface OperationType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
@@ -81,10 +74,6 @@ public interface OperationType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Return Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Return Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Return Type</em>' attribute.
 	 * @see #setReturnType(String)
@@ -108,10 +97,6 @@ public interface OperationType extends EObject {
 	 * Returns the value of the '<em><b>Modifiers</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Modifiers</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Modifiers</em>' attribute list.
 	 * @see kieker.model.analysismodel.type.TypePackage#getOperationType_Modifiers()
@@ -124,10 +109,6 @@ public interface OperationType extends EObject {
 	 * Returns the value of the '<em><b>Parameter Types</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Parameter Types</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parameter Types</em>' attribute list.
 	 * @see kieker.model.analysismodel.type.TypePackage#getOperationType_ParameterTypes()

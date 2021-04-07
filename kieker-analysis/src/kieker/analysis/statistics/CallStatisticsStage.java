@@ -19,6 +19,8 @@ package kieker.analysis.statistics;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 import kieker.model.analysismodel.trace.OperationCall;
 
 /**
@@ -31,7 +33,7 @@ import kieker.model.analysismodel.trace.OperationCall;
 public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCall> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {
-		super(statisticsModel, Units.RESPONSE_TIME, new CountCalculator<>(),
+		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, new CountCalculator<>(),
 				ModelObjectFromOperationCallAccessors.createForAggregatedInvocation(executionModel));
 	}
 

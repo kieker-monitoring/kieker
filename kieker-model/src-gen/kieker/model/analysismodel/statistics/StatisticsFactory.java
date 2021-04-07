@@ -31,6 +31,15 @@ public interface StatisticsFactory extends EFactory {
 	Statistics createStatistics();
 
 	/**
+	 * Returns a new object of class '<em>Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Record</em>'.
+	 * @generated
+	 */
+	Record createRecord();
+
+	/**
 	 * Returns a new object of class '<em>Time Series</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -76,6 +85,24 @@ public interface StatisticsFactory extends EFactory {
 	DoubleValue createDoubleValue();
 
 	/**
+	 * Returns a new object of class '<em>Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model</em>'.
+	 * @generated
+	 */
+	StatisticsModel createStatisticsModel();
+
+	/**
+	 * Returns a new object of class '<em>Time Series Statistics</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Time Series Statistics</em>'.
+	 * @generated
+	 */
+	TimeSeriesStatistics createTimeSeriesStatistics();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -84,4 +111,4 @@ public interface StatisticsFactory extends EFactory {
 	 */
 	StatisticsPackage getStatisticsPackage();
 
-} // StatisticsFactory
+} //StatisticsFactory

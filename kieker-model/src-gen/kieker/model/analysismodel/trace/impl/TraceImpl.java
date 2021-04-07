@@ -2,6 +2,10 @@
  */
 package kieker.model.analysismodel.trace.impl;
 
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TracePackage;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -10,10 +14,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.trace.Trace;
-import kieker.model.analysismodel.trace.TracePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -245,4 +245,4 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 		return result.toString();
 	}
 
-} // TraceImpl
+} //TraceImpl

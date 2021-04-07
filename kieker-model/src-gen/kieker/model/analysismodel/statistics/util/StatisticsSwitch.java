@@ -2,12 +2,14 @@
  */
 package kieker.model.analysismodel.statistics.util;
 
+import java.util.Map;
+
+import kieker.model.analysismodel.statistics.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import kieker.model.analysismodel.statistics.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -72,6 +74,24 @@ public class StatisticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<EPredefinedUnits, Record> unitsToStatisticsMapEntry = (Map.Entry<EPredefinedUnits, Record>)theEObject;
+				T result = caseUnitsToStatisticsMapEntry(unitsToStatisticsMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.RECORD: {
+				Record record = (Record)theEObject;
+				T result = caseRecord(record);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE: {
+				@SuppressWarnings("unchecked") Map.Entry<EPropertyType, Object> ePropertyTypeToValue = (Map.Entry<EPropertyType, Object>)theEObject;
+				T result = caseEPropertyTypeToValue(ePropertyTypeToValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case StatisticsPackage.TIME_SERIES: {
 				TimeSeries<?, ?> timeSeries = (TimeSeries<?, ?>)theEObject;
 				T result = caseTimeSeries(timeSeries);
@@ -118,6 +138,24 @@ public class StatisticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case StatisticsPackage.STATISTICS_MODEL: {
+				StatisticsModel statisticsModel = (StatisticsModel)theEObject;
+				T result = caseStatisticsModel(statisticsModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<Object, Statistics> eObjectToStatisticsMapEntry = (Map.Entry<Object, Statistics>)theEObject;
+				T result = caseEObjectToStatisticsMapEntry(eObjectToStatisticsMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case StatisticsPackage.TIME_SERIES_STATISTICS: {
+				TimeSeriesStatistics timeSeriesStatistics = (TimeSeriesStatistics)theEObject;
+				T result = caseTimeSeriesStatistics(timeSeriesStatistics);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -134,6 +172,51 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseStatistics(Statistics object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Units To Statistics Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Units To Statistics Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, Record> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Record</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRecord(Record object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EProperty Type To Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EProperty Type To Value</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEPropertyTypeToValue(Map.Entry<EPropertyType, Object> object) {
 		return null;
 	}
 
@@ -243,6 +326,51 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStatisticsModel(StatisticsModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EObject To Statistics Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EObject To Statistics Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEObjectToStatisticsMapEntry(Map.Entry<Object, Statistics> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Time Series Statistics</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Time Series Statistics</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTimeSeriesStatistics(TimeSeriesStatistics object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -258,4 +386,4 @@ public class StatisticsSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // StatisticsSwitch
+} //StatisticsSwitch

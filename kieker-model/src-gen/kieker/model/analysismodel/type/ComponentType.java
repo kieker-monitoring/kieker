@@ -30,10 +30,6 @@ public interface ComponentType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Signature</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
@@ -58,10 +54,6 @@ public interface ComponentType extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.type.OperationType},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Provided Operations</em>' map isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_ProvidedOperations()
@@ -73,10 +65,6 @@ public interface ComponentType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
@@ -99,10 +87,6 @@ public interface ComponentType extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Package</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Package</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Package</em>' attribute.
 	 * @see #setPackage(String)

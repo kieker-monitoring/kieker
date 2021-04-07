@@ -4,12 +4,12 @@ package kieker.model.analysismodel.type.util;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.type.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import kieker.model.analysismodel.type.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -235,4 +235,4 @@ public class TypeSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // TypeSwitch
+} //TypeSwitch

@@ -25,10 +25,6 @@ public interface Trace extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Trace ID</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Trace ID</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Trace ID</em>' attribute.
 	 * @see #setTraceID(long)
@@ -51,10 +47,6 @@ public interface Trace extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Root Operation Call</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Root Operation Call</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Root Operation Call</em>' containment reference.
 	 * @see #setRootOperationCall(OperationCall)
