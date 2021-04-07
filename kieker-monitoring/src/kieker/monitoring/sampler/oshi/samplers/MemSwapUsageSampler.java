@@ -16,8 +16,6 @@
 
 package kieker.monitoring.sampler.oshi.samplers;
 
-import org.hyperic.sigar.SigarException;
-
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -41,7 +39,7 @@ public class MemSwapUsageSampler extends AbstractOshiSampler {
 	 * Constructs a new {@link AbstractOshiSampler} with given
 	 * {@link HardwareAbstractionLayer} instance used to retrieve the sensor data.
 	 * Users should use the factory method
-	 * {@link kieker.monitoring.sampler.sigar.OshiSamplerFactory#createSensorMemSwapUsage()}
+	 * {@link kieker.monitoring.sampler.oshi.OshiSamplerFactory#createSensorMemSwapUsage()}
 	 * to acquire an instance rather than calling this constructor directly.
 	 *
 	 * @param hardwareAbstractionLayer
@@ -56,7 +54,7 @@ public class MemSwapUsageSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringCtr) throws SigarException {
+	public void sample(final IMonitoringController monitoringCtr) {
 		if (!monitoringCtr.isMonitoringEnabled() || !monitoringCtr.isProbeActivated(SignatureFactory.createMemSwapSignature())) {
 			return;
 		}

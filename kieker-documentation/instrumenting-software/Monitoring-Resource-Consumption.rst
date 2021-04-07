@@ -1,6 +1,6 @@
 .. _instrumenting-software-resource-consumption:
 
-Monitoring Resource Consumption 
+Monitoring Resource Consumption
 ===============================
 
 Kieker comes with a wide range of samplers to collect resource
@@ -18,7 +18,7 @@ Samplers can be added to software manually, via AspectJ probes and as
 listeners in Java servlet setups. Of course it is possible to use other
 means of injection. Feel free to create a probe based on the existing
 sampler API. To create your own probe, you have to create a proper
-injection setup and use the SigarSamplerFactory to create samplers.
+injection setup and use the OshiSamplerFactory to create samplers.
 
 Manual Setup
 ~~~~~~~~~~~~
@@ -32,9 +32,9 @@ within the controller.
   private static final IMonitoringController CTRL =
       MonitoringController.getInstance();
   
-  final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
+  final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
   
-  ISampler sampler = sigarFactory.createSensorCPUsDetailedPerc();
+  ISampler sampler = oshiFactory.createSensorCPUsDetailedPerc();
   
   CTRL.schedulePeriodicSampler(sampler, 0, 100, TimeUnit.MILLISECONDS);
  
