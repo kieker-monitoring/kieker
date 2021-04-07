@@ -2,10 +2,11 @@
  */
 package kieker.model.analysismodel.deployment;
 
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.EObject;
-
 import kieker.model.analysismodel.assembly.AssemblyComponent;
+
+import org.eclipse.emf.common.util.EMap;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,10 +30,6 @@ public interface DeployedComponent extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Assembly Component</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assembly Component</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assembly Component</em>' reference.
 	 * @see #setAssemblyComponent(AssemblyComponent)
@@ -57,10 +54,6 @@ public interface DeployedComponent extends EObject {
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeployedOperation},
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contained Operations</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contained Operations</em>' map.
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_ContainedOperations()

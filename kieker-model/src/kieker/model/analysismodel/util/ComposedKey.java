@@ -22,6 +22,8 @@ import com.google.common.base.Objects;
 
 /**
  * Class representing a key (e.g., for a {@link Map}) that consists of three elements.
+ * Please note that there is a similar class in execution generated via genmodel which
+ * is only usable inside an EMF model.
  *
  * @param <F>
  *            First element's type

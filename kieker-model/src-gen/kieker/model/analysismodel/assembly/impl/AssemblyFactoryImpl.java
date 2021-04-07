@@ -4,6 +4,8 @@ package kieker.model.analysismodel.assembly.impl;
 
 import java.util.Map;
 
+import kieker.model.analysismodel.assembly.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -11,8 +13,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import kieker.model.analysismodel.assembly.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -165,4 +165,4 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 		return AssemblyPackage.eINSTANCE;
 	}
 
-} // AssemblyFactoryImpl
+} //AssemblyFactoryImpl

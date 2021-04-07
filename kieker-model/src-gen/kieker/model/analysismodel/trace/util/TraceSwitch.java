@@ -2,12 +2,12 @@
  */
 package kieker.model.analysismodel.trace.util;
 
+import kieker.model.analysismodel.trace.*;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import kieker.model.analysismodel.trace.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,4 +128,4 @@ public class TraceSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} // TraceSwitch
+} //TraceSwitch

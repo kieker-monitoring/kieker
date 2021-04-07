@@ -12,11 +12,11 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each operation of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.model.analysismodel.trace.TraceFactory
@@ -229,6 +229,7 @@ public interface TracePackage extends EPackage {
 	 */
 	int OPERATION_CALL_OPERATION_COUNT = 0;
 
+
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.trace.Trace <em>Trace</em>}'.
 	 * <!-- begin-user-doc -->
@@ -405,11 +406,11 @@ public interface TracePackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each operation of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -541,4 +542,4 @@ public interface TracePackage extends EPackage {
 
 	}
 
-} // TracePackage
+} //TracePackage

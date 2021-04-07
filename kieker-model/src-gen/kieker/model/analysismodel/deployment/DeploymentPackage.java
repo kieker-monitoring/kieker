@@ -13,11 +13,11 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each operation of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.model.analysismodel.deployment.DeploymentFactory
@@ -480,6 +480,7 @@ public interface DeploymentPackage extends EPackage {
 	 */
 	int DEPLOYED_STORAGE_OPERATION_COUNT = 1;
 
+
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.deployment.DeploymentModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
@@ -546,6 +547,17 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentContext();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeploymentContext#getName()
+	 * @see #getDeploymentContext()
+	 * @generated
+	 */
+	EAttribute getDeploymentContext_Name();
+
+	/**
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -589,17 +601,6 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEStringToDeployedComponentMapEntry_Value();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeploymentContext#getName()
-	 * @see #getDeploymentContext()
-	 * @generated
-	 */
-	EAttribute getDeploymentContext_Name();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.deployment.DeployedComponent <em>Deployed Component</em>}'.
@@ -797,11 +798,11 @@ public interface DeploymentPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each operation of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -862,6 +863,14 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_CONTEXT = eINSTANCE.getDeploymentContext();
 
 		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPLOYMENT_CONTEXT__NAME = eINSTANCE.getDeploymentContext_Name();
+
+		/**
 		 * The meta object literal for the '<em><b>Components</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -894,14 +903,6 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE = eINSTANCE.getEStringToDeployedComponentMapEntry_Value();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DEPLOYMENT_CONTEXT__NAME = eINSTANCE.getDeploymentContext_Name();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl <em>Deployed Component</em>}' class.
@@ -1051,4 +1052,4 @@ public interface DeploymentPackage extends EPackage {
 
 	}
 
-} // DeploymentPackage
+} //DeploymentPackage

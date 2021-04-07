@@ -5,11 +5,11 @@ package kieker.model.analysismodel.trace;
 import java.time.Duration;
 import java.time.Instant;
 
+import kieker.model.analysismodel.deployment.DeployedOperation;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.deployment.DeployedOperation;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,10 +41,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Operation</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operation</em>' reference.
 	 * @see #setOperation(DeployedOperation)
@@ -68,10 +64,6 @@ public interface OperationCall extends EObject {
 	 * Returns the value of the '<em><b>Parent</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link kieker.model.analysismodel.trace.OperationCall#getChildren <em>Children</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Parent</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' reference.
 	 * @see #setParent(OperationCall)
@@ -97,10 +89,6 @@ public interface OperationCall extends EObject {
 	 * The list contents are of type {@link kieker.model.analysismodel.trace.OperationCall}.
 	 * It is bidirectional and its opposite is '{@link kieker.model.analysismodel.trace.OperationCall#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Children</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Children</em>' reference list.
 	 * @see kieker.model.analysismodel.trace.TracePackage#getOperationCall_Children()
@@ -113,10 +101,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Duration</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Duration</em>' attribute.
 	 * @see #setDuration(Duration)
@@ -139,10 +123,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Start</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start</em>' attribute.
 	 * @see #setStart(Instant)
@@ -165,10 +145,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Dur Ratio To Parent</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dur Ratio To Parent</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dur Ratio To Parent</em>' attribute.
 	 * @see #setDurRatioToParent(float)
@@ -191,10 +167,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Dur Ratio To Root Parent</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dur Ratio To Root Parent</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dur Ratio To Root Parent</em>' attribute.
 	 * @see #setDurRatioToRootParent(float)
@@ -217,10 +189,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Stack Depth</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Stack Depth</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Stack Depth</em>' attribute.
 	 * @see #setStackDepth(int)
@@ -243,10 +211,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Order Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Order Index</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Order Index</em>' attribute.
 	 * @see #setOrderIndex(int)
@@ -270,10 +234,6 @@ public interface OperationCall extends EObject {
 	 * Returns the value of the '<em><b>Failed</b></em>' attribute.
 	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Failed</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Failed</em>' attribute.
 	 * @see #setFailed(boolean)
@@ -296,10 +256,6 @@ public interface OperationCall extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Failed Cause</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Failed Cause</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Failed Cause</em>' attribute.
 	 * @see #setFailedCause(String)

@@ -28,10 +28,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries_Name()
@@ -43,10 +39,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	/**
 	 * Returns the value of the '<em><b>Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Unit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Unit</em>' attribute.
 	 * @see #setUnit(Object)
@@ -69,10 +61,6 @@ public interface TimeSeries<V extends Value, U extends Unit<V>> extends EObject 
 	/**
 	 * Returns the value of the '<em><b>Values</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Values</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Values</em>' reference list.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getTimeSeries_Values()

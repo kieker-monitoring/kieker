@@ -38,7 +38,6 @@ import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
-import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
@@ -49,6 +48,8 @@ import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -83,7 +84,7 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final StatisticsModel statisticsModel = new StatisticsModel();
+	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration() {

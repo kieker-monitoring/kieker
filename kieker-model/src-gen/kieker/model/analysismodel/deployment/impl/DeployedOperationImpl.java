@@ -4,22 +4,26 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import kieker.model.analysismodel.assembly.AssemblyOperation;
+
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import kieker.model.analysismodel.assembly.AssemblyOperation;
-import kieker.model.analysismodel.deployment.DeployedComponent;
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
-
 /**
- * <!-- begin-user-doc --> An implementation of the model object
- * '<em><b>Deployed Operation</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Deployed Operation</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -32,7 +36,8 @@ import kieker.model.analysismodel.deployment.DeploymentPackage;
 public class DeployedOperationImpl extends MinimalEObjectImpl.Container implements DeployedOperation {
 	/**
 	 * The cached value of the '{@link #getAssemblyOperation() <em>Assembly Operation</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getAssemblyOperation()
 	 * @generated
 	 * @ordered
@@ -40,7 +45,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	protected AssemblyOperation assemblyOperation;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected DeployedOperationImpl() {
@@ -48,7 +54,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -57,7 +64,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -74,7 +82,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public AssemblyOperation basicGetAssemblyOperation() {
@@ -82,7 +91,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -94,7 +104,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -111,7 +122,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -125,7 +137,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -139,7 +152,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -153,7 +167,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -166,7 +181,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -178,9 +194,4 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 		return super.eInvoke(operationID, arguments);
 	}
 
-	@Override
-	public String toString() {
-		return String.format("%s: %s", this.getClass().getName(), assemblyOperation.getOperationType().getSignature());
-	}
-
-} // DeployedOperationImpl
+} //DeployedOperationImpl

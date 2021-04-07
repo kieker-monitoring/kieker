@@ -4,17 +4,12 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import kieker.model.analysismodel.AnalysismodelPackage;
+
 import kieker.model.analysismodel.assembly.AssemblyPackage;
+
 import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
@@ -22,15 +17,32 @@ import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
+
 import kieker.model.analysismodel.execution.ExecutionPackage;
+
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
+
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
 import kieker.model.analysismodel.trace.TracePackage;
+
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
+
 import kieker.model.analysismodel.type.TypePackage;
+
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -255,6 +267,16 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDeploymentContext_Name() {
+		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getDeploymentContext_Components() {
 		return (EReference)deploymentContextEClass.getEStructuralFeatures().get(1);
 	}
@@ -287,16 +309,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	@Override
 	public EReference getEStringToDeployedComponentMapEntry_Value() {
 		return (EReference)eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getDeploymentContext_Name() {
-		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -610,4 +622,4 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
-} // DeploymentPackageImpl
+} //DeploymentPackageImpl

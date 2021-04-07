@@ -2,29 +2,41 @@
  */
 package kieker.model.analysismodel.trace.impl;
 
+import kieker.model.analysismodel.AnalysismodelPackage;
+
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+
+import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
+
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+
+import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
+
+import kieker.model.analysismodel.execution.ExecutionPackage;
+
+import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
+
+import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+
+import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
+
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TraceFactory;
+import kieker.model.analysismodel.trace.TracePackage;
+
+import kieker.model.analysismodel.type.TypePackage;
+
+import kieker.model.analysismodel.type.impl.TypePackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import kieker.model.analysismodel.AnalysismodelPackage;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
-import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
-import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
-import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.trace.Trace;
-import kieker.model.analysismodel.trace.TraceFactory;
-import kieker.model.analysismodel.trace.TracePackage;
-import kieker.model.analysismodel.type.TypePackage;
-import kieker.model.analysismodel.type.impl.TypePackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -383,4 +395,4 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		initEAttribute(getOperationCall_FailedCause(), ecorePackage.getEString(), "failedCause", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} // TracePackageImpl
+} //TracePackageImpl

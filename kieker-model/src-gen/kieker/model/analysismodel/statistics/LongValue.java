@@ -2,6 +2,7 @@
  */
 package kieker.model.analysismodel.statistics;
 
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Long Value</b></em>'.
@@ -22,10 +23,6 @@ public interface LongValue extends Value {
 	/**
 	 * Returns the value of the '<em><b>Measurement</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Measurement</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Measurement</em>' attribute.
 	 * @see #setMeasurement(long)

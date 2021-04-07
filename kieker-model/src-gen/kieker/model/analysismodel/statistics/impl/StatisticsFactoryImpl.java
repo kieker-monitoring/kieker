@@ -2,6 +2,10 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import java.util.Map;
+
+import kieker.model.analysismodel.statistics.*;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -10,8 +14,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import kieker.model.analysismodel.statistics.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -58,11 +60,17 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case StatisticsPackage.STATISTICS: return createStatistics();
+			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY: return (EObject)createUnitsToStatisticsMapEntry();
+			case StatisticsPackage.RECORD: return createRecord();
+			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE: return (EObject)createEPropertyTypeToValue();
 			case StatisticsPackage.TIME_SERIES: return createTimeSeries();
 			case StatisticsPackage.INT_VALUE: return createIntValue();
 			case StatisticsPackage.LONG_VALUE: return createLongValue();
 			case StatisticsPackage.FLOAT_VALUE: return createFloatValue();
 			case StatisticsPackage.DOUBLE_VALUE: return createDoubleValue();
+			case StatisticsPackage.STATISTICS_MODEL: return createStatisticsModel();
+			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY: return (EObject)createEObjectToStatisticsMapEntry();
+			case StatisticsPackage.TIME_SERIES_STATISTICS: return createTimeSeriesStatistics();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -76,8 +84,10 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case StatisticsPackage.PREDEFINED_UNITS:
-				return createPredefinedUnitsFromString(eDataType, initialValue);
+			case StatisticsPackage.EPREDEFINED_UNITS:
+				return createEPredefinedUnitsFromString(eDataType, initialValue);
+			case StatisticsPackage.EPROPERTY_TYPE:
+				return createEPropertyTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -91,8 +101,10 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case StatisticsPackage.PREDEFINED_UNITS:
-				return convertPredefinedUnitsToString(eDataType, instanceValue);
+			case StatisticsPackage.EPREDEFINED_UNITS:
+				return convertEPredefinedUnitsToString(eDataType, instanceValue);
+			case StatisticsPackage.EPROPERTY_TYPE:
+				return convertEPropertyTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -107,6 +119,37 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	public Statistics createStatistics() {
 		StatisticsImpl statistics = new StatisticsImpl();
 		return statistics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<EPredefinedUnits, Record> createUnitsToStatisticsMapEntry() {
+		UnitsToStatisticsMapEntryImpl unitsToStatisticsMapEntry = new UnitsToStatisticsMapEntryImpl();
+		return unitsToStatisticsMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Record createRecord() {
+		RecordImpl record = new RecordImpl();
+		return record;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<EPropertyType, Object> createEPropertyTypeToValue() {
+		EPropertyTypeToValueImpl ePropertyTypeToValue = new EPropertyTypeToValueImpl();
+		return ePropertyTypeToValue;
 	}
 
 	/**
@@ -169,8 +212,40 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PredefinedUnits createPredefinedUnitsFromString(EDataType eDataType, String initialValue) {
-		PredefinedUnits result = PredefinedUnits.get(initialValue);
+	@Override
+	public StatisticsModel createStatisticsModel() {
+		StatisticsModelImpl statisticsModel = new StatisticsModelImpl();
+		return statisticsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<Object, Statistics> createEObjectToStatisticsMapEntry() {
+		EObjectToStatisticsMapEntryImpl eObjectToStatisticsMapEntry = new EObjectToStatisticsMapEntryImpl();
+		return eObjectToStatisticsMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TimeSeriesStatistics createTimeSeriesStatistics() {
+		TimeSeriesStatisticsImpl timeSeriesStatistics = new TimeSeriesStatisticsImpl();
+		return timeSeriesStatistics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EPredefinedUnits createEPredefinedUnitsFromString(EDataType eDataType, String initialValue) {
+		EPredefinedUnits result = EPredefinedUnits.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
@@ -180,7 +255,27 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPredefinedUnitsToString(EDataType eDataType, Object instanceValue) {
+	public String convertEPredefinedUnitsToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EPropertyType createEPropertyTypeFromString(EDataType eDataType, String initialValue) {
+		EPropertyType result = EPropertyType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertEPropertyTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -205,4 +300,4 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 		return StatisticsPackage.eINSTANCE;
 	}
 
-} // StatisticsFactoryImpl
+} //StatisticsFactoryImpl
