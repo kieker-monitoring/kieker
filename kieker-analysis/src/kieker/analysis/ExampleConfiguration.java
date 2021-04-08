@@ -21,6 +21,8 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
@@ -85,7 +87,7 @@ public class ExampleConfiguration extends Configuration {
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
-		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
+		final Function<OperationCall, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
 				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)

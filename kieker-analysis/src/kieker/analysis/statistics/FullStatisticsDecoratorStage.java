@@ -18,6 +18,8 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.analysis.statistics.calculating.MaxCalculator;
 import kieker.analysis.statistics.calculating.MeanCalculator;
@@ -47,7 +49,7 @@ public class FullStatisticsDecoratorStage<T> extends CompositeStage {
 	private final StatisticsDecoratorStage<T> medianStatistics;
 
 	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final Function<T, Long> valueAccessor,
-			final Function<T, Object> objectAccesor) {
+			final Function<T, EObject> objectAccesor) {
 
 		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new CountCalculator<>(), objectAccesor);
 		final StatisticsDecoratorStage<T> totalStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new TotalCalculator<>(valueAccessor),

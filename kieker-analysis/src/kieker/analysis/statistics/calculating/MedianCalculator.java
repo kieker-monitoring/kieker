@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.util.RunningMedian;
 import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
@@ -35,7 +37,7 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  */
 public class MedianCalculator<T> implements ICalculator<T> {
 
-	private final Map<Object, RunningMedian<Long>> runningMedians = new HashMap<>(); // NOPMD (class not designed for concurrent access)
+	private final Map<EObject, RunningMedian<Long>> runningMedians = new HashMap<>(); // NOPMD (class not designed for concurrent access)
 	private final Function<T, Long> valueAccessor;
 
 	public MedianCalculator(final Function<T, Long> valueAccessor) {
@@ -43,7 +45,7 @@ public class MedianCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final StatisticRecord statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final RunningMedian<Long> runningMedian = this.runningMedians.computeIfAbsent(modelObject, o -> RunningMedian.forLong());
 		runningMedian.add(this.valueAccessor.apply(input));
 		final long newMedian = runningMedian.getMedian();

@@ -18,6 +18,8 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.statistics.calculating.ICalculator;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
@@ -39,7 +41,7 @@ public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 	private final StatisticsDecorator<T> statisticsDecorator;
 
 	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
+			final Function<T, EObject> objectAccesor) {
 		this.statisticsDecorator = new StatisticsDecorator<T>(statisticsModel, unit, statisticCalculator, objectAccesor);
 	}
 

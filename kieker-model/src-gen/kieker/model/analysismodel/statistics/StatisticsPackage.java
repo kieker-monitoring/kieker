@@ -584,7 +584,7 @@ public interface StatisticsPackage extends EPackage {
 	int EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * The feature id for the '<em><b>Key</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -965,21 +965,21 @@ public interface StatisticsPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model features="value key" 
 	 *        valueType="kieker.model.analysismodel.statistics.Statistics" valueContainment="true"
-	 *        keyDataType="org.eclipse.emf.ecore.EJavaObject"
+	 *        keyType="org.eclipse.emf.ecore.EObject"
 	 * @generated
 	 */
 	EClass getEObjectToStatisticsMapEntry();
 
 	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @return the meta object for the reference '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEObjectToStatisticsMapEntry()
 	 * @generated
 	 */
-	EAttribute getEObjectToStatisticsMapEntry_Key();
+	EReference getEObjectToStatisticsMapEntry_Key();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -1307,12 +1307,12 @@ public interface StatisticsPackage extends EPackage {
 		EClass EOBJECT_TO_STATISTICS_MAP_ENTRY = eINSTANCE.getEObjectToStatisticsMapEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Key</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
+		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
 
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.

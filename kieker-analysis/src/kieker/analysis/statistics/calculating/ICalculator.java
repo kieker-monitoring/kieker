@@ -16,6 +16,8 @@
 
 package kieker.analysis.statistics.calculating;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -34,6 +36,6 @@ public interface ICalculator<I> {
 	/**
 	 * @since 1.14
 	 */
-	public void calculate(final StatisticRecord statistic, final I input, final Object modelObject);
+	public void calculate(final StatisticRecord statistic, final I input, final EObject modelObject);
 
 }

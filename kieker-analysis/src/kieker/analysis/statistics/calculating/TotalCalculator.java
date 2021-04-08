@@ -18,6 +18,8 @@ package kieker.analysis.statistics.calculating;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
@@ -39,7 +41,7 @@ public class TotalCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final StatisticRecord statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
 		if (oldCount == null) {
