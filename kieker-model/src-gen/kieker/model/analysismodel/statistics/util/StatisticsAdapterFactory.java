@@ -74,12 +74,12 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 				return createStatisticsAdapter();
 			}
 			@Override
-			public Adapter caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, Record> object) {
+			public Adapter caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, StatisticRecord> object) {
 				return createUnitsToStatisticsMapEntryAdapter();
 			}
 			@Override
-			public Adapter caseRecord(Record object) {
-				return createRecordAdapter();
+			public Adapter caseStatisticRecord(StatisticRecord object) {
+				return createStatisticRecordAdapter();
 			}
 			@Override
 			public Adapter caseEPropertyTypeToValue(Map.Entry<EPropertyType, Object> object) {
@@ -174,16 +174,16 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Record <em>Record</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.StatisticRecord <em>Statistic Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.Record
+	 * @see kieker.model.analysismodel.statistics.StatisticRecord
 	 * @generated
 	 */
-	public Adapter createRecordAdapter() {
+	public Adapter createStatisticRecordAdapter() {
 		return null;
 	}
 

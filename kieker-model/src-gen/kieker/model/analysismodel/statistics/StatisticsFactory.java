@@ -31,13 +31,13 @@ public interface StatisticsFactory extends EFactory {
 	Statistics createStatistics();
 
 	/**
-	 * Returns a new object of class '<em>Record</em>'.
+	 * Returns a new object of class '<em>Statistic Record</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Record</em>'.
+	 * @return a new object of class '<em>Statistic Record</em>'.
 	 * @generated
 	 */
-	Record createRecord();
+	StatisticRecord createStatisticRecord();
 
 	/**
 	 * Returns a new object of class '<em>Time Series</em>'.

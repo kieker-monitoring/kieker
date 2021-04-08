@@ -3,7 +3,7 @@
 package kieker.model.analysismodel.statistics.impl;
 
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.Statistics;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
@@ -42,7 +42,7 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<EPredefinedUnits, Record> statistics;
+	protected EMap<EPredefinedUnits, StatisticRecord> statistics;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,9 +69,9 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * @generated
 	 */
 	@Override
-	public EMap<EPredefinedUnits, Record> getStatistics() {
+	public EMap<EPredefinedUnits, StatisticRecord> getStatistics() {
 		if (statistics == null) {
-			statistics = new EcoreEMap<EPredefinedUnits,Record>(StatisticsPackage.Literals.UNITS_TO_STATISTICS_MAP_ENTRY, UnitsToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS__STATISTICS);
+			statistics = new EcoreEMap<EPredefinedUnits,StatisticRecord>(StatisticsPackage.Literals.UNITS_TO_STATISTICS_MAP_ENTRY, UnitsToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS__STATISTICS);
 		}
 		return statistics;
 	}

@@ -12,10 +12,10 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="UnitsToStatisticsMapEntry" instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//statistics/EPredefinedUnits"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//statistics/Record"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//statistics/StatisticRecord"
           containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Record">
+    <eClassifiers xsi:type="ecore:EClass" name="StatisticRecord">
       <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
           eType="#//statistics/EPropertyTypeToValue" containment="true"/>
     </eClassifiers>

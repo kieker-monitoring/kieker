@@ -75,14 +75,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<EPredefinedUnits, Record> unitsToStatisticsMapEntry = (Map.Entry<EPredefinedUnits, Record>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<EPredefinedUnits, StatisticRecord> unitsToStatisticsMapEntry = (Map.Entry<EPredefinedUnits, StatisticRecord>)theEObject;
 				T result = caseUnitsToStatisticsMapEntry(unitsToStatisticsMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case StatisticsPackage.RECORD: {
-				Record record = (Record)theEObject;
-				T result = caseRecord(record);
+			case StatisticsPackage.STATISTIC_RECORD: {
+				StatisticRecord statisticRecord = (StatisticRecord)theEObject;
+				T result = caseStatisticRecord(statisticRecord);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -186,22 +186,22 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, Record> object) {
+	public T caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, StatisticRecord> object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Record</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Statistic Record</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Record</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Statistic Record</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRecord(Record object) {
+	public T caseStatisticRecord(StatisticRecord object) {
 		return null;
 	}
 

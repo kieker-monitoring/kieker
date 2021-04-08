@@ -30,8 +30,8 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//statistics/UnitsToStatisticsMapEntry/key"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/UnitsToStatisticsMapEntry/value"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//statistics/Record">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/Record/properties"/>
+      <genClasses ecoreClass="analysismodel.ecore#//statistics/StatisticRecord">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//statistics/StatisticRecord/properties"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//statistics/EPropertyTypeToValue">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//statistics/EPropertyTypeToValue/key"/>

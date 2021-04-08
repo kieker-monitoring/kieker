@@ -61,7 +61,7 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 		switch (eClass.getClassifierID()) {
 			case StatisticsPackage.STATISTICS: return createStatistics();
 			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY: return (EObject)createUnitsToStatisticsMapEntry();
-			case StatisticsPackage.RECORD: return createRecord();
+			case StatisticsPackage.STATISTIC_RECORD: return createStatisticRecord();
 			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE: return (EObject)createEPropertyTypeToValue();
 			case StatisticsPackage.TIME_SERIES: return createTimeSeries();
 			case StatisticsPackage.INT_VALUE: return createIntValue();
@@ -126,7 +126,7 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<EPredefinedUnits, Record> createUnitsToStatisticsMapEntry() {
+	public Map.Entry<EPredefinedUnits, StatisticRecord> createUnitsToStatisticsMapEntry() {
 		UnitsToStatisticsMapEntryImpl unitsToStatisticsMapEntry = new UnitsToStatisticsMapEntryImpl();
 		return unitsToStatisticsMapEntry;
 	}
@@ -137,9 +137,9 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * @generated
 	 */
 	@Override
-	public Record createRecord() {
-		RecordImpl record = new RecordImpl();
-		return record;
+	public StatisticRecord createStatisticRecord() {
+		StatisticRecordImpl statisticRecord = new StatisticRecordImpl();
+		return statisticRecord;
 	}
 
 	/**

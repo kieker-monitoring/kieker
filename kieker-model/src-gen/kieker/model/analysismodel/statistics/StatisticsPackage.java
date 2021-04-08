@@ -141,14 +141,14 @@ public interface StatisticsPackage extends EPackage {
 	int UNITS_TO_STATISTICS_MAP_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.RecordImpl <em>Record</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl <em>Statistic Record</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.statistics.impl.RecordImpl
-	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getRecord()
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticRecordImpl
+	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticRecord()
 	 * @generated
 	 */
-	int RECORD = 2;
+	int STATISTIC_RECORD = 2;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -157,25 +157,25 @@ public interface StatisticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RECORD__PROPERTIES = 0;
+	int STATISTIC_RECORD__PROPERTIES = 0;
 
 	/**
-	 * The number of structural features of the '<em>Record</em>' class.
+	 * The number of structural features of the '<em>Statistic Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RECORD_FEATURE_COUNT = 1;
+	int STATISTIC_RECORD_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Record</em>' class.
+	 * The number of operations of the '<em>Statistic Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RECORD_OPERATION_COUNT = 0;
+	int STATISTIC_RECORD_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.
@@ -696,7 +696,7 @@ public interface StatisticsPackage extends EPackage {
 	 * @return the meta object for class '<em>Units To Statistics Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="kieker.model.analysismodel.statistics.EPredefinedUnits"
-	 *        valueType="kieker.model.analysismodel.statistics.Record" valueContainment="true"
+	 *        valueType="kieker.model.analysismodel.statistics.StatisticRecord" valueContainment="true"
 	 * @generated
 	 */
 	EClass getUnitsToStatisticsMapEntry();
@@ -724,25 +724,25 @@ public interface StatisticsPackage extends EPackage {
 	EReference getUnitsToStatisticsMapEntry_Value();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.Record <em>Record</em>}'.
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.StatisticRecord <em>Statistic Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Record</em>'.
-	 * @see kieker.model.analysismodel.statistics.Record
+	 * @return the meta object for class '<em>Statistic Record</em>'.
+	 * @see kieker.model.analysismodel.statistics.StatisticRecord
 	 * @generated
 	 */
-	EClass getRecord();
+	EClass getStatisticRecord();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.Record#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.StatisticRecord#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Properties</em>'.
-	 * @see kieker.model.analysismodel.statistics.Record#getProperties()
-	 * @see #getRecord()
+	 * @see kieker.model.analysismodel.statistics.StatisticRecord#getProperties()
+	 * @see #getStatisticRecord()
 	 * @generated
 	 */
-	EReference getRecord_Properties();
+	EReference getStatisticRecord_Properties();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EProperty Type To Value</em>}'.
@@ -1101,14 +1101,14 @@ public interface StatisticsPackage extends EPackage {
 		EReference UNITS_TO_STATISTICS_MAP_ENTRY__VALUE = eINSTANCE.getUnitsToStatisticsMapEntry_Value();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.RecordImpl <em>Record</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl <em>Statistic Record</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.statistics.impl.RecordImpl
-		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getRecord()
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticRecordImpl
+		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticRecord()
 		 * @generated
 		 */
-		EClass RECORD = eINSTANCE.getRecord();
+		EClass STATISTIC_RECORD = eINSTANCE.getStatisticRecord();
 
 		/**
 		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
@@ -1116,7 +1116,7 @@ public interface StatisticsPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference RECORD__PROPERTIES = eINSTANCE.getRecord_Properties();
+		EReference STATISTIC_RECORD__PROPERTIES = eINSTANCE.getStatisticRecord_Properties();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.

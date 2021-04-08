@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import kieker.analysis.statistics.calculating.ICalculator;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.Statistics;
 import kieker.model.analysismodel.statistics.StatisticsFactory;
 import kieker.model.analysismodel.statistics.StatisticsModel;
@@ -56,9 +56,9 @@ public class StatisticsDecorator<T> {
 			this.statisticsModel.getStatistics().put(object, StatisticsFactory.eINSTANCE.createStatistics());
 			statistics = this.statisticsModel.getStatistics().get(object);
 		}
-		Record statistic = statistics.getStatistics().get(this.unit);
+		StatisticRecord statistic = statistics.getStatistics().get(this.unit);
 		if (statistic == null) {
-			statistics.getStatistics().put(this.unit, StatisticsFactory.eINSTANCE.createRecord());
+			statistics.getStatistics().put(this.unit, StatisticsFactory.eINSTANCE.createStatisticRecord());
 			statistic = statistics.getStatistics().get(this.unit);
 		}
 		this.statisticCalculator.calculate(statistic, input, object);
