@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -44,6 +45,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 // to be mocked classes, as this is done for other static classes
 // https://github.com/powermock/powermock/wiki/Mock-System
 @PrepareForTest({ TextMapFileHandler.class }) // NOCS
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class TextMapFileHandlerTest {
 
 	private static final String TEST_PATH = "this/is/a/test/path";

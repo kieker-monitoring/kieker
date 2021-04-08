@@ -34,7 +34,6 @@ import kieker.analysis.plugin.reader.util.FSReaderUtil;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
-
 import teetime.stage.basic.AbstractTransformation;
 
 /**
@@ -66,8 +65,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 		} else {
 			for (final File mapFile : mapFiles) {
 				final String mapFileName = mapFile.getName();
-				try {
-					this.readMapFile(Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ), mapFileName, registry);
+				try (InputStream inputStream = Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ)) {
+					this.readMapFile(inputStream, mapFileName, registry);
 				} catch (final IOException e) {
 					this.logger.error("Cannot find map file {}.", mapFileName);
 				}
@@ -78,8 +77,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 				Files.list(directory.toPath()).sorted().forEach(logFilePath -> {
 					final File logFile = logFilePath.toFile();
 					final String logFileName = logFile.getName();
-					try {
-						this.readLogFile(Files.newInputStream(logFile.toPath(), StandardOpenOption.READ), logFileName, registry);
+					try (InputStream inputStream = Files.newInputStream(logFile.toPath(), StandardOpenOption.READ)) {
+						this.readLogFile(inputStream, logFileName, registry);
 					} catch (final IOException e) {
 						this.logger.error("Cannot find log file {}.", logFileName);
 					}

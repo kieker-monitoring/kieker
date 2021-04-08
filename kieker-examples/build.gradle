@@ -143,7 +143,6 @@ task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, depen
 	into 'JavaEEServletContainerExample/livedemo-source/lib'
 }
 
-// TODO replace sigar
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
@@ -151,9 +150,6 @@ task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsO
 	from ('..') {
 		include "LICENSE"
 		rename "LICENSE", "kieker-${version}-aspectj.jar.LICENSE"
-	}
-	from ('../lib/sigar') {
-		include '*'
 	}
 	into 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib'
 }
@@ -313,12 +309,10 @@ task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
-// TODO replace sigar with oshi
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 	buildFile = 'JavaEEServletContainerExample/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
-	// delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
 	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
 	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
 }
