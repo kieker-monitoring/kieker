@@ -20,6 +20,7 @@ import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.TypeModel;
 
 import teetime.stage.basic.AbstractFilter;
@@ -33,9 +34,10 @@ public class TypeModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
 	private final TypeModelAssembler assembler;
 
-	public TypeModelAssemblerStage(final TypeModel typeModel, final IComponentSignatureExtractor componentSignatureExtractor,
+	public TypeModelAssemblerStage(final TypeModel typeModel, final SourceModel sourceModel, final String sourceLabel,
+			final IComponentSignatureExtractor componentSignatureExtractor,
 			final IOperationSignatureExtractor operationSignatureExtractor) {
-		this.assembler = new TypeModelAssembler(typeModel, componentSignatureExtractor, operationSignatureExtractor);
+		this.assembler = new TypeModelAssembler(typeModel, sourceModel, sourceLabel, componentSignatureExtractor, operationSignatureExtractor);
 	}
 
 	@Override

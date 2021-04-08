@@ -3,9 +3,6 @@
 package kieker.model.analysismodel.execution;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -19,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSource <em>Source</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getTarget <em>Target</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSources <em>Sources</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation()
@@ -70,17 +66,5 @@ public interface AggregatedInvocation extends EObject {
 	 * @generated
 	 */
 	void setTarget(DeployedOperation value);
-
-	/**
-	 * Returns the value of the '<em><b>Sources</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sources</em>' attribute list.
-	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation_Sources()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getSources();
 
 } // AggregatedInvocation

@@ -21,6 +21,7 @@ import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.Tuple;
+import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.trace.OperationCall;
 
 /**
@@ -28,13 +29,14 @@ import kieker.model.analysismodel.trace.OperationCall;
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler implements IExecutionModelAssembler {
+public class ExecutionModelAssembler extends AbstractModelAssembler implements IExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionModel executionModel) {
+	public ExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
+		super(sourceModel, sourceLabel);
 		this.executionModel = executionModel;
 	}
 
@@ -55,6 +57,8 @@ public class ExecutionModelAssembler implements IExecutionModelAssembler {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
 			invocation.setTarget(target);
+
+			this.updateSourceModel(invocation);
 
 			this.executionModel.getAggregatedInvocations().put(key, invocation);
 		}

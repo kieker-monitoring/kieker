@@ -131,14 +131,16 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			deserializerClass = FSReaderUtil.findMapDeserializer(baseName);
 		}
 
-		try {
-			final AbstractMapDeserializer deserializer = deserializerClass.getConstructor().newInstance();
-			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
+		try (InputStream chainedInputStream = decompressionFilter.chainInputStream(inputStream)) {
+			try {
+				final AbstractMapDeserializer deserializer = deserializerClass.getConstructor().newInstance();
+				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
+			}
 		} catch (final IOException ex) {
 			this.logger.error("Reading map file {} failed.", mapFileName);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
 		}
 	}
 
@@ -170,15 +172,18 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 		}
 
 		if (deserializerClass != null) {
-			try {
-				final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Integer.class, ReaderRegistry.class)
-						.newInstance(this.dataBufferSize, registry);
-				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
+			try (InputStream chainedInputStream = decompressionFilter.chainInputStream(inputStream)) {
+				try {
+					final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Integer.class, ReaderRegistry.class)
+							.newInstance(this.dataBufferSize, registry);
+
+					deserializer.processDataStream(chainedInputStream, this.outputPort);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
+				}
 			} catch (final IOException e) {
 				this.logger.error("Reading log file {} failed.", logFileName);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
 			}
 		} else {
 			this.logger.debug("Skipping file {}, as the extension indicates that it is not a log file.", logFileName);
