@@ -48,6 +48,8 @@ import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.statistics.StatisticsFactory;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 import kieker.model.analysismodel.type.TypeFactory;
@@ -79,12 +81,14 @@ public class DependencyGraphConfiguration extends Configuration {
 
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
+	private static final String DYNAMIC_SOURCE = "dynamic-source";
 
 	private final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
 	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();
+	private final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration() {
@@ -105,14 +109,14 @@ public class DependencyGraphConfiguration extends Configuration {
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
-				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
+				this.assemblyModel, this.deploymentModel, this.sourceModel, DYNAMIC_SOURCE, this.signatureExtractor);
 		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(
-				this.executionModel, new ExecutionModelAssembler(this.executionModel));
+				this.executionModel, new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
 		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(
 				this.statisticsModel, ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION);
 		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel,
