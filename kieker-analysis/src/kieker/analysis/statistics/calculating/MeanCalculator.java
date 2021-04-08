@@ -17,7 +17,7 @@
 package kieker.analysis.statistics.calculating;
 
 import kieker.model.analysismodel.statistics.EPropertyType;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  * @param <T>
@@ -34,7 +34,7 @@ public class MeanCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final Record statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final Object modelObject) {
 		final Long total = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
 		final Long count = (Long) statistic.getProperties().get(EPropertyType.COUNT);
 		if ((total != null) && (count != null)) {
