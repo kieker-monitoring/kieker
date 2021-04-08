@@ -2,8 +2,6 @@
  */
 package kieker.model.analysismodel.execution.impl;
 
-import java.util.Collection;
-
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
 
@@ -12,16 +10,11 @@ import kieker.model.analysismodel.execution.EDirection;
 import kieker.model.analysismodel.execution.ExecutionPackage;
 
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +26,6 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedStorageAccessImpl#getStorage <em>Storage</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedStorageAccessImpl#getCode <em>Code</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedStorageAccessImpl#getSources <em>Sources</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedStorageAccessImpl#getDirection <em>Direction</em>}</li>
  * </ul>
  *
@@ -59,16 +51,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 	 * @ordered
 	 */
 	protected DeployedOperation code;
-
-	/**
-	 * The cached value of the '{@link #getSources() <em>Sources</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSources()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> sources;
 
 	/**
 	 * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
@@ -195,19 +177,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 	 * @generated
 	 */
 	@Override
-	public EList<String> getSources() {
-		if (sources == null) {
-			sources = new EDataTypeUniqueEList<String>(String.class, this, ExecutionPackage.AGGREGATED_STORAGE_ACCESS__SOURCES);
-		}
-		return sources;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EDirection getDirection() {
 		return direction;
 	}
@@ -239,8 +208,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__CODE:
 				if (resolve) return getCode();
 				return basicGetCode();
-			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__SOURCES:
-				return getSources();
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__DIRECTION:
 				return getDirection();
 		}
@@ -261,10 +228,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 				return;
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__CODE:
 				setCode((DeployedOperation)newValue);
-				return;
-			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__SOURCES:
-				getSources().clear();
-				getSources().addAll((Collection<? extends String>)newValue);
 				return;
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__DIRECTION:
 				setDirection((EDirection)newValue);
@@ -287,9 +250,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__CODE:
 				setCode((DeployedOperation)null);
 				return;
-			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__SOURCES:
-				getSources().clear();
-				return;
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__DIRECTION:
 				setDirection(DIRECTION_EDEFAULT);
 				return;
@@ -309,8 +269,6 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 				return storage != null;
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__CODE:
 				return code != null;
-			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__SOURCES:
-				return sources != null && !sources.isEmpty();
 			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS__DIRECTION:
 				return direction != DIRECTION_EDEFAULT;
 		}
@@ -327,9 +285,7 @@ public class AggregatedStorageAccessImpl extends MinimalEObjectImpl.Container im
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (sources: ");
-		result.append(sources);
-		result.append(", direction: ");
+		result.append(" (direction: ");
 		result.append(direction);
 		result.append(')');
 		return result.toString();

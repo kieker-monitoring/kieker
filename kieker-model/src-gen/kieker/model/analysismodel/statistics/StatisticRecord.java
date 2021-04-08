@@ -8,21 +8,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Record</b></em>'.
+ * A representation of the model object '<em><b>Statistic Record</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.Record#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.StatisticRecord#getProperties <em>Properties</em>}</li>
  * </ul>
  *
- * @see kieker.model.analysismodel.statistics.StatisticsPackage#getRecord()
+ * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatisticRecord()
  * @model
  * @generated
  */
-public interface Record extends EObject {
+public interface StatisticRecord extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' map.
 	 * The key is of type {@link kieker.model.analysismodel.statistics.EPropertyType},
@@ -30,10 +30,10 @@ public interface Record extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Properties</em>' map.
-	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getRecord_Properties()
+	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatisticRecord_Properties()
 	 * @model mapType="kieker.model.analysismodel.statistics.EPropertyTypeToValue&lt;kieker.model.analysismodel.statistics.EPropertyType, org.eclipse.emf.ecore.EJavaObject&gt;"
 	 * @generated
 	 */
 	EMap<EPropertyType, Object> getProperties();
 
-} // Record
+} // StatisticRecord

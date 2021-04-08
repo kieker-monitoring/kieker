@@ -21,6 +21,7 @@ import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.assembly.AssemblyOperation;
+import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.TypeModel;
@@ -30,14 +31,15 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class AssemblyModelAssembler {
+public class AssemblyModelAssembler extends AbstractModelAssembler {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;
 
-	public AssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel) {
+	public AssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+		super(sourceModel, sourceLabel);
 		this.typeModel = typeModel;
 		this.assemblyModel = assemblyModel;
 	}
@@ -65,6 +67,8 @@ public class AssemblyModelAssembler {
 			final ComponentType componentType = this.typeModel.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
 		}
+		this.updateSourceModel(component);
+
 		return component;
 	}
 
@@ -80,6 +84,9 @@ public class AssemblyModelAssembler {
 			final OperationType operationType = componentType.getProvidedOperations().get(operationTypeKey);
 			operation.setOperationType(operationType);
 		}
+
+		this.updateSourceModel(operation);
+
 		return operation;
 	}
 

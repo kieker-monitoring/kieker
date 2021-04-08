@@ -20,13 +20,15 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
+import kieker.model.analysismodel.sources.SourcesPackage;
+import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
 import kieker.model.analysismodel.statistics.DoubleValue;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.FloatValue;
 import kieker.model.analysismodel.statistics.IntValue;
 import kieker.model.analysismodel.statistics.LongValue;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.Statistics;
 import kieker.model.analysismodel.statistics.StatisticsFactory;
 import kieker.model.analysismodel.statistics.StatisticsModel;
@@ -80,7 +82,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass recordEClass = null;
+	private EClass statisticRecordEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -233,6 +235,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
+		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theStatisticsPackage.createPackageContents();
@@ -242,6 +246,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		theDeploymentPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
+		theSourcesPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theStatisticsPackage.initializePackageContents();
@@ -251,6 +256,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		theDeploymentPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
+		theSourcesPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theStatisticsPackage.freeze();
@@ -316,8 +322,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EClass getRecord() {
-		return recordEClass;
+	public EClass getStatisticRecord() {
+		return statisticRecordEClass;
 	}
 
 	/**
@@ -326,8 +332,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EReference getRecord_Properties() {
-		return (EReference)recordEClass.getEStructuralFeatures().get(0);
+	public EReference getStatisticRecord_Properties() {
+		return (EReference)statisticRecordEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -636,8 +642,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		createEAttribute(unitsToStatisticsMapEntryEClass, UNITS_TO_STATISTICS_MAP_ENTRY__KEY);
 		createEReference(unitsToStatisticsMapEntryEClass, UNITS_TO_STATISTICS_MAP_ENTRY__VALUE);
 
-		recordEClass = createEClass(RECORD);
-		createEReference(recordEClass, RECORD__PROPERTIES);
+		statisticRecordEClass = createEClass(STATISTIC_RECORD);
+		createEReference(statisticRecordEClass, STATISTIC_RECORD__PROPERTIES);
 
 		ePropertyTypeToValueEClass = createEClass(EPROPERTY_TYPE_TO_VALUE);
 		createEAttribute(ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__KEY);
@@ -733,10 +739,10 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 
 		initEClass(unitsToStatisticsMapEntryEClass, Map.Entry.class, "UnitsToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitsToStatisticsMapEntry_Key(), this.getEPredefinedUnits(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitsToStatisticsMapEntry_Value(), this.getRecord(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitsToStatisticsMapEntry_Value(), this.getStatisticRecord(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(recordEClass, Record.class, "Record", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRecord_Properties(), this.getEPropertyTypeToValue(), null, "properties", null, 0, -1, Record.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(statisticRecordEClass, StatisticRecord.class, "StatisticRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStatisticRecord_Properties(), this.getEPropertyTypeToValue(), null, "properties", null, 0, -1, StatisticRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ePropertyTypeToValueEClass, Map.Entry.class, "EPropertyTypeToValue", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEPropertyTypeToValue_Key(), this.getEPropertyType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

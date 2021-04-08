@@ -3,7 +3,7 @@
 package kieker.model.analysismodel.statistics.impl;
 
 import kieker.model.analysismodel.statistics.EPropertyType;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -21,18 +21,18 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Record</b></em>'.
+ * An implementation of the model object '<em><b>Statistic Record</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.RecordImpl#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
+public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements StatisticRecord {
 	/**
 	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' map.
 	 * <!-- begin-user-doc -->
@@ -48,7 +48,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RecordImpl() {
+	protected StatisticRecordImpl() {
 		super();
 	}
 
@@ -59,7 +59,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.RECORD;
+		return StatisticsPackage.Literals.STATISTIC_RECORD;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public EMap<EPropertyType, Object> getProperties() {
 		if (properties == null) {
-			properties = new EcoreEMap<EPropertyType,Object>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this, StatisticsPackage.RECORD__PROPERTIES);
+			properties = new EcoreEMap<EPropertyType,Object>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this, StatisticsPackage.STATISTIC_RECORD__PROPERTIES);
 		}
 		return properties;
 	}
@@ -83,7 +83,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.RECORD__PROPERTIES:
+			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -97,7 +97,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.RECORD__PROPERTIES:
+			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
 				if (coreType) return getProperties();
 				else return getProperties().map();
 		}
@@ -112,7 +112,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.RECORD__PROPERTIES:
+			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
 				((EStructuralFeature.Setting)getProperties()).set(newValue);
 				return;
 		}
@@ -127,7 +127,7 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.RECORD__PROPERTIES:
+			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
 				getProperties().clear();
 				return;
 		}
@@ -142,10 +142,10 @@ public class RecordImpl extends MinimalEObjectImpl.Container implements Record {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.RECORD__PROPERTIES:
+			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
 				return properties != null && !properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //RecordImpl
+} //StatisticRecordImpl

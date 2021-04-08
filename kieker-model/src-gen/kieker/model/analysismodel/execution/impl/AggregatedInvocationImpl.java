@@ -2,24 +2,17 @@
  */
 package kieker.model.analysismodel.execution.impl;
 
-import java.util.Collection;
-
 import kieker.model.analysismodel.deployment.DeployedOperation;
 
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionPackage;
 
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +24,6 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedInvocationImpl#getSource <em>Source</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedInvocationImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.AggregatedInvocationImpl#getSources <em>Sources</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,16 +48,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @ordered
 	 */
 	protected DeployedOperation target;
-
-	/**
-	 * The cached value of the '{@link #getSources() <em>Sources</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSources()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> sources;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -172,19 +154,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@Override
-	public EList<String> getSources() {
-		if (sources == null) {
-			sources = new EDataTypeUniqueEList<String>(String.class, this, ExecutionPackage.AGGREGATED_INVOCATION__SOURCES);
-		}
-		return sources;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
@@ -193,8 +162,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCES:
-				return getSources();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -214,10 +181,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				setTarget((DeployedOperation)newValue);
 				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCES:
-				getSources().clear();
-				getSources().addAll((Collection<? extends String>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -236,9 +199,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				setTarget((DeployedOperation)null);
 				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCES:
-				getSources().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -255,26 +215,8 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 				return source != null;
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				return target != null;
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCES:
-				return sources != null && !sources.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (sources: ");
-		result.append(sources);
-		result.append(')');
-		return result.toString();
 	}
 
 } //AggregatedInvocationImpl

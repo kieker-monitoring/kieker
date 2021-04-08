@@ -17,7 +17,7 @@
 package kieker.analysis.statistics.calculating;
 
 import kieker.model.analysismodel.statistics.EPropertyType;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  *
@@ -35,7 +35,7 @@ public class CountCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final Record statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final Object modelObject) {
 		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.COUNT);
 		final long newCount = oldCount != null ? oldCount + 1 : 1; // NOCS (declarative)
 		statistic.getProperties().put(EPropertyType.COUNT, newCount);

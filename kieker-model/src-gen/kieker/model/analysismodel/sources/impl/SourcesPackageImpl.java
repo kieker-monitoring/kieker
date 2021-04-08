@@ -1,11 +1,9 @@
 /**
  */
-package kieker.model.analysismodel.impl;
+package kieker.model.analysismodel.sources.impl;
 
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Map;
 
-import kieker.model.analysismodel.AnalysismodelFactory;
 import kieker.model.analysismodel.AnalysismodelPackage;
 
 import kieker.model.analysismodel.assembly.AssemblyPackage;
@@ -20,8 +18,12 @@ import kieker.model.analysismodel.execution.ExecutionPackage;
 
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
+import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
+
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.sources.SourcesPackage;
-import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -34,8 +36,10 @@ import kieker.model.analysismodel.type.TypePackage;
 
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
 
-import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
@@ -45,20 +49,20 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AnalysismodelPackageImpl extends EPackageImpl implements AnalysismodelPackage {
+public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType instantEDataType = null;
+	private EClass sourceModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType durationEDataType = null;
+	private EClass eObjectToSourcesEntryEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -71,12 +75,12 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see kieker.model.analysismodel.AnalysismodelPackage#eNS_URI
+	 * @see kieker.model.analysismodel.sources.SourcesPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private AnalysismodelPackageImpl() {
-		super(eNS_URI, AnalysismodelFactory.eINSTANCE);
+	private SourcesPackageImpl() {
+		super(eNS_URI, SourcesFactory.eINSTANCE);
 	}
 
 	/**
@@ -89,7 +93,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>This method is used to initialize {@link AnalysismodelPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link SourcesPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -98,17 +102,19 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static AnalysismodelPackage init() {
-		if (isInited) return (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+	public static SourcesPackage init() {
+		if (isInited) return (SourcesPackage)EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredAnalysismodelPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		AnalysismodelPackageImpl theAnalysismodelPackage = registeredAnalysismodelPackage instanceof AnalysismodelPackageImpl ? (AnalysismodelPackageImpl)registeredAnalysismodelPackage : new AnalysismodelPackageImpl();
+		Object registeredSourcesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		SourcesPackageImpl theSourcesPackage = registeredSourcesPackage instanceof SourcesPackageImpl ? (SourcesPackageImpl)registeredSourcesPackage : new SourcesPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(registeredPackage instanceof AnalysismodelPackageImpl ? registeredPackage : AnalysismodelPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
 		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(registeredPackage instanceof StatisticsPackageImpl ? registeredPackage : StatisticsPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
 		TypePackageImpl theTypePackage = (TypePackageImpl)(registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
@@ -120,10 +126,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
-		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
 
 		// Create package meta-data objects
+		theSourcesPackage.createPackageContents();
 		theAnalysismodelPackage.createPackageContents();
 		theStatisticsPackage.createPackageContents();
 		theTypePackage.createPackageContents();
@@ -131,9 +136,9 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		theDeploymentPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
-		theSourcesPackage.createPackageContents();
 
 		// Initialize created meta-data
+		theSourcesPackage.initializePackageContents();
 		theAnalysismodelPackage.initializePackageContents();
 		theStatisticsPackage.initializePackageContents();
 		theTypePackage.initializePackageContents();
@@ -141,14 +146,13 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		theDeploymentPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
-		theSourcesPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theAnalysismodelPackage.freeze();
+		theSourcesPackage.freeze();
 
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(AnalysismodelPackage.eNS_URI, theAnalysismodelPackage);
-		return theAnalysismodelPackage;
+		EPackage.Registry.INSTANCE.put(SourcesPackage.eNS_URI, theSourcesPackage);
+		return theSourcesPackage;
 	}
 
 	/**
@@ -157,8 +161,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @generated
 	 */
 	@Override
-	public EDataType getInstant() {
-		return instantEDataType;
+	public EClass getSourceModel() {
+		return sourceModelEClass;
 	}
 
 	/**
@@ -167,8 +171,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @generated
 	 */
 	@Override
-	public EDataType getDuration() {
-		return durationEDataType;
+	public EReference getSourceModel_Sources() {
+		return (EReference)sourceModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -177,8 +181,38 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * @generated
 	 */
 	@Override
-	public AnalysismodelFactory getAnalysismodelFactory() {
-		return (AnalysismodelFactory)getEFactoryInstance();
+	public EClass getEObjectToSourcesEntry() {
+		return eObjectToSourcesEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEObjectToSourcesEntry_Key() {
+		return (EReference)eObjectToSourcesEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEObjectToSourcesEntry_Value() {
+		return (EAttribute)eObjectToSourcesEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SourcesFactory getSourcesFactory() {
+		return (SourcesFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -199,9 +233,13 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		if (isCreated) return;
 		isCreated = true;
 
-		// Create data types
-		instantEDataType = createEDataType(INSTANT);
-		durationEDataType = createEDataType(DURATION);
+		// Create classes and their features
+		sourceModelEClass = createEClass(SOURCE_MODEL);
+		createEReference(sourceModelEClass, SOURCE_MODEL__SOURCES);
+
+		eObjectToSourcesEntryEClass = createEClass(EOBJECT_TO_SOURCES_ENTRY);
+		createEReference(eObjectToSourcesEntryEClass, EOBJECT_TO_SOURCES_ENTRY__KEY);
+		createEAttribute(eObjectToSourcesEntryEClass, EOBJECT_TO_SOURCES_ENTRY__VALUE);
 	}
 
 	/**
@@ -227,30 +265,19 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
-		// Obtain other dependent packages
-		StatisticsPackage theStatisticsPackage = (StatisticsPackage)EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
-		TypePackage theTypePackage = (TypePackage)EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
-		AssemblyPackage theAssemblyPackage = (AssemblyPackage)EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
-		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
-		ExecutionPackage theExecutionPackage = (ExecutionPackage)EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
-		TracePackage theTracePackage = (TracePackage)EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
-		SourcesPackage theSourcesPackage = (SourcesPackage)EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
+		// Create type parameters
 
-		// Add subpackages
-		getESubpackages().add(theStatisticsPackage);
-		getESubpackages().add(theTypePackage);
-		getESubpackages().add(theAssemblyPackage);
-		getESubpackages().add(theDeploymentPackage);
-		getESubpackages().add(theExecutionPackage);
-		getESubpackages().add(theTracePackage);
-		getESubpackages().add(theSourcesPackage);
+		// Set bounds for type parameters
 
-		// Initialize data types
-		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(durationEDataType, Duration.class, "Duration", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		// Add supertypes to classes
 
-		// Create resource
-		createResource(eNS_URI);
+		// Initialize classes, features, and operations; add parameters
+		initEClass(sourceModelEClass, SourceModel.class, "SourceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSourceModel_Sources(), this.getEObjectToSourcesEntry(), null, "sources", null, 0, -1, SourceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eObjectToSourcesEntryEClass, Map.Entry.class, "EObjectToSourcesEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEObjectToSourcesEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEObjectToSourcesEntry_Value(), ecorePackage.getEString(), "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} //AnalysismodelPackageImpl
+} //SourcesPackageImpl

@@ -27,7 +27,10 @@ import java.util.Set;
  *
  * @since 1.14
  *
+ * @deprecated since 1.15 moved to Ecore model
+ *
  */
+@Deprecated
 public class Statistics {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 4;

@@ -29,13 +29,14 @@ import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.sources.SourceModel;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DeploymentModelAssembler {
+public class DeploymentModelAssembler extends AbstractModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
@@ -44,7 +45,9 @@ public class DeploymentModelAssembler {
 	private final AssemblyModel assemblyModel;
 	private final DeploymentModel deploymentModel;
 
-	public DeploymentModelAssembler(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel) {
+	public DeploymentModelAssembler(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel, final SourceModel sourceModel,
+			final String sourceLabel) {
+		super(sourceModel, sourceLabel);
 		this.assemblyModel = assemblyModel;
 		this.deploymentModel = deploymentModel;
 	}
@@ -87,6 +90,8 @@ public class DeploymentModelAssembler {
 			deploymentContext.setName(hostname);
 			this.deploymentModel.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
 		}
+		this.updateSourceModel(deploymentContext);
+
 		return deploymentContext;
 	}
 
@@ -101,6 +106,9 @@ public class DeploymentModelAssembler {
 			final AssemblyComponent assemblyComponent = this.assemblyModel.getAssemblyComponents().get(componentTypeKey);
 			component.setAssemblyComponent(assemblyComponent);
 		}
+
+		this.updateSourceModel(component);
+
 		return component;
 	}
 
@@ -116,6 +124,9 @@ public class DeploymentModelAssembler {
 			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
 			operation.setAssemblyOperation(assemblyOperation);
 		}
+
+		this.updateSourceModel(operation);
+
 		return operation;
 	}
 

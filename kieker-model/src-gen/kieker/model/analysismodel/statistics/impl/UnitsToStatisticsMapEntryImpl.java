@@ -3,7 +3,7 @@
 package kieker.model.analysismodel.statistics.impl;
 
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EPredefinedUnits,Record> {
+public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EPredefinedUnits,StatisticRecord> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -62,7 +62,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 * @ordered
 	 */
-	protected Record value;
+	protected StatisticRecord value;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -109,7 +109,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Record getTypedValue() {
+	public StatisticRecord getTypedValue() {
 		return value;
 	}
 
@@ -118,8 +118,8 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(Record newValue, NotificationChain msgs) {
-		Record oldValue = value;
+	public NotificationChain basicSetTypedValue(StatisticRecord newValue, NotificationChain msgs) {
+		StatisticRecord oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY__VALUE, oldValue, newValue);
@@ -133,7 +133,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedValue(Record newValue) {
+	public void setTypedValue(StatisticRecord newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
 			if (value != null)
@@ -189,7 +189,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 				setTypedKey((EPredefinedUnits)newValue);
 				return;
 			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY__VALUE:
-				setTypedValue((Record)newValue);
+				setTypedValue((StatisticRecord)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -207,7 +207,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 				setTypedKey(KEY_EDEFAULT);
 				return;
 			case StatisticsPackage.UNITS_TO_STATISTICS_MAP_ENTRY__VALUE:
-				setTypedValue((Record)null);
+				setTypedValue((StatisticRecord)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -302,7 +302,7 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public Record getValue() {
+	public StatisticRecord getValue() {
 		return getTypedValue();
 	}
 
@@ -312,8 +312,8 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public Record setValue(Record value) {
-		Record oldValue = getValue();
+	public StatisticRecord setValue(StatisticRecord value) {
+		StatisticRecord oldValue = getValue();
 		setTypedValue(value);
 		return oldValue;
 	}
@@ -324,9 +324,9 @@ public class UnitsToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<EPredefinedUnits, Record> getEMap() {
+	public EMap<EPredefinedUnits, StatisticRecord> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<EPredefinedUnits, Record>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<EPredefinedUnits, StatisticRecord>)container.eGet(eContainmentFeature());
 	}
 
 } //UnitsToStatisticsMapEntryImpl

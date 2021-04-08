@@ -4,9 +4,6 @@ package kieker.model.analysismodel.execution;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -20,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getStorage <em>Storage</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getCode <em>Code</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getSources <em>Sources</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getDirection <em>Direction</em>}</li>
  * </ul>
  *
@@ -72,18 +68,6 @@ public interface AggregatedStorageAccess extends EObject {
 	 * @generated
 	 */
 	void setCode(DeployedOperation value);
-
-	/**
-	 * Returns the value of the '<em><b>Sources</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sources</em>' attribute list.
-	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getAggregatedStorageAccess_Sources()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getSources();
 
 	/**
 	 * Returns the value of the '<em><b>Direction</b></em>' attribute.

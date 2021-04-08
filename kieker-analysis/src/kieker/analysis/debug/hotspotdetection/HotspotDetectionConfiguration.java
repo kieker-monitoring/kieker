@@ -24,14 +24,17 @@ import kieker.analysis.model.DeploymentModelAssemblerStage;
 import kieker.analysis.model.TypeModelAssemblerStage;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
+import kieker.analysis.source.file.DirectoryReaderStage;
+import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
-import kieker.analysis.tt.recordreading.ReadingComposite;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -48,30 +51,35 @@ import teetime.stage.InstanceOfFilter;
  */
 public class HotspotDetectionConfiguration extends Configuration {
 
+	private static final String DYNAMIC_SOURCE = null;
+
 	public HotspotDetectionConfiguration(final File importDirectory) {
 
 		final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
 		final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 		final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
 
 		// Create the stages
-		final ReadingComposite reader = new ReadingComposite(importDirectory);
+		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
+		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
 		// BETTER consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(
 				IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel,
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel, sourceModel, DYNAMIC_SOURCE,
 				new JavaComponentSignatureExtractor(), new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel,
-				assemblyModel);
+				assemblyModel, sourceModel, DYNAMIC_SOURCE);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel,
-				deploymentModel);
+				deploymentModel, sourceModel, DYNAMIC_SOURCE);
 		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(deploymentModel,
 				ChronoUnit.NANOS);
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
+		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
+		super.connectPorts(directoryReaderStage.getOutputPort(), instanceOfFilter.getInputPort());
 		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), typeModelAssembler.getInputPort());
 		super.connectPorts(typeModelAssembler.getOutputPort(), assemblyModelAssembler.getInputPort());
 		super.connectPorts(assemblyModelAssembler.getOutputPort(), deploymentModelAssembler.getInputPort());

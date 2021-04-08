@@ -24,6 +24,8 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
+import kieker.model.analysismodel.sources.SourcesPackage;
+import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -174,6 +176,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
+		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDeploymentPackage.createPackageContents();
@@ -183,6 +187,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		theAssemblyPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
+		theSourcesPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theDeploymentPackage.initializePackageContents();
@@ -192,6 +197,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		theAssemblyPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
+		theSourcesPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theDeploymentPackage.freeze();

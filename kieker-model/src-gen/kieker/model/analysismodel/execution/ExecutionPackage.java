@@ -179,22 +179,13 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_INVOCATION__TARGET = 1;
 
 	/**
-	 * The feature id for the '<em><b>Sources</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AGGREGATED_INVOCATION__SOURCES = 2;
-
-	/**
 	 * The number of structural features of the '<em>Aggregated Invocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_INVOCATION_FEATURE_COUNT = 3;
+	int AGGREGATED_INVOCATION_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Aggregated Invocation</em>' class.
@@ -234,22 +225,13 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_STORAGE_ACCESS__CODE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Sources</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AGGREGATED_STORAGE_ACCESS__SOURCES = 2;
-
-	/**
 	 * The feature id for the '<em><b>Direction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_STORAGE_ACCESS__DIRECTION = 3;
+	int AGGREGATED_STORAGE_ACCESS__DIRECTION = 2;
 
 	/**
 	 * The number of structural features of the '<em>Aggregated Storage Access</em>' class.
@@ -258,7 +240,7 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_STORAGE_ACCESS_FEATURE_COUNT = 4;
+	int AGGREGATED_STORAGE_ACCESS_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Aggregated Storage Access</em>' class.
@@ -490,17 +472,6 @@ public interface ExecutionPackage extends EPackage {
 	EReference getAggregatedInvocation_Target();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link kieker.model.analysismodel.execution.AggregatedInvocation#getSources <em>Sources</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Sources</em>'.
-	 * @see kieker.model.analysismodel.execution.AggregatedInvocation#getSources()
-	 * @see #getAggregatedInvocation()
-	 * @generated
-	 */
-	EAttribute getAggregatedInvocation_Sources();
-
-	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.execution.AggregatedStorageAccess <em>Aggregated Storage Access</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -531,17 +502,6 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAggregatedStorageAccess_Code();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getSources <em>Sources</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Sources</em>'.
-	 * @see kieker.model.analysismodel.execution.AggregatedStorageAccess#getSources()
-	 * @see #getAggregatedStorageAccess()
-	 * @generated
-	 */
-	EAttribute getAggregatedStorageAccess_Sources();
 
 	/**
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.execution.AggregatedStorageAccess#getDirection <em>Direction</em>}'.
@@ -753,14 +713,6 @@ public interface ExecutionPackage extends EPackage {
 		EReference AGGREGATED_INVOCATION__TARGET = eINSTANCE.getAggregatedInvocation_Target();
 
 		/**
-		 * The meta object literal for the '<em><b>Sources</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute AGGREGATED_INVOCATION__SOURCES = eINSTANCE.getAggregatedInvocation_Sources();
-
-		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.AggregatedStorageAccessImpl <em>Aggregated Storage Access</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -785,14 +737,6 @@ public interface ExecutionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference AGGREGATED_STORAGE_ACCESS__CODE = eINSTANCE.getAggregatedStorageAccess_Code();
-
-		/**
-		 * The meta object literal for the '<em><b>Sources</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute AGGREGATED_STORAGE_ACCESS__SOURCES = eINSTANCE.getAggregatedStorageAccess_Sources();
 
 		/**
 		 * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.

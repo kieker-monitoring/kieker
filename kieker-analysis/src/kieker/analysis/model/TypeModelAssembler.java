@@ -19,6 +19,7 @@ package kieker.analysis.model;
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
 import kieker.common.record.flow.IOperationRecord;
+import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.TypeFactory;
@@ -29,7 +30,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class TypeModelAssembler {
+public class TypeModelAssembler extends AbstractModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 	private final IComponentSignatureExtractor componentSignatureExtractor;
@@ -37,8 +38,11 @@ public class TypeModelAssembler {
 
 	private final TypeModel typeModel;
 
-	public TypeModelAssembler(final TypeModel typeModel, final IComponentSignatureExtractor componentSignatureExtractor,
+	public TypeModelAssembler(final TypeModel typeModel, final SourceModel sourceModel, final String sourceLabel,
+			final IComponentSignatureExtractor componentSignatureExtractor,
 			final IOperationSignatureExtractor operationSignatureExtractor) {
+		super(sourceModel, sourceLabel);
+
 		this.typeModel = typeModel;
 		this.componentSignatureExtractor = componentSignatureExtractor;
 		this.operationSignatureExtractor = operationSignatureExtractor;
@@ -65,6 +69,7 @@ public class TypeModelAssembler {
 			this.componentSignatureExtractor.extract(componentType);
 			this.typeModel.getComponentTypes().put(componentTypeKey, componentType);
 		}
+		this.updateSourceModel(componentType);
 		return componentType;
 	}
 
@@ -77,6 +82,7 @@ public class TypeModelAssembler {
 			this.operationSignatureExtractor.extract(operationType);
 			componentType.getProvidedOperations().put(operationTypeKey, operationType);
 		}
+		this.updateSourceModel(operationType);
 		return operationType;
 	}
 

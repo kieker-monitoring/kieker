@@ -22,6 +22,8 @@ import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -39,25 +41,31 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;
 	private final DeploymentModel deploymentModel;
+	private final SourceModel sourceModel;
 
 	private final InputPort<IFlowRecord> inputPort;
 	private final OutputPort<IFlowRecord> outputPort;
 
-	public StaticModelsAssemblerStage(final SignatureExtractor signatureExtractor) {
+	public StaticModelsAssemblerStage(final String sourceLabel, final SignatureExtractor signatureExtractor) {
 		this(TypeFactory.eINSTANCE.createTypeModel(), AssemblyFactory.eINSTANCE.createAssemblyModel(), DeploymentFactory.eINSTANCE.createDeploymentModel(),
-				signatureExtractor);
+				SourcesFactory.eINSTANCE.createSourceModel(), sourceLabel, signatureExtractor);
 	}
 
-	public StaticModelsAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel, final DeploymentModel deploymentModel,
+	public StaticModelsAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel,
+			final DeploymentModel deploymentModel, final SourceModel sourceModel, final String sourceLabel,
 			final SignatureExtractor signatureExtractor) {
 		this.typeModel = typeModel;
 		this.assemblyModel = assemblyModel;
 		this.deploymentModel = deploymentModel;
+		this.sourceModel = sourceModel;
 
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, signatureExtractor.getComponentSignatureExtractor(),
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, this.sourceModel, sourceLabel,
+				signatureExtractor.getComponentSignatureExtractor(),
 				signatureExtractor.getOperationSignatureExtractor());
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel);
+		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel, this.sourceModel,
+				sourceLabel);
+		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel, this.sourceModel,
+				sourceLabel);
 
 		this.inputPort = typeModelAssembler.getInputPort();
 		this.outputPort = deploymentModelAssembler.getOutputPort();
@@ -76,6 +84,10 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 
 	public DeploymentModel getDeploymentModel() {
 		return this.deploymentModel;
+	}
+
+	public SourceModel getSourceModel() {
+		return this.sourceModel;
 	}
 
 	public InputPort<IFlowRecord> getInputPort() {

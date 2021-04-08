@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import kieker.model.analysismodel.statistics.EPropertyType;
-import kieker.model.analysismodel.statistics.Record;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  *
@@ -41,7 +41,7 @@ public class MinCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final Record statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Optional<Long> oldMin = Optional.ofNullable((Long) statistic.getProperties().get(EPropertyType.MIN));
 		if (!oldMin.isPresent() || (value < oldMin.get())) {

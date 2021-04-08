@@ -1,17 +1,17 @@
 /**
  */
-package kieker.model.analysismodel.statistics.impl;
+package kieker.model.analysismodel.sources.impl;
 
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.StatisticRecord;
-import kieker.model.analysismodel.statistics.Statistics;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesPackage;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -22,34 +22,34 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Statistics</b></em>'.
+ * An implementation of the model object '<em><b>Source Model</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getStatistics <em>Statistics</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.sources.impl.SourceModelImpl#getSources <em>Sources</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StatisticsImpl extends MinimalEObjectImpl.Container implements Statistics {
+public class SourceModelImpl extends MinimalEObjectImpl.Container implements SourceModel {
 	/**
-	 * The cached value of the '{@link #getStatistics() <em>Statistics</em>}' map.
+	 * The cached value of the '{@link #getSources() <em>Sources</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStatistics()
+	 * @see #getSources()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<EPredefinedUnits, StatisticRecord> statistics;
+	protected EMap<EObject, EList<String>> sources;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected StatisticsImpl() {
+	protected SourceModelImpl() {
 		super();
 	}
 
@@ -60,7 +60,7 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.STATISTICS;
+		return SourcesPackage.Literals.SOURCE_MODEL;
 	}
 
 	/**
@@ -69,11 +69,11 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * @generated
 	 */
 	@Override
-	public EMap<EPredefinedUnits, StatisticRecord> getStatistics() {
-		if (statistics == null) {
-			statistics = new EcoreEMap<EPredefinedUnits,StatisticRecord>(StatisticsPackage.Literals.UNITS_TO_STATISTICS_MAP_ENTRY, UnitsToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS__STATISTICS);
+	public EMap<EObject, EList<String>> getSources() {
+		if (sources == null) {
+			sources = new EcoreEMap<EObject,EList<String>>(SourcesPackage.Literals.EOBJECT_TO_SOURCES_ENTRY, EObjectToSourcesEntryImpl.class, this, SourcesPackage.SOURCE_MODEL__SOURCES);
 		}
-		return statistics;
+		return sources;
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				return ((InternalEList<?>)getStatistics()).basicRemove(otherEnd, msgs);
+			case SourcesPackage.SOURCE_MODEL__SOURCES:
+				return ((InternalEList<?>)getSources()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -98,9 +98,9 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				if (coreType) return getStatistics();
-				else return getStatistics().map();
+			case SourcesPackage.SOURCE_MODEL__SOURCES:
+				if (coreType) return getSources();
+				else return getSources().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -113,8 +113,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				((EStructuralFeature.Setting)getStatistics()).set(newValue);
+			case SourcesPackage.SOURCE_MODEL__SOURCES:
+				((EStructuralFeature.Setting)getSources()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -128,8 +128,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				getStatistics().clear();
+			case SourcesPackage.SOURCE_MODEL__SOURCES:
+				getSources().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -143,10 +143,10 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				return statistics != null && !statistics.isEmpty();
+			case SourcesPackage.SOURCE_MODEL__SOURCES:
+				return sources != null && !sources.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //StatisticsImpl
+} //SourceModelImpl
