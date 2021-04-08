@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Object,Statistics> {
+public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,Statistics> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -44,24 +44,14 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	protected Statistics value;
 
 	/**
-	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
+	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Object KEY_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypedKey()
-	 * @generated
-	 * @ordered
-	 */
-	protected Object key = KEY_EDEFAULT;
+	protected EObject key;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -87,7 +77,15 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Object getTypedKey() {
+	public EObject getTypedKey() {
+		if (key != null && key.eIsProxy()) {
+			InternalEObject oldKey = (InternalEObject)key;
+			key = eResolveProxy(oldKey);
+			if (key != oldKey) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
+			}
+		}
 		return key;
 	}
 
@@ -96,8 +94,17 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedKey(Object newKey) {
-		Object oldKey = key;
+	public EObject basicGetTypedKey() {
+		return key;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTypedKey(EObject newKey) {
+		EObject oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
@@ -171,7 +178,8 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				return getTypedValue();
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				return getTypedKey();
+				if (resolve) return getTypedKey();
+				return basicGetTypedKey();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -188,7 +196,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 				setTypedValue((Statistics)newValue);
 				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				setTypedKey(newValue);
+				setTypedKey((EObject)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -206,7 +214,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 				setTypedValue((Statistics)null);
 				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				setTypedKey(KEY_EDEFAULT);
+				setTypedKey((EObject)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -223,25 +231,9 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
 				return value != null;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
-				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
+				return key != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (key: ");
-		result.append(key);
-		result.append(')');
-		return result.toString();
 	}
 
 	/**
@@ -281,7 +273,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public Object getKey() {
+	public EObject getKey() {
 		return getTypedKey();
 	}
 
@@ -291,7 +283,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public void setKey(Object key) {
+	public void setKey(EObject key) {
 		setTypedKey(key);
 	}
 
@@ -323,9 +315,9 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<Object, Statistics> getEMap() {
+	public EMap<EObject, Statistics> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<Object, Statistics>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<EObject, Statistics>)container.eGet(eContainmentFeature());
 	}
 
 } //EObjectToStatisticsMapEntryImpl

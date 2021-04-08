@@ -118,7 +118,7 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 				return createStatisticsModelAdapter();
 			}
 			@Override
-			public Adapter caseEObjectToStatisticsMapEntry(Map.Entry<Object, Statistics> object) {
+			public Adapter caseEObjectToStatisticsMapEntry(Map.Entry<EObject, Statistics> object) {
 				return createEObjectToStatisticsMapEntryAdapter();
 			}
 			@Override

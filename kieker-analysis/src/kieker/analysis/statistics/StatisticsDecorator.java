@@ -18,6 +18,8 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.statistics.calculating.ICalculator;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticRecord;
@@ -39,10 +41,10 @@ public class StatisticsDecorator<T> {
 	private final StatisticsModel statisticsModel;
 	private final EPredefinedUnits unit;
 	private final ICalculator<T> statisticCalculator;
-	private final Function<T, Object> objectAccesor;
+	private final Function<T, EObject> objectAccesor;
 
 	public StatisticsDecorator(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
+			final Function<T, EObject> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;
 		this.statisticCalculator = statisticCalculator;
@@ -50,7 +52,7 @@ public class StatisticsDecorator<T> {
 	}
 
 	public void decorate(final T input) {
-		final Object object = this.objectAccesor.apply(input);
+		final EObject object = this.objectAccesor.apply(input);
 		Statistics statistics = this.statisticsModel.getStatistics().get(object);
 		if (statistics == null) {
 			this.statisticsModel.getStatistics().put(object, StatisticsFactory.eINSTANCE.createStatistics());

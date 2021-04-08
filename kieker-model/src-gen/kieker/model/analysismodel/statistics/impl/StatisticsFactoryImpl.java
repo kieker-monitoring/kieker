@@ -223,7 +223,7 @@ public class StatisticsFactoryImpl extends EFactoryImpl implements StatisticsFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<Object, Statistics> createEObjectToStatisticsMapEntry() {
+	public Map.Entry<EObject, Statistics> createEObjectToStatisticsMapEntry() {
 		EObjectToStatisticsMapEntryImpl eObjectToStatisticsMapEntry = new EObjectToStatisticsMapEntryImpl();
 		return eObjectToStatisticsMapEntry;
 	}

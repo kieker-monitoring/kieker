@@ -78,7 +78,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="EObjectToStatisticsMapEntry" instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//statistics/Statistics"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="TimeSeriesStatistics">
       <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
