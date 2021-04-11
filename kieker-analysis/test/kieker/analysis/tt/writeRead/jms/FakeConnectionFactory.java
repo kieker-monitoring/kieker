@@ -59,25 +59,21 @@ public class FakeConnectionFactory implements ConnectionFactory {
 
 	@Override
 	public JMSContext createContext() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final String userName, final String password) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final String userName, final String password, final int sessionMode) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final int sessionMode) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

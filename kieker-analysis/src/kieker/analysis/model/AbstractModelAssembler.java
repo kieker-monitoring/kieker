@@ -16,6 +16,7 @@
 package kieker.analysis.model;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -38,11 +39,14 @@ public abstract class AbstractModelAssembler {
 	}
 
 	public void updateSourceModel(final EObject object) {
-		EList<String> sources = this.sourceModel.getSources().get(object);
-		if (sources == null) {
-			sources = new UniqueEList<>();
+		final EMap<EObject, EList<String>> sources = this.sourceModel.getSources();
+		EList<String> sourceIds = sources.get(object);
+		if (sourceIds == null) {
+			sourceIds = new UniqueEList<>();
+			sources.put(object, sourceIds);
+			sourceIds = sources.get(object);
 		}
-		sources.add(this.sourceLabel);
-		this.sourceModel.getSources().put(object, sources);
+		sourceIds.add(this.sourceLabel);
 	}
+
 }

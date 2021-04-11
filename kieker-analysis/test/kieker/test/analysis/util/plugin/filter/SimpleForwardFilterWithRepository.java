@@ -35,7 +35,7 @@ import kieker.test.analysis.util.repository.SimpleRepository;
  */
 @Plugin(programmaticOnly = true,
 		name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
-		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
+		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) }, // NOCS
 		repositoryPorts = @RepositoryPort(name = SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, repositoryType = SimpleRepository.class))
 public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	/** The dummy name of the filter. */
@@ -68,7 +68,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	 * @param event
 	 *            The next event.
 	 */
-	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class })
+	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class }) // NOCS
 	public final void inputEvent(final Object event) {
 		super.deliver(OUTPUT_PORT_NAME, event);
 	}

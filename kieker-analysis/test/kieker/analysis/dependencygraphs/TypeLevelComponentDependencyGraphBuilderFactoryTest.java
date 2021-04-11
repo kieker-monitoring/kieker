@@ -38,7 +38,7 @@ public class TypeLevelComponentDependencyGraphBuilderFactoryTest {
 
 	private TypeLevelComponentDependencyGraphBuilderFactory factory;
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();;
+	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();
 
 	public TypeLevelComponentDependencyGraphBuilderFactoryTest() {
 		super();
