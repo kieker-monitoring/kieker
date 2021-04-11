@@ -32,7 +32,7 @@ import teetime.framework.test.StageTester;
 public class EventRecordTraceCounterTest {
 
 	public EventRecordTraceCounterTest() {
-		// TODO Auto-generated constructor stub
+		// nothing to be done here, test class
 	}
 
 	@Test

@@ -33,7 +33,7 @@ import teetime.framework.test.StageTester;
  * @author Reiner Jung
  * @since 1.15
  */
-public class TraceRecordsTraceReconstructionStageTest {
+public class TraceRecordsTraceReconstructionStageTest { // NOCS test do not need constructors
 
 	private static final int NUMBER_OF_EVENTS = 10000;
 

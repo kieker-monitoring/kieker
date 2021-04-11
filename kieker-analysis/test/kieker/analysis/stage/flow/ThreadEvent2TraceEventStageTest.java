@@ -24,7 +24,7 @@ import kieker.test.analysis.util.stage.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;
 
-public class ThreadEvent2TraceEventStageTest {
+public class ThreadEvent2TraceEventStageTest { // NOCS test do not need constructors
 
 	@Test
 	public void testTrace() {

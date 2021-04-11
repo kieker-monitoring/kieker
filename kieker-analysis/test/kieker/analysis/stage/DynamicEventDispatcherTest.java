@@ -20,13 +20,18 @@ import org.junit.Test;
 
 import teetime.framework.test.StageTester;
 
-public class DynamicEventDispatcherTest {
+/**
+ *
+ * @author Reiner Jung
+ * @since 1.15
+ */
+public class DynamicEventDispatcherTest { // NOCS test do not need constructors
 
 	@Test
 	public void testBase() {
 		try {
 			this.testDispatcher(null, false, false, false);
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS temporary measure
 
 		}
 	}

@@ -138,13 +138,11 @@ public class FakeConnection implements Connection {
 
 	@Override
 	public Session createSession(final int sessionMode) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Session createSession() throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -152,7 +150,6 @@ public class FakeConnection implements Connection {
 	public ConnectionConsumer createSharedConnectionConsumer(final Topic topic, final String subscriptionName,
 			final String messageSelector, final ServerSessionPool sessionPool, final int maxMessages)
 			throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -160,7 +157,6 @@ public class FakeConnection implements Connection {
 	public ConnectionConsumer createSharedDurableConnectionConsumer(final Topic topic, final String subscriptionName,
 			final String messageSelector, final ServerSessionPool sessionPool, final int maxMessages)
 			throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
