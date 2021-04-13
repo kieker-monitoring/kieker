@@ -86,7 +86,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		return vertex;
 	}
 
-	private IEdge addEdge(final IVertex source, final IVertex target, final long calls) {
+	protected IEdge addEdge(final IVertex source, final IVertex target, final long calls) {
 		final int edgeId = this.identifierRegistry.getIdentifier(ComposedKey.of(source, target));
 		final IEdge edge = source.addEdgeIfAbsent(edgeId, target);
 		edge.setPropertyIfAbsent(PropertyConstants.CALLS, calls);
