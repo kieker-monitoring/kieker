@@ -19,6 +19,8 @@ package kieker.analysis;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
@@ -122,8 +124,10 @@ public class ExampleConfiguration extends Configuration {
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
-				this.statisticsModel, deploymentGraphBuilderFactory);
+		final Map<Class<?>, EObject> models = new HashMap<>();
+		models.put(ExecutionModel.class, this.executionModel);
+		models.put(StatisticsModel.class, this.statisticsModel);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, deploymentGraphBuilderFactory);
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
 				dependencyGraphDotExportConfiguration);
 

@@ -16,10 +16,12 @@
 
 package kieker.analysis.graph.dependency;
 
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.util.stage.trigger.Trigger;
-import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.StatisticsModel;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -30,16 +32,16 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, IGraph> {
 
-	private final DependencyGraphCreator graphCreator;
+	private final IDependencyGraphBuilder graphBuilder;
 
-	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
+	public DependencyGraphCreatorStage(final Map<Class<?>, EObject> models,
 			final IDependencyGraphBuilderFactory graphBuilderFactory) {
-		this.graphCreator = new DependencyGraphCreator(executionModel, statisticsModel, graphBuilderFactory);
+		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(models);
 	}
 
 	@Override
 	protected void execute(final Trigger trigger) {
-		final IGraph graph = this.graphCreator.create();
+		final IGraph graph = this.graphBuilder.build();
 		this.outputPort.send(graph);
 	}
 

@@ -19,6 +19,10 @@ package kieker.analysis.configuration;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 
 import kieker.analysis.OperationCallExtractorStage;
 import kieker.analysis.graph.IGraph;
@@ -123,8 +127,11 @@ public class DependencyGraphConfiguration extends Configuration {
 				this.executionModel);
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
-				this.statisticsModel, graphBuilderFactory);
+
+		final Map<Class<?>, EObject> models = new HashMap<>();
+		models.put(ExecutionModel.class, this.executionModel);
+		models.put(StatisticsModel.class, this.statisticsModel);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
