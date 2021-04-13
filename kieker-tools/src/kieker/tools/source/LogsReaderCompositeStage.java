@@ -82,7 +82,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 */
 	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}

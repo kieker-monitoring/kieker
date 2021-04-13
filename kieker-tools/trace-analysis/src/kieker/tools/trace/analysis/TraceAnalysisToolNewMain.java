@@ -62,7 +62,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 		final int result = tool.run("Trace Analysis Tool", "trace-analysis", args, new TraceAnalysisParameters());
 
 		if (tool.parameterConfiguration.isPrintSystemModel()) {
-			Path systemModelPath;
+			final Path systemModelPath;
 			try {
 				systemModelPath = Paths.get(tool.parameterConfiguration.getOutputDir().getCanonicalPath(), "system-entities.html");
 

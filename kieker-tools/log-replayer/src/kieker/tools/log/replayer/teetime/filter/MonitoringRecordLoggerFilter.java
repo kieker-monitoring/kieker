@@ -18,8 +18,8 @@ package kieker.tools.log.replayer.teetime.filter;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
