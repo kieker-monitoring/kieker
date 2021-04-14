@@ -32,7 +32,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
-          alwaysPull true
+          alwaysPull false
           args env.DOCKER_ARGS
         }
       }
