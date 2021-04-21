@@ -17,6 +17,7 @@
 package kieker.analysis;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class ExampleConfiguration extends Configuration {
 	private final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
-	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
+	public ExampleConfiguration(final File importDirectory, final Path exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
 		final Function<OperationCall, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
@@ -128,7 +129,7 @@ public class ExampleConfiguration extends Configuration {
 		models.put(ExecutionModel.class, this.executionModel);
 		models.put(StatisticsModel.class, this.statisticsModel);
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, deploymentGraphBuilderFactory);
-		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
+		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory,
 				dependencyGraphDotExportConfiguration);
 
 		// final AbstractConsumerStage<Graph> debugStage = new

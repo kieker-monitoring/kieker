@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 
 import org.eclipse.emf.common.util.EMap;
 import org.hamcrest.CoreMatchers;
@@ -84,7 +85,7 @@ public class ExampleConfigurationTest {
 		// final File exportDirectory = new
 		// File("C:/Users/Soeren/Desktop/kieker-output");
 		// final File exportDirectory = tempFolder.getRoot();
-		final File exportDirectory = new File(projectDir.getFile());
+		final Path exportDirectory = new File(projectDir.getFile()).toPath();
 
 		final ExampleConfiguration configuration = new ExampleConfiguration(importDirectory, exportDirectory);
 		final Execution<ExampleConfiguration> analysis = new Execution<>(configuration);
