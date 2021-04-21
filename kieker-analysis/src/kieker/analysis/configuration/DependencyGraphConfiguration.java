@@ -17,8 +17,14 @@
 package kieker.analysis.configuration;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 
 import kieker.analysis.OperationCallExtractorStage;
 import kieker.analysis.graph.IGraph;
@@ -93,16 +99,16 @@ public class DependencyGraphConfiguration extends Configuration {
 
 	public DependencyGraphConfiguration() {
 		this(DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
-				DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY);
+				Paths.get(DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY));
 	}
 
 	public DependencyGraphConfiguration(final String importDirectory, final String timeUnitOfRecods,
-			final String exportDirectory) {
-		this(new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), new File(exportDirectory));
+			final Path exportDirectory) {
+		this(new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), exportDirectory);
 	}
 
 	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods,
-			final File exportDirectory) {
+			final Path exportDirectory) {
 		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
@@ -123,15 +129,18 @@ public class DependencyGraphConfiguration extends Configuration {
 				this.executionModel);
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
-				this.statisticsModel, graphBuilderFactory);
+
+		final Map<Class<?>, EObject> models = new HashMap<>();
+		models.put(ExecutionModel.class, this.executionModel);
+		models.put(StatisticsModel.class, this.statisticsModel);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
+		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory,
 				DependencyGraphConfiguration.DOT_EXPORT_CONFIGURATION_FACTORY
 						.createForDeploymentLevelOperationDependencyGraph());
-		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
+		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory);
 
 		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
 		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
@@ -152,7 +161,7 @@ public class DependencyGraphConfiguration extends Configuration {
 
 	public static void main(final String[] args) {
 		final File importDirectory = new File(args[0]);
-		final File exportDirectory = new File(args[1]);
+		final Path exportDirectory = Paths.get(args[1]);
 
 		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
 				ChronoUnit.NANOS, exportDirectory);

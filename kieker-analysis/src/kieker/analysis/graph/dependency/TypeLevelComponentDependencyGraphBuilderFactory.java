@@ -16,6 +16,10 @@
 
 package kieker.analysis.graph.dependency;
 
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
@@ -31,8 +35,8 @@ public class TypeLevelComponentDependencyGraphBuilderFactory implements IDepende
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		return new TypeLevelComponentDependencyGraphBuilder(executionModel, statisticsModel);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final Map<Class<?>, EObject> models) {
+		return new TypeLevelComponentDependencyGraphBuilder((ExecutionModel) models.get(ExecutionModel.class), (StatisticsModel) models.get(StatisticsModel.class));
 	}
 
 }

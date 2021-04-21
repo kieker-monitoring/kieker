@@ -16,6 +16,10 @@
 
 package kieker.analysis.dependencygraphs;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +63,10 @@ public class AssemblyLevelComponentDependencyGraphBuilderFactoryTest {
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
+		final Map<Class<?>, EObject> models = new HashMap<>();
+		models.put(ExecutionModel.class, this.executionModel);
+		models.put(StatisticsModel.class, this.statisticsModel);
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(models);
 		Assert.assertTrue(graphBuilder instanceof AssemblyLevelComponentDependencyGraphBuilder);
 	}
 

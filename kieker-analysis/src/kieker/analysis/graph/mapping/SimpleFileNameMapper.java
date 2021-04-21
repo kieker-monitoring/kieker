@@ -16,6 +16,7 @@
 
 package kieker.analysis.graph.mapping;
 
+import java.nio.file.Path;
 import java.util.function.Function;
 
 import kieker.analysis.graph.IGraph;
@@ -29,9 +30,9 @@ import kieker.analysis.graph.util.FileExtension;
  *
  * @since 1.14
  */
-public class SimpleFileNameMapper implements Function<IGraph, String> {
+public class SimpleFileNameMapper implements Function<IGraph, Path> {
 
-	private final String outputDirectory;
+	private final Path outputDirectory;
 	private final FileExtension fileExtension;
 
 	/**
@@ -42,14 +43,14 @@ public class SimpleFileNameMapper implements Function<IGraph, String> {
 	 * @param fileExtension
 	 *            file extension for the graph
 	 */
-	public SimpleFileNameMapper(final String outputDirectory, final FileExtension fileExtension) {
+	public SimpleFileNameMapper(final Path outputDirectory, final FileExtension fileExtension) {
 		this.outputDirectory = outputDirectory;
 		this.fileExtension = fileExtension;
 	}
 
 	@Override
-	public String apply(final IGraph graph) {
-		return this.outputDirectory + '/' + graph.getName() + '.' + this.fileExtension;
+	public Path apply(final IGraph graph) {
+		return this.outputDirectory.resolve(String.format("%s.%s", graph.getName(), this.fileExtension));
 	}
 
 }

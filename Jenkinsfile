@@ -9,7 +9,7 @@ pipeline {
   }
 
   options {
-    buildDiscarder logRotator(artifactNumToKeepStr: '10')
+    buildDiscarder logRotator(artifactNumToKeepStr: '3', artifactDaysToKeepStr: '5', daysToKeepStr: '4', numToKeepStr: '10')
     timeout(time: 150, unit: 'MINUTES')
     retry(1)
     parallelsAlwaysFailFast()
@@ -32,7 +32,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
-          alwaysPull true
+          alwaysPull false
           args env.DOCKER_ARGS
         }
       }

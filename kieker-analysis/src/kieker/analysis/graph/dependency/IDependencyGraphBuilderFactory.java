@@ -16,8 +16,9 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.StatisticsModel;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * @author Sören Henning
@@ -27,13 +28,13 @@ import kieker.model.analysismodel.statistics.StatisticsModel;
 public interface IDependencyGraphBuilderFactory {
 
 	/**
+	 * @param models
+	 *            list of models
 	 *
-	 * @param executionModel
-	 * @param statisticsModel
-	 * @return
+	 * @return graph builder
 	 *
 	 * @since 1.14
 	 */
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(Map<Class<?>, EObject> models);
 
 }
