@@ -16,7 +16,7 @@
 
 package kieker.analysis.trace.graph.dot;
 
-import java.io.File;
+import java.nio.file.Path;
 
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
@@ -30,11 +30,11 @@ import kieker.analysis.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotTraceGraphFileWriterStage extends DotFileWriterStage { // NOPMD (class serves only as constructor)
 
-	public DotTraceGraphFileWriterStage(final File outputDirectory, final DotExportConfiguration exportConfiguration) {
-		super(outputDirectory.getPath(), exportConfiguration);
+	public DotTraceGraphFileWriterStage(final Path outputDirectory, final DotExportConfiguration exportConfiguration) {
+		super(outputDirectory, exportConfiguration);
 	}
 
-	public static DotTraceGraphFileWriterStage create(final File outputDirectory) {
+	public static DotTraceGraphFileWriterStage create(final Path outputDirectory) {
 		final DotExportConfiguration.Builder exportConfigurationBuilder = new DotExportConfiguration.Builder();
 		exportConfigurationBuilder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, g -> "none");
 		exportConfigurationBuilder.addEdgeAttribute(DotEdgeAttribute.LABEL,
