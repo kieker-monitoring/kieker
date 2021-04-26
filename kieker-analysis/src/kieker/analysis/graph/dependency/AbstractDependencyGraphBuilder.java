@@ -22,6 +22,7 @@ import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.analysis.model.ModelRepository;
 import kieker.analysis.util.ObjectIdentifierRegistry;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
@@ -52,12 +53,14 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	protected final ExecutionModel executionModel;
 	protected final StatisticsModel statisticsModel;
 
-	public AbstractDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
+	public AbstractDependencyGraphBuilder(final ModelRepository repository) {
 		this.graph = IGraph.create();
+		this.graph.setName(repository.getName());
+
+		this.executionModel = repository.getModel(ExecutionModel.class);
+		this.statisticsModel = repository.getModel(StatisticsModel.class);
 		this.identifierRegistry = new ObjectIdentifierRegistry();
-		this.responseTimeDecorator = new ResponseTimeDecorator(statisticsModel, ChronoUnit.NANOS);
-		this.executionModel = executionModel;
-		this.statisticsModel = statisticsModel;
+		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
 	}
 
 	@Override

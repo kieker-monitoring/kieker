@@ -16,9 +16,7 @@
 
 package kieker.analysis.graph.dependency;
 
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
+import kieker.analysis.model.ModelRepository;
 
 /**
  * @author Sören Henning
@@ -28,13 +26,14 @@ import org.eclipse.emf.ecore.EObject;
 public interface IDependencyGraphBuilderFactory {
 
 	/**
-	 * @param models
-	 *            list of models
+	 * @param repository
+	 *            holding all models
+	 * 
 	 *
 	 * @return graph builder
 	 *
 	 * @since 1.14
 	 */
-	public IDependencyGraphBuilder createDependencyGraphBuilder(Map<Class<?>, EObject> models);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(ModelRepository repository);
 
 }

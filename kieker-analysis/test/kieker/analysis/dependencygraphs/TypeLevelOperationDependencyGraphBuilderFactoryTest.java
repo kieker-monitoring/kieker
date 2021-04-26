@@ -16,10 +16,6 @@
 
 package kieker.analysis.dependencygraphs;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,6 +24,7 @@ import org.junit.Test;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.model.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.StatisticsFactory;
@@ -63,10 +60,11 @@ public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {
-		final Map<Class<?>, EObject> models = new HashMap<>();
-		models.put(ExecutionModel.class, this.executionModel);
-		models.put(StatisticsModel.class, this.statisticsModel);
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(models);
+		final ModelRepository repository = new ModelRepository("test");
+		repository.register(ExecutionModel.class, this.executionModel);
+		repository.register(StatisticsModel.class, this.statisticsModel);
+
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(repository);
 		Assert.assertTrue(graphBuilder instanceof TypeLevelOperationDependencyGraphBuilder);
 	}
 

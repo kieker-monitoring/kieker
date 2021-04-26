@@ -19,11 +19,10 @@ package kieker.analysis.graph.dependency;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.analysis.model.ModelRepository;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;
-import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  * Dependency graph builder for <strong>component</strong> dependency graphs
@@ -43,8 +42,8 @@ public class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDepe
 	 * @param statisticsModel
 	 *            statistics model
 	 */
-	public DeploymentLevelComponentDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		super(executionModel, statisticsModel);
+	public DeploymentLevelComponentDependencyGraphBuilder(final ModelRepository repository) {
+		super(repository);
 	}
 
 	@Override

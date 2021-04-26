@@ -16,12 +16,7 @@
 
 package kieker.analysis.graph.dependency;
 
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.analysis.model.ModelRepository;
 
 /**
  * @author Sören Henning
@@ -35,9 +30,8 @@ public class DeploymentLevelOperationDependencyGraphBuilderFactory implements ID
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final Map<Class<?>, EObject> models) {
-		return new DeploymentLevelOperationDependencyGraphBuilder((ExecutionModel) models.get(ExecutionModel.class),
-				(StatisticsModel) models.get(StatisticsModel.class));
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final ModelRepository repository) {
+		return new DeploymentLevelOperationDependencyGraphBuilder(repository);
 	}
 
 }

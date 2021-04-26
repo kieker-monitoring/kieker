@@ -16,11 +16,8 @@
 
 package kieker.analysis.graph.dependency;
 
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
-
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.model.ModelRepository;
 import kieker.analysis.util.stage.trigger.Trigger;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -34,9 +31,9 @@ public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger,
 
 	private final IDependencyGraphBuilder graphBuilder;
 
-	public DependencyGraphCreatorStage(final Map<Class<?>, EObject> models,
+	public DependencyGraphCreatorStage(final ModelRepository repository,
 			final IDependencyGraphBuilderFactory graphBuilderFactory) {
-		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(models);
+		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(repository);
 	}
 
 	@Override
