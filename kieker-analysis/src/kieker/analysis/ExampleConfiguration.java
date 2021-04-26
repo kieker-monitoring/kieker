@@ -20,8 +20,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
@@ -35,6 +33,7 @@ import kieker.analysis.graph.export.dot.DotFileWriterStage;
 import kieker.analysis.model.ExecutionModelAssembler;
 import kieker.analysis.model.ExecutionModelAssemblerStage;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.model.ModelRepository;
 import kieker.analysis.model.StaticModelsAssemblerStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
@@ -96,6 +95,14 @@ public class ExampleConfiguration extends Configuration {
 				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)
 						.createForDeploymentLevelOperationDependencyGraph();
 
+		final ModelRepository repository = new ModelRepository("Example");
+		repository.register(TypeModel.class, this.typeModel);
+		repository.register(AssemblyModel.class, this.assemblyModel);
+		repository.register(DeploymentModel.class, this.deploymentModel);
+		repository.register(ExecutionModel.class, this.executionModel);
+		repository.register(StatisticsModel.class, this.statisticsModel);
+		repository.register(SourceModel.class, this.sourceModel);
+
 		// Create the stages
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
@@ -125,10 +132,7 @@ public class ExampleConfiguration extends Configuration {
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final Map<Class<?>, EObject> models = new HashMap<>();
-		models.put(ExecutionModel.class, this.executionModel);
-		models.put(StatisticsModel.class, this.statisticsModel);
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, deploymentGraphBuilderFactory);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, deploymentGraphBuilderFactory);
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory,
 				dependencyGraphDotExportConfiguration);
 

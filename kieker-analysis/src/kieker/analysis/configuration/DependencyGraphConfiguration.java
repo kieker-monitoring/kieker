@@ -21,10 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
 
 import kieker.analysis.OperationCallExtractorStage;
 import kieker.analysis.graph.IGraph;
@@ -37,6 +33,7 @@ import kieker.analysis.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysis.model.ExecutionModelAssembler;
 import kieker.analysis.model.ExecutionModelAssemblerStage;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.model.ModelRepository;
 import kieker.analysis.model.StaticModelsAssemblerStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
@@ -88,6 +85,7 @@ public class DependencyGraphConfiguration extends Configuration {
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
 	private static final String DYNAMIC_SOURCE = "dynamic-source";
+	private static final String DEFAULT_NAME = "G";
 
 	private final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
@@ -98,17 +96,25 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration() {
-		this(DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
+		this(DEFAULT_NAME, DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
 				Paths.get(DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY));
 	}
 
-	public DependencyGraphConfiguration(final String importDirectory, final String timeUnitOfRecods,
+	public DependencyGraphConfiguration(final String name, final String importDirectory, final String timeUnitOfRecods,
 			final Path exportDirectory) {
-		this(new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), exportDirectory);
+		this(name, new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), exportDirectory);
 	}
 
-	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods,
+	public DependencyGraphConfiguration(final String name, final File importDirectory, final TemporalUnit timeUnitOfRecods,
 			final Path exportDirectory) {
+		final ModelRepository repository = new ModelRepository(name);
+		repository.register(TypeModel.class, this.typeModel);
+		repository.register(AssemblyModel.class, this.assemblyModel);
+		repository.register(DeploymentModel.class, this.deploymentModel);
+		repository.register(ExecutionModel.class, this.executionModel);
+		repository.register(StatisticsModel.class, this.statisticsModel);
+		repository.register(SourceModel.class, this.sourceModel);
+
 		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
@@ -130,10 +136,7 @@ public class DependencyGraphConfiguration extends Configuration {
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final Map<Class<?>, EObject> models = new HashMap<>();
-		models.put(ExecutionModel.class, this.executionModel);
-		models.put(StatisticsModel.class, this.statisticsModel);
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(models, graphBuilderFactory);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
@@ -163,7 +166,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		final File importDirectory = new File(args[0]);
 		final Path exportDirectory = Paths.get(args[1]);
 
-		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(DEFAULT_NAME, importDirectory,
 				ChronoUnit.NANOS, exportDirectory);
 		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
