@@ -18,10 +18,11 @@ package kieker.analysis.tt.reader.filesystem.fsReader;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
@@ -103,7 +104,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
+			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -155,7 +156,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	protected void processNormalInputFile(final File inputFile) {
 		final BufferedReader in = null;
 		try {
-			InputStream fileInputStream = new FileInputStream(inputFile);
+			InputStream fileInputStream = Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ);
 			if (this.shouldDecompress) {
 				@SuppressWarnings("resource")
 				final ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);

@@ -117,6 +117,7 @@ public abstract class AbstractLogStreamHandler {
 	 */
 	public void close() throws IOException {
 		this.outputChannel.close();
+		this.serializedStream.close();
 	}
 
 	/**

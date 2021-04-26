@@ -17,9 +17,10 @@
 package kieker.tools.trace.analysis.repository;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,9 +38,9 @@ import kieker.tools.trace.analysis.filter.visualization.graph.Color;
 /**
  * Implementation of a trace color repository, which associates colors to traces. These colors can, for instance,
  * be used to highlight traces in graph renderings.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 @Repository(name = "Trace color repository",
@@ -70,12 +71,12 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new description repository using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context for this plugin.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 */
@@ -85,7 +86,7 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new color repository with the given data.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param colorData
@@ -111,7 +112,7 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Returns the color map stored in this repository.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Map<Long, Color> getColorMap() {
@@ -120,7 +121,7 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Returns the color to use for elements which are not defined in the color map.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Color getDefaultColor() {
@@ -129,7 +130,7 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Returns the color to use for elements for which no unique color can be determined.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Color getCollisionColor() {
@@ -156,13 +157,13 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * Initializes a trace color repository from a given file.
-	 * 
+	 *
 	 * @param fileName
 	 *            The name of the file to read from
 	 * @param projectContext
 	 *            The project context to use.
 	 * @return The initialized trace color repository
-	 * 
+	 *
 	 * @throws IOException
 	 *             If an I/O error occurs
 	 */
@@ -175,8 +176,8 @@ public class TraceColorRepository extends AbstractRepository {
 	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
-			final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<Long, Color>();
+			reader = Files.newBufferedReader(Paths.get(fileName), Charset.forName(ENCODING));
+			final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<>();
 			Color defaultColor = Color.BLACK;
 			Color collisionColor = Color.GRAY;
 
@@ -223,9 +224,9 @@ public class TraceColorRepository extends AbstractRepository {
 
 	/**
 	 * This class groups the data required for a {@link TraceColorRepository}.
-	 * 
+	 *
 	 * @author Holger Knoche
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public static class TraceColorRepositoryData {
@@ -235,7 +236,7 @@ public class TraceColorRepository extends AbstractRepository {
 
 		/**
 		 * Creates a new data object using the given data.
-		 * 
+		 *
 		 * @param colorMap
 		 *            The color map (trace id -> color) to use
 		 * @param defaultColor

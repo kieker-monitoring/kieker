@@ -20,9 +20,10 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -172,7 +173,7 @@ public class FSDirectoryReader implements Runnable {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
+			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -222,7 +223,7 @@ public class FSDirectoryReader implements Runnable {
 	 */
 	private final void processNormalInputFile(final File inputFile) {
 		try {
-			this.textFileStreamProcessor.processInputChannel(new FileInputStream(inputFile));
+			this.textFileStreamProcessor.processInputChannel(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ));
 			this.terminated = true;
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOGGER.error("Error reading {}", inputFile, ex);
@@ -240,7 +241,7 @@ public class FSDirectoryReader implements Runnable {
 	private final void processBinaryInputFile(final File inputFile, final AbstractDecompressionFilter decompressionFilter) {
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(decompressionFilter.chainInputStream(new FileInputStream(inputFile)));
+			in = new DataInputStream(decompressionFilter.chainInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)));
 			this.binaryFileStreamProcessor.createRecordsFromBinaryFile(in);
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 			LOGGER.error("Error reading {}", inputFile, ex);

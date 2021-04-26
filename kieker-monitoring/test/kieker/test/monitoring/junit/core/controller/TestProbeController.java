@@ -19,14 +19,14 @@ package kieker.test.monitoring.junit.core.controller;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -287,7 +287,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), TestProbeController.ENCODING));
+			reader = Files.newBufferedReader(this.configFile.toPath(), Charset.forName(TestProbeController.ENCODING));
 			final List<String> strPatternList = new LinkedList<>();
 			String line;
 			while ((line = reader.readLine()) != null) { // NOPMD
