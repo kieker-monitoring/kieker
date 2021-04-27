@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.ExampleConfigurationTest;
@@ -39,6 +40,7 @@ public class DependencyGraphConfigurationTest {
 		// empty default constructor
 	}
 
+	@Ignore // This test has general file lookup issues.
 	@Test
 	public void testWithLargeInputLog() throws Exception { // NOPMD (nothing to assert)
 		// from within Eclipse:

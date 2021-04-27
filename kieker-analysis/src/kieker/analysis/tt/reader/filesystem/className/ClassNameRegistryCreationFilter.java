@@ -17,8 +17,9 @@
 package kieker.analysis.tt.reader.filesystem.className;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import kieker.common.registry.reader.ReaderRegistry;
 
@@ -67,13 +68,14 @@ public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File>
 		}
 
 		try {
-			final ReaderRegistry<String> classNameRegistry = this.mappingFileParser.parseFromStream(new FileInputStream(mappingFile));
+			final ReaderRegistry<String> classNameRegistry = this.mappingFileParser
+					.parseFromStream(Files.newInputStream(mappingFile.toPath(), StandardOpenOption.READ));
 			this.classNameRegistryRepository.put(inputDir, classNameRegistry);
 			this.outputPort.send(inputDir);
 
 			// final String filePrefix = this.mappingFileParser.getFilePrefixFromMappingFile(mappingFile);
 			// context.put(this.filePrefixOutputPort, filePrefix);
-		} catch (final FileNotFoundException e) {
+		} catch (final IOException e) {
 			this.logger.error("Mapping file not found.", e); // and skip this directory
 		}
 	}

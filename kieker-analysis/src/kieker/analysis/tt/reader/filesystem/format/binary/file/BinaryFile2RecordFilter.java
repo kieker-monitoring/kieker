@@ -18,9 +18,10 @@ package kieker.analysis.tt.reader.filesystem.format.binary.file;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
 import kieker.analysis.plugin.reader.util.FSReaderUtil;
@@ -85,7 +86,7 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 
 		try {
 			final AbstractDecompressionFilter filter = clazz.getConstructor(Configuration.class).newInstance(new Configuration());
-			final DataInputStream inputStream = new DataInputStream(filter.chainInputStream(new FileInputStream(binaryFile)));
+			final DataInputStream inputStream = new DataInputStream(filter.chainInputStream(Files.newInputStream(binaryFile.toPath(), StandardOpenOption.READ)));
 			try {
 				this.recordFromBinaryFileCreator.createRecordsFromBinaryFile(binaryFile, inputStream, this.outputPort);
 			} catch (final MonitoringRecordException e) {
