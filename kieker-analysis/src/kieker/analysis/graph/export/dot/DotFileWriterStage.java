@@ -17,9 +17,9 @@
 package kieker.analysis.graph.export.dot;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.function.Function;
 
 import kieker.analysis.graph.IGraph;
@@ -40,7 +40,7 @@ public class DotFileWriterStage extends DotWriterStage {
 	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
-				return Files.newBufferedWriter(fileName, StandardOpenOption.CREATE);
+				return Files.newBufferedWriter(fileName, StandardCharsets.UTF_8);
 			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}

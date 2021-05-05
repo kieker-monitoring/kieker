@@ -21,7 +21,6 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.util.classpath.InstantiationFactory;
@@ -73,8 +72,7 @@ public class TextMapFileHandler implements IMapFileHandler {
 	@Override
 	public void create(final Path location, final Charset charset) {
 		try {
-			final Writer w = Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW,
-					StandardOpenOption.WRITE);
+			final Writer w = Files.newBufferedWriter(location, charset);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's mapping file.", e);
