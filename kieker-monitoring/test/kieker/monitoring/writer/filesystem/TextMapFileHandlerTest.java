@@ -70,7 +70,7 @@ public class TextMapFileHandlerTest {
 		// mocking file.newBufferedWriter with our dummy writer
 		try {
 			PowerMockito.when(
-					Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE))
+					Files.newBufferedWriter(location, charset))
 					.thenReturn(writer);
 		} catch (final IOException e) {
 			Assert.fail(e.getLocalizedMessage());
