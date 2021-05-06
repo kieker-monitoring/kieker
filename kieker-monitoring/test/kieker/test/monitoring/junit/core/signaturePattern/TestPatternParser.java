@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternParser;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
 
