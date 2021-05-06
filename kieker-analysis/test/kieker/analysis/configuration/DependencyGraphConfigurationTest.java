@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import org.junit.Test;
 
 import kieker.analysis.ExampleConfigurationTest;
+
 import teetime.framework.Execution;
 
 /**
