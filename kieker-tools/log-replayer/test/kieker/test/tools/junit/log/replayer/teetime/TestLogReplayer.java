@@ -36,6 +36,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+
 import kieker.tools.log.replayer.AbstractLogReplayer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
