@@ -13,20 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.model.system.model;
+package kieker.analysis.stage.general;
+
+import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
 
 /**
- * @author Reiner Jung
+ * Stage that accepts an array of object of type <T> and sends them to its output port individually.
+ *
+ * @author Jannis Kuckei
+ * @author Reiner Jung -- generalization
  *
  * @since 1.15
+ *
+ * @param <T>
+ *            class type which is used in an array
  */
-public final class ModelFactory {
+public class ArrayElementStage<T> extends AbstractConsumerStage<T[]> {
+	private final OutputPort<T> outputPort = this.createOutputPort();
 
-	/** Label for the root node in graphs. */
-	public static final String ROOT_NODE_LABEL = "'Entry'";
-
-	private ModelFactory() {
-		// utility class
+	public ArrayElementStage() {
+		super();
 	}
 
+	@Override
+	protected void execute(final T[] array) throws Exception {
+		for (final T element : array) {
+			this.outputPort.send(element);
+		}
+	}
+
+	public OutputPort<T> getOutputPort() {
+		return this.outputPort;
+	}
 }
