@@ -18,8 +18,6 @@ package kieker.analysis.plugin.reader.depcompression;
 import java.io.IOException;
 import java.io.InputStream;
 
-import kieker.common.configuration.Configuration;
-
 /**
  * @author Reiner Jung
  *
@@ -30,12 +28,8 @@ public abstract class AbstractDecompressionFilter {
 	/**
 	 * Initialize pass through "decompression" with parameter to adhere Kieker configuration system.
 	 *
-	 * @param configuration
-	 *            Kieker configuration object
 	 */
-	public AbstractDecompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
-
-	}
+	public AbstractDecompressionFilter() {}
 
 	/**
 	 * Create an input stream with decompression support and use the normal input stream as source.

@@ -18,10 +18,10 @@ package kieker.analysis.model;
 
 import java.io.PrintStream;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentModel;
 
 /**
  * @author Sören Henning

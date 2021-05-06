@@ -17,25 +17,26 @@
 package kieker.analysis.model;
 
 import kieker.analysis.HostnameRepository;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.assembly.AssemblyOperation;
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentFactory;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.sources.SourceModel;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DeploymentModelAssembler {
+public class DeploymentModelAssembler extends AbstractModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
@@ -44,7 +45,9 @@ public class DeploymentModelAssembler {
 	private final AssemblyModel assemblyModel;
 	private final DeploymentModel deploymentModel;
 
-	public DeploymentModelAssembler(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel) {
+	public DeploymentModelAssembler(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel, final SourceModel sourceModel,
+			final String sourceLabel) {
+		super(sourceModel, sourceLabel);
 		this.assemblyModel = assemblyModel;
 		this.deploymentModel = deploymentModel;
 	}
@@ -87,6 +90,8 @@ public class DeploymentModelAssembler {
 			deploymentContext.setName(hostname);
 			this.deploymentModel.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
 		}
+		this.updateSourceModel(deploymentContext);
+
 		return deploymentContext;
 	}
 
@@ -101,6 +106,9 @@ public class DeploymentModelAssembler {
 			final AssemblyComponent assemblyComponent = this.assemblyModel.getAssemblyComponents().get(componentTypeKey);
 			component.setAssemblyComponent(assemblyComponent);
 		}
+
+		this.updateSourceModel(component);
+
 		return component;
 	}
 
@@ -116,6 +124,9 @@ public class DeploymentModelAssembler {
 			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
 			operation.setAssemblyOperation(assemblyOperation);
 		}
+
+		this.updateSourceModel(operation);
+
 		return operation;
 	}
 

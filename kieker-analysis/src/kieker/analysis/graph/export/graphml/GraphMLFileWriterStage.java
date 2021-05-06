@@ -16,8 +16,10 @@
 
 package kieker.analysis.graph.export.graphml;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.function.Function;
 
 import kieker.analysis.graph.IGraph;
@@ -31,17 +33,17 @@ import kieker.analysis.graph.util.FileExtension;
  */
 public class GraphMLFileWriterStage extends GraphMLWriterStage {
 
-	public GraphMLFileWriterStage(final Function<IGraph, String> fileNameMapper) {
+	public GraphMLFileWriterStage(final Function<IGraph, Path> fileNameMapper) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
-				return new FileOutputStream(fileName);
-			} catch (final FileNotFoundException e) {
+				return Files.newOutputStream(fileName, StandardOpenOption.CREATE);
+			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}
 		}));
 	}
 
-	public GraphMLFileWriterStage(final String outputDirectory) {
+	public GraphMLFileWriterStage(final Path outputDirectory) {
 		this(new SimpleFileNameMapper(outputDirectory, FileExtension.GRAPHML));
 	}
 

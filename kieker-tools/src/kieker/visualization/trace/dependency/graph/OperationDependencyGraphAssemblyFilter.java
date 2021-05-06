@@ -119,4 +119,10 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		}
 		this.reportSuccess(t.getTraceId());
 	}
+
+	@Override
+	protected void onTerminating() {
+		this.getOutputPort().send(this.getGraph());
+		super.onTerminating();
+	}
 }

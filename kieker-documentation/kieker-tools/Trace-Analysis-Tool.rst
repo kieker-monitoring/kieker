@@ -1,6 +1,6 @@
 .. _kieker-tools-trace-analysis-tool:
 
-Trace Analysis Tool 
+Trace Analysis Tool
 ====================================
 
 Calls Kieker.TraceAnalysis to analyze and visualize monitored trace

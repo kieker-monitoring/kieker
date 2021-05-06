@@ -18,7 +18,11 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.statistics.calculating.ICalculator;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -27,7 +31,7 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @param <T>
  *            Type of elements
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14
@@ -36,9 +40,9 @@ public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 
 	private final StatisticsDecorator<T> statisticsDecorator;
 
-	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final IUnit unit, final ICalculator<T> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
-		this.statisticsDecorator = new StatisticsDecorator<>(statisticsModel, unit, statisticCalculator, objectAccesor);
+	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
+			final Function<T, EObject> objectAccesor) {
+		this.statisticsDecorator = new StatisticsDecorator<T>(statisticsModel, unit, statisticCalculator, objectAccesor);
 	}
 
 	@Override

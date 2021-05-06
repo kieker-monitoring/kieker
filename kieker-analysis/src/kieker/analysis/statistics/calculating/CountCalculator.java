@@ -16,9 +16,10 @@
 
 package kieker.analysis.statistics.calculating;
 
-import kieker.analysis.statistics.IProperty;
-import kieker.analysis.statistics.Properties;
-import kieker.analysis.statistics.Statistic;
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  *
@@ -31,17 +32,15 @@ import kieker.analysis.statistics.Statistic;
  */
 public class CountCalculator<T> implements ICalculator<T> {
 
-	private static final IProperty COUNT_PROPERTY = Properties.COUNT;
-
 	public CountCalculator() {
 		// Create Calculator
 	}
 
 	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final Long oldCount = statistic.getProperty(COUNT_PROPERTY);
+	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
+		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.COUNT);
 		final long newCount = oldCount != null ? oldCount + 1 : 1; // NOCS (declarative)
-		statistic.setProperty(COUNT_PROPERTY, newCount);
+		statistic.getProperties().put(EPropertyType.COUNT, newCount);
 	}
 
 }

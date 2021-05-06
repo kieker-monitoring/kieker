@@ -20,12 +20,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.MessageTrace;
 
 /**
- * TODO can be merged with ExecutionTraceWriterFilter using generics
  * A filter allowing to write the incoming MessageTraces into a configured file.
  *
  * @author Andre van Hoorn
@@ -33,7 +32,7 @@ import kieker.model.system.model.MessageTrace;
  *
  * @since 1.2
  */
-public class MessageTraceWriterFilter extends AbstractTraceProcessingFilter<MessageTrace> {
+public class MessageTraceWriterFilter extends AbstractTraceProcessingStage<MessageTrace> {
 
 	private static final String ENCODING = "UTF-8";
 
@@ -65,14 +64,13 @@ public class MessageTraceWriterFilter extends AbstractTraceProcessingFilter<Mess
 		this.logger.debug("Wrote {} trace{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), this.outputFilename); // NOCS
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void onTerminating() {
+	protected void onTerminating() {
+		this.logger.debug("Terminatiing {}", this.getClass().getCanonicalName());
 		if (this.printStream != null) {
 			this.printStream.close();
 		}
+		super.onTerminating();
 	}
 
 	@Override

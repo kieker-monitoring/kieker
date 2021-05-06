@@ -30,7 +30,10 @@ import teetime.framework.InputPort;
  * @author Reiner Jung -- ported to teetime
  *
  * @since 1.7
+ * @deprecated 1.15 a joint counter for valid and invalid traces makes no sense and requires separate threads to execute, superseded by
+ *             (Invalid|Valid)EventRecordTraceCounter
  */
+@Deprecated
 public class EventRecordTraceCounter extends AbstractStage {
 
 	private static final long TRACE_ID_IF_NONE = -1;

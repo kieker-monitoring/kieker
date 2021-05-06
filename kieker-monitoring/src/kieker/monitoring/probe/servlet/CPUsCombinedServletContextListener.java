@@ -19,12 +19,11 @@ package kieker.monitoring.probe.servlet;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
 import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
-import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
 
 /**
  * <p>
  * Starts and stops the periodic logging of CPU utilization employing the
- * {@link SigarSamplerFactory} as the Servlet is initialized and destroyed
+ * {@link OshiSamplerFactory} as the Servlet is initialized and destroyed
  * respectively. <br/>
  * The initial delay and the sampling period (both given in seconds) can be
  * configured via context-params in the web.xml file, as shown below.

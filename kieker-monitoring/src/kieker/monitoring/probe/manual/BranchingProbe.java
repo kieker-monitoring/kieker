@@ -39,7 +39,7 @@ public final class BranchingProbe implements IMonitoringProbe {
 
 	private BranchingProbe() {}
 
-	public static final void monitorBranch(final int branchID, final int branchingOutcome) {
+	public static void monitorBranch(final int branchID, final int branchingOutcome) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}

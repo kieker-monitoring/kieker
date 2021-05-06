@@ -21,11 +21,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -163,9 +165,9 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void loadCurrentConfiguration() {
-		InputStreamReader propertiesFileInputStream = null;
+		Reader propertiesFileInputStream = null;
 		try {
-			propertiesFileInputStream = new InputStreamReader(new FileInputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			propertiesFileInputStream = Files.newBufferedReader(Paths.get("TraceAnalysisGUI.properties"), Charset.forName("UTF-8"));
 			final Properties properties = new Properties();
 			properties.load(propertiesFileInputStream);
 			for (final AbstractStep step : this.steps) {

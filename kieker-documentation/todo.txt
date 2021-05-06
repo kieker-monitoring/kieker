@@ -26,8 +26,6 @@ Appendix C
 Appendix D 
 - Using the AMQP Writer and Reader (Tutorial)
 
-Appendix E
-- Sigar (das ist wohl obsolet)
 
 Appendix F
 - Kieker default configuration refer to real file on github

@@ -110,18 +110,9 @@ public final class AMQPReader {
 
 			this.regularRecordHandlerThread = new Thread(this.regularRecordHandler);
 			this.regularRecordHandlerThread.setDaemon(true);
-		} catch (final KeyManagementException e) {
-			this.handleInitializationError(e);
-		} catch (final NoSuchAlgorithmException e) {
-			this.handleInitializationError(e);
-		} catch (final IOException e) {
-			this.handleInitializationError(e);
-		} catch (final TimeoutException e) {
-			this.handleInitializationError(e);
-		} catch (final URISyntaxException e) {
+		} catch (final KeyManagementException | NoSuchAlgorithmException | IOException | TimeoutException | URISyntaxException e) {
 			this.handleInitializationError(e);
 		}
-
 	}
 
 	private void handleInitializationError(final Throwable e) {

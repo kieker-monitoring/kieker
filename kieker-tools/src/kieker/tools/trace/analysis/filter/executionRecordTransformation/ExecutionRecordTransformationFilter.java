@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.executionRecordTransformation;
 
 import kieker.analysis.IProjectContext;
@@ -77,22 +76,23 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 * This method represents the input port, processing incoming operation
 	 * execution records.
 	 *
-	 * @param execRec
+	 * @param operationExecutionRecord
 	 *            The next operation execution record.
 	 */
 	@InputPort(name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS, description = "Receives operation execution records to be transformed",
 			eventTypes = OperationExecutionRecord.class)
-	public void inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
-		final String operationSignature = execRec.getOperationSignature();
+	public void inputOperationExecutionRecords(final OperationExecutionRecord operationExecutionRecord) {
+		final String operationSignature = operationExecutionRecord.getOperationSignature();
 		final boolean isConstructor = operationSignature.contains(Signature.CONSTRUCTOR_METHOD_NAME);
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair
-				.splitOperationSignatureStr(execRec.getOperationSignature(), isConstructor);
+				.splitOperationSignatureStr(operationExecutionRecord.getOperationSignature(), isConstructor);
 
-		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(),
+		final Execution execution = this.createExecutionByEntityNames(operationExecutionRecord.getHostname(),
 				fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
-				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(),
-				execRec.getTout(), false);
+				operationExecutionRecord.getTraceId(), operationExecutionRecord.getSessionId(), operationExecutionRecord.getEoi(),
+				operationExecutionRecord.getEss(), operationExecutionRecord.getTin(),
+				operationExecutionRecord.getTout(), false);
 		super.deliver(ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, execution);
 	}
 

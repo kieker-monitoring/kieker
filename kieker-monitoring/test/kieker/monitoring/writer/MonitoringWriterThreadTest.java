@@ -60,7 +60,7 @@ public class MonitoringWriterThreadTest {
 	public void testTermination() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
-		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<>();
 
 		writerQueue.add(new EmptyRecord());
 
@@ -83,7 +83,7 @@ public class MonitoringWriterThreadTest {
 	public void testBlocking() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
-		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<>();
 
 		final MonitoringWriterThread thread = new MonitoringWriterThread(writer, writerQueue);
 		thread.start();

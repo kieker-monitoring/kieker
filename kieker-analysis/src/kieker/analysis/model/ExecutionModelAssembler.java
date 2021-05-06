@@ -16,28 +16,31 @@
 
 package kieker.analysis.model;
 
-import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Tuple;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler {
+public class ExecutionModelAssembler extends AbstractModelAssembler implements IExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionModel executionModel) {
+	public ExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
+		super(sourceModel, sourceLabel);
 		this.executionModel = executionModel;
 	}
 
+	@Override
 	public void addOperationCall(final OperationCall operationCall) {
 		// Check if operationCall is an entry operation call. If so than source is null
 		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
@@ -47,11 +50,15 @@ public class ExecutionModelAssembler {
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
-		final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
+		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
+		key.setFirst(source);
+		key.setSecond(target);
 		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
 			invocation.setTarget(target);
+
+			this.updateSourceModel(invocation);
 
 			this.executionModel.getAggregatedInvocations().put(key, invocation);
 		}

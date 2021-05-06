@@ -35,9 +35,9 @@ import javax.swing.border.BevelBorder;
 
 /**
  * The final step of the trace analysis wizard contains of a log area and a button to start the trace analysis asynchronously.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class FinalStep extends AbstractStep {
@@ -146,7 +146,7 @@ public class FinalStep extends AbstractStep {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	private final class ClearLogClickListener implements ActionListener {
@@ -165,7 +165,7 @@ public class FinalStep extends AbstractStep {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.9
 	 */
 	private final class LogOutputStream extends OutputStream {

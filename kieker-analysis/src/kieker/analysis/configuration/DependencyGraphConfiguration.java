@@ -17,6 +17,8 @@
 package kieker.analysis.configuration;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
@@ -28,27 +30,33 @@ import kieker.analysis.graph.dependency.IDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
 import kieker.analysis.graph.export.graphml.GraphMLFileWriterStage;
+import kieker.analysis.model.ExecutionModelAssembler;
 import kieker.analysis.model.ExecutionModelAssemblerStage;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.model.ModelRepository;
 import kieker.analysis.model.StaticModelsAssemblerStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
+import kieker.analysis.source.file.DirectoryReaderStage;
+import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
-import kieker.analysis.tt.recordreading.ReadingComposite;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
+import kieker.model.analysismodel.assembly.AssemblyFactory;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.deployment.DeploymentFactory;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypeModel;
 
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
@@ -76,56 +84,69 @@ public class DependencyGraphConfiguration extends Configuration {
 
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
+	private static final String DYNAMIC_SOURCE = "dynamic-source";
+	private static final String DEFAULT_NAME = "G";
 
 	private final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final StatisticsModel statisticsModel = new StatisticsModel();
+	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();
+	private final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration() {
-		this(DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
-				DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY);
+		this(DEFAULT_NAME, DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
+				Paths.get(DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY));
 	}
 
-	public DependencyGraphConfiguration(final String importDirectory, final String timeUnitOfRecods,
-			final String exportDirectory) {
-		this(new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), new File(exportDirectory));
+	public DependencyGraphConfiguration(final String name, final String importDirectory, final String timeUnitOfRecods,
+			final Path exportDirectory) {
+		this(name, new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), exportDirectory);
 	}
 
-	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods,
-			final File exportDirectory) {
+	public DependencyGraphConfiguration(final String name, final File importDirectory, final TemporalUnit timeUnitOfRecods,
+			final Path exportDirectory) {
+		final ModelRepository repository = new ModelRepository(name);
+		repository.register(TypeModel.class, this.typeModel);
+		repository.register(AssemblyModel.class, this.assemblyModel);
+		repository.register(DeploymentModel.class, this.deploymentModel);
+		repository.register(ExecutionModel.class, this.executionModel);
+		repository.register(StatisticsModel.class, this.statisticsModel);
+		repository.register(SourceModel.class, this.sourceModel);
+
 		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
-		final ReadingComposite reader = new ReadingComposite(importDirectory);
+		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
+		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
-				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel,
+				this.assemblyModel, this.deploymentModel, this.sourceModel, DYNAMIC_SOURCE, this.signatureExtractor);
+		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(
-				this.executionModel);
+				this.executionModel, new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
 		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(
 				this.statisticsModel, ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION);
 		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel,
 				this.executionModel);
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
-				this.statisticsModel, graphBuilderFactory);
+
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
+		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory,
 				DependencyGraphConfiguration.DOT_EXPORT_CONFIGURATION_FACTORY
 						.createForDeploymentLevelOperationDependencyGraph());
-		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
+		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory);
 
-		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
+		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
+		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
 		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
@@ -143,9 +164,9 @@ public class DependencyGraphConfiguration extends Configuration {
 
 	public static void main(final String[] args) {
 		final File importDirectory = new File(args[0]);
-		final File exportDirectory = new File(args[1]);
+		final Path exportDirectory = Paths.get(args[1]);
 
-		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(DEFAULT_NAME, importDirectory,
 				ChronoUnit.NANOS, exportDirectory);
 		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();

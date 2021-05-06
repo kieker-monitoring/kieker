@@ -24,40 +24,40 @@ import kieker.monitoring.sampler.mxbean.UptimeSampler;
  * Starts and stops the periodic logging of JVM uptime. <br/>
  * The initial delay and the sampling period (both given in seconds) can be configured via context-params in the web.xml file, as shown below.
  * </p>
- * 
+ *
  * <p>
  * The integration and configuration in a web.xml file works as follows:<br/>
- * 
+ *
  * <pre>
  * {@code
  *  <web-app>
  *  ...
- *  
+ *
  * <context-param>
  *  <param-name>JVMUptimeServletContextListener.samplingIntervalSeconds</param-name>
  *  <param-value>15</param-value>
  * </context-param>
- * 
+ *
  *  <context-param>
  *   <param-name>JVMUptimeServletContextListener.initialSamplingDelaySeconds</param-name>
  *  <param-value>0</param-value>
  * </context-param>
- * 
+ *
  * <listener>
  *   <listener-class>
  *     kieker.monitoring.probe.servlet.JVMUptimeServletContextListener
  *   </listener-class>
  * </listener>
- * 
- * ... 
+ *
+ * ...
  * </web-app>}
  * }
  * </pre>
- * 
+ *
  * </p>
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class JVMUptimeServletContextListener extends AbstractRegularSamplingServletContextListener {

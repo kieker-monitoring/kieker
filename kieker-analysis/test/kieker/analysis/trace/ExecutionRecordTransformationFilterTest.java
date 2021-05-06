@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.repository.SystemModelRepository;
@@ -61,7 +62,7 @@ public class ExecutionRecordTransformationFilterTest {
 				traceId);
 
 		final SystemModelRepository systemModelRepository = new SystemModelRepository();
-		final ExecutionRecordTransformationFilter filter = new ExecutionRecordTransformationFilter(systemModelRepository);
+		final ExecutionRecordTransformationStage filter = new ExecutionRecordTransformationStage(systemModelRepository);
 
 		final Execution[] expectedOperationExecutionRecords = new Execution[operationExecutionRecords.size()];
 
@@ -69,7 +70,7 @@ public class ExecutionRecordTransformationFilterTest {
 		for (final OperationExecutionRecord opExec : operationExecutionRecords) {
 			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
 
-			final Execution exec = AbstractTraceAnalysisFilter.createExecutionByEntityNames(systemModelRepository,
+			final Execution exec = AbstractTraceAnalysisStage.createExecutionByEntityNames(systemModelRepository,
 					opExec.getHostname(), fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 					traceId, sessionId, opExec.getEoi(), opExec.getEss(), opExec.getTin(), opExec.getTout(), false);
 

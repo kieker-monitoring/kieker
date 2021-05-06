@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.sink.display.CPUUtilizationDisplayFilter;
+import kieker.analysis.sink.display.CPUUtilizationDisplaySink;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link CPUUtilizationDisplayFilter}.
+ * Test cases for {@link CPUUtilizationDisplaySink}.
  *
  * @author Lars Bluemke
  *
@@ -57,7 +57,7 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 	private static final double TOTAL_UTILISATION = 7.0;
 	private static final double IDLE = 8.0;
 
-	private CPUUtilizationDisplayFilter cpuUtilFilter;
+	private CPUUtilizationDisplaySink cpuUtilFilter;
 	private final CPUUtilizationRecord record = new CPUUtilizationRecord(TIMESTAMP, HOSTNAME, CPU_ID, USER, SYSTEM, WAIT, NICE, IRQ, TOTAL_UTILISATION, IDLE);
 	private final String id = this.record.getHostname() + " - " + this.record.getCpuID();
 
@@ -73,7 +73,7 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.cpuUtilFilter = new CPUUtilizationDisplayFilter(NUMBER_OF_ENTRIES, WARNING_INTERVALS, RECORDS_TIME_UNIT);
+		this.cpuUtilFilter = new CPUUtilizationDisplaySink(NUMBER_OF_ENTRIES, WARNING_INTERVALS, RECORDS_TIME_UNIT);
 	}
 
 	/**
@@ -96,14 +96,14 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(this.record.getLoggingTimestamp(), RECORDS_TIME_UNIT));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-		final double actualUser = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.USER).get(minutesAndSeconds).doubleValue();
-		final double actualSystem = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.SYSTEM).get(minutesAndSeconds)
+		final double actualUser = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.USER).get(minutesAndSeconds).doubleValue();
+		final double actualSystem = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.SYSTEM).get(minutesAndSeconds)
 				.doubleValue();
-		final double actualNice = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.NICE).get(minutesAndSeconds).doubleValue();
-		final double actualIrq = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.IRQ).get(minutesAndSeconds).doubleValue();
-		final double actualTotalUtilization = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION)
+		final double actualNice = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.NICE).get(minutesAndSeconds).doubleValue();
+		final double actualIrq = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.IRQ).get(minutesAndSeconds).doubleValue();
+		final double actualTotalUtilization = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.TOTAL_UTILIZATION)
 				.get(minutesAndSeconds).doubleValue();
-		final double actualIdle = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplayFilter.IDLE).get(minutesAndSeconds).doubleValue();
+		final double actualIdle = this.cpuUtilFilter.getXYPlot().getEntries(this.id + " - " + CPUUtilizationDisplaySink.IDLE).get(minutesAndSeconds).doubleValue();
 
 		Assert.assertThat(actualUser / 100, Is.is(USER));
 		Assert.assertThat(actualSystem / 100, Is.is(SYSTEM));

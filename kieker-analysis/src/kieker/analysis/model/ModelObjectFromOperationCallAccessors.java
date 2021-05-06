@@ -18,10 +18,13 @@ package kieker.analysis.model;
 
 import java.util.function.Function;
 
-import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Tuple;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  * Utility class for functions ({@link Function}) to access the model objects from operation calls.
@@ -32,28 +35,30 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
  */
 public final class ModelObjectFromOperationCallAccessors {
 
-	public static final Function<OperationCall, Object> DEPLOYED_OPERATION = c -> c.getOperation();
+	public static final Function<OperationCall, EObject> DEPLOYED_OPERATION = c -> c.getOperation();
 
-	public static final Function<OperationCall, Object> DEPLOYED_COMPONENT = c -> c.getOperation().getComponent();
+	public static final Function<OperationCall, EObject> DEPLOYED_COMPONENT = c -> c.getOperation().getComponent();
 
-	public static final Function<OperationCall, Object> DEPLOYMENT_CONTEXT = c -> c.getOperation().getComponent().getDeploymentContext();
+	public static final Function<OperationCall, EObject> DEPLOYMENT_CONTEXT = c -> c.getOperation().getComponent().getDeploymentContext();
 
-	public static final Function<OperationCall, Object> ASSEMBLY_OPERATION = c -> c.getOperation().getAssemblyOperation();
+	public static final Function<OperationCall, EObject> ASSEMBLY_OPERATION = c -> c.getOperation().getAssemblyOperation();
 
-	public static final Function<OperationCall, Object> ASSEMBLY_COMPONENT = c -> c.getOperation().getAssemblyOperation().getAssemblyComponent();
+	public static final Function<OperationCall, EObject> ASSEMBLY_COMPONENT = c -> c.getOperation().getAssemblyOperation().getAssemblyComponent();
 
-	public static final Function<OperationCall, Object> OPERATION_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType();
+	public static final Function<OperationCall, EObject> OPERATION_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType();
 
-	public static final Function<OperationCall, Object> COMPONENT_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType().getComponentType();
+	public static final Function<OperationCall, EObject> COMPONENT_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType().getComponentType();
 
 	private ModelObjectFromOperationCallAccessors() {}
 
-	public static final Function<OperationCall, Object> createForAggregatedInvocation(final ExecutionModel executionModel) {
+	public static final Function<OperationCall, EObject> createForAggregatedInvocation(final ExecutionModel executionModel) {
 		return operationCall -> {
 			// Check if operationCall is an entry operation call. If so than source is null
 			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
 			final DeployedOperation target = operationCall.getOperation();
-			final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
+			final Tuple<DeployedOperation, DeployedOperation> key = ExecutionFactory.eINSTANCE.createTuple();
+			key.setFirst(source);
+			key.setSecond(target);
 			return executionModel.getAggregatedInvocations().get(key);
 		};
 	}

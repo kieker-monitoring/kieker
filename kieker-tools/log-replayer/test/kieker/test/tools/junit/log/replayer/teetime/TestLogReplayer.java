@@ -37,10 +37,10 @@ import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
+import kieker.tools.log.replayer.AbstractLogReplayer;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
-
-import kieker.tools.log.replayer.AbstractLogReplayer;
 
 import teetime.framework.AbstractProducerStage;
 import teetime.stage.InitialElementProducer;

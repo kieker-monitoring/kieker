@@ -22,7 +22,9 @@ package kieker.analysis.statistics;
  *
  * @since 1.14
  *
+ * @deprecated since 1.15 moved to Ecore model
  */
+@Deprecated
 public enum Properties implements IProperty {
 
 	MIN, MAX, AVERAGE, MEDIAN, TOTAL, COUNT;

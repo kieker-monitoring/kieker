@@ -40,7 +40,7 @@ public interface IMonitoringRecordSerializer {
 	 * @return The number of bytes written to the buffer
 	 * @since 1.13
 	 */
-	public int serializeRecord(IMonitoringRecord record, ByteBuffer buffer);
+	int serializeRecord(IMonitoringRecord record, ByteBuffer buffer);
 
 	/**
 	 * Serializes multiple monitoring records into the given byte buffer.
@@ -52,20 +52,20 @@ public interface IMonitoringRecordSerializer {
 	 * @return The number of bytes written to the buffer
 	 * @since 1.13
 	 */
-	public int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
+	int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
 
 	/**
 	 * Called by the collector during initialization (before any records are written).
-	 * 
+	 *
 	 * @since 1.13
 	 */
-	public void onInitialization();
+	void onInitialization();
 
 	/**
 	 * Called by the collector upon termination (after remaining records have been flushed).
-	 * 
+	 *
 	 * @since 1.13
 	 */
-	public void onTermination();
+	void onTermination();
 
 }

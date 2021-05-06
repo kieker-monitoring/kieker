@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.display.TagCloud;
-import kieker.analysis.sink.display.MethodAndComponentFlowDisplayFilter;
+import kieker.analysis.sink.display.MethodAndComponentFlowDisplaySink;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -29,7 +29,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link MethodAndComponentFlowDisplayFilter}.
+ * Test cases for {@link MethodAndComponentFlowDisplaySink}.
  *
  * @author Lars Bluemke
  *
@@ -46,7 +46,7 @@ public class TestMethodAndComponentFlowDisplayFilter extends AbstractKiekerTest 
 	private static final int EOI = 4;
 	private static final int ESS = 5;
 
-	private MethodAndComponentFlowDisplayFilter methodAndComponentFlowDisplayFilter;
+	private MethodAndComponentFlowDisplaySink methodAndComponentFlowDisplayFilter;
 	private final OperationExecutionRecord record = new OperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID, TRACE_ID, TIN, TOUT, HOSTNAME, EOI, ESS);
 
 	/**
@@ -61,7 +61,7 @@ public class TestMethodAndComponentFlowDisplayFilter extends AbstractKiekerTest 
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.methodAndComponentFlowDisplayFilter = new MethodAndComponentFlowDisplayFilter();
+		this.methodAndComponentFlowDisplayFilter = new MethodAndComponentFlowDisplaySink();
 	}
 
 	/**

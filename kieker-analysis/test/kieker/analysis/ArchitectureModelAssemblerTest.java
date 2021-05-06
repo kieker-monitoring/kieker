@@ -28,9 +28,11 @@ import org.junit.Test;
 import kieker.analysis.model.TypeModelAssembler;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Sören Henning
@@ -45,6 +47,7 @@ public class ArchitectureModelAssemblerTest {
 
 	private static final String EXAMPLE_CLASS_SIGNATURE_1 = "org.package.FirstClass";
 	private static final String EXAMPLE_CLASS_SIGNATURE_2 = "org.package.SecondClass";
+	private static final String TEST_SOURCE = "test-source";
 
 	private final BeforeOperationEvent beforeOperationEvent1 = new BeforeOperationEvent(0, 0, 0, EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_CLASS_SIGNATURE_1);
 	private final BeforeOperationEvent beforeOperationEvent2 = new BeforeOperationEvent(0, 0, 0, EXAMPLE_OPERATION_SIGNATURE_2, EXAMPLE_CLASS_SIGNATURE_1);
@@ -62,7 +65,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
@@ -84,7 +88,9 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testComponentKeysExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
@@ -105,7 +111,9 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
@@ -127,7 +135,9 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationKeysExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
@@ -148,7 +158,9 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationExistsAfterAddRecordFromString() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);

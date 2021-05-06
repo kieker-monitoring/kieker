@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Countdown class for connection timeouts.
- * 
+ *
  * @author Christian Wulf
  *
  * @since 1.14
@@ -37,7 +37,7 @@ class TimeoutCountdown {
 
 	/**
 	 * Subtracts the given amount from the timeout.
-	 * 
+	 *
 	 * @param amountInNs
 	 *            The amount to subtract in nanoseconds
 	 */

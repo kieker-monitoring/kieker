@@ -18,8 +18,9 @@ package kieker.test.analysis.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.Assert;
 
@@ -50,11 +51,11 @@ public final class StringUtils {
 	 * @throws IOException
 	 *             If something went wrong during the reading.
 	 */
-	public static final String readOutputFileAsString(final File outputFile) throws IOException {
+	public static String readOutputFileAsString(final File outputFile) throws IOException {
 		final byte[] buffer = new byte[(int) outputFile.length()];
 		BufferedInputStream f = null;
 		try {
-			f = new BufferedInputStream(new FileInputStream(outputFile));
+			f = new BufferedInputStream(Files.newInputStream(outputFile.toPath(), StandardOpenOption.READ));
 			if (f.read(buffer) == -1) {
 				Assert.fail("Failed to read file into buffer: " + outputFile.getAbsolutePath());
 			}

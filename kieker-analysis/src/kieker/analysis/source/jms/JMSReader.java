@@ -38,6 +38,7 @@ import javax.naming.NameNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -73,11 +74,11 @@ public final class JMSReader {
 	 * @param elementReceivedCallback
 	 *            The actual teetime stage which uses this class.
 	 *
-	 * @throws IllegalArgumentException
+	 * @throws AnalysisConfigurationException
 	 *             If one of the properties is empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName,
-			final Consumer<IMonitoringRecord> elementReceivedCallback) throws IllegalArgumentException {
+			final Consumer<IMonitoringRecord> elementReceivedCallback) throws AnalysisConfigurationException {
 
 		// Initialize the reader bases
 		this.jmsProviderUrl = jmsProviderUrl;
@@ -91,7 +92,7 @@ public final class JMSReader {
 			final String message = String.format(
 					"Invalid or incomplete parameters: jmsProviderUrl ('%s'), jmsDestination ('%s'), or factoryLookupName ('%s') is null",
 					this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
-			throw new IllegalArgumentException(message);
+			throw new AnalysisConfigurationException(message);
 		}
 	}
 

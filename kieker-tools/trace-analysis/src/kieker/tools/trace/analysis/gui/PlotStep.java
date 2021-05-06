@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.StringConstants;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.gui.util.AllSelectionBindingItemListener;
 import kieker.tools.trace.analysis.gui.util.SelectionBindingItemListener;
@@ -358,15 +358,15 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.deploymentSequenceDiagrams.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS);
 		}
 
 		if (this.assemblySequenceDiagrams.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS);
 		}
 
 		if (this.deploymentComponentDependencyGraph.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
 				switch (this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
@@ -388,7 +388,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		}
 
 		if (this.assemblyComponentDependencyGraph.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
 				switch (this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
@@ -410,11 +410,11 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		}
 
 		if (this.containerDependencyGraph.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG);
 		}
 
 		if (this.deploymentOperationDependencyGraph.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
 				switch (this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
@@ -436,7 +436,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		}
 
 		if (this.assemblyOperationDependencyGraph.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
 				switch (this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
@@ -457,15 +457,15 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			}
 		}
 		if (this.aggregatedDeploymentCallTree.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE);
 		}
 
 		if (this.aggregatedAssemblyCallTree.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE);
 		}
 
 		if (this.callTrees.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTCALLTREES);
 		}
 
 	}

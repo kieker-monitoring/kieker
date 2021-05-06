@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.traceReconstruction;
 
 import java.util.Comparator;
@@ -208,7 +207,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!",
+					this.logger.error(
+							"Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!",
 							executionTrace);
 					this.reportError(traceId);
 				}
@@ -219,7 +219,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					this.logger.error("Equal entry existed in timeoutMap already:{}", executionTrace);
+					this.logger.error("Equal entry existed in timeoutMap already: {}", executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
@@ -239,21 +239,22 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 *            The execution trace to transform.
 	 *
 	 * @throws ExecutionEventProcessingException
-	 *             if the passed execution trace is
-	 *             invalid and this filter is configured to fail on the occurrence of invalid
-	 *             traces.
+	 *             if the passed execution trace is invalid and this filter is
+	 *             configured to fail on the occurrence of invalid traces.
 	 */
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
 		try {
-			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
-			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+			// If the polled trace is invalid, the following method toMessageTrace(..)
+			// throws an exception
+			final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0]
-			// execution and thus complete a trace that has timed out before and has thus been considered an invalid trace.
-			if (!this.invalidTraces.contains(mt.getTraceId())) {
+			// Transformation successful and the trace is for itself valid. However, this
+			// trace may actually contain the [0,0] execution and thus complete a trace
+			// that has timed out before and has thus been considered an invalid trace.
+			if (!this.invalidTraces.contains(messageTrace.getTraceId())) {
 				// Not completing part of an invalid trace
-				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
+				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTrace);
 				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
@@ -265,8 +266,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		} catch (final InvalidTraceException ex) {
 			// Transformation failed (i.e., trace invalid)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
-			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId + "). \n"
-					+ "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
+			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId
+					+ "). \n" + "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)

@@ -24,9 +24,11 @@ import org.junit.Test;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilderFactory;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.model.ModelRepository;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning
@@ -37,7 +39,7 @@ public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
 
 	private TypeLevelOperationDependencyGraphBuilderFactory factory;
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final StatisticsModel statisticsModel = new StatisticsModel();
+	private final StatisticsModel statisticsModel = StatisticsFactory.eINSTANCE.createStatisticsModel();
 
 	public TypeLevelOperationDependencyGraphBuilderFactoryTest() {
 		super();
@@ -58,7 +60,11 @@ public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
+		final ModelRepository repository = new ModelRepository("test");
+		repository.register(ExecutionModel.class, this.executionModel);
+		repository.register(StatisticsModel.class, this.statisticsModel);
+
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(repository);
 		Assert.assertTrue(graphBuilder instanceof TypeLevelOperationDependencyGraphBuilder);
 	}
 

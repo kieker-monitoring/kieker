@@ -9,7 +9,7 @@ pipeline {
   }
 
   options {
-    buildDiscarder logRotator(artifactNumToKeepStr: '10')
+    buildDiscarder logRotator(artifactNumToKeepStr: '3', artifactDaysToKeepStr: '5', daysToKeepStr: '4', numToKeepStr: '10')
     timeout(time: 150, unit: 'MINUTES')
     retry(1)
     parallelsAlwaysFailFast()
@@ -32,7 +32,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
-          alwaysPull true
+          alwaysPull false
           args env.DOCKER_ARGS
         }
       }
@@ -55,7 +55,11 @@ pipeline {
 
         stage('Unit Test') {
           steps {
-            sh './gradlew --parallel test'
+            sh './gradlew --parallel test jacocoTestReport'
+            jacoco(
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
           }
           post {
             always {
@@ -94,7 +98,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
-            sh './gradlew build distribute'
+            sh './gradlew -x test build distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
           }
@@ -216,7 +220,7 @@ pipeline {
                 passwordVariable: 'kiekerMavenPassword'
               )
             ]) {
-              sh './gradlew uploadArchives'
+              sh './gradlew publish'
             }
           }
           post {

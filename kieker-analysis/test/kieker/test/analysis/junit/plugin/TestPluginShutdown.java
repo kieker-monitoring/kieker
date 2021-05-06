@@ -37,9 +37,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This is a test to make sure that the plugins are shutdown in the correct order, when the analysis terminates.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class TestPluginShutdown extends AbstractKiekerTest {
@@ -63,7 +63,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This is a test using only one reader.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis is in an invalid state (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -80,7 +80,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This is a test using only one reader connected with one filter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis is in an invalid state (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -101,7 +101,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This is a test using one reader and one filter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis is in an invalid state (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -121,7 +121,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This is a test using only one reader but multiple filters.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis is in an invalid state (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -151,7 +151,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This is a test using two readers and one filter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis is in an invalid state (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -175,7 +175,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -205,7 +205,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the internally assembled analysis is in an invalid state.
 	 * @throws AnalysisConfigurationException
@@ -295,7 +295,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		@SuppressWarnings("unused")
 		// invoked via reflection
 		@InputPort(name = INPUT_PORT_NAME)
-		public final void inputEvent(final Object event) {
+		public void inputEvent(final Object event) {
 			super.deliver(OUTPUT_PORT_NAME, event);
 		}
 	}

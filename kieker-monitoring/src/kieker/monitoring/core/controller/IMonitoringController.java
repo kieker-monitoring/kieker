@@ -38,7 +38,7 @@ public interface IMonitoringController extends
 	 * @since 1.3
 	 */
 	@Override
-	public String toString();
+	String toString();
 
 	/**
 	 * This method is used to log the status of the controllers to the configured writer.
@@ -49,7 +49,7 @@ public interface IMonitoringController extends
 	 *
 	 * @since 1.7
 	 */
-	public boolean sendMetadataAsRecord();
+	boolean sendMetadataAsRecord();
 
 	/**
 	 * This method returns the application name stored in the controller.
@@ -58,5 +58,5 @@ public interface IMonitoringController extends
 	 *
 	 * @since 1.14
 	 */
-	public String getApplicationName();
+	String getApplicationName();
 }

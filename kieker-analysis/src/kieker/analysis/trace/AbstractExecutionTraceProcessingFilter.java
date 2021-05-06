@@ -19,14 +19,15 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 
 /**
- * TODO this class might be obsolete
  * This is the abstract base for a filter processing execution traces.
  *
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated since 1.15 class is obsolete
  */
-public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
+@Deprecated
+public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingStage<ExecutionTrace> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

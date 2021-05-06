@@ -16,10 +16,10 @@
 
 package kieker.analysis.graph.export.dot;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.function.Function;
 
 import kieker.analysis.graph.IGraph;
@@ -33,26 +33,25 @@ import kieker.analysis.graph.util.FileExtension;
  */
 public class DotFileWriterStage extends DotWriterStage {
 
-	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper) {
+	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper) {
 		this(fileNameMapper, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
-				// return new FileWriter(fileName); // Criticized by Findbugs
-				return new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8);
+				return Files.newBufferedWriter(fileName, StandardOpenOption.CREATE);
 			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}
 		}), exportConfiguration);
 	}
 
-	public DotFileWriterStage(final String outputDirectory) {
+	public DotFileWriterStage(final Path outputDirectory) {
 		this(outputDirectory, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final String outputDirectory, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Path outputDirectory, final DotExportConfiguration exportConfiguration) {
 		this(new SimpleFileNameMapper(outputDirectory, FileExtension.DOT), exportConfiguration);
 	}
 

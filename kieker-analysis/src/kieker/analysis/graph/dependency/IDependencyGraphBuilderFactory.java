@@ -16,8 +16,7 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.model.ModelRepository;
 
 /**
  * @author Sören Henning
@@ -27,13 +26,14 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 public interface IDependencyGraphBuilderFactory {
 
 	/**
+	 * @param repository
+	 *            holding all models
+	 * 
 	 *
-	 * @param executionModel
-	 * @param statisticsModel
-	 * @return
+	 * @return graph builder
 	 *
 	 * @since 1.14
 	 */
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(ModelRepository repository);
 
 }

@@ -25,8 +25,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.filesystem.FileWriter;
 

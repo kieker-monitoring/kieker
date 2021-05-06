@@ -34,7 +34,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.6
 	 */
-	public boolean activateProbe(final String pattern);
+	boolean activateProbe(final String pattern);
 
 	/**
 	 * Deactivates a probe.
@@ -45,7 +45,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.6
 	 */
-	public boolean deactivateProbe(final String pattern);
+	boolean deactivateProbe(final String pattern);
 
 	/**
 	 * Tests if a probe is active.
@@ -59,7 +59,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.6
 	 */
-	public boolean isProbeActivated(final String signature);
+	boolean isProbeActivated(final String signature);
 
 	/**
 	 * Overwrites the current list of patterns with a new pattern list.
@@ -71,7 +71,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.6
 	 */
-	public void setProbePatternList(final List<String> patternList);
+	void setProbePatternList(final List<String> patternList);
 
 	/**
 	 * Returns the current list of patterns with a prefix indicating whether the
@@ -82,7 +82,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.6
 	 */
-	public List<String> getProbePatternList();
+	List<String> getProbePatternList();
 
 	/**
 	 * Looks up the parameters for a probe /the pattern of the probe and returns
@@ -95,7 +95,7 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public Map<String, List<String>> getAllPatternParameters(final String pattern);
+	Map<String, List<String>> getAllPatternParameters(final String pattern);
 
 	/**
 	 * Deletes a parameter from the given pattern.
@@ -108,7 +108,7 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public void deletePatternParameter(final String pattern, String name);
+	void deletePatternParameter(final String pattern, String name);
 
 	/**
 	 * Deletes all parameters from the given pattern.
@@ -119,7 +119,7 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public void clearPatternParameters(final String pattern);
+	void clearPatternParameters(final String pattern);
 
 	/**
 	 * Adds or updates a parameter for the given pattern.
@@ -133,7 +133,7 @@ public interface IProbeController {
 	 *
 	 * @since 1.14
 	 */
-	public void addPatternParameter(final String pattern, final String name, final List<String> values);
+	void addPatternParameter(final String pattern, final String name, final List<String> values);
 
 	/**
 	 * Add one value to a list of parameter values for a pattern.

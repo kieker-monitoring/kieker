@@ -16,6 +16,8 @@
 package kieker.tools.source;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import kieker.analysis.source.ISourceCompositeStage;
 import kieker.analysis.source.file.DirectoryReaderStage;
@@ -37,6 +39,10 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 	public static final String PREFIX = LogsReaderCompositeStage.class.getCanonicalName() + ".";
 	public static final String LOG_DIRECTORIES = PREFIX + "logDirectories";
+	public static final String DATA_BUFFER_SIZE = PREFIX + "bufferSize";
+	public static final String VERBOSE = PREFIX + "verbose";
+
+	private static final int DEFAULT_BUFFER_SIZE = 8192;
 
 	private final DirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
 	private final DirectoryReaderStage directoryReaderStage;
@@ -48,16 +54,35 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 *            configuration for the enclosed filters
 	 */
 	public LogsReaderCompositeStage(final Configuration configuration) {
-
 		final String[] directoryNames = configuration.getStringArrayProperty(LOG_DIRECTORIES, ":");
-		final File[] directories = new File[directoryNames.length];
-		int i = 0;
+		final List<File> directories = new ArrayList<>(directoryNames.length);
+
 		for (final String name : directoryNames) {
-			directories[i++] = new File(name);
+			directories.add(new File(name));
 		}
 
+		final int dataBufferSize = configuration.getIntProperty(DATA_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+		final boolean verbose = configuration.getBooleanProperty(VERBOSE, false);
+
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(configuration);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize);
+
+		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+	}
+
+	/**
+	 * Creates a composite stage to scan and read a set of Kieker log directories.
+	 *
+	 * @param directories
+	 *            list of directories to read
+	 * @param verbose
+	 *            report on every read log file
+	 * @param dataBufferSize
+	 *            buffer size of the data file reader (null == use default setting)
+	 */
+	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
+		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}

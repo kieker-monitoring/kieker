@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.debug.hotspotdetection;
 
 import java.io.PrintStream;
@@ -28,13 +27,12 @@ import java.util.Map;
 
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.trace.traversal.TraceTraverser;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
 
 import teetime.framework.AbstractConsumerStage;
 
 /**
- *
  * This stage excepts traces at its input port and prints their operation calls
  * to a given {@link PrintStream}, which have the longest execution time without
  * their children.
@@ -114,6 +112,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 		@SuppressWarnings("hiding")
 		private final Map<OperationCall, Duration> durationsWithoutChild;
 
+		/* default */
 		DurationCollector(final Map<OperationCall, Duration> durationsWithoutChild) {
 			this.durationsWithoutChild = durationsWithoutChild;
 		}

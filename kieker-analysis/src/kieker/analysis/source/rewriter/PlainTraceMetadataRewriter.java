@@ -53,7 +53,7 @@ public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 	 * Trace data records use unique ids for their respective host. However, in a multi read stage
 	 * these ids may be used on different hosts. Therefore, they have to be mapped.
 	 *
-	 * TODO fails in case of records appearing out of order, i.e., a ITraceRecord appearing before a
+	 * Fails in case of records appearing out of order, i.e., a ITraceRecord appearing before a
 	 * TraceMetadata record.
 	 *
 	 * @param record

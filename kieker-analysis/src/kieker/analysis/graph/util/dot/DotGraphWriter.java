@@ -53,11 +53,11 @@ public class DotGraphWriter {
 
 		final String openToken;
 		if (this.graphType == DotGraphType.UNDIRECTED) {
-			openToken = DotGraph.UNDIRECTED_START_TOKEN;
+			openToken = DotGraphConstants.UNDIRECTED_START_TOKEN;
 		} else {
-			openToken = DotGraph.DIRECTED_START_TOKEN;
+			openToken = DotGraphConstants.DIRECTED_START_TOKEN;
 		}
-		this.writer.writeln(openToken + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
+		this.writer.writeln(openToken + ' ' + '"' + name + '"' + ' ' + DotGraphConstants.START_GRAPH_BRACKET);
 		this.writer.indent();
 		this.state = DotWriterState.STARTED;
 	}
@@ -70,7 +70,7 @@ public class DotGraphWriter {
 		}
 
 		this.writer.unindent();
-		this.writer.writeln(DotGraph.END_GRAPH_BRACKET);
+		this.writer.writeln(DotGraphConstants.END_GRAPH_BRACKET);
 		this.state = DotWriterState.FINISHED;
 
 		this.writer.close();
@@ -80,7 +80,7 @@ public class DotGraphWriter {
 		this.checkState(DotWriterState.STARTED);
 
 		if ((attributes != null) && !attributes.isEmpty()) {
-			this.writer.writeln(DotGraph.NODE + ' ' + this.assembleAttributes(attributes));
+			this.writer.writeln(DotGraphConstants.NODE + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
@@ -88,7 +88,7 @@ public class DotGraphWriter {
 		this.checkState(DotWriterState.STARTED);
 
 		if ((attributes != null) && !attributes.isEmpty()) {
-			this.writer.writeln(DotGraph.EDGE + ' ' + this.assembleAttributes(attributes));
+			this.writer.writeln(DotGraphConstants.EDGE + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
@@ -121,9 +121,9 @@ public class DotGraphWriter {
 
 		final String edgeConnector;
 		if (this.graphType == DotGraphType.UNDIRECTED) {
-			edgeConnector = DotGraph.UNDIRECTED_EDGE_CONNECTOR;
+			edgeConnector = DotGraphConstants.UNDIRECTED_EDGE_CONNECTOR;
 		} else {
-			edgeConnector = DotGraph.DIRECTED_EDGE_CONNECTOR;
+			edgeConnector = DotGraphConstants.DIRECTED_EDGE_CONNECTOR;
 		}
 
 		if ((attributes == null) || attributes.isEmpty()) {
@@ -136,7 +136,7 @@ public class DotGraphWriter {
 	public void addSubgraphStart(final String name) throws IOException {
 		this.checkState(DotWriterState.STARTED);
 
-		this.writer.writeln(DotGraph.SUB_START_TOKEN + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
+		this.writer.writeln(DotGraphConstants.SUB_START_TOKEN + ' ' + '"' + name + '"' + ' ' + DotGraphConstants.START_GRAPH_BRACKET);
 		this.writer.indent();
 		this.openSubgraphs++;
 	}
@@ -149,12 +149,12 @@ public class DotGraphWriter {
 		}
 
 		this.writer.unindent();
-		this.writer.writeln(DotGraph.END_GRAPH_BRACKET);
+		this.writer.writeln(DotGraphConstants.END_GRAPH_BRACKET);
 		this.openSubgraphs--;
 	}
 
 	public void addClusterStart(final String name) throws IOException {
-		this.addSubgraphStart(DotGraph.CLUSTER_PREFIX + name);
+		this.addSubgraphStart(DotGraphConstants.CLUSTER_PREFIX + name);
 	}
 
 	public void addClusterStop() throws IOException {
@@ -177,15 +177,15 @@ public class DotGraphWriter {
 	}
 
 	private String assembleAttributes(final Map<String, String> attributes) {
-		return DotGraph.START_ATTRS_BRACKET
+		return DotGraphConstants.START_ATTRS_BRACKET
 				+ attributes.entrySet().stream()
 						.map(e -> this.assembleAttribute(e.getKey(), e.getValue()))
 						.collect(Collectors.joining(","))
-				+ DotGraph.END_ATTRS_BRACKET;
+				+ DotGraphConstants.END_ATTRS_BRACKET;
 	}
 
 	private String assembleAttribute(final String key, final String value) {
-		return key + DotGraph.ATTR_CONNECTOR + '"' + value + '"';
+		return key + DotGraphConstants.ATTR_CONNECTOR + '"' + value + '"';
 	}
 
 	/**

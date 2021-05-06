@@ -319,7 +319,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		callStack.push(root);
 
 		final Collection<AbstractMessage> traceMessages = trace.getSequenceAsVector();
-		final String description = traceMessages.toString();
+		final String description = "PHI" + traceMessages.size(); // traceMessages.toString();
 		root.setDescription(description); // for debugging purposes (chw)
 
 		final NoOriginRetentionPolicy originPolicy = NoOriginRetentionPolicy.createInstance();

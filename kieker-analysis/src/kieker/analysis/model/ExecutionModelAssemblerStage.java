@@ -16,8 +16,8 @@
 
 package kieker.analysis.model;
 
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -28,10 +28,10 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class ExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
-	private final ExecutionModelAssembler assembler;
+	private final IExecutionModelAssembler assembler;
 
-	public ExecutionModelAssemblerStage(final ExecutionModel executionModel) {
-		this.assembler = new ExecutionModelAssembler(executionModel);
+	public ExecutionModelAssemblerStage(final ExecutionModel executionModel, final IExecutionModelAssembler assembler) {
+		this.assembler = assembler;
 	}
 
 	@Override

@@ -17,8 +17,8 @@
 package kieker.test.monitoring.util;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**

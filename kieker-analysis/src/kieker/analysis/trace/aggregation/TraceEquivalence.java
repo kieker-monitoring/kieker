@@ -20,8 +20,8 @@ import java.util.Objects;
 
 import com.google.common.base.Equivalence;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
 
 /**
  * This class defines an equivalence for {@link Trace}s using the class {@link Equivalence}. Therefore,

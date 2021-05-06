@@ -140,7 +140,7 @@ class ChunkWriterTask implements Runnable {
 	}
 
 	private void writeChunk(final Queue<IMonitoringRecord> queue, final int chunkSize) {
-		final List<IMonitoringRecord> chunk = new ArrayList<IMonitoringRecord>(chunkSize);
+		final List<IMonitoringRecord> chunk = new ArrayList<>(chunkSize);
 
 		for (int recordIndex = 0; recordIndex < chunkSize; recordIndex++) {
 			// Due to checks at the call sites, writeChunk is only called with a chunk size

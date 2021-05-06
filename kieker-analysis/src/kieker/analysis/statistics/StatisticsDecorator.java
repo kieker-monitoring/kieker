@@ -18,7 +18,14 @@ package kieker.analysis.statistics;
 
 import java.util.function.Function;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysis.statistics.calculating.ICalculator;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.StatisticRecord;
+import kieker.model.analysismodel.statistics.Statistics;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
  *
@@ -32,12 +39,12 @@ import kieker.analysis.statistics.calculating.ICalculator;
 public class StatisticsDecorator<T> {
 
 	private final StatisticsModel statisticsModel;
-	private final IUnit unit;
+	private final EPredefinedUnits unit;
 	private final ICalculator<T> statisticCalculator;
-	private final Function<T, Object> objectAccesor;
+	private final Function<T, EObject> objectAccesor;
 
-	public StatisticsDecorator(final StatisticsModel statisticsModel, final IUnit unit, final ICalculator<T> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
+	public StatisticsDecorator(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
+			final Function<T, EObject> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;
 		this.statisticCalculator = statisticCalculator;
@@ -45,8 +52,17 @@ public class StatisticsDecorator<T> {
 	}
 
 	public void decorate(final T input) {
-		final Object object = this.objectAccesor.apply(input);
-		final Statistic statistic = this.statisticsModel.get(object).getStatistic(this.unit);
+		final EObject object = this.objectAccesor.apply(input);
+		Statistics statistics = this.statisticsModel.getStatistics().get(object);
+		if (statistics == null) {
+			this.statisticsModel.getStatistics().put(object, StatisticsFactory.eINSTANCE.createStatistics());
+			statistics = this.statisticsModel.getStatistics().get(object);
+		}
+		StatisticRecord statistic = statistics.getStatistics().get(this.unit);
+		if (statistic == null) {
+			statistics.getStatistics().put(this.unit, StatisticsFactory.eINSTANCE.createStatisticRecord());
+			statistic = statistics.getStatistics().get(this.unit);
+		}
 		this.statisticCalculator.calculate(statistic, input, object);
 	}
 

@@ -61,6 +61,13 @@
 		<exclude name="UseVarargs" />
 	</rule>
 
+	<rule ref="category/java/design.xml">
+		<exclude name="DataClass"/>
+		<exclude name="LawOfDemeter"/>
+		<exclude name="ExcessiveImports"/>
+		<exclude name="TooManyFields"/>
+	</rule>
+
 	<rule ref="category/java/documentation.xml/CommentRequired">
 		<!-- <priority>5</priority> -->
 		<properties>
@@ -71,19 +78,15 @@
 			<property name="publicMethodCommentRequirement" value="Ignored" />
 		</properties>
 	</rule>
-
-<!-- Removed temporarily, as no longer compatible with current PMD -->
-<!--	<rule ref="rulesets/chw/basic.xml">
-		<exclude name="NonHeaderCommentSize" /> -->
-		<!-- enable "DisallowRawTypeDeclaration" on demand; contains a bug currently (05.05.2018) -->
-<!--		<exclude name="DisallowRawTypeDeclaration" />
-		<exclude name="MissingPluralVariableName"/>
-		<exclude name="MissingUnitSuffix"/>
-		<exclude name="UnitTestMayNotExtendAnything"/>
-	</rule>-->
-
-	<!-- <rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
-	<!-- <priority>3</priority> -->
-	<!-- </rule> -->
-
+	
+	<rule ref="category/java/codestyle.xml/ClassNamingConventions">
+	    <properties>
+	        <property name="classPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="abstractClassPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory)" />
+	    </properties>
+    </rule>
 </ruleset>

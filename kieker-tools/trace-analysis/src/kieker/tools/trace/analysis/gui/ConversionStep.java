@@ -227,9 +227,7 @@ public class ConversionStep extends AbstractStep {
 								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
 								dotFile.getAbsolutePath(), });
 					p.waitFor();
-				} catch (final IOException e) {
-					LOGGER.warn("An exception occurred", e);
-				} catch (final InterruptedException e) {
+				} catch (final IOException | InterruptedException e) {
 					LOGGER.warn("An exception occurred", e);
 				}
 			}
@@ -256,9 +254,7 @@ public class ConversionStep extends AbstractStep {
 					writer.close();
 					s.close();
 					p.waitFor();
-				} catch (final IOException e) {
-					LOGGER.warn("An exception occurred", e);
-				} catch (final InterruptedException e) {
+				} catch (final IOException | InterruptedException e) {
 					LOGGER.warn("An exception occurred", e);
 				} finally {
 					if (null != writer) {
@@ -347,9 +343,7 @@ public class ConversionStep extends AbstractStep {
 		try {
 			p = Runtime.getRuntime().exec(new String[] { command, parameter, });
 			return (0 == p.waitFor());
-		} catch (final IOException e) {
-			return false;
-		} catch (final InterruptedException e) {
+		} catch (final IOException | InterruptedException e) {
 			return false;
 		}
 	}

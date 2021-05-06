@@ -16,6 +16,7 @@
 
 package kieker.analysis.source.jms;
 
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -45,8 +46,10 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	 * @param jmsFactoryLookupName
 	 *            The name of the configuration determining the name of the used JMS
 	 *            factory, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
+	 * @throws AnalysisConfigurationException
+	 *             on errors when configuring the JMSReader
 	 */
-	public JMSReaderStage(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSReaderStage(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) throws AnalysisConfigurationException {
 		this.readerLogic = new JMSReader(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, this::deliverRecord);
 	}
 

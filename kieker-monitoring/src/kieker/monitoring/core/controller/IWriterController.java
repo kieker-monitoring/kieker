@@ -44,7 +44,7 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 * @since 1.3
 	 */
 	@Override
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+	boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
 	 * Waits for the termination of the monitoring controller. The termination must be previously triggered by {@link MonitoringController#terminateMonitoring()}.

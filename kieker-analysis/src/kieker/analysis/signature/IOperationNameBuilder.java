@@ -18,7 +18,7 @@ package kieker.analysis.signature;
 
 import java.util.Collection;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * A {@link IOperationNameBuilder} can be used to create the operation name from a list of

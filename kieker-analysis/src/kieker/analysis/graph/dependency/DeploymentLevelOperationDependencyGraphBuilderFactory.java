@@ -16,8 +16,7 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.model.ModelRepository;
 
 /**
  * @author Sören Henning
@@ -31,8 +30,8 @@ public class DeploymentLevelOperationDependencyGraphBuilderFactory implements ID
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		return new DeploymentLevelOperationDependencyGraphBuilder(executionModel, statisticsModel);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final ModelRepository repository) {
+		return new DeploymentLevelOperationDependencyGraphBuilder(repository);
 	}
 
 }

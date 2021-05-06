@@ -41,8 +41,10 @@ import kieker.tools.common.ParameterEvaluationUtils;
  * @author Reiner Jung -- ported to new APIs
  *
  * @since 0.95a, 1.15
+ * @deprecated since 1.15 ported to TeeTime
  */
-public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysisConfiguration> {
+@Deprecated
+public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysisParameters> {
 
 	/**
 	 * Private constructor.
@@ -58,7 +60,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 *            arguments
 	 */
 	public static void main(final String... args) {
-		System.exit(new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisConfiguration())); // NOPMD
+		System.exit(new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisParameters())); // NOPMD
 	}
 
 	/**
@@ -68,7 +70,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 *            arguments
 	 */
 	public static void runEmbedded(final String... args) {
-		new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisConfiguration());
+		new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisParameters());
 	}
 
 	@Override
@@ -77,21 +79,21 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		if (this.parameterConfiguration.getIgnoreExecutionsBeforeDate() != null) {
-			logger.info("Ignoring records before {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsBeforeDate()),
+			this.logger.info("Ignoring records before {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsBeforeDate()),
 					this.parameterConfiguration.getIgnoreExecutionsBeforeDate());
 		}
 		if (this.parameterConfiguration.getIgnoreExecutionsAfterDate() != null) {
-			logger.info("Ignoring records after {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsAfterDate()),
+			this.logger.info("Ignoring records after {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsAfterDate()),
 					this.parameterConfiguration.getIgnoreExecutionsAfterDate());
 		}
 
-		this.parameterConfiguration.dumpConfiguration(logger);
+		this.parameterConfiguration.dumpConfiguration(this.logger);
 
-		if (new PerformAnalysis(logger, this.parameterConfiguration).dispatchTasks()) {
-			logger.info("Analysis complete. See 'kieker.log' for details.");
+		if (new PerformAnalysis(this.logger, this.parameterConfiguration).dispatchTasks()) {
+			this.logger.info("Analysis complete. See 'kieker.log' for details.");
 			return SUCCESS_EXIT_CODE;
 		} else {
-			logger.error("Analysis incomplete. See 'kieker.log' for details.");
+			this.logger.error("Analysis incomplete. See 'kieker.log' for details.");
 			return RUNTIME_ERROR;
 		}
 	}
@@ -134,7 +136,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 */
 	private boolean selectOrFilterTraces() {
 		if (this.checkNotEmpty(this.parameterConfiguration.getSelectTraces()) && this.checkNotEmpty(this.parameterConfiguration.getFilterTraces())) {
-			logger.error("Trace Id selection and filtering are mutually exclusive");
+			this.logger.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
 		} else if (this.parameterConfiguration.getSelectTraces() != null) {
 			final int numSelectedTraces = this.parameterConfiguration.getSelectTraces().size();
@@ -142,9 +144,9 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
 					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
-				logger.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				this.logger.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
+				this.logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		} else if (this.parameterConfiguration.getFilterTraces() != null) {
@@ -156,9 +158,9 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
 					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
-				logger.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				this.logger.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
+				this.logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		}
@@ -173,14 +175,18 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 * @return true if {@link #inputDirs} exist and are Kieker directories; false otherwise
 	 */
 	private boolean checkInputDirs(final JCommander commander) {
+		if (this.parameterConfiguration.getInputDirs() == null) {
+			this.logger.error("No input directories specified.");
+			return false;
+		}
 		for (final File inputDir : this.parameterConfiguration.getInputDirs()) {
 			try {
 				if (!inputDir.exists()) {
-					logger.error("The specified input directory '{}' does not exist", inputDir.getCanonicalPath());
+					this.logger.error("The specified input directory '{}' does not exist", inputDir.getCanonicalPath());
 					return false;
 				}
 				if (!inputDir.isDirectory() && !inputDir.getAbsolutePath().endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					logger.error("The specified input directory '{}' is neither a directory nor a zip file", inputDir.getCanonicalPath());
+					this.logger.error("The specified input directory '{}' is neither a directory nor a zip file", inputDir.getCanonicalPath());
 					return false;
 				}
 				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
@@ -195,12 +201,12 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 						}
 					}
 					if (!mapFileExists) {
-						logger.error("The specified input directory '{}' is not a kieker log directory", inputDir.getCanonicalPath());
+						this.logger.error("The specified input directory '{}' is not a kieker log directory", inputDir.getCanonicalPath());
 						return false;
 					}
 				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				logger.error("Error resolving name of input directory: '{}'", inputDir);
+				this.logger.error("Error resolving name of input directory: '{}'", inputDir);
 			}
 		}
 

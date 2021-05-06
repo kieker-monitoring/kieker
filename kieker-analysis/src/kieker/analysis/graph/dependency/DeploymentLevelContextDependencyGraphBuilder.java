@@ -18,11 +18,10 @@ package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.model.ModelRepository;
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentContext;
 
 /**
  * Dependency graph builder for <strong>deployment context</strong> dependency graphs
@@ -39,13 +38,11 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 	/**
 	 * Create new graph builder.
 	 *
-	 * @param executionModel
-	 *            execution model
-	 * @param statisticsModel
-	 *            statistics model
+	 * @param repository
+	 *            model repository
 	 */
-	public DeploymentLevelContextDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		super(executionModel, statisticsModel);
+	public DeploymentLevelContextDependencyGraphBuilder(final ModelRepository repository) {
+		super(repository);
 	}
 
 	@Override
@@ -56,8 +53,8 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
+		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
+		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 		this.responseTimeDecorator.decorate(contextVertex, context);
 
 		return contextVertex;

@@ -27,7 +27,7 @@ import kieker.monitoring.sampler.mxbean.GCSampler;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.10
  */
 public class TestGCSampler extends AbstractJVMSamplerTest {

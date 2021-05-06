@@ -19,11 +19,10 @@ package kieker.analysis.graph.dependency;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.model.ModelRepository;
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentContext;
 
 /**
  * Dependency graph builder for <strong>component</strong> dependency graphs
@@ -43,8 +42,8 @@ public class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDepe
 	 * @param statisticsModel
 	 *            statistics model
 	 */
-	public DeploymentLevelComponentDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		super(executionModel, statisticsModel);
+	public DeploymentLevelComponentDependencyGraphBuilder(final ModelRepository repository) {
+		super(repository);
 	}
 
 	@Override
@@ -55,15 +54,15 @@ public class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDepe
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
+		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
+		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 
 		final IGraph contextSubgraph = contextVertex.addChildGraphIfAbsent();
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_COMPONENT);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getAssemblyComponent().getComponentType().getName());
-		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getAssemblyComponent().getComponentType().getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());
 		this.responseTimeDecorator.decorate(componentVertex, component);
 
 		return componentVertex;

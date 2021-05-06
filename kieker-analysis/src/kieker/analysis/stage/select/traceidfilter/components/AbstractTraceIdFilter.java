@@ -17,13 +17,12 @@
 package kieker.analysis.stage.select.traceidfilter.components;
 
 import java.util.Set;
-import java.util.TreeSet;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Abstract class which describes internal components of {@link TraceIdFilter}. Each concrete component filters the trace ids of a specific record type T.
+ * Abstract class which describes internal components of {@link TraceIdFilterOld}. Each concrete component filters the trace ids of a specific record type T.
  *
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke
  *
@@ -48,13 +47,9 @@ public abstract class AbstractTraceIdFilter<T> extends AbstractConsumerStage<T> 
 	 * @param selectedTraceIds
 	 *            Determining which trace IDs should be accepted by this filter.
 	 */
-	public AbstractTraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
-
+	public AbstractTraceIdFilter(final boolean acceptAllTraces, final Set<Long> selectedTraceIds) {
 		this.acceptAllTraces = acceptAllTraces;
-		this.selectedTraceIds = new TreeSet<>();
-		for (final Long id : selectedTraceIds) {
-			this.selectedTraceIds.add(id);
-		}
+		this.selectedTraceIds = selectedTraceIds;
 	}
 
 	private final boolean acceptId(final long traceId) {
