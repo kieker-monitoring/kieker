@@ -263,7 +263,7 @@ public final class PatternParser {
 		if (Character.isJavaIdentifierStart(array[0])) {
 			sb.append(Character.toString(array[0]));
 		} else if (array[0] == '*') {
-			sb.append("(\\p{javaJavaIdentifierPart})*");
+			sb.append("([\\p{javaJavaIdentifierPart}.])*");
 		} else {
 			throw new InvalidPatternException("Identifier starts with invalid symbol.");
 		}
