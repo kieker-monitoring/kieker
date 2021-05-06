@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.model.system.model;
+package kieker.analysis.stage.adaptation.events;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * @author Reiner Jung
+ * Interface for events that contain parameters.
  *
+ * @author Marc Adolf
  * @since 1.15
  */
-public final class ModelFactory {
+public interface IParameterEvent {
 
-	/** Label for the root node in graphs. */
-	public static final String ROOT_NODE_LABEL = "'Entry'";
-
-	private ModelFactory() {
-		// utility class
-	}
-
+	/**
+	 * @return returns a map of parameter names to lists of values
+	 */
+	public Map<String, List<String>> getParameters();
 }
