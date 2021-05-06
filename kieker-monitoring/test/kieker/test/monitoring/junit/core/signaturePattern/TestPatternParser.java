@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternParser;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
 
@@ -162,7 +161,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final boolean[] staticNonStaticMatches = { true, false, true };
 		final boolean[] nativeNonNativeMatches = { true, false, true };
 		final boolean[] returnTypeMatches = { false, true, true };
-		final boolean[] fqClassNameMatches = { false, false, false, true };
+		final boolean[] fqClassNameMatches = { false, false, true, true };
 		final boolean[] operationNameMatches = { false, false, true };
 		final boolean[] paramListMatches = { true, false, false, true };
 
@@ -221,7 +220,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 											final Pattern pattern = PatternParser.parseToPattern(signature);
 											final Matcher m = pattern.matcher(signature01);
 											final boolean result = m.matches();
-											Assert.assertEquals("expected: " + expected + ", but was: " + result, expected, result);
+											Assert.assertEquals("expected: " + expected + " for " + signature + " parsed to " + pattern.toString() + ", but was: " + result, expected, result);
 										}
 									}
 								}
@@ -268,6 +267,20 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final String signatureDoubleArray = "public void package.Class.method(byte[][])";
 		final Pattern patternDoubleArray = PatternParser.parseToPattern("public void package.Class.method(byte[][])");
 		Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+	}
+
+	@Test
+	public void testSubReturn() throws InvalidPatternException {
+		final Pattern patternReturn = PatternParser.parseToPattern("public * package.Class.method()");
+
+		final String signatureReturn = "public MyReturnClass package.Class.method()";
+		Assert.assertTrue(patternReturn.matcher(signatureReturn).matches());
+
+		final String signatureReturnSubpackage = "public com.MyReturnClass package.Class.method()";
+		Assert.assertTrue(patternReturn.matcher(signatureReturnSubpackage).matches());
+
+		final String signatureReturnSubpackage2 = "public com.kieker.MyReturnClass package.Class.method()";
+		Assert.assertTrue(patternReturn.matcher(signatureReturnSubpackage2).matches());
 	}
 
 	/**
