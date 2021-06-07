@@ -48,6 +48,8 @@ dependencies {
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
+	implementation 'com.github.oshi:oshi-core:3.12.2'
+
 	implementation resolveLibrary('disl-2.0/disl-server.jar')
 	
 	implementation 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
@@ -56,16 +58,19 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.20'
 		
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
-	implementation group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-server:3.0.0-M6'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
-	implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-common:3.0.0-M6'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
-	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-client:3.0.0-M6'
 	
 	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-	implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 	// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
-	implementation group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
+	implementation 'javax.jms:javax.jms-api:2.0.1'
+
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+	implementation 'javax.jws:javax.jws-api:1.1'
 	
 	implementation resolveLibrary('framework-libs/spring/aopalliance-*.jar')
 	implementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
@@ -90,25 +95,22 @@ dependencies {
 	testImplementation 'org.powermock:powermock-module-junit4:2.0.7' 
 	testImplementation 'org.powermock:powermock-core:2.0.7'
 	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.7' 
-	
-	implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
-	implementation group: 'javax.jws', name: 'javax.jws-api', version: '1.1'
-	
+
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
-	testImplementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	testImplementation resolveLibrary('framework-libs/spring/spring-expression-*.jar')
+	// testImplementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+	testImplementation 'org.springframework:spring-beans:3.2.18.RELEASE'
+	// testImplementation resolveLibrary('framework-libs/spring/spring-expression-*.jar')
+	testImplementation 'org.springframework:spring-expression:3.2.18.RELEASE'
 
 	testImplementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:apache-jsp:9.4.28.v20200408'
 	
-	testImplementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+	testImplementation 'commons-io:commons-io:2.8.0'
 	
 	testImplementation project(':kieker-common').sourceSets.test.output
-	
-	implementation group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
-	
+		
 	integrationTestCompile 'junit:junit:4.13'
 }
 

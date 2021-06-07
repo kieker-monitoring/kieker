@@ -10,8 +10,13 @@ targetCompatibility = 1.8
 dependencies {
 	api project(':kieker-common')
 	api 'com.google.guava:guava:21.0'	// used by ComposedKey
-	api resolveLibrary('org.eclipse.emf.common_*.jar')
-	api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
+
+        api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+
+//	api resolveLibrary('org.eclipse.emf.common_*.jar')
+//	api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
+//	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
 }
 

@@ -13,15 +13,22 @@ dependencies {
 	api project(':kieker-model')
 
 	api 'org.apache.cxf:cxf:2.6.17'			// cxf-bundle
-	api resolveLibrary('org.eclipse.emf.common_*.jar')
-	api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	
-	implementation group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
-	implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-		
+        api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+	
 	api 'com.rabbitmq:amqp-client:4.2.1'
 	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
+	api 'net.sourceforge.teetime:teetime:3.0'
+	
+	// api resolveLibrary('org.eclipse.emf.common_*.jar')
+	// api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
+	// api resolveLibrary('org.eclipse.emf.ecore_*.jar')
+	
+	implementation 'javax.jms:javax.jms-api:2.0.1'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+		
 	implementation 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
 	implementation 'org.apache.commons:commons-compress:1.20'
 	implementation 'org.nanohttpd:nanohttpd:2.3.0'
@@ -30,7 +37,7 @@ dependencies {
 
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'	
 			
-	api 'net.sourceforge.teetime:teetime:3.0'
+
 	implementation 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
