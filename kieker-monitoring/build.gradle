@@ -27,7 +27,7 @@ configurations {
     aspects
     aspectCompile
     compile{
-        extendsFrom aspects
+	extendsFrom aspects
     }
 }
 
@@ -50,6 +50,7 @@ dependencies {
 
 	implementation 'com.github.oshi:oshi-core:3.12.2'
 
+	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-server.jar')
 	
 	implementation 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
@@ -72,12 +73,21 @@ dependencies {
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
 	implementation 'javax.jws:javax.jws-api:1.1'
 	
-	implementation resolveLibrary('framework-libs/spring/aopalliance-*.jar')
-	implementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	implementation resolveLibrary('framework-libs/spring/spring-context-*.jar')
-	implementation resolveLibrary('framework-libs/spring/spring-core-*.jar')
-	implementation resolveLibrary('framework-libs/spring/spring-web-*.jar')
-	implementation resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
+	// https://mvnrepository.com/artifact/aopalliance/aopalliance
+	implementation 'aopalliance:aopalliance:1.0'
+	// https://mvnrepository.com/artifact/org.springframework/spring-beans
+	implementation 'org.springframework:spring-beans:3.2.8.RELEASE'
+	implementation 'org.springframework:spring-context:3.2.8.RELEASE'
+	implementation 'org.springframework:spring-core:3.2.8.RELEASE'
+	implementation 'org.springframework:spring-web:3.2.8.RELEASE'
+	implementation 'org.springframework:spring-webmvc:3.2.8.RELEASE'
+
+	// implementation resolveLibrary('framework-libs/spring/aopalliance-*.jar')
+	// implementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+	// implementation resolveLibrary('framework-libs/spring/spring-context-*.jar')
+	// implementation resolveLibrary('framework-libs/spring/spring-core-*.jar')
+	// implementation resolveLibrary('framework-libs/spring/spring-web-*.jar')
+	// implementation resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
 	
 	// testing
 	testImplementation 'org.hamcrest:hamcrest-all:1.3'
@@ -116,42 +126,42 @@ dependencies {
 
 task iajc(dependsOn: classes) {
     doLast {
-        ant.taskdef(
-        	resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
-            classpath: configurations.ajc.asPath
-        )
-        ant.iajc(
-        	XlintFile: 'aspectjXlint.properties', 
-        	X: 'joinpoints:synchronization', 
-        	source: sourceCompatibility, 
-        	target: targetCompatibility, 
-        	debug: 'true', 
-        	destdir: sourceSets.main.output.classesDir) {
+	ant.taskdef(
+		resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
+	    classpath: configurations.ajc.asPath
+	)
+	ant.iajc(
+		XlintFile: 'aspectjXlint.properties', 
+		X: 'joinpoints:synchronization', 
+		source: sourceCompatibility, 
+		target: targetCompatibility, 
+		debug: 'true', 
+		destdir: sourceSets.main.output.classesDir) {
 
-        	classpath {
-        		pathElement(location: configurations.compile.asPath)
-        		pathElement(location: sourceSets.main.output.classesDir)
-        	}
+		classpath {
+			pathElement(location: configurations.compile.asPath)
+			pathElement(location: sourceSets.main.output.classesDir)
+		}
 
-            sourceroots {
-                pathElement(location: 'src/kieker/monitoring/probe/aspectj')
-            }
-           
-        }
+	    sourceroots {
+		pathElement(location: 'src/kieker/monitoring/probe/aspectj')
+	    }
+	   
+	}
     }   
 }
 
 sourceSets {
     jarIntegrationTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-        
-        compileClasspath += sourceSets.test.output
-        runtimeClasspath += sourceSets.test.output
-        
-        java {
-        	srcDirs = [ 'integrationTest' ]
-        }
+	compileClasspath += sourceSets.main.output
+	runtimeClasspath += sourceSets.main.output
+	
+	compileClasspath += sourceSets.test.output
+	runtimeClasspath += sourceSets.test.output
+	
+	java {
+		srcDirs = [ 'integrationTest' ]
+	}
     }
 }
 

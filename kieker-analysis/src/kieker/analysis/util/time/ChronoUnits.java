@@ -34,6 +34,9 @@ public final class ChronoUnits {
 	 * Will be obsolete in Java 9 and can be replaced by {@code TimeUnit.toChronoUnit()}.
 	 * See: https://bugs.openjdk.java.net/browse/JDK-8141452
 	 *
+	 * @param timeUnit
+	 *            the used time unit.
+	 * @return returns the corresponding Chrono unit for a time unit.
 	 */
 	public static ChronoUnit createFromTimeUnit(final TimeUnit timeUnit) {
 		switch (timeUnit) {

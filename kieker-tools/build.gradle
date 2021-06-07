@@ -33,6 +33,7 @@ dependencies {
 	// TODO jgraphx is no longer maintained
 	implementation resolveLibrary('jgraphx-*.jar')
 
+        // no maven source available
 	implementation resolveLibrary('Rsession-*.jar')
 	implementation resolveLibrary('Rserve-*.jar')
 	implementation resolveLibrary('REngine-*.jar')

@@ -21,13 +21,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -194,9 +195,9 @@ public class TraceAnalysisGUI extends JFrame {
 			step.saveCurrentConfiguration(properties);
 		}
 
-		OutputStreamWriter stream = null;
+		BufferedWriter stream = null;
 		try {
-			stream = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			stream = Files.newBufferedWriter(Paths.get("TraceAnalysisGUI.properties"), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 			properties.store(stream, null);
 		} catch (final IOException ex) {
 			LOGGER.warn("Configuration could not be saved", ex);

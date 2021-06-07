@@ -22,10 +22,6 @@ dependencies {
 	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
 	api 'net.sourceforge.teetime:teetime:3.0'
 	
-	// api resolveLibrary('org.eclipse.emf.common_*.jar')
-	// api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	// api resolveLibrary('org.eclipse.emf.ecore_*.jar')
-	
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 		
