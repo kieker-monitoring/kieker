@@ -31,6 +31,9 @@ dependencies {
     resultJar 'org.slf4j:slf4j-api:1.7.25'
 
     emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
     aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
 }
