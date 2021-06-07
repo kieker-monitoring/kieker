@@ -25,7 +25,6 @@ configurations {
 }
 
 dependencies {
-    resultJar project(path: ':kieker-tools', configuration: 'resultJar')
     resultJar 'org.slf4j:slf4j-api:1.7.25'
     resultJar 'org.jctools:jctools-core:3.3.0'
     
@@ -582,7 +581,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure licence
     configure aopxml
 
-	from configurations.resultJar.collect { zipTree(it) }
+	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
     from configurations.resultJar.allArtifacts.collect {
         it.isDirectory() ? it : zipTree(it)
     }
@@ -608,6 +607,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
 
+	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
     from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
     def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
@@ -645,6 +645,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
     }
     from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
+	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
     from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
