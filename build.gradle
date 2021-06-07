@@ -22,6 +22,7 @@ plugins {
 configurations {
     resultJar
     emfJarConfig
+    aspectJarConfig
 }
 
 dependencies {
@@ -30,6 +31,8 @@ dependencies {
     resultJar 'org.slf4j:slf4j-api:1.7.25'
 
     emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')
+
+    aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -639,13 +642,9 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
     configure licence
     configure aopxml
 
-    from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
-        zipTree(it)
-    }
-    from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
-
+	from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
     from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
-
+	
     manifest = project.manifest {
         from sharedManifest
         attributes(
