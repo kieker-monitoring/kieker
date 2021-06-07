@@ -18,19 +18,19 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	
-	implementation group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+	implementation 'javax.jms:javax.jms-api:2.0.1'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
 	// https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
-	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.34.v20201102'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.4.34.v20201102'
+	implementation 'org.eclipse.jetty:jetty-server:9.4.34.v20201102'
+	implementation 'org.eclipse.jetty:jetty-servlet:9.4.34.v20201102'
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-util-ajax
-	implementation group: 'org.eclipse.jetty', name: 'jetty-util-ajax', version: '9.4.34.v20201102'
+	implementation 'org.eclipse.jetty:jetty-util-ajax:9.4.34.v20201102'
 
-	implementation group: 'org.apache.activemq', name: 'activemq-core', version: '5.7.0'
+	implementation 'org.apache.activemq:activemq-core:5.7.0'
 	
 	// TODO when removing kdb, remove reflections
-	implementation resolveLibrary('reflections-*.jar')
+	implementation 'org.reflections:reflections:0.9.12'
 	
 	testImplementation project(':kieker-common').sourceSets.test.output	
 	testImplementation project(':kieker-analysis').sourceSets.test.output
