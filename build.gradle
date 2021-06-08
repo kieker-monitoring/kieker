@@ -325,6 +325,10 @@ def checkSubprojects = [
     project(':kieker-extension-kafka')
 ]
 
+tasks.withType(Jar) {
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 checkSubprojects.each { project ->
     configure(project) {
 
