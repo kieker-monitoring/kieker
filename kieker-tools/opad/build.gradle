@@ -12,6 +12,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 	
+	// no suitable maven source available
 	implementation resolveLibrary('Rsession-*.jar')
 	implementation resolveLibrary('Rserve-*.jar')
 	implementation resolveLibrary('REngine-*.jar')

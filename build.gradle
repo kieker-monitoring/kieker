@@ -22,13 +22,18 @@ plugins {
 configurations {
     resultJar
     emfJarConfig
+    aspectJarConfig
 }
 
 dependencies {
     resultJar 'org.slf4j:slf4j-api:1.7.25'
     resultJar 'org.jctools:jctools-core:3.3.0'
-    
-    emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')
+
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+
+    aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -601,30 +606,15 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
     configure licence
     configure aopxml
 
+    from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+
     from('lib') {
         include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
         include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
-
-	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
-    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
-
-    def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
-        zipTree(it)
-    }
-    from(emfJarsTree) {
-        exclude "META-INF/*.RSA"
-        exclude "META-INF/*.SF"
-        exclude "META-INF/eclipse.inf"
-        exclude "META-INF/*.DSA"
-        exclude "plugin.*"
-        exclude "about.*"
-        exclude "modeling32.png"
-    }
-
-    from configurations.emfJarConfig.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
-
+    
     manifest = project.manifest {
         from sharedManifest
     }
@@ -640,14 +630,13 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
     configure licence
     configure aopxml
 
-    from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
-        zipTree(it)
-    }
     from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
 	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
-    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+	from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
 
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+	
     manifest = project.manifest {
         from sharedManifest
         attributes(
