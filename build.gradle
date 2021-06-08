@@ -134,6 +134,13 @@ subprojects {
     }
     check.dependsOn integrationTest
 
+	tasks.withType(Zip) {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+	tasks.withType(Distribution) {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+
     // --- quality assurance plugins ---
 
     apply plugin: 'pmd'
@@ -324,10 +331,6 @@ def checkSubprojects = [
     project(':kieker-tools:trace-analysis-gui'),
     project(':kieker-extension-kafka')
 ]
-
-tasks.withType(Jar) {
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
 
 checkSubprojects.each { project ->
     configure(project) {
