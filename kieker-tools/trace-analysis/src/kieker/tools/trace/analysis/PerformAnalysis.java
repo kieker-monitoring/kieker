@@ -326,7 +326,7 @@ public class PerformAnalysis {
 	}
 
 	private void printSystemEntities(final String pathPrefix, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final String systemEntitiesHtmlFn = pathPrefix + "system-entities.html";
 		final Configuration systemModel2FileFilterConfig = new Configuration();
 		systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN,
@@ -356,10 +356,9 @@ public class PerformAnalysis {
 	 *
 	 * @param reader
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
-	private ThreadEvent2TraceEventFilter createThreadEvent2TraceEventFilter(final FSReader reader) throws IllegalStateException, AnalysisConfigurationException {
+	private ThreadEvent2TraceEventFilter createThreadEvent2TraceEventFilter(final FSReader reader) throws AnalysisConfigurationException {
 		// transforms thread-based events to trace-based events
 		final ThreadEvent2TraceEventFilter threadEvent2TraceEventFilter = new ThreadEvent2TraceEventFilter(new Configuration(),
 				this.analysisController);
@@ -377,13 +376,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAggregatedDeploymentCallTree(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
 
 		componentPlotAggregatedCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
