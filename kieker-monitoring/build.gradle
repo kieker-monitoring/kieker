@@ -55,7 +55,10 @@ dependencies {
 	
 	implementation 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
 
-	implementation 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
+	implementation 'org.apache.cxf:cxf-core:3.4.3'
+	implementation 'org.apache.cxf:cxf-rt-bindings-soap:3.4.3'
+	implementation 'org.apache.cxf:cxf-rt-frontend-jaxws:3.4.3'
+
 	implementation 'org.apache.commons:commons-compress:1.20'
 		
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
