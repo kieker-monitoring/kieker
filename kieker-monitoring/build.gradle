@@ -41,7 +41,7 @@ dependencies {
 
 	implementation 'com.rabbitmq:amqp-client:4.2.1'
 
-	implementation 'org.jctools:jctools-core:2.1.0'
+	implementation 'org.jctools:jctools-core:3.3.0'
 	
 	ajc "org.aspectj:aspectjtools:$aspectjVersion"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
