@@ -19,6 +19,7 @@ dependencies {
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
 	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	implementation 'org.jctools:jctools-core:2.1.0'
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-expression
 	implementation "org.springframework:spring-aop:${springVersion}"
@@ -26,6 +27,8 @@ dependencies {
 	implementation "org.springframework:spring-context:${springVersion}"
 	implementation "org.springframework:spring-core:${springVersion}"
 	implementation "org.springframework:spring-expression:${springVersion}"
+	implementation "org.springframework:spring-web:${springVersion}"
+	implementation "org.springframework:spring-webmvc:${springVersion}"
 
 	// https://mvnrepository.com/artifact/aopalliance/aopalliance
 	implementation 'aopalliance:aopalliance:1.0'
