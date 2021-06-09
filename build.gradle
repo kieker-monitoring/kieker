@@ -139,6 +139,13 @@ subprojects {
     }
     check.dependsOn integrationTest
 
+	tasks.withType(Zip) {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+	tasks.withType(Distribution) {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+
     // --- quality assurance plugins ---
 
     apply plugin: 'pmd'
