@@ -25,7 +25,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -53,7 +52,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  *
  * @since 1.8
  */
-@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1826
+// @Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1826
 public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
