@@ -10,21 +10,24 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public enum Util {
 	;
-	
+
 	private static final File EXAMPLE_PROJECT_FOLDER = new File("test-resources/example-projects-aspectj");
-	
+
 	public static File runTestcase(final String projectName, final String testcase) throws IOException {
 		File folder = new File(EXAMPLE_PROJECT_FOLDER, projectName);
 		File logFolder = new File(folder, "monitoring-logs");
-		FileUtils.cleanDirectory(logFolder);
-		
-		ProcessBuilder processBuilder = new ProcessBuilder("gradle", "clean", "test", "--tests",
-				testcase);
+		if (!logFolder.exists()) {
+			logFolder.mkdirs();
+		} else {
+			FileUtils.cleanDirectory(logFolder);
+		}
+
+		ProcessBuilder processBuilder = new ProcessBuilder("gradle", "clean", "test", "--tests", testcase);
 		processBuilder.directory(folder);
 		StreamGobbler.showFullProcess(processBuilder.start());
 		return logFolder;
 	}
-	
+
 	public static List<String> getLatestLogRecord(final File monitoringFolder) throws IOException {
 		File dataFolder = monitoringFolder.listFiles()[0];
 		File dataFile = dataFolder.listFiles((FilenameFilter) new WildcardFileFilter("*.dat"))[0];
