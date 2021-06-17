@@ -920,7 +920,7 @@ publishing {
             pom {
                 groupId = 'net.kieker-monitoring'
                 artifactId = 'kieker'
-                version = '1.15-SNAPSHOT'
+                version = version
                 name = 'Kieker Monitoring and Analysis Framework'
                 description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
                 url = 'http://kieker-monitoring.net'
