@@ -593,11 +593,6 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure licence
     configure aopxml
 
-	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
-    from configurations.resultJar.allArtifacts.collect {
-        it.isDirectory() ? it : zipTree(it)
-    }
-
     manifest = project.manifest {
         from sharedManifest
     }
@@ -963,6 +958,17 @@ publishing {
                     connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
                     developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
                     url = 'https://github.com/kieker-monitoring/kieker'
+                }
+            }
+            
+            pom.withXml {
+            	def dependenciesNode = asNode().appendNode('dependencies')
+
+                configurations.resultJar.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
                 }
             }
         }
