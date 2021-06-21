@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	private volatile MyPipe pipe;
 	private final String pipeName;
-
+	private final ArraySerializer arraySerializer = new ArraySerializer();
+	
 	public MyPipeWriter(final Configuration configuration) {
 		super(configuration);
 		this.pipeName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
@@ -41,8 +42,10 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// Just write the content of the record into the pipe.
+			record.serialize(this.arraySerializer);
 			this.pipe.put(new PipeData(record.getLoggingTimestamp(),
-					record.toArray(), record.getClass()));
+					this.arraySerializer.getObjectArray(), record.getClass()));
+			this.arraySerializer.clear();
 		} catch (final InterruptedException e) {
 			throw new IllegalStateException("Should not be thrown", e);
 		}

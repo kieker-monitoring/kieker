@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.8
  */
 public final class JoinEventFactory implements IRecordFactory<JoinEvent> {
-	
-	
+
 	@Override
 	public JoinEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new JoinEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public JoinEvent create(final Object[] values) {
-		return new JoinEvent(values);
+	public String[] getValueNames() {
+		return JoinEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return JoinEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return JoinEvent.SIZE;
 	}

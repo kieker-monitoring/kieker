@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.newio.deserializer.IMonitoringRecordDeserializer;
@@ -36,6 +39,8 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.13
  */
 public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRawDataReader.class.getCanonicalName());
 
 	private final IMonitoringRecordDeserializer deserializer;
 
@@ -59,7 +64,6 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 	@SuppressWarnings("unchecked")
 	private IMonitoringRecordDeserializer createDeserializer(final String deserializerClassName, final Configuration configuration,
 			final IProjectContext projectContext) {
-
 		// NOCS TODO Externalize instance creation into a factory
 		final Class<? extends IMonitoringRecordDeserializer> deserializerClass;
 		IMonitoringRecordDeserializer localDeserializer = null;

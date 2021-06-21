@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,15 +48,22 @@ public interface IRecordFactory<T> {
 	T create(IValueDeserializer deserializer) throws RecordInstantiationException;
 
 	/**
-	 * Create a record of type T utilizing an object array.
+	 * provide an array of all value names of an event type in definition order.
 	 *
-	 * @param values
-	 *            the values used to fill the new instance
+	 * @return returns an array of value names
 	 *
-	 * @return a new instance of the declared record type
-	 * @since 1.11
+	 * @since 1.15
 	 */
-	T create(Object[] values);
+	String[] getValueNames();
+
+	/**
+	 * provide an array of all value types of an event type in definition order.
+	 *
+	 * @return returns an array of value types
+	 *
+	 * @since 1.15
+	 */
+	Class<?>[] getValueTypes();
 
 	/**
 	 * @return the size (in bytes) of the record in the serialized form, or a negative value represented by the constant {@link #UNKNOWN_RECORD_SIZE} if the

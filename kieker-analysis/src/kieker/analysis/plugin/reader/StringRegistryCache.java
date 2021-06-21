@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Cache to store and retrieve string registries.
@@ -35,7 +34,7 @@ import kieker.common.util.registry.Lookup;
  */
 public class StringRegistryCache {
 
-	private final Cache<Long, ILookup<String>> cache;
+	private final Cache<Long, ReaderRegistry<String>> cache;
 
 	/**
 	 * Creates a new registry cache using the given cache duration configuration.
@@ -58,7 +57,7 @@ public class StringRegistryCache {
 	 *            The time unit for the expiration duration
 	 * @return The cache instance to use
 	 */
-	protected Cache<Long, ILookup<String>> createCache(final long expirationDuration, final TimeUnit expirationTimeUnit) {
+	protected Cache<Long, ReaderRegistry<String>> createCache(final long expirationDuration, final TimeUnit expirationTimeUnit) {
 		return CacheBuilder.newBuilder()
 				.expireAfterAccess(expirationDuration, expirationTimeUnit)
 				.build();
@@ -72,9 +71,9 @@ public class StringRegistryCache {
 	 * @return The appropriate string registry
 	 */
 	@SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
-	public ILookup<String> getOrCreateRegistry(final Long registryId) {
+	public ReaderRegistry<String> getOrCreateRegistry(final Long registryId) {
 		try {
-			return this.cache.get(registryId, new RegistryLoader(registryId));
+			return this.cache.get(registryId, new RegistryLoader());
 		} catch (final ExecutionException e) {
 			// This should not happen since the loader only creates a
 			// new registry
@@ -89,17 +88,15 @@ public class StringRegistryCache {
 	 *
 	 * @since 1.13
 	 */
-	private static class RegistryLoader implements Callable<ILookup<String>> {
+	private static class RegistryLoader implements Callable<ReaderRegistry<String>> {
 
-		private final long id;
-
-		public RegistryLoader(final long id) {
-			this.id = id;
+		public RegistryLoader() {
+			// empty constructor
 		}
 
 		@Override
-		public ILookup<String> call() throws Exception {
-			return new Lookup<String>(this.id);
+		public ReaderRegistry<String> call() throws Exception {
+			return new ReaderRegistry<>();
 		}
 
 	}

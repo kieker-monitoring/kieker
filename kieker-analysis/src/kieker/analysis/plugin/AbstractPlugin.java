@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -56,6 +59,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  */
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPlugin.class.getCanonicalName());
 
 	private final ConcurrentHashMap<String, List<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
@@ -197,9 +202,9 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		// Third step: Send everything to the registered ports.
-		final List<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
+		final List<PluginInputPortReference> registeredPortMethods = this.registeredMethods.get(outputPortName);
 
-		for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
+		for (final PluginInputPortReference pluginInputPortReference : registeredPortMethods) {
 			// Check whether the data fits the event types.
 			Class<?>[] eventTypes = pluginInputPortReference.getEventTypes();
 			if (eventTypes.length == 0) {
@@ -524,11 +529,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return null;
 		}
 		// Now get the connections.
-		final List<PluginInputPortReference> result = new ArrayList<>();
+		final List<PluginInputPortReference> results = new ArrayList<>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
-			result.add(ref);
+			results.add(ref);
 		}
-		return result;
+		return results;
 	}
 
 	/**

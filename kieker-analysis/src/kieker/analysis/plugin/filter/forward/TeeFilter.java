@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -38,7 +42,9 @@ import kieker.common.configuration.Configuration;
  * @author Matthias Rohr, Jan Waller
  *
  * @since 1.2
+ * @deprecated since 1.15 ported to teetime kieker.analysis.stage.forward.TeeFilter
  */
+@Deprecated
 @Plugin(description = "A filter to print the object to a configured stream",
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object",
 				eventTypes = { Object.class }), configuration = {
@@ -146,12 +152,16 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			this.append = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_APPEND);
 			PrintStream tmpPrintStream;
 			try {
-				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig, this.append), false,
-						this.encoding);
+				final OutputStream stream = Files.newOutputStream(Paths.get(printStreamNameConfig), StandardOpenOption.CREATE,
+						this.append ? StandardOpenOption.APPEND : StandardOpenOption.WRITE); // NOCS
+				tmpPrintStream = new PrintStream(stream, false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
 				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
+				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
+				tmpPrintStream = null; // NOPMD (null)
+			} catch (final IOException ex) {
 				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			}
@@ -201,8 +211,8 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 * @param object
 	 *            The new object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = {
-		Object.class })
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded",
+			eventTypes = Object.class)
 	public final void inputEvent(final Object object) {
 		if (this.active) {
 			final StringBuilder sb = new StringBuilder(128);

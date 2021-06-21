@@ -5,7 +5,6 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -16,18 +15,19 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
  * 
- *       Complex type for the <data> element.
- *       data.type is mixed, that is, <data> may contain #PCDATA.
- *       Content type: extension of data-extension.type which is empty
- *                     per default.
- *     
+ * Complex type for the <data> element.
+ * data.type is mixed, that is, <data> may contain #PCDATA.
+ * Content type: extension of data-extension.type which is empty
+ * per default.
  * 
- * <p>Java class for data.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for data.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="data.type">
@@ -47,94 +47,93 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "data.type")
 public class DataType
-    extends DataExtensionType
-{
+		extends DataExtensionType {
 
-    @XmlAttribute(name = "key", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String key;
-    @XmlAttribute(name = "time")
-    protected Long time;
-    @XmlAttribute(name = "id")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String id;
+	@XmlAttribute(name = "key", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NMTOKEN")
+	protected String key;
+	@XmlAttribute(name = "time")
+	protected Long time;
+	@XmlAttribute(name = "id")
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NMTOKEN")
+	protected String id;
 
-    /**
-     * Gets the value of the key property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getKey() {
-        return key;
-    }
+	/**
+	 * Gets the value of the key property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getKey() {
+		return key;
+	}
 
-    /**
-     * Sets the value of the key property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setKey(String value) {
-        this.key = value;
-    }
+	/**
+	 * Sets the value of the key property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setKey(String value) {
+		this.key = value;
+	}
 
-    /**
-     * Gets the value of the time property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Long }
-     *     
-     */
-    public long getTime() {
-        if (time == null) {
-            return  0L;
-        } else {
-            return time;
-        }
-    }
+	/**
+	 * Gets the value of the time property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link Long }
+	 * 
+	 */
+	public long getTime() {
+		if (time == null) {
+			return 0L;
+		} else {
+			return time;
+		}
+	}
 
-    /**
-     * Sets the value of the time property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Long }
-     *     
-     */
-    public void setTime(Long value) {
-        this.time = value;
-    }
+	/**
+	 * Sets the value of the time property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link Long }
+	 * 
+	 */
+	public void setTime(Long value) {
+		this.time = value;
+	}
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * Gets the value of the id property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+	/**
+	 * Sets the value of the id property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setId(String value) {
+		this.id = value;
+	}
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.record.tcp.AbstractTcpReader;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
+import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 
 /**
  * This is a reader which reads the records from a TCP port. Compared to the {@link TCPReader}, it is more modular and faster in reading.
@@ -38,10 +37,12 @@ import kieker.common.util.registry.Lookup;
  * @author Jan Waller, Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 will no longer support dual socket in future
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the DualSocketTcpReader")
+	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the DualSocketTcpReader")
 }, configuration = {
 	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
 			description = "The first port of the server used for the TCP connection."),
@@ -63,7 +64,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	private final int port1;
 	private final int port2;
 
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 
 	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
@@ -88,7 +89,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	}
 
 	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Logger logger,
-			final ILookup<String> registry) {
+			final ReaderRegistry<String> registry) {
 		return new AbstractRecordTcpReader(port, bufferCapacity, logger, registry, new CachedRecordFactoryCatalog()) {
 			@SuppressWarnings("synthetic-access")
 			@Override

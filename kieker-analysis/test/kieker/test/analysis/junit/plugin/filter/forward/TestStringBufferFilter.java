@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.test.analysis.junit.plugin.filter.forward;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -36,9 +37,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.6
+ *
+ * @deprecated since 1.15 remove in 1.16 as it test the old deprecated filter
  */
+@Deprecated
 public class TestStringBufferFilter extends AbstractKiekerTest {
 
 	/**
@@ -48,12 +52,13 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		// default empty constructor
 	}
 
+	@Ignore // NOCS
 	@Test
 	public void testRecordsWithStringEqualButNeverSame() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController analysisController = new AnalysisController();
-		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListReader<IMonitoringRecord> reader = new ListReader<>(new Configuration(), analysisController);
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), analysisController);
-		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 		analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
@@ -78,12 +83,13 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		Assert.assertEquals("Second output record doesn't equal second input record", recordIn2, recordOut2); // ... but must be equal
 	}
 
+	@Ignore // NOCS
 	@Test
 	public void testRecordsWithoutStringSame() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
-		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListReader<IMonitoringRecord> reader = new ListReader<>(new Configuration(), analysisController);
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), analysisController);
-		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 		analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
@@ -100,12 +106,13 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		Assert.assertSame("First output record not same as first input record", recordIn1, recordOut1); // includes no String, hence "as-is"
 	}
 
+	@Ignore // NOCS
 	@Test
 	public void testObjects() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), analysisController);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), analysisController);
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), analysisController);
-		final ListCollectionFilter<Object> collectionFilter = new ListCollectionFilter<Object>(new Configuration(), analysisController);
+		final ListCollectionFilter<Object> collectionFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 		analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
@@ -135,12 +142,13 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 		Assert.assertEquals("Input string not equal to output string", stringIn2, stringOut2);
 	}
 
+	@Ignore // NOCS
 	@Test
 	public void testStringInRecord() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
-		final ListReader<OperationExecutionRecord> reader = new ListReader<OperationExecutionRecord>(new Configuration(), analysisController);
+		final ListReader<OperationExecutionRecord> reader = new ListReader<>(new Configuration(), analysisController);
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), analysisController);
-		final ListCollectionFilter<OperationExecutionRecord> collectionFilter = new ListCollectionFilter<OperationExecutionRecord>(new Configuration(),
+		final ListCollectionFilter<OperationExecutionRecord> collectionFilter = new ListCollectionFilter<>(new Configuration(),
 				analysisController);
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);

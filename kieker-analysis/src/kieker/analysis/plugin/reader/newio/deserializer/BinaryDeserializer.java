@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Holger Knoche
@@ -77,14 +77,14 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 		// Position the buffer and decode the string table
 		final int absoluteStringTableOffset = baseOffset + stringTableOffset;
 		buffer.position(absoluteStringTableOffset);
-		final IRegistry<String> stringRegistry = this.decodeStringRegistry(buffer);
+		final ReaderRegistry<String> stringRegistry = this.decodeStringRegistry(buffer);
 
 		// Position the buffer and decode the records
 		buffer.position(baseOffset);
 		return this.decodeMonitoringRecords(buffer, stringRegistry, absoluteStringTableOffset);
 	}
 
-	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
+	private ReaderRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
 		final int numberOfEntries = VariableLengthEncoding.decodeInt(buffer);
 		final List<String> values = new ArrayList<>(numberOfEntries);
 
@@ -101,7 +101,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	}
 
 	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer,
-			final IRegistry<String> stringRegistry, final int endOffset) {
+			final ReaderRegistry<String> stringRegistry, final int endOffset) {
 		final List<IMonitoringRecord> records = new ArrayList<>();
 		int currentOffset = buffer.position();
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,20 +26,20 @@ import kieker.common.record.flow.IObjectRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.6
  */
-public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEvent implements IObjectRecord {			
+public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEvent implements IObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-			 + TYPE_SIZE_INT; // IObjectRecord.objectId
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // IExceptionRecord.cause
+			+ TYPE_SIZE_INT; // IObjectRecord.objectId
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,13 +49,9 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
-	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -8160283153301963516L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -64,10 +60,14 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		"cause",
 		"objectId",
 	};
-	
+
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = -8957011715514297968L;
+
 	/** property declarations. */
 	private final int objectId;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -86,78 +86,28 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
+	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final String cause, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedObjectEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public AfterConstructorFailedObjectEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.objectId = (Integer) values[6];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedObjectEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected AfterConstructorFailedObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.objectId = (Integer) values[6];
-	}
-
-	
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AfterConstructorFailedObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getTraceId(),
-			this.getOrderIndex(),
-			this.getOperationSignature(),
-			this.getClassSignature(),
-			this.getCause(),
-			this.getObjectId(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
@@ -166,7 +116,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -174,15 +124,15 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -191,17 +141,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -216,7 +155,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AfterConstructorFailedObjectEvent castedRecord = (AfterConstructorFailedObjectEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -242,12 +181,58 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		if (this.getObjectId() != castedRecord.getObjectId()) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getOrderIndex());
+		code += this.getOperationSignature().hashCode();
+		code += this.getClassSignature().hashCode();
+		code += this.getCause().hashCode();
+		code += ((int) this.getObjectId());
+
+		return code;
+	}
+
 	public final int getObjectId() {
 		return this.objectId;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AfterConstructorFailedObjectEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+
+		result += "cause = ";
+		result += this.getCause() + ", ";
+
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+
+		return result;
+	}
 }

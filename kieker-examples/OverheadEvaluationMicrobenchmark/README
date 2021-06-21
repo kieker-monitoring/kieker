@@ -1,8 +1,0 @@
-MooBench  http://kieker-monitoring.net/MooBench
------------------------------------------------
-
-The Overhead Evaluation Microbenchmark moved to its own git repository:
-
-  http://git.kieker-monitoring.net/moobench.git
-
-This directory contains a pre-compiled version of MooBench and the necessary scripts to start the benchmark of Kieker from Jenkins.

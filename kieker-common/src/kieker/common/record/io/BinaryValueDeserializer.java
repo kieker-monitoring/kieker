@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package kieker.common.record.io;
 import java.nio.ByteBuffer;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Default value deserializer implementation.
@@ -34,7 +34,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	private static final byte TRUE_VALUE = (byte) 1;
 
 	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 
 	/**
 	 * Create a binary value deserializer.
@@ -44,7 +44,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	 * @param stringRegistry
 	 *            the string registry used for the deserializer
 	 */
-	protected BinaryValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected BinaryValueDeserializer(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
@@ -58,7 +58,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	 *            the string registry used for the deserializer
 	 * @return the value deserializer
 	 */
-	public static BinaryValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public static BinaryValueDeserializer create(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		return new BinaryValueDeserializer(buffer, stringRegistry);
 	}
 
@@ -97,12 +97,6 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
 		final int value = this.buffer.getInt();
 		return this.enumerationValueOf(clazz, value);
-	}
-
-	@Override
-	public byte[] getBytes(final byte[] target) {
-		this.buffer.get(target);
-		return target;
 	}
 
 	@Override

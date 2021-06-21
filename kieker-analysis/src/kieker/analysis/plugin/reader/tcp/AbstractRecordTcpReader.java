@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +25,17 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
-import kieker.common.record.tcp.AbstractTcpReader;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
+import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 
 /**
  *
  * @author Christian Wulf (chw)
  *
  * @since 1.13
+ * @deprecated 1.15 not relevant for the TeeTime port
  */
+@Deprecated
 public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
@@ -41,12 +43,17 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	private final CachedRecordFactoryCatalog recordFactories;
 	// BETTER use a non thread-safe implementation to increase performance. A thread-safe version is not necessary.
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 
 	/**
-	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>
+	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>.
+	 *
+	 * @param logger
+	 *            logger for the TCP reader
+	 * @param stringRegistry
+	 *            string registry for the reader
 	 */
-	public AbstractRecordTcpReader(final Logger logger, final ILookup<String> stringRegistry) {
+	public AbstractRecordTcpReader(final Logger logger, final ReaderRegistry<String> stringRegistry) {
 		this(10133, 65535, logger, stringRegistry, new CachedRecordFactoryCatalog());
 	}
 
@@ -56,8 +63,14 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 	 *            accept connections on this port
 	 * @param bufferCapacity
 	 *            capacity of the receiving buffer
+	 * @param logger
+	 *            logger for the TCP reader
+	 * @param stringRegistry
+	 *            string registry for the reader
+	 * @param recordFactories
+	 *            cache for record factories
 	 */
-	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Logger logger, final ILookup<String> stringRegistry,
+	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Logger logger, final ReaderRegistry<String> stringRegistry,
 			final CachedRecordFactoryCatalog recordFactories) {
 		super(port, bufferCapacity, logger);
 		this.stringRegistry = stringRegistry;

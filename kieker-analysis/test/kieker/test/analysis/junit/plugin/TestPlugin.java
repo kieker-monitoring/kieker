@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
- * 
+ *
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestPlugin extends AbstractKiekerTest {
@@ -86,7 +86,7 @@ public class TestPlugin extends AbstractKiekerTest {
 
 	/**
 	 * This method tests whether the chaining of filters, readers, and repositories is working.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If something went wrong during the test.
 	 * @throws AnalysisConfigurationException
@@ -100,11 +100,11 @@ public class TestPlugin extends AbstractKiekerTest {
 		final IAnalysisController analysisController = new AnalysisController();
 
 		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration(), analysisController);
-		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), analysisController);
+		final ListReader<Object> simpleListReader = new ListReader<>(new Configuration(), analysisController);
 		simpleListReader.addObject(testObject1);
 		simpleListReader.addObject(testObject2);
 		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
-		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
+		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		// Connect the plugins.
 		analysisController.connect(

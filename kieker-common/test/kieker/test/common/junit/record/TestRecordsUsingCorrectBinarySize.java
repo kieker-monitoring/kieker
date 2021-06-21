@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,15 +37,30 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestRecordsUsingCorrectBinarySize.class);
 
+	/** create test. */
 	public TestRecordsUsingCorrectBinarySize() {
 		// empty default constructor
 	}
 
+	/**
+	 * Test correct binary size of events/records.
+	 *
+	 * @throws ClassNotFoundException
+	 *             in case the class was not found
+	 * @throws IllegalArgumentException
+	 *             instantiation failed
+	 * @throws IllegalAccessException
+	 *             access was restricted
+	 * @throws NoSuchFieldException
+	 *             a property is used which does not exist
+	 * @throws SecurityException
+	 *             on access violations
+	 */
 	@Test
-	public void test() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void testEventBinarySize() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
-		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.BinaryFactory.class, notAbstractClasses);
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
 			LOGGER.info("Testing '{}'...", clazz.getSimpleName());

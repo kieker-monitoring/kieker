@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * String serializer for monitoring records based on the record's toString method.
+ * String serializer for monitoring records based on the record's toString
+ * method.
  *
  * @author Holger Knoche
  *
@@ -33,7 +34,7 @@ import kieker.common.record.IMonitoringRecord;
 public class StringSerializer extends AbstractMonitoringRecordSerializer {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
-	
+
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -45,7 +46,7 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
-		return builder.toString().getBytes(CHARSET);
+		return builder.toString().getBytes(StringSerializer.CHARSET);
 	}
 
 	@Override
@@ -61,12 +62,8 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private StringBuilder appendSingleRecord(final IMonitoringRecord record, final StringBuilder builder) {
-		builder.append(record.getClass().getName());
-		builder.append(';');
-		builder.append(record.getLoggingTimestamp());
-		builder.append(';');
-		builder.append(record.toString());
-		builder.append('\n');
+		builder.append(record.getClass().getName()).append(';').append(record.getLoggingTimestamp()).append(';')
+				.append(record.toString()).append('\n');
 
 		return builder;
 	}

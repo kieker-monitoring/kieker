@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.util;
 
 /**
  * This class provides the method getVersion() which returns the version number
  * set during build (String replacement task within build.xml).
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since < 0.9
  */
 public final class Version {
 	// The VERSION string is updated by the Ant build file, which looks for the pattern: VERSION = <quote>.*<quote>
-	private static final String VERSION = "1.14-SNAPSHOT"; // NOPMD (name equals classname)
-	private static final String COPYRIGHT = "Copyright (c) 2006-2017 Kieker Project";
+	private static final String VERSION = "1.15-SNAPSHOT"; // NOPMD (name equals classname)
+	private static final String COPYRIGHT = "Copyright (c) 2006-2020 Kieker Project";
 
 	/**
 	 * Private constructor to avoid instantiation.
@@ -36,7 +35,7 @@ public final class Version {
 
 	/**
 	 * Returns the version String.
-	 * 
+	 *
 	 * @return the version String.
 	 */
 	public static final String getVERSION() {
@@ -45,7 +44,7 @@ public final class Version {
 
 	/**
 	 * Returns the version String.
-	 * 
+	 *
 	 * @return the version String.
 	 */
 	public static final String getCOPYRIGHT() {

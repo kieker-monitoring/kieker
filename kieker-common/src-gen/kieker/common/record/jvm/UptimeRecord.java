@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,40 +22,39 @@ import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class UptimeRecord extends AbstractJVMRecord  {			
+public class UptimeRecord extends AbstractJVMRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG; // UptimeRecord.uptimeMS
-	
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_LONG; // UptimeRecord.uptimeMS
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
 		String.class, // AbstractJVMRecord.vmName
 		long.class, // UptimeRecord.uptimeMS
 	};
-	
-	private static final long serialVersionUID = 5233115844046765277L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
 		"uptimeMS",
 	};
-	
+
+	private static final long serialVersionUID = 5233115844046765277L;
+
 	/** property declarations. */
 	private final long uptimeMS;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -74,75 +73,27 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #UptimeRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public UptimeRecord(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.uptimeMS = (Long) values[3];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #UptimeRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected UptimeRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.uptimeMS = (Long) values[3];
-	}
-
-	
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public UptimeRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.uptimeMS = deserializer.getLong();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getVmName(),
-			this.getUptimeMS(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getVmName());
 		serializer.putLong(this.getUptimeMS());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,15 +101,15 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,17 +118,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,7 +132,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final UptimeRecord castedRecord = (UptimeRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -209,12 +149,46 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		if (this.getUptimeMS() != castedRecord.getUptimeMS()) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getVmName().hashCode();
+		code += ((int) this.getUptimeMS());
+
+		return code;
+	}
+
 	public final long getUptimeMS() {
 		return this.uptimeMS;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "UptimeRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+
+		result += "uptimeMS = ";
+		result += this.getUptimeMS() + ", ";
+
+		return result;
+	}
 }

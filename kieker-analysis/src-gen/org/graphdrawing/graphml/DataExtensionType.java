@@ -5,7 +5,6 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -14,19 +13,20 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-
 /**
  * 
- *       Extension mechanism for the content of <data> and <default>.
- *       The complex type data-extension.type is empty per default.
- *       Users may redefine this type in order to add content to 
- *       the complex types data.type and default.type which are 
- *       extensions of data-extension.type.
- *     
+ * Extension mechanism for the content of <data> and <default>.
+ * The complex type data-extension.type is empty per default.
+ * Users may redefine this type in order to add content to
+ * the complex types data.type and default.type which are
+ * extensions of data-extension.type.
  * 
- * <p>Java class for data-extension.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for data-extension.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="data-extension.type">
@@ -41,45 +41,45 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "data-extension.type", propOrder = {
-    "content"
+	"content"
 })
 @XmlSeeAlso({
-    DefaultType.class,
-    DataType.class
+	DefaultType.class,
+	DataType.class
 })
 public class DataExtensionType {
 
-    @XmlValue
-    protected String content;
+	@XmlValue
+	protected String content;
 
-    /**
-     * 
-     *       Extension mechanism for the content of <data> and <default>.
-     *       The complex type data-extension.type is empty per default.
-     *       Users may redefine this type in order to add content to 
-     *       the complex types data.type and default.type which are 
-     *       extensions of data-extension.type.
-     *     
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getContent() {
-        return content;
-    }
+	/**
+	 * 
+	 * Extension mechanism for the content of <data> and <default>.
+	 * The complex type data-extension.type is empty per default.
+	 * Users may redefine this type in order to add content to
+	 * the complex types data.type and default.type which are
+	 * extensions of data-extension.type.
+	 * 
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getContent() {
+		return content;
+	}
 
-    /**
-     * Sets the value of the content property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setContent(String value) {
-        this.content = value;
-    }
+	/**
+	 * Sets the value of the content property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setContent(String value) {
+		this.content = value;
+	}
 
 }

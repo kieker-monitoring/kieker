@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,19 @@ import kieker.common.record.flow.IConstructorRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.6
  */
-public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {			
+public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING; // IExceptionRecord.cause
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -47,11 +47,9 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
-	
-	private static final long serialVersionUID = -4069763872765597698L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -59,8 +57,9 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		"classSignature",
 		"cause",
 	};
-	
-	
+
+	private static final long serialVersionUID = 625847064598823017L;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -77,73 +76,26 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 * @param cause
 	 *            cause
 	 */
-	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause) {
+	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
+			final String cause) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public AfterConstructorFailedEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-	}
-
-	
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AfterConstructorFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getTraceId(),
-			this.getOrderIndex(),
-			this.getOperationSignature(),
-			this.getClassSignature(),
-			this.getCause(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
@@ -151,7 +103,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -159,15 +111,15 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,17 +128,6 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -201,7 +142,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AfterConstructorFailedEvent castedRecord = (AfterConstructorFailedEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -224,8 +165,50 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		if (!this.getCause().equals(castedRecord.getCause())) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getOrderIndex());
+		code += this.getOperationSignature().hashCode();
+		code += this.getClassSignature().hashCode();
+		code += this.getCause().hashCode();
+
+		return code;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AfterConstructorFailedEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+
+		result += "cause = ";
+		result += this.getCause() + ", ";
+
+		return result;
+	}
 }

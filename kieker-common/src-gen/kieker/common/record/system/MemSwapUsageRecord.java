@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,28 +19,26 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.3
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
-			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
-			 + TYPE_SIZE_LONG; // MemSwapUsageRecord.swapFree
-	
+			+ TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			+ TYPE_SIZE_LONG; // MemSwapUsageRecord.swapFree
+
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp
 		String.class, // MemSwapUsageRecord.hostname
@@ -51,7 +49,19 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapUsed
 		long.class, // MemSwapUsageRecord.swapFree
 	};
-	
+
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"memTotal",
+		"memUsed",
+		"memFree",
+		"swapTotal",
+		"swapUsed",
+		"swapFree",
+	};
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -62,19 +72,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	private static final long serialVersionUID = 638480390439299363L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"memTotal",
-		"memUsed",
-		"memFree",
-		"swapTotal",
-		"swapUsed",
-		"swapFree",
-	};
-	
+
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
@@ -84,7 +82,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	private final long swapTotal;
 	private final long swapUsed;
 	private final long swapFree;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -105,9 +103,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * @param swapFree
 	 *            swapFree
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal, final long swapUsed, final long swapFree) {
+	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
+			final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
@@ -117,56 +116,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemSwapUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public MemSwapUsageRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.memTotal = (Long) values[2];
-		this.memUsed = (Long) values[3];
-		this.memFree = (Long) values[4];
-		this.swapTotal = (Long) values[5];
-		this.swapUsed = (Long) values[6];
-		this.swapFree = (Long) values[7];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemSwapUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected MemSwapUsageRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.memTotal = (Long) values[2];
-		this.memUsed = (Long) values[3];
-		this.memFree = (Long) values[4];
-		this.swapTotal = (Long) values[5];
-		this.swapUsed = (Long) values[6];
-		this.swapFree = (Long) values[7];
-	}
-
-	
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public MemSwapUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -178,32 +131,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapUsed = deserializer.getLong();
 		this.swapFree = deserializer.getLong();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getMemTotal(),
-			this.getMemUsed(),
-			this.getMemFree(),
-			this.getSwapTotal(),
-			this.getSwapUsed(),
-			this.getSwapFree(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putLong(this.getMemTotal());
@@ -213,7 +146,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		serializer.putLong(this.getSwapUsed());
 		serializer.putLong(this.getSwapFree());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -221,15 +154,15 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -238,17 +171,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -263,7 +185,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -292,47 +214,90 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		if (this.getSwapFree() != castedRecord.getSwapFree()) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += ((int) this.getMemTotal());
+		code += ((int) this.getMemUsed());
+		code += ((int) this.getMemFree());
+		code += ((int) this.getSwapTotal());
+		code += ((int) this.getSwapUsed());
+		code += ((int) this.getSwapFree());
+
+		return code;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
-	
-	
+
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
-	
-	
+
 	public final long getMemFree() {
 		return this.memFree;
 	}
-	
-	
+
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
-	
-	
+
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
-	
-	
+
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MemSwapUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+
+		result += "memTotal = ";
+		result += this.getMemTotal() + ", ";
+
+		result += "memUsed = ";
+		result += this.getMemUsed() + ", ";
+
+		result += "memFree = ";
+		result += this.getMemFree() + ", ";
+
+		result += "swapTotal = ";
+		result += this.getSwapTotal() + ", ";
+
+		result += "swapUsed = ";
+		result += this.getSwapUsed() + ", ";
+
+		result += "swapFree = ";
+		result += this.getSwapFree() + ", ";
+
+		return result;
+	}
 }

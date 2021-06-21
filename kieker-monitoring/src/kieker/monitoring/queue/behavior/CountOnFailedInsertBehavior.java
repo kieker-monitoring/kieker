@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,10 @@ public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 		final boolean offered = this.queue.offer(element);
 		if (!offered) {
 			final long tmpMissedRecords = this.numFailedInserts.incrementAndGet();
-			if (LOGGER.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
+			if (CountOnFailedInsertBehavior.LOGGER.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
 				// warn upon the first failed element and upon all 1024th one
-				LOGGER.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+				CountOnFailedInsertBehavior.LOGGER.warn(
+						"Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
 			}
 		}
 		return true;
@@ -60,11 +61,8 @@ public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder()
-				.append(this.getClass())
-				.append("\n\t\t")
-				.append("Number of failed inserts: ")
-				.append(this.getNumFailedInserts());
+		final StringBuilder builder = new StringBuilder(128).append(this.getClass()).append("\n\t\t")
+				.append("Number of failed inserts: ").append(this.getNumFailedInserts());
 		return builder.toString();
 	}
 }

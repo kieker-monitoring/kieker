@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.14
  */
 public final class BeforeReceivedRemoteEventFactory implements IRecordFactory<BeforeReceivedRemoteEvent> {
-	
-	
+
 	@Override
 	public BeforeReceivedRemoteEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeReceivedRemoteEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public BeforeReceivedRemoteEvent create(final Object[] values) {
-		return new BeforeReceivedRemoteEvent(values);
+	public String[] getValueNames() {
+		return BeforeReceivedRemoteEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeReceivedRemoteEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeReceivedRemoteEvent.SIZE;
 	}

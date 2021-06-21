@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,27 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.12
  */
-public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class DiskUsageRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
-			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
-			 + TYPE_SIZE_STRING // DiskUsageRecord.deviceName
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
-			 + TYPE_SIZE_DOUBLE; // DiskUsageRecord.writesPerSecond
-	
+			+ TYPE_SIZE_STRING // DiskUsageRecord.hostname
+			+ TYPE_SIZE_STRING // DiskUsageRecord.deviceName
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
+			+ TYPE_SIZE_DOUBLE; // DiskUsageRecord.writesPerSecond
+
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp
 		String.class, // DiskUsageRecord.hostname
@@ -53,7 +51,20 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		double.class, // DiskUsageRecord.writeBytesPerSecond
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
-	
+
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"deviceName",
+		"queue",
+		"readBytesPerSecond",
+		"readsPerSecond",
+		"serviceTime",
+		"writeBytesPerSecond",
+		"writesPerSecond",
+	};
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -65,20 +76,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
 	private static final long serialVersionUID = 2474236414042988334L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"deviceName",
-		"queue",
-		"readBytesPerSecond",
-		"readsPerSecond",
-		"serviceTime",
-		"writeBytesPerSecond",
-		"writesPerSecond",
-	};
-	
+
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
@@ -89,7 +87,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	private final double serviceTime;
 	private final double writeBytesPerSecond;
 	private final double writesPerSecond;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -112,10 +110,11 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 * @param writesPerSecond
 	 *            writesPerSecond
 	 */
-	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queue, final double readBytesPerSecond, final double readsPerSecond, final double serviceTime, final double writeBytesPerSecond, final double writesPerSecond) {
+	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queue, final double readBytesPerSecond,
+			final double readsPerSecond, final double serviceTime, final double writeBytesPerSecond, final double writesPerSecond) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
-		this.deviceName = deviceName == null?DEVICE_NAME:deviceName;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
+		this.deviceName = deviceName == null ? DEVICE_NAME : deviceName;
 		this.queue = queue;
 		this.readBytesPerSecond = readBytesPerSecond;
 		this.readsPerSecond = readsPerSecond;
@@ -125,58 +124,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public DiskUsageRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.deviceName = (String) values[2];
-		this.queue = (Double) values[3];
-		this.readBytesPerSecond = (Double) values[4];
-		this.readsPerSecond = (Double) values[5];
-		this.serviceTime = (Double) values[6];
-		this.writeBytesPerSecond = (Double) values[7];
-		this.writesPerSecond = (Double) values[8];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected DiskUsageRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.deviceName = (String) values[2];
-		this.queue = (Double) values[3];
-		this.readBytesPerSecond = (Double) values[4];
-		this.readsPerSecond = (Double) values[5];
-		this.serviceTime = (Double) values[6];
-		this.writeBytesPerSecond = (Double) values[7];
-		this.writesPerSecond = (Double) values[8];
-	}
-
-	
-	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public DiskUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -189,33 +140,12 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writeBytesPerSecond = deserializer.getDouble();
 		this.writesPerSecond = deserializer.getDouble();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getDeviceName(),
-			this.getQueue(),
-			this.getReadBytesPerSecond(),
-			this.getReadsPerSecond(),
-			this.getServiceTime(),
-			this.getWriteBytesPerSecond(),
-			this.getWritesPerSecond(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getDeviceName());
@@ -226,7 +156,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		serializer.putDouble(this.getWriteBytesPerSecond());
 		serializer.putDouble(this.getWritesPerSecond());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -234,15 +164,15 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -251,17 +181,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -276,7 +195,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final DiskUsageRecord castedRecord = (DiskUsageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -308,52 +227,98 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getDeviceName().hashCode();
+		code += ((int) this.getQueue());
+		code += ((int) this.getReadBytesPerSecond());
+		code += ((int) this.getReadsPerSecond());
+		code += ((int) this.getServiceTime());
+		code += ((int) this.getWriteBytesPerSecond());
+		code += ((int) this.getWritesPerSecond());
+
+		return code;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final String getDeviceName() {
 		return this.deviceName;
 	}
-	
-	
+
 	public final double getQueue() {
 		return this.queue;
 	}
-	
-	
+
 	public final double getReadBytesPerSecond() {
 		return this.readBytesPerSecond;
 	}
-	
-	
+
 	public final double getReadsPerSecond() {
 		return this.readsPerSecond;
 	}
-	
-	
+
 	public final double getServiceTime() {
 		return this.serviceTime;
 	}
-	
-	
+
 	public final double getWriteBytesPerSecond() {
 		return this.writeBytesPerSecond;
 	}
-	
-	
+
 	public final double getWritesPerSecond() {
 		return this.writesPerSecond;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DiskUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+
+		result += "deviceName = ";
+		result += this.getDeviceName() + ", ";
+
+		result += "queue = ";
+		result += this.getQueue() + ", ";
+
+		result += "readBytesPerSecond = ";
+		result += this.getReadBytesPerSecond() + ", ";
+
+		result += "readsPerSecond = ";
+		result += this.getReadsPerSecond() + ", ";
+
+		result += "serviceTime = ";
+		result += this.getServiceTime() + ", ";
+
+		result += "writeBytesPerSecond = ";
+		result += this.getWriteBytesPerSecond() + ", ";
+
+		result += "writesPerSecond = ";
+		result += this.getWritesPerSecond() + ", ";
+
+		return result;
+	}
 }

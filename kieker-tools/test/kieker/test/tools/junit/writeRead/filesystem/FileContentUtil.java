@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package kieker.test.tools.junit.writeRead.filesystem;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.Assert;
 
 import kieker.common.util.filesystem.FSUtil;
 
-import kieker.test.tools.util.StringUtils;
+import kieker.test.analysis.util.StringUtils;
 
 /**
  * @author Christian Wulf
@@ -82,7 +83,7 @@ final class FileContentUtil {
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {
-			printStream = new PrintStream(new FileOutputStream(filename), false, FSUtil.ENCODING);
+			printStream = new PrintStream(Files.newOutputStream(Paths.get(filename)), false, FSUtil.ENCODING);
 			printStream.print(manipulatedContent);
 		} finally {
 			if (printStream != null) {

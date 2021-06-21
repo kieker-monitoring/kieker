@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package kieker.test.monitoring.junit.core.controller;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -99,8 +99,8 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testInitializationDefaultConfigLocation() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
 
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
@@ -127,9 +127,9 @@ public class TestProbeController extends AbstractKiekerTest {
 	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", "test invalid line in config file", "- InvalidPatternException expected", });
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
@@ -152,8 +152,8 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testEnabledDisabledMatchingWithAdaptiveMonitoring() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 		Assert.assertTrue(ctrl.isMonitoringEnabled());
 		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
@@ -179,8 +179,8 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testEnabledDisabledMatchingWithoutAdaptiveMonitoring() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "false");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "false");
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 		ctrl.deactivateProbe("*");
 		Assert.assertTrue(ctrl.isMonitoringEnabled());
@@ -209,10 +209,10 @@ public class TestProbeController extends AbstractKiekerTest {
 	public void testAutomatedReadingFromConfigFile() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		final int readIntervall = 2;
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, Integer.toString(readIntervall));
 
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", });
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
@@ -246,10 +246,10 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testAutomatedWriteBackToConfigFile() throws IOException {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
 
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
@@ -287,7 +287,7 @@ public class TestProbeController extends AbstractKiekerTest {
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.configFile), TestProbeController.ENCODING));
+			reader = Files.newBufferedReader(this.configFile.toPath(), Charset.forName(TestProbeController.ENCODING));
 			final List<String> strPatternList = new LinkedList<>();
 			String line;
 			while ((line = reader.readLine()) != null) { // NOPMD
@@ -309,9 +309,9 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testMatching() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 
 		// generate test signature
@@ -335,8 +335,8 @@ public class TestProbeController extends AbstractKiekerTest {
 	@Test
 	public void testSpecialProbes() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
 
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
 

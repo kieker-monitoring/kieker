@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,20 +26,20 @@ import kieker.common.record.flow.IInterfaceRecord;
 
 /**
  * @author Florian Fittkau
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent implements IInterfaceRecord {			
+public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent implements IInterfaceRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_STRING; // IInterfaceRecord.interface
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_INT // IObjectRecord.objectId
+			+ TYPE_SIZE_STRING; // IInterfaceRecord.interface
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,13 +49,9 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		int.class, // IObjectRecord.objectId
 		String.class, // IInterfaceRecord.interface
 	};
-	
-	/** default constants. */
-	public static final String INTERFACE = "";
-	private static final long serialVersionUID = -8438691367718487460L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -64,10 +60,14 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		"objectId",
 		"interface",
 	};
-	
+
+	/** default constants. */
+	public static final String INTERFACE = "";
+	private static final long serialVersionUID = 2900164578331713310L;
+
 	/** property declarations. */
 	private final String _interface;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -86,78 +86,28 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 * @param _interface
 	 *            _interface
 	 */
-	public BeforeOperationObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId, final String _interface) {
+	public BeforeOperationObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final int objectId, final String _interface) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, objectId);
-		this._interface = _interface == null?"":_interface;
+		this._interface = _interface == null ? "" : _interface;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #BeforeOperationObjectInterfaceEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public BeforeOperationObjectInterfaceEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this._interface = (String) values[6];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #BeforeOperationObjectInterfaceEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected BeforeOperationObjectInterfaceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this._interface = (String) values[6];
-	}
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public BeforeOperationObjectInterfaceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this._interface = deserializer.getString();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getTraceId(),
-			this.getOrderIndex(),
-			this.getOperationSignature(),
-			this.getClassSignature(),
-			this.getObjectId(),
-			this.getInterface(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
@@ -166,7 +116,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		serializer.putInt(this.getObjectId());
 		serializer.putString(this.getInterface());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -174,15 +124,15 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -191,17 +141,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -216,7 +155,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final BeforeOperationObjectInterfaceEvent castedRecord = (BeforeOperationObjectInterfaceEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -242,12 +181,58 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		if (!this.getInterface().equals(castedRecord.getInterface())) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getOrderIndex());
+		code += this.getOperationSignature().hashCode();
+		code += this.getClassSignature().hashCode();
+		code += ((int) this.getObjectId());
+		code += this.getInterface().hashCode();
+
+		return code;
+	}
+
 	public final String getInterface() {
 		return this._interface;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeOperationObjectInterfaceEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+
+		result += "interface = ";
+		result += this.getInterface() + ", ";
+
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,22 +32,13 @@ public class TestRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 9088190056147961692L;
 
+	/** test constructor. */
 	public TestRecord() {
 		// Nothing to do
 	}
 
 	@Override
-	public Object[] toArray() {
-		return new Object[0];
-	}
-
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		// not used in test
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) {
 		// not used in test
 	}
 

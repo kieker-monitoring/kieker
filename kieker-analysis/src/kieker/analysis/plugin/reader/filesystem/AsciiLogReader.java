@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,15 +31,15 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  *
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 replaced by teetime file reading facilities
  */
+@Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
 	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
@@ -113,7 +113,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressFBWarnings("NN_NAKED_NOTIFY")
+	// @SuppressFBWarnings("NN_NAKED_NOTIFY")
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -160,7 +160,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressFBWarnings("WA_NOT_IN_LOOP")
+	// @SuppressFBWarnings("WA_NOT_IN_LOOP")
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

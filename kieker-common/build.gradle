@@ -1,24 +1,14 @@
-apply plugin: 'eclipse'
-apply plugin: "com.github.hauner.jarTest"
+plugins {
+	id "com.github.hauner.jarTest"
+	id 'java'
+}
 
 dependencies {
-	// no project-specific dependencies
-	clover 'org.openclover:clover:4.2.0'
-	
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+	implementation 'org.slf4j:slf4j-api:1.7.25'
 }
 
-clover {
-	report {
-		html=true
-	}
-	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
 
 task replaceHardCodedVersionNames() {
   doLast {
@@ -27,7 +17,3 @@ task replaceHardCodedVersionNames() {
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
-
-clean.doFirst {
-	delete "${projectDir}/bin/build-eclipse/"
-}

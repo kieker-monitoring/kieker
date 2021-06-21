@@ -5,25 +5,25 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * 
- *       Complex type for the <default> element.
- *       default.type is mixed, that is, data may contain #PCDATA.
- *       Content type: extension of data-extension.type which is empty
- *                     per default.
- *     
+ * Complex type for the <default> element.
+ * default.type is mixed, that is, data may contain #PCDATA.
+ * Content type: extension of data-extension.type which is empty
+ * per default.
  * 
- * <p>Java class for default.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for default.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="default.type">
@@ -40,8 +40,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "default.type")
 public class DefaultType
-    extends DataExtensionType
-{
-
+		extends DataExtensionType {
 
 }

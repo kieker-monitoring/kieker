@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ package kieker.monitoring.core.configuration;
  *
  * @since 1.3
  *
- * @deprecated 1.14 replaced by the class {@link ConfigurationKeys} to support Kieker checkstyle policy
+ * @deprecated since 1.14 remove in 1.16 replaced by the class {@link ConfigurationConstants} to support Kieker checkstyle policy
  */
 @Deprecated
 public interface Keys { // NOCS

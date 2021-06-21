@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,22 @@ class ChunkWriterTask implements Runnable {
 
 	private final ChunkingCollector collector;
 
+	/**
+	 * Create a chunk writer task.
+	 *
+	 * @param collector
+	 *            collector for chunks
+	 * @param outputChunkSize
+	 *            size of the chunks
+	 * @param deferredWriteDelayMs
+	 *            write delay??
+	 * @param outputBufferSize
+	 *            buffer size
+	 * @param serializer
+	 *            serializer
+	 * @param writer
+	 *            data writer
+	 */
 	public ChunkWriterTask(final ChunkingCollector collector, final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize,
 			final IMonitoringRecordSerializer serializer,
 			final IRawDataWriter writer) {
@@ -124,7 +140,7 @@ class ChunkWriterTask implements Runnable {
 	}
 
 	private void writeChunk(final Queue<IMonitoringRecord> queue, final int chunkSize) {
-		final List<IMonitoringRecord> chunk = new ArrayList<IMonitoringRecord>(chunkSize);
+		final List<IMonitoringRecord> chunk = new ArrayList<>(chunkSize);
 
 		for (int recordIndex = 0; recordIndex < chunkSize; recordIndex++) {
 			// Due to checks at the call sites, writeChunk is only called with a chunk size

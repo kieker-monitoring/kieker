@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  *
  * @since 1.7
+ * @deprecated 1.15 can be removed when all tools have been migrated to TeeTime
  */
+@Deprecated
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
-
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractAnalysisComponent.class); // NOPMD (logger for inheriting classes)
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
@@ -70,7 +70,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * @throws NullPointerException
 	 *             If configuration or projectContext null
 	 */
-	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) throws NullPointerException {
+	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
 		if (null == projectContext) {
 			throw new NullPointerException("Missing projectContext");
 		}

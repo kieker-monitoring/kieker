@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.12
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
-	
-	
+
 	@Override
 	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NetworkUtilizationRecord(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public NetworkUtilizationRecord create(final Object[] values) {
-		return new NetworkUtilizationRecord(values);
+	public String[] getValueNames() {
+		return NetworkUtilizationRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NetworkUtilizationRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NetworkUtilizationRecord.SIZE;
 	}

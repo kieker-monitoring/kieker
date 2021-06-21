@@ -25,9 +25,9 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getEventTypes <em>Event Types</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getId <em>Id</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getEventTypes <em>Event Types</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -38,6 +38,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -48,6 +49,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -58,6 +60,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * The cached value of the '{@link #getEventTypes() <em>Event Types</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getEventTypes()
 	 * @generated
 	 * @ordered
@@ -68,6 +71,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -78,6 +82,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -87,6 +92,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MPort() {
@@ -96,6 +102,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -106,6 +113,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -115,6 +123,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -127,6 +136,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<String> getEventTypes() {
@@ -139,6 +149,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getId() {
@@ -148,6 +159,7 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setId(String newId) {
@@ -160,17 +172,18 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PORT__NAME:
-				return getName();
-			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				return getEventTypes();
-			case MIAnalysisMetaModelPackage.PORT__ID:
-				return getId();
+		case MIAnalysisMetaModelPackage.PORT__NAME:
+			return getName();
+		case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			return getEventTypes();
+		case MIAnalysisMetaModelPackage.PORT__ID:
+			return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -178,22 +191,23 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PORT__NAME:
-				setName((String)newValue);
-				return;
-			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				getEventTypes().clear();
-				getEventTypes().addAll((Collection<? extends String>)newValue);
-				return;
-			case MIAnalysisMetaModelPackage.PORT__ID:
-				setId((String)newValue);
-				return;
+		case MIAnalysisMetaModelPackage.PORT__NAME:
+			setName((String) newValue);
+			return;
+		case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			getEventTypes().clear();
+			getEventTypes().addAll((Collection<? extends String>) newValue);
+			return;
+		case MIAnalysisMetaModelPackage.PORT__ID:
+			setId((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -201,20 +215,21 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PORT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				getEventTypes().clear();
-				return;
-			case MIAnalysisMetaModelPackage.PORT__ID:
-				setId(ID_EDEFAULT);
-				return;
+		case MIAnalysisMetaModelPackage.PORT__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			getEventTypes().clear();
+			return;
+		case MIAnalysisMetaModelPackage.PORT__ID:
+			setId(ID_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -222,17 +237,18 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PORT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
-				return eventTypes != null && !eventTypes.isEmpty();
-			case MIAnalysisMetaModelPackage.PORT__ID:
-				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+		case MIAnalysisMetaModelPackage.PORT__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
+			return eventTypes != null && !eventTypes.isEmpty();
+		case MIAnalysisMetaModelPackage.PORT__ID:
+			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -240,11 +256,13 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
@@ -257,4 +275,4 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 		return result.toString();
 	}
 
-} //MPort
+} // MPort

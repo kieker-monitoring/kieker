@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.5
  */
 public final class ConstructionEventFactory implements IRecordFactory<ConstructionEvent> {
-	
-	
+
 	@Override
 	public ConstructionEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ConstructionEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public ConstructionEvent create(final Object[] values) {
-		return new ConstructionEvent(values);
+	public String[] getValueNames() {
+		return ConstructionEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ConstructionEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ConstructionEvent.SIZE;
 	}

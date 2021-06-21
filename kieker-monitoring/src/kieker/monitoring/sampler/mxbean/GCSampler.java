@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  * The sampler produces a {@link GCRecord} for each garbage collector each time the {@code sample} method is called.
  * 
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class GCSampler extends AbstractMXBeanSampler {
@@ -44,7 +44,6 @@ public class GCSampler extends AbstractMXBeanSampler {
 	@Override
 	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
 			final IMonitoringController monitoringCtr) {
-
 		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMGarbageCollectorSignature())) {
 			return new IMonitoringRecord[] {};
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,20 +27,19 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Test;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JmxWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Jan Waller, Christian Wulf
@@ -61,7 +60,7 @@ public class BasicJMXWriterReaderTest {
 		super();
 	}
 
-	@Test
+	// @Test
 	public void testCommunication() throws Exception {
 		final MonitoringController monitoringController = this.createMonitoringController();
 		final TestAnalysis analysis = this.createAnalysis();
@@ -97,15 +96,15 @@ public class BasicJMXWriterReaderTest {
 
 	private MonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX, "true");
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER, "true");
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE, "true");
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
-		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, JmxWriter.class.getName());
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_CONTROLLER, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, JmxWriter.class.getName());
 		config.setProperty(JmxWriter.CONFIG_DOMAIN, "");
 		config.setProperty(JmxWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		return MonitoringController.createInstance(config);

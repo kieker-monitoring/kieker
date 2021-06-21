@@ -2,15 +2,15 @@ This directory contains a pre-compiled Jar file which can be started with
 the 'java' tool using the following commands ('5' starts five requests):
 
 -UNIX-like systems:
- $ java -javaagent:lib/kieker-1.14-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
+ $ java -javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
 - Windows:
- $ java -javaagent:lib\kieker-1.14-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
+ $ java -javaagent:lib\kieker-1.15-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:
 
 Run example:
- $ gradle runMonitoringAndAnalysis
+ $ gradle runExampleOperationExecutions
 
 In order to re-compile the sources into BookstoreApplication.jar, run the 
 following command:

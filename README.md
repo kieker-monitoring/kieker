@@ -8,6 +8,16 @@ discovery.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
+## Citation
+
+If you use this software, please cite
+
+- Wilhelm Hasselbring and André van Hoorn (2020) "Kieker: A monitoring framework for software engineering research". Software Impacts, 5. https://doi.org/10.1016/j.simpa.2020.100019
+
+- André van Hoorn, Jan Waller, and Wilhelm Hasselbring (2012) "Kieker: A Framework for Application Performance Monitoring and Dynamic Software Analysis". In: 3rd joint ACM/SPEC International Conference on Performance Engineering (ICPE 2012), April 22-25, 2012, Boston, Massachusetts, USA. https://doi.org/10.1145/2188286.2188326
+
+BibTeX entries are provides as [Kieker BibTeX file](Kieker.bib)
+
 ## Usage
 
 Kieker releases (stable, nightly, etc.) can be downloaded from our website's [Download Section](http://kieker-monitoring.net/download).
@@ -16,7 +26,7 @@ Documentation on how to use Kieker can be found here: [Kieker Documentation](htt
 
 ## Development and Contribution
 
-Gradle is used as the build tool. A `build.gradle` file is provided.
+Gradle is used as the build tool. A `build.gradle` file is provided. From the command-line, please use the provided Gradle wrapper script, e.g., on Unix-based systems, run `./gradlew clean build -x check -x test` to build without executing checks and tests.
 
 For issue tracking and bug reports, JIRA is used at <https://kieker-monitoring.atlassian.net/>. 
  

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,18 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * Insert behavior that bypasses the writer controller's queue and thus calls the writer synchronously. This
  * behavior is useful for writers such as the chunking collector which have their own queues and asynchronous
  * workers.
- *  
+ *
  * @author Holger Knoche
  * @since 1.13
  */
 public class BypassQueueBehavior implements InsertBehavior<IMonitoringRecord> {
 
 	private final AbstractMonitoringWriter writer;
-	
+
 	public BypassQueueBehavior(final AbstractMonitoringWriter writer) {
 		this.writer = writer;
 	}
-	
+
 	@Override
 	public boolean insert(final IMonitoringRecord element) {
 		this.writer.writeMonitoringRecord(element);
@@ -43,7 +43,7 @@ public class BypassQueueBehavior implements InsertBehavior<IMonitoringRecord> {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder()
-			.append(this.getClass());
+				.append(this.getClass());
 		return builder.toString();
 	}
 }

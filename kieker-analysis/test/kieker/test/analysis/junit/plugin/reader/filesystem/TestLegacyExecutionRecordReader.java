@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.io.PrintStream;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -39,9 +40,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
+ *
+ * @deprecated 1since 1.15 remove 1.16 is dynfunctional, as we do no longer support kieker 1.5 records
  */
+@Deprecated
 public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	private static final String MAP_FILE = "$0=kieker.common.record.controlflow.OperationExecutionRecord\n"
@@ -65,7 +69,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	/**
 	 * Performs an initial test setup.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the setup failed.
 	 */
@@ -81,6 +85,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 		datStream.close();
 	}
 
+	@Ignore // NOCS
 	@Test
 	public void testRecords() throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController analysisController = new AnalysisController();

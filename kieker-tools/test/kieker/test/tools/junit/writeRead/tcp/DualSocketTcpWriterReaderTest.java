@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.tcp.DualSocketTcpReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.DualSocketTcpWriter;
@@ -58,7 +58,7 @@ public class DualSocketTcpWriterReaderTest extends AbstractWriterReaderTest { //
 		readerConfig.setProperty(DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, DualSocketTcpWriterReaderTest.PORT1);
 		readerConfig.setProperty(DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, DualSocketTcpWriterReaderTest.PORT2);
 		final DualSocketTcpReader tcpReader = new DualSocketTcpReader(readerConfig, this.analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
+		this.sinkFilter = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 		this.analysisController.connect(tcpReader, DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		this.analysisThread = new AnalysisControllerThread(this.analysisController);
 		this.analysisThread.start();
@@ -66,7 +66,7 @@ public class DualSocketTcpWriterReaderTest extends AbstractWriterReaderTest { //
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DualSocketTcpWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DualSocketTcpWriter.class.getName());
 		monitoringConfig.setProperty(DualSocketTcpWriter.CONFIG_PORT1, DualSocketTcpWriterReaderTest.PORT1);
 		monitoringConfig.setProperty(DualSocketTcpWriter.CONFIG_PORT2, DualSocketTcpWriterReaderTest.PORT2);
 		return MonitoringController.createInstance(monitoringConfig);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class MeterGauge extends AbstractDisplay {
@@ -38,14 +38,14 @@ public class MeterGauge extends AbstractDisplay {
 	 * Creates a new instance of this class.
 	 */
 	public MeterGauge() {
-		this.intervalMap = new ConcurrentHashMap<String, List<Number>>();
-		this.intervalColorMap = new ConcurrentHashMap<String, List<String>>();
-		this.valueMap = new ConcurrentHashMap<String, Number>();
+		this.intervalMap = new ConcurrentHashMap<>();
+		this.intervalColorMap = new ConcurrentHashMap<>();
+		this.valueMap = new ConcurrentHashMap<>();
 	}
 
 	/**
 	 * Sets the intervals for the colors of the meter gauge with the given name.
-	 * 
+	 *
 	 * @param key
 	 *            The name of the meter gauge "series".
 	 * @param intervals
@@ -61,7 +61,7 @@ public class MeterGauge extends AbstractDisplay {
 
 	/**
 	 * Sets the value for the given meter gauge "series".
-	 * 
+	 *
 	 * @param key
 	 *            The name of the meter gauge "series".
 	 * @param value

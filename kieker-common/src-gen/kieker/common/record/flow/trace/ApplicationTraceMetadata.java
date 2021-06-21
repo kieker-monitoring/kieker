@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +22,22 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Christian Zirkelbach
- * API compatibility: Kieker 1.14.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class ApplicationTraceMetadata extends TraceMetadata  {			
+public class ApplicationTraceMetadata extends TraceMetadata {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
-			 + TYPE_SIZE_LONG // TraceMetadata.threadId
-			 + TYPE_SIZE_STRING // TraceMetadata.sessionId
-			 + TYPE_SIZE_STRING // TraceMetadata.hostname
-			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
-			 + TYPE_SIZE_INT // TraceMetadata.parentOrderId
-			 + TYPE_SIZE_STRING; // ApplicationTraceMetadata.applicationName
-	
+			+ TYPE_SIZE_LONG // TraceMetadata.threadId
+			+ TYPE_SIZE_STRING // TraceMetadata.sessionId
+			+ TYPE_SIZE_STRING // TraceMetadata.hostname
+			+ TYPE_SIZE_LONG // TraceMetadata.parentTraceId
+			+ TYPE_SIZE_INT // TraceMetadata.parentOrderId
+			+ TYPE_SIZE_STRING; // ApplicationTraceMetadata.applicationName
+
 	public static final Class<?>[] TYPES = {
 		long.class, // TraceMetadata.traceId
 		long.class, // TraceMetadata.threadId
@@ -48,15 +47,11 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		int.class, // TraceMetadata.parentOrderId
 		String.class, // ApplicationTraceMetadata.applicationName
 	};
-	
+
 	/** user-defined constants. */
 	public static final String NO_APPLICATION_NAME = "<no-application-name>";
-	/** default constants. */
-	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
-	private static final long serialVersionUID = 7720995073835113293L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"traceId",
 		"threadId",
 		"sessionId",
@@ -65,10 +60,14 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		"parentOrderId",
 		"applicationName",
 	};
-	
+
+	/** default constants. */
+	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
+	private static final long serialVersionUID = 7720995073835113293L;
+
 	/** property declarations. */
 	private final String applicationName;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -87,78 +86,28 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 * @param applicationName
 	 *            applicationName
 	 */
-	public ApplicationTraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId, final String applicationName) {
+	public ApplicationTraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId,
+			final int parentOrderId, final String applicationName) {
 		super(traceId, threadId, sessionId, hostname, parentTraceId, parentOrderId);
-		this.applicationName = applicationName == null?NO_APPLICATION_NAME:applicationName;
+		this.applicationName = applicationName == null ? NO_APPLICATION_NAME : applicationName;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #ApplicationTraceMetadata(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public ApplicationTraceMetadata(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.applicationName = (String) values[7];
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #ApplicationTraceMetadata(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected ApplicationTraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.applicationName = (String) values[7];
-	}
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public ApplicationTraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.applicationName = deserializer.getString();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTraceId(),
-			this.getThreadId(),
-			this.getSessionId(),
-			this.getHostname(),
-			this.getParentTraceId(),
-			this.getParentOrderId(),
-			this.getApplicationName(),
-		};
-	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTraceId());
 		serializer.putLong(this.getThreadId());
 		serializer.putString(this.getSessionId());
@@ -167,7 +116,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		serializer.putInt(this.getParentOrderId());
 		serializer.putString(this.getApplicationName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,15 +124,15 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,17 +141,6 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -217,7 +155,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final ApplicationTraceMetadata castedRecord = (ApplicationTraceMetadata) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -246,12 +184,59 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTraceId());
+		code += ((int) this.getThreadId());
+		code += this.getSessionId().hashCode();
+		code += this.getHostname().hashCode();
+		code += ((int) this.getParentTraceId());
+		code += ((int) this.getParentOrderId());
+		code += ((int) this.getNextOrderId());
+		code += this.getApplicationName().hashCode();
+
+		return code;
+	}
+
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ApplicationTraceMetadata: ";
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+
+		result += "parentTraceId = ";
+		result += this.getParentTraceId() + ", ";
+
+		result += "parentOrderId = ";
+		result += this.getParentOrderId() + ", ";
+
+		result += "applicationName = ";
+		result += this.getApplicationName() + ", ";
+
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.4
  */
 @Plugin(description = "A reader which reads records from a JMX queue", outputPorts = {
-	@OutputPort(name = JmxReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmxReader")
+	@OutputPort(name = JmxReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the JmxReader")
 }, configuration = {
 	@Property(name = JmxReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost",
 			description = "The address of the server used for the JMX connection."),

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import kieker.examples.livedemo.analysis.sink.MethodResponsetimeDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.SwapDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

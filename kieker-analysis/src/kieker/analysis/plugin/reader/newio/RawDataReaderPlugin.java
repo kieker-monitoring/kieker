@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,9 @@ import kieker.common.record.IMonitoringRecord;
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
-	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
+	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output port for the decoded records") },
+		configuration = {
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
@@ -168,11 +169,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 		// Initialize the reader
 		final Outcome readerInitOutcome = this.initReader();
-		if (readerInitOutcome != Outcome.SUCCESS) {
-			return false;
-		}
 
-		return true;
+		return readerInitOutcome == Outcome.SUCCESS;
 	}
 
 	private Outcome initReader() {

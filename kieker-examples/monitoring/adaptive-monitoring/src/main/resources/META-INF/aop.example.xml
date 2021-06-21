@@ -1,0 +1,18 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<aspectj>
+	<weaver options=""> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
+		<include within="*"/>
+		<exclude within="org.apache.commons.logging..*" /> 
+		<exclude within="org.slf4j..*" /> 
+		<exclude within="java.util.logging..*" /> 
+		<exclude within="org.apache.log4j..*" />
+		<!-- excludes the queue implementation used internally by Kieker's monitoring component -->
+		<exclude within="org.jctools..*" />
+	</weaver>
+
+	<aspects>
+		<!-- monitor everything, including getters and setters -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" />
+	</aspects>
+</aspectj>

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,10 @@ import kieker.common.record.jvm.GCRecord;
  *
  * @since 1.10
  */
-@Plugin(configuration =
-		@Property(
-				name = GCDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-				defaultValue = GCDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-				description = "Sets the number of max plot entries per record entry"))
+@Plugin(configuration = @Property(
+		name = GCDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+		defaultValue = GCDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+		description = "Sets the number of max plot entries per record entry"))
 public class GCDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
@@ -76,7 +75,7 @@ public class GCDisplayFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = GCDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { GCRecord.class })
+	@InputPort(name = GCDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = GCRecord.class)
 	public void input(final GCRecord record) {
 		this.updateDisplays(record);
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Runnable to handle incoming registry records.
@@ -81,14 +81,14 @@ public class RegistryRecordHandler implements Runnable {
 		}
 	}
 
-	private ILookup<String> getStringRegistry(final long registryId) {
+	private ReaderRegistry<String> getStringRegistry(final long registryId) {
 		return this.stringRegistryCache.getOrCreateRegistry(registryId);
 	}
 
 	private void readRegistryRecord(final ByteBuffer buffer) {
 		try {
 			final long registryId = buffer.getLong();
-			final ILookup<String> stringRegistry = this.getStringRegistry(registryId);
+			final ReaderRegistry<String> stringRegistry = this.getStringRegistry(registryId);
 
 			RegistryRecord.registerRecordInRegistry(buffer, stringRegistry);
 		} catch (final BufferUnderflowException e) {

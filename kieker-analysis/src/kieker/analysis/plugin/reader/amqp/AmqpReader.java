@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -45,14 +48,15 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.12
  */
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
-	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
+	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output port of the AMQP reader") },
+		configuration = {
 			@Property(name = AmqpReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
 
-})
+		})
 public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
@@ -66,6 +70,8 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	public static final String CONFIG_PROPERTY_HEARTBEAT = "heartbeat";
 	/** The name of the configuration property for the cache duration (in seconds) for string registries. */
 	public static final String CONFIG_PROPERTY_CACHE_DURATION = "cacheDuration";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AmqpReader.class.getCanonicalName());
 
 	/** ID for registry records. */
 	private static final byte REGISTRY_RECORD_ID = (byte) 0xFF;

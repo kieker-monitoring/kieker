@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,16 @@ public class UnknownRecordTypeException extends Exception {
 	private static final long serialVersionUID = 3967732396720668295L;
 	private final String classname;
 
+	/**
+	 * Create an unknown record type exception.
+	 *
+	 * @param message
+	 *            exception message
+	 * @param classname
+	 *            class involved
+	 * @param cause
+	 *            cause of the exception
+	 */
 	public UnknownRecordTypeException(final String message, final String classname, final Throwable cause) {
 		super(message, cause);
 		this.classname = classname;

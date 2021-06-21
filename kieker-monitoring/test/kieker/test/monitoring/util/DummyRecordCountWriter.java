@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public final class DummyRecordCountWriter extends DumpWriter {
 	/**
 	 * @return the number of records
 	 */
-	public final int getNumDummyRecords() {
+	public int getNumDummyRecords() {
 		return this.numDummyRecords.get();
 	}
 

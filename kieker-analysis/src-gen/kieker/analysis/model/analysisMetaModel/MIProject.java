@@ -14,12 +14,12 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getPlugins <em>Plugins</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getRepositories <em>Repositories</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getDependencies <em>Dependencies</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getViews <em>Views</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getProperties <em>Properties</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getPlugins <em>Plugins</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getRepositories <em>Repositories</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getDependencies <em>Dependencies</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getViews <em>Views</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getProperties <em>Properties</em>}</li>
  * </ul>
  * </p>
  *
@@ -37,6 +37,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Plugins</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Plugins()
 	 * @model containment="true"
@@ -52,6 +53,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Name()
@@ -64,7 +66,9 @@ public interface MIProject extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIProject#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -79,6 +83,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Repositories</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Repositories()
 	 * @model containment="true"
@@ -95,6 +100,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Dependencies</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Dependencies()
 	 * @model containment="true"
@@ -111,6 +117,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Views</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Views()
 	 * @model containment="true"
@@ -127,6 +134,7 @@ public interface MIProject extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Properties()
 	 * @model containment="true"

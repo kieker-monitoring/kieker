@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools;
 
 import org.apache.commons.cli.BasicParser;
@@ -32,7 +31,10 @@ import kieker.tools.util.ToolsUtil;
  * @author Nils Christian Ehmke
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 remove after porting all tools to JCommander
  */
+@Deprecated
 public abstract class AbstractCommandLineTool {
 
 	public static final String CMD_OPT_NAME_HELP_LONG = "help";
@@ -48,10 +50,22 @@ public abstract class AbstractCommandLineTool {
 
 	private final boolean useSystemExit;
 
+	/**
+	 * Create an abstract commandline tool.
+	 *
+	 * @param useSystemExit
+	 *            true to indicated exit can be used
+	 */
 	public AbstractCommandLineTool(final boolean useSystemExit) {
 		this.useSystemExit = useSystemExit;
 	}
 
+	/**
+	 * Start analysis.
+	 *
+	 * @param args
+	 *            parameters
+	 */
 	public final void start(final String[] args) {
 		final Options options = new Options();
 
@@ -125,12 +139,35 @@ public abstract class AbstractCommandLineTool {
 		}
 	}
 
+	/**
+	 * Add additional options.
+	 *
+	 * @param options
+	 *            options
+	 */
 	protected abstract void addAdditionalOptions(Options options);
 
+	/**
+	 * Read properties from command line.
+	 *
+	 * @param commandLine
+	 *            command line handler
+	 * @return true on success
+	 */
 	protected abstract boolean readPropertiesFromCommandLine(CommandLine commandLine);
 
+	/**
+	 * Perform task.
+	 *
+	 * @return true on success
+	 */
 	protected abstract boolean performTask();
 
+	/**
+	 * Format usage output.
+	 * 
+	 * @return the formatter
+	 */
 	protected HelpFormatter getHelpFormatter() {
 		return new CLIHelpFormatter();
 	}

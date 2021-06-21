@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,13 +31,17 @@ import org.slf4j.LoggerFactory;
  */
 public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
-	/** the logger for this class */
+	/** The logger for this class. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(BlockOnFailedInsertBehavior.class);
-	/** the blocking queue to which elements should be inserted */
+	/** The blocking queue to which elements should be inserted. */
 	private final BlockingQueue<E> queue;
-	/** current number of blocked inserts */
+	/** Current number of blocked inserts. */
 	private int numBlocked;
 
+	/**
+	 * @param queue
+	 *            the blocking queue to use this insert behavior
+	 */
 	public BlockOnFailedInsertBehavior(final BlockingQueue<E> queue) {
 		this.queue = queue;
 	}

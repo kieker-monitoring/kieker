@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
@@ -32,9 +33,9 @@ import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.ByteBufferDeserializer;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.common.util.registry.reader.ReaderRegistry;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
@@ -42,7 +43,9 @@ import kieker.common.util.registry.reader.ReaderRegistry;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 class BinaryLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryLogReaderThread.class);
@@ -103,7 +106,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
+			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -155,7 +158,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 	protected void processNormalInputFile(final File inputFile) {
 		ReadableByteChannel channel = null;
 		try {
-			InputStream fileInputStream = new FileInputStream(inputFile);
+			InputStream fileInputStream = Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ);
 			if (this.shouldDecompress) {
 				@SuppressWarnings("resource")
 				final ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);

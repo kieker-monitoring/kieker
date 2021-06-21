@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,29 @@ import kieker.analysis.plugin.IPlugin;
 
 /**
  * This is the interface for web visualization filter plugins within Kieker.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public interface IWebVisualizationFilterPlugin extends IPlugin {
 
 	/**
 	 * @since 1.9
+	 *
+	 * @return returns header
 	 */
 	public String getHeader();
 
 	/**
 	 * @since 1.9
+	 * @return returns initial content
 	 */
 	public String getInitialContent();
 
 	/**
 	 * @since 1.9
+	 * @return returns updated content
 	 */
 	public String getUpdatedContent();
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr
  *
  * @since 0.95a
+ * @deprecated 1.15 ported to teetime
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
 		dependencies = "This plugin needs the file 'javax.jms-*.jar'.", outputPorts = {
@@ -60,6 +61,7 @@ import kieker.common.record.IMonitoringRecord;
 	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
 	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
 })
+@Deprecated
 public final class JmsReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */

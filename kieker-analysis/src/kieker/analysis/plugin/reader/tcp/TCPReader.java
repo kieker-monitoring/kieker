@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,7 @@ import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * This is a reader which reads the records from a TCP port.
@@ -48,9 +47,11 @@ import kieker.common.util.registry.Lookup;
  * @author Jan Waller
  *
  * @since 1.8
+ * @deprecated 1.15 replaced in the TeeTime port by a generic TCP stage
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
@@ -73,7 +74,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private final int port1;
 	private final int port2;
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 
 	public TCPReader(final Configuration configuration, final IProjectContext projectContext) {
@@ -188,11 +189,11 @@ class TCPStringReader extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPStringReader.class);
 
 	private final int port;
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 	private volatile boolean terminated;
 	private volatile Thread readerThread;
 
-	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
+	public TCPStringReader(final int port, final ReaderRegistry<String> stringRegistry) {
 		this.port = port;
 		this.stringRegistry = stringRegistry;
 	}

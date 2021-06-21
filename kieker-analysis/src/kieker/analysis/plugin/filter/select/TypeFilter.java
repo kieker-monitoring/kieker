@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	 * @param event
 	 *            The new incoming object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "all objects with matching types are forwarded")
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = Object.class, description = "all objects with matching types are forwarded")
 	public final void inputEvents(final Object event) {
 		final Class<?> eventClass = event.getClass();
 		for (final Class<?> clazz : this.acceptedClasses) {

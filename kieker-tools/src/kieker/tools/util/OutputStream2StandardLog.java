@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of an {@link OutputStream} that redirects data received via
- * its {@link #write(int)} method to an instance of {@link Log}.
+ * its {@link #write(int)} method to an instance of {@link Logger}.
  *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld

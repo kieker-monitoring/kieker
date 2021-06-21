@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,21 +63,22 @@ import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEve
  * @author Jan Waller
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime kieker.analysis.filter.flow
  */
+@Deprecated
 @Plugin(name = "Trace Reconstruction Filter (Event)", description = "Filter to reconstruct event based (flow) traces", outputPorts = {
-		@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = {
-				TraceEventRecords.class }),
-		@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records",
-				eventTypes = { TraceEventRecords.class }) },
+	@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces",
+			eventTypes = TraceEventRecords.class),
+	@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records",
+			eventTypes = TraceEventRecords.class) },
 		configuration = {
-				@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-						  defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-				@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						  defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-				@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
-						  defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-				@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-						  defaultValue = "false") })
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, defaultValue = "false") })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -176,8 +177,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @param timestamp
 	 *            The timestamp
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Input port for a periodic time signal", eventTypes = {
-			Long.class })
+	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Input port for a periodic time signal",
+			eventTypes = Long.class)
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
 			if (this.hasTimeout) {
@@ -192,8 +193,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @param traceEventRecords
 	 *            The new record to handle.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACEEVENT_RECORDS, description = "Reconstruct traces from incoming traces", eventTypes = {
-			TraceEventRecords.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACEEVENT_RECORDS, description = "Reconstruct traces from incoming traces",
+			eventTypes = TraceEventRecords.class)
 	public void newTraceEventRecord(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (null != trace) {
@@ -210,8 +211,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @param record
 	 *            The new record to handle.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACE_RECORDS, description = "Reconstruct traces from incoming flow records", eventTypes = {
-			TraceMetadata.class, AbstractTraceEvent.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACE_RECORDS, description = "Reconstruct traces from incoming flow records",
+			eventTypes = { TraceMetadata.class, AbstractTraceEvent.class })
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
@@ -514,7 +515,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 
 		public void repairAllBeforeEventsLeftInStackAtTermination() {
-
 			this.beforeEventStackEmptyAtTermination = true;
 			while (!this.beforeEventStack.isEmpty()) {
 				final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();

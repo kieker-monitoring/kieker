@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysisMetaModelFactory {
@@ -23,16 +24,17 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static MIAnalysisMetaModelFactory init() {
 		try {
-			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory)EPackage.Registry.INSTANCE.getEFactory(MIAnalysisMetaModelPackage.eNS_URI);
+			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory) EPackage.Registry.INSTANCE
+					.getEFactory(MIAnalysisMetaModelPackage.eNS_URI);
 			if (theAnalysisMetaModelFactory != null) {
 				return theAnalysisMetaModelFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MAnalysisMetaModelFactory();
@@ -42,6 +44,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MAnalysisMetaModelFactory() {
@@ -51,31 +54,45 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case MIAnalysisMetaModelPackage.PROJECT: return createProject();
-			case MIAnalysisMetaModelPackage.INPUT_PORT: return createInputPort();
-			case MIAnalysisMetaModelPackage.OUTPUT_PORT: return createOutputPort();
-			case MIAnalysisMetaModelPackage.PROPERTY: return createProperty();
-			case MIAnalysisMetaModelPackage.FILTER: return createFilter();
-			case MIAnalysisMetaModelPackage.READER: return createReader();
-			case MIAnalysisMetaModelPackage.REPOSITORY: return createRepository();
-			case MIAnalysisMetaModelPackage.DEPENDENCY: return createDependency();
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: return createRepositoryConnector();
-			case MIAnalysisMetaModelPackage.DISPLAY: return createDisplay();
-			case MIAnalysisMetaModelPackage.VIEW: return createView();
-			case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: return createDisplayConnector();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case MIAnalysisMetaModelPackage.PROJECT:
+			return createProject();
+		case MIAnalysisMetaModelPackage.INPUT_PORT:
+			return createInputPort();
+		case MIAnalysisMetaModelPackage.OUTPUT_PORT:
+			return createOutputPort();
+		case MIAnalysisMetaModelPackage.PROPERTY:
+			return createProperty();
+		case MIAnalysisMetaModelPackage.FILTER:
+			return createFilter();
+		case MIAnalysisMetaModelPackage.READER:
+			return createReader();
+		case MIAnalysisMetaModelPackage.REPOSITORY:
+			return createRepository();
+		case MIAnalysisMetaModelPackage.DEPENDENCY:
+			return createDependency();
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR:
+			return createRepositoryConnector();
+		case MIAnalysisMetaModelPackage.DISPLAY:
+			return createDisplay();
+		case MIAnalysisMetaModelPackage.VIEW:
+			return createView();
+		case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR:
+			return createDisplayConnector();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIProject createProject() {
@@ -86,6 +103,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIInputPort createInputPort() {
@@ -96,6 +114,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIOutputPort createOutputPort() {
@@ -106,6 +125,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIProperty createProperty() {
@@ -116,6 +136,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIFilter createFilter() {
@@ -126,6 +147,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIReader createReader() {
@@ -136,6 +158,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIRepository createRepository() {
@@ -146,6 +169,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIDependency createDependency() {
@@ -156,6 +180,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIRepositoryConnector createRepositoryConnector() {
@@ -166,6 +191,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIDisplay createDisplay() {
@@ -176,6 +202,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIView createView() {
@@ -186,6 +213,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIDisplayConnector createDisplayConnector() {
@@ -196,15 +224,17 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIAnalysisMetaModelPackage getAnalysisMetaModelPackage() {
-		return (MIAnalysisMetaModelPackage)getEPackage();
+		return (MIAnalysisMetaModelPackage) getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -213,4 +243,4 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 		return MIAnalysisMetaModelPackage.eINSTANCE;
 	}
 
-} //MAnalysisMetaModelFactory
+} // MAnalysisMetaModelFactory

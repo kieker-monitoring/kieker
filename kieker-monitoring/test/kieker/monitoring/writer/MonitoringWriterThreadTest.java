@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class MonitoringWriterThreadTest {
 	public void testTermination() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
-		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<>();
 
 		writerQueue.add(new EmptyRecord());
 
@@ -83,7 +83,7 @@ public class MonitoringWriterThreadTest {
 	public void testBlocking() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
-		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<>();
 
 		final MonitoringWriterThread thread = new MonitoringWriterThread(writer, writerQueue);
 		thread.start();

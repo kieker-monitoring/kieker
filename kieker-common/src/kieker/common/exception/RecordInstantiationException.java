@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,12 @@ public class RecordInstantiationException extends RuntimeException {
 
 	private static final long serialVersionUID = -2968478850093576098L;
 
+	/**
+	 * Creates a new instance of a exception.
+	 * 
+	 * @param throwable
+	 *            related throwable
+	 */
 	public RecordInstantiationException(final Throwable throwable) {
 		super(throwable);
 	}

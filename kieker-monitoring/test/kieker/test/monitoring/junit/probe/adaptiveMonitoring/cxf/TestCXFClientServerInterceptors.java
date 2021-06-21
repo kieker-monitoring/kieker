@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +25,14 @@ import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -52,6 +53,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  *
  * @since 1.8
  */
+@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1826
 public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
@@ -94,11 +96,11 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 
 	private MonitoringController createMonitoringController(final String hostname, final String listName) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationKeys.META_DATA, "false");
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, listName);
-		config.setProperty(ConfigurationKeys.HOST_NAME, hostname);
+		config.setProperty(ConfigurationConstants.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
 

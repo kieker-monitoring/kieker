@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import java.nio.file.Path;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
-import kieker.monitoring.registry.WriterRegistry;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.common.registry.writer.WriterRegistry;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * Abstract class for log stream handler. As log stream handler share a lot of functionality,
@@ -117,6 +117,7 @@ public abstract class AbstractLogStreamHandler {
 	 */
 	public void close() throws IOException {
 		this.outputChannel.close();
+		this.serializedStream.close();
 	}
 
 	/**

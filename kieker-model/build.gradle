@@ -1,0 +1,18 @@
+plugins {
+	id 'com.github.hauner.jarTest'
+	id 'java'
+	id 'java-library'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	api project(':kieker-common')
+	api 'com.google.guava:guava:21.0'	// used by ComposedKey
+
+        api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+        api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+}
+

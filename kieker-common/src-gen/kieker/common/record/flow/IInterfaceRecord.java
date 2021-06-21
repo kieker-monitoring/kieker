@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Florian Fittkau
  * 
@@ -23,5 +22,5 @@ package kieker.common.record.flow;
  */
 public interface IInterfaceRecord extends IFlowRecord {
 	public String getInterface();
-	
+
 }
