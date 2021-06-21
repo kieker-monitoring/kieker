@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.junit.Assert;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -50,7 +51,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	@Override
 	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
 		config.setProperty(PrintStreamWriter.STREAM, this.provideStreamName());
 		return MonitoringController.createInstance(config);
 	}
@@ -74,7 +75,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	protected List<IMonitoringRecord> readEvents() {
 		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader. We'll return an empty List and use our own buffer when evaluating
 		// the result.
-		return new ArrayList<IMonitoringRecord>();
+		return new ArrayList<>();
 	}
 
 	protected void checkRecords(final String outputString, final List<IMonitoringRecord> eventsPassedToController) {

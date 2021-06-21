@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,52 +16,48 @@
 package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
-
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.2
  */
-public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 3957750090047819946L;
-
+public class BranchingRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
-			 + TYPE_SIZE_INT // BranchingRecord.branchID
-			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
-	;
-	
+			+ TYPE_SIZE_INT // BranchingRecord.branchID
+			+ TYPE_SIZE_INT; // BranchingRecord.branchingOutcome
+
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp
 		int.class, // BranchingRecord.branchID
 		int.class, // BranchingRecord.branchingOutcome
 	};
-	
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final int BRANCH_ID = 0;
-	public static final int BRANCHING_OUTCOME = 0;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"branchID",
 		"branchingOutcome",
 	};
-	
+
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final int BRANCH_ID = 0;
+	public static final int BRANCHING_OUTCOME = 0;
+	private static final long serialVersionUID = 3957750090047819946L;
+
 	/** property declarations. */
-	private long timestamp;
-	private int branchID;
-	private int branchingOutcome;
-	
+	private final long timestamp;
+	private final int branchID;
+	private final int branchingOutcome;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -79,77 +75,27 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
-	public BranchingRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.branchID = (Integer) values[1];
-		this.branchingOutcome = (Integer) values[2];
+	public BranchingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.timestamp = deserializer.getLong();
+		this.branchID = deserializer.getInt();
+		this.branchingOutcome = deserializer.getInt();
 	}
 
 	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
+	 * {@inheritDoc}
 	 */
-	protected BranchingRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.branchID = (Integer) values[1];
-		this.branchingOutcome = (Integer) values[2];
+	@Override
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putInt(this.getBranchID());
+		serializer.putInt(this.getBranchingOutcome());
 	}
 
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public BranchingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.branchID = buffer.getInt();
-		this.branchingOutcome = buffer.getInt();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getBranchID(),
-			this.getBranchingOutcome()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(this.getBranchID());
-		buffer.putInt(this.getBranchingOutcome());
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,15 +103,15 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,64 +122,76 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final BranchingRecord castedRecord = (BranchingRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getBranchID() != castedRecord.getBranchID()) return false;
-		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getBranchID() != castedRecord.getBranchID()) {
+			return false;
+		}
+		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) {
+			return false;
+		}
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getBranchID());
+		code += ((int) this.getBranchingOutcome());
+
+		return code;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
-	
+
 	public final int getBranchID() {
 		return this.branchID;
 	}
-	
-	public final void setBranchID(int branchID) {
-		this.branchID = branchID;
-	}
-	
+
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
 	}
-	
-	public final void setBranchingOutcome(int branchingOutcome) {
-		this.branchingOutcome = branchingOutcome;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BranchingRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+
+		result += "branchID = ";
+		result += this.getBranchID() + ", ";
+
+		result += "branchingOutcome = ";
+		result += this.getBranchingOutcome() + ", ";
+
+		return result;
 	}
 }

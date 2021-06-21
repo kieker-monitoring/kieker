@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.test.monitoring.junit.probe.cxf.executions;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -27,11 +28,12 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
  * Tests the CXF interceptors with a previously registered Session ID.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
+@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1826
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
 	private static final String SESSION_ID = "SESSION-KQ8wFM0U";
 
@@ -88,6 +90,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 				break;
 			default:
 				Assert.fail("Unexpected record" + opRec);
+				break;
 			}
 		}
 	}

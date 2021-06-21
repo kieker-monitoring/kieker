@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -37,11 +37,11 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * CXF InInterceptor to get the sessionIdentifier header from an incoming soap message
  * and associate it with the current thread id.
- * 
+ *
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
- * 
+ *
  * @author Dennis Kieselhorst, Andre van Hoorn
- * 
+ *
  * @since 1.0
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
@@ -56,7 +56,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	/** Stores the singleton instance of the SOAP trace registry. */
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionSOAPRequestInInterceptor.class);
 
 	/**
 	 * Note we are using this IMonitoringController only to access ITimeSource which
@@ -77,7 +77,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	/**
 	 * Creates a new instance of this class, using the given instance of a {@link MonitoringController} as controller.
-	 * 
+	 *
 	 * @param monitoringCtrl
 	 *            The controller of this interceptor.
 	 */
@@ -117,7 +117,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					eoi = 1 + Integer.parseInt(eoiStr);
 				} catch (final NumberFormatException exc) {
-					LOG.warn("Invalid eoi", exc);
+					LOGGER.warn("Invalid eoi", exc);
 				}
 			}
 
@@ -129,7 +129,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					ess = Integer.parseInt(essStr);
 				} catch (final NumberFormatException exc) {
-					LOG.warn("Invalid ess", exc);
+					LOGGER.warn("Invalid ess", exc);
 				}
 			}
 
@@ -141,7 +141,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				try {
 					traceId = Long.parseLong(traceIdStr);
 				} catch (final NumberFormatException exc) {
-					LOG.warn("Invalid trace id", exc);
+					LOGGER.warn("Invalid trace id", exc);
 				}
 			} else {
 				// SOAP Header doesn't contain a trace id. This might be caused by a request which has been sent by a host not equipped with the RequestOutProbe. We

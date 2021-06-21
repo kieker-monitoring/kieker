@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.7
  */
 public final class KiekerMetadataRecordFactory implements IRecordFactory<KiekerMetadataRecord> {
-	
+
 	@Override
-	public KiekerMetadataRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new KiekerMetadataRecord(buffer, stringRegistry);
+	public KiekerMetadataRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new KiekerMetadataRecord(deserializer);
 	}
-	
+
 	@Override
-	public KiekerMetadataRecord create(final Object[] values) {
-		return new KiekerMetadataRecord(values);
+	public String[] getValueNames() {
+		return KiekerMetadataRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return KiekerMetadataRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return KiekerMetadataRecord.SIZE;
 	}

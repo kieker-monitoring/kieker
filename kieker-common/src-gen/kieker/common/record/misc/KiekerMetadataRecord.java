@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,29 @@
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
-
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Jan Waller
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.7
  */
-public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 8241152536143822747L;
-
+public class KiekerMetadataRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // KiekerMetadataRecord.version
-			 + TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName
-			 + TYPE_SIZE_STRING // KiekerMetadataRecord.hostname
-			 + TYPE_SIZE_INT // KiekerMetadataRecord.experimentId
-			 + TYPE_SIZE_BOOLEAN // KiekerMetadataRecord.debugMode
-			 + TYPE_SIZE_LONG // KiekerMetadataRecord.timeOffset
-			 + TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
-			 + TYPE_SIZE_LONG // KiekerMetadataRecord.numberOfRecords
-	;
-	
+			+ TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName
+			+ TYPE_SIZE_STRING // KiekerMetadataRecord.hostname
+			+ TYPE_SIZE_INT // KiekerMetadataRecord.experimentId
+			+ TYPE_SIZE_BOOLEAN // KiekerMetadataRecord.debugMode
+			+ TYPE_SIZE_LONG // KiekerMetadataRecord.timeOffset
+			+ TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
+			+ TYPE_SIZE_LONG; // KiekerMetadataRecord.numberOfRecords
+
 	public static final Class<?>[] TYPES = {
 		String.class, // KiekerMetadataRecord.version
 		String.class, // KiekerMetadataRecord.controllerName
@@ -53,25 +49,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		String.class, // KiekerMetadataRecord.timeUnit
 		long.class, // KiekerMetadataRecord.numberOfRecords
 	};
-	
+
 	/** user-defined constants. */
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
-	
-	/** default constants. */
-	public static final String VERSION = kieker.common.util.Version.getVERSION();
-	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
-	public static final String HOSTNAME = NO_HOSTNAME;
-	public static final int EXPERIMENT_ID = 0;
-	public static final boolean DEBUG_MODE = false;
-	public static final long TIME_OFFSET = 0L;
-	public static final String TIME_UNIT = NO_TIMEUNIT;
-	public static final long NUMBER_OF_RECORDS = 0L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"version",
 		"controllerName",
 		"hostname",
@@ -81,17 +66,28 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		"timeUnit",
 		"numberOfRecords",
 	};
-	
+
+	/** default constants. */
+	public static final String VERSION = kieker.common.util.Version.getVERSION();
+	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
+	public static final String HOSTNAME = NO_HOSTNAME;
+	public static final int EXPERIMENT_ID = 0;
+	public static final boolean DEBUG_MODE = false;
+	public static final long TIME_OFFSET = 0L;
+	public static final String TIME_UNIT = NO_TIMEUNIT;
+	public static final long NUMBER_OF_RECORDS = 0L;
+	private static final long serialVersionUID = 8241152536143822747L;
+
 	/** property declarations. */
-	private String version;
-	private String controllerName;
-	private String hostname;
-	private int experimentId;
-	private boolean debugMode;
-	private long timeOffset;
-	private String timeUnit;
-	private long numberOfRecords;
-	
+	private final String version;
+	private final String controllerName;
+	private final String hostname;
+	private final int experimentId;
+	private final boolean debugMode;
+	private final long timeOffset;
+	private final String timeUnit;
+	private final long numberOfRecords;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -112,118 +108,50 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 * @param numberOfRecords
 	 *            numberOfRecords
 	 */
-	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
-		this.version = version == null?VERSION:version;
-		this.controllerName = controllerName == null?NO_CONTROLLERNAME:controllerName;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
+	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode,
+			final long timeOffset, final String timeUnit, final long numberOfRecords) {
+		this.version = version == null ? VERSION : version;
+		this.controllerName = controllerName == null ? NO_CONTROLLERNAME : controllerName;
+		this.hostname = hostname == null ? NO_HOSTNAME : hostname;
 		this.experimentId = experimentId;
 		this.debugMode = debugMode;
 		this.timeOffset = timeOffset;
-		this.timeUnit = timeUnit == null?NO_TIMEUNIT:timeUnit;
+		this.timeUnit = timeUnit == null ? NO_TIMEUNIT : timeUnit;
 		this.numberOfRecords = numberOfRecords;
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
-	public KiekerMetadataRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.version = (String) values[0];
-		this.controllerName = (String) values[1];
-		this.hostname = (String) values[2];
-		this.experimentId = (Integer) values[3];
-		this.debugMode = (Boolean) values[4];
-		this.timeOffset = (Long) values[5];
-		this.timeUnit = (String) values[6];
-		this.numberOfRecords = (Long) values[7];
+	public KiekerMetadataRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.version = deserializer.getString();
+		this.controllerName = deserializer.getString();
+		this.hostname = deserializer.getString();
+		this.experimentId = deserializer.getInt();
+		this.debugMode = deserializer.getBoolean();
+		this.timeOffset = deserializer.getLong();
+		this.timeUnit = deserializer.getString();
+		this.numberOfRecords = deserializer.getLong();
 	}
 
 	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
+	 * {@inheritDoc}
 	 */
-	protected KiekerMetadataRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.version = (String) values[0];
-		this.controllerName = (String) values[1];
-		this.hostname = (String) values[2];
-		this.experimentId = (Integer) values[3];
-		this.debugMode = (Boolean) values[4];
-		this.timeOffset = (Long) values[5];
-		this.timeUnit = (String) values[6];
-		this.numberOfRecords = (Long) values[7];
+	@Override
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getVersion());
+		serializer.putString(this.getControllerName());
+		serializer.putString(this.getHostname());
+		serializer.putInt(this.getExperimentId());
+		serializer.putBoolean(this.isDebugMode());
+		serializer.putLong(this.getTimeOffset());
+		serializer.putString(this.getTimeUnit());
+		serializer.putLong(this.getNumberOfRecords());
 	}
 
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public KiekerMetadataRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.version = stringRegistry.get(buffer.getInt());
-		this.controllerName = stringRegistry.get(buffer.getInt());
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.experimentId = buffer.getInt();
-		this.debugMode = buffer.get()==1?true:false;
-		this.timeOffset = buffer.getLong();
-		this.timeUnit = stringRegistry.get(buffer.getInt());
-		this.numberOfRecords = buffer.getLong();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] toArray() {
-		return new Object[] {
-			this.getVersion(),
-			this.getControllerName(),
-			this.getHostname(),
-			this.getExperimentId(),
-			this.isDebugMode(),
-			this.getTimeOffset(),
-			this.getTimeUnit(),
-			this.getNumberOfRecords()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getVersion());
-		stringRegistry.get(this.getControllerName());
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getTimeUnit());
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getVersion()));
-		buffer.putInt(stringRegistry.get(this.getControllerName()));
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(this.getExperimentId());
-		buffer.put((byte)(this.isDebugMode()?1:0));
-		buffer.putLong(this.getTimeOffset());
-		buffer.putInt(stringRegistry.get(this.getTimeUnit()));
-		buffer.putLong(this.getNumberOfRecords());
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -231,15 +159,15 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -250,109 +178,131 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final KiekerMetadataRecord castedRecord = (KiekerMetadataRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getVersion().equals(castedRecord.getVersion())) return false;
-		if (!this.getControllerName().equals(castedRecord.getControllerName())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getExperimentId() != castedRecord.getExperimentId()) return false;
-		if (this.isDebugMode() != castedRecord.isDebugMode()) return false;
-		if (this.getTimeOffset() != castedRecord.getTimeOffset()) return false;
-		if (!this.getTimeUnit().equals(castedRecord.getTimeUnit())) return false;
-		if (this.getNumberOfRecords() != castedRecord.getNumberOfRecords()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getVersion().equals(castedRecord.getVersion())) {
+			return false;
+		}
+		if (!this.getControllerName().equals(castedRecord.getControllerName())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getExperimentId() != castedRecord.getExperimentId()) {
+			return false;
+		}
+		if (this.isDebugMode() != castedRecord.isDebugMode()) {
+			return false;
+		}
+		if (this.getTimeOffset() != castedRecord.getTimeOffset()) {
+			return false;
+		}
+		if (!this.getTimeUnit().equals(castedRecord.getTimeUnit())) {
+			return false;
+		}
+		if (this.getNumberOfRecords() != castedRecord.getNumberOfRecords()) {
+			return false;
+		}
+
 		return true;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getVersion().hashCode();
+		code += this.getControllerName().hashCode();
+		code += this.getHostname().hashCode();
+		code += ((int) this.getExperimentId());
+		code += this.isDebugMode() ? 0 : 1;
+		code += ((int) this.getTimeOffset());
+		code += this.getTimeUnit().hashCode();
+		code += ((int) this.getNumberOfRecords());
+
+		return code;
+	}
+
 	public final String getVersion() {
 		return this.version;
 	}
-	
-	public final void setVersion(String version) {
-		this.version = version;
-	}
-	
+
 	public final String getControllerName() {
 		return this.controllerName;
 	}
-	
-	public final void setControllerName(String controllerName) {
-		this.controllerName = controllerName;
-	}
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
-	
+
 	public final int getExperimentId() {
 		return this.experimentId;
 	}
-	
-	public final void setExperimentId(int experimentId) {
-		this.experimentId = experimentId;
-	}
-	
+
 	public final boolean isDebugMode() {
 		return this.debugMode;
 	}
-	
-	public final void setDebugMode(boolean debugMode) {
-		this.debugMode = debugMode;
-	}
-	
+
 	public final long getTimeOffset() {
 		return this.timeOffset;
 	}
-	
-	public final void setTimeOffset(long timeOffset) {
-		this.timeOffset = timeOffset;
-	}
-	
+
 	public final String getTimeUnit() {
 		return this.timeUnit;
 	}
-	
-	public final void setTimeUnit(String timeUnit) {
-		this.timeUnit = timeUnit;
-	}
-	
+
 	public final long getNumberOfRecords() {
 		return this.numberOfRecords;
 	}
-	
-	public final void setNumberOfRecords(long numberOfRecords) {
-		this.numberOfRecords = numberOfRecords;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "KiekerMetadataRecord: ";
+		result += "version = ";
+		result += this.getVersion() + ", ";
+
+		result += "controllerName = ";
+		result += this.getControllerName() + ", ";
+
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+
+		result += "experimentId = ";
+		result += this.getExperimentId() + ", ";
+
+		result += "debugMode = ";
+		result += this.isDebugMode() + ", ";
+
+		result += "timeOffset = ";
+		result += this.getTimeOffset() + ", ";
+
+		result += "timeUnit = ";
+		result += this.getTimeUnit() + ", ";
+
+		result += "numberOfRecords = ";
+		result += this.getNumberOfRecords() + ", ";
+
+		return result;
 	}
 }

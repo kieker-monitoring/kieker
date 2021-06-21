@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 
 /**
  * @author Christian Wulf (chw)
@@ -44,8 +44,8 @@ final class KiekerLogFolder {
 		final String currentDateStr = date.format(new java.util.Date())
 				+ "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
 
-		final String hostName = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
+		final String hostName = configuration.getStringProperty(ConfigurationConstants.HOST_NAME);
+		final String controllerName = configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME);
 
 		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
 

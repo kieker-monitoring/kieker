@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,8 @@ import org.rosuda.REngine.REXPLogical;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.REXPVector;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tillmann Carlos Bielefeld
@@ -38,7 +37,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class RBridgeControl {
 
-	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RBridgeControl.class);
 	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
 	private Rsession rCon;
@@ -48,7 +47,7 @@ public final class RBridgeControl {
 		try {
 			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
 		} catch (final UnsupportedEncodingException e) {
-			LOG.error(e.toString(), e);
+			LOGGER.error(e.toString(), e);
 		}
 	}
 
@@ -78,9 +77,9 @@ public final class RBridgeControl {
 				throw new InvalidREvaluationResultException("Got a null result for evaluation input: \"" + input + "\"");
 			}
 
-			RBridgeControl.LOG.trace("> REXP: " + input + " return: " + output);
+			RBridgeControl.LOGGER.trace("> REXP: {} return: {}", input, output);
 		} catch (final REXPMismatchException exc) {
-			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: " + exc, exc);
+			RBridgeControl.LOGGER.error("Error R expr.: {} Cause: {}", input, exc.getMessage(), exc);
 		}
 
 		return out;
@@ -95,10 +94,10 @@ public final class RBridgeControl {
 	public void toTS(final String variable) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable);
-			buf.append(" <- ts(");
-			buf.append(variable);
-			buf.append(')');
+			buf.append(variable)
+					.append(" <- ts(")
+					.append(variable)
+					.append(')');
 			this.evalWithR(buf.toString());
 		}
 	}
@@ -114,12 +113,12 @@ public final class RBridgeControl {
 	public void toTS(final String variable, final long frequency) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
-			buf.append(variable);
-			buf.append(" <- ts(");
-			buf.append(variable);
-			buf.append(", frequency=");
-			buf.append(frequency);
-			buf.append(')');
+			buf.append(variable)
+					.append(" <- ts(")
+					.append(variable)
+					.append(", frequency=")
+					.append(frequency)
+					.append(')');
 			this.evalWithR(buf.toString());
 		}
 	}
@@ -139,11 +138,10 @@ public final class RBridgeControl {
 			return doubleResult.asDouble();
 
 		} catch (final REXPMismatchException exc) {
-			RBridgeControl.LOG.error("Error casting value from R: " + input
-					+ " Cause: " + exc);
+			RBridgeControl.LOGGER.error("Error casting value from R: {} Cause: {}", input, exc);
 			return resultOnFailure;
 		} catch (final InvalidREvaluationResultException exc) {
-			RBridgeControl.LOG.error(exc.getMessage(), exc);
+			RBridgeControl.LOGGER.error(exc.getMessage(), exc);
 			return resultOnFailure;
 		}
 	}
@@ -163,7 +161,7 @@ public final class RBridgeControl {
 
 			return stringResult.toString();
 		} catch (final InvalidREvaluationResultException exc) {
-			RBridgeControl.LOG.error(exc.getMessage(), exc);
+			RBridgeControl.LOGGER.error(exc.getMessage(), exc);
 			return resultOnFailure;
 		}
 	}
@@ -184,7 +182,7 @@ public final class RBridgeControl {
 		} catch (final REXPMismatchException e) {
 			return resultOnFailure;
 		} catch (final InvalidREvaluationResultException e) {
-			RBridgeControl.LOG.error(e.getMessage(), e);
+			RBridgeControl.LOGGER.error(e.getMessage(), e);
 			return resultOnFailure;
 		}
 	}
@@ -200,8 +198,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+				.append(" <- c(");
 		boolean first = true;
 		for (final double item : values) {
 			if (!first) {
@@ -225,8 +223,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final Double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+				.append(" <- c(");
 		boolean first = true;
 		for (final Double item : values) {
 			if (!first) {
@@ -254,8 +252,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final Long[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+				.append(" <- c(");
 		boolean first = true;
 		for (final Long item : values) {
 			if (!first) {

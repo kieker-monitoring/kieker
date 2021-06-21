@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,12 @@ public class ClassForNameResolver<T> {
 
 	private final Class<T> classToCast;
 
+	/**
+	 * Create new class resolver.
+	 *
+	 * @param classToCast
+	 *            class to cast
+	 */
 	public ClassForNameResolver(final Class<T> classToCast) {
 		this.classToCast = classToCast;
 	}
@@ -39,6 +45,7 @@ public class ClassForNameResolver<T> {
 	 *
 	 * @return A {@link Class} instance corresponding to the given name, if it exists.
 	 * @throws ClassNotFoundException
+	 *             when the class is not known
 	 *
 	 */
 	public final Class<? extends T> classForName(final String classname) throws ClassNotFoundException {

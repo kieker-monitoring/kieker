@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,49 +17,51 @@
 package kieker.monitoring.probe.servlet;
 
 import kieker.monitoring.core.sampler.ISampler;
-import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
-import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
+import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
+import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
 
 /**
  * <p>
- * Starts and stops the periodic logging of CPU utilization and Memory usage employing the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed
- * respectively. <br/>
- * The initial delay and the sampling period (both given in seconds) can be configured via context-params in the web.xml file, as shown below.
+ * Starts and stops the periodic logging of CPU utilization and Memory usage
+ * employing the {@link OshiSamplerFactory} as the Servlet is initialized and
+ * destroyed respectively. <br/>
+ * The initial delay and the sampling period (both given in seconds) can be
+ * configured via context-params in the web.xml file, as shown below.
  * </p>
- * 
+ *
  * <p>
  * The integration and configuration in a web.xml file works as follows:<br/>
- * 
+ *
  * <pre>
  *  {@code
  *  <web-app>
  *  ...
- *  
+ *
  *  <context-param>
  *   <param-name>CPUMemUsageServletContextListener.samplingIntervalSeconds</param-name>
  *   <param-value>15</param-value>
  *  </context-param>
- *  
+ *
  *  <context-param>
  *   <param-name>CPUMemUsageServletContextListener.initialSamplingDelaySeconds</param-name>
  *   <param-value>0</param-value>
  *  </context-param>
- *  
+ *
  *  <listener>
  *    <listener-class>
  *     kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
  *    </listener-class>
  *  </listener>
- * 
- * ... 
+ *
+ * ...
  * </web-app>}
  * }
  * </pre>
- * 
+ *
  * </p>
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class CPUMemUsageServletContextListener extends AbstractRegularSamplingServletContextListener {
@@ -69,10 +71,13 @@ public class CPUMemUsageServletContextListener extends AbstractRegularSamplingSe
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl.
+																										// order)
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
+																												// (decl.
+																												// order)
 			+ ".initialSamplingDelaySeconds";
 
 	/**
@@ -94,8 +99,8 @@ public class CPUMemUsageServletContextListener extends AbstractRegularSamplingSe
 
 	@Override
 	protected ISampler[] createSamplers() {
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage() };
+		final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
+		return new ISampler[] { oshiFactory.createSensorCPUsDetailedPerc(), oshiFactory.createSensorMemSwapUsage() };
 	}
 
 }

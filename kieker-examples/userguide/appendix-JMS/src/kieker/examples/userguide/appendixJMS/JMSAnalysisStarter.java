@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.jms.JmsReader;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -30,19 +30,11 @@ import kieker.common.configuration.Configuration;
 public final class JMSAnalysisStarter {
 
 	private static final String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
-	private static final String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
-	private static final String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
 
 	/** Default provider URL used by ActiveMQ */
 	private static final String PROVIDER_URL__ACTIVEMQ = "tcp://127.0.0.1:61616/";
-	/** Default provider URL used by HornetQ */
-	private static final String PROVIDER_URL__HORNETQ = "jnp://localhost:1099/";
-	/** Default provider URL used by OpenJMS */
-	private static final String PROVIDER_URL__OPENJMS = "tcp://127.0.0.1:3035/";
 
 	private static final String QUEUE_ACTIVEMQ = "queue1";
-	private static final String QUEUE_HORNETQ = "queue1";
-	private static final String QUEUE_OPENJMS = "queue1";
 
 	private static String connectionFactory;
 	private static String providerUrl;
@@ -60,17 +52,17 @@ public final class JMSAnalysisStarter {
 		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
 
-		final JMSReader logReader = new JMSReader(logReaderConfiguration, analysisInstance);
+		final JmsReader logReader = new JmsReader(logReaderConfiguration, analysisInstance);
 
 		// Create and register a simple output writer.
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
 		try {
-			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			analysisInstance.connect(logReader, JmsReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
@@ -104,9 +96,5 @@ public final class JMSAnalysisStarter {
 		System.out.println("Examples:");
 		System.out.println(" - ActiveMQ: " + CONNECTION_FACTORY_TYPE__ACTIVEMQ + " " + PROVIDER_URL__ACTIVEMQ + " "
 				+ QUEUE_ACTIVEMQ);
-		System.out.println(" - HornetQ:  " + CONNECTION_FACTORY_TYPE__HORNETQ + " " + PROVIDER_URL__HORNETQ + " "
-				+ QUEUE_HORNETQ);
-		System.out.println(" - OpenJMS:  " + CONNECTION_FACTORY_TYPE__OPENJMS + " " + PROVIDER_URL__OPENJMS + " "
-				+ QUEUE_OPENJMS);
 	}
 }

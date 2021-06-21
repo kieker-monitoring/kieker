@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,26 +31,26 @@ import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.classpath.InstantiationFactory;
 
 /**
  * A very simple database reader that probably only works for small data sets.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
-@Plugin(description = "A reader which reads records from a database",
-		outputPorts = {
-			@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
-		},
-		configuration = {
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
-					description = "The classname of the driver used for the connection."),
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
-					description = "The connection string used to establish the connection."),
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker",
-					description = "The prefix of the used table within the database.")
-		})
+@Plugin(description = "A reader which reads records from a database", outputPorts = {
+	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the DBReader")
+}, configuration = {
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME,
+			defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
+			description = "The classname of the driver used for the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING,
+			defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
+			description = "The connection string used to establish the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker", description = "The prefix of the used table within the database.")
+})
 public class DbReader extends AbstractReaderPlugin {
 
 	/** This is the name of the outport port delivering the records from the database. */
@@ -71,12 +71,12 @@ public class DbReader extends AbstractReaderPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If the driver for the database could not be found.
 	 */
@@ -114,7 +114,19 @@ public class DbReader extends AbstractReaderPlugin {
 							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
 						} catch (final MonitoringRecordException ex) {
 							// log error but continue with next table
-							this.log.error("Failed to load records of type " + classname + " from table " + tablename, ex);
+							this.logger.error("Failed to load records of type {} from table {}", classname, tablename);
+							continue;
+						} catch (final IllegalArgumentException e) {
+							this.logger.error("Failed to load records of type {}. exception {}", classname, e);
+							continue;
+						} catch (final IllegalAccessException e) {
+							this.logger.error("TYPES field of class {} cannot be access", classname);
+							continue;
+						} catch (final NoSuchFieldException e) {
+							this.logger.error("Class {} does not have a TYPES field; is not a proper Kieker record", classname);
+							continue;
+						} catch (final SecurityException e) {
+							this.logger.error("Class {} in accessible", classname);
 							continue;
 						}
 					}
@@ -129,14 +141,14 @@ public class DbReader extends AbstractReaderPlugin {
 				}
 			}
 		} catch (final SQLException ex) {
-			this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			this.logger.error("SQLException with SQLState: '{}' and VendorError: '{}'", ex.getSQLState(), ex.getErrorCode(), ex);
 			return false;
 		} finally {
 			if (connection != null) {
 				try {
 					connection.close();
 				} catch (final SQLException ex) {
-					this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					this.logger.error("SQLException with SQLState: '{}' and VendorError: '{}'", ex.getSQLState(), ex.getErrorCode(), ex);
 				}
 			}
 		}
@@ -145,7 +157,7 @@ public class DbReader extends AbstractReaderPlugin {
 
 	/**
 	 * This method uses the given table to read records and sends them to the output port.
-	 * 
+	 *
 	 * @param connection
 	 *            The connection to the database which will be used.
 	 * @param tablename
@@ -156,9 +168,17 @@ public class DbReader extends AbstractReaderPlugin {
 	 *             If something went wrong during the database access.
 	 * @throws MonitoringRecordException
 	 *             If the data within the table could not be converted into a valid record.
+	 * @throws SecurityException
+	 *             on record class excess error
+	 * @throws NoSuchFieldException
+	 *             when the record has no TYPES field
+	 * @throws IllegalAccessException
+	 *             when the field cannot be accessed
+	 * @throws IllegalArgumentException
+	 *             when something else failed
 	 */
 	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz) throws SQLException,
-			MonitoringRecordException {
+			MonitoringRecordException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		Statement selectRecord = null;
 		try {
 			selectRecord = connection.createStatement();
@@ -171,7 +191,10 @@ public class DbReader extends AbstractReaderPlugin {
 					for (int i = 0; i < size; i++) {
 						recordValues[i] = records.getObject(i + 3);
 					}
-					final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, recordValues);
+
+					final Class<?>[] parameterTypes = (Class<?>[]) clazz.getField("TYPES").get(null);
+					final IMonitoringRecord record = InstantiationFactory.getInstance(null).create(IMonitoringRecord.class, clazz.getCanonicalName(), parameterTypes,
+							recordValues);
 					record.setLoggingTimestamp(records.getLong(2));
 					super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				}
@@ -192,7 +215,7 @@ public class DbReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of DBReader requested.");
+		this.logger.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 

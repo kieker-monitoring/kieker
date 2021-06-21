@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,37 +17,44 @@
 package kieker.monitoring.writer.tcp;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
-import kieker.monitoring.registry.WriterRegistry;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
 /**
+ * Represents a monitoring writer which serializes records via TCP to a given
+ * host:port.
+ *
  * @author Christian Wulf
  *
  * @since 1.13
  */
 public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	/** the logger for this class. */
-	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
-	/** prefix for all configuration keys. */
-	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
+	/**
+	 * This writer can be configured by the configuration file "kieker.properties".
+	 * For this purpose, it uses this prefix for all configuration keys.
+	 */
+	public static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
 	/** configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
@@ -56,86 +63,163 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	/** configuration key for the size of the {@link #buffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	/** configuration key for {@link #flush}. */
-	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS
 
+	/** configuration key for {@link #connectionTimeoutInMs}. */
+	public static final String CONFIG_CONN_TIMEOUT_IN_MS = PREFIX + "connectionTimeoutInMs";
+
+	/** the logger for this class. */
+	private static final Logger LOGGER = LoggerFactory.getLogger(SingleSocketTcpWriter.class);
+
+	// (afterPREFIX)
+	/** the host name and the port of the record reader. */
+	private final InetSocketAddress socketAddress;
+	/** the connection timeout for the initial connect. */
+	private final int connectionTimeoutInMs;
 	/** the channel which writes out monitoring and registry records. */
-	private final WritableByteChannel socketChannel;
-	/** the buffer used for buffering monitoring and registry records. */
+	private SocketChannel socketChannel;
+	/** the buffer used for buffering monitoring records. */
 	private final ByteBuffer buffer;
-	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record. */
+	/** the buffer used for buffering registry records. */
+	private final ByteBuffer registryBuffer;
+	/**
+	 * <code>true</code> if the {@link #buffer} should be flushed upon each new
+	 * incoming monitoring record.
+	 */
 	private final boolean flush;
+	/** the serializer to use for the incoming records. */
+	private final IValueSerializer serializer;
 
-	/** the registry used to compress string fields in monitoring records. */
-	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
-	private final RegisterAdapter<String> registerStringsAdapter;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
-	private final GetIdAdapter<String> writeBytesAdapter;
+	// remove RegisterAdapter
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
 		final int port = configuration.getIntProperty(CONFIG_PORT);
+		this.socketAddress = new InetSocketAddress(hostname, port);
+
+		final int configConnectionTimeoutInMs = configuration.getIntProperty(CONFIG_CONN_TIMEOUT_IN_MS, 1);
+		if (configConnectionTimeoutInMs > 0) {
+			this.connectionTimeoutInMs = configConnectionTimeoutInMs;
+		} else {
+			this.connectionTimeoutInMs = 1;
+		}
+
 		// buffer size is available by byteBuffer.capacity()
-		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
+		this.registryBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
-		this.writerRegistry = new WriterRegistry(this);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
+		final WriterRegistry writerRegistry = new WriterRegistry(this);
+		this.serializer = BinaryValueSerializer.create(this.buffer, writerRegistry);
 	}
 
 	@Override
 	public void onStarting() {
-		// do nothing
+		final long connectionTimeoutInNs = TimeUnit.MILLISECONDS.toNanos(this.connectionTimeoutInMs);
+		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(connectionTimeoutInNs);
+
+		do {
+			try {
+				this.socketChannel = SocketChannel.open();
+			} catch (final IOException e) {
+				throw new IllegalStateException(e);
+			}
+
+			this.tryConnect(timeoutCountdown);
+		} while (!this.socketChannel.isConnected());
+
+		final String message = String.format("Successfully connected to %s.", this.socketAddress);
+		LOGGER.info(message);
+	}
+
+	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
+		final Socket socket = this.socketChannel.socket();
+
+		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
+
+		if (this.connectOrTimeout(socket, timeoutCountdown.getRemainingTimeoutInMs())) {
+			return;
+		}
+
+		final long currentTimestampInNs = System.nanoTime();
+
+		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
+		timeoutCountdown.countdownNs(elapsedTimeInNs);
+
+		if (timeoutCountdown.getRemainingTimeoutInMs() <= 0) {
+			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
+			throw new ConnectionTimeoutException(message);
+		}
+	}
+
+	/**
+	 * @return <code>true</code> if connected, <code>false</code> if not connected
+	 *         due to a timeout.
+	 */
+	private boolean connectOrTimeout(final Socket socket, final int timeoutInMs) {
+		try {
+			socket.connect(this.socketAddress, timeoutInMs);
+			return true;
+		} catch (SocketTimeoutException | ConnectException e) {
+			// both of the exceptions indicate a connection timeout => ignore to reconnect
+			return false;
+		} catch (final IOException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		monitoringRecord.registerStrings(this.registerStringsAdapter);
-
 		final ByteBuffer recordBuffer = this.buffer;
 		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
-			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
+			// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+			// the monitoring records could arrive before their string records
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
-		this.writerRegistry.register(recordClassName);
 
-		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
-		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
-		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
+		this.serializer.putString(recordClassName);
+		this.serializer.putLong(monitoringRecord.getLoggingTimestamp());
+		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
-			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
+			// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+			// the monitoring records could arrive before their string records
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
 	}
 
 	@Override
 	public void onNewRegistryEntry(final String value, final int id) {
-		final ByteBuffer registryBuffer = this.buffer;
+		final ByteBuffer localRegistryBuffer = this.registryBuffer;
 
 		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		// logging timestamp + class id + RegistryRecord.SIZE + bytes.length
-		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE + bytes.length;
+		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE
+				+ bytes.length;
 
-		if (registryBuffer.remaining() < requiredBufferSize) {
-			WriterUtil.flushBuffer(registryBuffer, this.socketChannel, LOG);
+		if (localRegistryBuffer.remaining() < requiredBufferSize) {
+			WriterUtil.flushBuffer(localRegistryBuffer, this.socketChannel, LOGGER);
 		}
 
-		registryBuffer.putInt(RegistryRecord.CLASS_ID);
-		registryBuffer.putInt(id);
-		registryBuffer.putInt(value.length());
-		registryBuffer.put(bytes);
+		localRegistryBuffer.putInt(RegistryRecord.CLASS_ID);
+		localRegistryBuffer.putInt(id);
+		localRegistryBuffer.putInt(value.length());
+		localRegistryBuffer.put(bytes);
 	}
 
 	@Override
 	public void onTerminating() {
-		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOG);
-		WriterUtil.close(this.socketChannel, LOG);
+		// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+		// the monitoring records could arrive before their string records
+		WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOGGER);
+		WriterUtil.close(this.socketChannel, LOGGER);
 	}
 }

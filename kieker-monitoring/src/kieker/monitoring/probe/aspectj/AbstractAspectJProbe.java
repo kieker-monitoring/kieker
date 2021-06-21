@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ import kieker.monitoring.probe.IMonitoringProbe;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.2
  */
 @Aspect
-public abstract class AbstractAspectJProbe implements IMonitoringProbe {
+public abstract class AbstractAspectJProbe implements IMonitoringProbe { // NOPMD
 
-	private final ConcurrentMap<Signature, String> signatureCache = new ConcurrentHashMap<Signature, String>();
+	private final ConcurrentMap<Signature, String> signatureCache = new ConcurrentHashMap<>();
 
 	// Pointcuts should not be final!
 
@@ -67,7 +67,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	/**
 	 * Better handling of AspectJ Signature.toLongString (especially with constructors).
-	 * 
+	 *
 	 * @param sig
 	 *            an AspectJ Signature
 	 * @return LongString representation of the signature
@@ -88,14 +88,13 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				}
 				// return
 				this.addType(sb, signature.getReturnType());
-				sb.append(' ');
-				// component
-				sb.append(signature.getDeclaringTypeName());
-				sb.append('.');
-				// name
-				sb.append(signature.getName());
+				sb.append(' ')
+						.append(signature.getDeclaringTypeName()) // component
+						.append('.')
+						.append(signature.getName()) // name
+						.append('(');
 				// parameters
-				sb.append('(');
+
 				this.addTypeList(sb, signature.getParameterTypes());
 				sb.append(')');
 				// throws
@@ -111,12 +110,11 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 					sb.append(' ');
 				}
 				// component
-				sb.append(signature.getDeclaringTypeName());
-				sb.append('.');
-				// name
-				sb.append(signature.getName());
+				sb.append(signature.getDeclaringTypeName())
+						.append('.')
+						.append(signature.getName())// name
+						.append('(');
 				// parameters
-				sb.append('(');
 				this.addTypeList(sb, signature.getParameterTypes());
 				sb.append(')');
 				// throws

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,16 +29,16 @@ import kieker.common.configuration.Configuration;
 
 /**
  * An instance of this class computes the throughput in terms of the number of objects received per time unit.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 @Plugin(description = "A filter computing the throughput of the analysis",
 		outputPorts = {
-			@OutputPort(name = AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class },
+			@OutputPort(name = AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = Object.class,
 					description = "Provides each incoming object"),
-			@OutputPort(name = AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class },
+			@OutputPort(name = AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = Long.class,
 					description = "Provides throughput since last timer event object")
 		})
 public class AnalysisThroughputFilter extends AbstractFilterPlugin {
@@ -66,22 +66,18 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class }, description = "Receives incoming objects to calculate the throughput")
+	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = Object.class, description = "Receives incoming objects to calculate the throughput")
 	public final void inputObjects(final Object object) {
 		this.counter.incrementAndGet();
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, object);
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_TIME, eventTypes = { Long.class }, description = "Receives timestamps to calculate the throughput")
+	@InputPort(name = INPUT_PORT_NAME_TIME, eventTypes = Long.class, description = "Receives timestamps to calculate the throughput")
 	public final void inputTime(final Long timestamp) {
 		final long count = this.counter.getAndSet(0);
 		final long duration = timestamp - this.lastTimestamp;
 		final StringBuilder sb = new StringBuilder(256);
-		sb.append(count);
-		sb.append(" objects within ");
-		sb.append(duration);
-		sb.append(' ');
-		sb.append(super.recordsTimeUnitFromProjectContext.toString());
+		sb.append(count).append(" objects within ").append(duration).append(' ').append(super.recordsTimeUnitFromProjectContext.toString());
 		this.plainTextDisplayObject.setText(sb.toString());
 		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, count);
 		this.lastTimestamp = timestamp;

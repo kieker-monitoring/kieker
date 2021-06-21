@@ -3,7 +3,7 @@ performance monitoring and dynamic software analysis.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
-The Kieker libraries are located in the 'dist/' directory. These libraries are 
+The Kieker libraries are located in the 'build/' directory. These libraries are 
 also provided in a Maven repository. See http://kieker-monitoring.net/download/ 
 for details.
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and
  * {@link CurrentTimeEventGenerationFilter#inputRecord(kieker.common.record.IMonitoringRecord)}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
@@ -111,7 +111,7 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 	 * resolution, input the sequence of input timestamps and compares the
 	 * sequence of generated timer events with the given sequence of expected
 	 * output timer events.
-	 * 
+	 *
 	 * @param timerResolution
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
@@ -124,13 +124,13 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 			final boolean rawTimestamp) throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
 		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration, controller);
 
-		final ListCollectionFilter<TimestampRecord> sinkRecord = new ListCollectionFilter<TimestampRecord>(new Configuration(), controller);
-		final ListCollectionFilter<Long> sinkLong = new ListCollectionFilter<Long>(new Configuration(), controller);
+		final ListCollectionFilter<TimestampRecord> sinkRecord = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<Long> sinkLong = new ListCollectionFilter<>(new Configuration(), controller);
 
 		if (rawTimestamp) {
 			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);

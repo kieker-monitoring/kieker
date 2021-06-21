@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class TestOperationCallEvent extends AbstractKiekerTest {
@@ -52,16 +55,14 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link OperationCallEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
-		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+		final CallOperationEvent event1 = new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -70,14 +71,6 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected caller class name", FQ_CALLER_CLASSNAME, event1.getCallerClassSignature());
 		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
-
-		final Object[] event1Array = event1.toArray();
-
-		final CallOperationEvent event2 = new CallOperationEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -85,10 +78,8 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
-		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+		final CallOperationEvent event1 = new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -98,12 +89,13 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final CallOperationEvent event2 = new CallOperationEvent(buffer, stringRegistry);
+		final CallOperationEvent event2 = new CallOperationEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
@@ -112,12 +104,10 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 
 	@Test
 	public void testCallsReferencedOperationOf() {
-		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
-		final CallOperationEvent event2 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+		final CallOperationEvent event1 = new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+		final CallOperationEvent event2 = new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
+				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertTrue(UtilityClass.callsReferencedOperationOf(event1, event2));
 	}

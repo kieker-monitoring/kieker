@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,22 +28,26 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * An instance of this class computes the throughput in terms of the number of records logged within the monitoring instance per time unit.
+ * An instance of this class computes the throughput in terms of the number of
+ * records logged within the monitoring instance per time unit.
  *
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 1.8
  */
 @Plugin(description = "A filter computing the throughput of the monitoring", outputPorts = {
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Provides each incoming record"),
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Provides each not counted record"),
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class }, description = "Provides throughput within last interval")
-}, configuration = {
-	@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-	@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND)
-})
+
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS,
+			eventTypes = IMonitoringRecord.class, description = "Provides each incoming record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS,
+			eventTypes = IMonitoringRecord.class, description = "Provides each not counted record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
+			eventTypes = Long.class, description = "Provides throughput within last interval") },
+		configuration = {
+			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+			        defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE,
+					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND) })
 public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving other objects. */
@@ -61,7 +65,11 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "SECONDS"; // TimeUnit.NANOSECONDS.name()
 	/** The name of the property determining the interval size. */
 	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE = "intervalsize";
-	/** The configuration property value for {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE}, leading to a bin size of 1 second. */
+	/**
+	 * The configuration property value for
+	 * {@link #CONFIG_PROPERTY_NAME_INTERVAL_SIZE}, leading to a bin size of 1
+	 * second.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND = "1";
 
 	private final TimeUnit timeunit;
@@ -80,7 +88,7 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 		this.intervalSize = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE), configTimeunit);
@@ -95,7 +103,8 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives incoming records to calculate the throughput")
+	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Receives incoming records to calculate the throughput")
 	public final void inputRecord(final IMonitoringRecord record) {
 		// we assume a more or less linear order of incoming records
 		final long timestamp = record.getLoggingTimestamp();

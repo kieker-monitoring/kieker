@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,14 +46,13 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	 *             If the pipe name is null or empty.
 	 */
 	public Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
-		Pipe conn;
 		synchronized (this) {
 			if ((pipeName == null) || (pipeName.length() == 0)) {
 				// LOG.error(errorMsg); no need to log if thrown
 				throw new IllegalArgumentException("pipeName must not be null or empty!  (Found: " + pipeName + ")");
 			}
 			final Pipe newPipe = new Pipe(pipeName);
-			conn = this.pipeMap.putIfAbsent(pipeName, newPipe);
+			final Pipe conn = this.pipeMap.putIfAbsent(pipeName, newPipe);
 			if (conn == null) {
 				return newPipe;
 			} else {

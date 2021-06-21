@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,10 +48,11 @@ public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugi
 
 	/**
 	 * Set current configuration. Example implementation:
+	 * 
 	 * <pre>
 	 * // The following condition is true, if key exists in config object AND (update and isUpdateable is true OR update is false)
-	 * if(!update || isPropertyUpdateable(CONFIG_PROPERTY_PROP_NAME)) {
-	 *    this.localProperty = config.getLongProperty(CONFIG_PROPERTY_PROP_NAME);
+	 * if (!update || isPropertyUpdateable(CONFIG_PROPERTY_PROP_NAME)) {
+	 * 	this.localProperty = config.getLongProperty(CONFIG_PROPERTY_PROP_NAME);
 	 * }
 	 * </pre>
 	 * 

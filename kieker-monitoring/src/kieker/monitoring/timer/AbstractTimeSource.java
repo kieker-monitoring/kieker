@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import kieker.common.configuration.Configuration;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public abstract class AbstractTimeSource implements ITimeSource {
 
 	/**
 	 * This constructor initializes the class using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this time source.
 	 */
@@ -42,7 +42,7 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	/**
 	 * This method should be overwritten, iff the timer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
-	 * 
+	 *
 	 * @return The configuration object containing the default configuration.
 	 */
 	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,20 +31,23 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  *
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 replaced by teetime file reading facilities
  */
+@Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
-			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the reader") },
+		configuration = {
+			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
+					defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
 public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
@@ -87,10 +90,10 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + AsciiLogReader.class.getSimpleName() + " is empty");
+			this.logger.warn("The list of input dirs passed to the {} is empty", AsciiLogReader.class.getSimpleName());
 			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
+		this.recordQueue = new PriorityQueue<>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 
 		this.shouldDecompress = this.configuration.getBooleanProperty(CONFIG_SHOULD_DECOMPRESS);
@@ -101,7 +104,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutting down reader.");
+		this.logger.info("Shutting down reader.");
 		for (final AbstractLogReaderThread readerThread : this.readerThreads) {
 			readerThread.terminate();
 		}
@@ -111,7 +114,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressFBWarnings("NN_NAKED_NOTIFY")
+	// @SuppressFBWarnings("NN_NAKED_NOTIFY")
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -124,7 +127,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 				this.readerThreads.add(readerThread);
 				readerThread.start();
 			} else {
-				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.logger.warn("Invalid Directory or filename (no Kieker log): {}", inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
@@ -158,7 +161,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressFBWarnings("WA_NOT_IN_LOOP")
+	// @SuppressFBWarnings("WA_NOT_IN_LOOP")
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

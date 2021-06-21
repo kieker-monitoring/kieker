@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package kieker.test.analysis.junit.plugin.filter.select;
 
 import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,7 +30,7 @@ import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueSerializer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -48,22 +47,12 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object[] toArray() {
-			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-		}
-
-		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}
 
 		@Override
-		public void registerStrings(final IRegistry<String> stringRegistry) {
-			// not used here
-		}
-
-		@Override
-		public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 			// not used here
 		}
 
@@ -76,6 +65,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		public String[] getValueNames() {
 			return new String[] { "timestamp", "traceId", "orderIndex" };
 		}
+
 	};
 
 	private ListReader<AbstractTraceEvent> reader;
@@ -117,8 +107,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
-		this.reader = new ListReader<AbstractTraceEvent>(new Configuration(), this.controller);
-		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), this.controller);
+		this.reader = new ListReader<>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.controller);
 	}
 
 	/**

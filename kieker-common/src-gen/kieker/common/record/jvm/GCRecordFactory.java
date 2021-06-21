@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public final class GCRecordFactory implements IRecordFactory<GCRecord> {
-	
+
 	@Override
-	public GCRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new GCRecord(buffer, stringRegistry);
+	public GCRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new GCRecord(deserializer);
 	}
-	
+
 	@Override
-	public GCRecord create(final Object[] values) {
-		return new GCRecord(values);
+	public String[] getValueNames() {
+		return GCRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return GCRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return GCRecord.SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,31 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
+ * File extension filters.
+ *
  * @author Christian Wulf
  *
  * @since 1.13
  */
 public class FileExtensionFilter implements FilenameFilter {
 
-	public static final FileExtensionFilter GZIP = new FileExtensionFilter(FSUtil.GZIP_FILE_EXTENSION);
-	public static final FileExtensionFilter DAT = new FileExtensionFilter(FSUtil.NORMAL_FILE_EXTENSION);
+	/** A filter ensuring that the name of the file starts with {@value FSUtil.FILE_PREFIX} and ends with {@value FSUtil.MAP_FILE_EXTENSION}. */
 	public static final FileExtensionFilter BIN = new FileExtensionFilter(FSUtil.BINARY_FILE_EXTENSION);
-	/** A filter ensuring that the name of the file starts with {@value FSUtil.FILE_PREFIX} and ends with {@value FSUtil.MAP_FILE_EXTENSION} */
+	public static final FileExtensionFilter DAT = new FileExtensionFilter(FSUtil.DAT_FILE_EXTENSION);
+	public static final FileExtensionFilter DEFLATE = new FileExtensionFilter(FSUtil.DEFLATE_FILE_EXTENSION);
+	public static final FileExtensionFilter GZIP = new FileExtensionFilter(FSUtil.GZIP_FILE_EXTENSION);
 	public static final FileExtensionFilter MAP = new FileExtensionFilter(FSUtil.MAP_FILE_EXTENSION);
+	public static final FileExtensionFilter XZ = new FileExtensionFilter(FSUtil.XZ_FILE_EXTENSION);
 	public static final FileExtensionFilter ZIP = new FileExtensionFilter(FSUtil.ZIP_FILE_EXTENSION);
 
 	private final String fileExtension;
 
+	/**
+	 * create filename filter.
+	 * 
+	 * @param fileExtension
+	 *            extension
+	 */
 	public FileExtensionFilter(final String fileExtension) {
 		super();
 		this.fileExtension = fileExtension;
@@ -46,6 +56,10 @@ public class FileExtensionFilter implements FilenameFilter {
 			return false;
 		}
 		return name.endsWith(this.fileExtension);
+	}
+
+	public String getExtensionName() {
+		return this.fileExtension;
 	}
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestAfterConstructorEvent extends AbstractKiekerTest {
@@ -50,29 +53,19 @@ public class TestAfterConstructorEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link AfterConstructorEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
-		final AfterConstructorEvent event1 =
-				new AfterConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
+		final AfterConstructorEvent event1 = new AfterConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
-
-		final Object[] event1Array = event1.toArray();
-
-		final AfterConstructorEvent event2 = new AfterConstructorEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -80,9 +73,7 @@ public class TestAfterConstructorEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
-		final AfterConstructorEvent event1 =
-				new AfterConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
+		final AfterConstructorEvent event1 = new AfterConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -90,12 +81,13 @@ public class TestAfterConstructorEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final AfterConstructorEvent event2 = new AfterConstructorEvent(buffer, stringRegistry);
+		final AfterConstructorEvent event2 = new AfterConstructorEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

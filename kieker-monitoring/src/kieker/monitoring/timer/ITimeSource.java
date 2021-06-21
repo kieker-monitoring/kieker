@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,39 +20,39 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public interface ITimeSource {
 
 	/**
 	 * @return The timestamp for the current time in {@link java.util.concurrent.TimeUnit}.
-	 * 
+	 *
 	 * @see #getTimeUnit()
 	 * @since 1.3
 	 */
-	public long getTime();
+	long getTime();
 
 	/**
 	 * @return The offset of the timesource to 1970-1-1 in {@link java.util.concurrent.TimeUnit}.
-	 * 
+	 *
 	 * @see #getTimeUnit()
 	 * @since 1.7
 	 */
-	public long getOffset();
+	long getOffset();
 
 	/**
 	 * @return The {@link java.util.concurrent.TimeUnit} of the timesource.
-	 * 
+	 *
 	 * @since 1.7
 	 */
-	public TimeUnit getTimeUnit();
+	TimeUnit getTimeUnit();
 
 	/**
 	 * @return A String representation of the timesource. E.g., the meaning of a timestamp from this source.
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	@Override
-	public String toString();
+	String toString();
 }

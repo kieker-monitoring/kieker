@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A writer that prints incoming records to the specified PrintStream.
@@ -39,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintStreamWriter.class);
 
 	private static final String ENCODING = "UTF-8";
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
@@ -60,7 +59,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	 * @param configuration
 	 *            The configuration which will be used to initialize this writer.
 	 */
-	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
+	// @SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
 		this.configPrintStreamName = configuration.getStringProperty(STREAM);
@@ -77,7 +76,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 			try {
 				this.printStream = new PrintStream(new FileOutputStream(this.configPrintStreamName), false, ENCODING);
 			} catch (UnsupportedEncodingException | FileNotFoundException e) {
-				LOG.warn("An exception occurred", e);
+				LOGGER.warn("An exception occurred", e);
 			}
 		}
 	}
@@ -92,6 +91,6 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 		if ((this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
-		LOG.info(this.getClass().getName() + " shutting down.");
+		LOGGER.info("{} shutting down.", this.getClass().getName());
 	}
 }

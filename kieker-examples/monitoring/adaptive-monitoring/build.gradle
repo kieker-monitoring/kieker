@@ -1,17 +1,33 @@
-apply plugin: 'application'
-apply plugin: 'eclipse'
+plugins {
+	id 'application'
+}
+
+repositories {
+	mavenCentral() 
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
 
 dependencies {
-	compile fileTree('lib') {
-		include "kieker-1.13-SNAPSHOT-aspectj.jar"
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+
+	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+
+	implementation fileTree('lib') {
+		include "lib/kieker-1.15-SNAPSHOT-aspectj.jar"
 	}
 }
+
+distTar.enabled=false
 
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
 
@@ -24,8 +40,8 @@ jar {
 task runMonitoring(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
-	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs',
-	           "-javaagent:lib/kieker-1.13-SNAPSHOT-aspectj.jar",
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
+	           "-javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true',
 			   '-Dkieker.monitoring.adaptiveMonitoring.enabled=true',

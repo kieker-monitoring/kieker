@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.8
  */
 public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
@@ -47,7 +47,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 
 	/**
 	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead of using the singleton instance.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            must not be null
 	 */

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.tcp.SingleSocketTcpReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -58,7 +59,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 		// readerConfig.setProperty(SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, SingleSocketTcpWriterReaderTest.PORT1);
 		// readerConfig.setProperty(SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, SingleSocketTcpWriterReaderTest.PORT2);
 		final SingleSocketTcpReader tcpReader = new SingleSocketTcpReader(readerConfig, this.analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
+		this.sinkFilter = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 		this.analysisController.connect(tcpReader, SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		this.analysisThread = new AnalysisControllerThread(this.analysisController);
 		this.analysisThread.start();
@@ -66,7 +67,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationConstants.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
 		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT, SingleSocketTcpWriterReaderTest.PORT1);
 		return MonitoringController.createInstance(monitoringConfig);
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,33 +23,33 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class SamplingController extends AbstractController implements ISamplingController {
-	private static final Log LOG = LogFactory.getLog(SamplingController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SamplingController.class);
 
-	/** Executes the {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s. */
 	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
 	/**
 	 * Creates a new instance of this class using the given configuration to initialize the class.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration used to initialize this controller.
 	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
-		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+		final int threadPoolSize = configuration.getIntProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
 			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
@@ -61,22 +61,20 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Shutting down Sampling Controller");
-		}
+	protected void cleanup() {
+		LOGGER.debug("Shutting down Sampling Controller");
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Sampling Controller: ");
 		if (this.periodicSensorsPoolExecutor != null) {
@@ -95,9 +93,9 @@ public final class SamplingController extends AbstractController implements ISam
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
+	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (null == this.periodicSensorsPoolExecutor) {
-			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
+			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return null;
 		}
 		final ScheduledSamplerJob job = new ScheduledSamplerJob(super.monitoringController, sensor);
@@ -111,16 +109,16 @@ public final class SamplingController extends AbstractController implements ISam
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
+	public boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		if (null == this.periodicSensorsPoolExecutor) {
-			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
+			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return false;
 		}
 		final ScheduledFuture<?> future = sensorJob.getFuture();
 		if (future != null) {
 			future.cancel(false); // do not interrupt when running
 		} else {
-			LOG.warn("ScheduledFuture of ScheduledSamplerJob null: " + sensorJob);
+			LOGGER.warn("ScheduledFuture of ScheduledSamplerJob null: {}", sensorJob);
 		}
 		final boolean success = this.periodicSensorsPoolExecutor.remove(sensorJob);
 		this.periodicSensorsPoolExecutor.purge();
@@ -131,7 +129,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * @author Jan Waller
 	 */
 	private static final class RejectedExecutionHandler implements java.util.concurrent.RejectedExecutionHandler {
-		private static final Log LOG = LogFactory.getLog(RejectedExecutionHandler.class);
+		private static final Logger LOGGER = LoggerFactory.getLogger(RejectedExecutionHandler.class);
 
 		public RejectedExecutionHandler() {
 			// empty default constructor
@@ -139,15 +137,15 @@ public final class SamplingController extends AbstractController implements ISam
 
 		@Override
 		public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
-			LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
+			LOGGER.error("Exception caught by RejectedExecutionHandler for Runnable {} and ThreadPoolExecutor {}", r, executor);
 		}
 	}
 
 	/**
 	 * A thread factory to create daemon threads.
-	 * 
+	 *
 	 * @see java.util.concurrent.Executors.DefaultThreadFactory
-	 * 
+	 *
 	 * @author Jan Waller
 	 */
 	private static final class DaemonThreadFactory implements ThreadFactory {

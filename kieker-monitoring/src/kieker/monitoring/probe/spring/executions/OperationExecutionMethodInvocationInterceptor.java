@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package kieker.monitoring.probe.spring.executions;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -31,11 +31,11 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Marco Luebcke, Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 0.91
  */
 public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
-	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionMethodInvocationInterceptor.class);
 
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
@@ -50,7 +50,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 
 	/**
 	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead of using the singleton instance.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            must not be null
 	 */
@@ -90,7 +90,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
 			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			if ((eoi == -1) || (ess == -1)) {
-				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				this.monitoringCtrl.terminateMonitoring();
 			}
 		}

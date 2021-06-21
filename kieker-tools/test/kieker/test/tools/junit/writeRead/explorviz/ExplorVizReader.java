@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * @author Micky Singh Multani
@@ -60,8 +59,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
 	private final int port;
-	private final ILookup<String> stringRegistry = new Lookup<String>();
-	private final Deque<Number> recordValues = new LinkedList<Number>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
+	private final Deque<Number> recordValues = new LinkedList<>();
 
 	public ExplorVizReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -76,32 +75,30 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			final ServerSocket socket = serversocket.socket();
 			final InetSocketAddress address = new InetSocketAddress(this.port);
 			socket.bind(address);
-			this.log.info("Listening on " + address);
+			this.logger.info("Listening on {}", address);
 
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
 
-			this.log.info("Waiting for a (single) connection test...");
+			this.logger.info("Waiting for a (single) connection test...");
 			try (SocketChannel socketChannel = serversocket.accept()) {
 				socketChannel.read(buffer); // blocking wait
 			}
 
-			this.log.info("Waiting for the actual data connection...");
+			this.logger.info("Waiting for the actual data connection...");
 			this.accept(serversocket, buffer);
 
 		} catch (final ClosedByInterruptException ex) {
-			this.log.warn("Reader interrupted", ex);
+			this.logger.warn("Reader interrupted", ex);
 			return false;
 		} catch (final IOException ex) {
-			this.log.error("Error while reading", ex);
+			this.logger.error("Error while reading", ex);
 			return false;
 		} finally {
 			if (null != serversocket) {
 				try {
 					serversocket.close();
 				} catch (final IOException e) {
-					if (this.log.isDebugEnabled()) {
-						this.log.debug("Failed to close TCP connection!", e);
-					}
+					this.logger.debug("Failed to close TCP connection!", e);
 				}
 			}
 

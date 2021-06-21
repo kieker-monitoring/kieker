@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Teerat Pitakrat
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.12
  */
 public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverageRecord> {
-	
+
 	@Override
-	public LoadAverageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new LoadAverageRecord(buffer, stringRegistry);
+	public LoadAverageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new LoadAverageRecord(deserializer);
 	}
-	
+
 	@Override
-	public LoadAverageRecord create(final Object[] values) {
-		return new LoadAverageRecord(values);
+	public String[] getValueNames() {
+		return LoadAverageRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return LoadAverageRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return LoadAverageRecord.SIZE;
 	}

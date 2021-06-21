@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}
- * 
+ *
  * Otherwise jUnit gets Problems with two open JMX servers.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS

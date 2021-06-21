@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
@@ -124,9 +125,9 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 
 	private MonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationFactory.METADATA, "false");
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		return MonitoringController.createInstance(config);
 	}

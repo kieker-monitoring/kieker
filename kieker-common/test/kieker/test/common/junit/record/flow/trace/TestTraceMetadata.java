@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestTraceMetadata extends AbstractKiekerTest {
@@ -50,13 +53,12 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link TraceMetadata}.
-	 * 
+	 *
 	 * Assert that a record instance trace1 equals an instance event2 created by serializing trace1 to an array trace1Array
 	 * and using trace1Array to construct trace2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
 
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
@@ -65,13 +67,6 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected hostname", HOSTNAME, trace1.getHostname());
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
-
-		final Object[] trace1Array = trace1.toArray();
-
-		final TraceMetadata trace2 = new TraceMetadata(trace1Array);
-
-		Assert.assertEquals(trace1, trace2);
-		Assert.assertEquals(0, trace1.compareTo(trace2));
 	}
 
 	/**
@@ -79,7 +74,6 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
 
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
@@ -89,12 +83,13 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
-		trace1.writeBytes(buffer, stringRegistry);
+		trace1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final TraceMetadata trace2 = new TraceMetadata(buffer, stringRegistry);
+		final TraceMetadata trace2 = new TraceMetadata(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

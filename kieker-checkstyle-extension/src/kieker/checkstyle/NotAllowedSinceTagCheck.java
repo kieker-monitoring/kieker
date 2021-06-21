@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package kieker.checkstyle;
 
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that <b>only</b> classes, interfaces, annotations, enums and methods within interfaces have a since tag.
+ * This is an additional checkstyle check which makes sure that <b>only</b>
+ * classes, interfaces, annotations, enums and methods within interfaces have a
+ * since tag.
  *
  * @author Nils Christian Ehmke
  *
@@ -29,7 +31,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  *
  * @see MissingSinceTagCheck
  */
-public class NotAllowedSinceTagCheck extends Check {
+public class NotAllowedSinceTagCheck extends AbstractCheck {
 
 	/**
 	 * Creates a new instance of this class.
@@ -47,9 +49,20 @@ public class NotAllowedSinceTagCheck extends Check {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (CSUtility.sinceTagAvailable(this, ast) && ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
+		if (CSUtility.sinceTagAvailable(this, ast)
+				&& ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
 			this.log(ast.getLineNo(), "@since tag not allowed");
 		}
+	}
+
+	@Override
+	public int[] getAcceptableTokens() {
+		return getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return getDefaultTokens();
 	}
 
 }

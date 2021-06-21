@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package kieker.checkstyle;
 
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
@@ -45,7 +45,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  *
  * @since 1.7
  */
-public class AnalysisComponentConstructorCheck extends Check {
+public class AnalysisComponentConstructorCheck extends AbstractCheck {
 
 	private static final String REPOSITORY_ANNOTATION_NAME = "Repository";
 	private static final String PLUGIN_ANNOTATION_NAME = "Plugin";
@@ -162,5 +162,15 @@ public class AnalysisComponentConstructorCheck extends Check {
 	 */
 	public void setIgnoreAbstractClasses(final boolean ignoreAbstractClasses) {
 		this.ignoreAbstractClasses = ignoreAbstractClasses;
+	}
+
+	@Override
+	public int[] getAcceptableTokens() {
+		return getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return getDefaultTokens();
 	}
 }

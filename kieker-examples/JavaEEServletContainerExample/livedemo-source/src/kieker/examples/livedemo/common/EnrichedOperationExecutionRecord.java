@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueSerializer;
 
 /**
  * A record enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
@@ -77,7 +77,6 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 		return this.commaSeperatedValues;
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getOperationSignature(),
@@ -94,12 +93,12 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		super.writeBytes(buffer, stringRegistry);
+	public void serialize(IValueSerializer serializer) throws BufferOverflowException {
+		super.serialize(serializer);
 
-		buffer.putDouble(this.getResponseTime());
-		buffer.putInt(stringRegistry.get(this.getShortSignature()));
-		buffer.putInt(stringRegistry.get(this.getCommaSeperatedValues()));
+		serializer.putDouble(this.getResponseTime());
+		serializer.putString(this.getShortSignature());
+		serializer.putString(this.getCommaSeperatedValues());
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * A test for the class {@link TypeFilter}.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class TypeFilterTest extends AbstractKiekerTest {
@@ -58,10 +58,10 @@ public class TypeFilterTest extends AbstractKiekerTest {
 
 		// Create the plugins
 		final AnalysisController controller = new AnalysisController();
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 		final TypeFilter typeFilter = new TypeFilter(typeFilterConfiguration, controller);
-		final ListCollectionFilter<Object> sinkPluginValidElements = new ListCollectionFilter<Object>(new Configuration(), controller);
-		final ListCollectionFilter<Object> sinkPluginInvalidElements = new ListCollectionFilter<Object>(new Configuration(), controller);
+		final ListCollectionFilter<Object> sinkPluginValidElements = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<Object> sinkPluginInvalidElements = new ListCollectionFilter<>(new Configuration(), controller);
 
 		// Connect the plugins
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, typeFilter, TypeFilter.INPUT_PORT_NAME_EVENTS);

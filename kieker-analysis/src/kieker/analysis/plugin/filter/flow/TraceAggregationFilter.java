@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,28 +36,29 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 
 /**
- * This filter collects incoming traces for a specified amount of time.
- * Any traces representing the same series of events will be used to calculate statistical informations like the average runtime of this kind of trace.
- * Only one specimen of these traces containing this information will be forwarded from this filter.
- * 
- * Statistical outliers regarding the runtime of the trace will be treated special and therefore send out as they are and will not be mixed with others.
- * 
+ * This filter collects incoming traces for a specified amount of time. Any
+ * traces representing the same series of events will be used to calculate
+ * statistical informations like the average runtime of this kind of trace. Only
+ * one specimen of these traces containing this information will be forwarded
+ * from this filter.
+ *
+ * Statistical outliers regarding the runtime of the trace will be treated
+ * special and therefore send out as they are and will not be mixed with others.
+ *
  * @author Jan Waller, Florian Biss
- * 
+ *
  * @since 1.9
+ * @deprecated 1.15 ported to teetime kieker.analysis.filter.flow
  */
-@Plugin(description = "This filter tries to aggregate similar Traces into a single trace.",
-		outputPorts = {
-			@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES,
-					description = "Output port for the processed traces",
-					eventTypes = { TraceEventRecords.class })
-		},
+@Deprecated
+@Plugin(description = "This filter tries to aggregate similar Traces into a single trace.", outputPorts = {
+	@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES, description = "Output port for the processed traces",
+			eventTypes = TraceEventRecords.class) },
 		configuration = {
 			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			                defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
-					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION)
-		})
+					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION) })
 public class TraceAggregationFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -101,7 +102,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -117,23 +118,21 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
-		this.maxCollectionDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION), configTimeunit);
-		this.trace2buffer = new TreeMap<TraceEventRecords, TraceAggregationBuffer>(new TraceComperator());
+		this.maxCollectionDuration = this.timeunit
+				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION), configTimeunit);
+		this.trace2buffer = new TreeMap<>(new TraceComperator());
 	}
 
 	/**
 	 * This method is the input port for the timeout.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TIME_EVENT,
-			description = "Time signal for timeouts",
-			eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Time signal for timeouts", eventTypes = Long.class)
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
 			this.processTimeoutQueue(timestamp);
@@ -142,14 +141,12 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method is the input port for incoming traces.
-	 * 
+	 *
 	 * @param traceEventRecords
 	 *            incoming TraceEventRecords
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TRACES,
-			description = "Collect identical traces and aggregate them.",
-			eventTypes = { TraceEventRecords.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACES, description = "Collect identical traces and aggregate them.",
+			eventTypes = TraceEventRecords.class)
 	public void newEvent(final TraceEventRecords traceEventRecords) {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		synchronized (this) {
@@ -180,7 +177,8 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	private void processTimeoutQueue(final long timestamp) {
 		final long bufferTimeout = timestamp - this.maxCollectionDuration;
-		for (final Iterator<Entry<TraceEventRecords, TraceAggregationBuffer>> iterator = this.trace2buffer.entrySet().iterator(); iterator.hasNext();) {
+		for (final Iterator<Entry<TraceEventRecords, TraceAggregationBuffer>> iterator = this.trace2buffer.entrySet()
+				.iterator(); iterator.hasNext();) {
 			final TraceAggregationBuffer traceBuffer = iterator.next().getValue();
 			if (traceBuffer.getBufferCreatedTimestamp() <= bufferTimeout) {
 				final TraceEventRecords record = traceBuffer.getTraceEventRecords();
@@ -198,13 +196,14 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION, String.valueOf(this.maxCollectionDuration));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
+				String.valueOf(this.maxCollectionDuration));
 		return configuration;
 	}
 
 	/**
 	 * Buffer for similar traces that are to be aggregated into a single trace.
-	 * 
+	 *
 	 * @author Jan Waller, Florian Biss
 	 */
 	private static final class TraceAggregationBuffer {
@@ -260,8 +259,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 				return recordsT1.length - recordsT2.length;
 			}
 
-			final int cmpHostnames = t1.getTraceMetadata().getHostname()
-					.compareTo(t2.getTraceMetadata().getHostname());
+			final int cmpHostnames = t1.getTraceMetadata().getHostname().compareTo(t2.getTraceMetadata().getHostname());
 			if (cmpHostnames != 0) {
 				return cmpHostnames;
 			}
@@ -270,8 +268,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 				final AbstractTraceEvent recordT1 = recordsT1[i];
 				final AbstractTraceEvent recordT2 = recordsT2[i];
 
-				final int cmpClass = recordT1.getClass().getName()
-						.compareTo(recordT2.getClass().getName());
+				final int cmpClass = recordT1.getClass().getName().compareTo(recordT2.getClass().getName());
 				if (cmpClass != 0) {
 					return cmpClass;
 				}
@@ -283,8 +280,8 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 					}
 				}
 				if (recordT1 instanceof AfterOperationFailedEvent) {
-					final int cmpError = ((AfterOperationFailedEvent) recordT1).getCause().compareTo(
-							((AfterOperationFailedEvent) recordT2).getCause());
+					final int cmpError = ((AfterOperationFailedEvent) recordT1).getCause()
+							.compareTo(((AfterOperationFailedEvent) recordT2).getCause());
 					if (cmpError != 0) {
 						return cmpClass;
 					}

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
+ * 
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage
  * @generated
  */
@@ -27,6 +28,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static MIAnalysisMetaModelPackage modelPackage;
@@ -35,6 +37,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AnalysisMetaModelSwitch() {
@@ -47,6 +50,7 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @parameter ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
@@ -60,111 +64,136 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case MIAnalysisMetaModelPackage.PROJECT: {
-				MIProject project = (MIProject)theEObject;
-				T result = caseProject(project);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.PLUGIN: {
-				MIPlugin plugin = (MIPlugin)theEObject;
-				T result = casePlugin(plugin);
-				if (result == null) result = caseAnalysisComponent(plugin);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.PORT: {
-				MIPort port = (MIPort)theEObject;
-				T result = casePort(port);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.INPUT_PORT: {
-				MIInputPort inputPort = (MIInputPort)theEObject;
-				T result = caseInputPort(inputPort);
-				if (result == null) result = casePort(inputPort);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.OUTPUT_PORT: {
-				MIOutputPort outputPort = (MIOutputPort)theEObject;
-				T result = caseOutputPort(outputPort);
-				if (result == null) result = casePort(outputPort);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.PROPERTY: {
-				MIProperty property = (MIProperty)theEObject;
-				T result = caseProperty(property);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.FILTER: {
-				MIFilter filter = (MIFilter)theEObject;
-				T result = caseFilter(filter);
-				if (result == null) result = casePlugin(filter);
-				if (result == null) result = caseAnalysisComponent(filter);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.READER: {
-				MIReader reader = (MIReader)theEObject;
-				T result = caseReader(reader);
-				if (result == null) result = casePlugin(reader);
-				if (result == null) result = caseAnalysisComponent(reader);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.REPOSITORY: {
-				MIRepository repository = (MIRepository)theEObject;
-				T result = caseRepository(repository);
-				if (result == null) result = caseAnalysisComponent(repository);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.DEPENDENCY: {
-				MIDependency dependency = (MIDependency)theEObject;
-				T result = caseDependency(dependency);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: {
-				MIRepositoryConnector repositoryConnector = (MIRepositoryConnector)theEObject;
-				T result = caseRepositoryConnector(repositoryConnector);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.DISPLAY: {
-				MIDisplay display = (MIDisplay)theEObject;
-				T result = caseDisplay(display);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.VIEW: {
-				MIView view = (MIView)theEObject;
-				T result = caseView(view);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: {
-				MIDisplayConnector displayConnector = (MIDisplayConnector)theEObject;
-				T result = caseDisplayConnector(displayConnector);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT: {
-				MIAnalysisComponent analysisComponent = (MIAnalysisComponent)theEObject;
-				T result = caseAnalysisComponent(analysisComponent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			default: return defaultCase(theEObject);
+		case MIAnalysisMetaModelPackage.PROJECT: {
+			MIProject project = (MIProject) theEObject;
+			T result = caseProject(project);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.PLUGIN: {
+			MIPlugin plugin = (MIPlugin) theEObject;
+			T result = casePlugin(plugin);
+			if (result == null)
+				result = caseAnalysisComponent(plugin);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.PORT: {
+			MIPort port = (MIPort) theEObject;
+			T result = casePort(port);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.INPUT_PORT: {
+			MIInputPort inputPort = (MIInputPort) theEObject;
+			T result = caseInputPort(inputPort);
+			if (result == null)
+				result = casePort(inputPort);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.OUTPUT_PORT: {
+			MIOutputPort outputPort = (MIOutputPort) theEObject;
+			T result = caseOutputPort(outputPort);
+			if (result == null)
+				result = casePort(outputPort);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.PROPERTY: {
+			MIProperty property = (MIProperty) theEObject;
+			T result = caseProperty(property);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.FILTER: {
+			MIFilter filter = (MIFilter) theEObject;
+			T result = caseFilter(filter);
+			if (result == null)
+				result = casePlugin(filter);
+			if (result == null)
+				result = caseAnalysisComponent(filter);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.READER: {
+			MIReader reader = (MIReader) theEObject;
+			T result = caseReader(reader);
+			if (result == null)
+				result = casePlugin(reader);
+			if (result == null)
+				result = caseAnalysisComponent(reader);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.REPOSITORY: {
+			MIRepository repository = (MIRepository) theEObject;
+			T result = caseRepository(repository);
+			if (result == null)
+				result = caseAnalysisComponent(repository);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.DEPENDENCY: {
+			MIDependency dependency = (MIDependency) theEObject;
+			T result = caseDependency(dependency);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: {
+			MIRepositoryConnector repositoryConnector = (MIRepositoryConnector) theEObject;
+			T result = caseRepositoryConnector(repositoryConnector);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.DISPLAY: {
+			MIDisplay display = (MIDisplay) theEObject;
+			T result = caseDisplay(display);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.VIEW: {
+			MIView view = (MIView) theEObject;
+			T result = caseView(view);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: {
+			MIDisplayConnector displayConnector = (MIDisplayConnector) theEObject;
+			T result = caseDisplayConnector(displayConnector);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT: {
+			MIAnalysisComponent analysisComponent = (MIAnalysisComponent) theEObject;
+			T result = caseAnalysisComponent(analysisComponent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 
@@ -174,7 +203,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Project</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -189,7 +220,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Plugin</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -204,7 +237,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Port</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -219,7 +254,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Input Port</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -234,7 +271,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Output Port</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -249,7 +288,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Property</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -264,7 +305,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Filter</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -279,7 +322,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Reader</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -294,7 +339,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Repository</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -309,7 +356,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Dependency</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -324,7 +373,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Repository Connector</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -339,7 +390,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Display</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -354,7 +407,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>View</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -369,7 +424,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Display Connector</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -384,7 +441,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Analysis Component</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -399,7 +458,9 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
@@ -409,4 +470,4 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //AnalysisMetaModelSwitch
+} // AnalysisMetaModelSwitch

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,16 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * A timer implementation, counting in milliseconds since a specified offset.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
@@ -37,14 +38,14 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	/** The name of the configuration for the time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemMilliTimer.class.getName() + ".unit";
 
-	private static final Log LOG = LogFactory.getLog(SystemMilliTimer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SystemMilliTimer.class);
 
 	private final long offset;
 	private final TimeUnit timeunit;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this timer.
 	 */
@@ -70,14 +71,14 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 			this.timeunit = TimeUnit.SECONDS;
 			break;
 		default:
-			LOG.warn("Failed to determine value of " + CONFIG_UNIT + " (0, 1, 2, or 3 expected). Setting to 0=nanoseconds");
+			LOGGER.warn("Failed to determine value of {} (0, 1, 2, or 3 expected). Setting to 0=nanoseconds", CONFIG_UNIT);
 			this.timeunit = TimeUnit.NANOSECONDS;
 			break;
 		}
 	}
 
 	@Override
-	public final long getTime() {
+	public long getTime() {
 		return this.timeunit.convert(System.currentTimeMillis() - this.offset, TimeUnit.MILLISECONDS);
 	}
 
@@ -87,15 +88,15 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	}
 
 	@Override
-	public final TimeUnit getTimeUnit() {
+	public TimeUnit getTimeUnit() {
 		return this.timeunit;
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
-		sb.append(new Date(this.offset));
+		sb.append("Time in ").append(this.timeunit.toString().toLowerCase(Locale.ENGLISH)).append(" (with milliseconds precision) since ")
+				.append(new Date(this.offset));
 		return sb.toString();
 	}
 }

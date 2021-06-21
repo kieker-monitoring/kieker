@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,14 @@ public abstract class AbstractMonitoringRecordDeserializer implements IMonitorin
 
 	/**
 	 * Creates a new record deserializer.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context to use
 	 */
-	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for deserializers
+	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for
+																															// deserializers
 		// Constructor template
 	}
 

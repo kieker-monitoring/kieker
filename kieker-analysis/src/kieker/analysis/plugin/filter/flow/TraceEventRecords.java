@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
+ * @deprecated 1.15 moved to new location kieker.analysis.filter.flow
  */
+@Deprecated
 public final class TraceEventRecords {
 	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
@@ -34,20 +36,26 @@ public final class TraceEventRecords {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param trace
 	 *            The trace to be stored in this object.
 	 * @param traceEvents
 	 *            The trace events to be stored in this object.
 	 */
 	public TraceEventRecords(final TraceMetadata trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
+		// if (null == trace) {
+		// throw new NullPointerException("trace is null");
+		// }
+		if (null == traceEvents) {
+			throw new NullPointerException("traceEvents is null");
+		}
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
 
 	/**
 	 * Delivers the stored traces.
-	 * 
+	 *
 	 * @return The traces currently stored in this object.
 	 */
 	public TraceMetadata getTraceMetadata() {
@@ -56,7 +64,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Delivers the stored trace events.
-	 * 
+	 *
 	 * @return The trace events currently stored in this object.
 	 */
 	public AbstractTraceEvent[] getTraceEvents() {
@@ -78,16 +86,9 @@ public final class TraceEventRecords {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append(super.toString());
-		sb.append("\n\tTrace (");
-		sb.append(this.count);
-		sb.append("): ");
-		sb.append(this.trace);
+		sb.append(super.toString()).append("\n\tTrace (count=").append(this.count).append("): ").append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
-			sb.append("\n\t");
-			sb.append(traceEvent.getClass().getSimpleName());
-			sb.append(": ");
-			sb.append(traceEvent);
+			sb.append("\n\t").append(traceEvent.getClass().getSimpleName()).append(": ").append(traceEvent);
 		}
 		sb.append('\n');
 		return sb.toString();
@@ -121,9 +122,7 @@ public final class TraceEventRecords {
 		} else if (!this.trace.equals(other.trace)) {
 			return false;
 		}
-		if (!Arrays.equals(this.traceEvents, other.traceEvents)) {
-			return false;
-		}
-		return true;
+
+		return Arrays.equals(this.traceEvents, other.traceEvents);
 	}
 }

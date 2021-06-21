@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ public @interface Repository {
 	/**
 	 * This flag determines whether the annotated repository should only be used for programmatic purposes or not. This can for example be used by tools to ignore
 	 * specific repositories.
+	 *
+	 * @return true if a repository can be used only for programmatic reasons (what ever that is)
 	 */
 	boolean programmaticOnly() default false;
 

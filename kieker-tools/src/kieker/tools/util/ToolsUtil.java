@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@ package kieker.tools.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.LogManager; // NOCS 
+import java.util.logging.LogManager; // NOCS
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public final class ToolsUtil {
 
-	private static final Log LOG = LogFactory.getLog(ToolsUtil.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToolsUtil.class);
 
 	private ToolsUtil() {
 		// Private constructor to avoid instantiation
@@ -38,7 +38,6 @@ public final class ToolsUtil {
 
 	public static void loadVerboseLogger() {
 		ToolsUtil.loadLogger("logging.verbose.properties");
-
 	}
 
 	public static void loadDebugLogger() {
@@ -56,12 +55,12 @@ public final class ToolsUtil {
 			if (configStream != null) {
 				logManager.readConfiguration(configStream);
 			} else {
-				LOG.warn("Could not load verbose/debug logger");
+				LOGGER.warn("Could not load verbose/debug logger");
 			}
 		} catch (final SecurityException ex) {
-			LOG.warn("Could not load verbose/debug logger", ex);
+			LOGGER.warn("Could not load verbose/debug logger", ex);
 		} catch (final IOException ex) {
-			LOG.warn("Could not load verbose/debug logger", ex);
+			LOGGER.warn("Could not load verbose/debug logger", ex);
 		}
 	}
 

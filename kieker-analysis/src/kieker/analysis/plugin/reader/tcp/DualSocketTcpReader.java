@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.tcp.util.AbstractTcpReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
+import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 
 /**
  * This is a reader which reads the records from a TCP port. Compared to the {@link TCPReader}, it is more modular and faster in reading.
@@ -37,13 +37,17 @@ import kieker.common.util.registry.Lookup;
  * @author Jan Waller, Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 will no longer support dual socket in future
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the DualSocketTcpReader")
+	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the DualSocketTcpReader")
 }, configuration = {
-	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
-	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
+	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
+			description = "The first port of the server used for the TCP connection."),
+	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134",
+			description = "The second port of the server used for the TCP connection.")
 })
 public class DualSocketTcpReader extends AbstractReaderPlugin {
 
@@ -60,7 +64,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	private final int port1;
 	private final int port2;
 
-	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 
 	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
@@ -72,9 +76,9 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		this.port1 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT1);
 		this.port2 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT2);
 
-		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.log, this.stringRegistry);
+		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.logger, this.stringRegistry);
 
-		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.log) {
+		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.logger) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
@@ -84,14 +88,15 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		};
 	}
 
-	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Log logger, final ILookup<String> registry) {
+	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Logger logger,
+			final ReaderRegistry<String> registry) {
 		return new AbstractRecordTcpReader(port, bufferCapacity, logger, registry, new CachedRecordFactoryCatalog()) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected void onRecordReceived(final IMonitoringRecord record) {
 				final boolean success = DualSocketTcpReader.this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				if (!success) {
-					this.logger.warn("Failed to deliver record: " + record);
+					this.logger.warn("Failed to deliver record: {}", record);
 				}
 			}
 		};
@@ -120,7 +125,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown requested.");
+		this.logger.info("Shutdown requested.");
 		this.tcpMonitoringRecordReader.terminate();
 
 		this.tcpStringRecordReader.terminate();

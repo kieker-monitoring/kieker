@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,12 @@ public class ReadOnlyConfiguration extends Configuration {
 
 	private static final long serialVersionUID = 3692243455682718596L;
 
+	/**
+	 * Create a read only configuration.
+	 *
+	 * @param properties
+	 *            properties of the configuration
+	 */
 	public ReadOnlyConfiguration(final Properties properties) {
 		super(properties);
 	}

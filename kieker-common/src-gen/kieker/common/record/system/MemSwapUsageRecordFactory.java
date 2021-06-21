@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.3
  */
 public final class MemSwapUsageRecordFactory implements IRecordFactory<MemSwapUsageRecord> {
-	
+
 	@Override
-	public MemSwapUsageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new MemSwapUsageRecord(buffer, stringRegistry);
+	public MemSwapUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new MemSwapUsageRecord(deserializer);
 	}
-	
+
 	@Override
-	public MemSwapUsageRecord create(final Object[] values) {
-		return new MemSwapUsageRecord(values);
+	public String[] getValueNames() {
+		return MemSwapUsageRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return MemSwapUsageRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return MemSwapUsageRecord.SIZE;
 	}

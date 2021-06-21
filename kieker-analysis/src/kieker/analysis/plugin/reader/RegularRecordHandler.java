@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,15 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.ILookup;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Runnable to handle incoming regular records.
@@ -40,13 +42,13 @@ public class RegularRecordHandler implements Runnable {
 	/** Default queue size for the regular record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
 
-	private static final Log LOG = LogFactory.getLog(RegularRecordHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegularRecordHandler.class);
 
 	private final StringRegistryCache stringRegistryCache;
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 	private final AbstractStringRegistryReaderPlugin reader;
 
-	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<ByteBuffer>(DEFAULT_QUEUE_SIZE);
+	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 
 	/**
 	 * Creates a new regular record handler.
@@ -69,7 +71,7 @@ public class RegularRecordHandler implements Runnable {
 
 				this.readRegularRecord(nextRecord);
 			} catch (final InterruptedException e) {
-				LOG.error("Regular record handler was interrupted", e);
+				LOGGER.error("Regular record handler was interrupted", e);
 			}
 		}
 	}
@@ -84,11 +86,11 @@ public class RegularRecordHandler implements Runnable {
 		try {
 			this.queue.put(buffer);
 		} catch (final InterruptedException e) {
-			LOG.error("Record queue was interrupted", e);
+			LOGGER.error("Record queue was interrupted", e);
 		}
 	}
 
-	private ILookup<String> getStringRegistry(final long registryId) {
+	private ReaderRegistry<String> getStringRegistry(final long registryId) {
 		return this.stringRegistryCache.getOrCreateRegistry(registryId);
 	}
 
@@ -97,17 +99,17 @@ public class RegularRecordHandler implements Runnable {
 		final int classId = buffer.getInt();
 		final long loggingTimestamp = buffer.getLong();
 
-		final ILookup<String> stringRegistry = this.getStringRegistry(registryId);
+		final ReaderRegistry<String> stringRegistry = this.getStringRegistry(registryId);
 
 		try {
 			final String recordClassName = stringRegistry.get(classId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
-			final IMonitoringRecord record = recordFactory.create(buffer, stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.reader.deliverRecord(record);
 		} catch (final RecordInstantiationException e) {
-			LOG.error("Error instantiating record", e);
+			LOGGER.error("Error instantiating record", e);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestSplitEvent extends AbstractKiekerTest {
@@ -47,25 +50,17 @@ public class TestSplitEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link SplitEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final SplitEvent event1 = new SplitEvent(TSTAMP, TRACE_ID, ORDER_INDEX);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
-
-		final Object[] event1Array = event1.toArray();
-
-		final SplitEvent event2 = new SplitEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
 	}
 
 	/**
@@ -73,19 +68,19 @@ public class TestSplitEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final SplitEvent event1 = new SplitEvent(TSTAMP, TRACE_ID, ORDER_INDEX);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final SplitEvent event2 = new SplitEvent(buffer, stringRegistry);
+		final SplitEvent event2 = new SplitEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

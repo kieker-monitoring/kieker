@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package kieker.monitoring.queue.behavior;
 
 import java.util.concurrent.BlockingQueue;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author "Christian Wulf"
@@ -31,7 +31,7 @@ import kieker.common.logging.LogFactory;
  */
 public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
-	private static final Log LOG = LogFactory.getLog(TerminateOnFailedInsertBehavior.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TerminateOnFailedInsertBehavior.class);
 
 	private final BlockingQueue<E> queue;
 
@@ -43,12 +43,19 @@ public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 	public boolean insert(final E element) {
 		final boolean offered = this.queue.offer(element);
 		if (!offered) {
-			LOG.error(
+			LOGGER.error(
 					"Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder()
+				.append(this.getClass());
+		return builder.toString();
 	}
 
 }

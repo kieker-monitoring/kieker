@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,13 @@ package kieker.monitoring.queue.behavior;
 public interface InsertBehavior<E> { // NOCS (should start without an "I" for reasons of readability)
 
 	/**
+	 * @param element
+	 *            element to be inserted
+	 *
 	 * @return <code>true</code> if the element after this <code>element</code> can be inserted, otherwise <code>false</code>.
 	 *
 	 * @since 1.13
 	 */
-	public abstract boolean insert(E element);
+	boolean insert(E element);
 
 }

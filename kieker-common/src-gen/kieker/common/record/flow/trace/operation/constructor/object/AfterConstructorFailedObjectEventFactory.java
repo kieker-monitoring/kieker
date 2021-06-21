@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.6
  */
 public final class AfterConstructorFailedObjectEventFactory implements IRecordFactory<AfterConstructorFailedObjectEvent> {
-	
+
 	@Override
-	public AfterConstructorFailedObjectEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new AfterConstructorFailedObjectEvent(buffer, stringRegistry);
+	public AfterConstructorFailedObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new AfterConstructorFailedObjectEvent(deserializer);
 	}
-	
+
 	@Override
-	public AfterConstructorFailedObjectEvent create(final Object[] values) {
-		return new AfterConstructorFailedObjectEvent(values);
+	public String[] getValueNames() {
+		return AfterConstructorFailedObjectEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return AfterConstructorFailedObjectEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return AfterConstructorFailedObjectEvent.SIZE;
 	}

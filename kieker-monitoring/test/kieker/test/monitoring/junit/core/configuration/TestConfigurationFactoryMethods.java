@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,37 @@ package kieker.test.monitoring.junit.core.configuration;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
-import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
- * Tests whether the factory methods of {@link Configuration} return
- * instances and performs basic checks on these.
+ * Tests whether the factory methods of {@link Configuration} return instances and performs basic checks on these.
  *
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 1.3
  */
-public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
+public class TestConfigurationFactoryMethods extends kieker.test.common.junit.AbstractKiekerTest {
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK;
+	private static final Class<TestConfigurationFactoryMethods> THIS_CLASS = TestConfigurationFactoryMethods.class;
 
 	static {
 		String tempPath;
 		try {
-			tempPath = new File(TestConfigurationFactoryMethods.class.getResource("/META-INF/kieker.monitoring.test.properties").toURI()).getAbsolutePath();
+			final URL fileResource = THIS_CLASS.getResource("/META-INF/kieker.monitoring.test.properties");
+			tempPath = new File(fileResource.toURI()).getAbsolutePath();
 		} catch (final URISyntaxException e) {
 			tempPath = null; // NOPMD (null assignment could lead to an exception - but this is a unit test)
 		}
@@ -66,34 +67,42 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 	private void executeTestValues(final Configuration configuration) {
 		Assert.assertNotNull("Configuration is null", configuration);
 		// Monitoring controller
-		Assert.assertNotNull(ConfigurationFactory.MONITORING_ENABLED + " must not be empty", configuration.getProperty(ConfigurationFactory.MONITORING_ENABLED));
-		Assert.assertNotNull(ConfigurationFactory.CONTROLLER_NAME + " must not be empty", configuration.getProperty(ConfigurationFactory.CONTROLLER_NAME));
+		Assert.assertNotNull(ConfigurationConstants.MONITORING_ENABLED + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.MONITORING_ENABLED));
+		Assert.assertNotNull(ConfigurationConstants.CONTROLLER_NAME + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.CONTROLLER_NAME));
 		// HostName may be empty!
-		Assert.assertNotNull(ConfigurationFactory.EXPERIMENT_ID + " must not be empty", configuration.getProperty(ConfigurationFactory.EXPERIMENT_ID));
-		Assert.assertNotNull(ConfigurationFactory.USE_SHUTDOWN_HOOK + " must not be empty", configuration.getProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK));
-		Assert.assertNotNull(ConfigurationFactory.DEBUG + " must not be empty", configuration.getProperty(ConfigurationFactory.DEBUG));
+		Assert.assertNotNull(ConfigurationConstants.EXPERIMENT_ID + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.EXPERIMENT_ID));
+		Assert.assertNotNull(ConfigurationConstants.USE_SHUTDOWN_HOOK + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.USE_SHUTDOWN_HOOK));
+		Assert.assertNotNull(ConfigurationConstants.DEBUG + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.DEBUG));
 		// JMX controller
-		Assert.assertNotNull(ConfigurationFactory.ACTIVATE_JMX + " must not be empty", configuration.getProperty(ConfigurationFactory.ACTIVATE_JMX));
+		Assert.assertNotNull(ConfigurationConstants.ACTIVATE_JMX + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.ACTIVATE_JMX));
 		// Writer controller
-		Assert.assertNotNull(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
-		Assert.assertNotNull(ConfigurationFactory.METADATA + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.METADATA));
-		Assert.assertNotNull(ConfigurationFactory.WRITER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.WRITER_CLASSNAME));
+		Assert.assertNotNull(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertNotNull(ConfigurationConstants.META_DATA + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.META_DATA));
+		Assert.assertNotNull(ConfigurationConstants.WRITER_CLASSNAME + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.WRITER_CLASSNAME));
 		// TimeSource controller
-		Assert.assertNotNull(ConfigurationFactory.TIMER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.TIMER_CLASSNAME));
+		Assert.assertNotNull(ConfigurationConstants.TIMER_CLASSNAME + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.TIMER_CLASSNAME));
 		// Sampling controller
-		Assert.assertNotNull(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
+		Assert.assertNotNull(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
-		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED));
-		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
-		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
-		Assert.assertNotNull(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL + " must not be empty",
-				configuration.getProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
+		Assert.assertNotNull(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED));
+		Assert.assertNotNull(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE));
+		Assert.assertNotNull(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
+		Assert.assertNotNull(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL + " must not be empty",
+				configuration.getProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
 	}
 
 	/**
@@ -101,10 +110,11 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testCreationDefaultConfigurationWithDummyWriter() {
-		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		this.executeTestValues(configuration);
-		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.WRITER_NAME, DefaultConfigurationFactory.WRITER_NAME,
-				configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME));
+		Assert.assertEquals("Writer must be " + DummyWriterConfigurationFactory.WRITER_NAME,
+				DummyWriterConfigurationFactory.WRITER_NAME,
+				configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME));
 	}
 
 	/**
@@ -124,26 +134,30 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		this.executeTestValues(configuration);
 		// check for correct default values of required parameters
 		// Monitoring controller
-		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED));
-		Assert.assertEquals("KIEKER", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
-		Assert.assertEquals("", configuration.getStringProperty(ConfigurationFactory.HOST_NAME));
-		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
+		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED));
+		Assert.assertEquals("KIEKER", configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME));
+		Assert.assertEquals("", configuration.getStringProperty(ConfigurationConstants.HOST_NAME));
+		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationConstants.EXPERIMENT_ID));
 		// JMX controller
-		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX));
+		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_JMX));
 		// Writer controller
-		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.METADATA));
-		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
-		Assert.assertThat(configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME), CoreMatchers.is(AsciiFileWriter.class.getName()));
+		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationConstants.META_DATA));
+		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertThat(configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME),
+				CoreMatchers.is(FileWriter.class.getName()));
 		// TimeSource controller
-		Assert.assertThat(configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME), CoreMatchers.is(SystemNanoTimer.class.getName()));
+		Assert.assertThat(configuration.getStringProperty(ConfigurationConstants.TIMER_CLASSNAME),
+				CoreMatchers.is(SystemNanoTimer.class.getName()));
 		// Sampling controller
-		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
+		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
-		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED));
+		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED));
 		Assert.assertEquals("META-INF/kieker.monitoring.adaptiveMonitoring.conf",
-				configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE));
-		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
-		Assert.assertEquals(30, configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
+				configuration.getPathProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE));
+		Assert.assertEquals(false,
+				configuration.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE));
+		Assert.assertEquals(30,
+				configuration.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL));
 	}
 
 	/**
@@ -154,12 +168,13 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 	@Test
 	public void testCreationSingletonConfigurationVariants() {
 		// check no config parameters are set
-		Assert.assertNull(System.getProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM));
-		Assert.assertNull(System.getProperty(ConfigurationFactory.CONTROLLER_NAME));
-		Assert.assertNull(MonitoringController.class.getClassLoader().getResourceAsStream(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_CLASSPATH));
+		Assert.assertNull(System.getProperty(ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM));
+		Assert.assertNull(System.getProperty(ConfigurationConstants.CONTROLLER_NAME));
+		Assert.assertNull(THIS_CLASS.getResource("/" + ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_CLASSPATH));
 		{ // NOCS (Block to check the default singleton configuration)
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
+			Assert.assertEquals("KIEKER-SINGLETON",
+					configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME));
 		}
 
 		// { // NOCS (adding properties file in default location)
@@ -168,23 +183,25 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
 		// pw.close();
 		// final Configuration configuration = Configuration.createSingletonConfiguration();
-		// Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		// Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT",
+		// configuration.getStringProperty(Configuration.CONTROLLER_NAME));
 		// }
 
 		{ // NOCS (adding properties file in custom location)
-			System.setProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM, TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
+			System.setProperty(ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM,
+					TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-			Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
+			Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME));
 		}
 		{ // NOCS (adding JVM property)
 			final String ctrlName = "KIEKER-TEST-JVMPARAM";
-			System.setProperty(ConfigurationFactory.CONTROLLER_NAME, ctrlName);
+			System.setProperty(ConfigurationConstants.CONTROLLER_NAME, ctrlName);
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-			Assert.assertEquals(ctrlName, configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
+			Assert.assertEquals(ctrlName, configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME));
 		}
 		// clean up after us
-		System.clearProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM);
-		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
+		System.clearProperty(ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
+		System.clearProperty(ConfigurationConstants.CONTROLLER_NAME);
 	}
 
 	/**
@@ -192,8 +209,9 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testCreationfromFile() {
-		final Configuration configuration = ConfigurationFactory.createConfigurationFromFile(TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
+		final Configuration configuration = ConfigurationFactory
+				.createConfigurationFromFile(TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 		this.executeTestValues(configuration);
-		Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
+		Assert.assertEquals("KIEKER-TEST", configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME));
 	}
 }

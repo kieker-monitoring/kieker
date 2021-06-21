@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
 /**
  * A sampler using the MXBean interface to access information about the compilation time. The sampler produces a {@link CompilationRecord} each time the
  * {@code sample} method is called.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class CompilationSampler extends AbstractMXBeanSampler {
@@ -43,7 +43,6 @@ public class CompilationSampler extends AbstractMXBeanSampler {
 	@Override
 	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
 			final IMonitoringController monitoringCtr) {
-
 		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMCompilationSignature())) {
 			return new IMonitoringRecord[] {};
 		}

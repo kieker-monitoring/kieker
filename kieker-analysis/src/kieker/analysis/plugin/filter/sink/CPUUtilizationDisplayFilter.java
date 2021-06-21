@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,9 @@ import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
  * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them.
- * 
+ *
  * @author Bjoern Weissenfels, Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 @Plugin(configuration = {
@@ -85,7 +85,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.xyplot = new XYPlot(this.numberOfEntries);
 	}
 
-	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
+	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = CPUUtilizationRecord.class)
 	public void input(final CPUUtilizationRecord record) {
 		this.updateDisplays(record);
 	}

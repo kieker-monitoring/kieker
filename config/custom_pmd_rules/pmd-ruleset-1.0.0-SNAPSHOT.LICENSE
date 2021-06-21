@@ -1,0 +1,13 @@
+Apache License Version 2.0
+
+--------------------------------------------
+
+Available at the Central Maven Repository:
+
+<groupId>net.sourceforge.teetime</groupId>
+<artifactId>pmd.ruleset</artifactId>
+<version>1.0.0-SNAPSHOT</version>
+
+Available at gitlab:
+
+https://build.se.informatik.uni-kiel.de/chw/custompmdrules

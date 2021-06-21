@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation;
 
-import java.nio.ByteBuffer;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
@@ -26,17 +25,22 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.6
  */
 public final class AfterOperationEventFactory implements IRecordFactory<AfterOperationEvent> {
-	
+
 	@Override
-	public AfterOperationEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new AfterOperationEvent(buffer, stringRegistry);
+	public AfterOperationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new AfterOperationEvent(deserializer);
 	}
-	
+
 	@Override
-	public AfterOperationEvent create(final Object[] values) {
-		return new AfterOperationEvent(values);
+	public String[] getValueNames() {
+		return AfterOperationEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return AfterOperationEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return AfterOperationEvent.SIZE;
 	}

@@ -3,7 +3,16 @@
 KIEKER_DIR="$1"
 OUTDIR="$2"
 EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
-TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
+
+TOOL_DIR=`mktemp -d`
+
+ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-1.15-SNAPSHOT.zip"
+
+( cd ${TOOL_DIR} ; unzip -o ${ZIP_NAME} )
+
+TOOL_NAME=`basename ${ZIP_NAME} | sed 's/\.zip$//g'`
+
+TRACE_ANALYSIS_SH=${TOOL_DIR}/$TOOL_NAME/bin/trace-analysis
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
@@ -19,7 +28,7 @@ if ! test -x "${TRACE_ANALYSIS_SH}"; then
 fi
 
 if ! test -x "${FILE_CONVERTER_SH}"; then
-    echo "${TRACE_ANALYSIS_SH} does not exist or is not executable"
+    echo "${FILE_CONVERTER_SH} does not exist or is not executable"
     exit 1
 fi
 
@@ -39,30 +48,27 @@ fi
 ${TRACE_ANALYSIS_SH} \
     --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-    --plot-Deployment-Component-Dependency-Graph \
-    --plot-Assembly-Component-Dependency-Graph \
+    --plot-Deployment-Component-Dependency-Graph none\
+    --plot-Assembly-Component-Dependency-Graph none\
     --plot-Container-Dependency-Graph \
-    --plot-Deployment-Operation-Dependency-Graph \
-    --plot-Assembly-Operation-Dependency-Graph \
+    --plot-Deployment-Operation-Dependency-Graph none\
+    --plot-Assembly-Operation-Dependency-Graph none\
     --plot-Aggregated-Deployment-Call-Tree \
     --plot-Aggregated-Assembly-Call-Tree \
     --print-Deployment-Equivalence-Classes \
     --print-Assembly-Equivalence-Classes \
-    --plot-Aggregated-Deployment-Call-Tree \
-    --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
-	
+
 # Dependency graphs with responseTimes
 ${TRACE_ANALYSIS_SH} \
     --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-	--p responseTime- \
-	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
-	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
-	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
-	--plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
+    -p responseTime- \
+    --plot-Deployment-Component-Dependency-Graph responseTimes-ms \
+    --plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
+    --plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
+    --plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
     --short-labels
-	
 
 # Deployment-level representatives: 6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131
 # Assembly-level representative:    6488138950668976129
@@ -77,7 +83,6 @@ ${TRACE_ANALYSIS_SH} \
     --print-Message-Traces \
     --print-Execution-Traces  \
     --short-labels
-
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
 #${FILE_CONVERTER_SH} "./${OUTDIR}" pdf

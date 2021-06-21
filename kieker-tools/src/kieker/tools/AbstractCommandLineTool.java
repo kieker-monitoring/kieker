@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools;
 
 import org.apache.commons.cli.BasicParser;
@@ -22,9 +21,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.ToolsUtil;
 
@@ -32,7 +31,10 @@ import kieker.tools.util.ToolsUtil;
  * @author Nils Christian Ehmke
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 remove after porting all tools to JCommander
  */
+@Deprecated
 public abstract class AbstractCommandLineTool {
 
 	public static final String CMD_OPT_NAME_HELP_LONG = "help";
@@ -44,14 +46,26 @@ public abstract class AbstractCommandLineTool {
 	public static final String CMD_OPT_NAME_DEBUG_LONG = "debug";
 	public static final String CMD_OPT_NAME_DEBUG_SHORT = "d";
 
-	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandLineTool.class);
 
 	private final boolean useSystemExit;
 
+	/**
+	 * Create an abstract commandline tool.
+	 *
+	 * @param useSystemExit
+	 *            true to indicated exit can be used
+	 */
 	public AbstractCommandLineTool(final boolean useSystemExit) {
 		this.useSystemExit = useSystemExit;
 	}
 
+	/**
+	 * Start analysis.
+	 *
+	 * @param args
+	 *            parameters
+	 */
 	public final void start(final String[] args) {
 		final Options options = new Options();
 
@@ -73,7 +87,7 @@ public abstract class AbstractCommandLineTool {
 			success = this.readPropertiesFromCommandLine(commandLine);
 
 			if (!success) {
-				LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+				LOGGER.info("Use the option `--{}` for usage information", CMD_OPT_NAME_HELP_LONG);
 			} else {
 				success = this.performTask();
 			}
@@ -82,7 +96,7 @@ public abstract class AbstractCommandLineTool {
 			success = false;
 		}
 
-		LOG.info("See 'kieker.log' for details");
+		LOGGER.info("See 'kieker.log' for details");
 		if (!success && this.useSystemExit) {
 			System.exit(1);
 		}
@@ -118,19 +132,42 @@ public abstract class AbstractCommandLineTool {
 		} catch (final ParseException ex) {
 			// Note that we append ex.getMessage() to the log message on purpose to improve the
 			// logging output on the console.
-			LOG.error("An error occurred while parsing the command line arguments: " + ex.getMessage(), ex);
-			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+			LOGGER.error("An error occurred while parsing the command line arguments: {}", ex.getMessage(), ex);
+			LOGGER.info("Use the option `--{}` for usage information", CMD_OPT_NAME_HELP_LONG);
 
 			return null;
 		}
 	}
 
+	/**
+	 * Add additional options.
+	 *
+	 * @param options
+	 *            options
+	 */
 	protected abstract void addAdditionalOptions(Options options);
 
+	/**
+	 * Read properties from command line.
+	 *
+	 * @param commandLine
+	 *            command line handler
+	 * @return true on success
+	 */
 	protected abstract boolean readPropertiesFromCommandLine(CommandLine commandLine);
 
+	/**
+	 * Perform task.
+	 *
+	 * @return true on success
+	 */
 	protected abstract boolean performTask();
 
+	/**
+	 * Format usage output.
+	 * 
+	 * @return the formatter
+	 */
 	protected HelpFormatter getHelpFormatter() {
 		return new CLIHelpFormatter();
 	}

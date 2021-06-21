@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,9 @@
 package kieker.test.common.util.record.factory;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueSerializer;
 
 /**
  * This record is used in tests where a record is needed that has no associated record factory.
@@ -34,38 +32,24 @@ public class TestRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 9088190056147961692L;
 
+	/** test constructor. */
 	public TestRecord() {
 		// Nothing to do
 	}
 
 	@Override
-	public Object[] toArray() {
-		return new Object[0];
-	}
-
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// not used in test
-	}
-
-	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		// not used in test
-	}
-
-	@Override
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		// not used in test
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) {
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		// not used in test
 	}
 
 	@Override
 	public Class<?>[] getValueTypes() {
 		return new Class<?>[0];
+	}
+
+	@Override
+	public String[] getValueNames() {
+		return new String[0];
 	}
 
 	@Override
