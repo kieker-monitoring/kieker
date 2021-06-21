@@ -27,6 +27,7 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.analysis.tt.writeRead.TestDataRepository;

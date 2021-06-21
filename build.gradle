@@ -33,7 +33,6 @@ dependencies {
     emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
     emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
-    aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -159,6 +158,11 @@ subprojects {
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
+
+	/*apply plugin: 'cpd'
+	cpd {
+	    //toolVersion = pmdAndCpdVersion
+	}*/
 
     apply plugin: 'checkstyle'
     checkstyle {
