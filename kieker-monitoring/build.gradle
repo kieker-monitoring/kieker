@@ -47,6 +47,9 @@ dependencies {
 
 	implementation 'com.github.oshi:oshi-core:3.12.2'
 
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation 'org.influxdb:influxdb-java:2.21'
+
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-server.jar')
 
