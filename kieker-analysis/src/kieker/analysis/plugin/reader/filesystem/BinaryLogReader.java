@@ -41,6 +41,7 @@ import kieker.common.record.misc.EmptyRecord;
  */
 @Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
+
 	@OutputPort(name = BinaryLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the reader") },
 		configuration = {
