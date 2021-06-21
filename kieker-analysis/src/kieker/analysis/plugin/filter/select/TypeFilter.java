@@ -38,11 +38,12 @@ import kieker.common.configuration.Configuration;
  * @since 1.5
  */
 @Plugin(description = "Filters incoming objects based on their type", outputPorts = {
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = {
-		Object.class }, description = "Forwards events matching the configured types"),
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = Object.class,
+			description = "Forwards events matching the configured types"),
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {},
-			description = "Forwards events not matching the configured types") }, configuration = {
-		@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object") })
+			description = "Forwards events not matching the configured types") },
+		configuration = {
+			@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object") })
 public final class TypeFilter extends AbstractFilterPlugin {
 
 	/**

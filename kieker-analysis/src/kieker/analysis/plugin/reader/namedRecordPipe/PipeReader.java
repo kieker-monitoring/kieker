@@ -39,7 +39,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 @Deprecated
 @Plugin(description = "A reader which reads records via an in-memory pipe", outputPorts = {
-	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
+	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the PipeReader")
 }, configuration = {
 	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME,

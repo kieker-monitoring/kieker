@@ -40,13 +40,14 @@ import kieker.common.util.filesystem.FSUtil;
  */
 @Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
-			description = "Output Port of the FSReader") }, configuration = {
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
-				description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
-				defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
-	})
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the FSReader") },
+		configuration = {
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
+					defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */

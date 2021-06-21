@@ -36,7 +36,7 @@ import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
  */
 @Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
+	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133",

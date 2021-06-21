@@ -41,8 +41,9 @@ import kieker.common.record.misc.EmptyRecord;
  */
 @Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
+	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the reader") },
+		configuration = {
 			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
 					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
 			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
