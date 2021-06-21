@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -25,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.6
  */
 public final class BeforeConstructorObjectEventFactory implements IRecordFactory<BeforeConstructorObjectEvent> {
-	
-	
+
 	@Override
-	public BeforeConstructorObjectEvent create(final IValueDeserializer deserializer) {
+	public BeforeConstructorObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeConstructorObjectEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public BeforeConstructorObjectEvent create(final Object[] values) {
-		return new BeforeConstructorObjectEvent(values);
+	public String[] getValueNames() {
+		return BeforeConstructorObjectEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeConstructorObjectEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeConstructorObjectEvent.SIZE;
 	}

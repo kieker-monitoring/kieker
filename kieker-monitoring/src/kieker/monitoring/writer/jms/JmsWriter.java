@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,10 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -44,7 +45,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class JmsWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(JmsWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JmsWriter.class);
 
 	private static final String PREFIX = JmsWriter.class.getName() + ".";
 
@@ -53,12 +54,16 @@ public class JmsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
+	public static final String CONFIG_USERNAME = PREFIX + "Username"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PASSWORD = PREFIX + "Password"; // NOCS (afterPREFIX)
 
 	private final String configContextFactoryType;
 	private final String configProviderUrl;
 	private final String configFactoryLookupName;
 	private final String configTopic;
 	private final long configMessageTimeToLive;
+	private final String configUsername;
+	private final String configPassword;
 
 	private Session session;
 	private Connection connection;
@@ -71,13 +76,15 @@ public class JmsWriter extends AbstractMonitoringWriter {
 		this.configFactoryLookupName = configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME);
 		this.configTopic = configuration.getStringProperty(CONFIG_TOPIC);
 		this.configMessageTimeToLive = configuration.getLongProperty(CONFIG_MESSAGETTL);
+		this.configUsername = configuration.getStringProperty(CONFIG_USERNAME);
+		this.configPassword = configuration.getStringProperty(CONFIG_PASSWORD);
 
 		this.init();
 	}
 
 	private void init() {
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.configContextFactoryType);
 			properties.put(Context.PROVIDER_URL, this.configProviderUrl);
 
@@ -92,7 +99,13 @@ public class JmsWriter extends AbstractMonitoringWriter {
 			// context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
 
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup(this.configFactoryLookupName);
-			this.connection = factory.createConnection();
+
+			if (this.configUsername.isEmpty() && this.configPassword.isEmpty()) {
+				this.connection = factory.createConnection();
+			} else {
+				this.connection = factory.createConnection(this.configUsername, this.configPassword);
+			}
+
 			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			this.connection.start();
 
@@ -104,7 +117,7 @@ public class JmsWriter extends AbstractMonitoringWriter {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = this.session.createQueue(this.configTopic);
 				if (destination == null) { //
-					LOG.error("Failed to lookup queue '" + this.configTopic + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue", this.configTopic, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
@@ -148,21 +161,15 @@ public class JmsWriter extends AbstractMonitoringWriter {
 				this.connection.close();
 			}
 		} catch (final JMSException ex) {
-			LOG.error("Error closing connection", ex);
+			LOGGER.error("Error closing connection", ex);
 		}
 	}
 
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(128);
-		sb.append(super.toString());
-		sb.append("; Session: '");
-		sb.append(this.session.toString());
-		sb.append("'; Connection: '");
-		sb.append(this.connection.toString());
-		sb.append("'; MessageProducer: '");
-		sb.append(this.sender.toString());
-		sb.append('\'');
+		sb.append(super.toString()).append("; Session: '").append(this.session.toString()).append("'; Connection: '").append(this.connection.toString())
+				.append("'; MessageProducer: '").append(this.sender.toString()).append('\'');
 		return sb.toString();
 	}
 

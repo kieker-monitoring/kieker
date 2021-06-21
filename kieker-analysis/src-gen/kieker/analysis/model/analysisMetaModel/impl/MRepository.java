@@ -20,6 +20,7 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MRepository() {
@@ -29,6 +30,7 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -36,4 +38,4 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 		return MIAnalysisMetaModelPackage.Literals.REPOSITORY;
 	}
 
-} //MRepository
+} // MRepository

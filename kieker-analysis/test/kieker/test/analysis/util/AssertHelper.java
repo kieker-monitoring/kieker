@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,18 @@ public final class AssertHelper {
 		// utility class
 	}
 
+	/**
+	 * Assert that the actual instance is really from the specified expected class.
+	 *
+	 * @param <T>
+	 *            java type
+	 *
+	 * @param expectedClazz
+	 *            class type to expect
+	 * @param actualInstance
+	 *            instance to be checked
+	 * @return true when the type matches
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T assertInstanceOf(final Class<T> expectedClazz, final Object actualInstance) {
 		Assert.assertEquals(expectedClazz, actualInstance.getClass());

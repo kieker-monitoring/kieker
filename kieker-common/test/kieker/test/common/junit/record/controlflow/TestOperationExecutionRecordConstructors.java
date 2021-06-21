@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.io.DefaultValueDeserializer;
-import kieker.common.record.io.DefaultValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
@@ -40,6 +41,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
 
+	/** test constructor. */
 	public TestOperationExecutionRecordConstructors() {
 		// empty default constructor
 	}
@@ -66,7 +68,6 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
 
-		this.checkToFromArrayAllFields(opExecutionRecord);
 		this.checkToFromBinaryAllFields(opExecutionRecord);
 	}
 
@@ -92,25 +93,13 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		Assert.assertEquals("ess's differ", ess, opExecutionRecord.getEss());
 	}
 
-	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord) {
-		final Object[] serializedRecord = opExecutionRecord.toArray();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(serializedRecord);
-
-		Assert.assertEquals("Records not equal (array)", opExecutionRecord, deserializedRecord);
-
-		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
-		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
-		this.checkSessionId(deserializedRecord, opExecutionRecord.getSessionId());
-		this.checkTinTout(deserializedRecord, opExecutionRecord.getTin(), opExecutionRecord.getTout());
-		this.checkTraceId(deserializedRecord, opExecutionRecord.getTraceId());
-	}
-
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> writerRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		opExecutionRecord.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
+		opExecutionRecord.serialize(BinaryValueSerializer.create(buffer, writerRegistry));
 		buffer.flip();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(DefaultValueDeserializer.create(buffer, stringRegistry));
+		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 

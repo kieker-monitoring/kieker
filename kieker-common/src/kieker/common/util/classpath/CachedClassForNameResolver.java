@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,12 @@ public class CachedClassForNameResolver<T> {
 	private final ConcurrentMap<String, Class<? extends T>> cachedClasses = new ConcurrentHashMap<String, Class<? extends T>>(); // NOCS
 	private final ClassForNameResolver<T> classForNameResolver;
 
+	/**
+	 * Create a cached class name resolver.
+	 *
+	 * @param classForNameResolver
+	 *            plain class name resolver
+	 */
 	public CachedClassForNameResolver(final ClassForNameResolver<T> classForNameResolver) {
 		this.classForNameResolver = classForNameResolver;
 	}
@@ -44,6 +50,7 @@ public class CachedClassForNameResolver<T> {
 	 * @return A {@link Class} instance corresponding to the given name, if it exists.
 	 *
 	 * @throws ClassNotFoundException
+	 *             when the specified {@code classname} does not refer to a known class
 	 */
 	public final Class<? extends T> classForName(final String classname) throws ClassNotFoundException {
 		Class<? extends T> clazz = this.cachedClasses.get(classname);

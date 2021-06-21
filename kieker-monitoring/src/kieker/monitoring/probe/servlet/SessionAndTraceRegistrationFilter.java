@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
@@ -46,9 +47,9 @@ import kieker.monitoring.timer.ITimeSource;
  * the control-flow of this request, (ii) executes the given {@link FilterChain} and subsequently (iii) unregisters the thread-local
  * data. If configured in the {@link FilterConfig} (see below), the execution of the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} method
  * is also part of the trace and logged to the {@link IMonitoringController} (note that this is the default behavior when no property is found).
- * 
+ *
  * The filter can be integrated into the web.xml as follows:
- * 
+ *
  * <pre>
  * {@code
  * <filter>
@@ -61,9 +62,9 @@ import kieker.monitoring.timer.ITimeSource;
  * </filter-mapping>
  * }
  * </pre>
- * 
+ *
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
@@ -76,7 +77,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	protected static final ITimeSource TIMESOURCE = MONITORING_CTRL.getTimeSource();
 	protected static final String VM_NAME = MONITORING_CTRL.getHostname();
 
-	private static final Log LOG = LogFactory.getLog(SessionAndTraceRegistrationFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SessionAndTraceRegistrationFilter.class);
 
 	/**
 	 * Signature for the {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} which will be used when logging
@@ -90,19 +91,18 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
 	 */
 	public SessionAndTraceRegistrationFilter() {
-		final Signature methodSignature =
-				new Signature("doFilter", // operation name
-						new String[] { "public" }, // modifier list
-						"void", // return type
-						new String[] { ServletRequest.class.getName(), ServletResponse.class.getName(), FilterChain.class.getName() }); // arg types
-		final ClassOperationSignaturePair filterOperationSignaturePair =
-				new ClassOperationSignaturePair(SessionAndTraceRegistrationFilter.class.getName(), methodSignature);
+		final Signature methodSignature = new Signature("doFilter", // operation name
+				new String[] { "public" }, // modifier list
+				"void", // return type
+				new String[] { ServletRequest.class.getName(), ServletResponse.class.getName(), FilterChain.class.getName() }); // arg types
+		final ClassOperationSignaturePair filterOperationSignaturePair = new ClassOperationSignaturePair(SessionAndTraceRegistrationFilter.class.getName(),
+				methodSignature);
 		this.filterOperationSignatureString = filterOperationSignaturePair.toString();
 	}
 
 	/**
 	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
-	 * 
+	 *
 	 * @param logFilterExecution
 	 *            true enables logging of the filter execution
 	 */
@@ -114,11 +114,11 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	/**
 	 * Returns the operation signature of this filter's {@link #doFilter(ServletRequest, ServletResponse, FilterChain)} operation
 	 * to be used when logging executions of this operation.
-	 * 
+	 *
 	 * Extending classes may override this method in order to provide an alternative signature. However,
 	 * note that this method is executed on each filter execution. Hence, you should return a final
 	 * value here instead of executing expensive String operations.
-	 * 
+	 *
 	 * @return The operation signature as a string.
 	 */
 	protected String getFilterOperationSignatureString() {
@@ -132,9 +132,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		if (valString != null) {
 			this.logFilterExecution = Boolean.parseBoolean(valString);
 		} else {
-			LOG.warn("Filter configuration '"
-					+ CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION
-					+ "' not set. Using the value: " + this.logFilterExecution);
+			LOGGER.warn("Filter configuration '{}' not set. Using the value: {}", CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION, this.logFilterExecution);
 		}
 	}
 
@@ -142,14 +140,14 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Register thread-local session and trace information, executes the given {@link FilterChain} and unregisters
 	 * the session/trace information. If configured, the execution of this filter is also logged to the {@link IMonitoringController}.
 	 * This method returns immediately if monitoring is not enabled.
-	 * 
+	 *
 	 * @param request
 	 *            The request.
 	 * @param response
 	 *            The response.
 	 * @param chain
 	 *            The filter chain to be used.
-	 * 
+	 *
 	 * @throws IOException
 	 *             on io errors
 	 * @throws ServletException
@@ -211,10 +209,10 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * If the given {@link ServletRequest} is an instance of {@link HttpServletRequest}, this methods extracts the session ID and registers it in the
 	 * {@link #SESSION_REGISTRY} in order to be accessible for other probes in this thread. In case no session is associated with this request (or if the request is
 	 * not an instance of {@link HttpServletRequest}), this method returns without any further actions and returns {@link OperationExecutionRecord#NO_SESSION_ID}.
-	 * 
+	 *
 	 * @param request
 	 *            The request.
-	 * 
+	 *
 	 * @return The session ID.
 	 */
 	protected String registerSessionInformation(final ServletRequest request) {

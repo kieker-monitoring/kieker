@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.reader.amqp.AMQPReader;
+import kieker.analysis.plugin.reader.amqp.AmqpReader;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -46,16 +46,16 @@ public final class AMQPAnalysisStarter {
 		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
-		logReaderConfiguration.setProperty(AMQPReader.CONFIG_PROPERTY_URI, uri);
-		logReaderConfiguration.setProperty(AMQPReader.CONFIG_PROPERTY_QUEUENAME, queueName);
+		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_URI, uri);
+		logReaderConfiguration.setProperty(AmqpReader.CONFIG_PROPERTY_QUEUENAME, queueName);
 
-		final AMQPReader logReader = new AMQPReader(logReaderConfiguration, analysisInstance);
+		final AmqpReader logReader = new AmqpReader(logReaderConfiguration, analysisInstance);
 
 		// Create and register a simple output writer.
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
 		try {
-			analysisInstance.connect(logReader, AMQPReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			analysisInstance.connect(logReader, AmqpReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();

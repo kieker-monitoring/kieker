@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,24 +20,24 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.visualization.AbstractWebVisualizationFilterPlugin;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * This JUnit test makes sure that there are no visualizations with output ports in Kieker.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class TestNoOutputPortsForVisualizations extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestNoOutputPortsForVisualizations.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestNoOutputPortsForVisualizations.class);
 
 	public TestNoOutputPortsForVisualizations() {
 		// empty default constructor
@@ -50,7 +50,7 @@ public class TestNoOutputPortsForVisualizations extends AbstractDynamicKiekerTes
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractWebVisualizationFilterPlugin.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			LOGGER.info("Testing '{}'...", clazz.getSimpleName());
 			Assert.assertFalse(clazz.getSimpleName() + "' is a visualization filter with output ports.",
 					TestNoOutputPortsForVisualizations.containsOutputPorts(clazz));
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -58,7 +58,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 	private static final ITimeSource TIMESOURCE = MONITORING_CTRL.getTimeSource();
 	private static final String VM_NAME = MONITORING_CTRL.getHostname();
 
-	private static final Log LOG = LogFactory.getLog(RestInFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestInFilter.class);
 
 	public RestInFilter() {
 		// default constructor
@@ -68,7 +68,6 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 	protected final void doFilterInternal(final HttpServletRequest httpServletRequest,
 			final HttpServletResponse httpServletResponse, final FilterChain filterChain)
 			throws ServletException, IOException {
-
 		if (!MONITORING_CTRL.isMonitoringEnabled()) {
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 			return;
@@ -77,15 +76,14 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 		final String signature = "public void com.example.intercept.in.RestInInterceptor.interceptIncoming"
 				+ httpServletRequest.getMethod() + "Request()";
 
-		final List<String> requestRestHeader = Collections
-				.list(httpServletRequest.getHeaders(RestConstants.HEADER_FIELD));
+		final List<String> requestRestHeader = Collections.list(httpServletRequest.getHeaders(RestConstants.HEADER_FIELD));
 		final AtomicLong traceId = new AtomicLong(-1);
 		final AtomicReference<String> sessionId = new AtomicReference<>(SESSION_REGISTRY.recallThreadLocalSessionId());
 		int eoi;
 		int ess;
 
 		if (requestRestHeader.isEmpty()) {
-			LOG.debug("No monitoring data found in the incoming request header");
+			LOGGER.debug("No monitoring data found in the incoming request header");
 			// LOG.info("Will continue without sending back reponse header");
 			traceId.set(CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId());
 			CF_REGISTRY.storeThreadLocalEOI(0);
@@ -94,10 +92,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			ess = 0;
 		} else {
 			final String operationExecutionHeader = requestRestHeader.get(0);
-			if (LOG.isDebugEnabled()) {
-				LOG.info("Received request: " + httpServletRequest.getRequestURI() + "with header = "
-						+ requestRestHeader.toString());
-			}
+			LOGGER.info("Received request: {} with header = {}", httpServletRequest.getRequestURI(), requestRestHeader.toString());
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
@@ -112,7 +107,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			try {
 				eoi = 1 + Integer.parseInt(eoiStr);
 			} catch (final NumberFormatException exc) {
-				LOG.warn("Invalid eoi", exc);
+				LOGGER.warn("Invalid eoi", exc);
 			}
 
 			// Extract ESS
@@ -121,7 +116,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			try {
 				ess = Integer.parseInt(essStr);
 			} catch (final NumberFormatException exc) {
-				LOG.warn("Invalid ess", exc);
+				LOGGER.warn("Invalid ess", exc);
 			}
 
 			// Extract trace id
@@ -130,7 +125,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 				try {
 					traceId.set(Long.parseLong(traceIdStr));
 				} catch (final NumberFormatException exc) {
-					LOG.warn("Invalid trace id", exc);
+					LOGGER.warn("Invalid trace id", exc);
 				}
 			} else {
 				traceId.set(CF_REGISTRY.getUniqueTraceId());
@@ -154,30 +149,30 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			@Override
 			public void setStatus(final int sc) {
 				super.setStatus(sc);
-				handleStatus(sc);
+				this.handleStatus(sc);
 			}
 
 			@Override
 			@SuppressWarnings("deprecation")
 			public void setStatus(final int sc, final String sm) {
 				super.setStatus(sc, sm);
-				handleStatus(sc);
+				this.handleStatus(sc);
 			}
 
 			@Override
 			public void sendError(final int sc, final String msg) throws IOException {
 				super.sendError(sc, msg);
-				handleStatus(sc);
+				this.handleStatus(sc);
 			}
 
 			@Override
 			public void sendError(final int sc) throws IOException {
 				super.sendError(sc);
-				handleStatus(sc);
+				this.handleStatus(sc);
 			}
 
 			private void handleStatus(final int code) {
-				addHeader(RestConstants.HEADER_FIELD,
+				this.addHeader(RestConstants.HEADER_FIELD,
 						traceId + "," + sessionId + "," + CF_REGISTRY.recallThreadLocalEOI() + ","
 								+ Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
 			}

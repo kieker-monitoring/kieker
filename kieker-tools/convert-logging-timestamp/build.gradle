@@ -1,0 +1,32 @@
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+dependencies {
+	implementation project(":kieker-common")
+	implementation project(":kieker-tools")
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	// TODO this can be removed when all tools have been ported to jcommander
+	// https://mvnrepository.com/artifact/commons-cli/commons-cli
+	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+	
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
+}
+
+task uploadArchives {
+	println 'convert-logging-timestamp skipped'
+}
+

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.analysis.junit.plugin.filter.flow;
 
 import org.junit.Assert;
@@ -43,11 +42,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.6
  */
-public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest { // NOCS (test class without constructor)
+public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest { // NOPMD,NOCS (test class without constructor)
 
+	private static final String TEST_INVALID = "Test invalid";
 	private static final String SESSION_ID = "8yWpCvrJ2";
 	private static final String HOSTNAME = "srv55";
 	private static final long TRACE_ID = 978668L;
@@ -55,7 +55,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 
 	/**
 	 * Creates an {@link EventRecordTraceGenerationFilter} with the given parameter.
-	 * 
+	 *
 	 * @param maxTraceDuration
 	 * @param maxTraceTimeout
 	 * @return
@@ -68,14 +68,14 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
@@ -97,14 +97,14 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
@@ -125,16 +125,16 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
-		final ListCollectionFilter<TraceEventRecords> sinkPluginFailed = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
+		final ListCollectionFilter<TraceEventRecords> sinkPluginFailed = new ListCollectionFilter<>(new Configuration(), controller);
 		Assert.assertTrue(sinkPluginFailed.getList().isEmpty());
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
@@ -160,7 +160,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
@@ -168,7 +168,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, "true");
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<TraceEventRecords>(new Configuration(), controller);
+		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
@@ -189,14 +189,14 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	@Test
 	public void testTraceMaxLong() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
 		this.runTest(bookstoreTrace, Long.MAX_VALUE, Long.MAX_VALUE);
 	}
 
 	@Test
 	public void testTraceShorterThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
 		final long traceDuration = bookstoreTrace.getTraceEvents()[bookstoreTrace.getTraceEvents().length - 1].getTimestamp() - START_TIME;
 		this.runTest(bookstoreTrace, traceDuration + 1, Long.MAX_VALUE);
 	}
@@ -204,14 +204,14 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	@Test
 	public void testTraceShorterThanMaxTimeoutPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
 		this.runTest(bookstoreTrace, Long.MAX_VALUE, 100);
 	}
 
 	@Test
 	public void testTraceLongerThanMaxDurationPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords bookstoreTrace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, bookstoreTrace.getTraceEvents()[0].getTimestamp());
 		final long traceDuration = bookstoreTrace.getTraceEvents()[bookstoreTrace.getTraceEvents().length - 1].getTimestamp() - START_TIME;
 		this.runTestFailed(bookstoreTrace, traceDuration - 5, Long.MAX_VALUE);
 	}
@@ -220,21 +220,21 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	public void testTraceLongerThanMaxTimeoutPasses() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords bookstoreTrace1 = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
 		final TraceEventRecords bookstoreTrace2 = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(START_TIME, TRACE_ID + 1, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, bookstoreTrace1.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, bookstoreTrace1.getTraceEvents()[0].getTimestamp());
 		this.runTestFailedInterleaved(bookstoreTrace1, bookstoreTrace2, Long.MAX_VALUE, 1);
 	}
 
 	@Test
 	public void testEventBasedTraceRepairWithoutAnyAfterEvent() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords brokenTrace = this.brokenEventsWithoutAfterEvents(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, brokenTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, brokenTrace.getTraceEvents()[0].getTimestamp());
 		this.runTestEventBasedTraceRepair(brokenTrace, Long.MAX_VALUE, Long.MAX_VALUE);
 	}
 
 	@Test
 	public void testEventBasedTraceRepairWithAfterEventAtEnd() throws IllegalStateException, AnalysisConfigurationException {
 		final TraceEventRecords brokenTrace = this.brokenEventsWithAfterEventsAtEnd(START_TIME, TRACE_ID, SESSION_ID, HOSTNAME);
-		Assert.assertEquals("Test invalid", START_TIME, brokenTrace.getTraceEvents()[0].getTimestamp());
+		Assert.assertEquals(TEST_INVALID, START_TIME, brokenTrace.getTraceEvents()[0].getTimestamp());
 		this.runTestEventBasedTraceRepair(brokenTrace, Long.MAX_VALUE, Long.MAX_VALUE);
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @since 1.6
  */
 @Aspect
-public abstract class AbstractAspect extends AbstractAspectJProbe {
+public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;

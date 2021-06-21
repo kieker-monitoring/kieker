@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import kieker.common.util.signature.ClassOperationSignaturePair;
 
 /**
  * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 @Plugin
@@ -43,7 +43,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this filter.
 	 * @param projectContext
@@ -55,11 +55,11 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port receiving the incoming events.
-	 * 
+	 *
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = OperationExecutionRecord.class)
 	public void input(final OperationExecutionRecord record) {
 		final String shortClassName = ClassOperationSignaturePair.splitOperationSignatureStr(record.getOperationSignature()).getSimpleClassname();
 		final String methodName = shortClassName + '.' + this.extractMethodName(record.getOperationSignature());
@@ -71,9 +71,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 	private String extractMethodName(final String operationSignature) {
 		final String operationSignatureWithoutParameters = operationSignature.replaceAll("\\(.*\\)", "");
 		final int lastPointPos = operationSignatureWithoutParameters.lastIndexOf('.');
-		final String methodName = operationSignatureWithoutParameters.substring(lastPointPos + 1);
-
-		return methodName;
+		return operationSignatureWithoutParameters.substring(lastPointPos + 1);
 	}
 
 	@Override
@@ -83,7 +81,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents a display for a method tag cloud.
-	 * 
+	 *
 	 * @return The display object for the method tag cloud.
 	 */
 	@Display(name = "Method Tag Cloud Display")
@@ -93,7 +91,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents a display for a component tag cloud.
-	 * 
+	 *
 	 * @return The display object for the component tag cloud.
 	 */
 	@Display(name = "Component Tag Cloud Display")

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.jms.JmsReader;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -52,17 +52,17 @@ public final class JMSAnalysisStarter {
 		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
-		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
+		logReaderConfiguration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
 
-		final JMSReader logReader = new JMSReader(logReaderConfiguration, analysisInstance);
+		final JmsReader logReader = new JmsReader(logReaderConfiguration, analysisInstance);
 
 		// Create and register a simple output writer.
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
 		try {
-			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			analysisInstance.connect(logReader, JmsReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import java.util.List;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Serializer for the default Kieker binary record format.
@@ -79,19 +79,19 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 		return (recordDataSize + stringDataSize) + 4;
 	}
 
-	private int encodeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	private int encodeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer, final IWriterRegistry<String> writerRegistry) {
 		final int offsetBefore = buffer.position();
 
 		for (final IMonitoringRecord record : records) {
 			// Since writeBytes does not contain the type name and the logging timestamp,
 			// these two fields must be serialized separately
 			final String typeName = record.getClass().getName();
-			final int typeNameId = stringRegistry.get(typeName);
+			final int typeNameId = writerRegistry.getId(typeName);
 
 			buffer.putInt(typeNameId);
 			buffer.putLong(record.getLoggingTimestamp());
 
-			record.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
+			record.serialize(BinaryValueSerializer.create(buffer, writerRegistry));
 		}
 
 		final int offsetAfter = buffer.position();

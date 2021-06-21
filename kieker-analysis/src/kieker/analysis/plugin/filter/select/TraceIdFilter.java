@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,18 +35,18 @@ import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * Allows to filter Traces about their traceIds.
- * 
+ *
  * This class has exactly one input port and one output port. If the received object
  * contains the defined traceID, the object is delivered unmodified to the output port.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
-				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
+					eventTypes = { AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
 				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
 		},
@@ -76,7 +76,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -86,7 +86,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 
 		this.acceptAllTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES);
-		this.selectedTraceIds = new TreeSet<Long>();
+		this.selectedTraceIds = new TreeSet<>();
 		for (final String id : configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_SELECTED_TRACES)) {
 			this.selectedTraceIds.add(Long.parseLong(id));
 		}
@@ -104,15 +104,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	}
 
 	private final boolean acceptId(final long traceId) {
-		if (this.acceptAllTraces || this.selectedTraceIds.contains(traceId)) {
-			return true;
-		}
-		return false;
+		return (this.acceptAllTraces || this.selectedTraceIds.contains(traceId));
 	}
 
 	/**
 	 * This method represents an input port for both operation execution and flow records.
-	 * 
+	 *
 	 * @param record
 	 *            The next record.
 	 */
@@ -128,7 +125,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents an input port for flow records.
-	 * 
+	 *
 	 * @param record
 	 *            The next record.
 	 */
@@ -155,12 +152,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents an input port for operation execution records.
-	 * 
+	 *
 	 * @param record
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID",
-			eventTypes = { OperationExecutionRecord.class })
+			eventTypes = OperationExecutionRecord.class)
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {
 		if (this.acceptId(record.getTraceId())) {
 			super.deliver(OUTPUT_PORT_NAME_MATCH, record);

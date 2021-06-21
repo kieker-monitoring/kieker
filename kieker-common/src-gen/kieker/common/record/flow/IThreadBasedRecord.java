@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,14 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Christian Wulf
  * 
  * @since 1.13
  */
 public interface IThreadBasedRecord extends IFlowRecord {
-	public long getThreadId() ;
-	
-	public int getOrderIndex() ;
-	
+	public long getThreadId();
+
+	public int getOrderIndex();
+
 }

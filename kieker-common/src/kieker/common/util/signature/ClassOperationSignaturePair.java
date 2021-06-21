@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,12 +126,13 @@ public class ClassOperationSignaturePair {
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr, final boolean javaConstructor) {
 		final String fqClassname;
 		final String returnType;
-		String name;
-		String opName;
-		String[] paramTypeList;
-		String[] modifierList;
+		final String name;
+		final String opName;
+		final String[] paramTypeList;
+		final String[] modifierList;
 		final int openParenIdx = operationSignatureStr.indexOf('(');
 		final String modRetName;
+
 		if (openParenIdx == -1) { // no parameter list
 			paramTypeList = new String[] {};
 			modRetName = operationSignatureStr;
@@ -195,9 +196,9 @@ public class ClassOperationSignaturePair {
 		}
 
 		// Append operation name and parameter type list
-		strBuilder.append(fqClassName);
-		strBuilder.append('.').append(signature.getName());
-		strBuilder.append('(');
+		strBuilder.append(fqClassName)
+				.append('.').append(signature.getName())
+				.append('(');
 		boolean first = true;
 		for (final String type : signature.getParamTypeList()) {
 			if (!first) {

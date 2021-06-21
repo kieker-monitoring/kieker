@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.monitoring.core.controller.ISamplingController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
@@ -33,7 +34,7 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
  * @author Nils Christian Ehmke, Andre van Hoorn
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractRegularSamplingServletContextListener implements ServletContextListener {
@@ -41,13 +42,13 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
-	private static final Log LOG = LogFactory.getLog(AbstractRegularSamplingServletContextListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRegularSamplingServletContextListener.class);
 
 	private final String contextParameterNameSamplingIntervalSeconds = this.getContextParameterNameSamplingIntervalSeconds();
 	private final String contextParameterNameSamplingDelaySeconds = this.getContextParameterNameSamplingDelaySeconds();
 
 	private final ISamplingController samplingController = MonitoringController.getInstance();
-	private final Collection<ScheduledSamplerJob> startedSamplerJobs = new CopyOnWriteArrayList<ScheduledSamplerJob>();
+	private final Collection<ScheduledSamplerJob> startedSamplerJobs = new CopyOnWriteArrayList<>();
 
 	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
@@ -80,7 +81,7 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 
 	private void initParameters(final ServletContext c) {
 		if (c == null) {
-			LOG.warn("ServletContext == null");
+			LOGGER.warn("ServletContext == null");
 			// we are using the default values assigned during variable declaration.
 			return;
 		}
@@ -91,8 +92,8 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 		// allows values: Int>0
 		this.sensorIntervalSeconds = this.readLongInitParameter(c, this.contextParameterNameSamplingIntervalSeconds, DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
-			LOG.warn("values for the init-param '" + this.contextParameterNameSamplingIntervalSeconds + "' must be >0; found: " + this.sensorIntervalSeconds
-					+ ". Using default value: " + DEFAULT_SENSOR_INTERVAL_SECONDS);
+			LOGGER.warn("values for the init-param '{}' must be >0; found: {}. Using default value: {}", this.contextParameterNameSamplingIntervalSeconds,
+					this.sensorIntervalSeconds, DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
 
@@ -112,7 +113,7 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 		}
 
 		if (val < 0) {
-			LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: " + defaultValue);
+			LOGGER.warn("Invalid or missing value for context-param '{}': {}. Using default value: {}", paramName, valStr, defaultValue);
 			val = defaultValue;
 		}
 
@@ -133,21 +134,21 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 
 	/**
 	 * Parameter name for the sampling interval to be used in the web.xml file.
-	 * 
+	 *
 	 * @return the parameter name
 	 */
 	protected abstract String getContextParameterNameSamplingIntervalSeconds();
 
 	/**
 	 * Parameter name for the sampling delay to be used in the web.xml file.
-	 * 
+	 *
 	 * @return the parameter name
 	 */
 	protected abstract String getContextParameterNameSamplingDelaySeconds();
 
 	/**
 	 * Create samplers for the specific sampling class.
-	 * 
+	 *
 	 * @return array of samplers
 	 */
 	protected abstract ISampler[] createSamplers();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,19 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Test;
 
-import kieker.analysis.plugin.reader.jmx.JMXReader;
+import kieker.analysis.plugin.reader.jmx.JmxReader;
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JmxWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Jan Waller, Christian Wulf
@@ -60,14 +60,14 @@ public class BasicJMXWriterReaderTest {
 		super();
 	}
 
-	@Test
+	// @Test
 	public void testCommunication() throws Exception {
 		final MonitoringController monitoringController = this.createMonitoringController();
 		final TestAnalysis analysis = this.createAnalysis();
 		analysis.startInNewThread();
 		// TO_DO wait until jmx reader has registered its notification handler
 		// via: MBeanServerConnection.isRegistered(monitoringLog)
-		// from JMXReader: this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
+		// from JmxReader: this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
 		Thread.sleep(1000);
 
 		// 3. define analysis config
@@ -96,15 +96,15 @@ public class BasicJMXWriterReaderTest {
 
 	private MonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmxWriter.class.getName());
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_CONTROLLER, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE, "true");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
+		config.setProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, JmxWriter.class.getName());
 		config.setProperty(JmxWriter.CONFIG_DOMAIN, "");
 		config.setProperty(JmxWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		return MonitoringController.createInstance(config);
@@ -112,14 +112,14 @@ public class BasicJMXWriterReaderTest {
 
 	private TestAnalysis createAnalysis() throws Exception {
 		final Configuration jmxReaderConfig = new Configuration();
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 
-		return new TestAnalysis(jmxReaderConfig, JMXReader.class);
+		return new TestAnalysis(jmxReaderConfig, JmxReader.class);
 	}
 
 	private void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController)

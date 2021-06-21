@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,20 +36,20 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * This aspect spawns before and after events by foregoing an around advice.
  * Instead, it uses before and after advices only so that "cflow" can be used when specifying its pointcut.
- * 
+ *
  * This implementation uses <code>JoinPoint.StaticPart</code> instead of <code>JoinPoint</code> in the advices for performance reasons:
  * <blockquote>If you only need the static information about the join point, you may access the static part of the join point directly with the special variable
  * thisJoinPointStaticPart.
  * Using thisJoinPointStaticPart will avoid the run-time creation of the join point object that may be necessary when using thisJoinPoint directly.
  * </blockquote>
- * 
+ *
  * @author Christian Wulf (chw)
- * 
+ *
  * @since 1.13
  *
  */
 @Aspect
-public abstract class AbstractAspect extends AbstractAspectJProbe {
+public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.reader.jmx.JMXReader;
+import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 import kieker.examples.livedemo.analysis.filter.OperationExecutionRecordEnrichmentFilter;
@@ -42,9 +42,9 @@ import kieker.examples.livedemo.analysis.sink.MethodResponsetimeDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.SwapDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Nils Christian Ehmke
@@ -124,8 +124,8 @@ public final class LiveDemoAnalysis {
 
 	public void initializeAnalysis() throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration jmxReaderConfig = new Configuration();
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
-		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisController);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SILENT, "true");
+		final JmxReader reader = new JmxReader(jmxReaderConfig, this.analysisController);
 
 		final Configuration timeReaderConfig = new Configuration();
 		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, LiveDemoAnalysis.TIME_READER_UPDATE_INTERVAL_NS);
@@ -137,7 +137,7 @@ public final class LiveDemoAnalysis {
 
 		final ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration(), this.analysisController);
 
-		this.analysisController.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, distributor, Distributor.INPUT_PORT_NAME_RECORDS);
+		this.analysisController.connect(reader, JmxReader.OUTPUT_PORT_NAME_RECORDS, distributor, Distributor.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, this.responsetimeFilter,
 				AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
@@ -184,7 +184,7 @@ public final class LiveDemoAnalysis {
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmNonHeapDisplayFilter,
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
-		this.analysisController.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisController.connect(reader, JmxReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisController.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);
 	}

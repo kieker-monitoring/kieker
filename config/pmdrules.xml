@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Kieker PMD ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+<ruleset name="Kieker PMD ruleset"
+	xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
 	xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
@@ -17,10 +18,8 @@
 	<rule ref="rulesets/internal/all-java.xml">
 		<exclude name="AvoidCatchingNPE" />
 		<exclude name="AvoidDuplicateLiterals" />
-		<exclude name="AvoidFinalLocalVariable" />
 		<exclude name="AvoidInstantiatingObjectsInLoops" />
 		<exclude name="AvoidLiteralsInIfCondition" />
-		<exclude name="AvoidPrefixingMethodParameters" />
 		<exclude name="AvoidThrowingNullPointerException" />
 		<exclude name="AvoidUsingVolatile" />
 		<exclude name="BeanMembersShouldSerialize" />
@@ -35,31 +34,42 @@
 		<exclude name="ExcessiveMethodLength" />
 		<exclude name="ExcessiveParameterList" />
 		<exclude name="GodClass" />
+		<exclude name="JUnitAssertionsShouldIncludeMessage" />
 		<exclude name="LawOfDemeter" />
 		<exclude name="LongVariable" />
 		<exclude name="LoosePackageCoupling" />
-		<exclude name="NcssMethodCount" />
 		<exclude name="NPathComplexity" />
 		<exclude name="OnlyOneReturn" />
 		<exclude name="PackageCase" />
-		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException and its name reflects its purpose -->
+		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException 
+			and its name reflects its purpose -->
 		<exclude name="SimplifyStartsWith" />
 		<exclude name="ShortClassName" />
 		<exclude name="ShortVariable" />
 		<exclude name="SignatureDeclareThrowsException" />
-		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily synchronized -->
+		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily 
+			synchronized -->
 		<exclude name="UseStringBufferForStringAppends" />
 		<exclude name="TooManyMethods" />
 		<exclude name="UnnecessaryConstructor" />
-		<exclude name="UnnecessaryFinalModifier" />
-		<exclude name="UnusedModifier" />
+		<exclude name="UnnecessaryModifier" />
 		<exclude name="UseObjectForClearerAPI" />
 		<exclude name="UseProperClassLoader" />
+		<exclude name="UseUnderscoresInNumericLiterals" />
 		<exclude name="UselessParentheses" />
+		<exclude name="UselessQualifiedThis"/>
 		<exclude name="UseVarargs" />
 	</rule>
 
-	<rule ref="rulesets/java/comments.xml/CommentRequired">
+	<rule ref="category/java/design.xml">
+		<exclude name="DataClass"/>
+		<exclude name="LawOfDemeter"/>
+		<exclude name="ExcessiveImports"/>
+		<exclude name="TooManyFields"/>
+		<exclude name="LoosePackageCoupling" />
+	</rule>
+
+	<rule ref="category/java/documentation.xml/CommentRequired">
 		<!-- <priority>5</priority> -->
 		<properties>
 			<property name="violationSuppressXPath"
@@ -69,9 +79,15 @@
 			<property name="publicMethodCommentRequirement" value="Ignored" />
 		</properties>
 	</rule>
-
-<!-- 	<rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
-<!-- 		<priority>3</priority> -->
-<!-- 	</rule> -->
-
+	
+	<rule ref="category/java/codestyle.xml/ClassNamingConventions">
+	    <properties>
+	        <property name="classPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="abstractClassPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory)" />
+	    </properties>
+    </rule>
 </ruleset>

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.factory.old.RecordFactoryWrapper;
 
 /**
  * @author Christian Wulf
@@ -34,6 +33,9 @@ public final class CachedRecordFactoryCatalog {
 	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories;
 	private final RecordFactoryResolver recordFactoryResolver;
 
+	/**
+	 * Create an {@link CachedRecordFactoryCatalog}.
+	 */
 	public CachedRecordFactoryCatalog() {
 		this(new RecordFactoryResolver());
 	}
@@ -45,6 +47,8 @@ public final class CachedRecordFactoryCatalog {
 
 	/**
 	 * Returns the only instance of this class.
+	 *
+	 * @return returns an factory catalog instance.
 	 */
 	public static CachedRecordFactoryCatalog getInstance() {
 		return INSTANCE;
@@ -54,6 +58,7 @@ public final class CachedRecordFactoryCatalog {
 	 * Hint: This method uses convention over configuration when searching for a record factory class.
 	 *
 	 * @param recordClassName
+	 *            the record class name of the record class for which the factory is returned
 	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>.
 	 *         <ul>
 	 *         <li>If the cache does not contain a record factory instance, a new one is searched and instantiated via class path resolution.
@@ -63,17 +68,16 @@ public final class CachedRecordFactoryCatalog {
 	 */
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		if (null == recordFactory) {
+		if (recordFactory == null) {
 			recordFactory = this.recordFactoryResolver.get(recordClassName);
-			if (null == recordFactory) { // if a corresponding factory could not be found
-				recordFactory = new RecordFactoryWrapper(recordClassName);
+			if (recordFactory != null) {
+				final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+				if (existingFactory != null) {
+					recordFactory = existingFactory;
+				}
 			}
-			final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
-			if (existingFactory != null) {
-				recordFactory = existingFactory;
-			}
-
 		}
 		return recordFactory;
 	}
+
 }

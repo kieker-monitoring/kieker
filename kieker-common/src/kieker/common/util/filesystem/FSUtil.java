@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,17 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
 
 	/** The usual extension of Kieker's record files. */
-	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	public static final String DAT_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
+	/** The extension of Kieker's defalted record files. */
+	public static final String DEFLATE_FILE_EXTENSION = ".df";
+	/** The extension of Kieker's bzip2ed record files. */
+	public static final String BZIP2_FILE_EXTENSION = ".bz2";
 	/** The extension of Kieker's gzipped record files. */
 	public static final String GZIP_FILE_EXTENSION = ".gz";
+	/** The extension of Kieker's xz record files. */
+	public static final String XZ_FILE_EXTENSION = ".xz";
 	/** The extension of Kieker's binary record files. */
 	public static final String BINARY_FILE_EXTENSION = ".bin";
 	/** The extension of Kieker's mapping files. */
@@ -52,7 +58,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
+	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with
+	 * {@code \\n}).
 	 *
 	 * @param str
 	 *            The string to encode.
@@ -89,7 +96,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
+	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with
+	 * {@code \n}).
 	 *
 	 * @param str
 	 *            The string to decode.
@@ -128,4 +136,5 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 			return str;
 		}
 	}
+
 }

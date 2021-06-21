@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,20 @@
 
 package kieker.checkstyle;
 
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.DetailAstImpl;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This class extends checkstyle with a new check which makes sure that classes, which implement the {@link kieker.common.record.IMonitoringRecord.Factory} interface, supply the
- * necessary static field (for the types) and the constructor (working with an array of {@link Object}) for the framework.<br>
+ * This class extends checkstyle with a new check which makes sure that classes,
+ * which implement the {@link kieker.common.record.IMonitoringRecord.Factory}
+ * interface, supply the necessary static field (for the types) and the
+ * constructor (working with an array of {@link Object}) for the framework.<br>
  * </br>
  *
- * Keep in mind that the check is not perfect, as checkstyle has some limitations. There can therefore be some false positives.<br>
+ * Keep in mind that the check is not perfect, as checkstyle has some
+ * limitations. There can therefore be some false positives.<br>
  * </br>
  *
  * The check provides a property to ignore abstract classes.
@@ -34,10 +38,13 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  *
  * @since 1.7
  */
-public class MonitoringRecordFactoryConventionCheck extends Check {
+public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 
-	/** This field contains the (constant) tree to detect the type (this is necessary as this is a little bit more nested). */
-	private static final DetailAST TYPE_AST;
+	/**
+	 * This field contains the (constant) tree to detect the type (this is necessary
+	 * as this is a little bit more nested).
+	 */
+	private static final DetailAstImpl TYPE_AST;
 
 	private static final String FACTORY_FST_NAME = "IMonitoringRecord";
 	private static final String FACTORY_SND_NAME = "Factory";
@@ -49,38 +56,38 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	static {
 		// Assemble the type tree
-		TYPE_AST = new DetailAST();
-		TYPE_AST.initialize(TokenTypes.TYPE, "");
+		TYPE_AST = new DetailAstImpl();
+		MonitoringRecordFactoryConventionCheck.TYPE_AST.initialize(TokenTypes.TYPE, "");
 
-		final DetailAST arrDecl = new DetailAST();
+		final DetailAstImpl arrDecl = new DetailAstImpl();
 		arrDecl.initialize(TokenTypes.ARRAY_DECLARATOR, "");
-		TYPE_AST.addChild(arrDecl);
+		MonitoringRecordFactoryConventionCheck.TYPE_AST.addChild(arrDecl);
 
-		final DetailAST ident = new DetailAST();
+		final DetailAstImpl ident = new DetailAstImpl();
 		arrDecl.addChild(ident);
-		ident.initialize(TokenTypes.IDENT, FIELD_TYPE_NAME);
+		ident.initialize(TokenTypes.IDENT, MonitoringRecordFactoryConventionCheck.FIELD_TYPE_NAME);
 
-		final DetailAST typeArgs = new DetailAST();
+		final DetailAstImpl typeArgs = new DetailAstImpl();
 		arrDecl.addChild(typeArgs);
 		typeArgs.initialize(TokenTypes.TYPE_ARGUMENTS, "");
 
-		final DetailAST genStart = new DetailAST();
+		final DetailAstImpl genStart = new DetailAstImpl();
 		typeArgs.addChild(genStart);
 		genStart.initialize(TokenTypes.GENERIC_START, "");
 
-		final DetailAST typeArg = new DetailAST();
+		final DetailAstImpl typeArg = new DetailAstImpl();
 		typeArgs.addChild(typeArg);
 		typeArg.initialize(TokenTypes.TYPE_ARGUMENT, "");
 
-		final DetailAST wildcard = new DetailAST();
+		final DetailAstImpl wildcard = new DetailAstImpl();
 		typeArg.addChild(wildcard);
 		wildcard.initialize(TokenTypes.WILDCARD_TYPE, "");
 
-		final DetailAST genEnd = new DetailAST();
+		final DetailAstImpl genEnd = new DetailAstImpl();
 		typeArgs.addChild(genEnd);
 		genEnd.initialize(TokenTypes.GENERIC_END, "");
 
-		final DetailAST rBrack = new DetailAST();
+		final DetailAstImpl rBrack = new DetailAstImpl();
 		arrDecl.addChild(rBrack);
 		rBrack.initialize(TokenTypes.RBRACK, "");
 	}
@@ -101,7 +108,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		// Check whether we are interested in the class (whether it is an analysis component or not)
+		// Check whether we are interested in the class (whether it is an analysis
+		// component or not)
 		if (!(this.ignoreAbstractClasses && CSUtility.isAbstract(ast))
 				&& MonitoringRecordFactoryConventionCheck.implementsFactory(ast)) {
 			this.checkConstructors(ast);
@@ -118,7 +126,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	private void checkFields(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.VARIABLE_DEF);
 		while (child != null) {
-			if ((child.getType() == TokenTypes.VARIABLE_DEF) && MonitoringRecordFactoryConventionCheck.isValidTypeField(child)) {
+			if ((child.getType() == TokenTypes.VARIABLE_DEF)
+					&& MonitoringRecordFactoryConventionCheck.isValidTypeField(child)) {
 				// We found a valid field
 				return;
 			}
@@ -139,7 +148,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	private void checkConstructors(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
 		while (child != null) {
-			if ((child.getType() == TokenTypes.CTOR_DEF) && MonitoringRecordFactoryConventionCheck.isValidConstructor(child)) {
+			if ((child.getType() == TokenTypes.CTOR_DEF)
+					&& MonitoringRecordFactoryConventionCheck.isValidConstructor(child)) {
 				// We found a valid constructor
 				return;
 			}
@@ -163,12 +173,13 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 		final String ident = field.findFirstToken(TokenTypes.IDENT).getText();
 
 		// Is the name correct?
-		if (FIELD_NAME.equals(ident)) {
+		if (MonitoringRecordFactoryConventionCheck.FIELD_NAME.equals(ident)) {
 			final DetailAST modifiers = field.findFirstToken(TokenTypes.MODIFIERS);
 
 			// Check whether the field is static and final
 			if (modifiers.branchContains(TokenTypes.LITERAL_STATIC) && modifiers.branchContains(TokenTypes.FINAL)) {
-				return MonitoringRecordFactoryConventionCheck.treeCompare(field.findFirstToken(TokenTypes.TYPE), TYPE_AST);
+				return MonitoringRecordFactoryConventionCheck.treeCompare(field.findFirstToken(TokenTypes.TYPE),
+						MonitoringRecordFactoryConventionCheck.TYPE_AST);
 			}
 		}
 
@@ -176,7 +187,9 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	}
 
 	/**
-	 * This method checks whether the given trees are more or less equal. This is necessary as the available methods do not work as expected for this special case.
+	 * This method checks whether the given trees are more or less equal. This is
+	 * necessary as the available methods do not work as expected for this special
+	 * case.
 	 *
 	 * @param actual
 	 *            The actual tree.
@@ -197,7 +210,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 			DetailAST expChild = expected.getFirstChild();
 
 			while (actChild != null) {
-				// The treeCompare method checks whether one of the children is null (we recognize therefore if the parents have different number of children).
+				// The treeCompare method checks whether one of the children is null (we
+				// recognize therefore if the parents have different number of children).
 				if (!MonitoringRecordFactoryConventionCheck.treeCompare(actChild, expChild)) {
 					return false;
 				}
@@ -206,7 +220,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 				expChild = expChild.getNextSibling();
 			}
 
-			// Everything seems to be fine - just make sure that expChild is null as well or otherwise the parents had a different number of children
+			// Everything seems to be fine - just make sure that expChild is null as well or
+			// otherwise the parents had a different number of children
 			return expChild == null;
 		}
 
@@ -231,7 +246,7 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 			final DetailAST fstParArr = fstParType.findFirstToken(TokenTypes.ARRAY_DECLARATOR);
 			if (fstParArr != null) {
 				final DetailAST fstParIdent = fstParArr.findFirstToken(TokenTypes.IDENT);
-				return fstParIdent.getText().equals(CONSTRUCTOR_PARAMETER);
+				return fstParIdent.getText().equals(MonitoringRecordFactoryConventionCheck.CONSTRUCTOR_PARAMETER);
 			}
 		}
 
@@ -239,7 +254,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	}
 
 	/**
-	 * This method finds out whether the given class implements the record factory or not.
+	 * This method finds out whether the given class implements the record factory
+	 * or not.
 	 *
 	 * @param clazz
 	 *            The class in question.
@@ -258,7 +274,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 					final String fstClauseIdent = clause.getFirstChild().getText();
 					final String sndClauseIdent = clause.getLastChild().getText();
 
-					return (FACTORY_FST_NAME.equals(fstClauseIdent)) && (FACTORY_SND_NAME.equals(sndClauseIdent));
+					return (MonitoringRecordFactoryConventionCheck.FACTORY_FST_NAME.equals(fstClauseIdent))
+							&& (MonitoringRecordFactoryConventionCheck.FACTORY_SND_NAME.equals(sndClauseIdent));
 				}
 
 				clause = clause.getNextSibling();
@@ -275,5 +292,15 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	 */
 	public void setIgnoreAbstractClasses(final boolean ignoreAbstractClasses) {
 		this.ignoreAbstractClasses = ignoreAbstractClasses;
+	}
+
+	@Override
+	public int[] getAcceptableTokens() {
+		return this.getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return this.getDefaultTokens();
 	}
 }

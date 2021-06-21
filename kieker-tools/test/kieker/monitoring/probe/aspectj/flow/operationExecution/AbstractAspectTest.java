@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,6 @@
  ***************************************************************************/
 package kieker.monitoring.probe.aspectj.flow.operationExecution;
 
-import static org.hamcrest.CoreMatchers.is; // NOCS (static import)
-import static org.hamcrest.Matchers.hasSize; // NOCS (static import)
-import static org.junit.Assert.assertThat; // NOCS (static import)
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -27,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -35,9 +33,8 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import kieker.common.util.Version;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 /**
  * An integration test for AspectJ-based probes.
@@ -46,14 +43,18 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  */
-public class AbstractAspectTest { // NOCS (abstract class)
+public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
+	/**
+	 * Empty constructor.
+	 */
 	public AbstractAspectTest() { // NOCS NOPMD (empty ctor)
-		super();
+		// empty constructor.
 	}
 
-	@Test
-	@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
+	// why is this test deactivated?
+	// @Test
+	// @SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
 		final File workingDirectory = new File(resource.toURI());
@@ -63,19 +64,25 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		final int exitValue = aspectjMonitoring.runMonitoring(workingDirectory);
 
 		// check whether monitoring was successful
-		assertThat(exitValue, is(0));
+		Assert.assertThat(exitValue, CoreMatchers.is(0));
 
 		final AspectjAnalysisFromAsciiFileLog aspectjAnalysis = new AspectjAnalysisFromAsciiFileLog();
 		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
 		// -1 because AnalysisController absorbs the KiekerMetadataRecord
-		assertThat(records, hasSize(16 - 1));
+		Assert.assertThat(records, Matchers.hasSize(16 - 1));
 	}
 
+	/**
+	 * Some logging class.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class AspectjMonitoringToAsciiFileLog {
 
 		private static final String JAVA_COMMAND = "java"; // C:/Program Files/Java/jre7/bin/
-		private static final String KIEKER_ASPECTJ_FILE_NAME = "kieker-1.13-SNAPSHOT-aspectj.jar";
+		private static final String KIEKER_ASPECTJ_FILE_NAME = "kieker-" + Version.getVERSION() + "-aspectj.jar";
 		// BookstoreApplication.jar from /kieker-examples/monitoring/probe-aspectj/build/libs/
 		// gradle uses the env. var. JAVA_HOME to build the bookstore example
 		private final String appJarFilePath;
@@ -104,7 +111,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		 * @throws InterruptedException
 		 */
 		public int runMonitoring(final File workingDirectory) throws IOException, InterruptedException {
-			this.addJmvArgument(AsciiFileWriter.CONFIG_PATH + "=" + workingDirectory);
+			this.addJmvArgument(FileWriter.CONFIG_PATH + "=" + workingDirectory);
 
 			final List<String> commandWithArgs = new ArrayList<>();
 			commandWithArgs.add(JAVA_COMMAND);
@@ -122,6 +129,12 @@ public class AbstractAspectTest { // NOCS (abstract class)
 
 	}
 
+	/**
+	 * Filter to filter out directories containing META-INF.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class NonMetaInfDirectoryFilter implements FileFilter { // NOCS (no ctor)
 		@Override
 		public boolean accept(final File pathname) {
@@ -129,6 +142,12 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		}
 	}
 
+	/**
+	 * ASCII log checker.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class AspectjAnalysisFromAsciiFileLog { // NOCS (no ctor)
 
 		private static final FileFilter FILE_FILTER = new NonMetaInfDirectoryFilter();

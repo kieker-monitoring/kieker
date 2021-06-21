@@ -1,4 +1,11 @@
-apply plugin: 'war'
+plugins {
+    id 'war'
+}
+
+repositories {
+	mavenCentral() 
+        jcenter() 
+}
 
 sourceSets {
   main { 
@@ -8,13 +15,24 @@ sourceSets {
   }
 }
 
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 webAppDirName = 'livedemo-source/WebContent'
 
 dependencies {
-  compile fileTree('livedemo-source/lib') {
+  implementation 'ch.qos.logback:logback-classic:1.1.7'
+  implementation 'org.slf4j:slf4j-api:1.7.30'
+  implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+  
+  implementation files ('../../kieker-common/build/libs/kieker-common-1.15-SNAPSHOT.jar', 
+	'../../kieker-monitoring/build/libs/kieker-monitoring-1.15-SNAPSHOT.jar',
+	'../../kieker-tools/build/libs/kieker-tools-1.15-SNAPSHOT.jar',
+	'../../kieker-analysis/build/libs/kieker-analysis-1.15-SNAPSHOT.jar')
+
+  implementation fileTree('livedemo-source/lib') {
     include '*.jar'
   }
-  compile files('../../build/libs/kieker-1.13-SNAPSHOT-aspectj.jar')
 }
 
 task unwar(type: Copy) {

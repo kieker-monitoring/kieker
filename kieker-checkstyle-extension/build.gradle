@@ -1,5 +1,14 @@
-apply plugin: 'eclipse'
+plugins {
+	id 'java'
+	id 'java-library'
+}
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
 dependencies {
-	compile resolveLibrary('**/checkstyle-*/**/*.jar')
+	// checkstyleVersion is set in kieker/gradle.properties
+	implementation "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+	runtimeOnly "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
+

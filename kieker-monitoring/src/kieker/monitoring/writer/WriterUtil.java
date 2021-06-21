@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
 
 /**
  * @author Christian Wulf
@@ -37,7 +37,7 @@ public final class WriterUtil {
 	/**
 	 * @return the number of bytes written from the buffer to the channel
 	 */
-	public static long flushBuffer(final ByteBuffer buffer, final WritableByteChannel writableChannel, final Log log) {
+	public static long flushBuffer(final ByteBuffer buffer, final WritableByteChannel writableChannel, final Logger logger) {
 		long bytesWritten = 0;
 
 		buffer.flip();
@@ -47,20 +47,18 @@ public final class WriterUtil {
 			}
 			buffer.clear();
 		} catch (final IOException e) {
-			log.error("Caught exception while writing to the channel.", e);
-			WriterUtil.close(writableChannel, log);
+			logger.error("Caught exception while writing to the channel.", e);
+			WriterUtil.close(writableChannel, logger);
 		}
 
 		return bytesWritten;
 	}
 
-	public static void close(final Closeable closeable, final Log log) {
+	public static void close(final Closeable closeable, final Logger logger) {
 		try {
 			closeable.close();
 		} catch (final IOException e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Caught exception while closing '" + closeable.getClass() + "'.", e);
-			}
+			logger.warn("Caught exception while closing '{}'.", closeable.getClass(), e);
 		}
 	}
 }

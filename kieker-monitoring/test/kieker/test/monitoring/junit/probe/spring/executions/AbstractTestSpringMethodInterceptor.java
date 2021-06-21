@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -77,8 +78,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	@Before
 	public void init() throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 		this.monitoringCtrl = MonitoringController.createInstance(config);
 
 		this.controlFlowRegistry.unsetThreadLocalEOI();
@@ -123,7 +124,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			this.registerTraceInfo();
 		}
 
-		final List<BasicMethodInvocation> invocations = new ArrayList<BasicMethodInvocation>(4);
+		final List<BasicMethodInvocation> invocations = new ArrayList<>(4);
 
 		// Note that right before the proceed we expect the ess to be proceeding execution's ess +1!
 		final BasicMethodInvocation invocation11Catalog = new BasicMethodInvocation(// eoi should not increase because no sub call

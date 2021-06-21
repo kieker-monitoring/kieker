@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,16 +25,19 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ZipCompressionFilter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Christian Wulf
@@ -58,7 +61,7 @@ public class AsciiWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, false);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, NoneCompressionFilter.class.getName());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
@@ -69,21 +72,21 @@ public class AsciiWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, true);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ZipCompressionFilter.class.getName());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final boolean shouldDecompress) throws Exception {
+	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final String compressionMethod) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, compressionMethod);
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
@@ -92,7 +95,7 @@ public class AsciiWriterReaderTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, Boolean.toString(shouldDecompress));
+		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, !compressionMethod.equals(NoneCompressionFilter.class.getName())); // NOCS
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, AsciiLogReader.class);
 
 		// 4. trigger records

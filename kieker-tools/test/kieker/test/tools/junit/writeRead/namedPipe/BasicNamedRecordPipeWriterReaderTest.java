@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -52,7 +53,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 
 		final PipeReader pipeReader = new PipeReader(pipeReaderConfig, analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		this.sinkFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
@@ -62,7 +63,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	@Override
 	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, PipeWriter.class.getName());
 		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		return MonitoringController.createInstance(config);
 	}

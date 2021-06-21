@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package kieker.analysis;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
@@ -32,7 +32,7 @@ import kieker.common.logging.LogFactory;
  * @since 1.4
  */
 public final class AnalysisControllerThread extends Thread {
-	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalysisControllerThread.class);
 
 	private final IAnalysisController analysisController;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
@@ -69,7 +69,7 @@ public final class AnalysisControllerThread extends Thread {
 			this.analysisController.run();
 			this.terminationLatch.countDown();
 		} catch (final Exception ex) { // NOPMD NOCS (Exception)
-			LOG.error("Error running AnalysisController.", ex);
+			LOGGER.error("Error running AnalysisController.", ex);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 import kieker.common.util.filesystem.FSUtil;
 
@@ -43,7 +42,7 @@ class MappingFileWriter {
 		final Charset charset = Charset.forName(charsetName);
 
 		try {
-			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+			final Writer w = Files.newBufferedWriter(newMappingFile, charset);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's mapping file.", e);

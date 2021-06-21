@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,19 +34,20 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * CXF OutInterceptor to set the sessionIdentifier header for an outgoing soap message.
- *   
+ *
  * Look here how to add it to your client config: http://cwiki.apache.org/CXF20DOC/interceptors.html
- * 
+ *
  * Setting the soap header with jaxb or aegis databinding didn't work yet:
  * http://www.nabble.com/Add-%22out-of-band%22-soap-header-using-simple-frontend-td19380093.html
  */
 /**
- * 
+ *
  * @author Dennis Kieselhorst, Andre van Hoorn
- * 
+ *
  * @since 0.91
  */
-public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
+public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFilterInterceptor
+		implements IMonitoringProbe {
 
 	/** This constant can be used as a session ID for asynchronous traces. */
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCOUT";
@@ -69,15 +70,17 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	protected final ITimeSource timeSource;
 
 	/**
-	 * Creates a new instance of this class, using the singleton instance of the {@link MonitoringController} as controller.
+	 * Creates a new instance of this class, using the singleton instance of the
+	 * {@link MonitoringController} as controller.
 	 */
 	public OperationExecutionSOAPRequestOutInterceptor() {
 		this(MonitoringController.getInstance());
 	}
 
 	/**
-	 * Creates a new instance of this class, using the given instance of a {@link MonitoringController} as controller.
-	 * 
+	 * Creates a new instance of this class, using the given instance of a
+	 * {@link MonitoringController} as controller.
+	 *
 	 * @param monitoringCtrl
 	 *            The controller of this interceptor.
 	 */
@@ -95,41 +98,44 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 			return;
 		}
 
-		String sessionID = SESSION_REGISTRY.recallThreadLocalSessionId();
+		String sessionID = OperationExecutionSOAPRequestOutInterceptor.SESSION_REGISTRY.recallThreadLocalSessionId();
 
-		long traceId = CF_REGISTRY.recallThreadLocalTraceId();
-		int eoi;
-		int ess;
+		long traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
+		final int eoi;
+		final int ess;
 
-		// Store entry time tin for this trace. This value will be used by the corresponding invocation of the ResponseOutProbe.
+		// Store entry time tin for this trace. This value will be used by the
+		// corresponding invocation of the ResponseOutProbe.
 
 		final long tin = this.timeSource.getTime();
 		boolean isEntryCall = false; // set true below if is entry call
 
 		if (traceId == -1) {
-			// traceId has not been registered before. This might be caused by a thread which has been spawned asynchronously. We will now acquire a thread id and
+			// traceId has not been registered before. This might be caused by a thread
+			// which has been spawned asynchronously. We will now acquire a thread id and
 			// store it in the thread local variable.
-			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			traceId = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			eoi = 0; // eoi of this execution
-			CF_REGISTRY.storeThreadLocalEOI(eoi);
+			OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi);
 			ess = 0; // ess of this execution
-			CF_REGISTRY.storeThreadLocalESS(ess);
+			OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.storeThreadLocalESS(ess);
 			isEntryCall = true;
 			if (sessionID == null) {
-				sessionID = SESSION_ID_ASYNC_TRACE;
-				SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
+				sessionID = OperationExecutionSOAPRequestOutInterceptor.SESSION_ID_ASYNC_TRACE;
+				OperationExecutionSOAPRequestOutInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
 			}
 		} else {
 			// thread-local traceId exists: eoi and ess should have been registered before
-			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
-			ess = CF_REGISTRY.recallThreadLocalESS(); // do not increment in this case!
+			eoi = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
+			ess = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalESS(); // do not increment in
+																									// this case!
 			if (sessionID == null) {
 				sessionID = OperationExecutionRecord.NO_SESSION_ID;
 			}
 		}
 
-		SOAP_REGISTRY.storeThreadLocalOutRequestIsEntryCall(isEntryCall);
-		SOAP_REGISTRY.storeThreadLocalOutRequestTin(tin);
+		OperationExecutionSOAPRequestOutInterceptor.SOAP_REGISTRY.storeThreadLocalOutRequestIsEntryCall(isEntryCall);
+		OperationExecutionSOAPRequestOutInterceptor.SOAP_REGISTRY.storeThreadLocalOutRequestTin(tin);
 
 		final Document d = DOMUtils.createDocument();
 		Element e;

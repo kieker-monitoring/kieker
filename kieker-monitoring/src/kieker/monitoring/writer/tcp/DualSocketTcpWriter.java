@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,16 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.WriterRegistry;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
@@ -45,7 +45,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	/** default size for the monitoring buffer. */
 	private static final int DEFAULT_STRING_REGISTRY_BUFFER_SIZE = 1024;
 	/** the logger for this class. */
-	private static final Log LOG = LogFactory.getLog(DualSocketTcpWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DualSocketTcpWriter.class);
 	/** prefix for all configuration keys. */
 	private static final String PREFIX = DualSocketTcpWriter.class.getName() + ".";
 
@@ -74,7 +74,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final ByteBuffer recordBuffer;
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
-	/** the serializer to use for the incoming records */
+	/** The serializer to use for the incoming records. */
 	private final IValueSerializer serializer;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {
@@ -86,8 +86,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		int stringRegistryBufferSize = configuration.getIntProperty(CONFIG_STRING_REGISTRY_BUFFERSIZE);
 		if (stringRegistryBufferSize <= 0) {
-			LOG.warn("Invalid buffer size passed for string registry records: " + stringRegistryBufferSize
-					+ ". Defaults to " + DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
+			LOGGER.warn("Invalid buffer size passed for string registry records: {}. Defaults to {}", stringRegistryBufferSize, DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
 			stringRegistryBufferSize = DEFAULT_STRING_REGISTRY_BUFFER_SIZE;
 		}
 
@@ -100,8 +99,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, registryPort));
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		final GetIdAdapter<String> writeBytesAdapter = new GetIdAdapter<>(writerRegistry);
-		this.serializer = DefaultValueSerializer.create(this.recordBuffer, writeBytesAdapter);
+		this.serializer = BinaryValueSerializer.create(this.recordBuffer, writerRegistry);
 
 		// this.encoder = StandardCharsets.UTF_8.newEncoder();
 
@@ -118,7 +116,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		final ByteBuffer buffer = this.recordBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
-			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOGGER);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -128,7 +126,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
-			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOGGER);
 		}
 	}
 
@@ -152,15 +150,15 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		buffer.put(bytes);
 
 		// always flush so that the stringRegistryBuffer is transmitted before the record buffer
-		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOG);
+		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOGGER);
 	}
 
 	@Override
 	public void onTerminating() {
-		WriterUtil.flushBuffer(this.stringRegistryBuffer, this.registryRecordChannel, LOG);
-		WriterUtil.flushBuffer(this.recordBuffer, this.monitoringRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.stringRegistryBuffer, this.registryRecordChannel, LOGGER);
+		WriterUtil.flushBuffer(this.recordBuffer, this.monitoringRecordChannel, LOGGER);
 
-		WriterUtil.close(this.registryRecordChannel, LOG);
-		WriterUtil.close(this.monitoringRecordChannel, LOG);
+		WriterUtil.close(this.registryRecordChannel, LOGGER);
+		WriterUtil.close(this.monitoringRecordChannel, LOGGER);
 	}
 }

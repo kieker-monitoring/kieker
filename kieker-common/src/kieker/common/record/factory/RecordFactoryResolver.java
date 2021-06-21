@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,9 @@ public class RecordFactoryResolver {
 
 	private final ClassForNameResolver<IRecordFactory> classForNameResolver;
 
+	/**
+	 * Create a record factory resolver.
+	 */
 	public RecordFactoryResolver() {
 		this.classForNameResolver = new ClassForNameResolver<IRecordFactory>(IRecordFactory.class);
 	}
@@ -39,6 +42,7 @@ public class RecordFactoryResolver {
 
 	/**
 	 * @param recordClassName
+	 *            fully qualified class name of a record
 	 * @return a new instance of the record factory belonging to the given <code>recordClassName</code> or <code>null</code> if such a record factory could not be
 	 *         found or instantiated
 	 */

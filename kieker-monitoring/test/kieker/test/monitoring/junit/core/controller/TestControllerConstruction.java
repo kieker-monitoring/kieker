@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
@@ -39,22 +39,21 @@ public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 	 */
 	@Test
 	public void testConstructionFromConfig() {
-
-		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		{// Test with default values // NOCS
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED),
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}
 		{// NOCS
 			configuration
-					.setProperty(ConfigurationFactory.MONITORING_ENABLED,
-							Boolean.toString(!configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED)));
+					.setProperty(ConfigurationConstants.MONITORING_ENABLED,
+							Boolean.toString(!configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED)));
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());
-			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED),
+			Assert.assertEquals("monitoringEnabled values differ", configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED),
 					kieker.isMonitoringEnabled());
 			kieker.terminateMonitoring();
 		}

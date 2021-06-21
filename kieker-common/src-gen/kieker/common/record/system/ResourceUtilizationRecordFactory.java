@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -25,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.3
  */
 public final class ResourceUtilizationRecordFactory implements IRecordFactory<ResourceUtilizationRecord> {
-	
-	
+
 	@Override
-	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) {
+	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ResourceUtilizationRecord(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public ResourceUtilizationRecord create(final Object[] values) {
-		return new ResourceUtilizationRecord(values);
+	public String[] getValueNames() {
+		return ResourceUtilizationRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ResourceUtilizationRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ResourceUtilizationRecord.SIZE;
 	}

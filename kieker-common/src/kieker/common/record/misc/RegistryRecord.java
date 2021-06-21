@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -36,7 +34,7 @@ import kieker.common.util.registry.IRegistry;
  *
  * @since 1.5
  */
-public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public final class RegistryRecord extends AbstractMonitoringRecord {
 	public static final int SIZE = TYPE_SIZE_INT + TYPE_SIZE_STRING;
 	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
@@ -72,7 +70,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @param values
 	 *            The values for the record.
 	 */
-	@SuppressWarnings("unchecked")
 	public RegistryRecord(final Object[] values) { // NOPMD (direct store of E (usually String))
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
@@ -99,36 +96,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getId(), this.getString(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// makes not sense for this record
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putInt(this.getId());
 		serializer.putString(this.getString());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -138,7 +108,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	@Override
 	public String[] getValueNames() {
 		return new String[] { "id", "string", "strBytes" };
@@ -184,12 +154,12 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @throws BufferOverflowException
 	 *             if the length encoded in the buffer exceeds the buffers boundary
 	 */
-	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ILookup<String> stringRegistry) throws BufferOverflowException {
+	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) throws BufferOverflowException {
 		final int id = buffer.getInt();
 		final byte[] strBytes = new byte[buffer.getInt()];
 		buffer.get(strBytes);
 		final String string = RegistryRecord.bytesToString(strBytes);
-		stringRegistry.set(string, id);
+		stringRegistry.register(id, string);
 	}
 
 	private static String bytesToString(final byte[] strBytes) {

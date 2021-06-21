@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.io;
 
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+
+import kieker.common.exception.RecordInstantiationException;
 
 /**
  * Text value deserializer implementation.
@@ -25,14 +26,27 @@ import java.nio.CharBuffer;
  * @since 1.13
  *
  */
-public class TextValueDeserializer implements IValueDeserializer {
+public class TextValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
 	private final CharBuffer buffer;
 
+	/**
+	 * Create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            buffer for the deserializer
+	 */
 	protected TextValueDeserializer(final CharBuffer buffer) {
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Factory method to create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @return the value deserializer
+	 */
 	public static TextValueDeserializer create(final CharBuffer buffer) {
 		return new TextValueDeserializer(buffer);
 	}
@@ -43,7 +57,7 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public byte getByte() {
+	public byte getByte() throws NumberFormatException {
 		return Byte.parseByte(this.readValue());
 	}
 
@@ -55,27 +69,27 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public short getShort() { // NOPMD
+	public short getShort() throws NumberFormatException { // NOPMD
 		return Short.parseShort(this.readValue());
 	}
 
 	@Override
-	public int getInt() {
+	public int getInt() throws NumberFormatException {
 		return Integer.parseInt(this.readValue());
 	}
 
 	@Override
-	public long getLong() {
+	public long getLong() throws NumberFormatException {
 		return Long.parseLong(this.readValue());
 	}
 
 	@Override
-	public float getFloat() {
+	public float getFloat() throws NumberFormatException {
 		return Float.parseFloat(this.readValue());
 	}
 
 	@Override
-	public double getDouble() {
+	public double getDouble() throws NumberFormatException {
 		return Double.parseDouble(this.readValue());
 	}
 
@@ -85,29 +99,30 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public byte[] getBytes(final byte[] target) {
-		final char[] charTarget = new char[target.length];
-		this.buffer.get(charTarget);
-		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
-		return target;
+	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
+		final int value = Integer.parseInt(this.readValue());
+		return this.enumerationValueOf(clazz, value);
 	}
 
 	private String readValue() {
-		final char[] charArray = new char[this.buffer.capacity()];
+		final char[] charArray = new char[this.buffer.limit()]; // NOPMD plural name not relevant
+		final int remaining = this.buffer.limit() - this.buffer.position();
 		char ch;
-		boolean escape = false;
 		int i = 0;
-		do {
-			escape = false;
-			ch = this.buffer.get();
-			if ((ch == '\\') && !escape) {
-				escape = true;
-			}
-			if (escape || (ch != ';')) {
-				charArray[i++] = ch;
-			}
-		} while (escape || (ch != ';'));
-		return new String(charArray);
+		if (remaining > 0) {
+			do {
+				ch = this.buffer.get();
+				if (ch == '\\') {
+					charArray[i++] = ch;
+					charArray[i++] = this.buffer.get();
+				} else if (ch != ';') {
+					charArray[i++] = ch;
+				}
+			} while ((ch != ';') && (i < remaining));
+			return new String(charArray, 0, i);
+		} else {
+			return "";
+		}
 	}
 
 }

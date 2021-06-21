@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package kieker.common.record.io;
  * Interface for value serializers for use by monitoring records.
  *
  * @author Holger Knoche
+ * @author Reiner Jung - added enumeration support
+ *
  * @since 1.13
  */
 public interface IValueSerializer {
@@ -59,7 +61,7 @@ public interface IValueSerializer {
 	 * @since 1.13
 	 */
 	public void putShort(short value); // NOPMD
-	
+
 	/**
 	 * Stores an {@code int} value in the underlying data store.
 	 *
@@ -86,7 +88,7 @@ public interface IValueSerializer {
 	 * @since 1.13
 	 */
 	public void putFloat(float value);
-	
+
 	/**
 	 * Stores a {@code double} value in the underlying data store.
 	 *
@@ -97,6 +99,18 @@ public interface IValueSerializer {
 	public void putDouble(double value);
 
 	/**
+	 * Stores a {@code Enumeration} value in the underlying data store.
+	 *
+	 * @param <T>
+	 *            enumeration type
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.14
+	 */
+	public <T extends Enum<T>> void putEnumeration(T value);
+
+	/**
 	 * Stores raw data in the underlying data store.
 	 *
 	 * @param value
@@ -104,7 +118,7 @@ public interface IValueSerializer {
 	 * @since 1.13
 	 */
 	public void putBytes(byte[] value);
-	
+
 	/**
 	 * Stores a {@code String} value in the underlying data store.
 	 *

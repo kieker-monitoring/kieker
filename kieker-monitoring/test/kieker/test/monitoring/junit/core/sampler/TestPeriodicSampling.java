@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,19 +29,19 @@ import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testPeriodicSampler() throws InterruptedException {
-		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
 
 		final AtomicInteger numTriggers = new AtomicInteger(0);

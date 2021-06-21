@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of an {@link OutputStream} that redirects data received via
- * its {@link #write(int)} method to an instance of {@link Log}.
+ * its {@link #write(int)} method to an instance of {@link Logger}.
  *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  */
 public class OutputStream2StandardLog extends OutputStream {
-	private static final Log LOG = LogFactory.getLog(OutputStream2StandardLog.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OutputStream2StandardLog.class);
 
 	private static final int LINE_END = '\n';
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -46,8 +46,8 @@ public class OutputStream2StandardLog extends OutputStream {
 	@Override
 	public void write(final int b) throws IOException {
 		if (b == LINE_END) {
-			if (LOG.isTraceEnabled()) {
-				LOG.trace(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
 			}
 			this.baos.reset();
 		} else {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -33,12 +33,12 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
-	private static final Log LOG = LogFactory.getLog(AbstractOperationExecutionAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractOperationExecutionAspect.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -81,7 +81,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
 			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			if ((eoi == -1) || (ess == -1)) {
-				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				CTRLINST.terminateMonitoring();
 			}
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
-import kieker.common.record.io.DefaultValueDeserializer;
-import kieker.common.record.io.DefaultValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.junit.record.UtilityClass;
 
 /**
@@ -60,7 +61,6 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final CallConstructorEvent event1 = new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
@@ -71,14 +71,6 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected caller class name", FQ_CALLER_CLASSNAME, event1.getCallerClassSignature());
 		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
-
-		final Object[] event1Array = event1.toArray();
-
-		final CallConstructorEvent event2 = new CallConstructorEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -86,7 +78,6 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final CallConstructorEvent event1 = new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
@@ -98,12 +89,13 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final CallConstructorEvent event2 = new CallConstructorEvent(DefaultValueDeserializer.create(buffer, stringRegistry));
+		final CallConstructorEvent event2 = new CallConstructorEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

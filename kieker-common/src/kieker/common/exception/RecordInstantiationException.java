@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package kieker.common.exception;
  * Only thrown by the {@link kieker.common.record.factory.old.RecordFactoryWrapper}.
  *
  * @author Christian Wulf
+ * @author Reiner Jung - add format string support
  *
  * @since 1.10
  */
@@ -27,8 +28,26 @@ public class RecordInstantiationException extends RuntimeException {
 
 	private static final long serialVersionUID = -2968478850093576098L;
 
+	/**
+	 * Creates a new instance of a exception.
+	 * 
+	 * @param throwable
+	 *            related throwable
+	 */
 	public RecordInstantiationException(final Throwable throwable) {
 		super(throwable);
+	}
+
+	/**
+	 * Creates a new instance of a exception utilizing a format string.
+	 *
+	 * @param format
+	 *            format string
+	 * @param arguments
+	 *            arguments used for the format string
+	 */
+	public RecordInstantiationException(final String format, final Object... arguments) {
+		super(String.format(format, arguments));
 	}
 
 }
