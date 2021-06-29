@@ -13,7 +13,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
 public class TestConstructorExecutionObject {
 	@Test
 	public void testBasicExecution() throws IOException, InterruptedException {
-		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObjectInterface.xml"));
+		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObject.xml"));
 		
 		System.out.println(temporaryFile.getAbsolutePath());
 		
@@ -22,6 +22,18 @@ public class TestConstructorExecutionObject {
 		List<String> lines = Util.getLatestLogRecord(logFolder);
 		checkConstructorResult(lines);
 	}
+	
+	@Test
+	public void testThrowingExecution() throws IOException, InterruptedException {
+		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObject.xml"));
+		
+		System.out.println(temporaryFile.getAbsolutePath());
+		
+		File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
+
+		List<String> lines = Util.getLatestLogRecord(logFolder);
+		checkThrowingConstructorResult(lines);
+	}
 
 	public static void checkConstructorResult(final List<String> lines) {
 		System.out.println(lines);
@@ -29,6 +41,15 @@ public class TestConstructorExecutionObject {
 		Assert.assertEquals("public net.example.Instrumentable.<init>()", firstSignature);
 		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
 		Assert.assertEquals("public net.example.Instrumentable.<init>()", secondSignature);
+		Assert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
+	}
+	
+	public static void checkThrowingConstructorResult(final List<String> lines) {
+		System.out.println(lines);
+		String firstSignature = lines.get(2).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
+		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", firstSignature);
+		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
+		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", secondSignature);
 		Assert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
 	}
 }

@@ -12,7 +12,7 @@ public class TestConstructorExecutionObjectInterface {
 	@Test
 	public void testBasicExecution() throws IOException, InterruptedException {
 		File temporaryFile = Util
-				.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObject.xml"));
+				.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObjectInterface.xml"));
 
 		System.out.println(temporaryFile.getAbsolutePath());
 
