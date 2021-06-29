@@ -22,4 +22,16 @@ public class TestConstructorExecutionObjectInterface {
 
 		TestConstructorExecutionObject.checkConstructorResult(lines);
 	}
+	
+	@Test
+	public void testThrowingExecution() throws IOException, InterruptedException {
+		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorExecutionObjectInterface.xml"));
+		
+		System.out.println(temporaryFile.getAbsolutePath());
+		
+		File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
+
+		List<String> lines = Util.getLatestLogRecord(logFolder);
+		TestConstructorExecutionObject.checkThrowingConstructorResult(lines);
+	}
 }
