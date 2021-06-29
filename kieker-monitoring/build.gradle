@@ -39,9 +39,9 @@ repositories {
 dependencies {
 	implementation project(':kieker-common')
 
-	implementation 'com.rabbitmq:amqp-client:4.2.1'
+	implementation "com.rabbitmq:amqp-client:$libAmqpVersion"
 
-	implementation 'org.jctools:jctools-core:3.3.0'
+	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 	
 	ajc "org.aspectj:aspectjtools:$aspectjVersion"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
@@ -86,7 +86,7 @@ dependencies {
 
 	testImplementation 'org.javassist:javassist:3.24.1-GA'
 
-	testImplementation 'junit:junit:4.12'
+	testImplementation "junit:junit:$libJunitVersion"
 
 	testImplementation 'org.objenesis:objenesis:2.2'
 	
@@ -113,7 +113,7 @@ dependencies {
 	
 	testImplementation project(':kieker-common').sourceSets.test.output
 		
-	integrationTestCompile 'junit:junit:4.13'
+	integrationTestCompile "junit:junit:$libJunitVersion"
 }
 
 task iajc(dependsOn: classes) {
