@@ -34,11 +34,15 @@ import kieker.analysis.model.ExecutionModelAssembler;
 import kieker.analysis.model.ExecutionModelAssemblerStage;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.model.ModelRepository;
+import kieker.analysis.model.OperationAndCallGeneratorStage;
 import kieker.analysis.model.StaticModelsAssemblerStage;
+import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
 import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.stage.flow.FlowTraceEventMatcher;
+import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
@@ -47,6 +51,7 @@ import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
+import kieker.common.record.flow.IFlowRecord;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
@@ -110,15 +115,22 @@ public class ExampleConfiguration extends Configuration {
 		// final DebugStage<IMonitoringRecord> debugRecordsStage = new
 		// DebugStage<>();
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
+
+		final Distributor<IFlowRecord> flowRecordDistributor = new Distributor<>();
+		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage();
+
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.sourceModel, DYNAMIC_SOURCE, this.signatureExtractor);
+
+		final ControlledEventReleaseStage<OperationEvent, IFlowRecord> flowRecordMerger = new ControlledEventReleaseStage<>(new FlowTraceEventMatcher());
+
 		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(
-				this.executionModel, new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
+				new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
 		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(
 				this.statisticsModel, statisticsObjectAccesor);
 		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel,
@@ -142,8 +154,11 @@ public class ExampleConfiguration extends Configuration {
 		// Connect the stages
 		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
 		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
-		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
-		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
+		super.connectPorts(allowedRecordsFilter.getOutputPort(), flowRecordDistributor.getInputPort());
+		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationAndCallGeneratorStage.getInputPort());
+		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), staticModelsAssembler.getInputPort());
+		super.connectPorts(staticModelsAssembler.getOutputPort(), flowRecordMerger.getControlInputPort());
+		super.connectPorts(flowRecordDistributor.getNewOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());

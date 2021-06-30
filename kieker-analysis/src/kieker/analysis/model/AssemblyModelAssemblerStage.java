@@ -16,8 +16,7 @@
 
 package kieker.analysis.model;
 
-import kieker.common.record.flow.IFlowRecord;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.analysis.model.data.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.TypeModel;
@@ -29,7 +28,7 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.14
  */
-public class AssemblyModelAssemblerStage extends AbstractFilter<IFlowRecord> {
+public class AssemblyModelAssemblerStage extends AbstractFilter<OperationEvent> {
 
 	private final AssemblyModelAssembler assembler;
 
@@ -38,11 +37,9 @@ public class AssemblyModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 	}
 
 	@Override
-	protected void execute(final IFlowRecord record) {
-		if (record instanceof BeforeOperationEvent) {
-			this.assembler.addRecord((BeforeOperationEvent) record);
-		}
-		this.outputPort.send(record);
+	protected void execute(final OperationEvent event) {
+		this.assembler.addOperation(event);
+		this.outputPort.send(event);
 	}
 
 }

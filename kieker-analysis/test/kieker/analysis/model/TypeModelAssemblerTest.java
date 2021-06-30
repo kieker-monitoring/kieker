@@ -52,7 +52,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testAddRecordIOperationRecord() {
@@ -60,7 +60,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addRecord(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddRecordStringString() {
@@ -68,7 +68,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 		final IOperationSignatureExtractor operationSignatureExtractor = new JavaOperationSignatureExtractor();
 		final TypeModelAssembler assembler = new TypeModelAssembler(this.typeModel, this.sourceModel, LABEL, componentSignatureExtractor,
 				operationSignatureExtractor);
-		assembler.addRecord(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
+		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
 
 		// check type model
 
@@ -80,8 +80,8 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 		Assert.assertEquals("Label is not " + LABEL, LABEL, list.get(0));
 
 		// Extend model
-		assembler.addRecord(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
-		assembler.addRecord(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
+		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
+		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
 
 		// check type model
 

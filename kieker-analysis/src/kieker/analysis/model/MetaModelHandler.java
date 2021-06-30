@@ -74,7 +74,9 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
  *
  * @since 1.8
+ * @deprecated since 1.15 can be removed with the old TraceAnalysis
  */
+@Deprecated
 public final class MetaModelHandler {
 
 	private MetaModelHandler() {

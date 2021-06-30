@@ -16,9 +16,9 @@
 
 package kieker.analysis.model;
 
+import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
-import kieker.common.record.flow.IOperationRecord;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
@@ -48,14 +48,14 @@ public class TypeModelAssembler extends AbstractModelAssembler {
 		this.operationSignatureExtractor = operationSignatureExtractor;
 	}
 
-	public void addRecord(final IOperationRecord record) {
-		final String classSignature = record.getClassSignature();
-		final String operationSignature = record.getOperationSignature();
+	public void addOperation(final OperationEvent event) {
+		final String componentSignature = event.getComponentSignature();
+		final String operationSignature = event.getOperationSignature();
 
-		this.addRecord(classSignature, operationSignature);
+		this.addEvent(componentSignature, operationSignature);
 	}
 
-	public void addRecord(final String componentSignature, final String operationSignature) {
+	public void addEvent(final String componentSignature, final String operationSignature) {
 		final ComponentType componentType = this.addComponentType(componentSignature);
 		this.addOperationType(componentType, operationSignature);
 	}
