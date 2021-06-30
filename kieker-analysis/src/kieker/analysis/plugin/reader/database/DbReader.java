@@ -44,7 +44,7 @@ import kieker.common.util.classpath.InstantiationFactory;
 	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the DBReader")
 }, configuration = {
 	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME,
-			defaultValue = "org.apache.derby.iapi.jdbc.AutoloadedDriver",
+			defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
 			description = "The classname of the driver used for the connection."),
 	@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING,
 			defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
