@@ -12,7 +12,7 @@ dependencies {
 	api project(':kieker-monitoring')
 	api project(':kieker-model')
 
-	api 'org.apache.cxf:cxf:2.6.17'			// cxf-bundle
+	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 	
         api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
         api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
