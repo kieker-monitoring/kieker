@@ -100,10 +100,8 @@ dependencies {
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
-	// testImplementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	testImplementation 'org.springframework:spring-beans:3.2.18.RELEASE'
-	// testImplementation resolveLibrary('framework-libs/spring/spring-expression-*.jar')
-	testImplementation 'org.springframework:spring-expression:3.2.18.RELEASE'
+	testImplementation "org.springframework:spring-beans:$springVersion"
+	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
