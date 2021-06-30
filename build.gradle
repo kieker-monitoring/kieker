@@ -220,7 +220,7 @@ subprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
-        implementation 'org.slf4j:slf4j-api:1.7.25'
+        implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
         // enable logging for test runs
         testImplementation 'ch.qos.logback:logback-classic:1.2.3'
