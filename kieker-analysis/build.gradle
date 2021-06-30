@@ -25,7 +25,7 @@ dependencies {
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 		
-	implementation 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
+	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
 	implementation 'org.apache.commons:commons-compress:1.20'
 	implementation 'org.nanohttpd:nanohttpd:2.3.0'
 			
