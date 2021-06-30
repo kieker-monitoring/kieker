@@ -12,7 +12,7 @@ dependencies {
 	api project(':kieker-monitoring')
 	api project(':kieker-model')
 
-	api 'org.apache.cxf:cxf:2.6.17'			// cxf-bundle
+	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 	
         api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
         api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
@@ -25,9 +25,9 @@ dependencies {
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 		
-	implementation 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
+	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
 	implementation 'org.apache.commons:commons-compress:1.20'
-	implementation 'org.nanohttpd:nanohttpd:2.3.0'
+	implementation 'org.nanohttpd:nanohttpd:2.3.1'
 			
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
@@ -39,6 +39,6 @@ dependencies {
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project(':kieker-common').sourceSets.test.output
 	
-	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8)
+	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }
 

@@ -52,17 +52,17 @@ dependencies {
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-server.jar')
 	
-	implementation 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
+	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
-	implementation 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
+	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
 	implementation 'org.apache.commons:commons-compress:1.20'
 		
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
-	implementation 'org.glassfish.jersey.core:jersey-server:3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-server:3.0.2'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
-	implementation 'org.glassfish.jersey.core:jersey-common:3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-common:3.0.2'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
-	implementation 'org.glassfish.jersey.core:jersey-client:3.0.0-M6'
+	implementation 'org.glassfish.jersey.core:jersey-client:3.0.2'
 	
 	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
@@ -82,28 +82,26 @@ dependencies {
 	implementation "org.springframework:spring-webmvc:$springVersion"
 	
 	// testing
-	testImplementation 'org.hamcrest:hamcrest-all:1.3'
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
 
-	testImplementation 'org.javassist:javassist:3.24.1-GA'
+	testImplementation 'org.javassist:javassist:3.28.0-GA'
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation 'org.objenesis:objenesis:2.2'
+	testImplementation 'org.objenesis:objenesis:3.2'
 	
-	testImplementation 'org.easymock:easymock:3.4'
-	testImplementation 'org.mockito:mockito-core:2.8.9' 
-	testImplementation 'org.powermock:powermock-api-mockito2:2.0.7'
-	testImplementation 'org.powermock:powermock-api-easymock:2.0.7' 
-	testImplementation 'org.powermock:powermock-module-junit4:2.0.7' 
-	testImplementation 'org.powermock:powermock-core:2.0.7'
-	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.7' 
+	testImplementation 'org.easymock:easymock:4.3'
+	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+	testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
+	testImplementation 'org.powermock:powermock-api-easymock:2.0.9' 
+	testImplementation 'org.powermock:powermock-module-junit4:2.0.9' 
+	testImplementation 'org.powermock:powermock-core:2.0.9'
+	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.9' 
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
-	// testImplementation resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	testImplementation 'org.springframework:spring-beans:3.2.18.RELEASE'
-	// testImplementation resolveLibrary('framework-libs/spring/spring-expression-*.jar')
-	testImplementation 'org.springframework:spring-expression:3.2.18.RELEASE'
+	testImplementation "org.springframework:spring-beans:$springVersion"
+	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'

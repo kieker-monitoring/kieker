@@ -34,7 +34,7 @@ dependencies {
 	implementation 'aopalliance:aopalliance:1.0'
 
 	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
-	runtimeOnly 'org.aspectj:aspectjweaver:1.9.6'
+	runtimeOnly 'org.aspectj:aspectjweaver:1.9.7'
 
 	// https://mvnrepository.com/artifact/commons-logging/commons-logging
 	runtimeOnly 'commons-logging:commons-logging:1.2'
