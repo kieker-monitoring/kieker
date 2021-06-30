@@ -84,11 +84,11 @@ dependencies {
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
 
-	testImplementation 'org.javassist:javassist:3.24.1-GA'
+	testImplementation 'org.javassist:javassist:3.28.0-GA'
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation 'org.objenesis:objenesis:2.2'
+	testImplementation 'org.objenesis:objenesis:3.2'
 	
 	testImplementation 'org.easymock:easymock:4.3'
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
