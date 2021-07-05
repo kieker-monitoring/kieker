@@ -51,7 +51,14 @@ public final class ModelObjectFromOperationCallAccessors {
 
 	private ModelObjectFromOperationCallAccessors() {}
 
-	public static final Function<OperationCall, EObject> createForAggregatedInvocation(final ExecutionModel executionModel) {
+	/**
+	 * Get corresponding aggregated invocation from the execution model for a given OperationCall.
+	 *
+	 * @param executionModel
+	 *            the execution model to be used.
+	 * @return an aggregated invocation
+	 */
+	public static final Function<OperationCall, EObject> findAggregatedInvocation4OperationCall(final ExecutionModel executionModel) {
 		return operationCall -> {
 			// Check if operationCall is an entry operation call. If so than source is null
 			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
@@ -63,4 +70,16 @@ public final class ModelObjectFromOperationCallAccessors {
 		};
 	}
 
+	/**
+	 * Get corresponding aggregated invocation from the execution model for a given OperationCall.
+	 *
+	 * @param executionModel
+	 *            the execution model to be used.
+	 * @return an aggregated invocation
+	 */
+	public static final Function<Tuple<DeployedOperation, DeployedOperation>, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
+		return operationCall -> {
+			return executionModel.getAggregatedInvocations().get(operationCall);
+		};
+	}
 }

@@ -28,6 +28,7 @@ public interface IGraph extends IElement {
 	/**
 	 * Factory method to create a new graph using the default implementation.
 	 *
+	 * @return a new graph instance
 	 * @since 1.14
 	 */
 	public static IGraph create() {

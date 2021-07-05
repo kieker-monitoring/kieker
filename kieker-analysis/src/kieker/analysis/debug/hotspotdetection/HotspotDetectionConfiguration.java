@@ -75,7 +75,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 
 		final Distributor<IFlowRecord> flowRecordDistributor = new Distributor<>();
 
-		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage();
+		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage(true);
 
 		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel, sourceModel, DYNAMIC_SOURCE,
 				new JavaComponentSignatureExtractor(), new JavaOperationSignatureExtractor());
@@ -94,6 +94,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
 		super.connectPorts(directoryReaderStage.getOutputPort(), instanceOfFilter.getInputPort());
 		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), flowRecordDistributor.getInputPort());
+
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationAndCallGeneratorStage.getInputPort());
 		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), typeModelAssembler.getInputPort());
 		super.connectPorts(typeModelAssembler.getOutputPort(), assemblyModelAssembler.getInputPort());

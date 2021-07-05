@@ -30,21 +30,25 @@ import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
+import kieker.analysis.model.CallEvent2OperationCallStage;
 import kieker.analysis.model.ExecutionModelAssembler;
 import kieker.analysis.model.ExecutionModelAssemblerStage;
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.model.ModelRepository;
 import kieker.analysis.model.OperationAndCallGeneratorStage;
+import kieker.analysis.model.OperationCallExtractorStage;
 import kieker.analysis.model.StaticModelsAssemblerStage;
+import kieker.analysis.model.data.CallEvent;
 import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
 import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.flow.FlowTraceEventMatcher;
+import kieker.analysis.stage.general.CallEventMatcher;
 import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.statistics.CallStatisticsStage;
-import kieker.analysis.statistics.FullReponseTimeStatisticsStage;
+import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
 import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysis.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
@@ -116,32 +120,42 @@ public class ExampleConfiguration extends Configuration {
 		// DebugStage<>();
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 
-		final Distributor<IFlowRecord> flowRecordDistributor = new Distributor<>();
-		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage();
+		final Distributor<IFlowRecord> flowRecordDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage(true);
 
-		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
+		final StaticModelsAssemblerStage staticModelsAssemblerStage = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.sourceModel, DYNAMIC_SOURCE, this.signatureExtractor);
 
 		final ControlledEventReleaseStage<OperationEvent, IFlowRecord> flowRecordMerger = new ControlledEventReleaseStage<>(new FlowTraceEventMatcher());
+		flowRecordMerger.declareActive();
+		final ControlledEventReleaseStage<OperationEvent, CallEvent> controlCallEventStage = new ControlledEventReleaseStage<>(
+				new CallEventMatcher());
+		controlCallEventStage.declareActive();
+		final Distributor<OperationEvent> operationCompleteDistributor = new Distributor<>(new CopyByReferenceStrategy());
 
+		final CallEvent2OperationCallStage callEvent2OperationCallStage = new CallEvent2OperationCallStage(repository.getModel(DeploymentModel.class));
+		final ExecutionModelAssemblerStage executionModelAssemblerStage = new ExecutionModelAssemblerStage(
+				new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
+		final CallStatisticsStage callStatisticsStage = new CallStatisticsStage(this.statisticsModel,
+				this.executionModel);
+
+		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
+
+		// Works on a trace
 		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
-		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
-		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(
-				new ExecutionModelAssembler(this.executionModel, this.sourceModel, DYNAMIC_SOURCE));
-		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(
+		final OperationCallExtractorStage operationCallExtractorStage = new OperationCallExtractorStage();
+
+		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
 				this.statisticsModel, statisticsObjectAccesor);
-		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel,
-				this.executionModel);
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage
 				.create(exportDirectory);
-		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new
-		// GraphMLFileWriterStage(exportDirectory.getPath());
-		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		// alternative output stage
+		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory);
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, deploymentGraphBuilderFactory);
@@ -156,20 +170,27 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), flowRecordDistributor.getInputPort());
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationAndCallGeneratorStage.getInputPort());
-		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), staticModelsAssembler.getInputPort());
-		super.connectPorts(staticModelsAssembler.getOutputPort(), flowRecordMerger.getControlInputPort());
-		super.connectPorts(flowRecordDistributor.getNewOutputPort(), traceReconstructor.getInputPort());
-		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
-		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
-		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
+		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), staticModelsAssemblerStage.getInputPort());
+		super.connectPorts(staticModelsAssemblerStage.getOutputPort(), operationCompleteDistributor.getInputPort());
+		super.connectPorts(operationCompleteDistributor.getNewOutputPort(), flowRecordMerger.getControlInputPort());
+		super.connectPorts(flowRecordDistributor.getNewOutputPort(), flowRecordMerger.getBaseInputPort());
+		super.connectPorts(flowRecordMerger.getOutputPort(), traceReconstructor.getInputPort());
+		super.connectPorts(traceReconstructor.getOutputPort(), traceDistributor.getInputPort());
+		super.connectPorts(traceDistributor.getNewOutputPort(), traceStatisticsDecorator.getInputPort());
+		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceToGraphTransformer.getInputPort());
 		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
-		// super.connectPorts(traceToGraphTransformer.getOutputPort(),
-		// graphMLTraceGraphFileWriter.getInputPort());
-		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractor.getInputPort());
-		super.connectPorts(operationCallExtractor.getOutputPort(), executionModelAssembler.getInputPort());
-		super.connectPorts(executionModelAssembler.getOutputPort(), fullStatisticsDecorator.getInputPort());
-		super.connectPorts(fullStatisticsDecorator.getOutputPort(), callStatisticsDecorator.getInputPort());
-		super.connectPorts(callStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
+		// alterante output
+		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
+		super.connectPorts(operationCompleteDistributor.getNewOutputPort(), controlCallEventStage.getControlInputPort());
+		super.connectPorts(operationAndCallGeneratorStage.getCallOutputPort(), controlCallEventStage.getBaseInputPort());
+		super.connectPorts(controlCallEventStage.getOutputPort(), callEvent2OperationCallStage.getInputPort());
+		super.connectPorts(callEvent2OperationCallStage.getOutputPort(), executionModelAssemblerStage.getInputPort());
+		super.connectPorts(executionModelAssemblerStage.getOutputPort(), callStatisticsStage.getInputPort());
+		super.connectPorts(callStatisticsStage.getOutputPort(), onTerminationTrigger.getInputPort());
+
+		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractorStage.getInputPort());
+		super.connectPorts(operationCallExtractorStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
+
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(),
 		// debugStage.getInputPort());

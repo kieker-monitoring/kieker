@@ -16,25 +16,25 @@
 
 package kieker.analysis.model;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.Tuple;
+import kieker.model.analysismodel.trace.OperationCall;
 
 import teetime.stage.basic.AbstractFilter;
 
 /**
- * @author Reiner Jung
- * @since 1.15
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
-public class ExecutionModelAssemblerStage extends AbstractFilter<Tuple<DeployedOperation, DeployedOperation>> {
+public class TraceBasedExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
-	private final IExecutionModelAssembler assembler;
+	private final ITraceBasedExecutionModelAssembler assembler;
 
-	public ExecutionModelAssemblerStage(final IExecutionModelAssembler assembler) {
+	public TraceBasedExecutionModelAssemblerStage(final ITraceBasedExecutionModelAssembler assembler) {
 		this.assembler = assembler;
 	}
 
 	@Override
-	protected void execute(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
+	protected void execute(final OperationCall operationCall) {
 		this.assembler.addOperationCall(operationCall);
 		this.outputPort.send(operationCall);
 	}

@@ -16,7 +16,6 @@
 
 package kieker.analysis;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +61,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.analysis.model.data.OperationEvent)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
@@ -82,100 +81,6 @@ public class ArchitectureModelAssemblerTest {
 
 		Assert.assertTrue(actualList.equals(expectedList));
 
-	}
-
-	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
-	 */
-	@Test
-	public void testComponentKeysExistsAfterAddRecordFromRecord() {
-		final TypeModel typeModel = this.factory.createTypeModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
-
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-
-		typeModelAssembler.addOperation(this.beforeOperationEvent1);
-		typeModelAssembler.addOperation(this.beforeOperationEvent2);
-		typeModelAssembler.addOperation(this.beforeOperationEvent3);
-
-		final List<String> actualList = new ArrayList<>(typeModel.getComponentTypes().keySet());
-		final List<String> expectedList = Arrays.asList(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_CLASS_SIGNATURE_2);
-		Collections.sort(actualList);
-		Collections.sort(expectedList);
-
-		Assert.assertTrue(actualList.equals(expectedList));
-	}
-
-	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
-	 */
-	@Test
-	public void testOperationExistsAfterAddRecordFromRecord() {
-		final TypeModel typeModel = this.factory.createTypeModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
-
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-
-		typeModelAssembler.addOperation(this.beforeOperationEvent1);
-		typeModelAssembler.addOperation(this.beforeOperationEvent2);
-		typeModelAssembler.addOperation(this.beforeOperationEvent3);
-
-		final List<String> actualList = typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
-				.map(c -> c.getSignature()).collect(Collectors.toList());
-		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-		Collections.sort(actualList);
-		Collections.sort(expectedList);
-
-		Assert.assertTrue(actualList.equals(expectedList));
-	}
-
-	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
-	 */
-	@Test
-	public void testOperationKeysExistsAfterAddRecordFromRecord() {
-		final TypeModel typeModel = this.factory.createTypeModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
-
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-
-		typeModelAssembler.addOperation(this.beforeOperationEvent1);
-		typeModelAssembler.addOperation(this.beforeOperationEvent2);
-		typeModelAssembler.addOperation(this.beforeOperationEvent3);
-
-		final List<String> actualList = new ArrayList<>(typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().keySet());
-		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-		Collections.sort(actualList);
-		Collections.sort(expectedList);
-
-		Assert.assertTrue(actualList.equals(expectedList));
-	}
-
-	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	public void testOperationExistsAfterAddRecordFromString() {
-		final TypeModel typeModel = this.factory.createTypeModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
-
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-
-		typeModelAssembler.addEvent(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
-		typeModelAssembler.addEvent(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-		typeModelAssembler.addEvent(EXAMPLE_CLASS_SIGNATURE_2, EXAMPLE_OPERATION_SIGNATURE_3);
-
-		final List<String> actualList = typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
-				.map(c -> c.getSignature()).collect(Collectors.toList());
-		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-		Collections.sort(actualList);
-		Collections.sort(expectedList);
-
-		Assert.assertTrue(actualList.equals(expectedList));
 	}
 
 }

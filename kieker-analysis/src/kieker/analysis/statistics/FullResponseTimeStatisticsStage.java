@@ -14,29 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.statistics;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.Tuple;
+import java.util.function.Function;
 
-import teetime.stage.basic.AbstractFilter;
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
- * @author Reiner Jung
- * @since 1.15
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
+ *
  */
-public class ExecutionModelAssemblerStage extends AbstractFilter<Tuple<DeployedOperation, DeployedOperation>> {
+public class FullResponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCall> {
 
-	private final IExecutionModelAssembler assembler;
-
-	public ExecutionModelAssemblerStage(final IExecutionModelAssembler assembler) {
-		this.assembler = assembler;
-	}
-
-	@Override
-	protected void execute(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
+	public FullResponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCall, EObject> objectAccesor) {
+		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
 	}
 
 }

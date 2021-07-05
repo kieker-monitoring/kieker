@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
@@ -39,6 +40,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	private static final String LABEL = "FIRST";
 	private static final String COMPONENT_TYPE_SIGNATURE = "component.name";
 	private static final String OPERATION_TYPE_SIGNATURE = "int function(Parameter a)";
+	private static final String HOSTNAME = "test-host";
 	private TypeModel typeModel;
 	private SourceModel sourceModel;
 
@@ -68,7 +70,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 		final IOperationSignatureExtractor operationSignatureExtractor = new JavaOperationSignatureExtractor();
 		final TypeModelAssembler assembler = new TypeModelAssembler(this.typeModel, this.sourceModel, LABEL, componentSignatureExtractor,
 				operationSignatureExtractor);
-		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
+		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
 
 		// check type model
 
@@ -80,8 +82,8 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 		Assert.assertEquals("Label is not " + LABEL, LABEL, list.get(0));
 
 		// Extend model
-		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
-		assembler.addEvent(COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE);
+		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
+		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
 
 		// check type model
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.model;
 
-package kieker.analysis.statistics;
-
-import java.util.function.Function;
-
-import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.StatisticsModel;
 import kieker.model.analysismodel.trace.OperationCall;
 
 /**
+ * @author Reiner Jung
  *
- * @author Sören Henning
- *
- * @since 1.14
+ * @since 1.15
  *
  */
-public class FullReponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCall> {
+public interface ITraceBasedExecutionModelAssembler {
 
-	public FullReponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCall, EObject> objectAccesor) {
-		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
-	}
+	void addOperationCall(final OperationCall operationCall);
 
 }

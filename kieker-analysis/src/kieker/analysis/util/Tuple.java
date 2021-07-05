@@ -47,7 +47,7 @@ public class Tuple<F, S> {
 	@Override
 	public boolean equals(final Object value) {
 		if (value != null) {
-			if (value instanceof Tuple) {
+			if (value instanceof Tuple) { // NOPMD CollapsibleIfStatements (no they cannot)
 				final Tuple<?, ?> key = (Tuple<?, ?>) value;
 				if ((this.first == null) && (key.getFirst() == null)) {
 					if ((this.second == null) && (key.getSecond() == null)) {

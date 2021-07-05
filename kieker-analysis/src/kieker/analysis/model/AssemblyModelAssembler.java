@@ -31,7 +31,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class AssemblyModelAssembler extends AbstractModelAssembler {
+public class AssemblyModelAssembler extends AbstractSourceModelAssembler {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 

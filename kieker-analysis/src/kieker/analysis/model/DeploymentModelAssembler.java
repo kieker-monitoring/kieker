@@ -32,7 +32,7 @@ import kieker.model.analysismodel.sources.SourceModel;
  *
  * @since 1.14
  */
-public class DeploymentModelAssembler extends AbstractModelAssembler {
+public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 	private final AssemblyModel assemblyModel;

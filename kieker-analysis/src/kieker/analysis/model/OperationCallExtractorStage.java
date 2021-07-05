@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis;
+package kieker.analysis.model;
 
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.trace.traversal.TraceTraverser;

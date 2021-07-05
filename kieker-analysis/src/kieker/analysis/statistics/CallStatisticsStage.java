@@ -18,23 +18,25 @@ package kieker.analysis.statistics;
 
 import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.statistics.calculating.CountCalculator;
+import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
-import kieker.model.analysismodel.trace.OperationCall;
 
 /**
+ * Aggregates calls into execution model.
  *
  * @author Sören Henning
  *
  * @since 1.14
  *
  */
-public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCall> {
+public class CallStatisticsStage extends StatisticsDecoratorStage<Tuple<DeployedOperation, DeployedOperation>> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {
-		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, new CountCalculator<>(),
-				ModelObjectFromOperationCallAccessors.createForAggregatedInvocation(executionModel));
+		super(statisticsModel, EPredefinedUnits.INVOCATION, new CountCalculator<>(),
+				ModelObjectFromOperationCallAccessors.findAggregatedInvocation4OperationTuple(executionModel));
 	}
 
 }

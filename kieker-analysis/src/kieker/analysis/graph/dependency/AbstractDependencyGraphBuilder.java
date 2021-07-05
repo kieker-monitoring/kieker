@@ -74,7 +74,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	private void handleInvocation(final AggregatedInvocation invocation) {
 		final IVertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
 		final IVertex targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.RESPONSE_TIME).getProperties()
+		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
 				.get(EPropertyType.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
