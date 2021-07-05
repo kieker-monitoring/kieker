@@ -28,6 +28,8 @@ import org.eclipse.emf.common.util.EMap;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.model.DeploymentModelPrinter;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -47,6 +49,8 @@ import teetime.framework.Execution;
  *
  */
 public class ExampleConfigurationTest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger("ExampleConfigurationText");
 
 	// @Rule
 	// public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -99,11 +103,17 @@ public class ExampleConfigurationTest {
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
 
-		// StatisticsModel statisticsModel = configuration.getStatisticsModel();
-
 		final EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();
 		// contains [1, 1, 50] in any order
+
+		for (final AggregatedInvocation o : aggregatedInvocations.values()) {
+			LOGGER.info("{}:{} ->> {}:{}", o.getSource().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+					o.getSource().getAssemblyOperation().getOperationType().getSignature(),
+					o.getTarget().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+					o.getTarget().getAssemblyOperation().getOperationType().getSignature());
+		}
+
 		Assert.assertThat(aggregatedInvocations.values().size(), CoreMatchers.is(3));
 	}
 }
