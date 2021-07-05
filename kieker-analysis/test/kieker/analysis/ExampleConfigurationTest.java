@@ -50,7 +50,7 @@ import teetime.framework.Execution;
  */
 public class ExampleConfigurationTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger("ExampleConfigurationText");
+	private static final Logger LOGGER = LoggerFactory.getLogger("ExampleConfigurationTest");
 
 	// @Rule
 	// public TemporaryFolder tempFolder = new TemporaryFolder();

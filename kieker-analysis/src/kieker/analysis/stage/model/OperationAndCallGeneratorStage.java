@@ -15,9 +15,12 @@
  ***************************************************************************/
 package kieker.analysis.stage.model;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
@@ -39,8 +42,10 @@ import teetime.framework.OutputPort;
  */
 public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowRecord> {
 
-	private final Map<Long, TraceMetadata> traceMetadataMap = new HashMap<>();
-	private final Map<Long, Stack<OperationEvent>> traceStacksMap = new HashMap<>();
+	private static final Logger LOGGER = LoggerFactory.getLogger("OperationAndCallGeneratorStage");
+
+	private final Map<Long, TraceMetadata> traceMetadataMap = new ConcurrentHashMap<>();
+	private final Map<Long, Stack<OperationEvent>> traceStacksMap = new ConcurrentHashMap<>();
 
 	private final OutputPort<OperationEvent> operationOutputPort = this.createOutputPort(OperationEvent.class);
 	private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
@@ -81,13 +86,17 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 		final OperationEvent newEvent = new OperationEvent(traceMetadata.getHostname(),
 				beforeOperationEvent.getClassSignature(),
 				beforeOperationEvent.getOperationSignature());
-		this.operationOutputPort.send(newEvent);
 		if (!stack.empty()) {
+			this.operationOutputPort.send(newEvent);
 			this.callOutputPort.send(new CallEvent(stack.peek(), newEvent));
+			LOGGER.info("!! {}:{}", beforeOperationEvent.getClassSignature(), beforeOperationEvent.getOperationSignature());
 		} else if (this.createEntryCall) {
 			final OperationEvent triggerEvent = new OperationEvent("external", "<unknown>", "<unknown>");
 			this.operationOutputPort.send(triggerEvent);
+			this.operationOutputPort.send(newEvent);
 			this.callOutputPort.send(new CallEvent(triggerEvent, newEvent));
+			LOGGER.info("++ {}:{}", triggerEvent.getComponentSignature(), triggerEvent.getOperationSignature());
+			LOGGER.info("++ {}:{}", beforeOperationEvent.getClassSignature(), beforeOperationEvent.getOperationSignature());
 		}
 		stack.push(newEvent);
 	}
