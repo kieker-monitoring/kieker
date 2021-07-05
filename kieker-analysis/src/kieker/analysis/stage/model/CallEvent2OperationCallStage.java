@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.analysis.model.data.CallEvent;
-import kieker.analysis.model.data.OperationEvent;
+import kieker.analysis.stage.model.data.CallEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;

@@ -14,12 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.analysis.model.data.OperationEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyModel;
-import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.type.TypeModel;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -28,13 +28,12 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.14
  */
-public class DeploymentModelAssemblerStage extends AbstractFilter<OperationEvent> {
+public class AssemblyModelAssemblerStage extends AbstractFilter<OperationEvent> {
 
-	private final DeploymentModelAssembler assembler;
+	private final AssemblyModelAssembler assembler;
 
-	public DeploymentModelAssemblerStage(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel, final SourceModel sourceModel,
-			final String sourceLabel) {
-		this.assembler = new DeploymentModelAssembler(assemblyModel, deploymentModel, sourceModel, sourceLabel);
+	public AssemblyModelAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+		this.assembler = new AssemblyModelAssembler(typeModel, assemblyModel, sourceModel, sourceLabel);
 	}
 
 	@Override

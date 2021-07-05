@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.model;
-
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.Tuple;
-
-import teetime.stage.basic.AbstractFilter;
+package kieker.analysis.stage.model.data;
 
 /**
+ * Represent one operation event.
+ *
  * @author Reiner Jung
  * @since 1.15
  */
-public class ExecutionModelAssemblerStage extends AbstractFilter<Tuple<DeployedOperation, DeployedOperation>> {
+public class OperationEvent {
 
-	private final IExecutionModelAssembler assembler;
+	private final String componentSignature;
+	private final String operationSignature;
+	private final String hostname;
 
-	public ExecutionModelAssemblerStage(final IExecutionModelAssembler assembler) {
-		this.assembler = assembler;
+	public OperationEvent(final String hostname, final String componentSignature, final String operationSignature) {
+		this.hostname = hostname;
+		this.componentSignature = componentSignature;
+		this.operationSignature = operationSignature;
 	}
 
-	@Override
-	protected void execute(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
+	public String getHostname() {
+		return this.hostname;
 	}
 
+	public String getComponentSignature() {
+		return this.componentSignature;
+	}
+
+	public String getOperationSignature() {
+		return this.operationSignature;
+	}
 }

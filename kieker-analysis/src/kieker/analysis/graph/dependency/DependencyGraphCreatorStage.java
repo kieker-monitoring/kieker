@@ -17,7 +17,7 @@
 package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.model.ModelRepository;
+import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.util.stage.trigger.Trigger;
 
 import teetime.stage.basic.AbstractTransformation;

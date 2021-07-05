@@ -33,9 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.model.MetaModelHandler;
-import kieker.analysis.model.MetaModelHandler.PluginConnection;
-import kieker.analysis.model.MetaModelHandler.RepositoryConnection;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
@@ -46,6 +43,9 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.stage.model.MetaModelHandler;
+import kieker.analysis.stage.model.MetaModelHandler.PluginConnection;
+import kieker.analysis.stage.model.MetaModelHandler.RepositoryConnection;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.KiekerMetadataRecord;
 

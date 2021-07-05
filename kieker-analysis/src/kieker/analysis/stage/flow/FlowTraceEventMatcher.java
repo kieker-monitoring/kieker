@@ -18,8 +18,8 @@ package kieker.analysis.stage.flow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.stage.general.IControlEventMatcher;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;

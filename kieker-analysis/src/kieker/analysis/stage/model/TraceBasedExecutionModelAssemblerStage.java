@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model.data;
+
+package kieker.analysis.stage.model;
+
+import kieker.model.analysismodel.trace.OperationCall;
+
+import teetime.stage.basic.AbstractFilter;
 
 /**
- * @author Reiner Jung
- * @since 1.15
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
-public class CallEvent {
+public class TraceBasedExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
-	private final OperationEvent caller;
-	private final OperationEvent callee;
+	private final ITraceBasedExecutionModelAssembler assembler;
 
-	public CallEvent(final OperationEvent caller, final OperationEvent callee) {
-		this.caller = caller;
-		this.callee = callee;
+	public TraceBasedExecutionModelAssemblerStage(final ITraceBasedExecutionModelAssembler assembler) {
+		this.assembler = assembler;
 	}
 
-	public OperationEvent getCaller() {
-		return this.caller;
+	@Override
+	protected void execute(final OperationCall operationCall) {
+		this.assembler.addOperationCall(operationCall);
+		this.outputPort.send(operationCall);
 	}
 
-	public OperationEvent getCallee() {
-		return this.callee;
-	}
 }

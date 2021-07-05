@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import kieker.analysis.model.data.CallEvent;
-import kieker.analysis.model.data.OperationEvent;
+import kieker.analysis.stage.model.data.CallEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;

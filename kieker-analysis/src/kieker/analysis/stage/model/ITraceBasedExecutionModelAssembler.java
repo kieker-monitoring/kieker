@@ -13,35 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model.data;
+package kieker.analysis.stage.model;
+
+import kieker.model.analysismodel.trace.OperationCall;
 
 /**
- * Represent one operation event.
- *
  * @author Reiner Jung
+ *
  * @since 1.15
+ *
  */
-public class OperationEvent {
+public interface ITraceBasedExecutionModelAssembler {
 
-	private final String componentSignature;
-	private final String operationSignature;
-	private final String hostname;
+	void addOperationCall(final OperationCall operationCall);
 
-	public OperationEvent(final String hostname, final String componentSignature, final String operationSignature) {
-		this.hostname = hostname;
-		this.componentSignature = componentSignature;
-		this.operationSignature = operationSignature;
-	}
-
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	public String getComponentSignature() {
-		return this.componentSignature;
-	}
-
-	public String getOperationSignature() {
-		return this.operationSignature;
-	}
 }

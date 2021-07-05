@@ -13,41 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
+package kieker.analysis.stage.model.data;
 
 /**
  * @author Reiner Jung
  * @since 1.15
  */
-public class ModelRepository {
+public class CallEvent {
 
-	private final String name;
+	private final OperationEvent caller;
+	private final OperationEvent callee;
 
-	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
-
-	public ModelRepository(final String name) {
-		this.name = name;
+	public CallEvent(final OperationEvent caller, final OperationEvent callee) {
+		this.caller = caller;
+		this.callee = callee;
 	}
 
-	public Map<Class<? extends EObject>, EObject> getModels() {
-		return this.models;
+	public OperationEvent getCaller() {
+		return this.caller;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends EObject> T getModel(final Class<T> clazz) {
-		return (T) this.models.get(clazz);
-	}
-
-	public void register(final Class<? extends EObject> key, final EObject value) {
-		this.models.put(key, value);
-	}
-
-	public String getName() {
-		return this.name;
+	public OperationEvent getCallee() {
+		return this.callee;
 	}
 }

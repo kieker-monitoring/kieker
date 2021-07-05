@@ -14,7 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
@@ -22,45 +25,42 @@ import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.trace.OperationCall;
 
 /**
+ * Assemble execution model based on operation call tuples.
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TraceBasedExecutionModelAssembler extends AbstractSourceModelAssembler implements ITraceBasedExecutionModelAssembler {
+public class ExecutionModelAssembler extends AbstractSourceModelAssembler implements IExecutionModelAssembler {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger("ExecutionModelAssembler");
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public TraceBasedExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
+	public ExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.executionModel = executionModel;
 	}
 
 	@Override
-	public void addOperationCall(final OperationCall operationCall) {
-		// Check if operationCall is an entry operation call. If so than source is null
-		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
-		final DeployedOperation target = operationCall.getOperation();
-
-		this.addExecution(source, target);
-	}
-
-	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
-		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
-		key.setFirst(source);
-		key.setSecond(target);
-		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
+	public void addOperationCall(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
+		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall)) {
+			LOGGER.info("{}:{} => {}:{}",
+					operationCall.getFirst().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+					operationCall.getFirst().getAssemblyOperation().getOperationType().getSignature(),
+					operationCall.getSecond().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+					operationCall.getSecond().getAssemblyOperation().getOperationType().getSignature());
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-			invocation.setSource(source);
-			invocation.setTarget(target);
+			invocation.setSource(operationCall.getFirst());
+			invocation.setTarget(operationCall.getSecond());
 
 			this.updateSourceModel(invocation);
 
-			this.executionModel.getAggregatedInvocations().put(key, invocation);
+			this.executionModel.getAggregatedInvocations().put(operationCall, invocation);
 		}
 	}
 

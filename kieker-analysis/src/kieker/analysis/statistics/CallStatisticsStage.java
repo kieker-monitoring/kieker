@@ -16,7 +16,7 @@
 
 package kieker.analysis.statistics;
 
-import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionModel;

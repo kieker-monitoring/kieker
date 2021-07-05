@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.stage.general;
 
-import kieker.analysis.model.data.CallEvent;
-import kieker.analysis.model.data.OperationEvent;
+import kieker.analysis.stage.model.data.CallEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 
 /**
  * Check whether a CallEvent can be released based on an PperationEvent.

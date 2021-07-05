@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.stage.model.AbstractSourceModelAssembler;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.ComponentType;

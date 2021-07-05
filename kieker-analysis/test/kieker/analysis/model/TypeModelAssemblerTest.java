@@ -20,11 +20,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
+import kieker.analysis.stage.model.TypeModelAssembler;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.ComponentType;
@@ -54,7 +55,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysis.stage.model.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testAddRecordIOperationRecord() {
@@ -62,7 +63,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysis.stage.model.TypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddRecordStringString() {

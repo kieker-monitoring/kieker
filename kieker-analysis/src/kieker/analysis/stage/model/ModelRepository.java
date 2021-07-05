@@ -13,19 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.Tuple;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * @author Reiner Jung
- *
  * @since 1.15
- *
  */
-public interface IExecutionModelAssembler {
+public class ModelRepository {
 
-	void addOperationCall(Tuple<DeployedOperation, DeployedOperation> operationCall);
+	private final String name;
 
+	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
+
+	public ModelRepository(final String name) {
+		this.name = name;
+	}
+
+	public Map<Class<? extends EObject>, EObject> getModels() {
+		return this.models;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends EObject> T getModel(final Class<T> clazz) {
+		return (T) this.models.get(clazz);
+	}
+
+	public void register(final Class<? extends EObject> key, final EObject value) {
+		this.models.put(key, value);
+	}
+
+	public String getName() {
+		return this.name;
+	}
 }

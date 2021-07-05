@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.model.TypeModelAssembler;
-import kieker.analysis.model.data.OperationEvent;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
+import kieker.analysis.stage.model.TypeModelAssembler;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.TypeFactory;
@@ -61,7 +61,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.model.TypeModelAssembler#addOperation(kieker.analysis.model.data.OperationEvent)}.
+	 * Test method for {@link kieker.analysis.stage.model.TypeModelAssembler#addOperation(kieker.analysis.stage.model.data.OperationEvent)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
