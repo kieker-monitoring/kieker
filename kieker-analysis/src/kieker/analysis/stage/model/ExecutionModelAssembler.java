@@ -48,12 +48,13 @@ public class ExecutionModelAssembler extends AbstractSourceModelAssembler implem
 
 	@Override
 	public void addOperationCall(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
+		LOGGER.info("{}:{} => {}:{}",
+				operationCall.getFirst().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+				operationCall.getFirst().getAssemblyOperation().getOperationType().getSignature(),
+				operationCall.getSecond().getComponent().getAssemblyComponent().getComponentType().getSignature(),
+				operationCall.getSecond().getAssemblyOperation().getOperationType().getSignature());
 		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall)) {
-			LOGGER.info("{}:{} => {}:{}",
-					operationCall.getFirst().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					operationCall.getFirst().getAssemblyOperation().getOperationType().getSignature(),
-					operationCall.getSecond().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					operationCall.getSecond().getAssemblyOperation().getOperationType().getSignature());
+			LOGGER.info("NEW ENTRY");
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(operationCall.getFirst());
 			invocation.setTarget(operationCall.getSecond());
@@ -61,6 +62,8 @@ public class ExecutionModelAssembler extends AbstractSourceModelAssembler implem
 			this.updateSourceModel(invocation);
 
 			this.executionModel.getAggregatedInvocations().put(operationCall, invocation);
+		} else {
+			LOGGER.info("EXISTING ENTRY");
 		}
 	}
 
