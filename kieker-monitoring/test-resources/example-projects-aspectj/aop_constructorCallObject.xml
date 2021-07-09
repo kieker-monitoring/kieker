@@ -2,7 +2,8 @@
 
 <aspectj>
     <weaver options="">
-        <include within="net.example.Instrumentable"/>
+        <include within="example.kieker.TestOperationExecutionException"/>
+        <include within="example.kieker.TestSimpleOperationExecution"/>
     </weaver>
     
     <aspects>

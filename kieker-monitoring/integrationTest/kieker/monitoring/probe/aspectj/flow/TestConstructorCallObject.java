@@ -25,9 +25,7 @@ public class TestConstructorCallObject {
 
 		List<String> lines = Util.getLatestLogRecord(logFolder);
 		System.out.println(lines);
-		String firstSignature = lines.get(2).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>()", firstSignature);
-		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>()", secondSignature);
+		String firstSignature = lines.get(2).split(";")[TestConstructorCall.CALL_SIGNATURE_INDEX];
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>()", firstSignature);
 	}
 }

@@ -39,18 +39,18 @@ public class TestConstructorExecutionObject {
 	public static void checkConstructorResult(final List<String> lines) {
 		System.out.println(lines);
 		String firstSignature = lines.get(2).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>()", firstSignature);
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>()", firstSignature);
 		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>()", secondSignature);
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>()", secondSignature);
 		MatcherAssert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
 	}
 	
 	public static void checkThrowingConstructorResult(final List<String> lines) {
 		System.out.println(lines);
 		String firstSignature = lines.get(2).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", firstSignature);
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>(int)", firstSignature);
 		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
-		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", secondSignature);
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>(int)", secondSignature);
 		MatcherAssert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
 	}
 }
