@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class TestConstructorExecutionObject {
 		Assert.assertEquals("public net.example.Instrumentable.<init>()", firstSignature);
 		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
 		Assert.assertEquals("public net.example.Instrumentable.<init>()", secondSignature);
-		Assert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
+		MatcherAssert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
 	}
 	
 	public static void checkThrowingConstructorResult(final List<String> lines) {
@@ -50,6 +51,6 @@ public class TestConstructorExecutionObject {
 		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", firstSignature);
 		String secondSignature = lines.get(3).split(";")[TestBeforeAfterConstructorEvent.BEFOREAFTER_COLUMN_SIGNATURE];
 		Assert.assertEquals("public net.example.Instrumentable.<init>(int)", secondSignature);
-		Assert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
+		MatcherAssert.assertThat(lines.get(3), Matchers.not(Matchers.containsString("java.lang.IllegalAccessError")));
 	}
 }
