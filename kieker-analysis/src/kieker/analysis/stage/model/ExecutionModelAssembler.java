@@ -16,14 +16,10 @@
 
 package kieker.analysis.stage.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.sources.SourceModel;
 
 /**
@@ -35,8 +31,6 @@ import kieker.model.analysismodel.sources.SourceModel;
  */
 public class ExecutionModelAssembler extends AbstractSourceModelAssembler implements IExecutionModelAssembler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger("ExecutionModelAssembler");
-
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
@@ -47,23 +41,15 @@ public class ExecutionModelAssembler extends AbstractSourceModelAssembler implem
 	}
 
 	@Override
-	public void addOperationCall(final Tuple<DeployedOperation, DeployedOperation> operationCall) {
-		LOGGER.info("{}:{} => {}:{}",
-				operationCall.getFirst().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-				operationCall.getFirst().getAssemblyOperation().getOperationType().getSignature(),
-				operationCall.getSecond().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-				operationCall.getSecond().getAssemblyOperation().getOperationType().getSignature());
-		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall)) {
-			LOGGER.info("NEW ENTRY");
+	public void addOperationCall(final OperationCallDurationEvent operationCall) {
+		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall.getOperationCall())) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-			invocation.setSource(operationCall.getFirst());
-			invocation.setTarget(operationCall.getSecond());
+			invocation.setSource(operationCall.getOperationCall().getFirst());
+			invocation.setTarget(operationCall.getOperationCall().getSecond());
 
 			this.updateSourceModel(invocation);
 
-			this.executionModel.getAggregatedInvocations().put(operationCall, invocation);
-		} else {
-			LOGGER.info("EXISTING ENTRY");
+			this.executionModel.getAggregatedInvocations().put(operationCall.getOperationCall(), invocation);
 		}
 	}
 

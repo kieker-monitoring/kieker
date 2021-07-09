@@ -15,10 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.stage.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kieker.analysis.stage.model.data.CallEvent;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -35,9 +33,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Reiner Jung
  * @since 1.15
  */
-public class CallEvent2OperationCallStage extends AbstractTransformation<CallEvent, Tuple<DeployedOperation, DeployedOperation>> {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger("CallEvent2OperationCallStage");
+public class CallEvent2OperationCallStage extends AbstractTransformation<CallEvent, OperationCallDurationEvent> {
 
 	private final DeploymentModel deploymentModel;
 
@@ -47,17 +43,10 @@ public class CallEvent2OperationCallStage extends AbstractTransformation<CallEve
 
 	@Override
 	protected void execute(final CallEvent element) {
-		LOGGER.info("call-event -> operation-call {}:{}@{} -> {}:{}@{}",
-				element.getCaller().getComponentSignature(),
-				element.getCaller().getOperationSignature(),
-				element.getCaller().getHostname(),
-				element.getCallee().getComponentSignature(),
-				element.getCallee().getOperationSignature(),
-				element.getCallee().getHostname());
-		final Tuple<DeployedOperation, DeployedOperation> result = ExecutionFactory.eINSTANCE.createTuple();
-		result.setFirst(this.findDeployedOperation(element.getCaller()));
-		result.setSecond(this.findDeployedOperation(element.getCallee()));
-		this.outputPort.send(result);
+		final Tuple<DeployedOperation, DeployedOperation> operationCall = ExecutionFactory.eINSTANCE.createTuple();
+		operationCall.setFirst(this.findDeployedOperation(element.getCaller()));
+		operationCall.setSecond(this.findDeployedOperation(element.getCallee()));
+		this.outputPort.send(new OperationCallDurationEvent(operationCall, element.getDuration()));
 	}
 
 	private DeployedOperation findDeployedOperation(final OperationEvent operationEvent) {

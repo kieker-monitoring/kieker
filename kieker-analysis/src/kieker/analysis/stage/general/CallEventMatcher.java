@@ -19,7 +19,7 @@ import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 
 /**
- * Check whether a CallEvent can be released based on an PperationEvent.
+ * Check whether a CallEvent can be released based on an OperationEvent.
  *
  * @author Reiner Jung
  * @since 1.15

@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.stage.model.data;
 
+import java.time.Duration;
+
 /**
  * @author Reiner Jung
  * @since 1.15
@@ -23,10 +25,12 @@ public class CallEvent {
 
 	private final OperationEvent caller;
 	private final OperationEvent callee;
+	private final Duration duration;
 
-	public CallEvent(final OperationEvent caller, final OperationEvent callee) {
+	public CallEvent(final OperationEvent caller, final OperationEvent callee, final Duration duration) {
 		this.caller = caller;
 		this.callee = callee;
+		this.duration = duration;
 	}
 
 	public OperationEvent getCaller() {
@@ -35,5 +39,9 @@ public class CallEvent {
 
 	public OperationEvent getCallee() {
 		return this.callee;
+	}
+
+	public Duration getDuration() {
+		return this.duration;
 	}
 }

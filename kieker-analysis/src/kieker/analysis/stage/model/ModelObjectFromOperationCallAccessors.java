@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -39,7 +40,7 @@ public final class ModelObjectFromOperationCallAccessors {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("ModelObjectFromOperationCallAccessors");
 
-	public static final Function<OperationCall, EObject> DEPLOYED_OPERATION = c -> c.getOperation();
+	public static final Function<OperationCallDurationEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
 
 	public static final Function<OperationCall, EObject> DEPLOYED_COMPONENT = c -> c.getOperation().getComponent();
 
@@ -81,13 +82,9 @@ public final class ModelObjectFromOperationCallAccessors {
 	 *            the execution model to be used.
 	 * @return an aggregated invocation
 	 */
-	public static final Function<Tuple<DeployedOperation, DeployedOperation>, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
+	public static final Function<OperationCallDurationEvent, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
 		return operationCall -> {
-			LOGGER.info("find {}:{} -> {}:{}", operationCall.getFirst().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					operationCall.getFirst().getAssemblyOperation().getOperationType().getSignature(),
-					operationCall.getSecond().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					operationCall.getSecond().getAssemblyOperation().getOperationType().getSignature());
-			return executionModel.getAggregatedInvocations().get(operationCall);
+			return executionModel.getAggregatedInvocations().get(operationCall.getOperationCall());
 		};
 	}
 }

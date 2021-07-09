@@ -15,8 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.stage.model;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.Tuple;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 
 /**
  * @author Reiner Jung
@@ -26,6 +25,6 @@ import kieker.model.analysismodel.execution.Tuple;
  */
 public interface IExecutionModelAssembler {
 
-	void addOperationCall(Tuple<DeployedOperation, DeployedOperation> operationCall);
+	void addOperationCall(OperationCallDurationEvent operationCall);
 
 }

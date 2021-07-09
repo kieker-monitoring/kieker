@@ -35,7 +35,6 @@ import kieker.analysis.signature.SignatureExtractor;
 import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.flow.FlowTraceEventMatcher;
-import kieker.analysis.stage.general.CallEventMatcher;
 import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
@@ -43,9 +42,8 @@ import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
 import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
-import kieker.analysis.stage.model.OperationCallExtractorStage;
 import kieker.analysis.stage.model.StaticModelsAssemblerStage;
-import kieker.analysis.stage.model.data.CallEvent;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
@@ -66,8 +64,6 @@ import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.statistics.StatisticsFactory;
 import kieker.model.analysismodel.statistics.StatisticsModel;
-import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.trace.Trace;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -98,7 +94,7 @@ public class ExampleConfiguration extends Configuration {
 	public ExampleConfiguration(final File importDirectory, final Path exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
-		final Function<OperationCall, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
+		final Function<OperationCallDurationEvent, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
 				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)
@@ -128,10 +124,6 @@ public class ExampleConfiguration extends Configuration {
 
 		final ControlledEventReleaseStage<OperationEvent, IFlowRecord> flowRecordMerger = new ControlledEventReleaseStage<>(new FlowTraceEventMatcher());
 		flowRecordMerger.declareActive();
-		final ControlledEventReleaseStage<OperationEvent, CallEvent> controlCallEventStage = new ControlledEventReleaseStage<>(
-				new CallEventMatcher());
-		controlCallEventStage.declareActive();
-		final Distributor<OperationEvent> operationCompleteDistributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		final CallEvent2OperationCallStage callEvent2OperationCallStage = new CallEvent2OperationCallStage(repository.getModel(DeploymentModel.class));
 		final ExecutionModelAssemblerStage executionModelAssemblerStage = new ExecutionModelAssemblerStage(
@@ -139,14 +131,10 @@ public class ExampleConfiguration extends Configuration {
 		final CallStatisticsStage callStatisticsStage = new CallStatisticsStage(this.statisticsModel,
 				this.executionModel);
 
-		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
-
 		// Works on a trace
 		final FlowRecordTraceReconstructionStage traceReconstructor = new FlowRecordTraceReconstructionStage(this.deploymentModel,
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
-
-		final OperationCallExtractorStage operationCallExtractorStage = new OperationCallExtractorStage();
 
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
 				this.statisticsModel, statisticsObjectAccesor);
@@ -169,27 +157,24 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
 		super.connectPorts(directoryReaderStage.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), flowRecordDistributor.getInputPort());
+
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationAndCallGeneratorStage.getInputPort());
 		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), staticModelsAssemblerStage.getInputPort());
-		super.connectPorts(staticModelsAssemblerStage.getOutputPort(), operationCompleteDistributor.getInputPort());
-		super.connectPorts(operationCompleteDistributor.getNewOutputPort(), flowRecordMerger.getControlInputPort());
+		super.connectPorts(staticModelsAssemblerStage.getOutputPort(), flowRecordMerger.getControlInputPort());
+
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), flowRecordMerger.getBaseInputPort());
 		super.connectPorts(flowRecordMerger.getOutputPort(), traceReconstructor.getInputPort());
-		super.connectPorts(traceReconstructor.getOutputPort(), traceDistributor.getInputPort());
-		super.connectPorts(traceDistributor.getNewOutputPort(), traceStatisticsDecorator.getInputPort());
+		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceToGraphTransformer.getInputPort());
 		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
 		// alterante output
 		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
-		super.connectPorts(operationCompleteDistributor.getNewOutputPort(), controlCallEventStage.getControlInputPort());
-		super.connectPorts(operationAndCallGeneratorStage.getCallOutputPort(), controlCallEventStage.getBaseInputPort());
-		super.connectPorts(controlCallEventStage.getOutputPort(), callEvent2OperationCallStage.getInputPort());
+
+		super.connectPorts(operationAndCallGeneratorStage.getCallOutputPort(), callEvent2OperationCallStage.getInputPort());
 		super.connectPorts(callEvent2OperationCallStage.getOutputPort(), executionModelAssemblerStage.getInputPort());
 		super.connectPorts(executionModelAssemblerStage.getOutputPort(), callStatisticsStage.getInputPort());
-		super.connectPorts(callStatisticsStage.getOutputPort(), onTerminationTrigger.getInputPort());
-
-		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractorStage.getInputPort());
-		super.connectPorts(operationCallExtractorStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
+		super.connectPorts(callStatisticsStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
+		super.connectPorts(fullStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(),

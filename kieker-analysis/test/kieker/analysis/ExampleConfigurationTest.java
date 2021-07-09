@@ -106,14 +106,6 @@ public class ExampleConfigurationTest {
 		final EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();
 		// contains [1, 1, 50] in any order
-
-		for (final AggregatedInvocation o : aggregatedInvocations.values()) {
-			LOGGER.info("{}:{} ->> {}:{}", o.getSource().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					o.getSource().getAssemblyOperation().getOperationType().getSignature(),
-					o.getTarget().getComponent().getAssemblyComponent().getComponentType().getSignature(),
-					o.getTarget().getAssemblyOperation().getOperationType().getSignature());
-		}
-
 		Assert.assertThat(aggregatedInvocations.values().size(), CoreMatchers.is(3));
 	}
 }

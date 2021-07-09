@@ -15,12 +15,11 @@
  ***************************************************************************/
 package kieker.analysis.stage.model;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
@@ -42,10 +41,7 @@ import teetime.framework.OutputPort;
  */
 public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowRecord> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger("OperationAndCallGeneratorStage");
-
-	private final Map<Long, TraceMetadata> traceMetadataMap = new ConcurrentHashMap<>();
-	private final Map<Long, Stack<OperationEvent>> traceStacksMap = new ConcurrentHashMap<>();
+	private final Map<Long, TraceData> traceDataMap = new ConcurrentHashMap<>();
 
 	private final OutputPort<OperationEvent> operationOutputPort = this.createOutputPort(OperationEvent.class);
 	private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
@@ -75,34 +71,35 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	}
 
 	private void processTraceMetadata(final TraceMetadata traceMetadata) {
-		this.traceMetadataMap.put(traceMetadata.getTraceId(), traceMetadata);
-		this.traceStacksMap.put(traceMetadata.getTraceId(), new Stack<OperationEvent>());
+		this.traceDataMap.put(traceMetadata.getTraceId(), new TraceData(traceMetadata, new Stack<OperationEvent>()));
 	}
 
 	private void processBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
-		final Stack<OperationEvent> stack = this.traceStacksMap.get(beforeOperationEvent.getTraceId());
-		final TraceMetadata traceMetadata = this.traceMetadataMap.get(beforeOperationEvent.getTraceId());
+		final TraceData traceData = this.traceDataMap.get(beforeOperationEvent.getTraceId());
 
-		final OperationEvent newEvent = new OperationEvent(traceMetadata.getHostname(),
+		final OperationEvent newEvent = new OperationEvent(traceData.getMetadata().getHostname(),
 				beforeOperationEvent.getClassSignature(),
 				beforeOperationEvent.getOperationSignature());
-		if (!stack.empty()) {
+		if (!traceData.getOperationStack().empty()) {
 			this.operationOutputPort.send(newEvent);
-			this.callOutputPort.send(new CallEvent(stack.peek(), newEvent));
-			LOGGER.info("!! {}:{}", beforeOperationEvent.getClassSignature(), beforeOperationEvent.getOperationSignature());
-		} else if (this.createEntryCall) {
-			final OperationEvent triggerEvent = new OperationEvent("external", "<unknown>", "<unknown>");
-			this.operationOutputPort.send(triggerEvent);
-			this.operationOutputPort.send(newEvent);
-			this.callOutputPort.send(new CallEvent(triggerEvent, newEvent));
-			LOGGER.info("++ {}:{}", triggerEvent.getComponentSignature(), triggerEvent.getOperationSignature());
-			LOGGER.info("++ {}:{}", beforeOperationEvent.getClassSignature(), beforeOperationEvent.getOperationSignature());
+		} else {
+			if (this.createEntryCall) {
+				final OperationEvent triggerEvent = new OperationEvent("external", "<unknown>", "<unknown>");
+				this.operationOutputPort.send(triggerEvent);
+				this.operationOutputPort.send(newEvent);
+				traceData.getOperationStack().push(triggerEvent);
+				traceData.getStartTimeStack().push(Instant.ofEpochSecond(0, beforeOperationEvent.getTimestamp()));
+			} else {
+				this.operationOutputPort.send(newEvent);
+			}
 		}
-		stack.push(newEvent);
+		traceData.getOperationStack().push(newEvent);
+		traceData.getStartTimeStack().push(Instant.ofEpochSecond(0, beforeOperationEvent.getTimestamp()));
 	}
 
 	private void processAfterOperationEvent(final AfterOperationEvent afterOperationEvent) {
-		final Stack<OperationEvent> stack = this.traceStacksMap.get(afterOperationEvent.getTraceId());
+		final TraceData traceData = this.traceDataMap.get(afterOperationEvent.getTraceId());
+		final Stack<OperationEvent> stack = traceData.getOperationStack();
 		if (!stack.isEmpty()) {
 			final OperationEvent lastEvent = stack.pop();
 			if (!lastEvent.getComponentSignature().equals(afterOperationEvent.getClassSignature())
@@ -114,8 +111,11 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 						afterOperationEvent.getOperationSignature());
 			}
 			if (stack.isEmpty()) { // trace is complete
-				this.traceStacksMap.remove(afterOperationEvent.getTraceId());
-				this.traceMetadataMap.remove(afterOperationEvent.getTraceId());
+				this.traceDataMap.remove(afterOperationEvent.getTraceId());
+			} else {
+				final OperationEvent previousEvent = stack.peek();
+				final Instant end = Instant.ofEpochSecond(0, afterOperationEvent.getTimestamp());
+				this.callOutputPort.send(new CallEvent(previousEvent, lastEvent, Duration.between(traceData.getStartTimeStack().pop(), end)));
 			}
 		} else {
 			this.logger.error("Trace stack error. AfterOperationEvent without a previous BeforeOperationEvent, found {}:{}",
@@ -130,8 +130,17 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	 *            failed event to be processed
 	 */
 	private void processAfterOperationFailedEvent(final AfterOperationFailedEvent afterOperationFailedEvent) {
-		this.traceStacksMap.remove(afterOperationFailedEvent.getTraceId());
-		this.traceMetadataMap.remove(afterOperationFailedEvent.getTraceId());
+		final TraceData traceData = this.traceDataMap.get(afterOperationFailedEvent.getTraceId());
+		final Stack<OperationEvent> stack = traceData.getOperationStack();
+		if (!stack.isEmpty()) {
+			final OperationEvent lastEvent = stack.pop();
+			if (!stack.isEmpty()) {
+				final OperationEvent previousEvent = stack.peek();
+				final Instant end = Instant.ofEpochSecond(0, afterOperationFailedEvent.getTimestamp());
+				this.callOutputPort.send(new CallEvent(previousEvent, lastEvent, Duration.between(traceData.getStartTimeStack().pop(), end)));
+			}
+		}
+		this.traceDataMap.remove(afterOperationFailedEvent.getTraceId());
 	}
 
 	public OutputPort<CallEvent> getCallOutputPort() {
@@ -140,5 +149,36 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 
 	public OutputPort<OperationEvent> getOperationOutputPort() {
 		return this.operationOutputPort;
+	}
+
+	/**
+	 *
+	 * @author Reiner Jung
+	 * @since 1.15
+	 */
+	private class TraceData {
+
+		private final TraceMetadata metadata;
+		private final Stack<OperationEvent> operationStack;
+		private final Stack<Instant> startTimeStack;
+
+		private TraceData(final TraceMetadata metadata, final Stack<OperationEvent> operationStack) {
+			this.metadata = metadata;
+			this.operationStack = operationStack;
+			this.startTimeStack = new Stack<>();
+		}
+
+		public TraceMetadata getMetadata() {
+			return this.metadata;
+		}
+
+		public Stack<OperationEvent> getOperationStack() {
+			return this.operationStack;
+		}
+
+		public Stack<Instant> getStartTimeStack() {
+			return this.startTimeStack;
+		}
+
 	}
 }

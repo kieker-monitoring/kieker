@@ -17,10 +17,9 @@
 package kieker.analysis.statistics;
 
 import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.analysis.statistics.calculating.CountCalculator;
-import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
@@ -32,7 +31,7 @@ import kieker.model.analysismodel.statistics.StatisticsModel;
  * @since 1.14
  *
  */
-public class CallStatisticsStage extends StatisticsDecoratorStage<Tuple<DeployedOperation, DeployedOperation>> {
+public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCallDurationEvent> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {
 		super(statisticsModel, EPredefinedUnits.INVOCATION, new CountCalculator<>(),
