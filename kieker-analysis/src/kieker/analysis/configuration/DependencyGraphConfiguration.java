@@ -42,7 +42,6 @@ import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
 import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
-import kieker.analysis.stage.model.OperationCallExtractorStage;
 import kieker.analysis.stage.model.StaticModelsAssemblerStage;
 import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
@@ -153,7 +152,6 @@ public class DependencyGraphConfiguration extends Configuration {
 				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
-		final OperationCallExtractorStage operationCallExtractorStage = new OperationCallExtractorStage();
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
 				this.statisticsModel, ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION);
 
@@ -181,7 +179,8 @@ public class DependencyGraphConfiguration extends Configuration {
 		super.connectPorts(controlCallEventStage.getOutputPort(), callEvent2operationCallStage.getInputPort());
 		super.connectPorts(callEvent2operationCallStage.getOutputPort(), executionModelAssemblerStage.getInputPort());
 		super.connectPorts(executionModelAssemblerStage.getOutputPort(), callStatisticsStage.getInputPort());
-		super.connectPorts(callStatisticsStage.getOutputPort(), onTerminationTrigger.getInputPort());
+		super.connectPorts(callStatisticsStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
+		super.connectPorts(fullStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		super.connectPorts(dependencyGraphCreator.getOutputPort(), distributor.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), dotFileWriterStage.getInputPort());
@@ -190,8 +189,6 @@ public class DependencyGraphConfiguration extends Configuration {
 		super.connectPorts(operationCompleteDistributor.getNewOutputPort(), flowRecordMerger.getControlInputPort());
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
-		super.connectPorts(traceStatisticsDecorator.getOutputPort(), operationCallExtractorStage.getInputPort());
-		super.connectPorts(operationCallExtractorStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
 	}
 
 	public static void main(final String[] args) {
