@@ -19,8 +19,6 @@ package kieker.analysis.stage.model;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -37,8 +35,6 @@ import kieker.model.analysismodel.trace.OperationCall;
  * @since 1.14
  */
 public final class ModelObjectFromOperationCallAccessors {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger("ModelObjectFromOperationCallAccessors");
 
 	public static final Function<OperationCallDurationEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
 

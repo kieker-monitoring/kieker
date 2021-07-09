@@ -156,7 +156,7 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	 * @author Reiner Jung
 	 * @since 1.15
 	 */
-	private class TraceData {
+	private final class TraceData {
 
 		private final TraceMetadata metadata;
 		private final Stack<OperationEvent> operationStack;
