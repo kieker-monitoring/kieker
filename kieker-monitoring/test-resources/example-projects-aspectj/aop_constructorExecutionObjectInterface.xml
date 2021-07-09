@@ -2,7 +2,7 @@
 
 <aspectj>
     <weaver options="">
-        <include within="net.example.Instrumentable"/>
+        <include within="example.kieker.Instrumentable"/>
     </weaver>
     
     <aspects>
