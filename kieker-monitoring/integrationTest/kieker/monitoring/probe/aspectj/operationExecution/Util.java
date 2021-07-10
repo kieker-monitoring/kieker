@@ -8,19 +8,24 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
+/**
+ * Helper class for aspect integration tests 
+ * 
+ * @author DaGeRe
+ *
+ */
 public enum Util {
 	;
 
 	public static final File EXAMPLE_PROJECT_FOLDER = new File("test-resources/example-projects-aspectj");
 
 	/**
-	 * Creates a temporary project folder, containing the example project
+	 * Creates a temporary project folder, containing the example project (for all tests with standard traces)
 	 * @param aopXML
 	 * @return
 	 * @throws IOException 
 	 */
 	public static File createTemporaryProject(final File aopXML) throws IOException {
-//		File temporaryFile = Files.createTempDirectory("kieker-test-").toFile();
 		File temporaryFile = new File("build/kieker-test-aspectj/example-project");
 		if (!temporaryFile.exists()) {
 			temporaryFile.mkdirs();
@@ -33,6 +38,13 @@ public enum Util {
 		return temporaryFile;
 	}
 	
+	/**
+	 * Runs a test case in a generated project
+	 * @param projectFolder
+	 * @param testcase
+	 * @return
+	 * @throws IOException
+	 */
 	public static File runTestcase(final File projectFolder, final String testcase) throws IOException {
 		File logFolder = createLogFolder(projectFolder);
 		
@@ -51,6 +63,13 @@ public enum Util {
 		return logFolder;
 	}
 	
+	/**
+	 * Runs a test case in an individual project
+	 * @param projectName
+	 * @param testcase
+	 * @return
+	 * @throws IOException
+	 */
 	public static File runTestcase(final String projectName, final String testcase) throws IOException {
 		File folder = new File(EXAMPLE_PROJECT_FOLDER, projectName);
 		File logFolder = createLogFolder(folder);

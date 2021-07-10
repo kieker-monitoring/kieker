@@ -9,6 +9,15 @@ import org.junit.Test;
 
 import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
+/**
+ * Tests whether instrumented execution with beforeafterconstructorevent creates the
+ * expected records. Since this tests also that a method after throwing an
+ * exception is correctly recorded (throwingCallee), a individual test project
+ * is used
+ * 
+ * @author DaGeRe
+ *
+ */
 public class TestBeforeAfterConstructorEvent {
 	public static final int BEFOREAFTER_COLUMN_SIGNATURE = 5;
 	private static final String OPERATION_BEFOREAFTER_PROJECT = "example-beforeafterconstructorevent";

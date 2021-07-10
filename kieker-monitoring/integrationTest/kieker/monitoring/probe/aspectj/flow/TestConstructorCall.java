@@ -9,6 +9,12 @@ import org.junit.Test;
 
 import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
+/**
+ * Tests whether instrumented execution with constructorCall creates the expected records
+ * 
+ * @author DaGeRe
+ *
+ */
 public class TestConstructorCall {
 	static final int CALL_SIGNATURE_INDEX = 7;
 

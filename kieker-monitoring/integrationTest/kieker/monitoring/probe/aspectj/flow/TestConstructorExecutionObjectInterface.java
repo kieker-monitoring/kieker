@@ -8,6 +8,12 @@ import org.junit.Test;
 
 import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
+/**
+ * Tests whether instrumented execution with constructorExecutionObjectInterface creates the expected records
+ * 
+ * @author DaGeRe
+ *
+ */
 public class TestConstructorExecutionObjectInterface {
 	@Test
 	public void testBasicExecution() throws IOException, InterruptedException {
