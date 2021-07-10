@@ -27,6 +27,20 @@ public class TestConstructorCall {
 	}
 	
 	@Test
+	public void testThrowingExecution() throws IOException, InterruptedException {
+		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall.xml"));
+		
+		System.out.println(temporaryFile.getAbsolutePath());
+		
+		File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
+
+		List<String> lines = Util.getLatestLogRecord(logFolder);
+		System.out.println(lines);
+		String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
+		Assert.assertEquals("public example.kieker.Instrumentable.<init>(int)", firstSignature);
+	}
+	
+	@Test
 	public void testStaticExecution() throws IOException, InterruptedException {
 		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall_static.xml"));
 		
