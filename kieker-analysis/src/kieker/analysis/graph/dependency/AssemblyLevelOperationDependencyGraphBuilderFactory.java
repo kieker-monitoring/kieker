@@ -16,7 +16,7 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.model.ModelRepository;
+import kieker.analysis.stage.model.ModelRepository;
 
 /**
  * @author Sören Henning

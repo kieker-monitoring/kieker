@@ -27,7 +27,6 @@ public abstract class AbstractDecompressionFilter {
 
 	/**
 	 * Initialize pass through "decompression" with parameter to adhere Kieker configuration system.
-	 *
 	 */
 	public AbstractDecompressionFilter() {}
 

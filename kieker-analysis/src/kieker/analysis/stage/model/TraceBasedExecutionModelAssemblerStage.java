@@ -14,13 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.common.record.flow.IFlowRecord;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.model.analysismodel.assembly.AssemblyModel;
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.type.TypeModel;
+import kieker.model.analysismodel.trace.OperationCall;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -29,20 +25,18 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.14
  */
-public class AssemblyModelAssemblerStage extends AbstractFilter<IFlowRecord> {
+public class TraceBasedExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
-	private final AssemblyModelAssembler assembler;
+	private final ITraceBasedExecutionModelAssembler assembler;
 
-	public AssemblyModelAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
-		this.assembler = new AssemblyModelAssembler(typeModel, assemblyModel, sourceModel, sourceLabel);
+	public TraceBasedExecutionModelAssemblerStage(final ITraceBasedExecutionModelAssembler assembler) {
+		this.assembler = assembler;
 	}
 
 	@Override
-	protected void execute(final IFlowRecord record) {
-		if (record instanceof BeforeOperationEvent) {
-			this.assembler.addRecord((BeforeOperationEvent) record);
-		}
-		this.outputPort.send(record);
+	protected void execute(final OperationCall operationCall) {
+		this.assembler.addOperationCall(operationCall);
+		this.outputPort.send(operationCall);
 	}
 
 }

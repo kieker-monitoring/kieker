@@ -30,12 +30,12 @@ import org.junit.Test;
  */
 public class TestNetworkAccessHandler {
 
-	private static final String FIRST_ADDRESS = "134.10.5.231";
-	private static final String SECOND_ADDRESS = "192.168.48.4";
-	private static final String THIRD_ADDRESS = "192.168.48.5";
+	private static final String FIRST_ADDRESS = "134.10.5.231"; // NOPMD AvoidUsingHArdCodedIP
+	private static final String SECOND_ADDRESS = "192.168.48.4"; // NOPMD AvoidUsingHArdCodedIP
+	private static final String THIRD_ADDRESS = "192.168.48.5"; // NOPMD AvoidUsingHArdCodedIP
 
-	private static final String FIRST_NETWORK = "134.10.5.0/24";
-	private static final String SECOND_NETWORK = "134.10.4.0/23";
+	private static final String FIRST_NETWORK = "134.10.5.0/24"; // NOPMD AvoidUsingHArdCodedIP
+	private static final String SECOND_NETWORK = "134.10.4.0/23"; // NOPMD AvoidUsingHArdCodedIP
 
 	/** Create test object. */
 	public TestNetworkAccessHandler() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +74,9 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
  *
  * @since 1.8
+ * @deprecated since 1.15 can be removed with the old TraceAnalysis
  */
+@Deprecated
 public final class MetaModelHandler {
 
 	private MetaModelHandler() {

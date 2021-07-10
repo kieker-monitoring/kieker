@@ -60,8 +60,9 @@
       </eTypeParameters>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EPredefinedUnits">
-      <eLiterals name="CPU_UTIL"/>
-      <eLiterals name="RESPONSE_TIME"/>
+      <eLiterals name="CPU_UTIL" value="1"/>
+      <eLiterals name="RESPONSE_TIME" value="2"/>
+      <eLiterals name="INVOCATION" value="3"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EPropertyType">
       <eLiterals name="MIN"/>

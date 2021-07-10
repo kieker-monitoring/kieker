@@ -22,7 +22,7 @@ import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.model.ModelRepository;
+import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.util.ObjectIdentifierRegistry;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
@@ -74,7 +74,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	private void handleInvocation(final AggregatedInvocation invocation) {
 		final IVertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
 		final IVertex targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.RESPONSE_TIME).getProperties()
+		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
 				.get(EPropertyType.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}

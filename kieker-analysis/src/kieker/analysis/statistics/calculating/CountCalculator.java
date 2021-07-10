@@ -22,6 +22,7 @@ import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
+ * Computes an incrementable value.
  *
  * @param <T>
  *            Type of elements

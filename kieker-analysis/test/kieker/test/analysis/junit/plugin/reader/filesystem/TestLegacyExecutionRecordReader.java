@@ -17,9 +17,9 @@
 package kieker.test.analysis.junit.plugin.reader.filesystem;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -76,11 +76,11 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 	@Before
 	public void setUp() throws IOException {
 		final File mapFile = this.tmpFolder.newFile(FSUtil.MAP_FILENAME);
-		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSUtil.ENCODING);
+		final PrintStream mapStream = new PrintStream(Files.newOutputStream(mapFile.toPath()), false, FSUtil.ENCODING);
 		mapStream.print(MAP_FILE);
 		mapStream.close();
 		final File datFile = this.tmpFolder.newFile(FSUtil.FILE_PREFIX + FSUtil.DAT_FILE_EXTENSION);
-		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSUtil.ENCODING);
+		final PrintStream datStream = new PrintStream(Files.newOutputStream(datFile.toPath()), false, FSUtil.ENCODING);
 		datStream.print(DAT_FILE);
 		datStream.close();
 	}

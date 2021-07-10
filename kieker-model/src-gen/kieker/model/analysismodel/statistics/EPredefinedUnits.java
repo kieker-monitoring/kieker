@@ -26,7 +26,7 @@ public enum EPredefinedUnits implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	CPU_UTIL(0, "CPU_UTIL", "CPU_UTIL"),
+	CPU_UTIL(1, "CPU_UTIL", "CPU_UTIL"),
 
 	/**
 	 * The '<em><b>RESPONSE TIME</b></em>' literal object.
@@ -36,7 +36,15 @@ public enum EPredefinedUnits implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	RESPONSE_TIME(0, "RESPONSE_TIME", "RESPONSE_TIME");
+	RESPONSE_TIME(2, "RESPONSE_TIME", "RESPONSE_TIME"), /**
+	 * The '<em><b>INVOCATION</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INVOCATION_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INVOCATION(3, "INVOCATION", "INVOCATION");
 
 	/**
 	 * The '<em><b>CPU UTIL</b></em>' literal value.
@@ -47,7 +55,7 @@ public enum EPredefinedUnits implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CPU_UTIL_VALUE = 0;
+	public static final int CPU_UTIL_VALUE = 1;
 
 	/**
 	 * The '<em><b>RESPONSE TIME</b></em>' literal value.
@@ -58,7 +66,18 @@ public enum EPredefinedUnits implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int RESPONSE_TIME_VALUE = 0;
+	public static final int RESPONSE_TIME_VALUE = 2;
+
+	/**
+	 * The '<em><b>INVOCATION</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INVOCATION
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INVOCATION_VALUE = 3;
 
 	/**
 	 * An array of all the '<em><b>EPredefined Units</b></em>' enumerators.
@@ -70,6 +89,7 @@ public enum EPredefinedUnits implements Enumerator {
 		new EPredefinedUnits[] {
 			CPU_UTIL,
 			RESPONSE_TIME,
+			INVOCATION,
 		};
 
 	/**
@@ -127,6 +147,8 @@ public enum EPredefinedUnits implements Enumerator {
 	public static EPredefinedUnits get(int value) {
 		switch (value) {
 			case CPU_UTIL_VALUE: return CPU_UTIL;
+			case RESPONSE_TIME_VALUE: return RESPONSE_TIME;
+			case INVOCATION_VALUE: return INVOCATION;
 		}
 		return null;
 	}

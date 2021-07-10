@@ -24,7 +24,7 @@ import org.junit.Test;
 import kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
-import kieker.analysis.model.ModelRepository;
+import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.StatisticsFactory;

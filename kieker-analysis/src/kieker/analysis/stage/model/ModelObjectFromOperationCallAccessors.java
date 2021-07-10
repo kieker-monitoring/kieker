@@ -14,12 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -35,7 +36,7 @@ import kieker.model.analysismodel.trace.OperationCall;
  */
 public final class ModelObjectFromOperationCallAccessors {
 
-	public static final Function<OperationCall, EObject> DEPLOYED_OPERATION = c -> c.getOperation();
+	public static final Function<OperationCallDurationEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
 
 	public static final Function<OperationCall, EObject> DEPLOYED_COMPONENT = c -> c.getOperation().getComponent();
 
@@ -51,7 +52,14 @@ public final class ModelObjectFromOperationCallAccessors {
 
 	private ModelObjectFromOperationCallAccessors() {}
 
-	public static final Function<OperationCall, EObject> createForAggregatedInvocation(final ExecutionModel executionModel) {
+	/**
+	 * Get corresponding aggregated invocation from the execution model for a given OperationCall.
+	 *
+	 * @param executionModel
+	 *            the execution model to be used.
+	 * @return an aggregated invocation
+	 */
+	public static final Function<OperationCall, EObject> findAggregatedInvocation4OperationCall(final ExecutionModel executionModel) {
 		return operationCall -> {
 			// Check if operationCall is an entry operation call. If so than source is null
 			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
@@ -63,4 +71,16 @@ public final class ModelObjectFromOperationCallAccessors {
 		};
 	}
 
+	/**
+	 * Get corresponding aggregated invocation from the execution model for a given OperationCall.
+	 *
+	 * @param executionModel
+	 *            the execution model to be used.
+	 * @return an aggregated invocation
+	 */
+	public static final Function<OperationCallDurationEvent, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
+		return operationCall -> {
+			return executionModel.getAggregatedInvocations().get(operationCall.getOperationCall());
+		};
+	}
 }

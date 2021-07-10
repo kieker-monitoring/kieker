@@ -20,9 +20,9 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
-import kieker.model.analysismodel.trace.OperationCall;
 
 /**
  *
@@ -31,9 +31,9 @@ import kieker.model.analysismodel.trace.OperationCall;
  * @since 1.14
  *
  */
-public class FullReponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCall> {
+public class FullResponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCallDurationEvent> {
 
-	public FullReponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCall, EObject> objectAccesor) {
+	public FullResponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCallDurationEvent, EObject> objectAccesor) {
 		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
 	}
 
