@@ -81,8 +81,6 @@ public class OperationPresentInModelEventReleaseControlStage extends AbstractFil
 
 	private boolean operationExists(final AbstractOperationEvent event) {
 		final TraceMetadata metadata = this.traceMetadataMap.get(event.getTraceId());
-		this.logger.info("event {} -- {} {}", this.traceOrderIndexMap.get(event.getTraceId()), event.toString(), metadata.toString());
-		this.logger.info("deployments {}", this.deploymentModel.getDeploymentContexts().size());
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(metadata.getHostname());
 		if (context != null) {
 			final DeployedComponent component = context.getComponents().get(event.getClassSignature());
