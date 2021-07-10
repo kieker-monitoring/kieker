@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-	implementation 'org.slf4j:slf4j-api:1.7.25'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 }
 
 

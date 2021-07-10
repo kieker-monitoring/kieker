@@ -26,8 +26,8 @@ configurations {
 }
 
 dependencies {
-    resultJar 'org.slf4j:slf4j-api:1.7.25'
-    resultJar 'org.jctools:jctools-core:3.3.0'
+    resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+    resultJar "org.jctools:jctools-core:$libJctoolsVersion"
 
     emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
     emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
@@ -220,14 +220,14 @@ subprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
-        implementation 'org.slf4j:slf4j-api:1.7.25'
+        implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
         // enable logging for test runs
         testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
-        testImplementation 'org.mockito:mockito-core:2.8.9'
-        testImplementation 'junit:junit:4.12'
-        testImplementation 'org.hamcrest:hamcrest-library:1.3'
+        testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+        testImplementation "junit:junit:$libJunitVersion"
+        testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
     }
 
 }
@@ -915,7 +915,7 @@ publishing {
             pom {
                 groupId = 'net.kieker-monitoring'
                 artifactId = 'kieker'
-                version = '1.15-SNAPSHOT'
+                version = version
                 name = 'Kieker Monitoring and Analysis Framework'
                 description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
                 url = 'http://kieker-monitoring.net'
