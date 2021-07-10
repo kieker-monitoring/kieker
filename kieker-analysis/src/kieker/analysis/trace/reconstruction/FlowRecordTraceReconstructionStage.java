@@ -57,10 +57,13 @@ public class FlowRecordTraceReconstructionStage extends AbstractTransformation<I
 	@Override
 	protected void execute(final IFlowRecord record) {
 		if (record instanceof TraceMetadata) {
+			this.logger.info("FLOW tracemetadata {}", record.toString());
 			this.traceReconstructor.handleTraceMetadataRecord((TraceMetadata) record);
 		} else if (record instanceof BeforeOperationEvent) {
+			this.logger.info("FLOW before {}", record.toString());
 			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
 		} else if (record instanceof AfterOperationEvent) {
+			this.logger.info("FLOW after {}", record.toString());
 			final Optional<Trace> trace = this.traceReconstructor
 					.handleAfterOperationEventRecord((AfterOperationEvent) record);
 			// trace.ifPresent(this.outputPort::send);
