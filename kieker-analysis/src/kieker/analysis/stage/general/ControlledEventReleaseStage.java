@@ -18,6 +18,9 @@ package kieker.analysis.stage.general;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
@@ -34,6 +37,8 @@ import teetime.framework.OutputPort;
  * @since 1.15
  */
 public class ControlledEventReleaseStage<C, B> extends AbstractStage {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControlledEventReleaseStage.class);
 
 	private final InputPort<C> controlInputPort = this.createInputPort();
 	private final InputPort<B> baseInputPort = this.createInputPort();
@@ -62,29 +67,38 @@ public class ControlledEventReleaseStage<C, B> extends AbstractStage {
 	}
 
 	private void stackControlOrCheckBase(final C control) {
+		LOGGER.info("SCOCB stack control or check base {}", control.toString());
 		for (final B element : this.storedBaseEvents) {
 			if (this.matcher.checkControlEvent(control, element)) {
 				this.storedBaseEvents.remove(element);
 				this.outputPort.send(element);
+				LOGGER.info("SCOCB PASS {}", element.toString());
 				return;
 			}
 		}
 
+		LOGGER.info("SCOCB STACK control {}", control.toString());
 		this.storedControlEvents.add(control);
 	}
 
 	private void storeOrRelease(final B base) {
+		LOGGER.info("SOR store or release {}", base.toString());
 		if (this.matcher.requiresControlEvent(base)) {
 			for (final C control : this.storedControlEvents) {
 				if (this.matcher.checkControlEvent(control, base)) {
 					if (!this.matcher.keepControlEvent(base)) {
 						this.storedControlEvents.remove(control);
+						LOGGER.info("SOR REMOVE control {}", control.toString());
+					} else {
+						LOGGER.info("SOR KEEP control {}", control.toString());
 					}
 					this.outputPort.send(base);
+					LOGGER.info("SOR RELEASE base", base.toString());
 					return;
 				}
 			}
 		} else {
+			LOGGER.info("SOR PASS without control", base.toString());
 			this.outputPort.send(base);
 		}
 	}

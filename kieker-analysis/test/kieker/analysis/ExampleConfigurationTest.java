@@ -28,8 +28,6 @@ import org.eclipse.emf.common.util.EMap;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kieker.analysis.stage.model.DeploymentModelPrinter;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -49,8 +47,6 @@ import teetime.framework.Execution;
  *
  */
 public class ExampleConfigurationTest {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger("ExampleConfigurationTest");
 
 	// @Rule
 	// public TemporaryFolder tempFolder = new TemporaryFolder();

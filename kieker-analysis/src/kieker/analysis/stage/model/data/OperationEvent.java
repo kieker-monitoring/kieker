@@ -44,4 +44,9 @@ public class OperationEvent {
 	public String getOperationSignature() {
 		return this.operationSignature;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s:%s@%s", this.componentSignature, this.operationSignature, this.hostname);
+	}
 }

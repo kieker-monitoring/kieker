@@ -33,7 +33,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  */
 public class FlowTraceEventMatcher implements IControlEventMatcher<OperationEvent, IFlowRecord> {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(FlowTraceEventMatcher.class);
 
 	public FlowTraceEventMatcher() {
 		// default constructor.
@@ -55,7 +55,7 @@ public class FlowTraceEventMatcher implements IControlEventMatcher<OperationEven
 			return controlEvent.getComponentSignature().equals(afterOperationEvent.getClassSignature())
 					&& controlEvent.getOperationSignature().equals(afterOperationEvent.getOperationSignature());
 		} else {
-			this.logger.error("Events of type {} are not supported.", baseEvent.getClass().getSimpleName());
+			FlowTraceEventMatcher.LOGGER.error("Events of type {} are not supported.", baseEvent.getClass().getSimpleName());
 		}
 		return false;
 	}
