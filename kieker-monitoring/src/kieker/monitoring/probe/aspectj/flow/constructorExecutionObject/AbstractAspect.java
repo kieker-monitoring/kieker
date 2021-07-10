@@ -16,9 +16,12 @@
 
 package kieker.monitoring.probe.aspectj.flow.constructorExecutionObject;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 import kieker.common.record.flow.trace.TraceMetadata;
@@ -29,6 +32,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
+import kieker.monitoring.probe.aspectj.beforeafter.onlycallee.Counter;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -49,24 +53,21 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	@Pointcut
 	public abstract void monitoredConstructor();
 
-	/**
-	 * The advice used around the constructor executions.
-	 *
-	 * @param thisObject
-	 * @param thisJoinPoint
-	 *
-	 * @return The result of the joint point's {@code proceed} method.
-	 *
-	 * @throws Throwable
-	 */
-	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
-	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
+	
+	@Before("monitoredConstructor() && this(thisObject) && notWithinKieker()")
+	public void beforeConstructor(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
-			return thisJoinPoint.proceed();
+			return;
 		}
 		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
-			return thisJoinPoint.proceed();
+			return;
 		}
 		// common fields
 		TraceMetadata trace = TRACEREGISTRY.getTrace();
@@ -75,27 +76,68 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			trace = TRACEREGISTRY.registerTrace();
 			CTRLINST.newMonitoringRecord(trace);
 		}
+		currentStackIndex.get().incrementValue();
 		final long traceId = trace.getTraceId();
-		final String clazz = thisObject.getClass().getName();
-		final int objectId = System.identityHashCode(thisObject);
+		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		// measure before execution
+		final int objectId = System.identityHashCode(thisObject);
 		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
-		// execution of the called method
-		final Object retval;
-		try {
-			retval = thisJoinPoint.proceed();
-		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
-			// measure after failed execution
-			CTRLINST.newMonitoringRecord(
-					new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString(), objectId));
-			throw th;
-		} finally {
-			if (newTrace) { // close the trace
-				TRACEREGISTRY.unregisterTrace();
-			}
+	}
+	
+	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
+	public void afterConstructor(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
 		}
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+		
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final long traceId = trace.getTraceId();
+		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
+		final int objectId = System.identityHashCode(thisObject);
+		
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
-		return retval;
+		CTRLINST.newMonitoringRecord(
+				new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
+	}
+
+	@AfterThrowing(pointcut="monitoredConstructor() && this(thisObject) && notWithinKieker()", throwing="th")
+	public void afterConstructorThrowing(final Object thisObject, final JoinPoint thisJoinPoint, final Throwable th)
+			throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+		
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final long traceId = trace.getTraceId();
+		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
+		final int objectId = System.identityHashCode(thisObject);
+		
+		CTRLINST.newMonitoringRecord(new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
+				operationSignature, clazz, th.toString(), objectId));
+	}
+	
+	@After("monitoredConstructor() && notWithinKieker()")
+	public void afterOperation(final JoinPoint thisJoinPoint) {
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
+
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+
+		final int stackIndex = this.currentStackIndex.get().decrementValue();
+		if (stackIndex == 1) {
+			TRACEREGISTRY.unregisterTrace();
+		}
 	}
 }

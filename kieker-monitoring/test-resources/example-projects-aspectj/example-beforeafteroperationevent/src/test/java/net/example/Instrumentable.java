@@ -2,6 +2,8 @@ package net.example;
 
 public class Instrumentable {
 	
+	private final int i = 15;
+	
 	public Instrumentable() {
 		
 	}

@@ -8,7 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Tests whether OperationExecutionInstrumentation with AspectJ works
+ * Tests whether instrumented execution with OperationExecutionInstrumentation creates the
+ * expected records. Since this tests uses an individual method order, an individual test project
+ * is used
  * 
  * @author DaGeRe
  *
