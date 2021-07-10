@@ -34,17 +34,15 @@ import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
 import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.source.file.DirectoryScannerStage;
-import kieker.analysis.stage.flow.FlowTraceEventMatcher;
-import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
 import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
 import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
+import kieker.analysis.stage.model.OperationPresentInModelEventReleaseControlStage;
 import kieker.analysis.stage.model.StaticModelsAssemblerStage;
 import kieker.analysis.stage.model.data.OperationCallDurationEvent;
-import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
 import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
@@ -122,8 +120,8 @@ public class ExampleConfiguration extends Configuration {
 		final StaticModelsAssemblerStage staticModelsAssemblerStage = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.sourceModel, DYNAMIC_SOURCE, this.signatureExtractor);
 
-		final ControlledEventReleaseStage<OperationEvent, IFlowRecord> flowRecordMerger = new ControlledEventReleaseStage<>(new FlowTraceEventMatcher());
-		flowRecordMerger.declareActive();
+		final OperationPresentInModelEventReleaseControlStage operationPresentInModelEventReleaseControlStage = new OperationPresentInModelEventReleaseControlStage(
+				this.deploymentModel);
 
 		final CallEvent2OperationCallStage callEvent2OperationCallStage = new CallEvent2OperationCallStage(repository.getModel(DeploymentModel.class));
 		final ExecutionModelAssemblerStage executionModelAssemblerStage = new ExecutionModelAssemblerStage(
@@ -160,10 +158,9 @@ public class ExampleConfiguration extends Configuration {
 
 		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationAndCallGeneratorStage.getInputPort());
 		super.connectPorts(operationAndCallGeneratorStage.getOperationOutputPort(), staticModelsAssemblerStage.getInputPort());
-		super.connectPorts(staticModelsAssemblerStage.getOutputPort(), flowRecordMerger.getControlInputPort());
 
-		super.connectPorts(flowRecordDistributor.getNewOutputPort(), flowRecordMerger.getBaseInputPort());
-		super.connectPorts(flowRecordMerger.getOutputPort(), traceReconstructor.getInputPort());
+		super.connectPorts(flowRecordDistributor.getNewOutputPort(), operationPresentInModelEventReleaseControlStage.getInputPort());
+		super.connectPorts(operationPresentInModelEventReleaseControlStage.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceToGraphTransformer.getInputPort());
 		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
