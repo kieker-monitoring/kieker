@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.analysis.signature.AbstractSignatureCleaner;
+import kieker.analysis.signature.NullSignatureCleaner;
 import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.common.record.flow.IFlowRecord;
@@ -47,11 +49,26 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
 	private final boolean createEntryCall;
 
+	private final AbstractSignatureCleaner componentCleaner;
+
+	private final AbstractSignatureCleaner operationCleaner;
+
+	/**
+	 * Create stage.
+	 */
+	public OperationAndCallGeneratorStage(final boolean createEntryCall, final AbstractSignatureCleaner componentCleaner,
+			final AbstractSignatureCleaner operationCleaner) {
+		super();
+		this.createEntryCall = createEntryCall;
+		this.componentCleaner = componentCleaner;
+		this.operationCleaner = operationCleaner;
+	}
+
 	/**
 	 * Create stage.
 	 */
 	public OperationAndCallGeneratorStage(final boolean createEntryCall) {
-		this.createEntryCall = createEntryCall;
+		this(createEntryCall, new NullSignatureCleaner(false), new NullSignatureCleaner(false));
 	}
 
 	@Override
@@ -78,8 +95,8 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 		final TraceData traceData = this.traceDataMap.get(beforeOperationEvent.getTraceId());
 
 		final OperationEvent newEvent = new OperationEvent(traceData.getMetadata().getHostname(),
-				beforeOperationEvent.getClassSignature(),
-				beforeOperationEvent.getOperationSignature());
+				this.componentCleaner.processComponentSignature(beforeOperationEvent.getClassSignature()),
+				this.operationCleaner.processComponentSignature(beforeOperationEvent.getOperationSignature()));
 		if (!traceData.getOperationStack().empty()) {
 			this.operationOutputPort.send(newEvent);
 		} else {
