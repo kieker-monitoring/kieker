@@ -14,9 +14,9 @@ dependencies {
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 	
-        api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
-        api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
-        api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+    api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+    api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+    api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 	
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
@@ -32,7 +32,6 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'	
-			
 
 	implementation 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 	

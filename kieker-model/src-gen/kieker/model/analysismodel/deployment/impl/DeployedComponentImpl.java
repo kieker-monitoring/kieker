@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getAssemblyComponent <em>Assembly Component</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedOperations <em>Contained Operations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedStorages <em>Contained Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getSignature <em>Signature</em>}</li>
  * </ul>
  *
  * @generated
@@ -73,6 +74,26 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected EMap<String, DeployedStorage> containedStorages;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIGNATURE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -165,6 +186,29 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__SIGNATURE, oldSignature, signature));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DeploymentContext getDeploymentContext() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
@@ -210,6 +254,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
 				if (coreType) return getContainedStorages();
 				else return getContainedStorages().map();
+			case DeploymentPackage.DEPLOYED_COMPONENT__SIGNATURE:
+				return getSignature();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -230,6 +276,9 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
 				((EStructuralFeature.Setting)getContainedStorages()).set(newValue);
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__SIGNATURE:
+				setSignature((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -252,6 +301,9 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
 				getContainedStorages().clear();
 				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -270,6 +322,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 				return containedOperations != null && !containedOperations.isEmpty();
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
 				return containedStorages != null && !containedStorages.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -286,6 +340,22 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 				return getDeploymentContext();
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (signature: ");
+		result.append(signature);
+		result.append(')');
+		return result.toString();
 	}
 
 } //DeployedComponentImpl
