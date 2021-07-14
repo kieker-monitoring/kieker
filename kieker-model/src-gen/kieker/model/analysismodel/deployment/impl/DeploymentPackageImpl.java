@@ -483,7 +483,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedStorage_AssemblyOperation() {
+	public EReference getDeployedStorage_AssemblyStorage() {
 		return (EReference)deployedStorageEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -561,7 +561,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(eStringToDeployedStorageMapEntryEClass, ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE);
 
 		deployedStorageEClass = createEClass(DEPLOYED_STORAGE);
-		createEReference(deployedStorageEClass, DEPLOYED_STORAGE__ASSEMBLY_OPERATION);
+		createEReference(deployedStorageEClass, DEPLOYED_STORAGE__ASSEMBLY_STORAGE);
 		createEOperation(deployedStorageEClass, DEPLOYED_STORAGE___GET_COMPONENT);
 	}
 
@@ -635,7 +635,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getEStringToDeployedStorageMapEntry_Value(), this.getDeployedStorage(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedStorageEClass, DeployedStorage.class, "DeployedStorage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedStorage_AssemblyOperation(), theAssemblyPackage.getAssemblyStorage(), null, "assemblyOperation", null, 0, 1, DeployedStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedStorage_AssemblyStorage(), theAssemblyPackage.getAssemblyStorage(), null, "assemblyStorage", null, 0, 1, DeployedStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}

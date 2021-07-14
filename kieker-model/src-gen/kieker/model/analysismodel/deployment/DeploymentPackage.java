@@ -454,13 +454,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_STORAGE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Storage</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_STORAGE__ASSEMBLY_OPERATION = 0;
+	int DEPLOYED_STORAGE__ASSEMBLY_STORAGE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Storage</em>' class.
@@ -785,15 +785,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedStorage();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation <em>Assembly Operation</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage <em>Assembly Storage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation()
+	 * @return the meta object for the reference '<em>Assembly Storage</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage()
 	 * @see #getDeployedStorage()
 	 * @generated
 	 */
-	EReference getDeployedStorage_AssemblyOperation();
+	EReference getDeployedStorage_AssemblyStorage();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedStorage#getComponent() <em>Get Component</em>}' operation.
@@ -1063,12 +1063,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_STORAGE = eINSTANCE.getDeployedStorage();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Storage</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_STORAGE__ASSEMBLY_OPERATION = eINSTANCE.getDeployedStorage_AssemblyOperation();
+		EReference DEPLOYED_STORAGE__ASSEMBLY_STORAGE = eINSTANCE.getDeployedStorage_AssemblyStorage();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.

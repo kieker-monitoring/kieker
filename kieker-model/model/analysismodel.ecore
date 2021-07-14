@@ -179,7 +179,7 @@
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//type/StorageType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storageType" eType="#//type/StorageType"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyStorageMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -253,7 +253,7 @@
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyStorage"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorage" eType="#//assembly/AssemblyStorage"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"

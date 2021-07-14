@@ -142,7 +142,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyStorage">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyStorage/operationType"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyStorage/storageType"/>
         <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyStorage/getAssemblyComponent"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
@@ -195,7 +195,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedStorage">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedStorage/assemblyOperation"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedStorage/assemblyStorage"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedStorage/getComponent"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
