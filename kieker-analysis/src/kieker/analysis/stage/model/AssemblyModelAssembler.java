@@ -66,6 +66,7 @@ public class AssemblyModelAssembler extends AbstractSourceModelAssembler {
 			final String componentTypeKey = componentSignature;
 			final ComponentType componentType = this.typeModel.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
+			component.setSignature(componentSignature);
 		}
 		this.updateSourceModel(component);
 

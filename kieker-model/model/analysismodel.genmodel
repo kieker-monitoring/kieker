@@ -128,6 +128,7 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/componentType"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/assemblyStorages"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyComponent/signature"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/key"/>
@@ -174,6 +175,7 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/containedOperations"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/containedStorages"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/DeployedComponent/signature"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedComponent/getDeploymentContext"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentContext) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>

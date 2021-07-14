@@ -178,13 +178,22 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES = 2;
 
 	/**
+	 * The feature id for the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSEMBLY_COMPONENT__SIGNATURE = 3;
+
+	/**
 	 * The number of structural features of the '<em>Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 3;
+	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Component</em>' class.
@@ -479,6 +488,17 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyComponent_AssemblyStorages();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signature</em>'.
+	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getSignature()
+	 * @see #getAssemblyComponent()
+	 * @generated
+	 */
+	EAttribute getAssemblyComponent_Signature();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Operation Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -708,6 +728,14 @@ public interface AssemblyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES = eINSTANCE.getAssemblyComponent_AssemblyStorages();
+
+		/**
+		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSEMBLY_COMPONENT__SIGNATURE = eINSTANCE.getAssemblyComponent_Signature();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map Entry</em>}' class.

@@ -157,6 +157,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//type/ComponentType"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorages" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -224,6 +225,7 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="containedStorages" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeployedStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
