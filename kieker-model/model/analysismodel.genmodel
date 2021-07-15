@@ -205,6 +205,7 @@
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//execution/EDirection">
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/READ"/>
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/WRITE"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/BOTH"/>
       </genEnums>
       <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>

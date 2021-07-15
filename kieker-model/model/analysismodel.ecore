@@ -293,13 +293,14 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="key" containment="true">
         <eGenericType eClassifier="#//execution/Tuple">
           <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
-          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedStorage"/>
         </eGenericType>
       </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EDirection">
       <eLiterals name="READ"/>
       <eLiterals name="WRITE" value="1"/>
+      <eLiterals name="BOTH" value="2"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Tuple">
       <eTypeParameters name="F"/>

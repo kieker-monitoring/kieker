@@ -6,6 +6,7 @@ import java.util.Map;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 
+import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.execution.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -95,7 +96,7 @@ public class ExecutionSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> deployedOperationsPairToAggregatedStorageAccessMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> deployedOperationsPairToAggregatedStorageAccessMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess>)theEObject;
 				T result = caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(deployedOperationsPairToAggregatedStorageAccessMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -181,7 +182,7 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> object) {
+	public T caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> object) {
 		return null;
 	}
 
