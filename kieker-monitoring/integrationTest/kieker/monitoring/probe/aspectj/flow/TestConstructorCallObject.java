@@ -32,7 +32,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
  * 
  * @author DaGeRe
  */
-// TODO Does currently not work (no monitoring logs are produced), added for completeness
+// todo: Does currently not work (no monitoring logs are produced), added for completeness
 public class TestConstructorCallObject {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestConstructorCallObject.class);

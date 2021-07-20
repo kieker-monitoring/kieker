@@ -28,7 +28,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
 /**
  * Tests whether instrumented execution with constructorExecutionObjectInterface
- * creates the expected records
+ * creates the expected records.
  * 
  * @author DaGeRe
  *

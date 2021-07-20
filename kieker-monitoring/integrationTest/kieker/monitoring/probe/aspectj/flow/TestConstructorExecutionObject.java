@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
 /**
- * Tests whether instrumented execution with constructorExecutionObject creates the expected records
+ * Tests whether instrumented execution with constructorExecutionObject creates the expected records.
  * 
  * @author DaGeRe
  *
