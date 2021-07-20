@@ -28,22 +28,21 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedStorageImpl#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedStorageImpl#getAssemblyStorage <em>Assembly Storage</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements DeployedStorage {
 	/**
-	 * The cached value of the '{@link #getAssemblyOperation() <em>Assembly Operation</em>}' reference.
+	 * The cached value of the '{@link #getAssemblyStorage() <em>Assembly Storage</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssemblyOperation()
+	 * @see #getAssemblyStorage()
 	 * @generated
 	 * @ordered
 	 */
-	protected AssemblyStorage assemblyOperation;
-
+	protected AssemblyStorage assemblyStorage;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -69,16 +68,16 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public AssemblyStorage getAssemblyOperation() {
-		if (assemblyOperation != null && assemblyOperation.eIsProxy()) {
-			InternalEObject oldAssemblyOperation = (InternalEObject)assemblyOperation;
-			assemblyOperation = (AssemblyStorage)eResolveProxy(oldAssemblyOperation);
-			if (assemblyOperation != oldAssemblyOperation) {
+	public AssemblyStorage getAssemblyStorage() {
+		if (assemblyStorage != null && assemblyStorage.eIsProxy()) {
+			InternalEObject oldAssemblyStorage = (InternalEObject)assemblyStorage;
+			assemblyStorage = (AssemblyStorage)eResolveProxy(oldAssemblyStorage);
+			if (assemblyStorage != oldAssemblyStorage) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE, oldAssemblyStorage, assemblyStorage));
 			}
 		}
-		return assemblyOperation;
+		return assemblyStorage;
 	}
 
 	/**
@@ -86,8 +85,8 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyStorage basicGetAssemblyOperation() {
-		return assemblyOperation;
+	public AssemblyStorage basicGetAssemblyStorage() {
+		return assemblyStorage;
 	}
 
 	/**
@@ -96,11 +95,11 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public void setAssemblyOperation(AssemblyStorage newAssemblyOperation) {
-		AssemblyStorage oldAssemblyOperation = assemblyOperation;
-		assemblyOperation = newAssemblyOperation;
+	public void setAssemblyStorage(AssemblyStorage newAssemblyStorage) {
+		AssemblyStorage oldAssemblyStorage = assemblyStorage;
+		assemblyStorage = newAssemblyStorage;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE, oldAssemblyStorage, assemblyStorage));
 	}
 
 	/**
@@ -129,9 +128,9 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION:
-				if (resolve) return getAssemblyOperation();
-				return basicGetAssemblyOperation();
+			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE:
+				if (resolve) return getAssemblyStorage();
+				return basicGetAssemblyStorage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -144,8 +143,8 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyStorage)newValue);
+			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE:
+				setAssemblyStorage((AssemblyStorage)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -159,8 +158,8 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyStorage)null);
+			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE:
+				setAssemblyStorage((AssemblyStorage)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -174,8 +173,8 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_OPERATION:
-				return assemblyOperation != null;
+			case DeploymentPackage.DEPLOYED_STORAGE__ASSEMBLY_STORAGE:
+				return assemblyStorage != null;
 		}
 		return super.eIsSet(featureID);
 	}

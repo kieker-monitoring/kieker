@@ -14,22 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.trace.OperationCall;
 
 /**
+ * Assemble execution model based on operation call tuples.
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler extends AbstractModelAssembler implements IExecutionModelAssembler {
+public class ExecutionModelAssembler extends AbstractSourceModelAssembler implements IExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
@@ -41,26 +41,15 @@ public class ExecutionModelAssembler extends AbstractModelAssembler implements I
 	}
 
 	@Override
-	public void addOperationCall(final OperationCall operationCall) {
-		// Check if operationCall is an entry operation call. If so than source is null
-		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
-		final DeployedOperation target = operationCall.getOperation();
-
-		this.addExecution(source, target);
-	}
-
-	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
-		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
-		key.setFirst(source);
-		key.setSecond(target);
-		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
+	public void addOperationCall(final OperationCallDurationEvent operationCall) {
+		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall.getOperationCall())) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-			invocation.setSource(source);
-			invocation.setTarget(target);
+			invocation.setSource(operationCall.getOperationCall().getFirst());
+			invocation.setTarget(operationCall.getOperationCall().getSecond());
 
 			this.updateSourceModel(invocation);
 
-			this.executionModel.getAggregatedInvocations().put(key, invocation);
+			this.executionModel.getAggregatedInvocations().put(operationCall.getOperationCall(), invocation);
 		}
 	}
 

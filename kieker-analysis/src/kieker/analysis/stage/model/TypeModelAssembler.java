@@ -14,11 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import kieker.analysis.signature.IComponentSignatureExtractor;
 import kieker.analysis.signature.IOperationSignatureExtractor;
-import kieker.common.record.flow.IOperationRecord;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
@@ -30,7 +30,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class TypeModelAssembler extends AbstractModelAssembler {
+public class TypeModelAssembler extends AbstractSourceModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 	private final IComponentSignatureExtractor componentSignatureExtractor;
@@ -48,14 +48,10 @@ public class TypeModelAssembler extends AbstractModelAssembler {
 		this.operationSignatureExtractor = operationSignatureExtractor;
 	}
 
-	public void addRecord(final IOperationRecord record) {
-		final String classSignature = record.getClassSignature();
-		final String operationSignature = record.getOperationSignature();
+	public void addOperation(final OperationEvent event) {
+		final String componentSignature = event.getComponentSignature();
+		final String operationSignature = event.getOperationSignature();
 
-		this.addRecord(classSignature, operationSignature);
-	}
-
-	public void addRecord(final String componentSignature, final String operationSignature) {
 		final ComponentType componentType = this.addComponentType(componentSignature);
 		this.addOperationType(componentType, operationSignature);
 	}

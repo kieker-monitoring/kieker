@@ -4,6 +4,7 @@ package kieker.model.analysismodel.execution.impl;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 
+import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -56,7 +57,7 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> aggregatedStorageAccesses;
+	protected EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> aggregatedStorageAccesses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -96,9 +97,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
+	public EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
 		if (aggregatedStorageAccesses == null) {
-			aggregatedStorageAccesses = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
+			aggregatedStorageAccesses = new EcoreEMap<Tuple<DeployedOperation, DeployedStorage>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
 		}
 		return aggregatedStorageAccesses;
 	}

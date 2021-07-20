@@ -41,7 +41,8 @@ import kieker.common.record.IMonitoringRecord;
  *            The type of the model used by the filter.
  */
 @Plugin(configuration =
-		@Property(name = AbstractNonAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractNonAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
+		@Property(name = AbstractNonAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+				defaultValue = AbstractNonAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
 public abstract class AbstractNonAggregatingDisplayFilter<T extends IMonitoringRecord, C> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputPortRecords";

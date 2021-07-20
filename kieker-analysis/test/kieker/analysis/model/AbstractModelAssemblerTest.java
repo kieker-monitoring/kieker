@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.stage.model.AbstractSourceModelAssembler;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.ComponentType;
@@ -30,7 +31,7 @@ import kieker.model.analysismodel.type.TypeFactory;
  * @author Reiner Jung
  * @since 1.15
  */
-public class AbstractModelAssemblerTest { // NOCS this is a test class
+public class AbstractModelAssemblerTest { // NOCS NOPMD this is a test class
 
 	private static final String LABEL = "LABEL";
 	private static final String SECOND = "SECOND";
@@ -41,7 +42,7 @@ public class AbstractModelAssemblerTest { // NOCS this is a test class
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};
-		final AbstractModelAssembler assembler = new AbstractModelAssembler(model, LABEL) {
+		final AbstractSourceModelAssembler assembler = new AbstractSourceModelAssembler(model, LABEL) {
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -65,7 +66,7 @@ public class AbstractModelAssemblerTest { // NOCS this is a test class
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};
-		final AbstractModelAssembler assembler = new AbstractModelAssembler(model, LABEL) {
+		final AbstractSourceModelAssembler assembler = new AbstractSourceModelAssembler(model, LABEL) {
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -73,7 +74,7 @@ public class AbstractModelAssemblerTest { // NOCS this is a test class
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
 		}
-		final AbstractModelAssembler assembler2 = new AbstractModelAssembler(model, SECOND) {
+		final AbstractSourceModelAssembler assembler2 = new AbstractSourceModelAssembler(model, SECOND) {
 		};
 		for (final ComponentType type : types) {
 			assembler2.updateSourceModel(type);

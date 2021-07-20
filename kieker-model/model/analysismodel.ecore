@@ -60,8 +60,9 @@
       </eTypeParameters>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EPredefinedUnits">
-      <eLiterals name="CPU_UTIL"/>
-      <eLiterals name="RESPONSE_TIME"/>
+      <eLiterals name="CPU_UTIL" value="1"/>
+      <eLiterals name="RESPONSE_TIME" value="2"/>
+      <eLiterals name="INVOCATION" value="3"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EPropertyType">
       <eLiterals name="MIN"/>
@@ -156,6 +157,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//type/ComponentType"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorages" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -177,7 +179,7 @@
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//type/StorageType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storageType" eType="#//type/StorageType"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyStorageMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -223,6 +225,7 @@
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="containedStorages" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeployedStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -250,7 +253,7 @@
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyStorage"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorage" eType="#//assembly/AssemblyStorage"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
@@ -290,13 +293,14 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="key" containment="true">
         <eGenericType eClassifier="#//execution/Tuple">
           <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
-          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedStorage"/>
         </eGenericType>
       </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="EDirection">
       <eLiterals name="READ"/>
       <eLiterals name="WRITE" value="1"/>
+      <eLiterals name="BOTH" value="2"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Tuple">
       <eTypeParameters name="F"/>

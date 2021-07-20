@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.AssemblyComponent#getAssemblyStorages <em>Assembly Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent()
@@ -74,5 +75,27 @@ public interface AssemblyComponent extends EObject {
 	 * @generated
 	 */
 	EMap<String, AssemblyStorage> getAssemblyStorages();
+
+	/**
+	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Signature</em>' attribute.
+	 * @see #setSignature(String)
+	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_Signature()
+	 * @model
+	 * @generated
+	 */
+	String getSignature();
+
+	/**
+	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Signature</em>' attribute.
+	 * @see #getSignature()
+	 * @generated
+	 */
+	void setSignature(String value);
 
 } // AssemblyComponent

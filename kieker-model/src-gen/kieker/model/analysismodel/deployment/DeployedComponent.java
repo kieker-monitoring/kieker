@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.DeployedComponent#getContainedStorages <em>Contained Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.DeployedComponent#getSignature <em>Signature</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent()
@@ -74,6 +75,28 @@ public interface DeployedComponent extends EObject {
 	 * @generated
 	 */
 	EMap<String, DeployedStorage> getContainedStorages();
+
+	/**
+	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Signature</em>' attribute.
+	 * @see #setSignature(String)
+	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_Signature()
+	 * @model
+	 * @generated
+	 */
+	String getSignature();
+
+	/**
+	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedComponent#getSignature <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Signature</em>' attribute.
+	 * @see #getSignature()
+	 * @generated
+	 */
+	void setSignature(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

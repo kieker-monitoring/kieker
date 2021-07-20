@@ -790,6 +790,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 		initEEnum(ePredefinedUnitsEEnum, EPredefinedUnits.class, "EPredefinedUnits");
 		addEEnumLiteral(ePredefinedUnitsEEnum, EPredefinedUnits.CPU_UTIL);
 		addEEnumLiteral(ePredefinedUnitsEEnum, EPredefinedUnits.RESPONSE_TIME);
+		addEEnumLiteral(ePredefinedUnitsEEnum, EPredefinedUnits.INVOCATION);
 
 		initEEnum(ePropertyTypeEEnum, EPropertyType.class, "EPropertyType");
 		addEEnumLiteral(ePropertyTypeEEnum, EPropertyType.MIN);

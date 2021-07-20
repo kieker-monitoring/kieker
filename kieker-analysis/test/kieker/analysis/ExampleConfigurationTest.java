@@ -29,7 +29,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.model.DeploymentModelPrinter;
+import kieker.analysis.stage.model.DeploymentModelPrinter;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
@@ -98,8 +98,6 @@ public class ExampleConfigurationTest {
 		// final DeploymentModelPrinter deploymentModelPrinter = new
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
-
-		// StatisticsModel statisticsModel = configuration.getStatisticsModel();
 
 		final EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();

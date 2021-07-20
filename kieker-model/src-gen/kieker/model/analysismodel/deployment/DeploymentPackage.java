@@ -270,13 +270,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__CONTAINED_STORAGES = 2;
 
 	/**
+	 * The feature id for the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT__SIGNATURE = 3;
+
+	/**
 	 * The number of structural features of the '<em>Deployed Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT_FEATURE_COUNT = 3;
+	int DEPLOYED_COMPONENT_FEATURE_COUNT = 4;
 
 	/**
 	 * The operation id for the '<em>Get Deployment Context</em>' operation.
@@ -445,13 +454,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_STORAGE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Storage</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_STORAGE__ASSEMBLY_OPERATION = 0;
+	int DEPLOYED_STORAGE__ASSEMBLY_STORAGE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Storage</em>' class.
@@ -646,6 +655,17 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_ContainedStorages();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeployedComponent#getSignature <em>Signature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signature</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getSignature()
+	 * @see #getDeployedComponent()
+	 * @generated
+	 */
+	EAttribute getDeployedComponent_Signature();
+
+	/**
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedComponent#getDeploymentContext() <em>Get Deployment Context</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -765,15 +785,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedStorage();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation <em>Assembly Operation</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage <em>Assembly Storage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation()
+	 * @return the meta object for the reference '<em>Assembly Storage</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage()
 	 * @see #getDeployedStorage()
 	 * @generated
 	 */
-	EReference getDeployedStorage_AssemblyOperation();
+	EReference getDeployedStorage_AssemblyStorage();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedStorage#getComponent() <em>Get Component</em>}' operation.
@@ -939,6 +959,14 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__CONTAINED_STORAGES = eINSTANCE.getDeployedComponent_ContainedStorages();
 
 		/**
+		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPLOYED_COMPONENT__SIGNATURE = eINSTANCE.getDeployedComponent_Signature();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Deployment Context</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1035,12 +1063,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_STORAGE = eINSTANCE.getDeployedStorage();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Storage</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_STORAGE__ASSEMBLY_OPERATION = eINSTANCE.getDeployedStorage_AssemblyOperation();
+		EReference DEPLOYED_STORAGE__ASSEMBLY_STORAGE = eINSTANCE.getDeployedStorage_AssemblyStorage();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.

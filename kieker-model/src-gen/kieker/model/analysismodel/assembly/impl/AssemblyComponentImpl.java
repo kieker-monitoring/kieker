@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyOperations <em>Assembly Operations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getComponentType <em>Component Type</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyStorages <em>Assembly Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getSignature <em>Signature</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,6 +70,26 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected EMap<String, AssemblyStorage> assemblyStorages;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIGNATURE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -161,6 +182,29 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE, oldSignature, signature));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
@@ -188,6 +232,8 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES:
 				if (coreType) return getAssemblyStorages();
 				else return getAssemblyStorages().map();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				return getSignature();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -208,6 +254,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES:
 				((EStructuralFeature.Setting)getAssemblyStorages()).set(newValue);
+				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				setSignature((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -230,6 +279,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES:
 				getAssemblyStorages().clear();
 				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -248,8 +300,26 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return componentType != null;
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_STORAGES:
 				return assemblyStorages != null && !assemblyStorages.isEmpty();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (signature: ");
+		result.append(signature);
+		result.append(')');
+		return result.toString();
 	}
 
 } //AssemblyComponentImpl

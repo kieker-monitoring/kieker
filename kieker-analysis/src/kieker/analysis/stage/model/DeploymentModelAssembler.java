@@ -14,13 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.analysis.HostnameRepository;
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.assembly.AssemblyOperation;
@@ -36,12 +32,9 @@ import kieker.model.analysismodel.sources.SourceModel;
  *
  * @since 1.14
  */
-public class DeploymentModelAssembler extends AbstractModelAssembler {
+public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
-
-	private final HostnameRepository hostnameRepository = new HostnameRepository();
-
 	private final AssemblyModel assemblyModel;
 	private final DeploymentModel deploymentModel;
 
@@ -52,31 +45,15 @@ public class DeploymentModelAssembler extends AbstractModelAssembler {
 		this.deploymentModel = deploymentModel;
 	}
 
-	public void handleMetadataRecord(final TraceMetadata metadata) {
-		final String hostname = metadata.getHostname();
-		final long traceId = metadata.getTraceId();
-		this.hostnameRepository.addEntry(traceId, hostname);
+	public void addOperation(final OperationEvent event) {
+		final String hostname = event.getHostname();
+		final String classSignature = event.getComponentSignature();
+		final String operationSignature = event.getOperationSignature();
+
+		this.addOperation(hostname, classSignature, operationSignature);
 	}
 
-	public void handleBeforeOperationEvent(final BeforeOperationEvent event) {
-		this.hostnameRepository.inc(event.getTraceId());
-
-		this.addRecord(event);
-	}
-
-	public void handleAfterOperationEvent(final AfterOperationEvent event) {
-		this.hostnameRepository.dec(event.getTraceId());
-	}
-
-	private void addRecord(final AbstractOperationEvent record) {
-		final String hostname = this.hostnameRepository.getHostname(record.getTraceId());
-		final String classSignature = record.getClassSignature();
-		final String operationSignature = record.getOperationSignature();
-
-		this.addRecord(hostname, classSignature, operationSignature);
-	}
-
-	private void addRecord(final String hostname, final String componentSignature, final String operationSignature) {
+	private void addOperation(final String hostname, final String componentSignature, final String operationSignature) {
 		final DeploymentContext deploymentContext = this.addDeploymentContext(hostname);
 		final DeployedComponent component = this.addDeployedComponent(deploymentContext, componentSignature);
 		this.addDeployedOperation(component, operationSignature);

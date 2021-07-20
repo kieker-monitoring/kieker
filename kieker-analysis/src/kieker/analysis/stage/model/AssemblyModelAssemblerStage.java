@@ -14,27 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.statistics;
+package kieker.analysis.stage.model;
 
-import java.util.function.Function;
+import kieker.analysis.stage.model.data.OperationEvent;
+import kieker.model.analysismodel.assembly.AssemblyModel;
+import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.type.TypeModel;
 
-import org.eclipse.emf.ecore.EObject;
-
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.StatisticsModel;
-import kieker.model.analysismodel.trace.OperationCall;
+import teetime.stage.basic.AbstractFilter;
 
 /**
- *
  * @author Sören Henning
  *
  * @since 1.14
- *
  */
-public class FullReponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCall> {
+public class AssemblyModelAssemblerStage extends AbstractFilter<OperationEvent> {
 
-	public FullReponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCall, EObject> objectAccesor) {
-		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
+	private final AssemblyModelAssembler assembler;
+
+	public AssemblyModelAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+		this.assembler = new AssemblyModelAssembler(typeModel, assemblyModel, sourceModel, sourceLabel);
+	}
+
+	@Override
+	protected void execute(final OperationEvent event) {
+		this.assembler.addOperation(event);
+		this.outputPort.send(event);
 	}
 
 }

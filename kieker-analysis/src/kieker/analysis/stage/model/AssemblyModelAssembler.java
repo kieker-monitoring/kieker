@@ -14,9 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
@@ -31,7 +31,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class AssemblyModelAssembler extends AbstractModelAssembler {
+public class AssemblyModelAssembler extends AbstractSourceModelAssembler {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 
@@ -44,14 +44,14 @@ public class AssemblyModelAssembler extends AbstractModelAssembler {
 		this.assemblyModel = assemblyModel;
 	}
 
-	public void addRecord(final BeforeOperationEvent record) {
-		final String classSignature = record.getClassSignature();
-		final String operationSignature = record.getOperationSignature();
+	public void addOperation(final OperationEvent event) {
+		final String componentSignature = event.getComponentSignature();
+		final String operationSignature = event.getOperationSignature();
 
-		this.addRecord(classSignature, operationSignature);
+		this.addOperation(componentSignature, operationSignature);
 	}
 
-	public void addRecord(final String componentSignature, final String operationSignature) {
+	public void addOperation(final String componentSignature, final String operationSignature) {
 		final AssemblyComponent component = this.addAssemblyComponent(componentSignature);
 		this.addAssemblyOperation(component, operationSignature);
 	}
@@ -66,6 +66,7 @@ public class AssemblyModelAssembler extends AbstractModelAssembler {
 			final String componentTypeKey = componentSignature;
 			final ComponentType componentType = this.typeModel.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
+			component.setSignature(componentSignature);
 		}
 		this.updateSourceModel(component);
 

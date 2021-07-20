@@ -24,9 +24,9 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
- * A sampler using the MXBean interface to access information about the class loading. The sampler produces a {@link ClassLoadingRecord} each time the {@code sample}
- * method is called.
- *
+ * A sampler using the MXBean interface to access information about the class loading.
+ * The sampler produces a {@link ClassLoadingRecord} each time the {@code sample} method is called.
+ * 
  * @author Nils Christian Ehmke
  *
  * @since 1.10

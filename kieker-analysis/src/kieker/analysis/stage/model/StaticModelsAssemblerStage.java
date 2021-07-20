@@ -14,10 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import kieker.analysis.signature.SignatureExtractor;
-import kieker.common.record.flow.IFlowRecord;
+import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
@@ -43,8 +43,8 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 	private final DeploymentModel deploymentModel;
 	private final SourceModel sourceModel;
 
-	private final InputPort<IFlowRecord> inputPort;
-	private final OutputPort<IFlowRecord> outputPort;
+	private final InputPort<OperationEvent> inputPort;
+	private final OutputPort<OperationEvent> outputPort;
 
 	public StaticModelsAssemblerStage(final String sourceLabel, final SignatureExtractor signatureExtractor) {
 		this(TypeFactory.eINSTANCE.createTypeModel(), AssemblyFactory.eINSTANCE.createAssemblyModel(), DeploymentFactory.eINSTANCE.createDeploymentModel(),
@@ -90,11 +90,11 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 		return this.sourceModel;
 	}
 
-	public InputPort<IFlowRecord> getInputPort() {
+	public InputPort<OperationEvent> getInputPort() {
 		return this.inputPort;
 	}
 
-	public OutputPort<IFlowRecord> getOutputPort() {
+	public OutputPort<OperationEvent> getOutputPort() {
 		return this.outputPort;
 	}
 

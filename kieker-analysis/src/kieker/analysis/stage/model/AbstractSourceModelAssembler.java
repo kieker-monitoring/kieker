@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
+package kieker.analysis.stage.model;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -28,12 +28,12 @@ import kieker.model.analysismodel.sources.SourceModel;
  * @author Reiner Jung
  * @since 1.15
  */
-public abstract class AbstractModelAssembler {
+public abstract class AbstractSourceModelAssembler { // NOPMD should be abstract to avoid misuse as standalone assembler
 
 	private final SourceModel sourceModel;
 	private final String sourceLabel;
 
-	public AbstractModelAssembler(final SourceModel sourceModel, final String sourceLabel) {
+	public AbstractSourceModelAssembler(final SourceModel sourceModel, final String sourceLabel) {
 		this.sourceModel = sourceModel;
 		this.sourceLabel = sourceLabel;
 	}

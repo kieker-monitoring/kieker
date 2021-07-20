@@ -13,41 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
+package kieker.analysis.signature;
 
 /**
+ * Signature cleanup facility.
+ *
  * @author Reiner Jung
  * @since 1.15
  */
-public class ModelRepository {
+public abstract class AbstractSignatureCleaner {
 
-	private final String name;
+	protected boolean caseInsensitive;
 
-	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
-
-	public ModelRepository(final String name) {
-		this.name = name;
+	public AbstractSignatureCleaner(final boolean caseInsensitive) {
+		this.caseInsensitive = caseInsensitive;
 	}
 
-	public Map<Class<? extends EObject>, EObject> getModels() {
-		return this.models;
+	protected String removeTrailingUnderscore(final String string) {
+		if (string.endsWith("_")) {
+			return string.substring(0, string.length() - 1);
+		} else {
+			return string;
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends EObject> T getModel(final Class<T> clazz) {
-		return (T) this.models.get(clazz);
+	protected String convertToLowerCase(final String string) {
+		return this.caseInsensitive ? string.toLowerCase() : string; // NOCS NOPMD
 	}
 
-	public void register(final Class<? extends EObject> key, final EObject value) {
-		this.models.put(key, value);
-	}
-
-	public String getName() {
-		return this.name;
-	}
+	public abstract String processComponentSignature(final String signature);
 }

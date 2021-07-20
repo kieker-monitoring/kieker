@@ -4,6 +4,7 @@ package kieker.model.analysismodel.execution.impl;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 
+import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionPackage;
 import kieker.model.analysismodel.execution.Tuple;
@@ -35,7 +36,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedOperation>,AggregatedStorageAccess> {
+public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedStorage>,AggregatedStorageAccess> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -54,7 +55,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 * @ordered
 	 */
-	protected Tuple<DeployedOperation, DeployedOperation> key;
+	protected Tuple<DeployedOperation, DeployedStorage> key;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -123,7 +124,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Tuple<DeployedOperation, DeployedOperation> getTypedKey() {
+	public Tuple<DeployedOperation, DeployedStorage> getTypedKey() {
 		return key;
 	}
 
@@ -132,8 +133,8 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedKey(Tuple<DeployedOperation, DeployedOperation> newKey, NotificationChain msgs) {
-		Tuple<DeployedOperation, DeployedOperation> oldKey = key;
+	public NotificationChain basicSetTypedKey(Tuple<DeployedOperation, DeployedStorage> newKey, NotificationChain msgs) {
+		Tuple<DeployedOperation, DeployedStorage> oldKey = key;
 		key = newKey;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY, oldKey, newKey);
@@ -147,7 +148,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedKey(Tuple<DeployedOperation, DeployedOperation> newKey) {
+	public void setTypedKey(Tuple<DeployedOperation, DeployedStorage> newKey) {
 		if (newKey != key) {
 			NotificationChain msgs = null;
 			if (key != null)
@@ -206,7 +207,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 				setTypedValue((AggregatedStorageAccess)newValue);
 				return;
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
-				setTypedKey((Tuple<DeployedOperation, DeployedOperation>)newValue);
+				setTypedKey((Tuple<DeployedOperation, DeployedStorage>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -224,7 +225,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 				setTypedValue((AggregatedStorageAccess)null);
 				return;
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
-				setTypedKey((Tuple<DeployedOperation, DeployedOperation>)null);
+				setTypedKey((Tuple<DeployedOperation, DeployedStorage>)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -283,7 +284,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@Override
-	public Tuple<DeployedOperation, DeployedOperation> getKey() {
+	public Tuple<DeployedOperation, DeployedStorage> getKey() {
 		return getTypedKey();
 	}
 
@@ -293,7 +294,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@Override
-	public void setKey(Tuple<DeployedOperation, DeployedOperation> key) {
+	public void setKey(Tuple<DeployedOperation, DeployedStorage> key) {
 		setTypedKey(key);
 	}
 
@@ -325,9 +326,9 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> getEMap() {
+	public EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess>)container.eGet(eContainmentFeature());
 	}
 
 } //DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl

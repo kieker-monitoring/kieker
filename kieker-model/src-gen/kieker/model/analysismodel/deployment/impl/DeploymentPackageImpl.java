@@ -363,6 +363,16 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDeployedComponent_Signature() {
+		return (EAttribute)deployedComponentEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getDeployedComponent__GetDeploymentContext() {
 		return deployedComponentEClass.getEOperations().get(0);
 	}
@@ -473,7 +483,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedStorage_AssemblyOperation() {
+	public EReference getDeployedStorage_AssemblyStorage() {
 		return (EReference)deployedStorageEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -535,6 +545,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_STORAGES);
+		createEAttribute(deployedComponentEClass, DEPLOYED_COMPONENT__SIGNATURE);
 		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT);
 
 		eStringToDeployedOperationMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY);
@@ -550,7 +561,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(eStringToDeployedStorageMapEntryEClass, ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE);
 
 		deployedStorageEClass = createEClass(DEPLOYED_STORAGE);
-		createEReference(deployedStorageEClass, DEPLOYED_STORAGE__ASSEMBLY_OPERATION);
+		createEReference(deployedStorageEClass, DEPLOYED_STORAGE__ASSEMBLY_STORAGE);
 		createEOperation(deployedStorageEClass, DEPLOYED_STORAGE___GET_COMPONENT);
 	}
 
@@ -606,6 +617,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getDeployedComponent_AssemblyComponent(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyComponent", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 		initEReference(getDeployedComponent_ContainedStorages(), this.getEStringToDeployedStorageMapEntry(), null, "containedStorages", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEAttribute(getDeployedComponent_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -623,7 +635,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getEStringToDeployedStorageMapEntry_Value(), this.getDeployedStorage(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedStorageEClass, DeployedStorage.class, "DeployedStorage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedStorage_AssemblyOperation(), theAssemblyPackage.getAssemblyStorage(), null, "assemblyOperation", null, 0, 1, DeployedStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedStorage_AssemblyStorage(), theAssemblyPackage.getAssemblyStorage(), null, "assemblyStorage", null, 0, 1, DeployedStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}

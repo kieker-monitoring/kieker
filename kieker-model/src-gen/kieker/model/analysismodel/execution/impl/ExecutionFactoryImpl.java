@@ -6,6 +6,7 @@ import java.util.Map;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 
+import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.execution.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -150,7 +151,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> createDeployedOperationsPairToAggregatedStorageAccessMapEntry() {
+	public Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> createDeployedOperationsPairToAggregatedStorageAccessMapEntry() {
 		DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl deployedOperationsPairToAggregatedStorageAccessMapEntry = new DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl();
 		return deployedOperationsPairToAggregatedStorageAccessMapEntry;
 	}
