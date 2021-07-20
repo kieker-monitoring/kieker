@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
@@ -16,47 +18,50 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
  *
  */
 public class TestConstructorCall {
-	static final int CALL_SIGNATURE_INDEX = 7;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestConstructorCall.class);
+
+	public static final int CALL_SIGNATURE_INDEX = 7;
 
 	@Test
 	public void testBasicExecution() throws IOException, InterruptedException {
-		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall.xml"));
-		
-		System.out.println(temporaryFile.getAbsolutePath());
-		
-		File logFolder = Util.runTestcase(temporaryFile, "TestSimpleOperationExecution");
+		final File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall.xml"));
 
-		List<String> lines = Util.getLatestLogRecord(logFolder);
-		System.out.println(lines);
-		String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
+		LOGGER.debug("Result path: {}", temporaryFile.getAbsolutePath());
+
+		final File logFolder = Util.runTestcase(temporaryFile, "TestSimpleOperationExecution");
+
+		final List<String> lines = Util.getLatestLogRecord(logFolder);
+		LOGGER.debug("Lines: {}", lines);
+		final String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
 		Assert.assertEquals("public example.kieker.Instrumentable.<init>()", firstSignature);
 	}
-	
+
 	@Test
 	public void testThrowingExecution() throws IOException, InterruptedException {
-		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall.xml"));
-		
-		System.out.println(temporaryFile.getAbsolutePath());
-		
-		File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
+		final File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall.xml"));
 
-		List<String> lines = Util.getLatestLogRecord(logFolder);
-		System.out.println(lines);
-		String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
+		LOGGER.debug("Result path: {}", temporaryFile.getAbsolutePath());
+
+		final File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
+
+		final List<String> lines = Util.getLatestLogRecord(logFolder);
+		LOGGER.debug("Lines: {}", lines);
+		final String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
 		Assert.assertEquals("public example.kieker.Instrumentable.<init>(int)", firstSignature);
 	}
-	
+
 	@Test
 	public void testStaticExecution() throws IOException, InterruptedException {
-		File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall_static.xml"));
-		
-		System.out.println(temporaryFile.getAbsolutePath());
-		
-		File logFolder = Util.runTestcase(temporaryFile, "TestStaticOperationExecution");
+		final File temporaryFile = Util.createTemporaryProject(new File(Util.EXAMPLE_PROJECT_FOLDER, "aop_constructorCall_static.xml"));
 
-		List<String> lines = Util.getLatestLogRecord(logFolder);
-		System.out.println(lines);
-		String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
+		LOGGER.debug("Result path: {}", temporaryFile.getAbsolutePath());
+
+		final File logFolder = Util.runTestcase(temporaryFile, "TestStaticOperationExecution");
+
+		final List<String> lines = Util.getLatestLogRecord(logFolder);
+		LOGGER.debug("Lines: {}", lines);
+		final String firstSignature = lines.get(2).split(";")[CALL_SIGNATURE_INDEX];
 		Assert.assertEquals("public example.kieker.Instrumentable.<init>()", firstSignature);
 	}
 }
