@@ -55,7 +55,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			return new Stack<>();
 		}
 	};
-	
+
 	/**
 	 * The pointcut for the monitored operations. Inheriting classes should extend
 	 * the pointcut in order to find the correct executions of the methods (e.g. all
@@ -98,9 +98,9 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		}
 		// measure before
 		final long tin = TIME.getTime();
-		
-		OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
-		stack.get().push(data);
+
+		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+		this.stack.get().push(data);
 	}
 
 	@After("monitoredOperation() && notWithinKieker()")
@@ -114,11 +114,11 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			return;
 		}
 
-		OperationStartData data = stack.get().pop();
-		
+		final OperationStartData data = this.stack.get().pop();
+
 		final long tout = TIME.getTime();
 		CTRLINST.newMonitoringRecord(
-				new OperationExecutionRecord(operationSignature, data.getSessionId(), 
+				new OperationExecutionRecord(operationSignature, data.getSessionId(),
 						data.getTraceId(), data.getTin(), tout, data.getHostname(), data.getEoi(), data.getEss()));
 		// cleanup
 		if (data.isEntrypoint()) {

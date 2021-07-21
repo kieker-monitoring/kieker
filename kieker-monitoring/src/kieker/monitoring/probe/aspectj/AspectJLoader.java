@@ -66,8 +66,8 @@ public final class AspectJLoader {
 		}
 
 		LOGGER.info(
-				"Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI." +
-						"Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
+				"Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI."
+						+ "Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
 				KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION);
 
 		if (null != System.getProperty("aj5.def")) {
