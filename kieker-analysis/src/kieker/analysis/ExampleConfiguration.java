@@ -37,7 +37,7 @@ import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
 import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
 import kieker.analysis.stage.model.OperationPresentInModelEventReleaseControlStage;
@@ -92,7 +92,7 @@ public class ExampleConfiguration extends Configuration {
 	public ExampleConfiguration(final File importDirectory, final Path exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
-		final Function<OperationCallDurationEvent, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
+		final Function<OperationCallDurationEvent, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
 				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)

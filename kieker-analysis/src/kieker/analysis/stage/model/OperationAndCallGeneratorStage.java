@@ -95,8 +95,8 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 		final TraceData traceData = this.traceDataMap.get(beforeOperationEvent.getTraceId());
 
 		final OperationEvent newEvent = new OperationEvent(traceData.getMetadata().getHostname(),
-				this.componentCleaner.processComponentSignature(beforeOperationEvent.getClassSignature()),
-				this.operationCleaner.processComponentSignature(beforeOperationEvent.getOperationSignature()));
+				this.componentCleaner.processSignature(beforeOperationEvent.getClassSignature()),
+				this.operationCleaner.processSignature(beforeOperationEvent.getOperationSignature()));
 		if (!traceData.getOperationStack().empty()) {
 			this.operationOutputPort.send(newEvent);
 		} else {
@@ -119,13 +119,13 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 		final Stack<OperationEvent> stack = traceData.getOperationStack();
 		if (!stack.isEmpty()) {
 			final OperationEvent lastEvent = stack.pop();
-			if (!lastEvent.getComponentSignature().equals(afterOperationEvent.getClassSignature())
-					|| !lastEvent.getOperationSignature().equals(afterOperationEvent.getOperationSignature())) {
+			if (!lastEvent.getComponentSignature().equals(this.componentCleaner.processSignature(afterOperationEvent.getClassSignature()))
+					|| !lastEvent.getOperationSignature().equals(this.operationCleaner.processSignature(afterOperationEvent.getOperationSignature()))) {
 				this.logger.error("Broken trace, expected {}:{}, but got {}:{}",
 						lastEvent.getComponentSignature(),
 						lastEvent.getOperationSignature(),
-						afterOperationEvent.getClassSignature(),
-						afterOperationEvent.getOperationSignature());
+						this.componentCleaner.processSignature(afterOperationEvent.getClassSignature()),
+						this.operationCleaner.processSignature(afterOperationEvent.getOperationSignature()));
 			}
 			if (stack.isEmpty()) { // trace is complete
 				this.traceDataMap.remove(afterOperationEvent.getTraceId());

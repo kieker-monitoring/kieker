@@ -41,5 +41,5 @@ public abstract class AbstractSignatureCleaner {
 		return this.caseInsensitive ? string.toLowerCase() : string; // NOCS NOPMD
 	}
 
-	public abstract String processComponentSignature(final String signature);
+	public abstract String processSignature(final String signature);
 }

@@ -39,7 +39,7 @@ import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
 import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
 import kieker.analysis.stage.model.StaticModelsAssemblerStage;
@@ -153,7 +153,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
-				this.statisticsModel, ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION);
+				this.statisticsModel, ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION);
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
