@@ -164,14 +164,8 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				fileInputStream = zipInputStream;
 			}
 			this.textFileStreamProcessor.processInputChannel(fileInputStream);
-		} catch (final IOException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final MappingException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final MonitoringRecordException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final UnknownRecordTypeException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
+		} catch (final IOException | MappingException | MonitoringRecordException | UnknownRecordTypeException e) {
+			LOGGER.error("Epimlicorror reading {} {}", inputFile, e);
 		} finally {
 			if (in != null) {
 				try {

@@ -31,7 +31,7 @@ public class DynamicEventDispatcherTest { // NOCS test do not need constructors
 	public void testBase() {
 		try {
 			this.testDispatcher(null, false, false, false);
-		} catch (final Exception e) { // NOCS temporary measure
+		} catch (final Exception e) { // NOCS NOPMD temporary measure
 
 		}
 	}
