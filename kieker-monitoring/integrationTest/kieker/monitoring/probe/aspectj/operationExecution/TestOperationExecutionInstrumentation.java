@@ -40,11 +40,13 @@ public class TestOperationExecutionInstrumentation {
 		final File logFolder = Util.runTestcase(OPERATION_EXECUTION_PROJECT, "TestSimpleOperationExecution");
 
 		final List<String> lines = Util.getLatestLogRecord(logFolder);
-		final String firstSignature = lines.get(1).split(";")[2];
+		final String staticSignature = lines.get(1).split(";")[2];
+		Assert.assertEquals("public static void net.example.Instrumentable.staticMethod()", staticSignature);
+		final String firstSignature = lines.get(2).split(";")[2];
 		Assert.assertEquals("public net.example.Instrumentable.<init>()", firstSignature);
-		final String secondSignature = lines.get(2).split(";")[2];
+		final String secondSignature = lines.get(3).split(";")[2];
 		Assert.assertEquals("public void net.example.Instrumentable.callee2(java.lang.String)", secondSignature);
-		final String thirdSignature = lines.get(3).split(";")[2];
+		final String thirdSignature = lines.get(4).split(";")[2];
 		Assert.assertEquals("public void net.example.Instrumentable.callee()", thirdSignature);
 	}
 

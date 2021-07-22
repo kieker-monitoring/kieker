@@ -64,8 +64,8 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	@Before("monitoredOperation() && this(thisObject) && notWithinKieker()")
-	public void beforeOperation(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
+	@Before("monitoredOperation() && notWithinKieker()")
+	public void beforeOperation(final JoinPoint thisJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
