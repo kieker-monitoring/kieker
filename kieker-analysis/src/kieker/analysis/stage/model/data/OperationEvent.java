@@ -46,6 +46,33 @@ public class OperationEvent {
 	}
 
 	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof OperationEvent) {
+			final OperationEvent operation = (OperationEvent) obj;
+			return this.compare(this.componentSignature, operation.getComponentSignature())
+					&& this.compare(this.operationSignature, operation.getOperationSignature())
+					&& this.compare(this.hostname, operation.getHostname());
+		} else {
+			return super.equals(obj);
+		}
+	}
+
+	private boolean compare(final String a, final String b) {
+		if ((a == null) && (b == null)) {
+			return true;
+		} else if (a != null) {
+			return a.equals(b);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s:%s@%s", this.componentSignature, this.operationSignature, this.hostname);
 	}

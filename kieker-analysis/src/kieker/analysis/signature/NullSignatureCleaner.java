@@ -28,7 +28,7 @@ public class NullSignatureCleaner extends AbstractSignatureCleaner {
 	}
 
 	@Override
-	public String processComponentSignature(final String signature) {
+	public String processSignature(final String signature) {
 		return this.convertToLowerCase(signature);
 	}
 
