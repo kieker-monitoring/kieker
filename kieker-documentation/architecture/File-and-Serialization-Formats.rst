@@ -69,6 +69,7 @@ Binary String Registry Serialization
 
 Each string or fully qualified event type name is serialized as follows:
 
+-  int (signed) fixed value -1 to indicate a string value
 -  int (signed) indicating the id number for the string or type name
 -  int (signed) the length of the string in bytes
 -  a sequence of bytes describing the string (note that the default

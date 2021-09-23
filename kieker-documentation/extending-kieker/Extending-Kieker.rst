@@ -18,4 +18,4 @@ In this section we explain how to extend Kieker in many different ways:
 * How to support new programming languages
   
   * :ref:`extending-kieker-general-language-and-platform-support`
-
+  * :ref:`architecture-file-and-serialization-formats`
