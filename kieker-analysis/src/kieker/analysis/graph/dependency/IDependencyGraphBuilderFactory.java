@@ -19,6 +19,9 @@ package kieker.analysis.graph.dependency;
 /**
  * @author Sören Henning
  *
+ * @param <T>
+ *            configuration object
+ *
  * @since 1.14
  */
 public interface IDependencyGraphBuilderFactory<T extends IDependencyGraphBuilderConfiguration> {
