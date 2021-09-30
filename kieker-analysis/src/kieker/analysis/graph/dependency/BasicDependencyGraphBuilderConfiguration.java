@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.graph.IGraph;
 import kieker.analysis.stage.model.ModelRepository;
-import kieker.analysis.util.stage.trigger.Trigger;
-
-import teetime.stage.basic.AbstractTransformation;
 
 /**
- * @author Sören Henning
+ * Basic graph builder configuration.
  *
- * @since 1.14
+ * @author Reiner Jung
+ * @since 1.16
  */
-public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, IGraph> {
+public class BasicDependencyGraphBuilderConfiguration implements IDependencyGraphBuilderConfiguration {
 
-	private final IDependencyGraphBuilder graphBuilder;
+	private final ModelRepository repository;
 
-	public DependencyGraphCreatorStage(final ModelRepository repository,
-			final IDependencyGraphBuilderFactory graphBuilderFactory) {
-		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(new BasicDependencyGraphBuilderConfiguration(repository));
+	public BasicDependencyGraphBuilderConfiguration(final ModelRepository repository) {
+		this.repository = repository;
 	}
 
 	@Override
-	protected void execute(final Trigger trigger) {
-		final IGraph graph = this.graphBuilder.build();
-		this.outputPort.send(graph);
+	public ModelRepository getModelRepository() {
+		return this.repository;
 	}
 
 }
