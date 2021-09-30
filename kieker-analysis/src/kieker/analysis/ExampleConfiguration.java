@@ -24,8 +24,10 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.graph.dependency.BasicDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
@@ -144,7 +146,9 @@ public class ExampleConfiguration extends Configuration {
 		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory);
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, deploymentGraphBuilderFactory);
+		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
+				new BasicDependencyGraphBuilderConfiguration(repository),
+				deploymentGraphBuilderFactory);
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory,
 				dependencyGraphDotExportConfiguration);
 
