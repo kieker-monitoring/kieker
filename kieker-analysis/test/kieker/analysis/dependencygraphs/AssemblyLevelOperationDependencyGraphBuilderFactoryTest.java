@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import kieker.analysis.graph.dependency.AssemblyLevelOperationDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.AssemblyLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.BasicDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
@@ -64,7 +65,7 @@ public class AssemblyLevelOperationDependencyGraphBuilderFactoryTest {
 		repository.register(ExecutionModel.class, this.executionModel);
 		repository.register(StatisticsModel.class, this.statisticsModel);
 
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(repository);
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(new BasicDependencyGraphBuilderConfiguration(repository));
 		Assert.assertTrue(graphBuilder instanceof AssemblyLevelOperationDependencyGraphBuilder);
 	}
 

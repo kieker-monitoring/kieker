@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.dependency;
 
-/**
- * @author Sören Henning
- *
- * @since 1.14
- */
-public class DeploymentLevelContextDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
+import kieker.analysis.stage.model.ModelRepository;
 
-	public DeploymentLevelContextDependencyGraphBuilderFactory() {
-		super();
+/**
+ * Basic graph builder configuration.
+ *
+ * @author Reiner Jung
+ * @since 1.16
+ */
+public class BasicDependencyGraphBuilderConfiguration implements IDependencyGraphBuilderConfiguration {
+
+	private final ModelRepository repository;
+
+	public BasicDependencyGraphBuilderConfiguration(final ModelRepository repository) {
+		this.repository = repository;
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new DeploymentLevelContextDependencyGraphBuilder(configuration.getModelRepository());
+	public ModelRepository getModelRepository() {
+		return this.repository;
 	}
 
 }

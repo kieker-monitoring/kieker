@@ -16,24 +16,25 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.stage.model.ModelRepository;
-
 /**
  * @author Sören Henning
  *
+ * @param <T>
+ *            configuration object
+ *
  * @since 1.14
  */
-public interface IDependencyGraphBuilderFactory {
+public interface IDependencyGraphBuilderFactory<T extends IDependencyGraphBuilderConfiguration> {
 
 	/**
-	 * @param repository
-	 *            holding all models
-	 * 
+	 * @param configuration
+	 *            holding all configuration parameters including the model repository
+	 *
 	 *
 	 * @return graph builder
 	 *
 	 * @since 1.14
 	 */
-	public IDependencyGraphBuilder createDependencyGraphBuilder(ModelRepository repository);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(T configuration);
 
 }

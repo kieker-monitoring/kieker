@@ -33,7 +33,7 @@ public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger,
 
 	public DependencyGraphCreatorStage(final ModelRepository repository,
 			final IDependencyGraphBuilderFactory graphBuilderFactory) {
-		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(repository);
+		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(new BasicDependencyGraphBuilderConfiguration(repository));
 	}
 
 	@Override
