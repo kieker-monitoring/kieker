@@ -24,6 +24,8 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * @author Sören Henning
  *
+ * @param <T> configuration type to be used with a sepecific graph builder.
+ *
  * @since 1.14
  */
 public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<Trigger, IGraph> {
