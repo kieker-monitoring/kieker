@@ -13,10 +13,10 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	implementation 'net.kieker-monitoring:kieker:1.15'
 
 	implementation fileTree('lib') {
-		include "lib/kieker-1.15-SNAPSHOT-aspectj.jar"
+		include "lib/kieker-1.15-aspectj.jar"
 	}
 }
 
@@ -41,7 +41,7 @@ task runMonitoring(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
-	           "-javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar",
+	           "-javaagent:lib/kieker-1.15-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true',
 			   '-Dkieker.monitoring.adaptiveMonitoring.enabled=true',

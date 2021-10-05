@@ -16,7 +16,7 @@ dependencies {
 	implementation "com.beust:jcommander:1.72"
 
 	implementation 'net.sourceforge.teetime:teetime:3.0'
-	// implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	// implementation 'net.kieker-monitoring:kieker:1.15'
 
 	implementation fileTree('lib') {
 		include "kieker-*.jar"
