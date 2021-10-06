@@ -1,10 +1,10 @@
 This is the binary release archive of the Kieker framework for application 
 performance monitoring and dynamic software analysis.
 
-Detailed information about Kieker is provided at http://kieker-monitoring.net/
+Detailed information about Kieker is provided at https://kieker-monitoring.net/
 
 The Kieker libraries are located in the 'build/' directory. These libraries are 
-also provided in a Maven repository. See http://kieker-monitoring.net/download/ 
+also provided in a Maven repository. See https://kieker-monitoring.net/download/ 
 for details.
 
 In order to get started, you should refer to the Kieker User Guide to be found 
