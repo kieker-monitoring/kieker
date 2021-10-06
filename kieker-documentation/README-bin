@@ -7,6 +7,6 @@ The Kieker libraries are located in the 'build/' directory. These libraries are
 also provided in a Maven repository. See https://kieker-monitoring.net/download/ 
 for details.
 
-In order to get started, you should refer to the Kieker User Guide to be found 
-in the 'doc/' directory. The User Guide includes a number of examples; the 
-corresponding source code can be found in the 'examples/' directory. 
+In order to get started, you should refer to the Kieker documentation to be found 
+in https://kieker-monitoring.net/documentation/. The documentation includes a number 
+of examples; the corresponding source code can be found in the 'examples/' directory. 
