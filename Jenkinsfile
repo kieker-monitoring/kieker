@@ -98,8 +98,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
-            sh './gradlew -x check -x test publishToMavenLocal'
-            sh './gradlew -x test build distribute'
+            sh './gradlew -x test build publishToMavenLocal distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
           }
