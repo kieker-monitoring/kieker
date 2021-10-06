@@ -32,7 +32,7 @@ import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 
 // Command-Line:
-// java -javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter
+// java -javaagent:lib/kieker-1.15-aspectj.jar -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter
 // -Dkieker.monitoring.writer.tcp.TCPWriter.QueueFullBehavior=1 -jar MooBench.jar --recursiondepth 10 --totalthreads 1 --methodtime 0 --output-filename raw.csv
 // --totalcalls 10000000
 /**

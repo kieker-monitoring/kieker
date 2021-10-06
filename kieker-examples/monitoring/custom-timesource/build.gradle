@@ -1,9 +1,10 @@
 apply plugin: 'application'
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	jcenter()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
