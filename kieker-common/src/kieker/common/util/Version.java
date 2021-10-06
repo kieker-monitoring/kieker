@@ -26,7 +26,7 @@ package kieker.common.util;
 public final class Version {
 	// The VERSION string is updated by the Ant build file, which looks for the pattern: VERSION = <quote>.*<quote>
 	private static final String VERSION = "1.15"; // NOPMD (name equals classname)
-	private static final String COPYRIGHT = "Copyright (c) 2006-2020 Kieker Project";
+	private static final String COPYRIGHT = "Copyright (c) 2006-2021 Kieker Project";
 
 	/**
 	 * Private constructor to avoid instantiation.
