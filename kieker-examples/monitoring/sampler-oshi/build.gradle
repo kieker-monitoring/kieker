@@ -4,7 +4,6 @@ repositories {
 	mavenLocal()
 	mavenCentral() 
 	jcenter()
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
@@ -13,12 +12,7 @@ dependencies {
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
         implementation 'org.jctools:jctools-core:3.1.0'
 
-        // If the example is used without build Kieker yourself, use the following line
-        // implementation 'net.kieker-monitoring:kieker:1.15'
-        // and comment out the next three lines.
-        implementation fileTree('lib') {
-                include "kieker-*.jar"
-        }
+		implementation 'net.kieker-monitoring:kieker:1.15'
         implementation 'com.github.oshi:oshi-core:3.12.2'
 }
 

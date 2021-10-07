@@ -3,22 +3,16 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
 	mavenCentral() 
-        jcenter() 
+	jcenter() 
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
-
-	compile fileTree('lib') {
-		include "*.jar"
-		// we use the wildcard above because we need to include 
-		// libraries that depend on the actual JMS product used
-		//include "kieker-*-emf.jar"
-		//include "commons-logging-*.jar"
-  }
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
+	compile 'net.kieker-monitoring:kieker:1.15'
 }
 
 
