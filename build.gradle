@@ -588,7 +588,7 @@ task createArtifacts(dependsOn: [ 'mainJar', 'aspectJJar', 'emfJar', 'sourcesJar
 task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
         description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
 ) {
-    classifier = 'jar'
+    //classifier = 'jar'
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     configure allArtifacts
     configure licence
