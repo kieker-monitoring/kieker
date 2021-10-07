@@ -1,3 +1,5 @@
+# Custom Components
+
 This directory contains a pre-compiled Jar file which can be started with 
 the 'java' tool using the following commands:
 
@@ -19,6 +21,3 @@ following command:
 The example includes the Gradle wrapper scripts `gradlew{.bat}` for UNIX-like and
 Windows systems. These scripts automatically download and install the right 
 Gradle version. They can be used just like the gradle command, e.g., `./gradlew jar`
-
-
-Please see Chapters 3 and 4 of the Kieker User Guide for details on this example.
