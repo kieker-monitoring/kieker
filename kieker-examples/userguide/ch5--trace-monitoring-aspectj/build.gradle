@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 repositories {
 	mavenCentral() 
