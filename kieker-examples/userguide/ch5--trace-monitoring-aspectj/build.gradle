@@ -2,8 +2,9 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter() 
+	jcenter() 
 }
 
 dependencies {
