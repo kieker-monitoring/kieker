@@ -3,21 +3,19 @@
 This directory contains a pre-compiled Jar file which can be started with 
 the 'java' tool using the following commands:
 
--UNIX-like systems:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.15-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter 
+- UNIX-like systems:
+  - unzip build/distributions/ch3-4--custom-components.zip
+  - ch3-4--custom-components/bin/ch3-4--custom-components
 - Windows:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.15-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter
+  - Unpack build/distributions/ch3-4--custom-components.zip
+  - Run ch3-4--custom-components/bin/ch3-4--custom-components.bat
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:
 
 Run example:
- $ gradle runMonitoringAndAnalysis
+ $ ./gradlew runMonitoringAndAnalysis
 
 In order to re-compile the sources into BookstoreApplicationMonitoringAnalysis.jar, run the 
 following command:
- $ gradle jar
-
-The example includes the Gradle wrapper scripts `gradlew{.bat}` for UNIX-like and
-Windows systems. These scripts automatically download and install the right 
-Gradle version. They can be used just like the gradle command, e.g., `./gradlew jar`
+ $ ./gradlew build
