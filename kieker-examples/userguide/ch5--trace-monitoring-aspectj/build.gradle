@@ -16,12 +16,6 @@ dependencies {
 	compile 'net.kieker-monitoring:kieker:1.15'    
 }
 
-eclipse {
-  project {
-    name = 'Kieker Example 4 ch5--trace-monitoring-aspectj'
-  }
-}
-
 distTar.enabled=false
 
 // Simplify the JAR's file name
