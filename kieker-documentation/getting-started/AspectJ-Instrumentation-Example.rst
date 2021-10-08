@@ -48,7 +48,7 @@ The directory structure used in this example is as follows:
             -  ``wrapper/`` Directory for the gradle wrapper
             -  ``lib/``\ Directory for the needed libraries
 
-               -  ``kieker-1.15-SNAPSHOT-aspectj.jar``
+               -  ``kieker-1.16-SNAPSHOT-aspectj.jar``
 
             -  ``src/kieker/examples/userguide/ch5bookstore/`` Directory
                for the source code files
@@ -73,14 +73,14 @@ The directory structure used in this example is as follows:
          -  ``gradlew.bat``
          -  ``README.txt``
 
-The jar-file\ ``kieker-1.15-SNAPSHOT-aspectj.jar``\ already includes the
+The jar-file\ ``kieker-1.16-SNAPSHOT-aspectj.jar``\ already includes the
 AspectJ weaver, which is registered with the JVM and weaves the
 monitoring instrumentation into the Java classes. It will be configured
 based on the configuration file\ ``aop.xml``, for which a working sample
 file is provided in the example’s\ ``META-INF/``\ directory. Instead of
-registering the\ ``kieker-1.15-SNAPSHOT-aspectj.jar``\ as an agent to
+registering the\ ``kieker-1.16-SNAPSHOT-aspectj.jar``\ as an agent to
 the JVM, the\ ``aspectjweaver-1.8.2.jar``\ can be used. In this case,
-the\ ``kieker-1.15-SNAPSHOT.jar``\ needs to be added to the classpath.
+the\ ``kieker-1.16-SNAPSHOT.jar``\ needs to be added to the classpath.
 
 Instrumentation by Annotation
 -----------------------------
@@ -151,12 +151,12 @@ Unix version:
    
    mkdir build/META−INF
    javac src/kieker/examples/userguide/ch5bookstore/∗.java \
-      -d build/ -classpath lib/kieker-1.15-SNAPSHOT-aspectj.jar
+      -d build/ -classpath lib/kieker-1.16-SNAPSHOT-aspectj.jar
 
    cp src−resources/META−INF/aop.xml build/META−INF/
    cp src−resources/META−INF/kieker.monitoring.properties build/META−INF/
 
-   java -javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar \
+   java -javaagent:lib/kieker-1.16-SNAPSHOT-aspectj.jar \
       -classpath build/ kieker.examples.userguide.ch5bookstore.BookstoreStarter
 
 Windows version:
@@ -167,12 +167,12 @@ Windows version:
    mkdir build\META−INF
 
    javac src\kieker\examples\userguide\ch5bookstore\∗.java
-      -d build -classpathlib\kieker-1.15-SNAPSHOT-aspectj.jar
+      -d build -classpathlib\kieker-1.16-SNAPSHOT-aspectj.jar
 
    copy src−resources\META−INF\aop.xml build\META−INF\
    copy src−resources\META−INF\kieker.monitoring.properties build\META−INF\
 
-   java -javaagent:lib\kieker-1.15-SNAPSHOT-aspectj.jar
+   java -javaagent:lib\kieker-1.16-SNAPSHOT-aspectj.jar
       -classpath build\kieker.examples.userguide.ch5bookstore.BookstoreStarter
 
 After a complete run of the application, the monitoring files should
@@ -219,12 +219,12 @@ Unix version:
    mkdir build/META−INF
    
    javac src/kieker/examples/userguide/ch5bookstore/∗.java \
-      -d build/ -classpath lib/kieker-1.15-SNAPSHOT-aspectj.jar
+      -d build/ -classpath lib/kieker-1.16-SNAPSHOT-aspectj.jar
    
    cp src−resources/META−INF/aop-full.xml build/META−INF/aop.xml
    cp src−resources/META−INF/kieker.monitoring.properties build/META−INF/
    
-   java -javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar \
+   java -javaagent:lib/kieker-1.16-SNAPSHOT-aspectj.jar \
       -classpath build/ kieker.examples.userguide.ch5bookstore.BookstoreStarter
 
 Windows version:
@@ -235,12 +235,12 @@ Windows version:
    mkdir build\META−INF
 
    javac src\kieker\examples\userguide\ch5bookstore\∗.java
-      -d build -classpathlib\kieker-1.15-SNAPSHOT-aspectj.jar
+      -d build -classpathlib\kieker-1.16-SNAPSHOT-aspectj.jar
    
    copy src−resources\META−INF\aop-full.xml build\META−INF\aop.xml
    copy src−resources\META−INF\kieker.monitoring.properties build\META−INF\
 
-   java -javaagent:lib\kieker-1.15-SNAPSHOT-aspectj.jar
+   java -javaagent:lib\kieker-1.16-SNAPSHOT-aspectj.jar
       -classpath build\kieker.examples.userguide.ch5bookstore.BookstoreStarter
 
 After a complete run of the application, the monitoring files should

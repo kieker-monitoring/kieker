@@ -4,6 +4,7 @@ plugins {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
 	jcenter()
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
@@ -16,7 +17,7 @@ dependencies {
 	implementation "com.beust:jcommander:1.72"
 
 	implementation 'net.sourceforge.teetime:teetime:3.0'
-	// implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	// implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT'
 
 	implementation fileTree('lib') {
 		include "kieker-*.jar"

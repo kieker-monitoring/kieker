@@ -1,4 +1,6 @@
-apply plugin: 'application'
+plugins {
+   id 'application'
+}
 
 repositories {
 	mavenCentral() 
@@ -19,11 +21,6 @@ dependencies {
   }
 }
 
-eclipse {
-  project {
-    name = 'Kieker Example 5 appendix-JMS'
-  }
-}
 
 def monitoringConfigurationActiveMQ = 'src-resources/META-INF/kieker.monitoring.properties-activemq'
 

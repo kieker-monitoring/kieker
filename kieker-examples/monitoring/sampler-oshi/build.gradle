@@ -1,9 +1,10 @@
 apply plugin: 'application'
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	jcenter()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
@@ -13,7 +14,7 @@ dependencies {
         implementation 'org.jctools:jctools-core:3.1.0'
 
         // If the example is used without build Kieker yourself, use the following line
-        // implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+        // implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT'
         // and comment out the next three lines.
         implementation fileTree('lib') {
                 include "kieker-*.jar"

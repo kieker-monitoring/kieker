@@ -26,7 +26,7 @@ Example
 The following listing shows the command to convert two logging
 timestamps as well as the resulting output.
 
-``convertLoggingTimestamp --timestamps 1283156545581511026 1283156546127117246``
+``convert-logging-timestamp --timestamps 1283156545581511026 1283156546127117246``
 
 .. code::
   
@@ -35,7 +35,7 @@ timestamps as well as the resulting output.
 
 Listing A.1: Execution under UNIX-like systems
 
-``convertLoggingTimestamp.bat --timestamps 1283156545581511026 1283156546127117246``
+``convert-logging-timestamp.bat --timestamps 1283156545581511026 1283156546127117246``
 
 .. code::
   
