@@ -11,7 +11,7 @@ to use AspectJ to monitor method calls in different JavaEE environments.
 Jetty
 -----
 
-Copy ``kieker-1.15_aspectj.jar`` into a directory, where it can be accessed
+Copy ``kieker-1.16-SNAPSHOT-aspectj.jar`` into a directory, where it can be accessed
 by Jetty, e.g. ``jetty/kieker/``.
 
 Jetty is usually shipped with a configuration file start.ini in which
@@ -20,7 +20,7 @@ start parameters are defined. Add the following snippet to this file:
 .. code::
 	
 	--exec
-	-javaagent:kieker/kieker-1.15_aspectj.jar
+	-javaagent:kieker/kieker-1.16-SNAPSHOT-aspectj.jar
 	-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 	-Daj.weaving.verbose=true
 
@@ -103,7 +103,7 @@ and adapt the paths to your situation.
 
 .. code::
 	
-	<jvm-options>-javaagent:${com.sun.aas.installRoot}/lib/kieker-1.15_aspectj.jar</jvm-options>
+	<jvm-options>-javaagent:${com.sun.aas.installRoot}/lib/kieker-1.16-SNAPSHOT-aspectj.jar</jvm-options>
 	<jvm-options>-Dkieker.monitoring.skipDefaultAOPConfiguration=true</jvm-options>
 	<jvm-options>-Daj.weaving.verbose=true</jvm-options>
 	<jvm-options>-Dkieker.monitoring.configuration=${com.sun.aas.installRoot}/kieker/kieker.monitoring.properties</jvm-options>
@@ -173,7 +173,7 @@ gewünschten Paketnamen ein.
 	
 	set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 	
-	set "JAVA_OPTS=%JAVA_OPTS% -Xbootclasspath/p:%WILDFLY%/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar;%WILDFLY%\modules\system\layers\base\kieker\main\kieker-1.15.jar;%WILDFLY%\modules\system\layers\base\org\aspectj\main\aspectjweaver.jar"
+	set "JAVA_OPTS=%JAVA_OPTS% -Xbootclasspath/p:%WILDFLY%/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar;%WILDFLY%\modules\system\layers\base\kieker\main\kieker-1.16-SNAPSHOT.jar;%WILDFLY%\modules\system\layers\base\org\aspectj\main\aspectjweaver.jar"
 
 -  Anschließend werden Einstellungen für das Monitoring durch Kieker
    vorgenommen:

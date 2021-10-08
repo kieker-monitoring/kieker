@@ -16,22 +16,20 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.stage.model.ModelRepository;
-
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DeploymentLevelContextDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory {
+public class DeploymentLevelContextDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
 
 	public DeploymentLevelContextDependencyGraphBuilderFactory() {
 		super();
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ModelRepository repository) {
-		return new DeploymentLevelContextDependencyGraphBuilder(repository);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
+		return new DeploymentLevelContextDependencyGraphBuilder(configuration.getModelRepository());
 	}
 
 }
