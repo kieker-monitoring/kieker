@@ -4,16 +4,16 @@ the 'java' tool using the following commands:
 Monitoring:
 
 -UNIX-like systems:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.15-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.16-SNAPSHOT-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 - Windows:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.15-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.16-SNAPSHOT-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Analysis:
 
 -UNIX-like systems:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.15-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter </path/to/monitoring-log/>
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.16-SNAPSHOT-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter </path/to/monitoring-log/>
 - Windows:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.15-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter <path\to\monitoring-log\>
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.16-SNAPSHOT-emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter <path\to\monitoring-log\>
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:

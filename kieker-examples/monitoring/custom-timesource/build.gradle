@@ -12,7 +12,7 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation 'net.kieker-monitoring:kieker:1.15'
+	implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT'
 
         // you need to ensure by yourself that the following jars are in the lib folder
         implementation fileTree('lib') {
@@ -42,7 +42,7 @@ task runMonitoring(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
 			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
-	           "-javaagent:lib/kieker-1.15-aspectj.jar",
+	           "-javaagent:lib/kieker-1.16-SNAPSHOT-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }
