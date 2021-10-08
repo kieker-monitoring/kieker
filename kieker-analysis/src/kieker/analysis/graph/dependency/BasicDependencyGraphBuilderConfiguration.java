@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.dependency;
 
-/**
- * @author Sören Henning
- *
- * @since 1.14
- */
-public class AssemblyLevelOperationDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
+import kieker.analysis.stage.model.ModelRepository;
 
-	public AssemblyLevelOperationDependencyGraphBuilderFactory() {
-		super();
+/**
+ * Basic graph builder configuration.
+ *
+ * @author Reiner Jung
+ * @since 1.16
+ */
+public class BasicDependencyGraphBuilderConfiguration implements IDependencyGraphBuilderConfiguration {
+
+	private final ModelRepository repository;
+
+	public BasicDependencyGraphBuilderConfiguration(final ModelRepository repository) {
+		this.repository = repository;
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new AssemblyLevelOperationDependencyGraphBuilder(configuration.getModelRepository());
+	public ModelRepository getModelRepository() {
+		return this.repository;
 	}
 
 }

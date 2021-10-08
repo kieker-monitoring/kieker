@@ -23,8 +23,10 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.dependency.BasicDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
@@ -157,7 +159,8 @@ public class DependencyGraphConfiguration extends Configuration {
 
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, graphBuilderFactory);
+		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
+				new BasicDependencyGraphBuilderConfiguration(repository), graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());

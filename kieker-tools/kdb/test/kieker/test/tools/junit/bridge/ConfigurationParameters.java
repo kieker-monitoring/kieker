@@ -19,9 +19,9 @@ import kieker.analysis.tt.writeRead.jms.FakeInitialContextFactory;
 
 /**
  * Common configuration parameters for all bridge tests.
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.8
  */
 public final class ConfigurationParameters {
