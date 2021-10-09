@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
 	id 'application'
 }
 
@@ -13,13 +14,12 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.30'
 	compile 'org.codehaus.groovy:groovy-all:3.0.2'
 	compile 'net.kieker-monitoring:kieker:1.16-SNAPSHOT:emf'
+	compile 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+	compile 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
 }
 
 distTar.enabled=false
-
-// Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
-version = ''
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]

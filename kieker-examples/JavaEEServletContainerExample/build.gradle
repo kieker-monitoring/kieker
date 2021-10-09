@@ -3,8 +3,9 @@ plugins {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter() 
+	jcenter() 
 }
 
 sourceSets {
@@ -25,11 +26,8 @@ dependencies {
   implementation 'org.slf4j:slf4j-api:1.7.30'
   implementation 'org.codehaus.groovy:groovy-all:3.0.2'
   
-  implementation files ('../../kieker-common/build/libs/kieker-common-1.16-SNAPSHOT.jar', 
-	'../../kieker-monitoring/build/libs/kieker-monitoring-1.16-SNAPSHOT.jar',
-	'../../kieker-tools/build/libs/kieker-tools-1.16-SNAPSHOT.jar',
-	'../../kieker-analysis/build/libs/kieker-analysis-1.16-SNAPSHOT.jar')
-
+  implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT'
+  
   implementation fileTree('livedemo-source/lib') {
     include '*.jar'
   }

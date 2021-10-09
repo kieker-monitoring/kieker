@@ -1,21 +1,19 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
 repositories {
 	mavenLocal()
 	mavenCentral() 
 	jcenter()
-//	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 dependencies {
-    implementation 'ch.qos.logback:logback-classic:1.1.7'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation 'ch.qos.logback:logback-classic:1.1.7'
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
 	implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT:emf'
-	implementation fileTree('lib') {
-		include 'kieker-*.jar'
-	}
 }
 
 distTar.enabled=false
