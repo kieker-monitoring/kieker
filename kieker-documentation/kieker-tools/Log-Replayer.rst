@@ -51,7 +51,7 @@ binary release to another directory:
 
 .. code::
   
-  logReplay --inputdirs
+  log-replayer --inputdirs
      examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
      --keep-logging-timestamps true
      --realtime false
@@ -60,7 +60,7 @@ Listing A.3: Execution under UNIX-like systems
 
 .. code::
   
-  logReplay.bat --inputdirs
+  log-replayer --inputdirs
      ..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
      --keep-logging-timestamps true
      --realtime false

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,12 +54,12 @@ public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 	}
 
 	private void addOperation(final String hostname, final String componentSignature, final String operationSignature) {
-		final DeploymentContext deploymentContext = this.addDeploymentContext(hostname);
-		final DeployedComponent component = this.addDeployedComponent(deploymentContext, componentSignature);
+		final DeploymentContext deploymentContext = this.findOrAddDeploymentContext(hostname);
+		final DeployedComponent component = this.findOrAddDeployedComponent(deploymentContext, componentSignature);
 		this.addDeployedOperation(component, operationSignature);
 	}
 
-	private DeploymentContext addDeploymentContext(final String hostname) {
+	private DeploymentContext findOrAddDeploymentContext(final String hostname) {
 		final String deploymentContextKey = hostname;
 		DeploymentContext deploymentContext = this.deploymentModel.getDeploymentContexts().get(deploymentContextKey);
 		if (deploymentContext == null) {
@@ -72,16 +72,16 @@ public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 		return deploymentContext;
 	}
 
-	private DeployedComponent addDeployedComponent(final DeploymentContext deploymentContext, final String componentSignature) {
-		final String componentKey = componentSignature;
-		DeployedComponent component = deploymentContext.getComponents().get(componentKey);
+	private DeployedComponent findOrAddDeployedComponent(final DeploymentContext deploymentContext, final String componentSignature) {
+		DeployedComponent component = deploymentContext.getComponents().get(componentSignature);
 		if (component == null) {
 			component = this.factory.createDeployedComponent();
-			deploymentContext.getComponents().put(componentKey, component);
+			deploymentContext.getComponents().put(componentSignature, component);
 
 			final String componentTypeKey = componentSignature;
 			final AssemblyComponent assemblyComponent = this.assemblyModel.getAssemblyComponents().get(componentTypeKey);
 			component.setAssemblyComponent(assemblyComponent);
+			component.setSignature(componentSignature);
 		}
 
 		this.updateSourceModel(component);
