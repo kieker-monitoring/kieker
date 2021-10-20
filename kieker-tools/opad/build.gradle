@@ -2,9 +2,9 @@ plugins {
 	id "com.github.hauner.jarTest"
 }
 
-// Since the analysis component requires JRE 1.8, this "tools component" requires JRE 1.8, too.
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+// Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 dependencies {
 	implementation project(':kieker-tools')

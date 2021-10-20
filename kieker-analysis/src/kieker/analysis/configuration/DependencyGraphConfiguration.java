@@ -157,7 +157,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
 				this.statisticsModel, ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION);
 
-		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage<>(repository);
 
 		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
 				new BasicDependencyGraphBuilderConfiguration(repository), graphBuilderFactory);

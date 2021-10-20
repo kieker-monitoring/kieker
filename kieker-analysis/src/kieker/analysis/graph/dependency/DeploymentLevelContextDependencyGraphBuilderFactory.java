@@ -29,7 +29,7 @@ public class DeploymentLevelContextDependencyGraphBuilderFactory implements IDep
 
 	@Override
 	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new DeploymentLevelContextDependencyGraphBuilder(configuration.getModelRepository());
+		return new DeploymentLevelContextDependencyGraphBuilder();
 	}
 
 }

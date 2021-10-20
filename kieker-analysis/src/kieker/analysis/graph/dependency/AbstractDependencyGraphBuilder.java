@@ -46,14 +46,17 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 
 	private static final Object ENTRY_VERTEX_IDENTIFIER = "entry";
 
-	protected final IGraph graph;
-	protected final ObjectIdentifierRegistry identifierRegistry;
-	protected final ResponseTimeDecorator responseTimeDecorator;
+	protected IGraph graph;
+	protected ObjectIdentifierRegistry identifierRegistry;
+	protected ResponseTimeDecorator responseTimeDecorator;
 
-	protected final ExecutionModel executionModel;
-	protected final StatisticsModel statisticsModel;
+	protected ExecutionModel executionModel;
+	protected StatisticsModel statisticsModel;
 
-	public AbstractDependencyGraphBuilder(final ModelRepository repository) {
+	public AbstractDependencyGraphBuilder() {}
+
+	@Override
+	public IGraph build(final ModelRepository repository) {
 		this.graph = IGraph.create();
 		this.graph.setName(repository.getName());
 
@@ -61,10 +64,6 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		this.statisticsModel = repository.getModel(StatisticsModel.class);
 		this.identifierRegistry = new ObjectIdentifierRegistry();
 		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
-	}
-
-	@Override
-	public IGraph build() {
 		for (final AggregatedInvocation invocation : this.executionModel.getAggregatedInvocations().values()) {
 			this.handleInvocation(invocation);
 		}

@@ -3,8 +3,8 @@ plugins {
 	id 'java-library'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 // In this section you declare where to find the dependencies of your project
 repositories {

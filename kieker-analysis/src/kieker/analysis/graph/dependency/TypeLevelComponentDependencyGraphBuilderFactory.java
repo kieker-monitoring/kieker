@@ -29,7 +29,7 @@ public class TypeLevelComponentDependencyGraphBuilderFactory implements IDepende
 
 	@Override
 	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new TypeLevelComponentDependencyGraphBuilder(configuration.getModelRepository());
+		return new TypeLevelComponentDependencyGraphBuilder();
 	}
 
 }

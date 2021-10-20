@@ -18,7 +18,6 @@ package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;
@@ -41,8 +40,8 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 	 * @param repository
 	 *            model repository
 	 */
-	public DeploymentLevelContextDependencyGraphBuilder(final ModelRepository repository) {
-		super(repository);
+	public DeploymentLevelContextDependencyGraphBuilder() {
+		super();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class DeploymentLevelOperationDependencyGraphBuilderFactory implements ID
 
 	@Override
 	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new DeploymentLevelOperationDependencyGraphBuilder(configuration.getModelRepository());
+		return new DeploymentLevelOperationDependencyGraphBuilder();
 	}
 
 }

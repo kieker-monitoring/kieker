@@ -17,18 +17,19 @@
 package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.util.stage.trigger.Trigger;
+import kieker.analysis.stage.model.ModelRepository;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Sören Henning
  *
- * @param <T> configuration type to be used with a sepecific graph builder.
+ * @param <T>
+ *            configuration type to be used with a sepecific graph builder.
  *
  * @since 1.14
  */
-public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<Trigger, IGraph> {
+public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<ModelRepository, IGraph> {
 
 	private final IDependencyGraphBuilder graphBuilder;
 
@@ -37,8 +38,8 @@ public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfig
 	}
 
 	@Override
-	protected void execute(final Trigger trigger) {
-		final IGraph graph = this.graphBuilder.build();
+	protected void execute(final ModelRepository repository) {
+		final IGraph graph = this.graphBuilder.build(repository);
 		this.outputPort.send(graph);
 	}
 

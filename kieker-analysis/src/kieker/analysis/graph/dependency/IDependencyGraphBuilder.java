@@ -17,6 +17,7 @@
 package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.stage.model.ModelRepository;
 
 /**
  * @author Sören Henning
@@ -26,8 +27,8 @@ import kieker.analysis.graph.IGraph;
 public interface IDependencyGraphBuilder {
 
 	/**
-	 * @since 1.14
+	 * @since 1.16
 	 */
-	public IGraph build();
+	public IGraph build(ModelRepository repository);
 
 }
