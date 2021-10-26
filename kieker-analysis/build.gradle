@@ -20,7 +20,7 @@ dependencies {
 	
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
-	api 'net.sourceforge.teetime:teetime:3.1-SNAPSHOT'
+	api 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT'
 	
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
