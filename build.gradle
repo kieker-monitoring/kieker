@@ -55,6 +55,7 @@ allprojects {
 	mavenLocal()
         mavenCentral()
         jcenter() // for mockito
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }
 
