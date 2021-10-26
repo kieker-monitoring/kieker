@@ -21,8 +21,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.graph.dependency.BasicDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.TypeLevelComponentDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelComponentDependencyGraphBuilderFactory;
 import kieker.analysis.stage.model.ModelRepository;
@@ -65,7 +65,8 @@ public class TypeLevelComponentDependencyGraphBuilderFactoryTest {
 		repository.register(ExecutionModel.class, this.executionModel);
 		repository.register(StatisticsModel.class, this.statisticsModel);
 
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(new BasicDependencyGraphBuilderConfiguration(repository));
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(new IDependencyGraphBuilderConfiguration() {
+		});
 		Assert.assertTrue(graphBuilder instanceof TypeLevelComponentDependencyGraphBuilder);
 	}
 

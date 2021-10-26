@@ -15,13 +15,9 @@
  ***************************************************************************/
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.stage.model.ModelRepository;
-
 /**
  * @author Reiner Jung
  * @since 1.16
  */
 public interface IDependencyGraphBuilderConfiguration {
-
-	ModelRepository getModelRepository();
 }

@@ -57,6 +57,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 
 	@Override
 	public IGraph build(final ModelRepository repository) {
+		// TODO this must be refactored and separated out in a separate function
 		this.graph = IGraph.create();
 		this.graph.setName(repository.getName());
 
