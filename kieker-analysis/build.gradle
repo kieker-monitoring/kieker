@@ -4,8 +4,8 @@ plugins {
 	id 'java-library'
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
 	api project(':kieker-common')
@@ -37,7 +37,7 @@ dependencies {
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project(':kieker-common').sourceSets.test.output
-	
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT:test'
 	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }
 
