@@ -3,7 +3,7 @@ plugins {
 }
 
 sourceCompatibility = 1.8
-targetCompatibility = 11
+targetCompatibility = 1.8
 
 distTar.enabled=false
 distZip.enabled=true
