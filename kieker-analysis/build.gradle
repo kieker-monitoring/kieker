@@ -28,6 +28,7 @@ dependencies {
 	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
 	implementation 'org.apache.commons:commons-compress:1.20'
 	implementation 'org.nanohttpd:nanohttpd:2.3.1'
+	implementation 'com.carrotsearch:hppc:0.9.0'
 			
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
