@@ -5,8 +5,8 @@ plugins {
 }
 
 // Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
 	implementation project(':kieker-common')
