@@ -47,6 +47,7 @@ dependencies {
 	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
 	aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
+	aspectJarConfig "com.rabbitmq:amqp-client:5.13.0"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
