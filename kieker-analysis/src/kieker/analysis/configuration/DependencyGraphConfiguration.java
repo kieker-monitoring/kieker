@@ -23,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.dependency.BasicDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
@@ -157,10 +156,11 @@ public class DependencyGraphConfiguration extends Configuration {
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
 				this.statisticsModel, ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION);
 
-		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage<>(repository);
 
 		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
-				new BasicDependencyGraphBuilderConfiguration(repository), graphBuilderFactory);
+				new IDependencyGraphBuilderConfiguration() {
+				}, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());

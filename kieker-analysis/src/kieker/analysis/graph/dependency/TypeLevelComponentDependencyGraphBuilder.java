@@ -18,7 +18,6 @@ package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
@@ -33,8 +32,8 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public TypeLevelComponentDependencyGraphBuilder(final ModelRepository repository) {
-		super(repository);
+	public TypeLevelComponentDependencyGraphBuilder() {
+		super();
 	}
 
 	@Override

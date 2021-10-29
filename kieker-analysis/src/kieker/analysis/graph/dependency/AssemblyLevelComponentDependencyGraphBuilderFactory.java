@@ -29,7 +29,7 @@ public class AssemblyLevelComponentDependencyGraphBuilderFactory implements IDep
 
 	@Override
 	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new AssemblyLevelComponentDependencyGraphBuilder(configuration.getModelRepository());
+		return new AssemblyLevelComponentDependencyGraphBuilder();
 	}
 
 }

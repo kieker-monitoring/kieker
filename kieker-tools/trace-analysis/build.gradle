@@ -2,8 +2,8 @@ plugins {
 	id 'application'
 }
 
-sourceCompatibility = sourceVersion
-targetCompatibility = targetVersion
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 distTar.enabled=false
 distZip.enabled=true

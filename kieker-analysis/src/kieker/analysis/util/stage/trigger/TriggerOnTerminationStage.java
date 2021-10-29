@@ -21,16 +21,20 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * This stage sends a {@link Trigger} after the terminating signal was received.
  *
+ * @param <T>
+ *            object to be sent as trigger message
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TriggerOnTerminationStage extends AbstractTransformation<Object, Trigger> {
+public class TriggerOnTerminationStage<T> extends AbstractTransformation<Object, T> {
 
-	private final Trigger trigger = new Trigger();
+	private final T trigger;
 
-	public TriggerOnTerminationStage() {
+	public TriggerOnTerminationStage(final T trigger) {
 		super();
+		this.trigger = trigger;
 	}
 
 	@Override

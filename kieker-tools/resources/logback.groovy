@@ -17,15 +17,11 @@ appender("FILE", FileAppender) {
 }
 
 appender("STDOUT", ConsoleAppender) {
-  filter(EvaluatorFilter) {
-    evaluator(GEventEvaluator) {
-      expression = 'e.level.toInt() == INFO.toInt()'
-    }
-    onMismatch = DENY
-    onMatch = NEUTRAL
+  filter(ThresholdFilter) {
+    level=INFO
   }
   encoder(PatternLayoutEncoder) {
-    pattern = "<> %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   }
   target="System.out"
 }

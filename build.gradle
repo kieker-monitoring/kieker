@@ -52,8 +52,10 @@ allprojects {
     version = kiekerVersion
 
     repositories {    // must be above subprojects {}
+	mavenLocal()
         mavenCentral()
         jcenter() // for mockito
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }
 
