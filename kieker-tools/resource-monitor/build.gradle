@@ -17,11 +17,9 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
-	
 }
 
 
 task uploadArchives {
 	println 'resource-monitor skipped'
 }
-

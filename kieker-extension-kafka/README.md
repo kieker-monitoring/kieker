@@ -23,7 +23,7 @@ kieker.monitoring.writer.collector.ChunkingCollector.writer=kieker.monitoring.wr
 
 #
 ## The following properties correspond to Kafka producer's configuration paramaters with the same name
-## For a more detailed explanation see: https://kafka.apache.org/documentation/#producerconfigs 
+## For a more detailed explanation see: https://kafka.apache.org/documentation/#producerconfigs
 #
 ## The address and port of the Kafka bootstrap server(s) ("host1:port1"), multiple servers comma separated
 kieker.monitoring.writer.kafka.KafkaWriter.bootstrapServers=127.0.0.1:9092

@@ -11,9 +11,9 @@ dependencies {
 
 
 task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
-  }
+	doLast {
+		regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+	}
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames

@@ -41,5 +41,3 @@ kieker.monitoring.writer.filesystem.FileWriter.bufferSize=81920
 You may specify a logging configuration with:
 
 export COLLECTOR_OPTS=-Dlog4j.configuration=file:///$BASE_DIR/log4j.cfg
-
-
