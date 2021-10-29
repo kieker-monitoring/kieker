@@ -8,17 +8,16 @@ targetCompatibility = 1.8
 
 dependencies {
 	implementation project(':kieker-tools')
-	
+
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
-	implementation 'org.apache.commons:commons-math3:3.6.1'	
+	implementation 'org.apache.commons:commons-math3:3.6.1'
 
 	// no suitable maven source available
 	implementation resolveLibrary('Rsession-*.jar')
 	implementation resolveLibrary('Rserve-*.jar')
 	implementation resolveLibrary('REngine-*.jar')
 
-	testImplementation project(':kieker-common').sourceSets.test.output	
+	testImplementation project(':kieker-common').sourceSets.test.output
 	testImplementation project(':kieker-tools').sourceSets.test.output
 }
-
