@@ -26,15 +26,16 @@ Language Features
 Event Types
 """""""""""
 
-```
-event EventName {
-   string name
-}
+::
 
-event ChildEvent extends EventName {
-   int children
-}
-```
+   event EventName {
+      string name
+   }
+   
+   event ChildEvent extends EventName {
+      int children
+   }
+
 
 **EventName** has one attribute name of type string and **ChildEvent** inherits
 the name attribute and adds a children attribute.
@@ -42,19 +43,20 @@ the name attribute and adds a children attribute.
 Template Types
 """"""""""""""
 
-```
-template TraceEvent {
-   int traceId
-}
-template OperationEvent {
-   string operationName
-}
-template ClassEvent {
-   string className
-}
-template BeforeOperationEvent : TraceEvent, OperationEvent, ClassEvent
-event SpecialChild extends EventName : BeforeOperationEvent
-```
+::
+
+   template TraceEvent {
+      int traceId
+   }
+   template OperationEvent {
+      string operationName
+   }
+   template ClassEvent {
+      string className
+   }
+   template BeforeOperationEvent : TraceEvent, OperationEvent, ClassEvent
+   event SpecialChild extends EventName : BeforeOperationEvent
+
 
 Templates allow to group attributes. **TraceEvent** defines the attribute
 traceId. **OperationEvent** and **ClassEvent** define operationName and
@@ -65,21 +67,37 @@ attributes from the templates.
 Attributes
 """"""""""
 
-```
-event EventName {
-   const string NO_SESSION = "<no-session>"
-   string name
-   string sessionName = NO_SESSION
-   auto-increment int value
-   transient int key
-   changeable int data // can be changed during analysis
-}
-```
+::
+
+   event EventName {
+      const string NO_SESSION = "<no-session>"
+      string name
+      string sessionName = NO_SESSION
+      auto-increment int value
+      transient int key
+      changeable int data // can be changed during analysis
+   }
+
+
+Model Types
+"""""""""""
+
+::
+
+	model ModelName TypeA, TypeB, TypeC
+	
+	sub SubModelName ModelName {
+		int additionaAttribute
+		const int SOME_CONSTANT = 1
+	}
+	
+	sub SubModel2Name ModelName : ExtensionTemplate, AdditionalExtensionTemplate
+
 
 Language Syntax
 ---------------
 
-.. _kieker-tools-irl-syntax-semantics:
+:ref:`kieker-tools-irl-syntax-semantics`
 
 Generating Records
 ------------------
