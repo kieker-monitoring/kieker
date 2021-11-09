@@ -78,6 +78,15 @@ Attributes
       changeable int data // can be changed during analysis
    }
 
+Here an example with semantic annotations ::
+
+	event EventName {
+		long value : timestamp
+		string text = "empty" : operationsignature
+	}
+
+Please note that the available semantics depend on the used semantics model.
+
 
 Model Types
 """""""""""
@@ -103,7 +112,17 @@ Generating Records
 ------------------
 
 - Commandline
-- Using Eclipse
 
+Eclipse Installation
+""""""""""""""""""""
+
+- Install package from: https://maui.se.informatik.uni-kiel.de/repo/kdt/
+- You may choose the repository under snapshot or a more stable releast from
+  the releases folder.
+- Add the Xtext nature to the Eclipse project of Kieker
+- Configuration of IRL can be found in the Project Properties and
+  Workspace Preferences. It is necessary to setup the properties/preferences to
+  ensure correct generation of event types. You can select the target language
+  and Kieker Version you want to support.
 
 
