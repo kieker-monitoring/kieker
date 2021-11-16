@@ -30,7 +30,6 @@ parameters and options to a tool.
 -  :ref:`kieker-tools-convert-logging-timestamps`
 -  :ref:`kieker-tools-log-replayer`
 -  :ref:`kieker-tools-collector`
--  :ref:`kieker-tools-kdb` (deprecated)
 -  :ref:`kieker-tools-resource-monitor`
 
 -  :ref:`kieker-tools-irl`
