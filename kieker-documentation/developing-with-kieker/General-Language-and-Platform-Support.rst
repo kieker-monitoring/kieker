@@ -1,4 +1,4 @@
-.. _extending-kieker-general-language-and-platform-support:
+.. _developing-with-kieker-general-language-and-platform-support:
 
 General Language and Platform Support 
 =====================================
@@ -16,17 +16,17 @@ Conceptual Directory Structure
 *  common
 
    *  records
-
+   
       *  All the records generated automatically with the IRL compiler
          or crafted by hand
+
    *  utilities
 
       *  Utility functions, e.g., for serialization
-   
 *  monitoring
 
    *  controller
-      
+
       *  Functionality and data structures to create and setup a
          monitoring controller, including a way to gain the current
          time, thread, process etc.
@@ -50,9 +50,9 @@ Conceptual Directory Structure
          accepts data events via TCP. Be aware that using this option
          can be a vulnerability issue. Therefore, such TCP connection
          must be governed by security measures.
-         
+
    *  probes
-      
+
       *  Probes contain ready to use implementations of probes for a
          specific language.
          
@@ -72,9 +72,6 @@ kieker-common-lang-pack-LANGUAGE.
 Supported Languages
 -------------------
 
--  Java
--  C, C++, Fortran
--  Perl (dated)
--  Python (upcoming)
--  VB6, COM, .NET (see DynaMod project)
+See :ref:`instrumenting-software`
+
 
