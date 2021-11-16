@@ -23,7 +23,6 @@ Table of Contents
    analyzing-monitoring-data/Analyzing-Monitoring-Data.rst
    kieker-tools/Kieker-Tools.rst
    developing-with-kieker/Developing-with-Kieker.rst
-   extending-kieker/Extending-Kieker.rst
    architecture/Architecture.rst
    lectures/Lectures.rst
    related-work/Related-Work.rst
