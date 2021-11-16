@@ -23,10 +23,13 @@ illustrated below.
 
 -  ``examples/``
    -  ``userguide/``
+
       -  ``ch2–manual-instrumentation/``
          -  ``build/`` Directory for the Java class files
          -  ``lib/`` Directory for the required libraries
+
             -  ``kieker-1.16-SNAPSHOT-emf.jar``
+
          -  ``src/`` The directory for the source code files
 
 The Java sources and pre-compiled binaries of the manually instrumented

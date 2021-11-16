@@ -137,9 +137,9 @@ The following Wildcards are available:
 "*" indicates a sequence of arbitrary characters.
 
 Example: The line
-
+```
 "*.scc"; "textfile.txt"; "Image??.JPG"; "./parent/child"
-
+```
 indicates the exclusion of all files ending with ".scc" from the weaving
 process, as well as files of name "textfile.txt" and files named
 "Image??.JPG", with arbitrary characters at the question mark positions.
@@ -268,7 +268,7 @@ whenever a file or directory is going to be deleted, or even if one
 cannot be deleted.
 
 The Graphical User Interface (GUI)
-==================================
+----------------------------------
 
 Overview
 ~~~~~~~~

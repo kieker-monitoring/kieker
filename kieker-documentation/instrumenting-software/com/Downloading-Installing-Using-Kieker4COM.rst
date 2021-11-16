@@ -4,7 +4,7 @@ Downloading, Installing, Using Kieker4COM
 =========================================
 
 Downloading Kieker4COM
-======================
+----------------------
 
 -  Kieker4COM install archives are provided by the `nightly
    build <http://kieker.uni-kiel.de/jenkins/job/kieker4com-nightly-release/lastSuccessfulBuild/artifact/dist/release/>`_
@@ -12,7 +12,7 @@ Downloading Kieker4COM
    kieker4com <https://build.se.informatik.uni-kiel.de/kieker/4com>`_
 
 Installing Kieker4COM
-=====================
+---------------------
 
 **Note:** If you have just uninstalled a Kieker4COM version, you should
 perform a restart before starting a new installation process!
@@ -85,7 +85,7 @@ the Kieker4COM service.
 .. image:: ../../images/09-success.png
 
 Testing the Kieker4COM installation
-===================================
+-----------------------------------
 
 The Kieker installation directory (%KIEKER_HOME%) contains a folder
 called examples, which includes example projects instrumented in
@@ -160,7 +160,7 @@ the User Guide---to learn more about the usage of the
 Kieker.TraceAnalysis tool.
 
 Uninstalling Kieker4COM
-=======================
+-----------------------
 
 1. Start Uninstaller
 ^^^^^^^^^^^^^^^^^^^^

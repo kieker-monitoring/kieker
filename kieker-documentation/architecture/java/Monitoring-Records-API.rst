@@ -5,10 +5,10 @@ Monitoring Records API
 
 Monitoring records are objects that contain the monitoring data, e.g.,
 timestamps, operation names, and resource utilization values. Typically,
-an instance of a monitoring record is constructed in a java-probes-api_
-passed to the java-monitoring-controller-api_,
-serialized and deserialized by a java-writer-api_ and java-reader-api_.
-In getting-started_, we already introduced and used the monitoring
+an instance of a monitoring record is constructed in a :ref:`java-probes-api`
+passed to the :ref:`java-monitoring-controller-api`,
+serialized and deserialized by a :ref:`java-writer-api` and :ref:`java-reader-api`.
+In :ref:`getting-started`, we already introduced and used the monitoring
 record type **OperationExecutionRecord**. **Kieker** allows to use custom
 monitoring record types. Corresponding classes must implement the
 interface **IMonitoringRecord** and serialization and deserialization must
