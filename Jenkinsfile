@@ -20,6 +20,13 @@ pipeline {
   }
 
   stages {
+    stage('RunSH') {
+	steps {
+	sh '''
+		cat ~/.m2/settings.xml
+	'''
+	}
+    }
     stage('Precheck') {
       when {
         changeRequest target: 'stable'
