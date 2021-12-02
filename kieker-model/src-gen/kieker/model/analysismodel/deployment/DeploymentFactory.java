@@ -67,6 +67,24 @@ public interface DeploymentFactory extends EFactory {
 	DeployedStorage createDeployedStorage();
 
 	/**
+	 * Returns a new object of class '<em>Deployed Provided Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Deployed Provided Interface</em>'.
+	 * @generated
+	 */
+	DeployedProvidedInterface createDeployedProvidedInterface();
+
+	/**
+	 * Returns a new object of class '<em>Deployed Required Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Deployed Required Interface</em>'.
+	 * @generated
+	 */
+	DeployedRequiredInterface createDeployedRequiredInterface();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

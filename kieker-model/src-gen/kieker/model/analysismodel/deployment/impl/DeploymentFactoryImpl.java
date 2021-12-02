@@ -67,6 +67,9 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 			case DeploymentPackage.DEPLOYED_OPERATION: return createDeployedOperation();
 			case DeploymentPackage.ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY: return (EObject)createEStringToDeployedStorageMapEntry();
 			case DeploymentPackage.DEPLOYED_STORAGE: return createDeployedStorage();
+			case DeploymentPackage.DEPLOYED_PROVIDED_INTERFACE: return createDeployedProvidedInterface();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY: return (EObject)createEStringToDeployedProvidedInterfaceMapEntry();
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE: return createDeployedRequiredInterface();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -165,6 +168,38 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	public DeployedStorage createDeployedStorage() {
 		DeployedStorageImpl deployedStorage = new DeployedStorageImpl();
 		return deployedStorage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DeployedProvidedInterface createDeployedProvidedInterface() {
+		DeployedProvidedInterfaceImpl deployedProvidedInterface = new DeployedProvidedInterfaceImpl();
+		return deployedProvidedInterface;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, DeployedProvidedInterface> createEStringToDeployedProvidedInterfaceMapEntry() {
+		EStringToDeployedProvidedInterfaceMapEntryImpl eStringToDeployedProvidedInterfaceMapEntry = new EStringToDeployedProvidedInterfaceMapEntryImpl();
+		return eStringToDeployedProvidedInterfaceMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DeployedRequiredInterface createDeployedRequiredInterface() {
+		DeployedRequiredInterfaceImpl deployedRequiredInterface = new DeployedRequiredInterfaceImpl();
+		return deployedRequiredInterface;
 	}
 
 	/**

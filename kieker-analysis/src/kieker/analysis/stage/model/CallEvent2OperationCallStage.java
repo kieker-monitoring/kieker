@@ -52,7 +52,7 @@ public class CallEvent2OperationCallStage extends AbstractTransformation<CallEve
 	private DeployedOperation findDeployedOperation(final OperationEvent operationEvent) {
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(operationEvent.getHostname());
 		final DeployedComponent component = context.getComponents().get(operationEvent.getComponentSignature());
-		final DeployedOperation operation = component.getContainedOperations().get(operationEvent.getOperationSignature());
+		final DeployedOperation operation = component.getOperations().get(operationEvent.getOperationSignature());
 
 		return operation;
 	}

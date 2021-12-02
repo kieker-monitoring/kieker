@@ -109,6 +109,12 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="package" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="providedStorages" ordered="false"
           upperBound="-1" eType="#//type/EStringToStorageTypeMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedComponents"
+          upperBound="-1" eType="#//type/ComponentType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterfaceTypes"
+          upperBound="-1" eType="#//type/ProvidedInterfaceType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterfaceTypes"
+          upperBound="-1" eType="#//type/RequiredInterfaceType"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToOperationTypeMapEntry" instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -138,6 +144,21 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedInterfaceType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperationTypes"
+          ordered="false" upperBound="-1" eType="#//type/EStringToOperationTypeMapEntry"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToProvidedInterfaceTypeMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//type/ProvidedInterfaceType"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RequiredInterfaceType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requires" eType="#//type/ProvidedInterfaceType"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="assembly" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/assembly"
       nsPrefix="assembly">
@@ -152,11 +173,17 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyComponent">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperations" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyOperationMapEntry" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//type/ComponentType"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorages" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storages" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedComponents"
+          upperBound="-1" eType="#//assembly/AssemblyComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterfaces" upperBound="-1"
+          eType="#//assembly/EStringToAssemblyProvidedInterfaceMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterfaces" upperBound="-1"
+          eType="#//assembly/AssemblyRequiredInterface" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -185,6 +212,21 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyStorage"
           containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyProvidedInterface">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
+          eType="#//assembly/EStringToAssemblyOperationMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declaration" eType="#//type/ProvidedInterfaceType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyProvidedInterfaceMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyProvidedInterface"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyRequiredInterface">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requires" eType="#//assembly/AssemblyProvidedInterface"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declaration" eType="#//type/RequiredInterfaceType"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
@@ -219,11 +261,17 @@
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponent" eType="#//assembly/AssemblyComponent"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
-          ordered="false" upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" ordered="false"
+          upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="containedStorages" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storages" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeployedStorageMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedComponents"
+          upperBound="-1" eType="#//deployment/DeployedComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterfaces" upperBound="-1"
+          eType="#//deployment/EStringToDeployedProvidedInterfaceMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterfaces" upperBound="-1"
+          eType="#//deployment/DeployedRequiredInterface" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedOperationMapEntry"
         instanceClassName="java.util.Map$Entry">
@@ -252,6 +300,22 @@
         </eAnnotations>
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyStorage"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedProvidedInterface">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
+          eType="#//assembly/EStringToAssemblyOperationMapEntry" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedProvidedInterfaceMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedProvidedInterface"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedRequiredInterface">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyRequiredInterface"
+          eType="#//assembly/AssemblyRequiredInterface"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requires" eType="#//deployment/DeployedProvidedInterface"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"

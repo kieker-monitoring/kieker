@@ -98,6 +98,18 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 				return createEStringToAssemblyStorageMapEntryAdapter();
 			}
 			@Override
+			public Adapter caseAssemblyProvidedInterface(AssemblyProvidedInterface object) {
+				return createAssemblyProvidedInterfaceAdapter();
+			}
+			@Override
+			public Adapter caseEStringToAssemblyProvidedInterfaceMapEntry(Map.Entry<String, AssemblyProvidedInterface> object) {
+				return createEStringToAssemblyProvidedInterfaceMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseAssemblyRequiredInterface(AssemblyRequiredInterface object) {
+				return createAssemblyRequiredInterfaceAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -212,6 +224,48 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEStringToAssemblyStorageMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface <em>Provided Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.assembly.AssemblyProvidedInterface
+	 * @generated
+	 */
+	public Adapter createAssemblyProvidedInterfaceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Assembly Provided Interface Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToAssemblyProvidedInterfaceMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface <em>Required Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.assembly.AssemblyRequiredInterface
+	 * @generated
+	 */
+	public Adapter createAssemblyRequiredInterfaceAdapter() {
 		return null;
 	}
 

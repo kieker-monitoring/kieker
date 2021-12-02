@@ -2,6 +2,7 @@
  */
 package kieker.model.analysismodel.type;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -20,6 +21,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.model.analysismodel.type.ComponentType#getName <em>Name</em>}</li>
  *   <li>{@link kieker.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}</li>
  *   <li>{@link kieker.model.analysismodel.type.ComponentType#getProvidedStorages <em>Provided Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getContainedComponents <em>Contained Components</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes <em>Provided Interface Types</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required Interface Types</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.type.TypePackage#getComponentType()
@@ -118,5 +122,41 @@ public interface ComponentType extends EObject {
 	 * @generated
 	 */
 	EMap<String, StorageType> getProvidedStorages();
+
+	/**
+	 * Returns the value of the '<em><b>Contained Components</b></em>' reference list.
+	 * The list contents are of type {@link kieker.model.analysismodel.type.ComponentType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contained Components</em>' reference list.
+	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_ContainedComponents()
+	 * @model
+	 * @generated
+	 */
+	EList<ComponentType> getContainedComponents();
+
+	/**
+	 * Returns the value of the '<em><b>Provided Interface Types</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.model.analysismodel.type.ProvidedInterfaceType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Provided Interface Types</em>' containment reference list.
+	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_ProvidedInterfaceTypes()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ProvidedInterfaceType> getProvidedInterfaceTypes();
+
+	/**
+	 * Returns the value of the '<em><b>Required Interface Types</b></em>' reference list.
+	 * The list contents are of type {@link kieker.model.analysismodel.type.RequiredInterfaceType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Required Interface Types</em>' reference list.
+	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_RequiredInterfaceTypes()
+	 * @model
+	 * @generated
+	 */
+	EList<RequiredInterfaceType> getRequiredInterfaceTypes();
 
 } // ComponentType

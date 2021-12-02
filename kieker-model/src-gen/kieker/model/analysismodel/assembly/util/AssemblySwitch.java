@@ -110,6 +110,24 @@ public class AssemblySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE: {
+				AssemblyProvidedInterface assemblyProvidedInterface = (AssemblyProvidedInterface)theEObject;
+				T result = caseAssemblyProvidedInterface(assemblyProvidedInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, AssemblyProvidedInterface> eStringToAssemblyProvidedInterfaceMapEntry = (Map.Entry<String, AssemblyProvidedInterface>)theEObject;
+				T result = caseEStringToAssemblyProvidedInterfaceMapEntry(eStringToAssemblyProvidedInterfaceMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE: {
+				AssemblyRequiredInterface assemblyRequiredInterface = (AssemblyRequiredInterface)theEObject;
+				T result = caseAssemblyRequiredInterface(assemblyRequiredInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -216,6 +234,51 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEStringToAssemblyStorageMapEntry(Map.Entry<String, AssemblyStorage> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Provided Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Provided Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAssemblyProvidedInterface(AssemblyProvidedInterface object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Assembly Provided Interface Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Assembly Provided Interface Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToAssemblyProvidedInterfaceMapEntry(Map.Entry<String, AssemblyProvidedInterface> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Required Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Required Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAssemblyRequiredInterface(AssemblyRequiredInterface object) {
 		return null;
 	}
 

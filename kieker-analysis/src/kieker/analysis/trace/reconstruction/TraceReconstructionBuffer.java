@@ -69,7 +69,7 @@ public class TraceReconstructionBuffer {
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts()
 				.get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
-		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
+		final DeployedOperation operation = component.getOperations().get(record.getOperationSignature());
 		newCall.setOperation(operation);
 
 		newCall.setOrderIndex(record.getOrderIndex());

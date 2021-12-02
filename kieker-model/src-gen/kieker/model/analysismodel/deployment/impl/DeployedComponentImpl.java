@@ -4,10 +4,13 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import java.util.Collection;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeployedProvidedInterface;
+import kieker.model.analysismodel.deployment.DeployedRequiredInterface;
 import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
@@ -25,6 +28,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -37,8 +42,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getAssemblyComponent <em>Assembly Component</em>}</li>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedOperations <em>Contained Operations</em>}</li>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedStorages <em>Contained Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getOperations <em>Operations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getStorages <em>Storages</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedComponents <em>Contained Components</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getProvidedInterfaces <em>Provided Interfaces</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedComponentImpl#getRequiredInterfaces <em>Required Interfaces</em>}</li>
  * </ul>
  *
  * @generated
@@ -55,24 +63,54 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	protected AssemblyComponent assemblyComponent;
 
 	/**
-	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' map.
+	 * The cached value of the '{@link #getOperations() <em>Operations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getContainedOperations()
+	 * @see #getOperations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, DeployedOperation> containedOperations;
+	protected EMap<String, DeployedOperation> operations;
 
 	/**
-	 * The cached value of the '{@link #getContainedStorages() <em>Contained Storages</em>}' map.
+	 * The cached value of the '{@link #getStorages() <em>Storages</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getContainedStorages()
+	 * @see #getStorages()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, DeployedStorage> containedStorages;
+	protected EMap<String, DeployedStorage> storages;
+
+	/**
+	 * The cached value of the '{@link #getContainedComponents() <em>Contained Components</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContainedComponents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<DeployedComponent> containedComponents;
+
+	/**
+	 * The cached value of the '{@link #getProvidedInterfaces() <em>Provided Interfaces</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProvidedInterfaces()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<String, DeployedProvidedInterface> providedInterfaces;
+
+	/**
+	 * The cached value of the '{@link #getRequiredInterfaces() <em>Required Interfaces</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRequiredInterfaces()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<DeployedRequiredInterface> requiredInterfaces;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -139,11 +177,11 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public EMap<String, DeployedOperation> getContainedOperations() {
-		if (containedOperations == null) {
-			containedOperations = new EcoreEMap<String,DeployedOperation>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY, EStringToDeployedOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
+	public EMap<String, DeployedOperation> getOperations() {
+		if (operations == null) {
+			operations = new EcoreEMap<String,DeployedOperation>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY, EStringToDeployedOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS);
 		}
-		return containedOperations;
+		return operations;
 	}
 
 	/**
@@ -152,11 +190,50 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public EMap<String, DeployedStorage> getContainedStorages() {
-		if (containedStorages == null) {
-			containedStorages = new EcoreEMap<String,DeployedStorage>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY, EStringToDeployedStorageMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES);
+	public EMap<String, DeployedStorage> getStorages() {
+		if (storages == null) {
+			storages = new EcoreEMap<String,DeployedStorage>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_STORAGE_MAP_ENTRY, EStringToDeployedStorageMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_COMPONENT__STORAGES);
 		}
-		return containedStorages;
+		return storages;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<DeployedComponent> getContainedComponents() {
+		if (containedComponents == null) {
+			containedComponents = new EObjectResolvingEList<DeployedComponent>(DeployedComponent.class, this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_COMPONENTS);
+		}
+		return containedComponents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EMap<String, DeployedProvidedInterface> getProvidedInterfaces() {
+		if (providedInterfaces == null) {
+			providedInterfaces = new EcoreEMap<String,DeployedProvidedInterface>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY, EStringToDeployedProvidedInterfaceMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES);
+		}
+		return providedInterfaces;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<DeployedRequiredInterface> getRequiredInterfaces() {
+		if (requiredInterfaces == null) {
+			requiredInterfaces = new EObjectContainmentEList<DeployedRequiredInterface>(DeployedRequiredInterface.class, this, DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES);
+		}
+		return requiredInterfaces;
 	}
 
 	/**
@@ -185,10 +262,14 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
-				return ((InternalEList<?>)getContainedOperations()).basicRemove(otherEnd, msgs);
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
-				return ((InternalEList<?>)getContainedStorages()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS:
+				return ((InternalEList<?>)getOperations()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYED_COMPONENT__STORAGES:
+				return ((InternalEList<?>)getStorages()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES:
+				return ((InternalEList<?>)getProvidedInterfaces()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES:
+				return ((InternalEList<?>)getRequiredInterfaces()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -204,12 +285,19 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
 				if (resolve) return getAssemblyComponent();
 				return basicGetAssemblyComponent();
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
-				if (coreType) return getContainedOperations();
-				else return getContainedOperations().map();
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
-				if (coreType) return getContainedStorages();
-				else return getContainedStorages().map();
+			case DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS:
+				if (coreType) return getOperations();
+				else return getOperations().map();
+			case DeploymentPackage.DEPLOYED_COMPONENT__STORAGES:
+				if (coreType) return getStorages();
+				else return getStorages().map();
+			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_COMPONENTS:
+				return getContainedComponents();
+			case DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES:
+				if (coreType) return getProvidedInterfaces();
+				else return getProvidedInterfaces().map();
+			case DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES:
+				return getRequiredInterfaces();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -219,17 +307,29 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
 				setAssemblyComponent((AssemblyComponent)newValue);
 				return;
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
-				((EStructuralFeature.Setting)getContainedOperations()).set(newValue);
+			case DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS:
+				((EStructuralFeature.Setting)getOperations()).set(newValue);
 				return;
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
-				((EStructuralFeature.Setting)getContainedStorages()).set(newValue);
+			case DeploymentPackage.DEPLOYED_COMPONENT__STORAGES:
+				((EStructuralFeature.Setting)getStorages()).set(newValue);
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_COMPONENTS:
+				getContainedComponents().clear();
+				getContainedComponents().addAll((Collection<? extends DeployedComponent>)newValue);
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES:
+				((EStructuralFeature.Setting)getProvidedInterfaces()).set(newValue);
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES:
+				getRequiredInterfaces().clear();
+				getRequiredInterfaces().addAll((Collection<? extends DeployedRequiredInterface>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -246,11 +346,20 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
 				setAssemblyComponent((AssemblyComponent)null);
 				return;
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
-				getContainedOperations().clear();
+			case DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS:
+				getOperations().clear();
 				return;
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
-				getContainedStorages().clear();
+			case DeploymentPackage.DEPLOYED_COMPONENT__STORAGES:
+				getStorages().clear();
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_COMPONENTS:
+				getContainedComponents().clear();
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES:
+				getProvidedInterfaces().clear();
+				return;
+			case DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES:
+				getRequiredInterfaces().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -266,10 +375,16 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
 				return assemblyComponent != null;
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
-				return containedOperations != null && !containedOperations.isEmpty();
-			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_STORAGES:
-				return containedStorages != null && !containedStorages.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__OPERATIONS:
+				return operations != null && !operations.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__STORAGES:
+				return storages != null && !storages.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_COMPONENTS:
+				return containedComponents != null && !containedComponents.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__PROVIDED_INTERFACES:
+				return providedInterfaces != null && !providedInterfaces.isEmpty();
+			case DeploymentPackage.DEPLOYED_COMPONENT__REQUIRED_INTERFACES:
+				return requiredInterfaces != null && !requiredInterfaces.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

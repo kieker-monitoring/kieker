@@ -196,13 +196,40 @@ public interface TypePackage extends EPackage {
 	int COMPONENT_TYPE__PROVIDED_STORAGES = 4;
 
 	/**
+	 * The feature id for the '<em><b>Contained Components</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE__CONTAINED_COMPONENTS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Provided Interface Types</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES = 6;
+
+	/**
+	 * The feature id for the '<em><b>Required Interface Types</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES = 7;
+
+	/**
 	 * The number of structural features of the '<em>Component Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE_FEATURE_COUNT = 5;
+	int COMPONENT_TYPE_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Component Type</em>' class.
@@ -435,6 +462,136 @@ public interface TypePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl <em>Provided Interface Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl
+	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getProvidedInterfaceType()
+	 * @generated
+	 */
+	int PROVIDED_INTERFACE_TYPE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Provided Operation Types</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE__NAME = 1;
+
+	/**
+	 * The number of structural features of the '<em>Provided Interface Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Provided Interface Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl
+	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToProvidedInterfaceTypeMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Provided Interface Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Provided Interface Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl <em>Required Interface Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl
+	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getRequiredInterfaceType()
+	 * @generated
+	 */
+	int REQUIRED_INTERFACE_TYPE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Requires</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIRED_INTERFACE_TYPE__REQUIRES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Required Interface Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIRED_INTERFACE_TYPE_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Required Interface Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIRED_INTERFACE_TYPE_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.TypeModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -553,6 +710,39 @@ public interface TypePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getComponentType_ProvidedStorages();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.type.ComponentType#getContainedComponents <em>Contained Components</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Contained Components</em>'.
+	 * @see kieker.model.analysismodel.type.ComponentType#getContainedComponents()
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	EReference getComponentType_ContainedComponents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes <em>Provided Interface Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Provided Interface Types</em>'.
+	 * @see kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes()
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	EReference getComponentType_ProvidedInterfaceTypes();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required Interface Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Required Interface Types</em>'.
+	 * @see kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes()
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	EReference getComponentType_RequiredInterfaceTypes();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
@@ -730,6 +920,93 @@ public interface TypePackage extends EPackage {
 	EAttribute getStorageType_Type();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.ProvidedInterfaceType <em>Provided Interface Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Provided Interface Type</em>'.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType
+	 * @generated
+	 */
+	EClass getProvidedInterfaceType();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getProvidedOperationTypes <em>Provided Operation Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Provided Operation Types</em>'.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getProvidedOperationTypes()
+	 * @see #getProvidedInterfaceType()
+	 * @generated
+	 */
+	EReference getProvidedInterfaceType_ProvidedOperationTypes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getName()
+	 * @see #getProvidedInterfaceType()
+	 * @generated
+	 */
+	EAttribute getProvidedInterfaceType_Name();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Provided Interface Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Provided Interface Type Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.model.analysismodel.type.ProvidedInterfaceType" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToProvidedInterfaceTypeMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToProvidedInterfaceTypeMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToProvidedInterfaceTypeMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToProvidedInterfaceTypeMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToProvidedInterfaceTypeMapEntry_Value();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.RequiredInterfaceType <em>Required Interface Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Required Interface Type</em>'.
+	 * @see kieker.model.analysismodel.type.RequiredInterfaceType
+	 * @generated
+	 */
+	EClass getRequiredInterfaceType();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.type.RequiredInterfaceType#getRequires <em>Requires</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Requires</em>'.
+	 * @see kieker.model.analysismodel.type.RequiredInterfaceType#getRequires()
+	 * @see #getRequiredInterfaceType()
+	 * @generated
+	 */
+	EReference getRequiredInterfaceType_Requires();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -845,6 +1122,30 @@ public interface TypePackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_STORAGES = eINSTANCE.getComponentType_ProvidedStorages();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Components</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_TYPE__CONTAINED_COMPONENTS = eINSTANCE.getComponentType_ContainedComponents();
+
+		/**
+		 * The meta object literal for the '<em><b>Provided Interface Types</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES = eINSTANCE.getComponentType_ProvidedInterfaceTypes();
+
+		/**
+		 * The meta object literal for the '<em><b>Required Interface Types</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES = eINSTANCE.getComponentType_RequiredInterfaceTypes();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
@@ -981,6 +1282,76 @@ public interface TypePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STORAGE_TYPE__TYPE = eINSTANCE.getStorageType_Type();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl <em>Provided Interface Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl
+		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getProvidedInterfaceType()
+		 * @generated
+		 */
+		EClass PROVIDED_INTERFACE_TYPE = eINSTANCE.getProvidedInterfaceType();
+
+		/**
+		 * The meta object literal for the '<em><b>Provided Operation Types</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES = eINSTANCE.getProvidedInterfaceType_ProvidedOperationTypes();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROVIDED_INTERFACE_TYPE__NAME = eINSTANCE.getProvidedInterfaceType_Name();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl
+		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToProvidedInterfaceTypeMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY = eINSTANCE.getEStringToProvidedInterfaceTypeMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToProvidedInterfaceTypeMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToProvidedInterfaceTypeMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl <em>Required Interface Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl
+		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getRequiredInterfaceType()
+		 * @generated
+		 */
+		EClass REQUIRED_INTERFACE_TYPE = eINSTANCE.getRequiredInterfaceType();
+
+		/**
+		 * The meta object literal for the '<em><b>Requires</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REQUIRED_INTERFACE_TYPE__REQUIRES = eINSTANCE.getRequiredInterfaceType_Requires();
 
 	}
 
