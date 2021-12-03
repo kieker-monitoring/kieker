@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl#getAssemblyRequiredInterface <em>Assembly Required Interface</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl#getRequiredInterface <em>Required Interface</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl#getRequires <em>Requires</em>}</li>
  * </ul>
  *
@@ -32,14 +32,14 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container implements DeployedRequiredInterface {
 	/**
-	 * The cached value of the '{@link #getAssemblyRequiredInterface() <em>Assembly Required Interface</em>}' reference.
+	 * The cached value of the '{@link #getRequiredInterface() <em>Required Interface</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssemblyRequiredInterface()
+	 * @see #getRequiredInterface()
 	 * @generated
 	 * @ordered
 	 */
-	protected AssemblyRequiredInterface assemblyRequiredInterface;
+	protected AssemblyRequiredInterface requiredInterface;
 
 	/**
 	 * The cached value of the '{@link #getRequires() <em>Requires</em>}' reference.
@@ -76,16 +76,16 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public AssemblyRequiredInterface getAssemblyRequiredInterface() {
-		if (assemblyRequiredInterface != null && assemblyRequiredInterface.eIsProxy()) {
-			InternalEObject oldAssemblyRequiredInterface = (InternalEObject)assemblyRequiredInterface;
-			assemblyRequiredInterface = (AssemblyRequiredInterface)eResolveProxy(oldAssemblyRequiredInterface);
-			if (assemblyRequiredInterface != oldAssemblyRequiredInterface) {
+	public AssemblyRequiredInterface getRequiredInterface() {
+		if (requiredInterface != null && requiredInterface.eIsProxy()) {
+			InternalEObject oldRequiredInterface = (InternalEObject)requiredInterface;
+			requiredInterface = (AssemblyRequiredInterface)eResolveProxy(oldRequiredInterface);
+			if (requiredInterface != oldRequiredInterface) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE, oldAssemblyRequiredInterface, assemblyRequiredInterface));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE, oldRequiredInterface, requiredInterface));
 			}
 		}
-		return assemblyRequiredInterface;
+		return requiredInterface;
 	}
 
 	/**
@@ -93,8 +93,8 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyRequiredInterface basicGetAssemblyRequiredInterface() {
-		return assemblyRequiredInterface;
+	public AssemblyRequiredInterface basicGetRequiredInterface() {
+		return requiredInterface;
 	}
 
 	/**
@@ -103,11 +103,11 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public void setAssemblyRequiredInterface(AssemblyRequiredInterface newAssemblyRequiredInterface) {
-		AssemblyRequiredInterface oldAssemblyRequiredInterface = assemblyRequiredInterface;
-		assemblyRequiredInterface = newAssemblyRequiredInterface;
+	public void setRequiredInterface(AssemblyRequiredInterface newRequiredInterface) {
+		AssemblyRequiredInterface oldRequiredInterface = requiredInterface;
+		requiredInterface = newRequiredInterface;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE, oldAssemblyRequiredInterface, assemblyRequiredInterface));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE, oldRequiredInterface, requiredInterface));
 	}
 
 	/**
@@ -158,9 +158,9 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE:
-				if (resolve) return getAssemblyRequiredInterface();
-				return basicGetAssemblyRequiredInterface();
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE:
+				if (resolve) return getRequiredInterface();
+				return basicGetRequiredInterface();
 			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRES:
 				if (resolve) return getRequires();
 				return basicGetRequires();
@@ -176,8 +176,8 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE:
-				setAssemblyRequiredInterface((AssemblyRequiredInterface)newValue);
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE:
+				setRequiredInterface((AssemblyRequiredInterface)newValue);
 				return;
 			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRES:
 				setRequires((DeployedProvidedInterface)newValue);
@@ -194,8 +194,8 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE:
-				setAssemblyRequiredInterface((AssemblyRequiredInterface)null);
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE:
+				setRequiredInterface((AssemblyRequiredInterface)null);
 				return;
 			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRES:
 				setRequires((DeployedProvidedInterface)null);
@@ -212,8 +212,8 @@ public class DeployedRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE:
-				return assemblyRequiredInterface != null;
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE:
+				return requiredInterface != null;
 			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE__REQUIRES:
 				return requires != null;
 		}

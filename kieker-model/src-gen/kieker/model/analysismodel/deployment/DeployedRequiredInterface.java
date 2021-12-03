@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getAssemblyRequiredInterface <em>Assembly Required Interface</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}</li>
  *   <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}</li>
  * </ul>
  *
@@ -25,26 +25,26 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeployedRequiredInterface extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Assembly Required Interface</b></em>' reference.
+	 * Returns the value of the '<em><b>Required Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Assembly Required Interface</em>' reference.
-	 * @see #setAssemblyRequiredInterface(AssemblyRequiredInterface)
-	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedRequiredInterface_AssemblyRequiredInterface()
+	 * @return the value of the '<em>Required Interface</em>' reference.
+	 * @see #setRequiredInterface(AssemblyRequiredInterface)
+	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedRequiredInterface_RequiredInterface()
 	 * @model
 	 * @generated
 	 */
-	AssemblyRequiredInterface getAssemblyRequiredInterface();
+	AssemblyRequiredInterface getRequiredInterface();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getAssemblyRequiredInterface <em>Assembly Required Interface</em>}' reference.
+	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assembly Required Interface</em>' reference.
-	 * @see #getAssemblyRequiredInterface()
+	 * @param value the new value of the '<em>Required Interface</em>' reference.
+	 * @see #getRequiredInterface()
 	 * @generated
 	 */
-	void setAssemblyRequiredInterface(AssemblyRequiredInterface value);
+	void setRequiredInterface(AssemblyRequiredInterface value);
 
 	/**
 	 * Returns the value of the '<em><b>Requires</b></em>' reference.

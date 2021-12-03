@@ -5,7 +5,7 @@ during runtime utilizing a configuration file. There are other options
 available for runtime configuration of the adaptive monitoring feature
 utilizing the `TCPController`. See the documentation for more details.
 
-1. Copy the `kieker-1.15-SNAPSHOT-aspectj.jar` from the distribution
+1. Copy the `kieker-<version>-aspectj.jar` from the distribution
    to the `lib` folder.
 
 2. Start the request loop by invoking

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,25 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.stage.model.ModelRepository;
-
 /**
  * @author Sören Henning
  *
+ * @param <T>
+ *            configuration object
+ *
  * @since 1.14
  */
-public interface IDependencyGraphBuilderFactory {
+public interface IDependencyGraphBuilderFactory<T extends IDependencyGraphBuilderConfiguration> {
 
 	/**
-	 * @param repository
-	 *            holding all models
-	 * 
+	 * @param configuration
+	 *            holding all configuration parameters including the model repository
+	 *
 	 *
 	 * @return graph builder
 	 *
 	 * @since 1.14
 	 */
-	public IDependencyGraphBuilder createDependencyGraphBuilder(ModelRepository repository);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(T configuration);
 
 }

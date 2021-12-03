@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.time.temporal.TemporalUnit;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
@@ -39,7 +40,7 @@ import kieker.analysis.stage.general.ControlledEventReleaseStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
 import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
 import kieker.analysis.stage.model.StaticModelsAssemblerStage;
@@ -153,11 +154,13 @@ public class DependencyGraphConfiguration extends Configuration {
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final FullResponseTimeStatisticsStage fullStatisticsDecorator = new FullResponseTimeStatisticsStage(
-				this.statisticsModel, ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION);
+				this.statisticsModel, ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION);
 
-		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage<>(repository);
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, graphBuilderFactory);
+		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
+				new IDependencyGraphBuilderConfiguration() {
+				}, graphBuilderFactory);
 
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());

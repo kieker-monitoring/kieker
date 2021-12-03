@@ -44,4 +44,24 @@ public class CallEvent {
 	public Duration getDuration() {
 		return this.duration;
 	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof CallEvent) {
+			final CallEvent event = (CallEvent) obj;
+			return this.getCaller().equals(event.getCaller()) && this.getCallee().equals(event.getCallee()) && this.duration.equals(event.getDuration());
+		} else {
+			return super.equals(obj);
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s -> %s (%d)", this.getCaller().toString(), this.getCallee().toString(), this.duration.getNano());
+	}
 }

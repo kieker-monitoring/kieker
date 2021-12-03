@@ -1,25 +1,19 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+	id 'eclipse'
+}
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter() 
+	jcenter() 
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
-
-        // you need to ensure by yourself that the following jars are in the lib folder
-        compile fileTree('lib') {
-                include "kieker-*.jar"
-        }
-}
-
-eclipse {
-  project {
-    name = 'Kieker Example 4 ch5--trace-monitoring-aspectj'
-  }
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
+	compile 'net.kieker-monitoring:kieker:1.15'    
 }
 
 distTar.enabled=false

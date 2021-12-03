@@ -8,7 +8,7 @@ Instrumentation with AspectJ
   Describe general approach to do so. Refer to a tutorial for a quicker
   approach.
 
-The tutorial-servlet-example_ contains a some basic introduction to
+The :ref:`tutorial-servlet-example` contains a some basic introduction to
 using AspectJ probes.
 
 AspectJ Configuration

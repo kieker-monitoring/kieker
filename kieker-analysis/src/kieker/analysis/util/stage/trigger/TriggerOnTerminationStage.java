@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,20 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * This stage sends a {@link Trigger} after the terminating signal was received.
  *
+ * @param <T>
+ *            object to be sent as trigger message
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TriggerOnTerminationStage extends AbstractTransformation<Object, Trigger> {
+public class TriggerOnTerminationStage<T> extends AbstractTransformation<Object, T> {
 
-	private final Trigger trigger = new Trigger();
+	private final T trigger;
 
-	public TriggerOnTerminationStage() {
+	public TriggerOnTerminationStage(final T trigger) {
 		super();
+		this.trigger = trigger;
 	}
 
 	@Override

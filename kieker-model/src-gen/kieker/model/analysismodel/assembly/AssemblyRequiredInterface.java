@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequires <em>Requires</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getDeclaration <em>Declaration</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequiredInterfaceType <em>Required Interface Type</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyRequiredInterface()
@@ -47,25 +47,25 @@ public interface AssemblyRequiredInterface extends EObject {
 	void setRequires(AssemblyProvidedInterface value);
 
 	/**
-	 * Returns the value of the '<em><b>Declaration</b></em>' reference.
+	 * Returns the value of the '<em><b>Required Interface Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Declaration</em>' reference.
-	 * @see #setDeclaration(RequiredInterfaceType)
-	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyRequiredInterface_Declaration()
+	 * @return the value of the '<em>Required Interface Type</em>' reference.
+	 * @see #setRequiredInterfaceType(RequiredInterfaceType)
+	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyRequiredInterface_RequiredInterfaceType()
 	 * @model
 	 * @generated
 	 */
-	RequiredInterfaceType getDeclaration();
+	RequiredInterfaceType getRequiredInterfaceType();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getDeclaration <em>Declaration</em>}' reference.
+	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequiredInterfaceType <em>Required Interface Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Declaration</em>' reference.
-	 * @see #getDeclaration()
+	 * @param value the new value of the '<em>Required Interface Type</em>' reference.
+	 * @see #getRequiredInterfaceType()
 	 * @generated
 	 */
-	void setDeclaration(RequiredInterfaceType value);
+	void setRequiredInterfaceType(RequiredInterfaceType value);
 
 } // AssemblyRequiredInterface

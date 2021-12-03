@@ -4,7 +4,7 @@ Kieker Tools
 ============
 
 All tools can be found in the binary bundle
-``(kieker-$VERSION-binaries.zip``) in the ``tools`` directory. The
+``(kieker-1.16-SNAPSHOT-binaries.zip``) in the ``tools`` directory. The
 ``tools`` directory contains a set of tools prepacked as tar and zip
 archives. Each archive contains one tool with all its libraries and
 start scripts. The start scripts are located in the ``bin`` directory
@@ -30,7 +30,6 @@ parameters and options to a tool.
 -  :ref:`kieker-tools-convert-logging-timestamps`
 -  :ref:`kieker-tools-log-replayer`
 -  :ref:`kieker-tools-collector`
--  :ref:`kieker-tools-kdb` (deprecated)
 -  :ref:`kieker-tools-resource-monitor`
 
 -  :ref:`kieker-tools-irl`

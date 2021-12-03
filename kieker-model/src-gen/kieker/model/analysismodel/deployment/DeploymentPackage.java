@@ -297,13 +297,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__REQUIRED_INTERFACES = 5;
 
 	/**
+	 * The feature id for the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT__SIGNATURE = 6;
+
+	/**
 	 * The number of structural features of the '<em>Deployed Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT_FEATURE_COUNT = 6;
+	int DEPLOYED_COMPONENT_FEATURE_COUNT = 7;
 
 	/**
 	 * The operation id for the '<em>Get Deployment Context</em>' operation.
@@ -472,13 +481,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_STORAGE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Storage</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_STORAGE__ASSEMBLY_OPERATION = 0;
+	int DEPLOYED_STORAGE__ASSEMBLY_STORAGE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Storage</em>' class.
@@ -507,7 +516,6 @@ public interface DeploymentPackage extends EPackage {
 	 */
 	int DEPLOYED_STORAGE_OPERATION_COUNT = 1;
 
-
 	/**
 	 * The meta object id for the '{@link kieker.model.analysismodel.deployment.impl.DeployedProvidedInterfaceImpl <em>Deployed Provided Interface</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -528,13 +536,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Provided Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_PROVIDED_INTERFACE__NAME = 1;
+	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = 1;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Provided Interface</em>' class.
@@ -611,13 +619,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_REQUIRED_INTERFACE = 11;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Required Interface</b></em>' reference.
+	 * The feature id for the '<em><b>Required Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE = 0;
+	int DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Requires</b></em>' reference.
@@ -845,6 +853,17 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_RequiredInterfaces();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeployedComponent#getSignature <em>Signature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signature</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getSignature()
+	 * @see #getDeployedComponent()
+	 * @generated
+	 */
+	EAttribute getDeployedComponent_Signature();
+
+	/**
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedComponent#getDeploymentContext() <em>Get Deployment Context</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -964,15 +983,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedStorage();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation <em>Assembly Operation</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage <em>Assembly Storage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyOperation()
+	 * @return the meta object for the reference '<em>Assembly Storage</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedStorage#getAssemblyStorage()
 	 * @see #getDeployedStorage()
 	 * @generated
 	 */
-	EReference getDeployedStorage_AssemblyOperation();
+	EReference getDeployedStorage_AssemblyStorage();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedStorage#getComponent() <em>Get Component</em>}' operation.
@@ -1006,15 +1025,15 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedProvidedInterface_ProvidedOperations();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getName <em>Name</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface <em>Provided Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface#getName()
+	 * @return the meta object for the reference '<em>Provided Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface()
 	 * @see #getDeployedProvidedInterface()
 	 * @generated
 	 */
-	EAttribute getDeployedProvidedInterface_Name();
+	EReference getDeployedProvidedInterface_ProvidedInterface();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Provided Interface Map Entry</em>}'.
@@ -1061,15 +1080,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedRequiredInterface();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getAssemblyRequiredInterface <em>Assembly Required Interface</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assembly Required Interface</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedRequiredInterface#getAssemblyRequiredInterface()
+	 * @return the meta object for the reference '<em>Required Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface()
 	 * @see #getDeployedRequiredInterface()
 	 * @generated
 	 */
-	EReference getDeployedRequiredInterface_AssemblyRequiredInterface();
+	EReference getDeployedRequiredInterface_RequiredInterface();
 
 	/**
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}'.
@@ -1260,6 +1279,14 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__REQUIRED_INTERFACES = eINSTANCE.getDeployedComponent_RequiredInterfaces();
 
 		/**
+		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPLOYED_COMPONENT__SIGNATURE = eINSTANCE.getDeployedComponent_Signature();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Deployment Context</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1356,12 +1383,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_STORAGE = eINSTANCE.getDeployedStorage();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Storage</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_STORAGE__ASSEMBLY_OPERATION = eINSTANCE.getDeployedStorage_AssemblyOperation();
+		EReference DEPLOYED_STORAGE__ASSEMBLY_STORAGE = eINSTANCE.getDeployedStorage_AssemblyStorage();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
@@ -1390,12 +1417,12 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = eINSTANCE.getDeployedProvidedInterface_ProvidedOperations();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Provided Interface</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute DEPLOYED_PROVIDED_INTERFACE__NAME = eINSTANCE.getDeployedProvidedInterface_Name();
+		EReference DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = eINSTANCE.getDeployedProvidedInterface_ProvidedInterface();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.EStringToDeployedProvidedInterfaceMapEntryImpl <em>EString To Deployed Provided Interface Map Entry</em>}' class.
@@ -1434,12 +1461,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_REQUIRED_INTERFACE = eINSTANCE.getDeployedRequiredInterface();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Required Interface</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Required Interface</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_REQUIRED_INTERFACE__ASSEMBLY_REQUIRED_INTERFACE = eINSTANCE.getDeployedRequiredInterface_AssemblyRequiredInterface();
+		EReference DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE = eINSTANCE.getDeployedRequiredInterface_RequiredInterface();
 
 		/**
 		 * The meta object literal for the '<em><b>Requires</b></em>' reference feature.

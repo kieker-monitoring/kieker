@@ -214,7 +214,7 @@ public interface TypePackage extends EPackage {
 	int COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES = 6;
 
 	/**
-	 * The feature id for the '<em><b>Required Interface Types</b></em>' reference list.
+	 * The feature id for the '<em><b>Required Interface Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -460,7 +460,6 @@ public interface TypePackage extends EPackage {
 	 */
 	int STORAGE_TYPE_OPERATION_COUNT = 0;
 
-
 	/**
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl <em>Provided Interface Type</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -490,13 +489,31 @@ public interface TypePackage extends EPackage {
 	int PROVIDED_INTERFACE_TYPE__NAME = 1;
 
 	/**
+	 * The feature id for the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE__SIGNATURE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Package</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVIDED_INTERFACE_TYPE__PACKAGE = 3;
+
+	/**
 	 * The number of structural features of the '<em>Provided Interface Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROVIDED_INTERFACE_TYPE_FEATURE_COUNT = 2;
+	int PROVIDED_INTERFACE_TYPE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Provided Interface Type</em>' class.
@@ -734,10 +751,10 @@ public interface TypePackage extends EPackage {
 	EReference getComponentType_ProvidedInterfaceTypes();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required Interface Types</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required Interface Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Required Interface Types</em>'.
+	 * @return the meta object for the containment reference list '<em>Required Interface Types</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes()
 	 * @see #getComponentType()
 	 * @generated
@@ -952,6 +969,28 @@ public interface TypePackage extends EPackage {
 	EAttribute getProvidedInterfaceType_Name();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getSignature <em>Signature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signature</em>'.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getSignature()
+	 * @see #getProvidedInterfaceType()
+	 * @generated
+	 */
+	EAttribute getProvidedInterfaceType_Signature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getPackage <em>Package</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Package</em>'.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getPackage()
+	 * @see #getProvidedInterfaceType()
+	 * @generated
+	 */
+	EAttribute getProvidedInterfaceType_Package();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Provided Interface Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1140,7 +1179,7 @@ public interface TypePackage extends EPackage {
 		EReference COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES = eINSTANCE.getComponentType_ProvidedInterfaceTypes();
 
 		/**
-		 * The meta object literal for the '<em><b>Required Interface Types</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Required Interface Types</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1308,6 +1347,22 @@ public interface TypePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROVIDED_INTERFACE_TYPE__NAME = eINSTANCE.getProvidedInterfaceType_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROVIDED_INTERFACE_TYPE__SIGNATURE = eINSTANCE.getProvidedInterfaceType_Signature();
+
+		/**
+		 * The meta object literal for the '<em><b>Package</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROVIDED_INTERFACE_TYPE__PACKAGE = eINSTANCE.getProvidedInterfaceType_Package();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map Entry</em>}' class.

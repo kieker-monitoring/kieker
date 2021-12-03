@@ -32,8 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getProvidedOperations <em>Provided Operations</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getDeclaration <em>Declaration</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getProvidedInterfaceType <em>Provided Interface Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -50,34 +49,14 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	protected EMap<String, AssemblyOperation> providedOperations;
 
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The cached value of the '{@link #getProvidedInterfaceType() <em>Provided Interface Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getProvidedInterfaceType()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getDeclaration() <em>Declaration</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDeclaration()
-	 * @generated
-	 * @ordered
-	 */
-	protected ProvidedInterfaceType declaration;
+	protected ProvidedInterfaceType providedInterfaceType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -117,39 +96,16 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ProvidedInterfaceType getDeclaration() {
-		if (declaration != null && declaration.eIsProxy()) {
-			InternalEObject oldDeclaration = (InternalEObject)declaration;
-			declaration = (ProvidedInterfaceType)eResolveProxy(oldDeclaration);
-			if (declaration != oldDeclaration) {
+	public ProvidedInterfaceType getProvidedInterfaceType() {
+		if (providedInterfaceType != null && providedInterfaceType.eIsProxy()) {
+			InternalEObject oldProvidedInterfaceType = (InternalEObject)providedInterfaceType;
+			providedInterfaceType = (ProvidedInterfaceType)eResolveProxy(oldProvidedInterfaceType);
+			if (providedInterfaceType != oldProvidedInterfaceType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION, oldDeclaration, declaration));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE, oldProvidedInterfaceType, providedInterfaceType));
 			}
 		}
-		return declaration;
+		return providedInterfaceType;
 	}
 
 	/**
@@ -157,8 +113,8 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProvidedInterfaceType basicGetDeclaration() {
-		return declaration;
+	public ProvidedInterfaceType basicGetProvidedInterfaceType() {
+		return providedInterfaceType;
 	}
 
 	/**
@@ -167,11 +123,11 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public void setDeclaration(ProvidedInterfaceType newDeclaration) {
-		ProvidedInterfaceType oldDeclaration = declaration;
-		declaration = newDeclaration;
+	public void setProvidedInterfaceType(ProvidedInterfaceType newProvidedInterfaceType) {
+		ProvidedInterfaceType oldProvidedInterfaceType = providedInterfaceType;
+		providedInterfaceType = newProvidedInterfaceType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION, oldDeclaration, declaration));
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE, oldProvidedInterfaceType, providedInterfaceType));
 	}
 
 	/**
@@ -199,11 +155,9 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS:
 				if (coreType) return getProvidedOperations();
 				else return getProvidedOperations().map();
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__NAME:
-				return getName();
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION:
-				if (resolve) return getDeclaration();
-				return basicGetDeclaration();
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+				if (resolve) return getProvidedInterfaceType();
+				return basicGetProvidedInterfaceType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -219,11 +173,8 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS:
 				((EStructuralFeature.Setting)getProvidedOperations()).set(newValue);
 				return;
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__NAME:
-				setName((String)newValue);
-				return;
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION:
-				setDeclaration((ProvidedInterfaceType)newValue);
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+				setProvidedInterfaceType((ProvidedInterfaceType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -240,11 +191,8 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS:
 				getProvidedOperations().clear();
 				return;
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION:
-				setDeclaration((ProvidedInterfaceType)null);
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+				setProvidedInterfaceType((ProvidedInterfaceType)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -260,28 +208,10 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS:
 				return providedOperations != null && !providedOperations.isEmpty();
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__DECLARATION:
-				return declaration != null;
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+				return providedInterfaceType != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } //AssemblyProvidedInterfaceImpl

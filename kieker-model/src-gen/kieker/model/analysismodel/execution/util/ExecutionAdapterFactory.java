@@ -5,6 +5,7 @@ package kieker.model.analysismodel.execution.util;
 import java.util.Map;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeployedStorage;
 
 import kieker.model.analysismodel.execution.*;
 
@@ -88,7 +89,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createAggregatedStorageAccessAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedStorageAccess> object) {
+			public Adapter caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> object) {
 				return createDeployedOperationsPairToAggregatedStorageAccessMapEntryAdapter();
 			}
 			@Override

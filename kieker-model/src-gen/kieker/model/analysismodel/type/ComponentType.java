@@ -148,13 +148,13 @@ public interface ComponentType extends EObject {
 	EList<ProvidedInterfaceType> getProvidedInterfaceTypes();
 
 	/**
-	 * Returns the value of the '<em><b>Required Interface Types</b></em>' reference list.
+	 * Returns the value of the '<em><b>Required Interface Types</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.model.analysismodel.type.RequiredInterfaceType}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Required Interface Types</em>' reference list.
+	 * @return the value of the '<em>Required Interface Types</em>' containment reference list.
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_RequiredInterfaceTypes()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<RequiredInterfaceType> getRequiredInterfaceTypes();

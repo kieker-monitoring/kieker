@@ -18,8 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedOperations <em>Provided Operations</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getDeclaration <em>Declaration</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedInterfaceType <em>Provided Interface Type</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyProvidedInterface()
@@ -41,47 +40,25 @@ public interface AssemblyProvidedInterface extends EObject {
 	EMap<String, AssemblyOperation> getProvidedOperations();
 
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Provided Interface Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyProvidedInterface_Name()
+	 * @return the value of the '<em>Provided Interface Type</em>' reference.
+	 * @see #setProvidedInterfaceType(ProvidedInterfaceType)
+	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyProvidedInterface_ProvidedInterfaceType()
 	 * @model
 	 * @generated
 	 */
-	String getName();
+	ProvidedInterfaceType getProvidedInterfaceType();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedInterfaceType <em>Provided Interface Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
+	 * @param value the new value of the '<em>Provided Interface Type</em>' reference.
+	 * @see #getProvidedInterfaceType()
 	 * @generated
 	 */
-	void setName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Declaration</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Declaration</em>' reference.
-	 * @see #setDeclaration(ProvidedInterfaceType)
-	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyProvidedInterface_Declaration()
-	 * @model
-	 * @generated
-	 */
-	ProvidedInterfaceType getDeclaration();
-
-	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getDeclaration <em>Declaration</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Declaration</em>' reference.
-	 * @see #getDeclaration()
-	 * @generated
-	 */
-	void setDeclaration(ProvidedInterfaceType value);
+	void setProvidedInterfaceType(ProvidedInterfaceType value);
 
 } // AssemblyProvidedInterface

@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl#getRequires <em>Requires</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl#getDeclaration <em>Declaration</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl#getRequiredInterfaceType <em>Required Interface Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,14 +42,14 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	protected AssemblyProvidedInterface requires;
 
 	/**
-	 * The cached value of the '{@link #getDeclaration() <em>Declaration</em>}' reference.
+	 * The cached value of the '{@link #getRequiredInterfaceType() <em>Required Interface Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDeclaration()
+	 * @see #getRequiredInterfaceType()
 	 * @generated
 	 * @ordered
 	 */
-	protected RequiredInterfaceType declaration;
+	protected RequiredInterfaceType requiredInterfaceType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -116,16 +116,16 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public RequiredInterfaceType getDeclaration() {
-		if (declaration != null && declaration.eIsProxy()) {
-			InternalEObject oldDeclaration = (InternalEObject)declaration;
-			declaration = (RequiredInterfaceType)eResolveProxy(oldDeclaration);
-			if (declaration != oldDeclaration) {
+	public RequiredInterfaceType getRequiredInterfaceType() {
+		if (requiredInterfaceType != null && requiredInterfaceType.eIsProxy()) {
+			InternalEObject oldRequiredInterfaceType = (InternalEObject)requiredInterfaceType;
+			requiredInterfaceType = (RequiredInterfaceType)eResolveProxy(oldRequiredInterfaceType);
+			if (requiredInterfaceType != oldRequiredInterfaceType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION, oldDeclaration, declaration));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE, oldRequiredInterfaceType, requiredInterfaceType));
 			}
 		}
-		return declaration;
+		return requiredInterfaceType;
 	}
 
 	/**
@@ -133,8 +133,8 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RequiredInterfaceType basicGetDeclaration() {
-		return declaration;
+	public RequiredInterfaceType basicGetRequiredInterfaceType() {
+		return requiredInterfaceType;
 	}
 
 	/**
@@ -143,11 +143,11 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public void setDeclaration(RequiredInterfaceType newDeclaration) {
-		RequiredInterfaceType oldDeclaration = declaration;
-		declaration = newDeclaration;
+	public void setRequiredInterfaceType(RequiredInterfaceType newRequiredInterfaceType) {
+		RequiredInterfaceType oldRequiredInterfaceType = requiredInterfaceType;
+		requiredInterfaceType = newRequiredInterfaceType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION, oldDeclaration, declaration));
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE, oldRequiredInterfaceType, requiredInterfaceType));
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRES:
 				if (resolve) return getRequires();
 				return basicGetRequires();
-			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION:
-				if (resolve) return getDeclaration();
-				return basicGetDeclaration();
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE:
+				if (resolve) return getRequiredInterfaceType();
+				return basicGetRequiredInterfaceType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -179,8 +179,8 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRES:
 				setRequires((AssemblyProvidedInterface)newValue);
 				return;
-			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION:
-				setDeclaration((RequiredInterfaceType)newValue);
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE:
+				setRequiredInterfaceType((RequiredInterfaceType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -197,8 +197,8 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRES:
 				setRequires((AssemblyProvidedInterface)null);
 				return;
-			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION:
-				setDeclaration((RequiredInterfaceType)null);
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE:
+				setRequiredInterfaceType((RequiredInterfaceType)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -214,8 +214,8 @@ public class AssemblyRequiredInterfaceImpl extends MinimalEObjectImpl.Container 
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRES:
 				return requires != null;
-			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__DECLARATION:
-				return declaration != null;
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE:
+				return requiredInterfaceType != null;
 		}
 		return super.eIsSet(featureID);
 	}

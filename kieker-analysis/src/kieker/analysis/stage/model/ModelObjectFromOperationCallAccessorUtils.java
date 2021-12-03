@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import kieker.model.analysismodel.trace.OperationCall;
  *
  * @since 1.14
  */
-public final class ModelObjectFromOperationCallAccessors {
+public final class ModelObjectFromOperationCallAccessorUtils {
 
 	public static final Function<OperationCallDurationEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
 
@@ -50,7 +50,7 @@ public final class ModelObjectFromOperationCallAccessors {
 
 	public static final Function<OperationCall, EObject> COMPONENT_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType().getComponentType();
 
-	private ModelObjectFromOperationCallAccessors() {}
+	private ModelObjectFromOperationCallAccessorUtils() {}
 
 	/**
 	 * Get corresponding aggregated invocation from the execution model for a given OperationCall.

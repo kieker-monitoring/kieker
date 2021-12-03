@@ -21,7 +21,9 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.model.analysismodel.sources.SourcesPackage;
+
 import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.DoubleValue;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.EPropertyType;
@@ -552,8 +554,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EReference getEObjectToStatisticsMapEntry_Key() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
+	public EReference getEObjectToStatisticsMapEntry_Value() {
+		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -562,8 +564,8 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * @generated
 	 */
 	@Override
-	public EReference getEObjectToStatisticsMapEntry_Value() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
+	public EReference getEObjectToStatisticsMapEntry_Key() {
+		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**

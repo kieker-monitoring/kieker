@@ -522,7 +522,7 @@ public interface ExecutionPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model features="value key" 
 	 *        valueType="kieker.model.analysismodel.execution.AggregatedStorageAccess" valueContainment="true"
-	 *        keyType="kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;" keyContainment="true"
+	 *        keyType="kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedStorage&gt;" keyContainment="true"
 	 * @generated
 	 */
 	EClass getDeployedOperationsPairToAggregatedStorageAccessMapEntry();

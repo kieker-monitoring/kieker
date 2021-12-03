@@ -25,7 +25,9 @@ import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.model.analysismodel.sources.SourcesPackage;
+
 import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -538,7 +540,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		g1 = createEGenericType(this.getTuple());
 		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
+		g2 = createEGenericType(theDeploymentPackage.getDeployedStorage());
 		g1.getETypeArguments().add(g2);
 		initEReference(getDeployedOperationsPairToAggregatedStorageAccessMapEntry_Key(), g1, null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -557,6 +559,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEEnum(eDirectionEEnum, EDirection.class, "EDirection");
 		addEEnumLiteral(eDirectionEEnum, EDirection.READ);
 		addEEnumLiteral(eDirectionEEnum, EDirection.WRITE);
+		addEEnumLiteral(eDirectionEEnum, EDirection.BOTH);
 	}
 
 } //ExecutionPackageImpl

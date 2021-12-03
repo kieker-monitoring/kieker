@@ -36,7 +36,17 @@ public enum EDirection implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WRITE(1, "WRITE", "WRITE");
+	WRITE(1, "WRITE", "WRITE"),
+
+	/**
+	 * The '<em><b>BOTH</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #BOTH_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BOTH(2, "BOTH", "BOTH");
 
 	/**
 	 * The '<em><b>READ</b></em>' literal value.
@@ -61,6 +71,17 @@ public enum EDirection implements Enumerator {
 	public static final int WRITE_VALUE = 1;
 
 	/**
+	 * The '<em><b>BOTH</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #BOTH
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int BOTH_VALUE = 2;
+
+	/**
 	 * An array of all the '<em><b>EDirection</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -70,6 +91,7 @@ public enum EDirection implements Enumerator {
 		new EDirection[] {
 			READ,
 			WRITE,
+			BOTH,
 		};
 
 	/**
@@ -128,6 +150,7 @@ public enum EDirection implements Enumerator {
 		switch (value) {
 			case READ_VALUE: return READ;
 			case WRITE_VALUE: return WRITE;
+			case BOTH_VALUE: return BOTH;
 		}
 		return null;
 	}

@@ -31,6 +31,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getProvidedOperationTypes <em>Provided Operation Types</em>}</li>
  *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getSignature <em>Signature</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getPackage <em>Package</em>}</li>
  * </ul>
  *
  * @generated
@@ -65,6 +67,46 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIGNATURE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected String signature = SIGNATURE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPackage() <em>Package</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPackage()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PACKAGE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPackage() <em>Package</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPackage()
+	 * @generated
+	 * @ordered
+	 */
+	protected String package_ = PACKAGE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -127,6 +169,52 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE, oldSignature, signature));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getPackage() {
+		return package_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPackage(String newPackage) {
+		String oldPackage = package_;
+		package_ = newPackage;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE, oldPackage, package_));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
@@ -148,6 +236,10 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 				else return getProvidedOperationTypes().map();
 			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
 				return getName();
+			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+				return getSignature();
+			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+				return getPackage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -165,6 +257,12 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 				return;
 			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
 				setName((String)newValue);
+				return;
+			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+				setSignature((String)newValue);
+				return;
+			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+				setPackage((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -184,6 +282,12 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
+			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+				setPackage(PACKAGE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,6 +304,10 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 				return providedOperationTypes != null && !providedOperationTypes.isEmpty();
 			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
+			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+				return PACKAGE_EDEFAULT == null ? package_ != null : !PACKAGE_EDEFAULT.equals(package_);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -216,6 +324,10 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", signature: ");
+		result.append(signature);
+		result.append(", package: ");
+		result.append(package_);
 		result.append(')');
 		return result.toString();
 	}

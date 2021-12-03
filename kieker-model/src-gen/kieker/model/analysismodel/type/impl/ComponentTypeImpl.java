@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.type.impl;
 
 import java.util.Collection;
+
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.ProvidedInterfaceType;
@@ -150,7 +151,7 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	protected EList<ProvidedInterfaceType> providedInterfaceTypes;
 
 	/**
-	 * The cached value of the '{@link #getRequiredInterfaceTypes() <em>Required Interface Types</em>}' reference list.
+	 * The cached value of the '{@link #getRequiredInterfaceTypes() <em>Required Interface Types</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRequiredInterfaceTypes()
@@ -307,7 +308,7 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	@Override
 	public EList<RequiredInterfaceType> getRequiredInterfaceTypes() {
 		if (requiredInterfaceTypes == null) {
-			requiredInterfaceTypes = new EObjectResolvingEList<RequiredInterfaceType>(RequiredInterfaceType.class, this, TypePackage.COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES);
+			requiredInterfaceTypes = new EObjectContainmentEList<RequiredInterfaceType>(RequiredInterfaceType.class, this, TypePackage.COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES);
 		}
 		return requiredInterfaceTypes;
 	}
@@ -326,6 +327,8 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 				return ((InternalEList<?>)getProvidedStorages()).basicRemove(otherEnd, msgs);
 			case TypePackage.COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES:
 				return ((InternalEList<?>)getProvidedInterfaceTypes()).basicRemove(otherEnd, msgs);
+			case TypePackage.COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES:
+				return ((InternalEList<?>)getRequiredInterfaceTypes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}

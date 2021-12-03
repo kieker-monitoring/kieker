@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.assembly.impl;
 
 import java.util.Collection;
+
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.assembly.AssemblyPackage;
@@ -44,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getContainedComponents <em>Contained Components</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getProvidedInterfaces <em>Provided Interfaces</em>}</li>
  *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getRequiredInterfaces <em>Required Interfaces</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl#getSignature <em>Signature</em>}</li>
  * </ul>
  *
  * @generated
@@ -108,6 +110,26 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected EList<AssemblyRequiredInterface> requiredInterfaces;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIGNATURE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -239,6 +261,29 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE, oldSignature, signature));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_COMPONENT__OPERATIONS:
@@ -277,6 +322,8 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				else return getProvidedInterfaces().map();
 			case AssemblyPackage.ASSEMBLY_COMPONENT__REQUIRED_INTERFACES:
 				return getRequiredInterfaces();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				return getSignature();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -310,6 +357,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				getRequiredInterfaces().clear();
 				getRequiredInterfaces().addAll((Collection<? extends AssemblyRequiredInterface>)newValue);
 				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				setSignature((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -340,6 +390,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_COMPONENT__REQUIRED_INTERFACES:
 				getRequiredInterfaces().clear();
 				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -364,8 +417,26 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return providedInterfaces != null && !providedInterfaces.isEmpty();
 			case AssemblyPackage.ASSEMBLY_COMPONENT__REQUIRED_INTERFACES:
 				return requiredInterfaces != null && !requiredInterfaces.isEmpty();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (signature: ");
+		result.append(signature);
+		result.append(')');
+		return result.toString();
 	}
 
 } //AssemblyComponentImpl

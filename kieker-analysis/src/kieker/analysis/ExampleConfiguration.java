@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
@@ -37,7 +38,7 @@ import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.model.CallEvent2OperationCallStage;
 import kieker.analysis.stage.model.ExecutionModelAssembler;
 import kieker.analysis.stage.model.ExecutionModelAssemblerStage;
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
 import kieker.analysis.stage.model.OperationPresentInModelEventReleaseControlStage;
@@ -92,7 +93,7 @@ public class ExampleConfiguration extends Configuration {
 	public ExampleConfiguration(final File importDirectory, final Path exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
-		final Function<OperationCallDurationEvent, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
+		final Function<OperationCallDurationEvent, EObject> statisticsObjectAccesor = ModelObjectFromOperationCallAccessorUtils.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
 				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)
@@ -142,9 +143,12 @@ public class ExampleConfiguration extends Configuration {
 				.create(exportDirectory);
 		// alternative output stage
 		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory);
-		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage(repository);
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(repository, deploymentGraphBuilderFactory);
+		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
+				new IDependencyGraphBuilderConfiguration() {
+				},
+				deploymentGraphBuilderFactory);
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory,
 				dependencyGraphDotExportConfiguration);
 

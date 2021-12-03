@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;
@@ -41,8 +40,8 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 	 * @param repository
 	 *            model repository
 	 */
-	public DeploymentLevelContextDependencyGraphBuilder(final ModelRepository repository) {
-		super(repository);
+	public DeploymentLevelContextDependencyGraphBuilder() {
+		super();
 	}
 
 	@Override

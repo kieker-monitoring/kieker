@@ -77,44 +77,6 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EObject getTypedKey() {
-		if (key != null && key.eIsProxy()) {
-			InternalEObject oldKey = (InternalEObject)key;
-			key = eResolveProxy(oldKey);
-			if (key != oldKey) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
-			}
-		}
-		return key;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject basicGetTypedKey() {
-		return key;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTypedKey(EObject newKey) {
-		EObject oldKey = key;
-		key = newKey;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Statistics getTypedValue() {
 		return value;
 	}
@@ -151,6 +113,44 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE, newValue, newValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject getTypedKey() {
+		if (key != null && key.eIsProxy()) {
+			InternalEObject oldKey = (InternalEObject)key;
+			key = eResolveProxy(oldKey);
+			if (key != oldKey) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
+			}
+		}
+		return key;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject basicGetTypedKey() {
+		return key;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTypedKey(EObject newKey) {
+		EObject oldKey = key;
+		key = newKey;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY, oldKey, key));
 	}
 
 	/**

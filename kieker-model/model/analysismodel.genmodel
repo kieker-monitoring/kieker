@@ -121,6 +121,8 @@
       <genClasses ecoreClass="analysismodel.ecore#//type/ProvidedInterfaceType">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/ProvidedInterfaceType/providedOperationTypes"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ProvidedInterfaceType/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ProvidedInterfaceType/signature"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ProvidedInterfaceType/package"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//type/EStringToProvidedInterfaceTypeMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToProvidedInterfaceTypeMapEntry/key"/>
@@ -149,6 +151,7 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/containedComponents"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/providedInterfaces"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/requiredInterfaces"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyComponent/signature"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/key"/>
@@ -162,7 +165,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyStorage">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyStorage/operationType"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyStorage/storageType"/>
         <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyStorage/getAssemblyComponent"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
@@ -172,9 +175,8 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyProvidedInterface">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyProvidedInterface/providedOperations"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyProvidedInterface/name"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyProvidedInterface/declaration"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyProvidedInterface/providedInterfaceType"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyProvidedInterfaceMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyProvidedInterfaceMapEntry/key"/>
@@ -185,7 +187,7 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRequiredInterface/requires"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRequiredInterface/declaration"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRequiredInterface/requiredInterfaceType"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Deployment" basePackage="kieker.model.analysismodel"
@@ -215,6 +217,7 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/containedComponents"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/providedInterfaces"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/requiredInterfaces"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/DeployedComponent/signature"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedComponent/getDeploymentContext"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentContext) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
@@ -234,13 +237,14 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedStorage">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedStorage/assemblyOperation"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedStorage/assemblyStorage"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedStorage/getComponent"
             body="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeployedComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedProvidedInterface">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedProvidedInterface/providedOperations"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/DeployedProvidedInterface/name"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedProvidedInterface/providedInterface"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/EStringToDeployedProvidedInterfaceMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/EStringToDeployedProvidedInterfaceMapEntry/key"/>
@@ -248,7 +252,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedRequiredInterface">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedRequiredInterface/assemblyRequiredInterface"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedRequiredInterface/requiredInterface"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedRequiredInterface/requires"/>
       </genClasses>
@@ -258,6 +262,7 @@
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//execution/EDirection">
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/READ"/>
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/WRITE"/>
+        <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/BOTH"/>
       </genEnums>
       <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>

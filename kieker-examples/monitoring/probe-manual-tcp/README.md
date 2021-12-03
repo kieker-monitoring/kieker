@@ -13,8 +13,8 @@ example.
    - Replace %RESULTS% in `collector.conf` with the name of the log file directories 
 
 1. Start the collector with
-   - Linux: `collector-1.15-SNAPSHOT/bin/collector -c collector.conf`
-   - Windows: `collector-1.15-SNAPSHOT/bin/collector.bat -c collector.conf`
+   - Linux: `collector-<version>/bin/collector -c collector.conf`
+   - Windows: `collector-<version>/bin/collector.bat -c collector.conf`
 
 1. Execute the gradle build
    - Linux: `./gradlew runMonitoring`

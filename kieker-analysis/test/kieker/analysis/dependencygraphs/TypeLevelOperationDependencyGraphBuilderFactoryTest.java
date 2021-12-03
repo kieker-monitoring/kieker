@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilder;
 import kieker.analysis.graph.dependency.TypeLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysis.stage.model.ModelRepository;
@@ -64,7 +65,8 @@ public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
 		repository.register(ExecutionModel.class, this.executionModel);
 		repository.register(StatisticsModel.class, this.statisticsModel);
 
-		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(repository);
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(new IDependencyGraphBuilderConfiguration() {
+		});
 		Assert.assertTrue(graphBuilder instanceof TypeLevelOperationDependencyGraphBuilder);
 	}
 

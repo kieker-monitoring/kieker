@@ -28,21 +28,21 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl#getOperationType <em>Operation Type</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl#getStorageType <em>Storage Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements AssemblyStorage {
 	/**
-	 * The cached value of the '{@link #getOperationType() <em>Operation Type</em>}' reference.
+	 * The cached value of the '{@link #getStorageType() <em>Storage Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getOperationType()
+	 * @see #getStorageType()
 	 * @generated
 	 * @ordered
 	 */
-	protected StorageType operationType;
+	protected StorageType storageType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,16 +69,16 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public StorageType getOperationType() {
-		if (operationType != null && operationType.eIsProxy()) {
-			InternalEObject oldOperationType = (InternalEObject)operationType;
-			operationType = (StorageType)eResolveProxy(oldOperationType);
-			if (operationType != oldOperationType) {
+	public StorageType getStorageType() {
+		if (storageType != null && storageType.eIsProxy()) {
+			InternalEObject oldStorageType = (InternalEObject)storageType;
+			storageType = (StorageType)eResolveProxy(oldStorageType);
+			if (storageType != oldStorageType) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE, oldOperationType, operationType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE, oldStorageType, storageType));
 			}
 		}
-		return operationType;
+		return storageType;
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public StorageType basicGetOperationType() {
-		return operationType;
+	public StorageType basicGetStorageType() {
+		return storageType;
 	}
 
 	/**
@@ -96,11 +96,11 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public void setOperationType(StorageType newOperationType) {
-		StorageType oldOperationType = operationType;
-		operationType = newOperationType;
+	public void setStorageType(StorageType newStorageType) {
+		StorageType oldStorageType = storageType;
+		storageType = newStorageType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE, oldOperationType, operationType));
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE, oldStorageType, storageType));
 	}
 
 	/**
@@ -129,9 +129,9 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE:
-				if (resolve) return getOperationType();
-				return basicGetOperationType();
+			case AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE:
+				if (resolve) return getStorageType();
+				return basicGetStorageType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -144,8 +144,8 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE:
-				setOperationType((StorageType)newValue);
+			case AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE:
+				setStorageType((StorageType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -159,8 +159,8 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE:
-				setOperationType((StorageType)null);
+			case AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE:
+				setStorageType((StorageType)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -174,8 +174,8 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_STORAGE__OPERATION_TYPE:
-				return operationType != null;
+			case AssemblyPackage.ASSEMBLY_STORAGE__STORAGE_TYPE:
+				return storageType != null;
 		}
 		return super.eIsSet(featureID);
 	}

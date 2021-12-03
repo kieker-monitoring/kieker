@@ -3,6 +3,7 @@
 package kieker.model.analysismodel.deployment;
 
 import kieker.model.analysismodel.assembly.AssemblyOperation;
+import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
 
 import org.eclipse.emf.common.util.EMap;
 
@@ -18,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedOperations <em>Provided Operations</em>}</li>
- *   <li>{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface <em>Provided Interface</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedProvidedInterface()
@@ -40,25 +41,25 @@ public interface DeployedProvidedInterface extends EObject {
 	EMap<String, AssemblyOperation> getProvidedOperations();
 
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Provided Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedProvidedInterface_Name()
+	 * @return the value of the '<em>Provided Interface</em>' reference.
+	 * @see #setProvidedInterface(AssemblyProvidedInterface)
+	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedProvidedInterface_ProvidedInterface()
 	 * @model
 	 * @generated
 	 */
-	String getName();
+	AssemblyProvidedInterface getProvidedInterface();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface <em>Provided Interface</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
+	 * @param value the new value of the '<em>Provided Interface</em>' reference.
+	 * @see #getProvidedInterface()
 	 * @generated
 	 */
-	void setName(String value);
+	void setProvidedInterface(AssemblyProvidedInterface value);
 
 } // DeployedProvidedInterface

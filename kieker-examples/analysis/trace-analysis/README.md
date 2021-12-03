@@ -2,7 +2,7 @@
 
 This example shows how to obtain message traces using different kinds of inputs.
 
-1. Copy the `kieker-1.15-SNAPSHOT-jar.jar` of the distribution to this
+1. Copy the `kieker-<version>-SNAPSHOT.jar` of the distribution to this
    example's lib directory or uncomment the kieker dependency in the
    `build.gradle` file.
    
