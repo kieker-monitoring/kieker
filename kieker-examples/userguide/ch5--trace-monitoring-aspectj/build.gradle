@@ -43,14 +43,14 @@ task runExampleOperationExecutions(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
-	jvmArgs = ["-javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar"]
+	jvmArgs = ["-javaagent:lib/kieker-${kiekerVersion}-aspectj.jar"]
 }
 
 task runExampleFlowEvents(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
-	jvmArgs = ["-javaagent:lib/kieker-1.15-SNAPSHOT-aspectj.jar",
+	jvmArgs = ["-javaagent:lib/kieker-${kiekerVersion}-aspectj.jar",
 			   '-Dkieker.monitoring.core.controller.WriterController.RecordQueueSize=30000',
 			   //'-Dorg.aspectj.weaver.showWeaveInfo=true', 
 			   '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'

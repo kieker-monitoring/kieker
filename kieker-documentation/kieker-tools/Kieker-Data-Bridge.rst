@@ -209,39 +209,43 @@ basic setup. Finally each connector must be annotated with the
 ConnectorProperty annotation to specify properties used in the command
 line version or the Eclipse plugin.
 
-@ConnectorProperty(cmdName = "my-service", name = "My Service Demo
-Connector", description = "example connector for documentation.")
-
-public class MyServiceConnector extends AbstractConnector {
+.. code-block::
+   
+   @ConnectorProperty(cmdName = "my-service", name = "My Service Demo
+   Connector", description = "example connector for documentation.")
+   public class MyServiceConnector extends AbstractConnector {
 
 As the connector uses the normal Kieker Configuration object for
 configuration, the different settings require Configuration property
 names and should use private properties in the class to hold the values.
 
-/*\* Property name for the host name of the record source. \*/
-
-public static final String PROPERTY =
-MyServiceConnector.class.getCanonicalName() + ".property";
-
-private String property;
+.. code-block::
+   
+   /** Property name for the host name of the record source. */
+   
+   public static final String PROPERTY =
+       MyServiceConnector.class.getCanonicalName() + ".property";
+   
+   private String property;
 
 In the constructor, first the configuration is passed to the super
 constructor and then the properties are setup.
 
-/*\* \* Create a MyServiceConnector. \* \* @param configuration \*
-Kieker configuration including setup for connectors \* \* @param
-lookupEntityMap \* IMonitoringRecord constructor and TYPES-array to id
-map \*/
-
-public MyServiceConnector(final Configuration configuration, final
-ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
-
-super(configuration, lookupEntityMap);
-
-this.property =
-this.configuration.getStringProperty(MyServiceConnector.PROPERTY);
-
-}
+.. code-block::
+   
+   /**
+    * Create a MyServiceConnector. 
+    * @param configuration
+    *      Kieker configuration including setup for connectors
+    * @param lookupEntityMap
+    * I    MonitoringRecord constructor and TYPES-array to id map
+    */
+   public MyServiceConnector(final Configuration configuration, final
+      ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+      super(configuration, lookupEntityMap);
+      this.property =
+          this.configuration.getStringProperty(MyServiceConnector.PROPERTY);
+   }
 
 The remaining connector comprises the three methods from the
 IServiceConnector interface. The methods all may throw a
@@ -254,24 +258,33 @@ The initialize() method can be implemented blocking or non blocking. It
 throws a ConnectorDataTransmissionException if no connection could be
 established.
 
-/*\* \* Create the connection ... \* \* @throws
-ConnectorDataTransmissionException \* if the initialization fails \*/
-
-public void initialize() throws ConnectorDataTransmissionException {
-
-// initialization code, establish connection }
+.. code-block::
+   
+   /**
+    * Create the connection
+    *
+    * @throws ConnectorDataTransmissionException
+    *     if the initialization fails
+    */
+   public void initialize() throws ConnectorDataTransmissionException {
+      // initialization code, establish connection
+   }
 
 The close() method must terminate the connection. If queues must be
 freed, then this routine has to do it. On error the method can produce a
 ConnectorDataTransmissionException exception.
 
-/*\* \* Closes the connection ... \* \* @throws
-ConnectorDataTransmissionException \* if an IOException occurs during
-the close operation \*/
-
-public void close() throws ConnectorDataTransmissionException {
-
-// terminate connection }
+.. code-block::
+   
+   /**
+    * Closes the connection
+    * 
+    * @throws ConnectorDataTransmissionException
+    *     if an IOException occurs during the close operation
+    */
+   public void close() throws ConnectorDataTransmissionException {
+      // terminate connection
+   }
 
 The deserializeNextRecord() method blocks until is able to read one new
 record. If you want to implement a multi-record transmit channel, then
@@ -279,43 +292,40 @@ can do so, but must store the results in a buffer, which is then read on
 every call of deserializeNextRecord() returning one received record
 after another.
 
-/*\* \* De-serialize an object reading from the input stream. \* \*
-@return the de-serialized IMonitoringRecord object or null if the stream
-was terminated by the client. \* \* @throws
-ConnectorDataTransmissionException \* when a record is received that ID
-is unknown or the deserialization fails \* @throws
-ConnectorEndOfDataException \* when the other end hung up or the data
-stream ends of another reason \*/
-
-public IMonitoringRecord deserializeNextRecord() throws
-ConnectorDataTransmissionException, ConnectorEndOfDataException {
-
-// read structure ID try {
-
-final Integer id = ... ; // get id for the record final LookupEntity
-recordProperty = this.lookupEntityMap.get(id);
-
-if (recordProperty != null) {
-
-final Object[] values = new
-Object[recordProperty.getParameterTypes().length];
-
-// process and or receive record data // - fill the values array. This
-could also be handled differently. // return new record return
-recordProperty.getConstructor().newInstance(values);
-
-} else {
-
-throw new ConnectorDataTransmissionException("Record type " + id + " is
-not registered.");
-
-}
-
-} catch (... e) {
-
-throw new ConnectorEndOfDataException("End of stream", e);
-
-} ...
-
-}
+.. code-block::
+   
+   /**
+    * De-serialize an object reading from the input stream.
+    *
+    * @return the de-serialized IMonitoringRecord object or null if the stream
+    *     was terminated by the client.
+    *
+    * @throws ConnectorDataTransmissionException
+    *     when a record is received that ID is unknown or 
+    *     the deserialization fails
+    * @throws ConnectorEndOfDataException
+    *     when the other end hung up or the data stream ends of another reason
+    */
+   public IMonitoringRecord deserializeNextRecord() throws
+       ConnectorDataTransmissionException, ConnectorEndOfDataException {
+       // read structure ID
+       try {
+          final Integer id = ... ; // get id for the record final LookupEntity
+          recordProperty = this.lookupEntityMap.get(id);
+          if (recordProperty != null) {
+             final Object[] values = new
+                Object[recordProperty.getParameterTypes().length];
+             
+             // process and or receive record data 
+             // - fill the values array. This could also be handled differently.
+             // return new record return
+             recordProperty.getConstructor().newInstance(values);
+          } else {
+            throw new ConnectorDataTransmissionException("Record type " + id + 
+               " is not registered.");
+          }
+       } catch (... e) {
+         throw new ConnectorEndOfDataException("End of stream", e);
+       }
+   }
 
