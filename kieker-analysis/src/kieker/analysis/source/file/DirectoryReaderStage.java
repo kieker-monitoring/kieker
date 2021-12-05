@@ -36,6 +36,7 @@ import kieker.analysis.plugin.reader.util.FSReaderUtil;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
+
 import teetime.stage.basic.AbstractTransformation;
 
 /**
