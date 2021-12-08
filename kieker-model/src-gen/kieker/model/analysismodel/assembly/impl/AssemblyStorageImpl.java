@@ -43,6 +43,7 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected StorageType storageType;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

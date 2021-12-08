@@ -971,17 +971,6 @@ public interface StatisticsPackage extends EPackage {
 	EClass getEObjectToStatisticsMapEntry();
 
 	/**
-	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getEObjectToStatisticsMapEntry()
-	 * @generated
-	 */
-	EReference getEObjectToStatisticsMapEntry_Key();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +980,17 @@ public interface StatisticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEObjectToStatisticsMapEntry_Value();
+
+	/**
+	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEObjectToStatisticsMapEntry()
+	 * @generated
+	 */
+	EReference getEObjectToStatisticsMapEntry_Key();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.TimeSeriesStatistics <em>Time Series Statistics</em>}'.
@@ -1307,20 +1307,20 @@ public interface StatisticsPackage extends EPackage {
 		EClass EOBJECT_TO_STATISTICS_MAP_ENTRY = eINSTANCE.getEObjectToStatisticsMapEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
-
-		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = eINSTANCE.getEObjectToStatisticsMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.TimeSeriesStatisticsImpl <em>Time Series Statistics</em>}' class.

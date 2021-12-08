@@ -25,7 +25,9 @@ import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.model.analysismodel.sources.SourcesPackage;
+
 import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;

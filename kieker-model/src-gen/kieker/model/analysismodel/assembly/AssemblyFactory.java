@@ -58,6 +58,24 @@ public interface AssemblyFactory extends EFactory {
 	AssemblyStorage createAssemblyStorage();
 
 	/**
+	 * Returns a new object of class '<em>Provided Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Provided Interface</em>'.
+	 * @generated
+	 */
+	AssemblyProvidedInterface createAssemblyProvidedInterface();
+
+	/**
+	 * Returns a new object of class '<em>Required Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Required Interface</em>'.
+	 * @generated
+	 */
+	AssemblyRequiredInterface createAssemblyRequiredInterface();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

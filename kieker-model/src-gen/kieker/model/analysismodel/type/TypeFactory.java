@@ -58,6 +58,24 @@ public interface TypeFactory extends EFactory {
 	StorageType createStorageType();
 
 	/**
+	 * Returns a new object of class '<em>Provided Interface Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Provided Interface Type</em>'.
+	 * @generated
+	 */
+	ProvidedInterfaceType createProvidedInterfaceType();
+
+	/**
+	 * Returns a new object of class '<em>Required Interface Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Required Interface Type</em>'.
+	 * @generated
+	 */
+	RequiredInterfaceType createRequiredInterfaceType();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

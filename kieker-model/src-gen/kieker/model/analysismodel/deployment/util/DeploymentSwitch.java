@@ -122,6 +122,24 @@ public class DeploymentSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DeploymentPackage.DEPLOYED_PROVIDED_INTERFACE: {
+				DeployedProvidedInterface deployedProvidedInterface = (DeployedProvidedInterface)theEObject;
+				T result = caseDeployedProvidedInterface(deployedProvidedInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, DeployedProvidedInterface> eStringToDeployedProvidedInterfaceMapEntry = (Map.Entry<String, DeployedProvidedInterface>)theEObject;
+				T result = caseEStringToDeployedProvidedInterfaceMapEntry(eStringToDeployedProvidedInterfaceMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE: {
+				DeployedRequiredInterface deployedRequiredInterface = (DeployedRequiredInterface)theEObject;
+				T result = caseDeployedRequiredInterface(deployedRequiredInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -258,6 +276,51 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDeployedStorage(DeployedStorage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deployed Provided Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deployed Provided Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeployedProvidedInterface(DeployedProvidedInterface object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Deployed Provided Interface Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Deployed Provided Interface Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToDeployedProvidedInterfaceMapEntry(Map.Entry<String, DeployedProvidedInterface> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deployed Required Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deployed Required Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeployedRequiredInterface(DeployedRequiredInterface object) {
 		return null;
 	}
 

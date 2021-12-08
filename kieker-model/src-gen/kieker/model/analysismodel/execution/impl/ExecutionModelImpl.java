@@ -3,8 +3,8 @@
 package kieker.model.analysismodel.execution.impl;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
-
 import kieker.model.analysismodel.deployment.DeployedStorage;
+
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionModel;

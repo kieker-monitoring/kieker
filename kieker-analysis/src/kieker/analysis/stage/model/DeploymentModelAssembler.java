@@ -91,14 +91,14 @@ public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 
 	private DeployedOperation addDeployedOperation(final DeployedComponent component, final String operationSignature) {
 		final String operationKey = operationSignature;
-		DeployedOperation operation = component.getContainedOperations().get(operationKey);
+		DeployedOperation operation = component.getOperations().get(operationKey);
 		if (operation == null) {
 			operation = this.factory.createDeployedOperation();
-			component.getContainedOperations().put(operationKey, operation);
+			component.getOperations().put(operationKey, operation);
 
 			final AssemblyComponent assemblyComponent = component.getAssemblyComponent();
 			final String operationTypeKey = operationSignature;
-			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
+			final AssemblyOperation assemblyOperation = assemblyComponent.getOperations().get(operationTypeKey);
 			operation.setAssemblyOperation(assemblyOperation);
 		}
 

@@ -25,6 +25,7 @@ illustrated below.
    -  ``userguide/``
 
       -  ``ch2–manual-instrumentation/``
+         
          -  ``build/`` Directory for the Java class files
          -  ``lib/`` Directory for the required libraries
 

@@ -12,6 +12,8 @@ import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
 
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeployedProvidedInterface;
+import kieker.model.analysismodel.deployment.DeployedRequiredInterface;
 import kieker.model.analysismodel.deployment.DeployedStorage;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
@@ -25,7 +27,9 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.model.analysismodel.sources.SourcesPackage;
+
 import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -115,6 +119,27 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	private EClass deployedStorageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass deployedProvidedInterfaceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eStringToDeployedProvidedInterfaceMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass deployedRequiredInterfaceEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -343,7 +368,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedComponent_ContainedOperations() {
+	public EReference getDeployedComponent_Operations() {
 		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -353,7 +378,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedComponent_ContainedStorages() {
+	public EReference getDeployedComponent_Storages() {
 		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -363,8 +388,38 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
+	public EReference getDeployedComponent_ContainedComponents() {
+		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedComponent_ProvidedInterfaces() {
+		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedComponent_RequiredInterfaces() {
+		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getDeployedComponent_Signature() {
-		return (EAttribute)deployedComponentEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)deployedComponentEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -503,6 +558,96 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
+	public EClass getDeployedProvidedInterface() {
+		return deployedProvidedInterfaceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedProvidedInterface_ProvidedOperations() {
+		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedProvidedInterface_ProvidedInterface() {
+		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEStringToDeployedProvidedInterfaceMapEntry() {
+		return eStringToDeployedProvidedInterfaceMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEStringToDeployedProvidedInterfaceMapEntry_Key() {
+		return (EAttribute)eStringToDeployedProvidedInterfaceMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEStringToDeployedProvidedInterfaceMapEntry_Value() {
+		return (EReference)eStringToDeployedProvidedInterfaceMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getDeployedRequiredInterface() {
+		return deployedRequiredInterfaceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedRequiredInterface_RequiredInterface() {
+		return (EReference)deployedRequiredInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDeployedRequiredInterface_Requires() {
+		return (EReference)deployedRequiredInterfaceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DeploymentFactory getDeploymentFactory() {
 		return (DeploymentFactory)getEFactoryInstance();
 	}
@@ -543,8 +688,11 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		deployedComponentEClass = createEClass(DEPLOYED_COMPONENT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_STORAGES);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__OPERATIONS);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__STORAGES);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_COMPONENTS);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__PROVIDED_INTERFACES);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__REQUIRED_INTERFACES);
 		createEAttribute(deployedComponentEClass, DEPLOYED_COMPONENT__SIGNATURE);
 		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT);
 
@@ -563,6 +711,18 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deployedStorageEClass = createEClass(DEPLOYED_STORAGE);
 		createEReference(deployedStorageEClass, DEPLOYED_STORAGE__ASSEMBLY_STORAGE);
 		createEOperation(deployedStorageEClass, DEPLOYED_STORAGE___GET_COMPONENT);
+
+		deployedProvidedInterfaceEClass = createEClass(DEPLOYED_PROVIDED_INTERFACE);
+		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
+		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE);
+
+		eStringToDeployedProvidedInterfaceMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY);
+		createEAttribute(eStringToDeployedProvidedInterfaceMapEntryEClass, ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__KEY);
+		createEReference(eStringToDeployedProvidedInterfaceMapEntryEClass, ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__VALUE);
+
+		deployedRequiredInterfaceEClass = createEClass(DEPLOYED_REQUIRED_INTERFACE);
+		createEReference(deployedRequiredInterfaceEClass, DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE);
+		createEReference(deployedRequiredInterfaceEClass, DEPLOYED_REQUIRED_INTERFACE__REQUIRES);
 	}
 
 	/**
@@ -615,8 +775,11 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeployedComponent_AssemblyComponent(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyComponent", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-		initEReference(getDeployedComponent_ContainedStorages(), this.getEStringToDeployedStorageMapEntry(), null, "containedStorages", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeployedComponent_Operations(), this.getEStringToDeployedOperationMapEntry(), null, "operations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeployedComponent_Storages(), this.getEStringToDeployedStorageMapEntry(), null, "storages", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeployedComponent_ContainedComponents(), this.getDeployedComponent(), null, "containedComponents", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedComponent_ProvidedInterfaces(), this.getEStringToDeployedProvidedInterfaceMapEntry(), null, "providedInterfaces", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedComponent_RequiredInterfaces(), this.getDeployedRequiredInterface(), null, "requiredInterfaces", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeployedComponent_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -638,6 +801,18 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getDeployedStorage_AssemblyStorage(), theAssemblyPackage.getAssemblyStorage(), null, "assemblyStorage", null, 0, 1, DeployedStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(deployedProvidedInterfaceEClass, DeployedProvidedInterface.class, "DeployedProvidedInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDeployedProvidedInterface_ProvidedOperations(), theAssemblyPackage.getEStringToAssemblyOperationMapEntry(), null, "providedOperations", null, 0, -1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedProvidedInterface_ProvidedInterface(), theAssemblyPackage.getAssemblyProvidedInterface(), null, "providedInterface", null, 0, 1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eStringToDeployedProvidedInterfaceMapEntryEClass, Map.Entry.class, "EStringToDeployedProvidedInterfaceMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeployedProvidedInterfaceMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeployedProvidedInterfaceMapEntry_Value(), this.getDeployedProvidedInterface(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(deployedRequiredInterfaceEClass, DeployedRequiredInterface.class, "DeployedRequiredInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDeployedRequiredInterface_RequiredInterface(), theAssemblyPackage.getAssemblyRequiredInterface(), null, "requiredInterface", null, 0, 1, DeployedRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedRequiredInterface_Requires(), this.getDeployedProvidedInterface(), null, "requires", null, 0, 1, DeployedRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //DeploymentPackageImpl

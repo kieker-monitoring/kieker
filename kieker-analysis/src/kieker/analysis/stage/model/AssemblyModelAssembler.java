@@ -75,10 +75,10 @@ public class AssemblyModelAssembler extends AbstractSourceModelAssembler {
 
 	private AssemblyOperation addAssemblyOperation(final AssemblyComponent component, final String operationSignature) {
 		final String operationKey = operationSignature;
-		AssemblyOperation operation = component.getAssemblyOperations().get(operationKey);
+		AssemblyOperation operation = component.getOperations().get(operationKey);
 		if (operation == null) {
 			operation = this.factory.createAssemblyOperation();
-			component.getAssemblyOperations().put(operationKey, operation);
+			component.getOperations().put(operationKey, operation);
 
 			final ComponentType componentType = component.getComponentType();
 			final String operationTypeKey = operationSignature;

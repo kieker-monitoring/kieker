@@ -3,8 +3,8 @@
 package kieker.model.analysismodel.sources;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**

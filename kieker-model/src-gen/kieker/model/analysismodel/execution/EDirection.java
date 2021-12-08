@@ -36,7 +36,9 @@ public enum EDirection implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WRITE(1, "WRITE", "WRITE"), /**
+	WRITE(1, "WRITE", "WRITE"),
+
+	/**
 	 * The '<em><b>BOTH</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
