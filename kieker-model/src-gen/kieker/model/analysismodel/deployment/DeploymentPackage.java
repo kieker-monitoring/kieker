@@ -252,22 +252,49 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Contained Operations</b></em>' map.
+	 * The feature id for the '<em><b>Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = 1;
+	int DEPLOYED_COMPONENT__OPERATIONS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Contained Storages</b></em>' map.
+	 * The feature id for the '<em><b>Storages</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__CONTAINED_STORAGES = 2;
+	int DEPLOYED_COMPONENT__STORAGES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Contained Components</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT__CONTAINED_COMPONENTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Provided Interfaces</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT__PROVIDED_INTERFACES = 4;
+
+	/**
+	 * The feature id for the '<em><b>Required Interfaces</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT__REQUIRED_INTERFACES = 5;
 
 	/**
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
@@ -276,7 +303,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__SIGNATURE = 3;
+	int DEPLOYED_COMPONENT__SIGNATURE = 6;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Component</em>' class.
@@ -285,7 +312,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT_FEATURE_COUNT = 4;
+	int DEPLOYED_COMPONENT_FEATURE_COUNT = 7;
 
 	/**
 	 * The operation id for the '<em>Get Deployment Context</em>' operation.
@@ -489,6 +516,144 @@ public interface DeploymentPackage extends EPackage {
 	 */
 	int DEPLOYED_STORAGE_OPERATION_COUNT = 1;
 
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.deployment.impl.DeployedProvidedInterfaceImpl <em>Deployed Provided Interface</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.deployment.impl.DeployedProvidedInterfaceImpl
+	 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedProvidedInterface()
+	 * @generated
+	 */
+	int DEPLOYED_PROVIDED_INTERFACE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Provided Operations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Provided Interface</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Deployed Provided Interface</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_PROVIDED_INTERFACE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Deployed Provided Interface</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_PROVIDED_INTERFACE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.deployment.impl.EStringToDeployedProvidedInterfaceMapEntryImpl <em>EString To Deployed Provided Interface Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.deployment.impl.EStringToDeployedProvidedInterfaceMapEntryImpl
+	 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedProvidedInterfaceMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Deployed Provided Interface Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Deployed Provided Interface Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl <em>Deployed Required Interface</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl
+	 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedRequiredInterface()
+	 * @generated
+	 */
+	int DEPLOYED_REQUIRED_INTERFACE = 11;
+
+	/**
+	 * The feature id for the '<em><b>Required Interface</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Requires</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_REQUIRED_INTERFACE__REQUIRES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Deployed Required Interface</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_REQUIRED_INTERFACE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Deployed Required Interface</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_REQUIRED_INTERFACE_OPERATION_COUNT = 0;
+
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.deployment.DeploymentModel <em>Model</em>}'.
@@ -633,26 +798,59 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_AssemblyComponent();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedComponent#getOperations <em>Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Contained Operations</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getContainedOperations()
+	 * @return the meta object for the map '<em>Operations</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getOperations()
 	 * @see #getDeployedComponent()
 	 * @generated
 	 */
-	EReference getDeployedComponent_ContainedOperations();
+	EReference getDeployedComponent_Operations();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedComponent#getContainedStorages <em>Contained Storages</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedComponent#getStorages <em>Storages</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Contained Storages</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getContainedStorages()
+	 * @return the meta object for the map '<em>Storages</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getStorages()
 	 * @see #getDeployedComponent()
 	 * @generated
 	 */
-	EReference getDeployedComponent_ContainedStorages();
+	EReference getDeployedComponent_Storages();
+
+	/**
+	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.deployment.DeployedComponent#getContainedComponents <em>Contained Components</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Contained Components</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getContainedComponents()
+	 * @see #getDeployedComponent()
+	 * @generated
+	 */
+	EReference getDeployedComponent_ContainedComponents();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedComponent#getProvidedInterfaces <em>Provided Interfaces</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Provided Interfaces</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getProvidedInterfaces()
+	 * @see #getDeployedComponent()
+	 * @generated
+	 */
+	EReference getDeployedComponent_ProvidedInterfaces();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.deployment.DeployedComponent#getRequiredInterfaces <em>Required Interfaces</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Required Interfaces</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getRequiredInterfaces()
+	 * @see #getDeployedComponent()
+	 * @generated
+	 */
+	EReference getDeployedComponent_RequiredInterfaces();
 
 	/**
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.deployment.DeployedComponent#getSignature <em>Signature</em>}'.
@@ -806,6 +1004,104 @@ public interface DeploymentPackage extends EPackage {
 	EOperation getDeployedStorage__GetComponent();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface <em>Deployed Provided Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Deployed Provided Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface
+	 * @generated
+	 */
+	EClass getDeployedProvidedInterface();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedOperations <em>Provided Operations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Provided Operations</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedOperations()
+	 * @see #getDeployedProvidedInterface()
+	 * @generated
+	 */
+	EReference getDeployedProvidedInterface_ProvidedOperations();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface <em>Provided Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Provided Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface()
+	 * @see #getDeployedProvidedInterface()
+	 * @generated
+	 */
+	EReference getDeployedProvidedInterface_ProvidedInterface();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Provided Interface Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Deployed Provided Interface Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.model.analysismodel.deployment.DeployedProvidedInterface" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToDeployedProvidedInterfaceMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedProvidedInterfaceMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToDeployedProvidedInterfaceMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedProvidedInterfaceMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToDeployedProvidedInterfaceMapEntry_Value();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface <em>Deployed Required Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Deployed Required Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedRequiredInterface
+	 * @generated
+	 */
+	EClass getDeployedRequiredInterface();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Required Interface</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface()
+	 * @see #getDeployedRequiredInterface()
+	 * @generated
+	 */
+	EReference getDeployedRequiredInterface_RequiredInterface();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Requires</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires()
+	 * @see #getDeployedRequiredInterface()
+	 * @generated
+	 */
+	EReference getDeployedRequiredInterface_Requires();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -943,20 +1239,44 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT = eINSTANCE.getDeployedComponent_AssemblyComponent();
 
 		/**
-		 * The meta object literal for the '<em><b>Contained Operations</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = eINSTANCE.getDeployedComponent_ContainedOperations();
+		EReference DEPLOYED_COMPONENT__OPERATIONS = eINSTANCE.getDeployedComponent_Operations();
 
 		/**
-		 * The meta object literal for the '<em><b>Contained Storages</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Storages</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_COMPONENT__CONTAINED_STORAGES = eINSTANCE.getDeployedComponent_ContainedStorages();
+		EReference DEPLOYED_COMPONENT__STORAGES = eINSTANCE.getDeployedComponent_Storages();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Components</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_COMPONENT__CONTAINED_COMPONENTS = eINSTANCE.getDeployedComponent_ContainedComponents();
+
+		/**
+		 * The meta object literal for the '<em><b>Provided Interfaces</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_COMPONENT__PROVIDED_INTERFACES = eINSTANCE.getDeployedComponent_ProvidedInterfaces();
+
+		/**
+		 * The meta object literal for the '<em><b>Required Interfaces</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_COMPONENT__REQUIRED_INTERFACES = eINSTANCE.getDeployedComponent_RequiredInterfaces();
 
 		/**
 		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
@@ -1077,6 +1397,84 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation DEPLOYED_STORAGE___GET_COMPONENT = eINSTANCE.getDeployedStorage__GetComponent();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.DeployedProvidedInterfaceImpl <em>Deployed Provided Interface</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.deployment.impl.DeployedProvidedInterfaceImpl
+		 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedProvidedInterface()
+		 * @generated
+		 */
+		EClass DEPLOYED_PROVIDED_INTERFACE = eINSTANCE.getDeployedProvidedInterface();
+
+		/**
+		 * The meta object literal for the '<em><b>Provided Operations</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = eINSTANCE.getDeployedProvidedInterface_ProvidedOperations();
+
+		/**
+		 * The meta object literal for the '<em><b>Provided Interface</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = eINSTANCE.getDeployedProvidedInterface_ProvidedInterface();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.EStringToDeployedProvidedInterfaceMapEntryImpl <em>EString To Deployed Provided Interface Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.deployment.impl.EStringToDeployedProvidedInterfaceMapEntryImpl
+		 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedProvidedInterfaceMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY = eINSTANCE.getEStringToDeployedProvidedInterfaceMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__KEY = eINSTANCE.getEStringToDeployedProvidedInterfaceMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToDeployedProvidedInterfaceMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl <em>Deployed Required Interface</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.deployment.impl.DeployedRequiredInterfaceImpl
+		 * @see kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedRequiredInterface()
+		 * @generated
+		 */
+		EClass DEPLOYED_REQUIRED_INTERFACE = eINSTANCE.getDeployedRequiredInterface();
+
+		/**
+		 * The meta object literal for the '<em><b>Required Interface</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE = eINSTANCE.getDeployedRequiredInterface_RequiredInterface();
+
+		/**
+		 * The meta object literal for the '<em><b>Requires</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEPLOYED_REQUIRED_INTERFACE__REQUIRES = eINSTANCE.getDeployedRequiredInterface_Requires();
 
 	}
 

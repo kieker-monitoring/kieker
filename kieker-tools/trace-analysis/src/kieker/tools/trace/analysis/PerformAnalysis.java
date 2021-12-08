@@ -414,7 +414,7 @@ public class PerformAnalysis {
 	private void createPlotAssemblyOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 
 		final OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration,
@@ -444,13 +444,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 		final OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration,
 				this.analysisController);
@@ -479,13 +478,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotContainerDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 
 		final ContainerDependencyGraphFilter componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(configuration,
@@ -511,13 +509,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAssemblyComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 
 		final ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration,
@@ -546,13 +543,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers,
 			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
-			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+			final SystemModelRepository systemEntityFactory) throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 		final ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration,
 				this.analysisController);
@@ -581,12 +577,11 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAssemblySequenceDiagrams(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
 			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
-			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+			final SystemModelRepository systemEntityFactory) throws AnalysisConfigurationException {
 		final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
 
 		componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -619,7 +614,7 @@ public class PerformAnalysis {
 	private void createPlotDeploymentSequenceDiagrams(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
 			final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
 		componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
@@ -655,13 +650,12 @@ public class PerformAnalysis {
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
 	 * @throws IOException
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPrintInvalidExecutionTraces(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
 			final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IOException, IllegalStateException, AnalysisConfigurationException {
+			throws IOException, AnalysisConfigurationException {
 		final Configuration componentPrintInvalidTraceConfig = new Configuration();
 		componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
@@ -693,13 +687,12 @@ public class PerformAnalysis {
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
 	 * @throws IOException
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createComponentPrintExecTrace(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
 			final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
-			throws IOException, IllegalStateException, AnalysisConfigurationException {
+			throws IOException, AnalysisConfigurationException {
 		final Configuration componentPrintExecTraceConfig = new Configuration();
 		componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTEXECTRACE_COMPONENT_NAME);
@@ -729,13 +722,12 @@ public class PerformAnalysis {
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
 	 * @throws IOException
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createComponentPrintMsgTrace(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
 			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
 			final SystemModelRepository systemEntityFactory)
-			throws IOException, IllegalStateException, AnalysisConfigurationException {
+			throws IOException, AnalysisConfigurationException {
 		final Configuration componentPrintMsgTraceConfig = new Configuration();
 		componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTMSGTRACE_COMPONENT_NAME);
@@ -763,13 +755,12 @@ public class PerformAnalysis {
 	 * @param mtReconstrFilter
 	 * @param transformTraceEventsFilter
 	 * @param systemEntityFactory
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private TraceEquivalenceClassFilter createPrintAssemblyEquivalenceClasses(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter transformTraceEventsFilter, final SystemModelRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
 		traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				StringConstants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
@@ -808,12 +799,11 @@ public class PerformAnalysis {
 	 * @param systemEntityFactory
 	 *
 	 * @throws AnalysisConfigurationException
-	 * @throws IllegalStateException
 	 */
 	private TraceEquivalenceClassFilter createPrintDeploymentEquivalenceClasses(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
 			final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final AbstractRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 
 		traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -852,11 +842,10 @@ public class PerformAnalysis {
 	 * @param systemEntityFactory
 	 * @return
 	 * @throws AnalysisConfigurationException
-	 * @throws IllegalStateException
 	 */
 	private TraceEventRecords2ExecutionAndMessageTraceFilter createTraceEvents2ExecutionAndMessageTraceFilter(
 			final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter, final AbstractRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		// Create the event trace to execution/message trace transformation filter and connect its input to the
 		// event record trace generation filter's output
 		// port
@@ -886,11 +875,10 @@ public class PerformAnalysis {
 	 *
 	 * @param eventTraceReconstructionFilter
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private EventRecordTraceCounter createEventRecordTraceCounter(final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		// Create the counter for valid/invalid event record traces
 		final Configuration configurationEventRecordTraceCounter = new Configuration();
 		configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -917,11 +905,10 @@ public class PerformAnalysis {
 	 * @param execRecTransformer
 	 * @param systemEntityFactory
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private TraceReconstructionFilter createTraceReconstruction(final AbstractPlugin execRecTransformer, final AbstractRepository systemEntityFactory)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		// Create the trace reconstruction filter and connect to the record transformation filter's output port
 		final Configuration mtReconstrFilterConfig = new Configuration();
 		mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -948,11 +935,10 @@ public class PerformAnalysis {
 	 *
 	 * @param traceIdFilter
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private EventRecordTraceReconstructionFilter createEventRecordTraceReconstruction(final TraceIdFilter traceIdFilter)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		// Create the event record trace generation filter and connect to the trace ID filter's output port
 		final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 		configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -987,11 +973,10 @@ public class PerformAnalysis {
 	 * @param traceIdFilter
 	 * @param systemEntityFactory
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private ExecutionRecordTransformationFilter createExecutionRecordTransformationFilter(final TraceIdFilter traceIdFilter,
-			final AbstractRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+			final AbstractRepository systemEntityFactory) throws AnalysisConfigurationException {
 		// Create the execution record transformation filter and connect to the trace ID filter's output port
 		final Configuration execRecTransformerConfig = new Configuration();
 		execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -1015,10 +1000,9 @@ public class PerformAnalysis {
 	 *
 	 * @param timestampFilter
 	 * @return
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
-	private TraceIdFilter createTraceIdFilter(final TimestampFilter timestampFilter) throws IllegalStateException, AnalysisConfigurationException {
+	private TraceIdFilter createTraceIdFilter(final TimestampFilter timestampFilter) throws AnalysisConfigurationException {
 		// Create the trace ID filter and connect to the timestamp filter's output port
 		final Configuration configTraceIdFilterFlow = new Configuration();
 		if (this.parameters.getSelectedTraces().isEmpty()) {
@@ -1040,7 +1024,7 @@ public class PerformAnalysis {
 	}
 
 	private TimestampFilter createTimestampFilter(final ThreadEvent2TraceEventFilter sourceStage)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		// Create the timestamp filter and connect to the reader's output port
 		final Configuration configTimestampFilter = new Configuration();
 		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
@@ -1227,13 +1211,11 @@ public class PerformAnalysis {
 	 * @param commandLine
 	 *            The command line to determine the desired processors
 	 *
-	 * @throws IllegalStateException
-	 *             If the connection of plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If some plugins cannot be connected
 	 */
 	private void attachGraphProcessors(final String pathPrefix, final List<AbstractGraphProducingFilter<?>> graphProducers)
-			throws IllegalStateException, AnalysisConfigurationException, IOException {
+			throws AnalysisConfigurationException, IOException {
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
 			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
@@ -1270,8 +1252,6 @@ public class PerformAnalysis {
 	 *            The plugin which delivers the graph to write
 	 * @param producer
 	 *            The producer which originally produced the graph
-	 * @throws IllegalStateException
-	 *             If the connection of the plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If the plugins cannot be connected
 	 *
@@ -1280,7 +1260,7 @@ public class PerformAnalysis {
 	 */
 	private <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final String pathPrefix, final P plugin,
 			final AbstractGraphProducingFilter<?> producer)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, pathPrefix);
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
@@ -1298,18 +1278,17 @@ public class PerformAnalysis {
 	 * @param predecessor
 	 * @param filter
 	 * @param controller
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
 			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller)
-			throws IllegalStateException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		controller.connect(predecessor, predecessor.getGraphOutputPortName(), filter, filter.getGraphInputPortName());
 	}
 
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(
 			final P predecessor, final String coloringFileName, final AnalysisController controller)
-			throws IOException, IllegalStateException, AnalysisConfigurationException {
+			throws IOException, AnalysisConfigurationException {
 		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName, controller);
 
 		@SuppressWarnings("rawtypes")
@@ -1327,12 +1306,11 @@ public class PerformAnalysis {
 	 * @param controller
 	 * @return
 	 * @throws IOException
-	 * @throws IllegalStateException
 	 * @throws AnalysisConfigurationException
 	 */
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
 			final P predecessor, final String descriptionsFileName, final AnalysisController controller)
-			throws IOException, IllegalStateException, AnalysisConfigurationException {
+			throws IOException, AnalysisConfigurationException {
 		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName,
 				controller);
 
@@ -1361,9 +1339,7 @@ public class PerformAnalysis {
 			final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
 		boolean retVal = true;
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
-		PrintStream ps = null;
-		try {
-			ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, ENCODING);
+		try (PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, ENCODING)) {
 			int numClasses = 0;
 			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD
 																										// (UseConcurrentHashMap)
@@ -1376,13 +1352,10 @@ public class PerformAnalysis {
 			this.logger.debug("#");
 			this.logger.debug("# Plugin: Trace equivalence report");
 			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses, (numClasses > 1 ? "es" : ""), outputFn); // NOCS
+			ps.close();
 		} catch (final FileNotFoundException e) {
 			this.logger.error("File not found", e);
 			retVal = false;
-		} finally {
-			if (ps != null) {
-				ps.close();
-			}
 		}
 
 		return retVal;

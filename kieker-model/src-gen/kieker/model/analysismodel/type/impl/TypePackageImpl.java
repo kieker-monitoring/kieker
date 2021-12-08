@@ -21,7 +21,9 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.model.analysismodel.sources.SourcesPackage;
+
 import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -32,6 +34,8 @@ import kieker.model.analysismodel.trace.impl.TracePackageImpl;
 
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.ProvidedInterfaceType;
+import kieker.model.analysismodel.type.RequiredInterfaceType;
 import kieker.model.analysismodel.type.StorageType;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
@@ -100,6 +104,27 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * @generated
 	 */
 	private EClass storageTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass providedInterfaceTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eStringToProvidedInterfaceTypeMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass requiredInterfaceTypeEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -308,6 +333,36 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getComponentType_ContainedComponents() {
+		return (EReference)componentTypeEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentType_ProvidedInterfaceTypes() {
+		return (EReference)componentTypeEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentType_RequiredInterfaceTypes() {
+		return (EReference)componentTypeEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getEStringToOperationTypeMapEntry() {
 		return eStringToOperationTypeMapEntryEClass;
 	}
@@ -468,6 +523,106 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getProvidedInterfaceType() {
+		return providedInterfaceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getProvidedInterfaceType_ProvidedOperationTypes() {
+		return (EReference)providedInterfaceTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProvidedInterfaceType_Name() {
+		return (EAttribute)providedInterfaceTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProvidedInterfaceType_Signature() {
+		return (EAttribute)providedInterfaceTypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProvidedInterfaceType_Package() {
+		return (EAttribute)providedInterfaceTypeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEStringToProvidedInterfaceTypeMapEntry() {
+		return eStringToProvidedInterfaceTypeMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEStringToProvidedInterfaceTypeMapEntry_Key() {
+		return (EAttribute)eStringToProvidedInterfaceTypeMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEStringToProvidedInterfaceTypeMapEntry_Value() {
+		return (EReference)eStringToProvidedInterfaceTypeMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRequiredInterfaceType() {
+		return requiredInterfaceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRequiredInterfaceType_Requires() {
+		return (EReference)requiredInterfaceTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public TypeFactory getTypeFactory() {
 		return (TypeFactory)getEFactoryInstance();
 	}
@@ -504,6 +659,9 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		createEAttribute(componentTypeEClass, COMPONENT_TYPE__NAME);
 		createEAttribute(componentTypeEClass, COMPONENT_TYPE__PACKAGE);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_STORAGES);
+		createEReference(componentTypeEClass, COMPONENT_TYPE__CONTAINED_COMPONENTS);
+		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES);
+		createEReference(componentTypeEClass, COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES);
 
 		eStringToOperationTypeMapEntryEClass = createEClass(ESTRING_TO_OPERATION_TYPE_MAP_ENTRY);
 		createEAttribute(eStringToOperationTypeMapEntryEClass, ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY);
@@ -524,6 +682,19 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		storageTypeEClass = createEClass(STORAGE_TYPE);
 		createEAttribute(storageTypeEClass, STORAGE_TYPE__NAME);
 		createEAttribute(storageTypeEClass, STORAGE_TYPE__TYPE);
+
+		providedInterfaceTypeEClass = createEClass(PROVIDED_INTERFACE_TYPE);
+		createEReference(providedInterfaceTypeEClass, PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES);
+		createEAttribute(providedInterfaceTypeEClass, PROVIDED_INTERFACE_TYPE__NAME);
+		createEAttribute(providedInterfaceTypeEClass, PROVIDED_INTERFACE_TYPE__SIGNATURE);
+		createEAttribute(providedInterfaceTypeEClass, PROVIDED_INTERFACE_TYPE__PACKAGE);
+
+		eStringToProvidedInterfaceTypeMapEntryEClass = createEClass(ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY);
+		createEAttribute(eStringToProvidedInterfaceTypeMapEntryEClass, ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__KEY);
+		createEReference(eStringToProvidedInterfaceTypeMapEntryEClass, ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__VALUE);
+
+		requiredInterfaceTypeEClass = createEClass(REQUIRED_INTERFACE_TYPE);
+		createEReference(requiredInterfaceTypeEClass, REQUIRED_INTERFACE_TYPE__REQUIRES);
 	}
 
 	/**
@@ -569,6 +740,9 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		initEAttribute(getComponentType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getComponentType_Package(), ecorePackage.getEString(), "package", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComponentType_ProvidedStorages(), this.getEStringToStorageTypeMapEntry(), null, "providedStorages", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getComponentType_ContainedComponents(), this.getComponentType(), null, "containedComponents", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentType_ProvidedInterfaceTypes(), this.getProvidedInterfaceType(), null, "providedInterfaceTypes", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentType_RequiredInterfaceTypes(), this.getRequiredInterfaceType(), null, "requiredInterfaceTypes", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eStringToOperationTypeMapEntryEClass, Map.Entry.class, "EStringToOperationTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToOperationTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -590,6 +764,19 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		initEClass(storageTypeEClass, StorageType.class, "StorageType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStorageType_Name(), ecorePackage.getEString(), "name", null, 0, 1, StorageType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStorageType_Type(), ecorePackage.getEString(), "type", null, 0, 1, StorageType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(providedInterfaceTypeEClass, ProvidedInterfaceType.class, "ProvidedInterfaceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProvidedInterfaceType_ProvidedOperationTypes(), this.getEStringToOperationTypeMapEntry(), null, "providedOperationTypes", null, 0, -1, ProvidedInterfaceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEAttribute(getProvidedInterfaceType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ProvidedInterfaceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProvidedInterfaceType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, ProvidedInterfaceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProvidedInterfaceType_Package(), ecorePackage.getEString(), "package", null, 0, 1, ProvidedInterfaceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eStringToProvidedInterfaceTypeMapEntryEClass, Map.Entry.class, "EStringToProvidedInterfaceTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToProvidedInterfaceTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToProvidedInterfaceTypeMapEntry_Value(), this.getProvidedInterfaceType(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(requiredInterfaceTypeEClass, RequiredInterfaceType.class, "RequiredInterfaceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRequiredInterfaceType_Requires(), this.getProvidedInterfaceType(), null, "requires", null, 0, 1, RequiredInterfaceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //TypePackageImpl

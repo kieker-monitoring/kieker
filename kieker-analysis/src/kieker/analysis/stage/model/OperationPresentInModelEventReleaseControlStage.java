@@ -85,7 +85,7 @@ public class OperationPresentInModelEventReleaseControlStage extends AbstractFil
 		if (context != null) {
 			final DeployedComponent component = context.getComponents().get(event.getClassSignature());
 			if (component != null) {
-				final DeployedOperation operation = component.getContainedOperations().get(event.getOperationSignature());
+				final DeployedOperation operation = component.getOperations().get(event.getOperationSignature());
 				return operation != null;
 			}
 		}

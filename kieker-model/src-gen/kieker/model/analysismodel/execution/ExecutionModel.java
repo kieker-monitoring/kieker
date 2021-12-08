@@ -3,8 +3,8 @@
 package kieker.model.analysismodel.execution;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
-
 import kieker.model.analysismodel.deployment.DeployedStorage;
+
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;

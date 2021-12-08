@@ -65,6 +65,9 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 			case AssemblyPackage.ASSEMBLY_OPERATION: return createAssemblyOperation();
 			case AssemblyPackage.ASSEMBLY_STORAGE: return createAssemblyStorage();
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY: return (EObject)createEStringToAssemblyStorageMapEntry();
+			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE: return createAssemblyProvidedInterface();
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY: return (EObject)createEStringToAssemblyProvidedInterfaceMapEntry();
+			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE: return createAssemblyRequiredInterface();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -142,6 +145,38 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	public Map.Entry<String, AssemblyStorage> createEStringToAssemblyStorageMapEntry() {
 		EStringToAssemblyStorageMapEntryImpl eStringToAssemblyStorageMapEntry = new EStringToAssemblyStorageMapEntryImpl();
 		return eStringToAssemblyStorageMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AssemblyProvidedInterface createAssemblyProvidedInterface() {
+		AssemblyProvidedInterfaceImpl assemblyProvidedInterface = new AssemblyProvidedInterfaceImpl();
+		return assemblyProvidedInterface;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, AssemblyProvidedInterface> createEStringToAssemblyProvidedInterfaceMapEntry() {
+		EStringToAssemblyProvidedInterfaceMapEntryImpl eStringToAssemblyProvidedInterfaceMapEntry = new EStringToAssemblyProvidedInterfaceMapEntryImpl();
+		return eStringToAssemblyProvidedInterfaceMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AssemblyRequiredInterface createAssemblyRequiredInterface() {
+		AssemblyRequiredInterfaceImpl assemblyRequiredInterface = new AssemblyRequiredInterfaceImpl();
+		return assemblyRequiredInterface;
 	}
 
 	/**

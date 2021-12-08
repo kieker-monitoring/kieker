@@ -43,6 +43,7 @@ public class DeployedStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected AssemblyStorage assemblyStorage;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

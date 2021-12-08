@@ -43,7 +43,7 @@ public class DeploymentModelPrinter {
 			this.printDeploymentContext(deploymentContext);
 			for (final DeployedComponent component : deploymentContext.getComponents().values()) {
 				this.printComponent(component);
-				for (final DeployedOperation operation : component.getContainedOperations().values()) {
+				for (final DeployedOperation operation : component.getOperations().values()) {
 					this.printOperation(operation);
 				}
 			}
