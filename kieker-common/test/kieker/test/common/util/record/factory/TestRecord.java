@@ -53,6 +53,11 @@ public class TestRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
+	public String[] getValueNames() {
+		return new String[0];
+	}
+	
+	@Override
 	public int getSize() {
 		return 0;
 	}

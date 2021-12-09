@@ -175,6 +175,7 @@ subprojects {
 		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	}
 
+<<<<<<< HEAD
 	// --- quality assurance plugins ---
 
 	apply plugin: 'pmd'
@@ -234,6 +235,72 @@ subprojects {
 			html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
 		}
 	}
+=======
+    // --- quality assurance plugins ---
+
+    apply plugin: 'pmd'
+    pmd {    // is represented by the groovy class "PmdExtension"
+        // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+        toolVersion = pmdVersion
+        ignoreFailures = true
+        consoleOutput = true
+
+        // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
+        ruleSets = []
+        ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
+    }
+
+	/*apply plugin: 'cpd'
+	cpd {
+	    //toolVersion = pmdAndCpdVersion
+	}*/
+
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion = checkstyleVersion
+        ignoreFailures = true
+        showViolations = false
+        
+        configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
+        configDirectory = rootProject.file(dirConfig)
+    }
+
+    //apply plugin: "com.github.spotbugs"
+    //spotbugs {
+    //   toolVersion = spotbugsVersion
+    //   ignoreFailures = false
+    //   showStackTraces = true
+    //   showProgress = false
+    //   effort = 'max'
+    //   reportLevel = 'low'
+       // visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+       // omitVisitors = [ 'FindNonShortCircuit' ]
+       // reportsDir = file("$buildDir/spotbugs")
+       // includeFilter = file("include.xml")
+    //   excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+       // onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
+       // maxHeapSize = '1g'
+       // extraArgs = [ '-nested:false' ]
+       // jvmArgs = [ '-Duser.language=ja' ]
+    //}
+
+    tasks.withType(Pmd) {
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+        // the following line of code adds our custom PMD rules as jar file to the classpath
+        //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+    }
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled true
+            html.enabled true
+            html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
+        }
+    }
+>>>>>>> origin/issue-1522-influxdb-writer
 
 //    tasks.withType(Spotbugs) {
 //        reports {
