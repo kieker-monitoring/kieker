@@ -17,17 +17,20 @@
 package kieker.monitoring.writer.influxdb;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Pong;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -36,7 +39,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  *
  * @since 1.13
  */
-public class InfluxDBWriter extends AbstractMonitoringWriter {
+public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a data class
 
 	public static final String CONFIG_PROPERTY_DB_URL = "databaseURL";
 	public static final String CONFIG_PROPERTY_DB_PORT = "databasePort";
@@ -44,7 +47,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_PROPERTY_DB_PASSWORD = "databasePassword";
 	public static final String CONFIG_PROPERTY_DB_NAME = "databaseName";
 
-	private static final Log LOG = LogFactory.getLog(InfluxDBWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBWriter.class);
 
 	private final String dbURL;
 	private final int dbPort;
@@ -79,11 +82,11 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 	 *             If connection to InfluxDB fails.
 	 **/
 	protected final void connectToInfluxDB() throws IOException {
-		LOG.info("Connecting to database using the following parameters:");
-		LOG.info("URL = " + this.dbURL);
-		LOG.info("Port = " + this.dbPort);
-		LOG.info("Username = " + this.dbUsername);
-		LOG.info("Password = " + this.dbPassword);
+		LOGGER.info("Connecting to database using the following parameters:");
+		LOGGER.info("URL = {}", this.dbURL);
+		LOGGER.info("Port = {}", this.dbPort);
+		LOGGER.info("Username = {}", this.dbUsername);
+		LOGGER.info("Password = {}", this.dbPassword);
 		this.influxDB = InfluxDBFactory.connect(this.dbURL + ":" + this.dbPort, this.dbUsername, this.dbPassword);
 		if (!this.influxDB.isBatchEnabled()) {
 			this.influxDB.enableBatch(2000, 500, TimeUnit.MILLISECONDS);
@@ -93,27 +96,26 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		final Pong pong;
 		try {
 			pong = this.influxDB.ping();
-			LOG.info("Connected to InfluxDB");
+			LOGGER.info("Connected to InfluxDB");
 		} catch (final RuntimeException e) { // NOCS NOPMD (thrown by InfluxDB library)
 			throw new IOException("Cannot connect to InfluxDB with the following parameters:"
 					+ "URL = " + this.dbURL
 					+ "; Port = " + this.dbPort
 					+ "; Username = " + this.dbUsername
-					+ "; Password = " + this.dbPassword
-					, e);
+					+ "; Password = " + this.dbPassword, e);
 		}
 		final String influxDBVersion = pong.getVersion();
 		final String[] splitVersion = influxDBVersion.split("\\.");
 		this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
-		LOG.info("Version: " + influxDBVersion);
-		LOG.info("Response time: " + pong.getResponseTime());
+		LOGGER.info("Version: {}", influxDBVersion);
+		LOGGER.info("Response time: {}", pong.getResponseTime());
 
 		// Create database if it does not exist
 		final List<String> dbList = this.influxDB.describeDatabases();
 		if (!dbList.contains(this.dbName)) {
-			LOG.info("Database " + this.dbName + " does not exist. Creating ...");
+			LOGGER.info("Database {} does not exist. Creating ...", this.dbName);
 			this.influxDB.createDatabase(this.dbName);
-			LOG.info("Done");
+			LOGGER.info("Done");
 		}
 		this.isConnected = true;
 	}
@@ -125,7 +127,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 			try {
 				this.connectToInfluxDB();
 			} catch (final IOException e) {
-				LOG.error("Cannot connect to InfluxDB. Dropping record.", e);
+				LOGGER.error("Cannot connect to InfluxDB. Dropping record.", e);
 				return;
 			}
 		}
@@ -133,10 +135,12 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		// Extract data
 		final String recordName = monitoringRecord.getClass().getSimpleName();
 		final long timestamp = monitoringRecord.getLoggingTimestamp();
-		// final String[] propertyNames = monitoringRecord.getPropertyNames();
-		final String[] propertyNames = { "operationSignature", "sessionId", "traceId", "tin", "tout", "hostname", "eoi", "ess" }; // Mock array
+		final String[] propertyNames = monitoringRecord.getValueNames();
 		final Class<?>[] valueTypes = monitoringRecord.getValueTypes();
-		final Object[] values = monitoringRecord.toArray();
+		final Object[] values = monitoringRecord.getValueNames();
+
+		// This is a temporary measure until the code can be adapted to proper record serialization using IValueSerializer
+		final Method[] methods = monitoringRecord.getClass().getMethods();
 
 		// Build data point
 		final Point.Builder pointBuilder = Point.measurement(recordName);
@@ -144,7 +148,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		for (int i = 0; i < propertyNames.length; i++) {
 			final String name = propertyNames[i];
 			final Class<?> type = valueTypes[i];
-			final Object value = values[i];
+			final Object value = this.invokeMethod(methods, type, name, monitoringRecord);
 			if (type == int.class) {
 				pointBuilder.addField(name, (int) value);
 			} else if (type == long.class) {
@@ -166,20 +170,40 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	private Object invokeMethod(final Method[] methods, final Class<?> type, final String name, final Object monitoringRecord) {
+		final String prefix;
+		if (type.equals(Boolean.class)) {
+			prefix = "is";
+		} else {
+			prefix = "get";
+		}
+		final String methodName = prefix + name.substring(0, 1).toUpperCase(Locale.ROOT) + name.substring(1);
+		for (final Method method : methods) {
+			if (method.getName().equals(methodName)) {
+				try {
+					return method.invoke(monitoringRecord);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public void onStarting() {
 		try {
 			this.connectToInfluxDB();
 		} catch (final IOException e) {
-			LOG.error("Cannot connect to InfluxDB.", e);
+			LOGGER.error("Cannot connect to InfluxDB.", e);
 		}
 	}
 
 	@Override
 	public void onTerminating() {
-		LOG.info("Closing database");
+		LOGGER.info("Closing database");
 		this.influxDB.close();
-		LOG.info("Closing database done");
+		LOGGER.info("Closing database done");
 	}
 
 }

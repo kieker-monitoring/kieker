@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
@@ -27,16 +27,23 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class UptimeRecordFactory implements IRecordFactory<UptimeRecord> {
 	
+
 	@Override
-	public UptimeRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new UptimeRecord(buffer, stringRegistry);
+	public UptimeRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new UptimeRecord(deserializer);
 	}
-	
+
+
 	@Override
-	public UptimeRecord create(final Object[] values) {
-		return new UptimeRecord(values);
+	public String[] getValueNames() {
+		return UptimeRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return UptimeRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return UptimeRecord.SIZE;
 	}

@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -27,31 +24,20 @@ import kieker.common.record.flow.IEventRecord;
 
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {
-
-<<<<<<< HEAD
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {			
+	
+		
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -8847127127729394312L;
-
-	/** property declarations. */
-	private long timestamp;
-
-=======
 	
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	
-		
 	/** property declarations. */
 	private long timestamp;
 	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -62,36 +48,20 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = timestamp;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AbstractEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 	}
-
-	/**
-<<<<<<< HEAD
-=======
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-	}
 	
 
+	
 	/**
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -105,7 +75,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final AbstractEvent castedRecord = (AbstractEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -113,29 +83,28 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		if (this.getTimestamp() != castedRecord.getTimestamp()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-
+		code += ((int)this.getTimestamp());
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
 	public final void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,18 +113,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		String result = "AbstractEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		return result;
 	}
-<<<<<<< HEAD
-=======
-	
-	public final long getTimestamp() {
-		return this.timestamp;
-	}
-	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

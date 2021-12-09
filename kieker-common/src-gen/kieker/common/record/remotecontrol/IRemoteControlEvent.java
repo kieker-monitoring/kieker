@@ -23,6 +23,6 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.14
  */
 public interface IRemoteControlEvent extends IMonitoringRecord {
-	public String getPattern() ;
+	public String getPattern();
 	
 }

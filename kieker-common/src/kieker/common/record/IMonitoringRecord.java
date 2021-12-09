@@ -89,30 +89,12 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public Class<?>[] getValueTypes();
 
 	/**
-<<<<<<< HEAD
 	 * This method delivers an array containing the value names of the record.
-=======
-	 * This method delivers an array with the classes of the single values for the record.
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
 	 *
 	 * @since 1.2
 	 */
-<<<<<<< HEAD
-=======
-	public Class<?>[] getValueTypes();
-	
-	/**
-	 * This method delivers an array containing the value names of the record.
-	 *
-	 * @return The types of the values. This returned array should be treated readonly.
-	 *
-	 * @see #toArray()
-	 *
-	 * @since 1.2
-	 */
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	public String[] getValueNames();
 
 	/**

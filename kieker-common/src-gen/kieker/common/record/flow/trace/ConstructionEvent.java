@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,20 +22,21 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public class ConstructionEvent extends AbstractTraceEvent {
+public class ConstructionEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // ConstructionEvent.classSignature
-			+ TYPE_SIZE_INT; // ConstructionEvent.objectId
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
+			 + TYPE_SIZE_INT; // ConstructionEvent.objectId
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -47,8 +44,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		String.class, // ConstructionEvent.classSignature
 		int.class, // ConstructionEvent.objectId
 	};
-<<<<<<< HEAD
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,37 +53,16 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		"classSignature",
 		"objectId",
 	};
-
+	
 	/** default constants. */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
 	private static final long serialVersionUID = 5435515970872711524L;
-
+	
 	/** property declarations. */
 	private final String classSignature;
 	private final int objectId;
-
-=======
 	
-	
-	/** default constants. */
-	public static final String CLASS_SIGNATURE = "";
-	public static final int OBJECT_ID = 0;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"traceId",
-		"orderIndex",
-		"classSignature",
-		"objectId",
-	};
-	
-	/** property declarations. */
-	private String classSignature;
-	private int objectId;
-	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -104,44 +79,21 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
+		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
 		this.objectId = objectId;
 	}
+
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-<<<<<<< HEAD
 	public ConstructionEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.classSignature = deserializer.getString();
 		this.objectId = deserializer.getInt();
-=======
-	protected ConstructionEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.classSignature = (String) values[3];
-		this.objectId = (Integer) values[4];
-	}
-
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public ConstructionEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.classSignature = stringRegistry.get(buffer.getInt());
-		this.objectId = buffer.getInt();
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 	
 	/**
@@ -155,17 +107,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
-<<<<<<< HEAD
-
-=======
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getClassSignature());
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -173,24 +115,13 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -201,6 +132,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -215,7 +147,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final ConstructionEvent castedRecord = (ConstructionEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -235,33 +167,34 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		if (this.getObjectId() != castedRecord.getObjectId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getClassSignature().hashCode();
-		code += ((int) this.getObjectId());
-
+		code += ((int)this.getObjectId());
+		
 		return code;
 	}
-
+	
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
-
+	
+	
 	public final int getObjectId() {
 		return this.objectId;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -270,38 +203,19 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		String result = "ConstructionEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		result += "objectId = ";
 		result += this.getObjectId() + ", ";
-
+		
 		return result;
 	}
-<<<<<<< HEAD
-=======
-	
-	public final String getClassSignature() {
-		return this.classSignature;
-	}
-	
-	public final void setClassSignature(String classSignature) {
-		this.classSignature = classSignature;
-	}
-	
-	public final int getObjectId() {
-		return this.objectId;
-	}
-	
-	public final void setObjectId(int objectId) {
-		this.objectId = objectId;
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

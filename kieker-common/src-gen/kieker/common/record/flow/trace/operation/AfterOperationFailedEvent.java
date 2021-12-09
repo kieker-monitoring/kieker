@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,19 +26,19 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
+public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING // IClassSignature.classSignature
-			+ TYPE_SIZE_STRING; // IExceptionRecord.cause
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -51,8 +47,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
-<<<<<<< HEAD
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -62,34 +57,14 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		"classSignature",
 		"cause",
 	};
-
+	
 	/** default constants. */
 	public static final String CAUSE = "";
 	private static final long serialVersionUID = -235912152331253573L;
-
+	
 	/** property declarations. */
 	private final String cause;
-
-=======
 	
-	
-	/** default constants. */
-	public static final String CAUSE = "";
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"traceId",
-		"orderIndex",
-		"operationSignature",
-		"classSignature",
-		"cause",
-	};
-	
-	/** property declarations. */
-	private String cause;
-	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -106,29 +81,17 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 * @param cause
 	 *            cause
 	 */
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
-			final String cause) {
+	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
-		this.cause = cause == null ? CAUSE : cause;
+		this.cause = cause == null?CAUSE:cause;
 	}
 
+
 	/**
-<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
-=======
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AfterOperationFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -139,7 +102,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 * {@inheritDoc}
 	 */
 	@Override
-<<<<<<< HEAD
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
@@ -148,28 +110,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
-
-=======
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getTraceId(),
-			this.getOrderIndex(),
-			this.getOperationSignature(),
-			this.getClassSignature(),
-			this.getCause()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getCause());
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -177,24 +118,13 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -205,6 +135,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -219,7 +150,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final AfterOperationFailedEvent castedRecord = (AfterOperationFailedEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -242,30 +173,30 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		if (!this.getCause().equals(castedRecord.getCause())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
 		code += this.getCause().hashCode();
-
+		
 		return code;
 	}
-
+	
 	public final String getCause() {
 		return this.cause;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -274,33 +205,22 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String result = "AfterOperationFailedEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		result += "cause = ";
 		result += this.getCause() + ", ";
-
+		
 		return result;
 	}
-<<<<<<< HEAD
-=======
-	
-	public final String getCause() {
-		return this.cause;
-	}
-	
-	public final void setCause(String cause) {
-		this.cause = cause;
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

@@ -81,7 +81,7 @@ dependencies {
 	implementation "org.springframework:spring-core:$springVersion"
 	implementation "org.springframework:spring-web:$springVersion"
 	implementation "org.springframework:spring-webmvc:$springVersion"
-	
+
 	// influxdb
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation 'org.influxdb:influxdb-java:2.22'

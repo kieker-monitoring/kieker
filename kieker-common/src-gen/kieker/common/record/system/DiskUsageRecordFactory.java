@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Teerat Pitakrat
@@ -27,16 +27,23 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class DiskUsageRecordFactory implements IRecordFactory<DiskUsageRecord> {
 	
+
 	@Override
-	public DiskUsageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new DiskUsageRecord(buffer, stringRegistry);
+	public DiskUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new DiskUsageRecord(deserializer);
 	}
-	
+
+
 	@Override
-	public DiskUsageRecord create(final Object[] values) {
-		return new DiskUsageRecord(values);
+	public String[] getValueNames() {
+		return DiskUsageRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return DiskUsageRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return DiskUsageRecord.SIZE;
 	}

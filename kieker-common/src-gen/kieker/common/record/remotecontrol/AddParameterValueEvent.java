@@ -16,47 +16,50 @@
 package kieker.common.record.remotecontrol;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 
 import kieker.common.record.remotecontrol.IParameterValueEvent;
 
 /**
  * @author Reiner Jung
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.15
  */
-public class AddParameterValueEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IParameterValueEvent {
-	private static final long serialVersionUID = -5279430930031250890L;
-
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
-				 + TYPE_SIZE_STRING // IParameterValueEvent.name
-				 + TYPE_SIZE_STRING // IParameterValueEvent.value
-		;
+public class AddParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {			
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
+			 + TYPE_SIZE_STRING // IParameterValueEvent.name
+			 + TYPE_SIZE_STRING; // IParameterValueEvent.value
 	
-		public static final Class<?>[] TYPES = {
-			String.class, // IRemoteControlEvent.pattern
-			String.class, // IParameterValueEvent.name
-			String.class, // IParameterValueEvent.value
-		};
+	public static final Class<?>[] TYPES = {
+		String.class, // IRemoteControlEvent.pattern
+		String.class, // IParameterValueEvent.name
+		String.class, // IParameterValueEvent.value
+	};
 	
-	/** user-defined constants */
-
-	/** default constants */
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"pattern",
+		"name",
+		"value",
+	};
+	
+	/** default constants. */
 	public static final String PATTERN = "";
 	public static final String NAME = "";
 	public static final String VALUE = "";
-
-	/** property declarations */
+	private static final long serialVersionUID = -5279430930031250890L;
+	
+	/** property declarations. */
 	private final String pattern;
 	private final String name;
 	private final String value;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -73,80 +76,27 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		this.value = value == null?"":value;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 */
-	public AddParameterValueEvent(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.pattern = (String) values[0];
-		this.name = (String) values[1];
-		this.value = (String) values[2];
-	}
 
 	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	protected AddParameterValueEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.pattern = (String) values[0];
-		this.name = (String) values[1];
-		this.value = (String) values[2];
-	}
-
-	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public AddParameterValueEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.pattern = stringRegistry.get(buffer.getInt());
-		this.name = stringRegistry.get(buffer.getInt());
-		this.value = stringRegistry.get(buffer.getInt());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] toArray() {
-		return new Object[] {
-			this.getPattern(),
-			this.getName(),
-			this.getValue()
-		};
+	public AddParameterValueEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.pattern = deserializer.getString();
+		this.name = deserializer.getString();
+		this.value = deserializer.getString();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getPattern());
-		stringRegistry.get(this.getName());
-		stringRegistry.get(this.getValue());
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getPattern()));
-		buffer.putInt(stringRegistry.get(this.getName()));
-		buffer.putInt(stringRegistry.get(this.getValue()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getPattern());
+		serializer.putString(this.getName());
+		serializer.putString(this.getValue());
 	}
 	
 	/**
@@ -161,58 +111,93 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getSize() {
-		return SIZE;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
+	public String[] getValueNames() {
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
+	public int getSize() {
+		return SIZE;
 	}
+
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AddParameterValueEvent castedRecord = (AddParameterValueEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getPattern().equals(castedRecord.getPattern())) return false;
-		if (!this.getName().equals(castedRecord.getName())) return false;
-		if (!this.getValue().equals(castedRecord.getValue())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getPattern().equals(castedRecord.getPattern())) {
+			return false;
+		}
+		if (!this.getName().equals(castedRecord.getName())) {
+			return false;
+		}
+		if (!this.getValue().equals(castedRecord.getValue())) {
+			return false;
+		}
+		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getPattern().hashCode();
+		code += this.getName().hashCode();
+		code += this.getValue().hashCode();
+		
+		return code;
 	}
 	
 	public final String getPattern() {
 		return this.pattern;
-	}	
+	}
+	
 	
 	public final String getName() {
 		return this.name;
-	}	
+	}
+	
 	
 	public final String getValue() {
 		return this.value;
-	}	
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AddParameterValueEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		result += "name = ";
+		result += this.getName() + ", ";
+		
+		result += "value = ";
+		result += this.getValue() + ", ";
+		
+		return result;
+	}
 }

@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Marc Adolf
@@ -27,16 +27,23 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class UpdateParameterEventFactory implements IRecordFactory<UpdateParameterEvent> {
 	
+
 	@Override
-	public UpdateParameterEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new UpdateParameterEvent(buffer, stringRegistry);
+	public UpdateParameterEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new UpdateParameterEvent(deserializer);
 	}
-	
+
+
 	@Override
-	public UpdateParameterEvent create(final Object[] values) {
-		return new UpdateParameterEvent(values);
+	public String[] getValueNames() {
+		return UpdateParameterEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return UpdateParameterEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return UpdateParameterEvent.SIZE;
 	}

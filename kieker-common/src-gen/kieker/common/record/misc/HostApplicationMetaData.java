@@ -16,50 +16,54 @@
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.13
  */
-public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 5425789809172379297L;
-
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.hostname
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
-		;
+public class HostApplicationMetaData extends AbstractMonitoringRecord  {			
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
+			 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
+			 + TYPE_SIZE_STRING // HostApplicationMetaData.hostname
+			 + TYPE_SIZE_STRING; // HostApplicationMetaData.applicationName
 	
-		public static final Class<?>[] TYPES = {
-			String.class, // HostApplicationMetaData.systemName
-			String.class, // HostApplicationMetaData.ipAddress
-			String.class, // HostApplicationMetaData.hostname
-			String.class, // HostApplicationMetaData.applicationName
-		};
+	public static final Class<?>[] TYPES = {
+		String.class, // HostApplicationMetaData.systemName
+		String.class, // HostApplicationMetaData.ipAddress
+		String.class, // HostApplicationMetaData.hostname
+		String.class, // HostApplicationMetaData.applicationName
+	};
 	
-	/** user-defined constants */
-
-	/** default constants */
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"systemName",
+		"ipAddress",
+		"hostname",
+		"applicationName",
+	};
+	
+	/** default constants. */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOSTNAME = "";
 	public static final String APPLICATION_NAME = "";
-
-	/** property declarations */
+	private static final long serialVersionUID = 5425789809172379297L;
+	
+	/** property declarations. */
 	private final String systemName;
 	private final String ipAddress;
 	private final String hostname;
 	private final String applicationName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -79,86 +83,29 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		this.applicationName = applicationName == null?"":applicationName;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 */
-	public HostApplicationMetaData(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.systemName = (String) values[0];
-		this.ipAddress = (String) values[1];
-		this.hostname = (String) values[2];
-		this.applicationName = (String) values[3];
-	}
 
 	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	protected HostApplicationMetaData(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.systemName = (String) values[0];
-		this.ipAddress = (String) values[1];
-		this.hostname = (String) values[2];
-		this.applicationName = (String) values[3];
-	}
-
-	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public HostApplicationMetaData(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.systemName = stringRegistry.get(buffer.getInt());
-		this.ipAddress = stringRegistry.get(buffer.getInt());
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.applicationName = stringRegistry.get(buffer.getInt());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] toArray() {
-		return new Object[] {
-			this.getSystemName(),
-			this.getIpAddress(),
-			this.getHostname(),
-			this.getApplicationName()
-		};
+	public HostApplicationMetaData(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.systemName = deserializer.getString();
+		this.ipAddress = deserializer.getString();
+		this.hostname = deserializer.getString();
+		this.applicationName = deserializer.getString();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getSystemName());
-		stringRegistry.get(this.getIpAddress());
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getApplicationName());
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getSystemName()));
-		buffer.putInt(stringRegistry.get(this.getIpAddress()));
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getSystemName());
+		serializer.putString(this.getIpAddress());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getApplicationName());
 	}
 	
 	/**
@@ -173,63 +120,105 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getSize() {
-		return SIZE;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
+	public String[] getValueNames() {
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
+	public int getSize() {
+		return SIZE;
 	}
+
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final HostApplicationMetaData castedRecord = (HostApplicationMetaData) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getSystemName().equals(castedRecord.getSystemName())) return false;
-		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getSystemName().equals(castedRecord.getSystemName())) {
+			return false;
+		}
+		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getSystemName().hashCode();
+		code += this.getIpAddress().hashCode();
+		code += this.getHostname().hashCode();
+		code += this.getApplicationName().hashCode();
+		
+		return code;
 	}
 	
 	public final String getSystemName() {
 		return this.systemName;
-	}	
+	}
+	
 	
 	public final String getIpAddress() {
 		return this.ipAddress;
-	}	
+	}
+	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}	
+	}
+	
 	
 	public final String getApplicationName() {
 		return this.applicationName;
-	}	
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "HostApplicationMetaData: ";
+		result += "systemName = ";
+		result += this.getSystemName() + ", ";
+		
+		result += "ipAddress = ";
+		result += this.getIpAddress() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "applicationName = ";
+		result += this.getApplicationName() + ", ";
+		
+		return result;
+	}
 }

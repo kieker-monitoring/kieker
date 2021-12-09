@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,20 +22,21 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public class BeforeOperationEvent extends AbstractOperationEvent {
+public class BeforeOperationEvent extends AbstractOperationEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING; // IClassSignature.classSignature
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING; // IClassSignature.classSignature
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -47,31 +44,19 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
 	};
-<<<<<<< HEAD
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
-=======
-	
-	
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"operationSignature",
 		"classSignature",
 	};
-<<<<<<< HEAD
-
+	
 	private static final long serialVersionUID = -4739205267677950144L;
-
-=======
 	
 	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -90,34 +75,15 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-<<<<<<< HEAD
 	public BeforeOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
-=======
-	protected BeforeOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-	}
-
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 */
-	public BeforeOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 	
 	/**
@@ -131,18 +97,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		serializer.putString(this.getOperationSignature());
 		serializer.putString(this.getClassSignature());
 	}
-<<<<<<< HEAD
-
-=======
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,24 +105,13 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -178,6 +122,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,7 +137,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final BeforeOperationEvent castedRecord = (BeforeOperationEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -212,25 +157,25 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
-
+		
 		return code;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,19 +184,19 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		String result = "BeforeOperationEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		return result;
 	}
 }

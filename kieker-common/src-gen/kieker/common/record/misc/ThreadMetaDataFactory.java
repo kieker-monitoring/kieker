@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Christian Wulf
@@ -27,16 +27,23 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class ThreadMetaDataFactory implements IRecordFactory<ThreadMetaData> {
 	
+
 	@Override
-	public ThreadMetaData create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new ThreadMetaData(buffer, stringRegistry);
+	public ThreadMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new ThreadMetaData(deserializer);
 	}
-	
+
+
 	@Override
-	public ThreadMetaData create(final Object[] values) {
-		return new ThreadMetaData(values);
+	public String[] getValueNames() {
+		return ThreadMetaData.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ThreadMetaData.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ThreadMetaData.SIZE;
 	}

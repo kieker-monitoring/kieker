@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,46 +22,35 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public class SplitEvent extends AbstractTraceEvent {
+public class SplitEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT; // ITraceRecord.orderIndex
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT; // ITraceRecord.orderIndex
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 	};
-<<<<<<< HEAD
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
-=======
-	
-	
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 		"timestamp",
 		"traceId",
 		"orderIndex",
 	};
-<<<<<<< HEAD
-
+	
 	private static final long serialVersionUID = 757022930650044358L;
-
-=======
 	
 	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -80,46 +65,12 @@ public class SplitEvent extends AbstractTraceEvent {
 		super(timestamp, traceId, orderIndex);
 	}
 
+
 	/**
-<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
-=======
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 */
-	public SplitEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-	}
-
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 */
-	protected SplitEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-	}
-
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public SplitEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -129,28 +80,12 @@ public class SplitEvent extends AbstractTraceEvent {
 	 * {@inheritDoc}
 	 */
 	@Override
-<<<<<<< HEAD
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 	}
-
-=======
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getTraceId(),
-			this.getOrderIndex()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,24 +93,13 @@ public class SplitEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -186,6 +110,7 @@ public class SplitEvent extends AbstractTraceEvent {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,7 +125,7 @@ public class SplitEvent extends AbstractTraceEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final SplitEvent castedRecord = (SplitEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -214,23 +139,23 @@ public class SplitEvent extends AbstractTraceEvent {
 		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
-
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		
 		return code;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,13 +164,13 @@ public class SplitEvent extends AbstractTraceEvent {
 		String result = "SplitEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		return result;
 	}
 }

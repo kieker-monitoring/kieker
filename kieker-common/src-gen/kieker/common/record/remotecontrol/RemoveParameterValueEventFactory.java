@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Reiner Jung
@@ -27,16 +27,23 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class RemoveParameterValueEventFactory implements IRecordFactory<RemoveParameterValueEvent> {
 	
+
 	@Override
-	public RemoveParameterValueEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new RemoveParameterValueEvent(buffer, stringRegistry);
+	public RemoveParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new RemoveParameterValueEvent(deserializer);
 	}
-	
+
+
 	@Override
-	public RemoveParameterValueEvent create(final Object[] values) {
-		return new RemoveParameterValueEvent(values);
+	public String[] getValueNames() {
+		return RemoveParameterValueEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return RemoveParameterValueEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return RemoveParameterValueEvent.SIZE;
 	}

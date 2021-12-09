@@ -26,7 +26,6 @@ configurations {
 	aspectJarConfig
 }
 
-<<<<<<< HEAD
 spotless {
 	format 'misc', {
 		// define the files to apply `misc` to
@@ -36,19 +35,6 @@ spotless {
 		trimTrailingWhitespace()
 		indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
 		endWithNewline()
-=======
-plugins {
-    //id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
-}
-
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-apply plugin: 'signing'
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
->>>>>>> 35941907b (added cpd (but commented out))
 	}
 }
 

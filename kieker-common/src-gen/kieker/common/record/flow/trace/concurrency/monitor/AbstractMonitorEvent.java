@@ -1,9 +1,5 @@
 /***************************************************************************
-<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
-=======
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,37 +15,28 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.8
  */
-public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
-
-<<<<<<< HEAD
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {			
+	
+		
 	/** default constants. */
 	public static final int LOCK_ID = 0;
 	private static final long serialVersionUID = -5428034537740978080L;
-
+	
 	/** property declarations. */
 	private final int lockId;
-
-=======
 	
-	
-	/** default constants. */
-	public static final int LOCK_ID = 0;
-	
-		
-	/** property declarations. */
-	private int lockId;
-	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -67,33 +54,20 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		this.lockId = lockId;
 	}
 
+
 	/**
-<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
-=======
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.lockId = deserializer.getInt();
 	}
-<<<<<<< HEAD
-=======
 	
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -108,7 +82,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -125,28 +99,28 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		if (this.getLockId() != castedRecord.getLockId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
-		code += ((int) this.getLockId());
-
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		code += ((int)this.getLockId());
+		
 		return code;
 	}
-
+	
 	public final int getLockId() {
 		return this.lockId;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,27 +129,16 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		String result = "AbstractMonitorEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "lockId = ";
 		result += this.getLockId() + ", ";
-
+		
 		return result;
 	}
-<<<<<<< HEAD
-=======
-	
-	public final int getLockId() {
-		return this.lockId;
-	}
-	
-	public final void setLockId(int lockId) {
-		this.lockId = lockId;
-	}
->>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }
