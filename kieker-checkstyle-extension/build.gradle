@@ -11,4 +11,3 @@ dependencies {
 	implementation "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 	runtimeOnly "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
-
