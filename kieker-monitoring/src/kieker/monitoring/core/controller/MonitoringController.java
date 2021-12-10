@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package kieker.monitoring.core.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -26,8 +27,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -72,7 +73,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.probeController = new ProbeController(configuration);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP);
+		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP);
 	}
 
 	// FACTORY
@@ -85,7 +86,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 *
 	 * @return A new controller.
 	 */
-	public static final MonitoringController createInstance(final Configuration configuration) {
+	public static MonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController;
 		// try {
 		monitoringController = new MonitoringController(configuration);
@@ -137,7 +138,7 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.enableMonitoring(); // notifies the listener
 		}
 
-		if (configuration.getBooleanProperty(ConfigurationKeys.USE_SHUTDOWN_HOOK)) {
+		if (configuration.getBooleanProperty(ConfigurationConstants.USE_SHUTDOWN_HOOK)) {
 			// This ensures that the terminateMonitoring() method is always called before
 			// shutting down the JVM. This method ensures that necessary cleanup steps are
 			// finished and no information is lost due to asynchronous writers.
@@ -149,13 +150,13 @@ public final class MonitoringController extends AbstractController implements IM
 						if (!monitoringController.isMonitoringTerminated()) {
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be
 							// down! (#26)
-							LOGGER.info("ShutdownHook notifies controller to initiate shutdown.");
+							MonitoringController.LOGGER.info("ShutdownHook notifies controller to initiate shutdown.");
 							monitoringController.terminateMonitoring();
 							try {
-								monitoringController.waitForTermination(SHUTDOWN_DELAY_MILLIS);
+								monitoringController.waitForTermination(MonitoringController.SHUTDOWN_DELAY_MILLIS);
 							} catch (final InterruptedException e) {
 								// ignore since we cannot do anything at this point
-								LOGGER.warn("Shutdown was interrupted while waiting");
+								MonitoringController.LOGGER.warn("Shutdown was interrupted while waiting");
 							}
 							// LOG.info("ShutdownHook has finished."); // does not work anymore
 							// System.out.println("ShutdownHook has finished."); // works!
@@ -163,12 +164,12 @@ public final class MonitoringController extends AbstractController implements IM
 					}
 				});
 			} catch (final Exception e) { // NOPMD NOCS (Exception)
-				LOGGER.warn("Failed to add shutdownHook");
+				MonitoringController.LOGGER.warn("Failed to add shutdownHook");
 			}
 		} else {
-			LOGGER.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
+			MonitoringController.LOGGER.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
-		LOGGER.info(monitoringController.toString());
+		MonitoringController.LOGGER.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -177,7 +178,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 *
 	 * @return the version name
 	 */
-	public static final String getVersion() {
+	public static String getVersion() {
 		return Version.getVERSION();
 	}
 
@@ -189,13 +190,13 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
-		LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
+	protected void cleanup() {
+		MonitoringController.LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
 		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
 		this.timeSourceController.terminate();
@@ -207,7 +208,7 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(2048).append("Current State of kieker.monitoring (")
 				.append(MonitoringController.getVersion()).append(") ").append(this.stateController.toString())
 				.append(this.jmxController.toString()).append(this.timeSourceController.toString())
@@ -224,7 +225,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 * @return true on success; false in case of an error.
 	 */
 	@Override
-	public final boolean sendMetadataAsRecord() {
+	public boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
 		return this.newMonitoringRecord(new KiekerMetadataRecord(null, // Kieker version will be filled in
 				this.getName(), // controllerName
@@ -245,43 +246,43 @@ public final class MonitoringController extends AbstractController implements IM
 	// #############################
 
 	@Override
-	public final boolean terminateMonitoring() {
-		LOGGER.info("Terminating monitoring...");
+	public boolean terminateMonitoring() {
+		MonitoringController.LOGGER.info("Terminating monitoring...");
 		return this.stateController.terminateMonitoring();
 	}
 
 	@Override
-	public final boolean isMonitoringTerminated() {
+	public boolean isMonitoringTerminated() {
 		return this.stateController.isMonitoringTerminated();
 	}
 
 	@Override
-	public final boolean enableMonitoring() {
+	public boolean enableMonitoring() {
 		return this.stateController.enableMonitoring();
 	}
 
 	@Override
-	public final boolean disableMonitoring() {
+	public boolean disableMonitoring() {
 		return this.stateController.disableMonitoring();
 	}
 
 	@Override
-	public final boolean isMonitoringEnabled() {
+	public boolean isMonitoringEnabled() {
 		return this.stateController.isMonitoringEnabled();
 	}
 
 	@Override
-	public final boolean isDebug() {
+	public boolean isDebug() {
 		return this.stateController.isDebug();
 	}
 
 	@Override
-	public final String getName() {
+	public String getName() {
 		return this.stateController.getName();
 	}
 
 	@Override
-	public final String getHostname() {
+	public String getHostname() {
 		return this.stateController.getHostname();
 	}
 
@@ -291,22 +292,22 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final int incExperimentId() {
+	public int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
 
 	@Override
-	public final void setExperimentId(final int newExperimentID) {
+	public void setExperimentId(final int newExperimentID) {
 		this.stateController.setExperimentId(newExperimentID);
 	}
 
 	@Override
-	public final int getExperimentId() {
+	public int getExperimentId() {
 		return this.stateController.getExperimentId();
 	}
 
 	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!this.isMonitoringEnabled()) { // enabled and not terminated
 			return false;
 		}
@@ -322,33 +323,33 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
+	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
 			final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
 	@Override
-	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
+	public boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
 
 	@Override
-	public final ITimeSource getTimeSource() {
+	public ITimeSource getTimeSource() {
 		return this.timeSourceController.getTimeSource();
 	}
 
 	@Override
-	public final String getControllerDomain() {
+	public String getControllerDomain() {
 		return this.jmxController.getControllerDomain();
 	}
 
 	@Override
-	public final boolean activateProbe(final String pattern) {
+	public boolean activateProbe(final String pattern) {
 		return this.probeController.activateProbe(pattern);
 	}
 
 	@Override
-	public final boolean deactivateProbe(final String pattern) {
+	public boolean deactivateProbe(final String pattern) {
 		return this.probeController.deactivateProbe(pattern);
 	}
 
@@ -367,17 +368,47 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.probeController.getProbePatternList();
 	}
 
+	@Override
+	public Map<String, List<String>> getAllPatternParameters(final String pattern) {
+		return this.probeController.getAllPatternParameters(pattern);
+	}
+
+	@Override
+	public void deletePatternParameter(final String pattern, final String parameterName) {
+		this.probeController.deletePatternParameter(pattern, parameterName);
+	}
+
+	@Override
+	public void clearPatternParameters(final String pattern) {
+		this.probeController.clearPatternParameters(pattern);
+	}
+
+	@Override
+	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters) {
+		this.probeController.addPatternParameter(pattern, parameterName, parameters);
+	}
+
+	@Override
+	public void addPatternParameterValue(final String pattern, final String name, final String value) {
+		this.probeController.addPatternParameterValue(pattern, name, value);
+	}
+
+	@Override
+	public void removePatternParameterValue(final String pattern, final String name, final String value) {
+		this.probeController.removePatternParameterValue(pattern, name, value);
+	}
+
 	// GET SINGLETON INSTANCE
 	// #############################
-	public static final IMonitoringController getInstance() {
-		return LazyHolder.INSTANCE;
+	public static IMonitoringController getInstance() {
+		return SingletonHelper.INSTANCE;
 	}
 
 	/**
 	 * SINGLETON.
 	 */
-	private static final class LazyHolder { // NOCS
-		static final IMonitoringController INSTANCE = MonitoringController
+	private static final class SingletonHelper { // NOCS
+		static final IMonitoringController INSTANCE = MonitoringController // NOPMD default modifier
 				.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
 

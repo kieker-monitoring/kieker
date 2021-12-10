@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,16 +25,19 @@ import kieker.common.record.io.TextValueSerializer;
 import kieker.monitoring.writer.raw.IRawDataWrapper;
 
 /**
- * String serializer for monitoring records based on the record's toString method.
+ * String serializer for monitoring records based on the record's toString
+ * method.
  *
  * @author Holger Knoche
  *
  * @since 1.13
  */
-public class StringSerializer extends AbstractCharacterRecordSerializer {
+public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	
 	private static final char FIELD_SEPARATOR = ';';
-	
+
+	private static final Charset CHARSET = Charset.forName("UTF-8");
+
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -45,23 +48,21 @@ public class StringSerializer extends AbstractCharacterRecordSerializer {
 		super(configuration);
 	}
 
+	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
+		return builder.toString().getBytes(StringSerializer.CHARSET);
+	}
+
 	@Override
 	public void serializeRecordToCharBuffer(final IMonitoringRecord record, final CharBuffer buffer) {
 		// Serialize the record
 		this.appendSingleRecord(record, buffer);
 	}
 
-	private void appendSingleRecord(final IMonitoringRecord record, final CharBuffer buffer) {
-		final TextValueSerializer serializer = TextValueSerializer.create(buffer);
-		
-		buffer.append(record.getClass().getName());
-		buffer.append(FIELD_SEPARATOR);
-		buffer.append(String.valueOf(record.getLoggingTimestamp()));
-		buffer.append(FIELD_SEPARATOR);
-		
-		record.serialize(serializer);
-		
-		buffer.append('\n');
+	private StringBuilder appendSingleRecord(final IMonitoringRecord record, final StringBuilder builder) {
+		builder.append(record.getClass().getName()).append(FIELD_SEPARATOR).append(record.getLoggingTimestamp()).append(FIELD_SEPARATOR)
+				.append(record.toString()).append('\n');
+
+		return builder;
 	}
 
 	@Override

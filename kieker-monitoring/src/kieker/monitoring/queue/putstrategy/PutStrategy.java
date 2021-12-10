@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,21 @@ import java.util.Queue;
 public interface PutStrategy { // NOCS //NOPMD (name without prefix "I" for reasons of readability)
 
 	/**
+	 *
+	 * @param queue
+	 *            queue
+	 * @param element
+	 *            element
+	 *
+	 * @param <E>
+	 *            element type
+	 *
+	 * @throws InterruptedException
+	 *             on interruption of the queue
+	 *
 	 * @since 1.13
 	 */
-	<E> void backoffOffer(Queue<E> q, E e) throws InterruptedException;
+	<E> void backoffOffer(Queue<E> queue, E element) throws InterruptedException;
 
 	/**
 	 * @since 1.13

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
 	
-	
+
 	@Override
 	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NetworkUtilizationRecord(deserializer);
 	}
-	
+
+
 	@Override
-	@Deprecated
-	public NetworkUtilizationRecord create(final Object[] values) {
-		return new NetworkUtilizationRecord(values);
+	public String[] getValueNames() {
+		return NetworkUtilizationRecord.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NetworkUtilizationRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NetworkUtilizationRecord.SIZE;
 	}

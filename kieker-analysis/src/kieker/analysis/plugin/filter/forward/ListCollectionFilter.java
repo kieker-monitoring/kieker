@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,19 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke, Jan Waller, Bjoern Weissenfels
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
-@Plugin(programmaticOnly = true, description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)", outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = {
-		Object.class }, description = "Provides each incoming object"), configuration = {
-				@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),
-				@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR, description = "Determines what happens to new objects when the list is full.") })
+@Deprecated
+@Plugin(programmaticOnly = true, description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
+		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME,
+				eventTypes = Object.class, description = "Provides each incoming object"),
+		configuration = {
+			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
+					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+					description = "Sets the maximum number of stored values."),
+			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR,
+					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
+					description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming objects. */
@@ -60,7 +68,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/** The name of the property determining the behavior of a full list. */
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
 	/** The default value for the behavior of a full list (drop oldest). */
-	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
+	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "DROP_OLDEST"; // must really be a String here
 
 	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
@@ -76,11 +84,11 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 */
 	public enum ListFullBehavior {
 		/** Drops the oldest entry. */
-		dropOldest,
+		DROP_OLDEST,
 		/** Ignores the given entry. */
-		ignore,
+		IGNORE,
 		/** Throws a runtime exception. */
-		error;
+		ERROR;
 	}
 
 	/**
@@ -107,7 +115,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
 		} catch (final IllegalArgumentException ex) {
 			this.logger.warn("{} is no valid list full behavior! Using 'ignore' instead.", strListFullBehavior);
-			tmpListFullBehavior = ListFullBehavior.ignore;
+			tmpListFullBehavior = ListFullBehavior.IGNORE;
 		}
 		this.listFullBehavior = tmpListFullBehavior;
 
@@ -128,7 +136,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 			}
 		} else {
 			switch (this.listFullBehavior) {
-			case dropOldest:
+			case DROP_OLDEST:
 				synchronized (this.list) {
 					this.list.add(data);
 					if (this.list.size() > this.maxNumberOfEntries) {
@@ -136,14 +144,14 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					}
 				}
 				break;
-			case ignore:
+			case IGNORE:
 				synchronized (this.list) {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					}
 				}
 				break;
-			case error:
+			case ERROR:
 				synchronized (this.list) {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);

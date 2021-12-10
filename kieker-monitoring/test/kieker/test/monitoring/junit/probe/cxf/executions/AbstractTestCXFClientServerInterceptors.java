@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -69,16 +69,20 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	/**
 	 * Each instance of this class increments the port number by 1.
 	 */
-	private volatile String serviceAddress;
+	private String serviceAddress;
 
-	private volatile String listName;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
+	private String listName;
+	private List<IMonitoringRecord> recordListFilledByListWriter;
 
 	private MonitoringController clientMonitoringController;
 	private MonitoringController serverMonitoringController;
 
 	private IBookstore client;
 	private Server server;
+
+	public AbstractTestCXFClientServerInterceptors() {
+		// empty constructor
+	}
 
 	@Before
 	public void prepare() throws Exception {
@@ -95,8 +99,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static integer increment by each instance did work under Eclipse, but not
-	 * when executed by ant.
+	 * Workaround to have unique port numbers among the CXF tests. A mechanism
+	 * having a static integer increment by each instance did work under Eclipse,
+	 * but not when executed by ant.
 	 *
 	 * @return A port digit.
 	 */
@@ -104,10 +109,10 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private MonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.META_DATA, "false");
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
-		config.setProperty(ConfigurationKeys.HOST_NAME, hostname);
+		config.setProperty(ConfigurationConstants.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
 
@@ -119,17 +124,23 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		srvFactory.setAddress(this.serviceAddress);
 		srvFactory.setServiceBean(new BookstoreImpl());
 
-		// On the server-side, we only intercept incoming requests and outgoing responses.
-		srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
-		srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
-		return srvFactory.create();
+		// On the server-side, we only intercept incoming requests and outgoing
+		// responses.
+		srvFactory.getInInterceptors()
+				.add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
+		srvFactory.getOutInterceptors()
+				.add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
+		return srvFactory.create(); // create() also starts the server
 	}
 
 	private IBookstore createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		// On the client-side, we only intercept outgoing requests and incoming responses.
-		factory.getOutInterceptors().add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
-		factory.getInInterceptors().add(new OperationExecutionSOAPResponseInInterceptor(this.clientMonitoringController));
+		// On the client-side, we only intercept outgoing requests and incoming
+		// responses.
+		factory.getOutInterceptors()
+				.add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
+		factory.getInInterceptors()
+				.add(new OperationExecutionSOAPResponseInInterceptor(this.clientMonitoringController));
 
 		factory.setServiceClass(IBookstore.class);
 		factory.setAddress(this.serviceAddress);
@@ -137,17 +148,20 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Gives implementing classes the possibility to modify the state before the request to {@link #client} is performed.
+	 * Gives implementing classes the possibility to modify the state before the
+	 * request to {@link #client} is performed.
 	 */
 	protected abstract void beforeRequest();
 
 	/**
-	 * Gives implementing classes the possibility to modify the state after the request to {@link #client} is performed.
+	 * Gives implementing classes the possibility to modify the state after the
+	 * request to {@link #client} is performed.
 	 */
 	protected abstract void afterRequest();
 
 	/**
-	 * Gives implementing classes the possibility to inspect the records written by the probes.
+	 * Gives implementing classes the possibility to inspect the records written by
+	 * the probes.
 	 *
 	 * @param records
 	 *            The list of written records.
@@ -156,6 +170,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	@Test
 	public final void testIt() throws InterruptedException {
+		Assert.assertTrue(this.server.isStarted());
 		this.beforeRequest();
 		final String retVal = this.client.searchBook("any"); // we could use the return value
 		Assert.assertEquals("Unexpected return value", "any", retVal);

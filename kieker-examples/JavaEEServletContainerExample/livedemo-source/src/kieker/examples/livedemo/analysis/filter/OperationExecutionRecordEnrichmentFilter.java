@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ import kieker.examples.livedemo.analysis.util.LimitedHashMap;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 
 /**
- * A filter enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values. The filter uses an internal LRU cache for the
- * short signatures.
+ * A filter enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
+ * The filter uses an internal LRU cache for the short signatures.
  * 
  * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BeforeReceivedRemoteEventFactory implements IRecordFactory<BeforeReceivedRemoteEvent> {
 	
-	
+
 	@Override
 	public BeforeReceivedRemoteEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeReceivedRemoteEvent(deserializer);
 	}
-	
+
+
 	@Override
-	@Deprecated
-	public BeforeReceivedRemoteEvent create(final Object[] values) {
-		return new BeforeReceivedRemoteEvent(values);
+	public String[] getValueNames() {
+		return BeforeReceivedRemoteEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeReceivedRemoteEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeReceivedRemoteEvent.SIZE;
 	}

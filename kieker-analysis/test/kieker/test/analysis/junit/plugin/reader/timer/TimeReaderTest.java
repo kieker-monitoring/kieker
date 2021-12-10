@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * A JUnit test for the {@link TimeReader}.<br>
  * </br>
- * 
+ *
  * Note: I know that some of the tests can result in race conditions (although this is not very likely). This is acceptable, as those are just tests (and not for
  * productive deployment). However, if the tests tend to fail, they have to be reworked.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class TimeReaderTest extends AbstractKiekerTest {
@@ -51,7 +51,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Tests the "non blocking" mode of the reader.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If the thread is interrupted. This should not happen.
 	 */
@@ -77,7 +77,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Tests the "blocking" mode of the reader.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If the thread is interrupted. This should not happen.
 	 */
@@ -118,7 +118,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * This test should make sure that the timer delivers a correct amount of records within a given limit.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If the test thread is interrupted.
 	 * @throws IllegalStateException
@@ -149,7 +149,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * This test should make sure that the timer delivers the correct amount of records.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If the test thread is interrupted.
 	 * @throws IllegalStateException

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BeforeDatabaseEventFactory implements IRecordFactory<BeforeDatabaseEvent> {
 	
-	
+
 	@Override
 	public BeforeDatabaseEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeDatabaseEvent(deserializer);
 	}
-	
+
+
 	@Override
-	@Deprecated
-	public BeforeDatabaseEvent create(final Object[] values) {
-		return new BeforeDatabaseEvent(values);
+	public String[] getValueNames() {
+		return BeforeDatabaseEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeDatabaseEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeDatabaseEvent.SIZE;
 	}

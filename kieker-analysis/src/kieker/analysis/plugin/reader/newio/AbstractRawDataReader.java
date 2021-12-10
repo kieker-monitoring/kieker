@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,97 @@
  ***************************************************************************/
 package kieker.analysis.plugin.reader.newio;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.newio.deserializer.IMonitoringRecordDeserializer;
+import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
+
+
 /**
- * <<<<<<< HEAD Abstract superclass for raw data readers. ======= Abstract
- * superclass for all readers which only read raw data to be processed by a
- * configurable deserializer. >>>>>>> stable
+ * Abstract superclass for all readers which only read raw data to be processed by a
+ * configurable deserializer.
  *
  * @author Holger Knoche
  * @since 2.0
  *
  */
-public abstract class AbstractRawDataReader implements IRawDataReader {
+public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRawDataReader.class.getCanonicalName());
+
+	private final IMonitoringRecordDeserializer deserializer;
+
+	/**
+	 * Creates a new reader using the given data.
+	 *
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context the reader runs in
+	 * @param deserializerClassName
+	 *            The class name of the deserializer to use
+	 */
+	public AbstractRawDataReader(final Configuration configuration, final IProjectContext projectContext,
+			final String deserializerClassName) {
+		super(configuration, projectContext);
+
+		this.deserializer = this.createDeserializer(deserializerClassName, configuration, projectContext);
+	}
+
+	@SuppressWarnings("unchecked")
+	private IMonitoringRecordDeserializer createDeserializer(final String deserializerClassName, final Configuration configuration,
+			final IProjectContext projectContext) {
+		// NOCS TODO Externalize instance creation into a factory
+		final Class<? extends IMonitoringRecordDeserializer> deserializerClass;
+		IMonitoringRecordDeserializer localDeserializer = null;
+
+		try {
+			deserializerClass = (Class<? extends IMonitoringRecordDeserializer>) Class.forName(deserializerClassName);
+			final Constructor<? extends IMonitoringRecordDeserializer> constructor = deserializerClass
+					.getConstructor(Configuration.class, IProjectContext.class);
+			localDeserializer = constructor.newInstance(configuration, projectContext);
+		} catch (final ClassNotFoundException e) {
+			LOGGER.error("The deserializer class '{}' was not found.", deserializerClassName);
+		} catch (final NoSuchMethodException e) {
+			LOGGER.error("The deserializer class '{}' does not provide a suitable constructor.", deserializerClassName);
+		} catch (final InstantiationException e) {
+			this.logInstantiationFailed(deserializerClassName, e);
+		} catch (final IllegalAccessException e) {
+			this.logInstantiationFailed(deserializerClassName, e);
+		} catch (final IllegalArgumentException e) {
+			this.logInstantiationFailed(deserializerClassName, e);
+		} catch (final InvocationTargetException e) {
+			this.logInstantiationFailed(deserializerClassName, e);
+		}
+
+		return localDeserializer;
+	}
+
+	private void logInstantiationFailed(final String className, final Throwable e) {
+		LOGGER.error("The deserializer class '{}' could not be instantiated.", className, e);
+	}
+
+	/**
+	 * Decodes the given raw data using the configured deserializer and delivers
+	 * them to the given output port.
+	 *
+	 * @param rawData
+	 *            The raw data to decode
+	 * @param outputPortName
+	 *            The output port name to send the decoded records to
+	 */
+	protected void decodeAndDeliverRecords(final byte[] rawData, final String outputPortName) {
+		this.decodeAndDeliverRecords(ByteBuffer.wrap(rawData), rawData.length, outputPortName);
+	}
 
 	protected final IRawDataProcessor dataProcessor;
 

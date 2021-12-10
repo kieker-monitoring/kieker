@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,10 +43,18 @@ import kieker.common.record.IMonitoringRecord;
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
+<<<<<<< HEAD
 		@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 				IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
 						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
 						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
+=======
+	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output port for the decoded records") },
+		configuration = {
+			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
+			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
+>>>>>>> origin/master
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
 
 	/** The name of the output port for the decoded records. */
@@ -85,8 +93,12 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 	@SuppressWarnings("unchecked")
 	private <C> C createAndInitializeReader(final String className, final Configuration configuration,
+<<<<<<< HEAD
 			final IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType)
 			throws AnalysisConfigurationException {
+=======
+			final Class<C> expectedType) {
+>>>>>>> origin/master
 		C createdInstance = null;
 
 		try {
@@ -217,11 +229,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 		// Initialize the reader
 		final Outcome readerInitOutcome = this.initReader();
-		if (readerInitOutcome != Outcome.SUCCESS) {
-			return false;
-		}
 
-		return true;
+		return readerInitOutcome == Outcome.SUCCESS;
 	}
 
 	private Outcome initReader() {

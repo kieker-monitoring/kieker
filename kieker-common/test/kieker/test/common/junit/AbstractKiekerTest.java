@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +105,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 			}
 
 		}
-		LOGGER.info("Prefix for test resources is {}", this.testModulePrefix);
+		LOGGER.debug("Prefix for test resources is {}", this.testModulePrefix);
 	}
 
 	protected String getTestModulePrefix() {

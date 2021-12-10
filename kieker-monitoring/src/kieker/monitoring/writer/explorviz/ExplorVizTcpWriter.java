@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,11 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.HostApplicationMetaData;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
@@ -53,13 +52,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExplorVizTcpWriter.class);
 
 	private static final String PREFIX = ExplorVizTcpWriter.class.getName() + ".";
-	/** configuration key for the hostname */
+	/** Configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	/** configuration key for the port */
+	/** Configuration key for the port. */
 	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
-	/** configuration key for the size of the {@link #byteBuffer} */
+	/** Configuration key for the size of the {@link #byteBuffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
-	/** configuration key for {@link #flush} */
+	/** Configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final byte HOST_APPLICATION_META_DATA_CLAZZ_ID = 0;
@@ -72,21 +71,24 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	/**
 	 * <code>true</code> if the {@link #byteBuffer} should be flushed upon each new
-	 * incoming monitoring record
+	 * incoming monitoring record.
 	 */
 	private final boolean flush;
-	/** the buffer used for buffering monitoring and registry records */
+	/** The buffer used for buffering monitoring and registry records. */
 	private final ByteBuffer byteBuffer;
-	/** the channel used to write out monitoring and registry records */
+	/** The channel used to write out monitoring and registry records. */
 	private final WritableByteChannel socketChannel;
-	/** the registry used to compress string fields in monitoring records */
+	/** The registry used to compress string fields in monitoring records. */
 	private final IWriterRegistry<String> writerRegistry;
-	/**
-	 * this adapter allows to use the new WriterRegistry with the legacy IRegistry
-	 * in {@link AbstractMonitoringRecord.registerStrings(..)}
-	 */
-	private final RegisterAdapter<String> registerStringsAdapter;
 
+	/**
+	 * Create explorviz writer.
+	 *
+	 * @param configuration
+	 *            configuration
+	 * @throws IOException
+	 *             on io error
+	 */
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
@@ -102,7 +104,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);
-		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
+		// this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
 	}
 
 	@Override
@@ -122,7 +124,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
-		record.registerStrings(this.registerStringsAdapter);
+		// record.registerStrings(this.registerStringsAdapter);
 
 		// sizes from ExplorViz not Kieker!
 		int recordSize = 0;

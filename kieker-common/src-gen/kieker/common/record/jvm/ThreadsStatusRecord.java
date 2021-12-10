@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,15 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class ThreadsStatusRecord extends AbstractJVMRecord  {
-	private static final long serialVersionUID = -9176980438135391329L;
-
+public class ThreadsStatusRecord extends AbstractJVMRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
@@ -40,8 +37,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
-	;
+			 + TYPE_SIZE_LONG; // ThreadsStatusRecord.totalStartedThreadCount
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
@@ -53,10 +49,8 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
 	
-	
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -65,6 +59,8 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		"peakThreadCount",
 		"totalStartedThreadCount",
 	};
+	
+	private static final long serialVersionUID = -9176980438135391329L;
 	
 	/** property declarations. */
 	private final long threadCount;
@@ -98,48 +94,12 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		this.totalStartedThreadCount = totalStartedThreadCount;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #ThreadsStatusRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public ThreadsStatusRecord(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.threadCount = (Long) values[3];
-		this.daemonThreadCount = (Long) values[4];
-		this.peakThreadCount = (Long) values[5];
-		this.totalStartedThreadCount = (Long) values[6];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #ThreadsStatusRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected ThreadsStatusRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.threadCount = (Long) values[3];
-		this.daemonThreadCount = (Long) values[4];
-		this.peakThreadCount = (Long) values[5];
-		this.totalStartedThreadCount = (Long) values[6];
-	}
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ThreadsStatusRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -151,36 +111,9 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getVmName(),
-			this.getThreadCount(),
-			this.getDaemonThreadCount(),
-			this.getPeakThreadCount(),
-			this.getTotalStartedThreadCount()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getVmName());
-	}
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getVmName());
@@ -189,6 +122,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		serializer.putLong(this.getPeakThreadCount());
 		serializer.putLong(this.getTotalStartedThreadCount());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -202,7 +136,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -213,36 +147,65 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ThreadsStatusRecord castedRecord = (ThreadsStatusRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getThreadCount() != castedRecord.getThreadCount()) return false;
-		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) return false;
-		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) return false;
-		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getThreadCount() != castedRecord.getThreadCount()) {
+			return false;
+		}
+		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) {
+			return false;
+		}
+		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) {
+			return false;
+		}
+		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) {
+			return false;
+		}
+		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getVmName().hashCode();
+		code += ((int)this.getThreadCount());
+		code += ((int)this.getDaemonThreadCount());
+		code += ((int)this.getPeakThreadCount());
+		code += ((int)this.getTotalStartedThreadCount());
+		
+		return code;
 	}
 	
 	public final long getThreadCount() {
@@ -264,4 +227,34 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		return this.totalStartedThreadCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ThreadsStatusRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "threadCount = ";
+		result += this.getThreadCount() + ", ";
+		
+		result += "daemonThreadCount = ";
+		result += this.getDaemonThreadCount() + ", ";
+		
+		result += "peakThreadCount = ";
+		result += this.getPeakThreadCount() + ", ";
+		
+		result += "totalStartedThreadCount = ";
+		result += this.getTotalStartedThreadCount() + ", ";
+		
+		return result;
+	}
 }

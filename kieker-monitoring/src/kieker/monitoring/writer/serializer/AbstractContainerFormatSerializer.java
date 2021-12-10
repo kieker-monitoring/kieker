@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public abstract class AbstractContainerFormatSerializer extends AbstractBinaryRe
 
 	/**
 	 * Write the given records to the given byte buffer.
-	 * 
+	 *
 	 * @param records
 	 *            The records to write
 	 * @param buffer
@@ -73,7 +73,7 @@ public abstract class AbstractContainerFormatSerializer extends AbstractBinaryRe
 
 	/**
 	 * Returns the format identifier for the contained data format.
-	 * 
+	 *
 	 * @return see above
 	 */
 	protected abstract int getFormatIdentifier();

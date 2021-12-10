@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * @author Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 abstract class AbstractLogReaderThread extends Thread {
 
 	private final Logger logger; // NOPMD (private log instance passed by ctor)

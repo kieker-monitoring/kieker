@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
-public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public class MyResponseTimeRecord extends AbstractMonitoringRecord {
 	public static final int SIZE = (2 * TYPE_SIZE_STRING) + TYPE_SIZE_LONG;
 	public static final Class<?>[] TYPES = { String.class, String.class, long.class, };
 
@@ -54,24 +53,6 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		this.className = deserializer.getString();
 		this.methodName = deserializer.getString();
 		this.responseTimeNanos = deserializer.getLong();
-	}
-
-	@Override
-	@Deprecated
-	// Will not be used because the record implements IMonitoringRecord.Factory
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
-	}
-
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		stringRegistry.get(this.getClassName());
-		stringRegistry.get(this.getMethodName());
 	}
 
 	@Override

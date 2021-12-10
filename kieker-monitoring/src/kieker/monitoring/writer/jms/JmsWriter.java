@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,12 +54,16 @@ public class JmsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
+	public static final String CONFIG_USERNAME = PREFIX + "Username"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PASSWORD = PREFIX + "Password"; // NOCS (afterPREFIX)
 
 	private final String configContextFactoryType;
 	private final String configProviderUrl;
 	private final String configFactoryLookupName;
 	private final String configTopic;
 	private final long configMessageTimeToLive;
+	private final String configUsername;
+	private final String configPassword;
 
 	private Session session;
 	private Connection connection;
@@ -72,6 +76,8 @@ public class JmsWriter extends AbstractMonitoringWriter {
 		this.configFactoryLookupName = configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME);
 		this.configTopic = configuration.getStringProperty(CONFIG_TOPIC);
 		this.configMessageTimeToLive = configuration.getLongProperty(CONFIG_MESSAGETTL);
+		this.configUsername = configuration.getStringProperty(CONFIG_USERNAME);
+		this.configPassword = configuration.getStringProperty(CONFIG_PASSWORD);
 
 		this.init();
 	}
@@ -93,7 +99,13 @@ public class JmsWriter extends AbstractMonitoringWriter {
 			// context.addToEnvironment(Context.PROVIDER_URL, providerUrl);
 
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup(this.configFactoryLookupName);
-			this.connection = factory.createConnection();
+
+			if (this.configUsername.isEmpty() && this.configPassword.isEmpty()) {
+				this.connection = factory.createConnection();
+			} else {
+				this.connection = factory.createConnection(this.configUsername, this.configPassword);
+			}
+
 			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			this.connection.start();
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.factory.old.RecordFactoryWrapper;
 
 /**
  * @author Christian Wulf
@@ -69,17 +68,16 @@ public final class CachedRecordFactoryCatalog {
 	 */
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		if (null == recordFactory) {
+		if (recordFactory == null) {
 			recordFactory = this.recordFactoryResolver.get(recordClassName);
-			if (null == recordFactory) { // if a corresponding factory could not be found
-				recordFactory = new RecordFactoryWrapper(recordClassName);
+			if (recordFactory != null) {
+				final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+				if (existingFactory != null) {
+					recordFactory = existingFactory;
+				}
 			}
-			final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
-			if (existingFactory != null) {
-				recordFactory = existingFactory;
-			}
-
 		}
 		return recordFactory;
 	}
+
 }

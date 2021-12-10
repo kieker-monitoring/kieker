@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * @author Micky Singh Multani
@@ -60,7 +59,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
 	private final int port;
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final Deque<Number> recordValues = new LinkedList<>();
 
 	public ExplorVizReader(final Configuration configuration, final IProjectContext projectContext) {

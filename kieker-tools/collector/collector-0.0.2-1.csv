@@ -1,0 +1,11 @@
+collector;size of observed system;3
+collector;lines of code (LOC);148
+collector;cyclomatic complexity bucket 1;6
+collector;cyclomatic complexity bucket 2;2
+collector;number of modules;24
+collector;number of nodes;33
+collector;number of edges;31
+collector;hypergraph size;166.39562257612886
+collector;hypergraph complexity;111.80356217262965
+collector;inter module coupling;93.38546242281882
+collector;graph cohesion;0.020034111328508276

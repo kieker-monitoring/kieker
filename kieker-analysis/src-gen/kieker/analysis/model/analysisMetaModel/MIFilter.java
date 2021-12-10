@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,6 +31,7 @@ public interface MIFilter extends MIPlugin {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Input Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getFilter_InputPorts()
 	 * @see kieker.analysis.model.analysisMetaModel.MIInputPort#getParent

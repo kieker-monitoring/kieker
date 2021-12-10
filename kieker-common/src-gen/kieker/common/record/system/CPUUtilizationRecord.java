@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,17 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.3
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -7851990890838902217L;
-
+public class CPUUtilizationRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
@@ -44,8 +40,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
-	;
+			 + TYPE_SIZE_DOUBLE; // CPUUtilizationRecord.idle
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // CPUUtilizationRecord.timestamp
@@ -60,6 +55,19 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"cpuID",
+		"user",
+		"system",
+		"wait",
+		"nice",
+		"irq",
+		"totalUtilization",
+		"idle",
+	};
 	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
@@ -72,20 +80,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"cpuID",
-		"user",
-		"system",
-		"wait",
-		"nice",
-		"irq",
-		"totalUtilization",
-		"idle",
-	};
+	private static final long serialVersionUID = -7851990890838902217L;
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -136,60 +131,12 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.idle = idle;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #CPUUtilizationRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public CPUUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #CPUUtilizationRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected CPUUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
-	}
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public CPUUtilizationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -206,39 +153,9 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getCpuID(),
-			this.getUser(),
-			this.getSystem(),
-			this.getWait(),
-			this.getNice(),
-			this.getIrq(),
-			this.getTotalUtilization(),
-			this.getIdle()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getCpuID());
-	}
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getCpuID());
@@ -250,6 +167,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		serializer.putDouble(this.getTotalUtilization());
 		serializer.putDouble(this.getIdle());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -263,7 +181,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -274,39 +192,77 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getCpuID().equals(castedRecord.getCpuID())) return false;
-		if (isNotEqual(this.getUser(), castedRecord.getUser())) return false;
-		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) return false;
-		if (isNotEqual(this.getWait(), castedRecord.getWait())) return false;
-		if (isNotEqual(this.getNice(), castedRecord.getNice())) return false;
-		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) return false;
-		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) return false;
-		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getCpuID().equals(castedRecord.getCpuID())) {
+			return false;
+		}
+		if (isNotEqual(this.getUser(), castedRecord.getUser())) {
+			return false;
+		}
+		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) {
+			return false;
+		}
+		if (isNotEqual(this.getWait(), castedRecord.getWait())) {
+			return false;
+		}
+		if (isNotEqual(this.getNice(), castedRecord.getNice())) {
+			return false;
+		}
+		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) {
+			return false;
+		}
+		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) {
+			return false;
+		}
+		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) {
+			return false;
+		}
+		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getCpuID().hashCode();
+		code += ((int)this.getUser());
+		code += ((int)this.getSystem());
+		code += ((int)this.getWait());
+		code += ((int)this.getNice());
+		code += ((int)this.getIrq());
+		code += ((int)this.getTotalUtilization());
+		code += ((int)this.getIdle());
+		
+		return code;
 	}
 	
 	public final long getTimestamp() {
@@ -358,4 +314,43 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return this.idle;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CPUUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "cpuID = ";
+		result += this.getCpuID() + ", ";
+		
+		result += "user = ";
+		result += this.getUser() + ", ";
+		
+		result += "system = ";
+		result += this.getSystem() + ", ";
+		
+		result += "wait = ";
+		result += this.getWait() + ", ";
+		
+		result += "nice = ";
+		result += this.getNice() + ", ";
+		
+		result += "irq = ";
+		result += this.getIrq() + ", ";
+		
+		result += "totalUtilization = ";
+		result += this.getTotalUtilization() + ", ";
+		
+		result += "idle = ";
+		result += this.getIdle() + ", ";
+		
+		return result;
+	}
 }

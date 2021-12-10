@@ -1,0 +1,27 @@
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+dependencies {
+	implementation project(":kieker-tools")
+	implementation project(":kieker-tools:trace-analysis")
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
+}
+
+task uploadArchives {
+	println 'trace-analysis-gui skipped'
+}

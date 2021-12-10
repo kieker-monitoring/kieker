@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	 * @param stringRegistry
 	 *            the string registry used for the serializer
 	 */
-	protected BinaryValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected BinaryValueSerializer(final ByteBuffer buffer, final IWriterRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
@@ -58,7 +58,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	 *            the string registry used for the serializer
 	 * @return the value serializer
 	 */
-	public static BinaryValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public static BinaryValueSerializer create(final ByteBuffer buffer, final IWriterRegistry<String> stringRegistry) {
 		return new BinaryValueSerializer(buffer, stringRegistry);
 	}
 
@@ -107,8 +107,8 @@ public class BinaryValueSerializer implements IValueSerializer {
 	
 	@Override
 	public void putString(final String value) {
-		final int stringId = this.stringRegistry.get(value);
-		this.putTableIndex(stringId);
+		final int stringId = this.stringRegistry.getId(value);
+		this.putInt(stringId);
 	}
 
 	@Override

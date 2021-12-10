@@ -1,39 +1,43 @@
-apply plugin: 'eclipse'
-apply plugin: 'com.github.hauner.jarTest'
+plugins {
+	id 'com.github.hauner.jarTest'
+	id 'java'
+	id 'java-library'
+}
 
-//sourceCompatibility = 1.8
-//targetCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+	api project(':kieker-common')
+	api project(':kieker-monitoring')
+	api project(':kieker-model')
 
-	compile project(':kieker-common')
+	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
-	compile resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
-	compile 'org.apache.cxf:cxf:2.6.17'							// cxf-bundle
-	compile resolveLibrary('org.eclipse.emf.common_*.jar')
-	compile resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
-	compile 'com.rabbitmq:amqp-client:4.2.1'
+	api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
-	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
+	api "com.rabbitmq:amqp-client:$libAmqpVersion"
+	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
+	api 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT'
+
+	implementation 'javax.jms:javax.jms-api:2.0.1'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
+	implementation 'org.apache.commons:commons-compress:1.20'
+	implementation 'org.nanohttpd:nanohttpd:2.3.1'
+	implementation 'com.carrotsearch:hppc:0.9.0'
+
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+	implementation 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	
-	testRuntime 'org.apache.derby:derby:10.12.1.1'	// (10.13.1.1 and above require Java 8)
-}
-
-
-clover {
-	report {
-		html=true
-	}
-	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
+	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT:test'
+	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }

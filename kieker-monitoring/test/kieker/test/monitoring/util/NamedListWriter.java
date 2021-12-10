@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,9 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class NamedListWriter extends AbstractMonitoringWriter {
 
+	public static final String PREFIX = NamedListWriter.class.getName() + ".";
 	/** The name of the configuration determining the name of the list used by this writer. */
-	public static final String CONFIG_PROPERTY_NAME_LIST_NAME = NamedListWriter.class.getName() + ".listName";
+	public static final String CONFIG_PROPERTY_NAME_LIST_NAME = PREFIX + "listName";
 	/** The default used list name if no name has been specified. */
 	public static final String FALLBACK_LIST_NAME = "VbDt0E7Aqv";
 
@@ -103,7 +104,8 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 	 * @throws AssertionError
 	 *             if the timeout has been reached or exceeded
 	 */
-	public static void awaitListSize(final List<?> list, final int listSize, final int timeoutInMs) throws InterruptedException {
+	public static void awaitListSize(final List<?> list, final int listSize, final int timeoutInMs)
+			throws InterruptedException {
 		final int interPauseInMs = 10;
 
 		int currentWaitingTimeInMs = 0;

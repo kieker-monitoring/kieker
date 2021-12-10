@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,17 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.12
  */
-public class NetworkUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 7799663712343478641L;
-
+public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
@@ -51,8 +47,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
-	;
+			 + TYPE_SIZE_DOUBLE; // NetworkUtilizationRecord.rxPacketsPerSecond
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // NetworkUtilizationRecord.timestamp
@@ -74,6 +69,26 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"interfaceName",
+		"speed",
+		"txBytesPerSecond",
+		"txCarrierPerSecond",
+		"txCollisionsPerSecond",
+		"txDroppedPerSecond",
+		"txErrorsPerSecond",
+		"txOverrunsPerSecond",
+		"txPacketsPerSecond",
+		"rxBytesPerSecond",
+		"rxDroppedPerSecond",
+		"rxErrorsPerSecond",
+		"rxFramePerSecond",
+		"rxOverrunsPerSecond",
+		"rxPacketsPerSecond",
+	};
 	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
@@ -93,27 +108,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_FRAME_PER_SECOND = 0.0;
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"interfaceName",
-		"speed",
-		"txBytesPerSecond",
-		"txCarrierPerSecond",
-		"txCollisionsPerSecond",
-		"txDroppedPerSecond",
-		"txErrorsPerSecond",
-		"txOverrunsPerSecond",
-		"txPacketsPerSecond",
-		"rxBytesPerSecond",
-		"rxDroppedPerSecond",
-		"rxErrorsPerSecond",
-		"rxFramePerSecond",
-		"rxOverrunsPerSecond",
-		"rxPacketsPerSecond",
-	};
+	private static final long serialVersionUID = 7799663712343478641L;
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -192,74 +187,12 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		this.rxPacketsPerSecond = rxPacketsPerSecond;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #NetworkUtilizationRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public NetworkUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.interfaceName = (String) values[2];
-		this.speed = (Long) values[3];
-		this.txBytesPerSecond = (Double) values[4];
-		this.txCarrierPerSecond = (Double) values[5];
-		this.txCollisionsPerSecond = (Double) values[6];
-		this.txDroppedPerSecond = (Double) values[7];
-		this.txErrorsPerSecond = (Double) values[8];
-		this.txOverrunsPerSecond = (Double) values[9];
-		this.txPacketsPerSecond = (Double) values[10];
-		this.rxBytesPerSecond = (Double) values[11];
-		this.rxDroppedPerSecond = (Double) values[12];
-		this.rxErrorsPerSecond = (Double) values[13];
-		this.rxFramePerSecond = (Double) values[14];
-		this.rxOverrunsPerSecond = (Double) values[15];
-		this.rxPacketsPerSecond = (Double) values[16];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #NetworkUtilizationRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected NetworkUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.interfaceName = (String) values[2];
-		this.speed = (Long) values[3];
-		this.txBytesPerSecond = (Double) values[4];
-		this.txCarrierPerSecond = (Double) values[5];
-		this.txCollisionsPerSecond = (Double) values[6];
-		this.txDroppedPerSecond = (Double) values[7];
-		this.txErrorsPerSecond = (Double) values[8];
-		this.txOverrunsPerSecond = (Double) values[9];
-		this.txPacketsPerSecond = (Double) values[10];
-		this.rxBytesPerSecond = (Double) values[11];
-		this.rxDroppedPerSecond = (Double) values[12];
-		this.rxErrorsPerSecond = (Double) values[13];
-		this.rxFramePerSecond = (Double) values[14];
-		this.rxOverrunsPerSecond = (Double) values[15];
-		this.rxPacketsPerSecond = (Double) values[16];
-	}
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public NetworkUtilizationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -283,46 +216,9 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getInterfaceName(),
-			this.getSpeed(),
-			this.getTxBytesPerSecond(),
-			this.getTxCarrierPerSecond(),
-			this.getTxCollisionsPerSecond(),
-			this.getTxDroppedPerSecond(),
-			this.getTxErrorsPerSecond(),
-			this.getTxOverrunsPerSecond(),
-			this.getTxPacketsPerSecond(),
-			this.getRxBytesPerSecond(),
-			this.getRxDroppedPerSecond(),
-			this.getRxErrorsPerSecond(),
-			this.getRxFramePerSecond(),
-			this.getRxOverrunsPerSecond(),
-			this.getRxPacketsPerSecond()
-		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getInterfaceName());
-	}
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getInterfaceName());
@@ -341,6 +237,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		serializer.putDouble(this.getRxOverrunsPerSecond());
 		serializer.putDouble(this.getRxPacketsPerSecond());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -354,7 +251,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -365,46 +262,105 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) return false;
-		if (this.getSpeed() != castedRecord.getSpeed()) return false;
-		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) return false;
-		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) return false;
-		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) return false;
-		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) return false;
-		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) return false;
-		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) return false;
-		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) {
+			return false;
+		}
+		if (this.getSpeed() != castedRecord.getSpeed()) {
+			return false;
+		}
+		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) {
+			return false;
+		}
+		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getInterfaceName().hashCode();
+		code += ((int)this.getSpeed());
+		code += ((int)this.getTxBytesPerSecond());
+		code += ((int)this.getTxCarrierPerSecond());
+		code += ((int)this.getTxCollisionsPerSecond());
+		code += ((int)this.getTxDroppedPerSecond());
+		code += ((int)this.getTxErrorsPerSecond());
+		code += ((int)this.getTxOverrunsPerSecond());
+		code += ((int)this.getTxPacketsPerSecond());
+		code += ((int)this.getRxBytesPerSecond());
+		code += ((int)this.getRxDroppedPerSecond());
+		code += ((int)this.getRxErrorsPerSecond());
+		code += ((int)this.getRxFramePerSecond());
+		code += ((int)this.getRxOverrunsPerSecond());
+		code += ((int)this.getRxPacketsPerSecond());
+		
+		return code;
 	}
 	
 	public final long getTimestamp() {
@@ -491,4 +447,64 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		return this.rxPacketsPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "NetworkUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "interfaceName = ";
+		result += this.getInterfaceName() + ", ";
+		
+		result += "speed = ";
+		result += this.getSpeed() + ", ";
+		
+		result += "txBytesPerSecond = ";
+		result += this.getTxBytesPerSecond() + ", ";
+		
+		result += "txCarrierPerSecond = ";
+		result += this.getTxCarrierPerSecond() + ", ";
+		
+		result += "txCollisionsPerSecond = ";
+		result += this.getTxCollisionsPerSecond() + ", ";
+		
+		result += "txDroppedPerSecond = ";
+		result += this.getTxDroppedPerSecond() + ", ";
+		
+		result += "txErrorsPerSecond = ";
+		result += this.getTxErrorsPerSecond() + ", ";
+		
+		result += "txOverrunsPerSecond = ";
+		result += this.getTxOverrunsPerSecond() + ", ";
+		
+		result += "txPacketsPerSecond = ";
+		result += this.getTxPacketsPerSecond() + ", ";
+		
+		result += "rxBytesPerSecond = ";
+		result += this.getRxBytesPerSecond() + ", ";
+		
+		result += "rxDroppedPerSecond = ";
+		result += this.getRxDroppedPerSecond() + ", ";
+		
+		result += "rxErrorsPerSecond = ";
+		result += this.getRxErrorsPerSecond() + ", ";
+		
+		result += "rxFramePerSecond = ";
+		result += this.getRxFramePerSecond() + ", ";
+		
+		result += "rxOverrunsPerSecond = ";
+		result += this.getRxOverrunsPerSecond() + ", ";
+		
+		result += "rxPacketsPerSecond = ";
+		result += this.getRxPacketsPerSecond() + ", ";
+		
+		return result;
+	}
 }

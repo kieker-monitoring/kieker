@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@ package kieker.monitoring.probe.spring.flow;
  * @since 1.13
  */
 public class RestConstants {
-    /**
-     * Name of the header field that is used to store the Kieker tracing information in HTTP requests and responses
-     */
-    protected static final String HEADER_FIELD = "KiekerTracingInfo";
+	/**
+	 * Name of the header field that is used to store the Kieker tracing information in HTTP requests and responses.
+	 */
+	protected static final String HEADER_FIELD = "KiekerTracingInfo";
 
-    protected RestConstants() {
-        // default constructor
-    }
+	protected RestConstants() {
+		// default constructor
+	}
 
 }

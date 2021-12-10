@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -42,7 +42,7 @@ public final class TimeSourceController extends AbstractController implements IT
 	 */
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
-		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationKeys.TIMER_CLASSNAME),
+		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationConstants.TIMER_CLASSNAME),
 				configuration);
 		if (this.timeSource == null) {
 			this.terminate();
@@ -50,17 +50,17 @@ public final class TimeSourceController extends AbstractController implements IT
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		LOGGER.debug("Shutting down TimeSource Controller");
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("TimeSource: ");
 		if (this.timeSource != null) {
@@ -76,7 +76,7 @@ public final class TimeSourceController extends AbstractController implements IT
 	}
 
 	@Override
-	public final ITimeSource getTimeSource() {
+	public ITimeSource getTimeSource() {
 		return this.timeSource;
 	}
 }

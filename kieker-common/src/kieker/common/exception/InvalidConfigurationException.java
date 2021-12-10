@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package kieker.common.exception;
 
 /**
  * This exception should be thrown if an illegal configuration (parameter) is detected by a configurable component.
- * 
+ *
  * @author Holger Knoche
  * @since 1.13
  *
@@ -29,19 +29,24 @@ public class InvalidConfigurationException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with the given message.
-	 * @param message The message to associate with this exception
+	 * 
+	 * @param message
+	 *            The message to associate with this exception
 	 */
 	public InvalidConfigurationException(final String message) {
 		super(message);
 	}
-	
+
 	/**
 	 * Creates a new exception with the given message and cause.
-	 * @param message The message to associate with this exception
-	 * @param cause The cause for this exception
+	 * 
+	 * @param message
+	 *            The message to associate with this exception
+	 * @param cause
+	 *            The cause for this exception
 	 */
 	public InvalidConfigurationException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
-	
+
 }

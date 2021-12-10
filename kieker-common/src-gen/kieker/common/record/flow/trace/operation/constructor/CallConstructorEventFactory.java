@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class CallConstructorEventFactory implements IRecordFactory<CallConstructorEvent> {
 	
-	
+
 	@Override
 	public CallConstructorEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CallConstructorEvent(deserializer);
 	}
-	
+
+
 	@Override
-	@Deprecated
-	public CallConstructorEvent create(final Object[] values) {
-		return new CallConstructorEvent(values);
+	public String[] getValueNames() {
+		return CallConstructorEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return CallConstructorEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return CallConstructorEvent.SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -50,12 +50,12 @@ public final class StateController extends AbstractController implements IStateC
 	 */
 	protected StateController(final Configuration configuration) {
 		super(configuration);
-		this.name = configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
-		this.experimentId.set(configuration.getIntProperty(ConfigurationKeys.EXPERIMENT_ID));
-		this.applicationName = configuration.getStringProperty(ConfigurationKeys.APPLICATION_NAME);
-		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationKeys.MONITORING_ENABLED);
-		this.debug = configuration.getBooleanProperty(ConfigurationKeys.DEBUG);
-		String hostnameTmp = configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
+		this.name = configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME);
+		this.experimentId.set(configuration.getIntProperty(ConfigurationConstants.EXPERIMENT_ID));
+		this.applicationName = configuration.getStringProperty(ConfigurationConstants.APPLICATION_NAME);
+		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED);
+		this.debug = configuration.getBooleanProperty(ConfigurationConstants.DEBUG);
+		String hostnameTmp = configuration.getStringProperty(ConfigurationConstants.HOST_NAME);
 		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
 			try {
@@ -68,17 +68,17 @@ public final class StateController extends AbstractController implements IStateC
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		LOGGER.debug("Shutting down State Controller");
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Status: '");
 		if (this.isMonitoringTerminated()) {
@@ -102,7 +102,7 @@ public final class StateController extends AbstractController implements IStateC
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean terminateMonitoring() {
+	public boolean terminateMonitoring() {
 		if (super.monitoringController != null) {
 			return super.monitoringController.terminate();
 		} else {
@@ -112,7 +112,7 @@ public final class StateController extends AbstractController implements IStateC
 	}
 
 	@Override
-	public final boolean isMonitoringTerminated() {
+	public boolean isMonitoringTerminated() {
 		return super.isTerminated();
 	}
 
@@ -120,7 +120,7 @@ public final class StateController extends AbstractController implements IStateC
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean enableMonitoring() {
+	public boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
 			LOGGER.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
@@ -139,24 +139,24 @@ public final class StateController extends AbstractController implements IStateC
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean disableMonitoring() {
+	public boolean disableMonitoring() {
 		LOGGER.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}
 
 	@Override
-	public final boolean isMonitoringEnabled() {
+	public boolean isMonitoringEnabled() {
 		return !super.isTerminated() && this.monitoringEnabled;
 	}
 
 	@Override
-	public final String getName() {
+	public String getName() {
 		return this.name;
 	}
 
 	@Override
-	public final String getHostname() {
+	public String getHostname() {
 		return this.hostname;
 	}
 
@@ -164,7 +164,7 @@ public final class StateController extends AbstractController implements IStateC
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final int incExperimentId() {
+	public int incExperimentId() {
 		return this.experimentId.incrementAndGet();
 	}
 
@@ -172,17 +172,17 @@ public final class StateController extends AbstractController implements IStateC
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void setExperimentId(final int newExperimentID) {
+	public void setExperimentId(final int newExperimentID) {
 		this.experimentId.set(newExperimentID);
 	}
 
 	@Override
-	public final int getExperimentId() {
+	public int getExperimentId() {
 		return this.experimentId.get();
 	}
 
 	@Override
-	public final boolean isDebug() {
+	public boolean isDebug() {
 		return this.debug;
 	}
 

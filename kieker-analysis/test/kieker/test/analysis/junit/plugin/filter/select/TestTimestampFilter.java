@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -48,18 +47,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object[] toArray() {
-			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-		}
-
-		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
-		}
-
-		@Override
-		public void registerStrings(final IRegistry<String> stringRegistry) {
-			// not used here
 		}
 
 		@Override
@@ -118,8 +107,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
-		this.reader = new ListReader<AbstractTraceEvent>(new Configuration(), this.controller);
-		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), this.controller);
+		this.reader = new ListReader<>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.controller);
 	}
 
 	/**

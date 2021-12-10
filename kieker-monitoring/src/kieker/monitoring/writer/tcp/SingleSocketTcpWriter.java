@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.WriterRegistry;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
@@ -120,7 +119,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		this.serializer = BinaryValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = BinaryValueSerializer.create(this.buffer, writerRegistry);
 	}
 
 	@Override

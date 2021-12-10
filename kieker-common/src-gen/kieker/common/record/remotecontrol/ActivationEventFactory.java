@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ActivationEventFactory implements IRecordFactory<ActivationEvent> {
 	
-	
+
 	@Override
 	public ActivationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ActivationEvent(deserializer);
 	}
-	
+
+
 	@Override
-	@Deprecated
-	public ActivationEvent create(final Object[] values) {
-		return new ActivationEvent(values);
+	public String[] getValueNames() {
+		return ActivationEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ActivationEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ActivationEvent.SIZE;
 	}

@@ -39,7 +39,7 @@ template IConstructorRecord : IOperationRecord
 
 @author 'Jan Waller' @since '1.6'
 template IEventRecord : IFlowRecord {
-    long timestamp = 0
+    changeable long timestamp = 0
 }
 
 @author 'Jan Waller' @since '1.6'
@@ -75,8 +75,8 @@ template IOperationRecord : IFlowRecord, IOperationSignature, IClassSignature
 
 @author 'Jan Waller' @since '1.6'
 template ITraceRecord : IFlowRecord {
-	//grouped by TraceMetadata.traceId traceId = -1
-	changeable long traceId = -1
+	changeable grouped by TraceMetadata.traceId traceId = -1
+	//changeable long traceId = -1
 	int orderIndex = -1
 }
 

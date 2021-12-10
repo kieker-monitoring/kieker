@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,12 @@ import kieker.common.record.misc.ThreadMetaData;
  * @author Christian Wulf (chw)
  *
  * @since 1.13
+ * @deprecated 1.15 ported teetime kieker.analysis.stage.flow
  */
+@Deprecated
 @Plugin(name = "Thread Event to Trace Event Filter (Event)", description = "Filter to transform threadId-based events to traceId-based events", outputPorts = {
-	@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records", eventTypes = {
-		IMonitoringRecord.class }) })
+	@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records",
+			eventTypes = IMonitoringRecord.class) })
 public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_DEFAULT = "defaultInputPort";
@@ -55,8 +57,8 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
-		IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event",
+			eventTypes = IMonitoringRecord.class)
 	public void readInput(final IMonitoringRecord event) {
 		if (event instanceof BeforeThreadBasedEvent) {
 			final BeforeThreadBasedEvent originalEvent = (BeforeThreadBasedEvent) event;
