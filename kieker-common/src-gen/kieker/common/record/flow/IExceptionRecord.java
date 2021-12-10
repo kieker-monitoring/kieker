@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
+
 /**
  * @author Jan Waller
  * 
@@ -22,5 +23,5 @@ package kieker.common.record.flow;
  */
 public interface IExceptionRecord extends IFlowRecord {
 	public String getCause();
-
+	
 }

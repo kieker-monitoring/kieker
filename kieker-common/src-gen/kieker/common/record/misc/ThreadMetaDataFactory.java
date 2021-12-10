@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -25,11 +26,13 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.13
  */
 public final class ThreadMetaDataFactory implements IRecordFactory<ThreadMetaData> {
+	
 
 	@Override
 	public ThreadMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ThreadMetaData(deserializer);
 	}
+
 
 	@Override
 	public String[] getValueNames() {

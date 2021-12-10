@@ -26,18 +26,18 @@ import kieker.common.record.flow.IConstructorRecord;
 
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.6
  */
-public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
+public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING; // IClassSignature.classSignature
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING; // IClassSignature.classSignature
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -45,7 +45,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -54,9 +54,10 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		"operationSignature",
 		"classSignature",
 	};
-
+	
 	private static final long serialVersionUID = -7724172518672268698L;
-
+	
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -75,16 +76,17 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeConstructorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -96,7 +98,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		serializer.putString(this.getOperationSignature());
 		serializer.putString(this.getClassSignature());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -104,7 +106,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -112,7 +114,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -121,6 +123,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,7 +138,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final BeforeConstructorEvent castedRecord = (BeforeConstructorEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -155,25 +158,25 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
-
+		
 		return code;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -182,19 +185,19 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String result = "BeforeConstructorEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		return result;
 	}
 }

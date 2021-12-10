@@ -26,30 +26,30 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
 
 /**
  * @author Marc Adolf
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class ActivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {
+public class ActivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
-
+	
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 	};
-
+	
 	/** default constants. */
 	public static final String PATTERN = "";
 	private static final long serialVersionUID = 6888923121890229913L;
-
+	
 	/** property declarations. */
 	private final String pattern;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -57,19 +57,20 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	 *            pattern
 	 */
 	public ActivationEvent(final String pattern) {
-		this.pattern = pattern == null ? "" : pattern;
+		this.pattern = pattern == null?"":pattern;
 	}
+
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ActivationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -77,7 +78,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putString(this.getPattern());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -85,7 +86,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -93,7 +94,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -102,6 +103,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +118,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final ActivationEvent castedRecord = (ActivationEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -124,10 +126,9 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		if (!this.getPattern().equals(castedRecord.getPattern())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,14 +136,15 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	public int hashCode() {
 		int code = 0;
 		code += this.getPattern().hashCode();
-
+		
 		return code;
 	}
-
+	
 	public final String getPattern() {
 		return this.pattern;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -151,7 +153,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		String result = "ActivationEvent: ";
 		result += "pattern = ";
 		result += this.getPattern() + ", ";
-
+		
 		return result;
 	}
 }
