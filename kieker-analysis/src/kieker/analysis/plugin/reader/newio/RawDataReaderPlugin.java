@@ -43,18 +43,11 @@ import kieker.common.record.IMonitoringRecord;
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
-<<<<<<< HEAD
-		@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-				IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
-						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
-						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
-=======
 	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output port for the decoded records") },
 		configuration = {
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
->>>>>>> origin/master
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
 
 	/** The name of the output port for the decoded records. */
@@ -93,12 +86,9 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 	@SuppressWarnings("unchecked")
 	private <C> C createAndInitializeReader(final String className, final Configuration configuration,
-<<<<<<< HEAD
 			final IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType)
 			throws AnalysisConfigurationException {
-=======
-			final Class<C> expectedType) {
->>>>>>> origin/master
+
 		C createdInstance = null;
 
 		try {

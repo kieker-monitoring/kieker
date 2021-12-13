@@ -21,7 +21,7 @@ import java.nio.CharBuffer;
 /**
  * Interface for raw data processors, i.e. classes which decode raw data to
  * records and feed them into a processing pipeline.
- * 
+ *
  * @author Holger Knoche
  *
  * @since 1.13
@@ -30,7 +30,7 @@ public interface IRawDataProcessor {
 
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
 	 * 
@@ -42,7 +42,7 @@ public interface IRawDataProcessor {
 
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
 	 * @param dataSize
@@ -56,46 +56,46 @@ public interface IRawDataProcessor {
 
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
-	 *            
+	 * 
 	 * @since 2.0
 	 */
 	public void decodeBytesAndDeliverRecords(byte[] rawData);
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
 	 * @param dataSize
 	 *            The size of the contained data in bytes
-	 *            
+	 * 
 	 * @since 2.0
 	 */
 	public void decodeBytesAndDeliverRecords(final ByteBuffer rawData, final int dataSize);
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
-	 *            
+	 * 
 	 * @since 2.0
 	 */
 	public void decodeCharactersAndDeliverRecords(char[] rawData);
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
-	 * 
+	 *
 	 * @param rawData
 	 *            The raw data to decode
 	 * @param dataSize
 	 *            The size of the contained data in characters
-	 *            
+	 * 
 	 * @since 2.0
 	 */
 	public void decodeCharactersAndDeliverRecords(final CharBuffer rawData, final int dataSize);
-			
+
 }

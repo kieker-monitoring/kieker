@@ -16,6 +16,8 @@
 
 package kieker.analysis.plugin.reader.newio;
 
+import static kieker.analysis.plugin.AbstractPlugin.LOGGER;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;

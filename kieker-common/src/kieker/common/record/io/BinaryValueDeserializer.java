@@ -19,9 +19,8 @@ package kieker.common.record.io;
 import java.nio.ByteBuffer;
 
 import kieker.common.exception.RecordInstantiationException;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.dataformat.VariableLengthEncoding;
-import kieker.common.util.registry.IRegistry;
-
 
 /**
  * Default value deserializer implementation.
@@ -36,7 +35,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	private static final byte TRUE_VALUE = (byte) 1;
 
 	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 
 	/**
 	 * Create a binary value deserializer.
@@ -46,7 +45,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	 * @param stringRegistry
 	 *            the string registry used for the deserializer
 	 */
-	protected BinaryValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected BinaryValueDeserializer(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
@@ -93,7 +92,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 		// Use variable-length encoding for indexes into the string table
 		return VariableLengthEncoding.decodeInt(this.buffer);
 	}
-	
+
 	@Override
 	public String getString() {
 		final int stringId = this.getTableIndex();

@@ -60,7 +60,7 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPlugin.class.getCanonicalName());
+	public static final Logger LOGGER = LoggerFactory.getLogger(AbstractPlugin.class.getCanonicalName());
 
 	private final ConcurrentHashMap<String, List<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;

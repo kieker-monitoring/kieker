@@ -29,9 +29,9 @@ import kieker.common.exception.RecordInstantiationException;
 public class TextValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
 	private static final char ESCAPE_CHAR = '\\';
-	
+
 	private static final char FIELD_SEPARATOR = ';';
-	
+
 	private final CharBuffer buffer;
 
 	/**
@@ -106,11 +106,6 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
 		final int value = Integer.parseInt(this.readValue());
 		return this.enumerationValueOf(clazz, value);
-	}
-
-	@Override
-	public byte[] getBytes(final byte[] target) {
-		throw new UnsupportedOperationException("Reading binary data is not supported by this deserializer.");
 	}
 
 	private String readValue() {

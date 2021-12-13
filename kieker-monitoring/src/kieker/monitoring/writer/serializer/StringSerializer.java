@@ -25,18 +25,15 @@ import kieker.common.record.io.TextValueSerializer;
 import kieker.monitoring.writer.raw.IRawDataWrapper;
 
 /**
- * String serializer for monitoring records based on the record's toString
- * method.
+ * String serializer for monitoring records based on the record's toString method.
  *
  * @author Holger Knoche
  *
  * @since 1.13
  */
-public class StringSerializer extends AbstractMonitoringRecordSerializer {
-	
-	private static final char FIELD_SEPARATOR = ';';
+public class StringSerializer extends AbstractCharacterRecordSerializer {
 
-	private static final Charset CHARSET = Charset.forName("UTF-8");
+	private static final char FIELD_SEPARATOR = ';';
 
 	/**
 	 * Creates a new serializer using the given configuration.
@@ -48,21 +45,23 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 		super(configuration);
 	}
 
-	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
-		return builder.toString().getBytes(StringSerializer.CHARSET);
-	}
-
 	@Override
 	public void serializeRecordToCharBuffer(final IMonitoringRecord record, final CharBuffer buffer) {
 		// Serialize the record
 		this.appendSingleRecord(record, buffer);
 	}
 
-	private StringBuilder appendSingleRecord(final IMonitoringRecord record, final StringBuilder builder) {
-		builder.append(record.getClass().getName()).append(FIELD_SEPARATOR).append(record.getLoggingTimestamp()).append(FIELD_SEPARATOR)
-				.append(record.toString()).append('\n');
+	private void appendSingleRecord(final IMonitoringRecord record, final CharBuffer buffer) {
+		final TextValueSerializer serializer = TextValueSerializer.create(buffer);
 
-		return builder;
+		buffer.append(record.getClass().getName());
+		buffer.append(FIELD_SEPARATOR);
+		buffer.append(String.valueOf(record.getLoggingTimestamp()));
+		buffer.append(FIELD_SEPARATOR);
+
+		record.serialize(serializer);
+
+		buffer.append('\n');
 	}
 
 	@Override
@@ -78,7 +77,7 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 		// No additional wrapping required (linebreaks are already added)
 		return NopCharacterWrapper.class;
 	}
-	
+
 	@Override
 	public void onInitialization() {
 		// Nothing to do

@@ -106,7 +106,7 @@ dependencies {
 	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.9'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	//testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation "org.springframework:spring-beans:$springVersion"
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 

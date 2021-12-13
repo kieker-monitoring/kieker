@@ -96,6 +96,7 @@ public class ByteBufferDeserializer {
 		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
 		final String recordClassName = this.stringRegistry.get(clazzId);
+		System.err.println("+++ " + recordClassName);
 		if (recordClassName != null) {
 			// identify record data
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);

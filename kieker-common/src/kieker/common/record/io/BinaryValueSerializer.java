@@ -18,8 +18,8 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
+import kieker.common.registry.writer.IWriterRegistry;
 import kieker.common.util.dataformat.VariableLengthEncoding;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Default value serializer implementation.
@@ -34,7 +34,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	private static final byte FALSE_VALUE = (byte) 0;
 
 	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+	private final IWriterRegistry<String> stringRegistry;
 
 	/**
 	 * Create a binary value serializer.
@@ -104,7 +104,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 		// Use variable-length encoding for indexes into the string table
 		VariableLengthEncoding.encodeInt(index, this.buffer);
 	}
-	
+
 	@Override
 	public void putString(final String value) {
 		final int stringId = this.stringRegistry.getId(value);

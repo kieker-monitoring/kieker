@@ -25,9 +25,9 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.registry.reader.ReaderRegistry;
 import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
-
 
 /**
  *
@@ -84,7 +84,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
 		}
-		
+
 		final IValueDeserializer deserializer = BinaryValueDeserializer.create(buffer, this.stringRegistry);
 		final String recordClassName = deserializer.getString(); // NOPMD (clazzId must be read before reading timestamp)
 

@@ -72,9 +72,11 @@ public class BinaryUnknownTypeTest {
 	@Test
 	public void testTerminateUponUnknownRecordType() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
-
+		System.err.println("+++++++++ 1 " + (records != null));
+		System.err.println("++r " + records.size());
 		final List<IMonitoringRecord> analyzedRecords = this.testUnknownRecordTypes(records, false);
-
+		System.err.println("+++++++++ 2 " + (analyzedRecords != null));
+		System.err.println("++ar " + analyzedRecords.size());
 		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
 		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(1));
