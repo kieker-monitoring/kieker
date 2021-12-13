@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,16 @@
 
 package kieker.monitoring.probe.aspectj.operationExecution;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import java.util.Stack;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -33,12 +36,12 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
-	private static final Log LOG = LogFactory.getLog(AbstractOperationExecutionAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractOperationExecutionAspect.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -46,23 +49,31 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
+	private final ThreadLocal<Stack<OperationStartData>> stack = new ThreadLocal<Stack<OperationStartData>>() {
+		@Override
+		protected Stack<OperationStartData> initialValue() {
+			return new Stack<>();
+		}
+	};
+
 	/**
-	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct executions of the methods (e.g. all
+	 * The pointcut for the monitored operations. Inheriting classes should extend
+	 * the pointcut in order to find the correct executions of the methods (e.g. all
 	 * methods or only methods with specific annotations).
 	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	@Around("monitoredOperation() && notWithinKieker()")
-	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+	@Before("monitoredOperation() && notWithinKieker()")
+	public void beforeOperation(final JoinPoint thisJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
-			return thisJoinPoint.proceed();
+			return;
 		}
-		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
-		if (!CTRLINST.isProbeActivated(signature)) {
-			return thisJoinPoint.proceed();
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
 		}
-		// collect data
+		// common fields
 		final boolean entrypoint;
 		final String hostname = VMNAME;
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
@@ -81,29 +92,41 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
 			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			if ((eoi == -1) || (ess == -1)) {
-				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				CTRLINST.terminateMonitoring();
 			}
 		}
 		// measure before
 		final long tin = TIME.getTime();
-		// execution of the called method
-		final Object retval;
-		try {
-			retval = thisJoinPoint.proceed();
-		} finally {
-			// measure after
-			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
-			// cleanup
-			if (entrypoint) {
-				CFREGISTRY.unsetThreadLocalTraceId();
-				CFREGISTRY.unsetThreadLocalEOI();
-				CFREGISTRY.unsetThreadLocalESS();
-			} else {
-				CFREGISTRY.storeThreadLocalESS(ess); // next operation is ess
-			}
+
+		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+		stack.get().push(data);
+	}
+
+	@After("monitoredOperation() && notWithinKieker()")
+	public void afterOperation(final JoinPoint thisJoinPoint) {
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
 		}
-		return retval;
+
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+
+		final OperationStartData data = stack.get().pop();
+
+		final long tout = TIME.getTime();
+		CTRLINST.newMonitoringRecord(
+				new OperationExecutionRecord(operationSignature, data.getSessionId(),
+						data.getTraceId(), data.getTin(), tout, data.getHostname(), data.getEoi(), data.getEss()));
+		// cleanup
+		if (data.isEntrypoint()) {
+			CFREGISTRY.unsetThreadLocalTraceId();
+			CFREGISTRY.unsetThreadLocalEOI();
+			CFREGISTRY.unsetThreadLocalESS();
+		} else {
+			CFREGISTRY.storeThreadLocalESS(data.getEss()); // next operation is ess
+		}
 	}
 }

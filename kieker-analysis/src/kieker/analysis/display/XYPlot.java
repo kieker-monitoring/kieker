@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class XYPlot extends AbstractDisplay {
@@ -37,21 +37,21 @@ public class XYPlot extends AbstractDisplay {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param maxEntriesPerSeries
 	 *            The maximal number of allowed entries per series in this plot.
 	 */
 	public XYPlot(final int maxEntriesPerSeries) {
-		this.entries = new ConcurrentHashMap<String, CacheMap>();
+		this.entries = new ConcurrentHashMap<>();
 		this.maxEntriesPerSeries = maxEntriesPerSeries;
 	}
 
 	/**
 	 * Delivers the entries for the given series.
-	 * 
+	 *
 	 * @param key
 	 *            The name of the series.
-	 * 
+	 *
 	 * @return A map with the series entries.
 	 */
 	public Map<Object, Number> getEntries(final String key) {
@@ -66,7 +66,7 @@ public class XYPlot extends AbstractDisplay {
 
 	/**
 	 * Sets a value for the given series.
-	 * 
+	 *
 	 * @param key
 	 *            The name of the series to modify.
 	 * @param x
@@ -92,7 +92,7 @@ public class XYPlot extends AbstractDisplay {
 
 	/**
 	 * A helper class representing a simple LRU cache with fixed size.
-	 * 
+	 *
 	 * @author Nils Christian Ehmke
 	 * @since 1.8
 	 */

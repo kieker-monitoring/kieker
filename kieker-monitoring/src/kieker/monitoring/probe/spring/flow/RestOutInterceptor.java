@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package kieker.monitoring.probe.spring.flow;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -45,7 +45,7 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 
 	private static final String SIGNATURE = "kieker.monitoring.probe.spring.flow.RestOutInterceptor.interceptOutgoingRequest()";
 
-	private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestOutInterceptor.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = RestOutInterceptor.CTRLINST.getTimeSource();
 	private static final String VMNAME = RestOutInterceptor.CTRLINST.getHostname();
@@ -62,7 +62,6 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 	@Override
 	public ClientHttpResponse intercept(final HttpRequest request, final byte[] body,
 			final ClientHttpRequestExecution execution) throws IOException {
-
 		if (!RestOutInterceptor.CTRLINST.isMonitoringEnabled()) {
 			return execution.execute(request, body);
 		}
@@ -86,8 +85,7 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 			ess = RestOutInterceptor.CF_REGISTRY.recallAndIncrementThreadLocalESS();
 			nextESS = ess + 1;
 			if ((eoi == -1) || (ess == -1)) {
-				RestOutInterceptor.LOG
-						.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				RestOutInterceptor.LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				RestOutInterceptor.CTRLINST.terminateMonitoring();
 			}
 		}
@@ -98,10 +96,7 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 		headers.add(RestConstants.HEADER_FIELD, Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi)
 				+ "," + Integer.toString(nextESS));
 
-		if (RestOutInterceptor.LOG.isDebugEnabled()) {
-			RestOutInterceptor.LOG.debug(
-					"Sending request to " + request.getURI().toString() + " with header = " + headers.toString());
-		}
+		RestOutInterceptor.LOGGER.debug("Sending request to {} with header = ", request.getURI().toString(), headers.toString());
 
 		// measure before
 		final long tin = RestOutInterceptor.TIME.getTime();
@@ -121,11 +116,8 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 					final List<String> responseHeaderList = responseHeaders.get(RestConstants.HEADER_FIELD);
 
 					if (responseHeaderList != null) {
-						if (RestOutInterceptor.LOG.isDebugEnabled()) {
-							RestOutInterceptor.LOG
-									.debug("Received response from " + responseHeaders.getLocation().toString()
-											+ " with header = " + responseHeaders.toString());
-						}
+						RestOutInterceptor.LOGGER.debug("Received response from {} with header = {}", responseHeaders.getLocation().toString(),
+								responseHeaders.toString());
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -135,12 +127,11 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 							try {
 								retTraceId = Long.parseLong(retTraceIdStr);
 							} catch (final NumberFormatException exc) {
-								RestOutInterceptor.LOG.warn("Invalid tradeId");
+								RestOutInterceptor.LOGGER.warn("Invalid tradeId");
 							}
 						}
 						if (traceId != retTraceId) {
-							RestOutInterceptor.LOG.error("TraceId in response header (" + retTraceId
-									+ ") is different from that in request header (" + traceId + ")");
+							RestOutInterceptor.LOGGER.error("TraceId in response header ({}) is different from that in request header ({})", retTraceId, traceId);
 						}
 
 						// Extract session id
@@ -157,21 +148,16 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 								retEOI = Integer.parseInt(retEOIStr);
 								RestOutInterceptor.CF_REGISTRY.storeThreadLocalEOI(retEOI);
 							} catch (final NumberFormatException exc) {
-								RestOutInterceptor.LOG.warn("Invalid eoi", exc);
+								RestOutInterceptor.LOGGER.warn("Invalid eoi", exc);
 							}
 						}
 
 					} else {
-						if (RestOutInterceptor.LOG.isDebugEnabled()) {
-							RestOutInterceptor.LOG.debug("No monitoring data found in the response header from "
-									+ responseHeaders.getLocation().toString() + ". Is it instrumented?");
-						}
+						RestOutInterceptor.LOGGER.debug("No monitoring data found in the response header from {}. Is it instrumented?",
+								responseHeaders.getLocation().toString());
 					}
 				} else {
-					if (RestOutInterceptor.LOG.isDebugEnabled()) {
-						RestOutInterceptor.LOG.debug("Response header from "
-								+ response.getHeaders().getLocation().toString() + " is null. Is it instrumented?");
-					}
+					RestOutInterceptor.LOGGER.debug("Response header from {} is null. Is it instrumented?", response.getHeaders().getLocation().toString());
 				}
 				response.close();
 			}

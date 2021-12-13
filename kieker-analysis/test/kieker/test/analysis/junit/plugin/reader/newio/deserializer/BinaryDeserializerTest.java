@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,13 +43,16 @@ public class BinaryDeserializerTest {
 	public BinaryDeserializerTest() {
 		// Default serializer
 	}
-	
+
 	/**
 	 * Tests the decoding of a single record and its associated metadata record.
 	 */
 	@Test
 	public void testDecodeSingleRecord() {
-		final String dataBase64 = "S0lLQURGTFQAAAAAFJlRZxLkqNMAAAABAAAAAgAAAAMAAAABAAAAAAAAAAAAAAAABAAAAAAAAAABAAAABRSZUWcS3PyIAAAABgAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAEJLmtpZWtlci5jb21tb24ucmVjb3JkLm1pc2MuS2lla2VyTWV0YWRhdGFSZWNvcmQNMS4xMy1TTkFQU0hPVAZLSUVLRVIHaWRlYXBhZAtOQU5PU0VDT05EUzlraWVrZXIuY29tbW9uLnJlY29yZC5jb250cm9sZmxvdy5PcGVyYXRpb25FeGVjdXRpb25SZWNvcmQEb3AoKQdTRVNTLUlEBGhvc3QAAABp";
+		final String dataBase64 = "S0lLQURGTFQAAAAAFJlRZxLkqNMAAAABAAAAAgAAAAMAAAABAAAAAAAAAAAAAAAABAAAAAAAAAABAAAABRS"
+				+ "ZUWcS3PyIAAAABgAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAEJLmtpZWtlci5jb21tb24ucmVjb3JkLm1p"
+				+ "c2MuS2lla2VyTWV0YWRhdGFSZWNvcmQNMS4xMy1TTkFQU0hPVAZLSUVLRVIHaWRlYXBhZAtOQU5PU0VDT05EUzlraWVrZXIuY29tb"
+				+ "W9uLnJlY29yZC5jb250cm9sZmxvdy5PcGVyYXRpb25FeGVjdXRpb25SZWNvcmQEb3AoKQdTRVNTLUlEBGhvc3QAAABp";
 
 		final IMonitoringRecord expectedMetadataRecord = new KiekerMetadataRecord("1.13-SNAPSHOT", "KIEKER", "ideapad", 1, false, 0, "NANOSECONDS", 1);
 		expectedMetadataRecord.setLoggingTimestamp(1484307055335745747L);

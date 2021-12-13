@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,20 +31,21 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This reader can be used to read records via an in-memory pipe.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
+ * @deprecated 1.15 ported to teetime
  */
-@Plugin(description = "A reader which reads records via an in-memory pipe",
-		outputPorts = {
-			@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
-					description = "Output Port of the PipeReader")
-		},
-		configuration = {
-			@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
-					description = "The name of the pipe used to read data.")
-		})
+@Deprecated
+@Plugin(description = "A reader which reads records via an in-memory pipe", outputPorts = {
+	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the PipeReader")
+}, configuration = {
+	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME,
+			defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
+			description = "The name of the pipe used to read data.")
+})
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
 	/** This is the name of the default output port. */
@@ -61,7 +62,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -77,9 +78,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeNameConfig);
 		} else {
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Connected to named pipe '" + this.pipe.getName() + "'");
-			}
+			this.logger.debug("Connected to named pipe '{}'", this.pipe.getName());
 		}
 		// escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
@@ -87,7 +86,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	/**
 	 * Blocks until the associated pipe is being closed.
-	 * 
+	 *
 	 * @return true if the reading terminated in a "normal" way. If an interrupt terminates the wait-method too early, false will be returned.
 	 */
 	@Override
@@ -95,9 +94,9 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
-			this.log.info("Pipe closed. Will terminate.");
+			this.logger.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException ex) {
-			this.log.error("Received InterruptedException", ex);
+			this.logger.error("Received InterruptedException", ex);
 			return false;
 		}
 		return true;
@@ -105,7 +104,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 
 	/**
 	 * This method sends a given records directly to the output port.
-	 * 
+	 *
 	 * @param rec
 	 *            The new record object.
 	 * @return true if and only if the record has been delivered.

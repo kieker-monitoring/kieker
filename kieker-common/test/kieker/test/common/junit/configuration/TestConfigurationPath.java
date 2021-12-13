@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestConfigurationPath extends AbstractKiekerTest {
@@ -52,6 +52,9 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	/**
+	 * Test for correct path conversion.
+	 */
 	@Test
 	public void testPath() {
 		Assert.assertTrue((paths.length % 2) == 0);

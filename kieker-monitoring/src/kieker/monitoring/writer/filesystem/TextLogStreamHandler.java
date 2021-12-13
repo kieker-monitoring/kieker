@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,15 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.TextValueSerializer;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.WriterUtil;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * Create log files following the Kieker DAT format of semicolon separated values.
@@ -42,7 +43,7 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 	/** line separator string. */
 	private static final String LINE_SEPARATOR = System.lineSeparator();
 
-	private static final Log LOGGER = LogFactory.getLog(TextLogStreamHandler.class); // NOPMD use of "wrong" logger class
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextLogStreamHandler.class);
 
 	private final CharBuffer buffer;
 

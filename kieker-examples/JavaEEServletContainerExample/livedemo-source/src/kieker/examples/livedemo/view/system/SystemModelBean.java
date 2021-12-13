@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import kieker.examples.livedemo.view.AnalysisBean;
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Operation;
+import kieker.tools.trace.analysis.systemModel.AllocationComponent;
+import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
+import kieker.tools.trace.analysis.systemModel.ComponentType;
+import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
+import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * @author Bjoern Weissenfels

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import org.apache.cxf.binding.soap.interceptor.SoapHeaderOutFilterInterceptor;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.interceptor.Fault;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -65,7 +65,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 	/** Stores the singleton instance of the SOAP trace registry. */
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
-	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseOutInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionSOAPResponseOutInterceptor.class);
 
 	/** The monitoring controller of this interceptor. */
 	protected final IMonitoringController monitoringController;
@@ -116,8 +116,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		if (traceId == -1) {
 			// Kieker trace Id not registered. Should not happen, since this is a response
 			// message!
-			OperationExecutionSOAPResponseOutInterceptor.LOG
-					.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
+			OperationExecutionSOAPResponseOutInterceptor.LOGGER.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {

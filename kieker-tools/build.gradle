@@ -1,98 +1,51 @@
-apply plugin: 'eclipse'
-
-configurations {
-	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
+plugins {
+	id 'java'
+	id 'java-library'
+	id "com.github.hauner.jarTest"
 }
+
+// Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
-	resultJar 'commons-cli:commons-cli:1.4'
-	resultJar 'com.beust:jcommander:1.27'
+	implementation project(':kieker-common')
+	api project(':kieker-analysis')
+	api project(':kieker-model')
+	api project(':kieker-monitoring')
 
-	compile project(':kieker-common')
-	compile project(':kieker-analysis')
-	compile project(':kieker-monitoring')	
+	implementation 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
+	implementation 'org.apache.commons:commons-lang3:3.12.0'		// used by OPAD
 
-	compile 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
-	compile 'org.apache.commons:commons-lang3:3.6'		// used by OPAD
-	compile configurations.resultJar
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
-	compile resolveLibrary('Rsession-*.jar')
-	compile resolveLibrary('Rserve-*.jar')
-	compile resolveLibrary('REngine-*.jar')
-	compile resolveLibrary('reflections-*.jar')
-	compile resolveLibrary('activemq-core-*.jar')
-	//compile group: 'org.eclipse.jetty',	name: 'jetty-server', version: '8.1.16.v20140903'
-	
+	// TODO this can be removed when all tools have been ported to jcommander
+	// https://mvnrepository.com/artifact/commons-cli/commons-cli
+	implementation 'commons-cli:commons-cli:1.4'
+
+	implementation 'javax.jms:javax.jms-api:2.0.1'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+	implementation 'ch.qos.logback:logback-classic:1.1.7'
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+
+	// TODO jgraphx is no longer maintained
+	implementation resolveLibrary('jgraphx-*.jar')
+
+	// no maven source available
+	implementation resolveLibrary('Rsession-*.jar')
+	implementation resolveLibrary('Rserve-*.jar')
+	implementation resolveLibrary('REngine-*.jar')
+	// https://mvnrepository.com/artifact/org.apache.activemq/activemq-core
+	implementation 'org.apache.activemq:activemq-core:5.7.0'
+
+
 	// Some dependencies for the HTTP connector of the KDB
-	compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
-	
-	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	// this project depends on the tests of kieker-analysis, e.g., it requires the class BookstoreEventRecordFactory
-	testCompile project (path: ':kieker-analysis', configuration: 'testArchives')
-	// this project depends on the tests of kieker-analysis, e.g., it requires the class NamedListWriter
-	testCompile project (path: ':kieker-monitoring', configuration: 'testArchives')
+	implementation fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 
-	//testRuntime org.apache.derby:derby:10.13.1.1
-	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
-	testRuntime resolveLibrary('kahadb-*.jar')
-	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
-}
+	testImplementation "junit:junit:$libJunitVersion"
 
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
-
-task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-  }
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames
-
-task generateRecords(type: JavaExec) {
-  description 'Generates the sources for the Kieker records using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'src-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java',          // generate the records
-       '-l', 'java.factory',  // generate the record factories
-       '-n', 'kieker-tools',
-       '-p', 'kieker-tools',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}
-
-task generateRecordTests(type: JavaExec) {
-  description 'Generates the sources for the Kieker records tests using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'test-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java.junit',          // generate the records
-       '-n', 'kieker-tools',
-       '-p', 'kieker-tools',
-       '-v', '1.10'	          // generate code for Kieker 1.10
+	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation project(':kieker-analysis').sourceSets.test.output
 }

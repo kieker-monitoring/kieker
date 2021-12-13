@@ -1,10 +1,6 @@
-apply plugin: 'eclipse'
-apply plugin: 'java-library'
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
+plugins {
+	id: 'java'
+	id: 'java-library'
 }
 
 sourceCompatibility = 1.8
@@ -24,13 +20,13 @@ dependencies {
 	api project(':kieker-monitoring')
 	api project(':kieker-analysis')
 
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    //api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
+	// This dependency is exported to consumers, that is to say found on their compile classpath.
+	//api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.datastax.cassandra:cassandra-driver-core:3.4.0'
+	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+	implementation 'com.datastax.cassandra:cassandra-driver-core:3.4.0'
 
-    // Use JUnit test framework
-    //testImplementation 'junit:junit:4.12'
+	// Use JUnit test framework
+	//testImplementation 'junit:junit:4.12'
 }
 

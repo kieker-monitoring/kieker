@@ -1,55 +1,19 @@
-apply plugin: 'eclipse'
-apply plugin: "com.github.hauner.jarTest"
-
-dependencies {
-	// no project-specific dependencies
+plugins {
+	id "com.github.hauner.jarTest"
+	id 'java'
 }
 
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
+dependencies {
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+}
+
+
+task replaceHardCodedVersionNames() {
+	doLast {
+		regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
 	}
 }
 
-task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
-  }
-}
-
 compileJava.dependsOn replaceHardCodedVersionNames
-
-task generateRecords(type: JavaExec) {
-  description 'Generates the sources for the Kieker records using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'src-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java',          // generate the records
-       '-l', 'java.factory',  // generate the record factories
-       '-n', 'kieker-common',
-       '-p', 'kieker-common',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}
-
-task generateRecordTests(type: JavaExec) {
-  description 'Generates the sources for the Kieker records tests using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'test-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java.junit',          // generate the records
-       '-n', 'kieker-common',
-       '-p', 'kieker-common',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}

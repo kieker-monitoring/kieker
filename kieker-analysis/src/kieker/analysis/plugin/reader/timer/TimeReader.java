@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,16 +35,16 @@ import kieker.common.record.misc.TimestampRecord;
 /**
  * This plugin provides the current (system) time in regular intervals. The time is delivered to the two output ports as both a timestamp and a
  * {@link TimestampRecord} instance.<br>
- * <br/>
- * 
+ * <br>
+ *
  * The reader can be configured to emit an arbitrary amount of signals. It can also be configured to emit an infinite amount of signals.<br>
- * <br/>
- * 
+ * <br>
+ *
  * The sent timestamps are created using {@link System#nanoTime()} as a time source, which is being converted to the global time unit (as defined in the
  * configuration from the given {@link IProjectContext}).
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 @Plugin(
@@ -99,7 +99,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	/**
 	 * Creates a new timer using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration containing the properties to initialize this timer.
 	 * @param projectContext
@@ -118,7 +118,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		if (!this.terminated) {
-			this.log.info("Shutdown of TimeReader requested.");
+			this.logger.info("Shutdown of TimeReader requested.");
 			this.executorService.shutdown();
 			try {
 				this.terminated = this.executorService.awaitTermination(5, TimeUnit.SECONDS);
@@ -137,7 +137,8 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public boolean read() {
-		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(this.numberImpulses), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
+		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(this.numberImpulses),
+				this.initialDelay, this.period, TimeUnit.NANOSECONDS);
 		try {
 			if (this.numberImpulses == INFINITE_EMITS) {
 				this.result.get();
@@ -176,9 +177,9 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	/**
 	 * A simple helper class used to send the current system time.
-	 * 
+	 *
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.8
 	 */
 	protected class TimestampEventTask implements Runnable {
@@ -187,7 +188,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 		/**
 		 * Creates a new task.
-		 * 
+		 *
 		 * @param numberImpulses
 		 *            0 = infinite
 		 */

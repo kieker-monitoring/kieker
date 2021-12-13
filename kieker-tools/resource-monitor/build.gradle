@@ -1,0 +1,25 @@
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.resource.monitor.ResourceMonitorMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+dependencies {
+	implementation project(":kieker-tools")
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+}
+
+
+task uploadArchives {
+	println 'resource-monitor skipped'
+}

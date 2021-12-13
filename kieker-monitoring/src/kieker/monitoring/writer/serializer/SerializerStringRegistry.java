@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.IRegistryRecordReceiver;
+import kieker.common.registry.writer.IWriterRegistry;
 
 /**
  * Rudimentary string registry for use by the binary format serializer. This registry is meant for
@@ -34,22 +33,17 @@ import kieker.common.util.registry.IRegistryRecordReceiver;
  *
  * @since 1.13
  */
-class SerializerStringRegistry implements IRegistry<String> {
+class SerializerStringRegistry implements IWriterRegistry<String> {
 
-	private final Map<String, Integer> valueToIdMap = new HashMap<String, Integer>(); // NOPMD
-	private final List<String> values = new ArrayList<String>();
+	private final Map<String, Integer> valueToIdMap = new HashMap<>(); // NOPMD
+	private final List<String> values = new ArrayList<>();
 
 	SerializerStringRegistry() {
 		// Nothing to do
 	}
-	
-	@Override
-	public long getId() {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
-	public int get(final String value) {
+	public int getId(final String value) {
 		final Integer id = this.valueToIdMap.get(value);
 
 		if (id == null) {
@@ -73,23 +67,16 @@ class SerializerStringRegistry implements IRegistry<String> {
 	}
 
 	@Override
-	public String get(final int id) {
-		throw new UnsupportedOperationException();
+	public void register(final String value) {
+		final int newId = this.values.size();
+
+		this.values.add(value);
+		this.valueToIdMap.put(value, newId);
 	}
 
 	@Override
-	public String[] getAll() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getSize() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setRecordReceiver(final IRegistryRecordReceiver registryRecordReceiver) {
-		throw new UnsupportedOperationException();
+	public long getId() {
+		return 0;
 	}
 
 }

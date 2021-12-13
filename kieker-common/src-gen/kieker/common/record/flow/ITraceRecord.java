@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Jan Waller
  * 
@@ -23,8 +22,9 @@ package kieker.common.record.flow;
  */
 public interface ITraceRecord extends IFlowRecord {
 	public long getTraceId();
+
 	public void setTraceId(long traceId);
-	
+
 	public int getOrderIndex();
-	
+
 }

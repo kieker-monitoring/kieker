@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,24 +20,27 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.slf4j.Logger;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FileExtensionFilter;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 abstract class AbstractLogReaderThread extends Thread {
 
-	private final Log logger; // NOPMD (private log instance passed by ctor)
+	private final Logger logger; // NOPMD (private log instance passed by ctor)
 	private final File inputDir;
 
 	/** indicates that this thread should terminate itself. */
 	private volatile boolean shouldTerminate;
 
-	protected AbstractLogReaderThread(final Log logger, final File inputDir) {
+	protected AbstractLogReaderThread(final Logger logger, final File inputDir) {
 		super();
 		this.logger = logger;
 		this.inputDir = inputDir;
@@ -51,10 +54,10 @@ abstract class AbstractLogReaderThread extends Thread {
 
 		final File[] inputFiles = this.inputDir.listFiles(fileExtensionFilter);
 		if (inputFiles == null) {
-			this.logger.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+			this.logger.error("Directory '{}' does not exist or an I/O error occured.", this.inputDir);
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			this.logger.warn("Directory '" + this.inputDir + "' contains no Kieker log files.");
+			this.logger.warn("Directory '{}' contains no Kieker log files.", this.inputDir);
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -69,7 +72,7 @@ abstract class AbstractLogReaderThread extends Thread {
 					break;
 				}
 
-				this.logger.info("< Loading " + inputFile.getAbsolutePath());
+				this.logger.info("< Loading {}", inputFile.getAbsolutePath());
 
 				try {
 					this.processNormalInputFile(inputFile);

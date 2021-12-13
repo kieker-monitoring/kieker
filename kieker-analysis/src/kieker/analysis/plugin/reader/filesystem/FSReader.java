@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,18 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
-	})
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the FSReader") },
+		configuration = {
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES,
+					defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
@@ -82,10 +88,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			this.logger.warn("The list of input dirs passed to the {} is empty", FSReader.class.getSimpleName());
 			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
+		this.recordQueue = new PriorityQueue<>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
@@ -94,7 +100,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutting down reader.");
+		this.logger.info("Shutting down reader.");
 		this.running = false;
 	}
 
@@ -115,7 +121,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
 				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
-				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.logger.warn("Invalid Directory or filename (no Kieker log): {}", inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
@@ -136,7 +142,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			}
 			final IMonitoringRecord record = this.recordQueue.remove();
 			synchronized (record) { // with newMonitoringRecord()
-				record.notifyAll();
+				record.notifyAll(); // NOFB this is an issue, but the code is legacy
 			}
 			if (record == EOF) { // NOPMD (CompareObjectsWithEquals)
 				readingReaders--;
@@ -158,7 +164,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 				this.recordQueue.notifyAll();
 			}
 			try {
-				record.wait();
+				record.wait(); // NOFB this is an issue, but the code is legacy
 			} catch (final InterruptedException ex) {
 				// ignore InterruptedException
 			}

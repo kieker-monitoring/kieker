@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.probe.spring.executions.jetty.UrlUtil;
@@ -46,6 +47,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  *
  * @since 1.5
  */
+@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1515
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
@@ -75,10 +77,10 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		// We must use System.setProperty (and not a new custom Configuration instance)
 		// because the probe for the spring intercepter uses the singleton instance of the monitoring controller
 		// which reads its properties by configuration file and system properties
-		System.setProperty(ConfigurationKeys.META_DATA, "false");
-		System.setProperty(ConfigurationKeys.HOST_NAME, HOSTNAME);
-		System.setProperty(ConfigurationKeys.CONTROLLER_NAME, CTRLNAME);
-		System.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		System.setProperty(ConfigurationConstants.META_DATA, "false");
+		System.setProperty(ConfigurationConstants.HOST_NAME, HOSTNAME);
+		System.setProperty(ConfigurationConstants.CONTROLLER_NAME, CTRLNAME);
+		System.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because the property does not start with kieker.monitoring:
 		// System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, listName);
 
@@ -159,10 +161,10 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@After
 	public void cleanup() {
 		this.ctx.destroy();
-		System.clearProperty(ConfigurationKeys.META_DATA);
-		System.clearProperty(ConfigurationKeys.CONTROLLER_NAME);
-		System.clearProperty(ConfigurationKeys.WRITER_CLASSNAME);
-		System.clearProperty(ConfigurationKeys.HOST_NAME);
+		System.clearProperty(ConfigurationConstants.META_DATA);
+		System.clearProperty(ConfigurationConstants.CONTROLLER_NAME);
+		System.clearProperty(ConfigurationConstants.WRITER_CLASSNAME);
+		System.clearProperty(ConfigurationConstants.HOST_NAME);
 	}
 
 }

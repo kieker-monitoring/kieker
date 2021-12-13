@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency.monitor;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.8
  */
 public final class MonitorRequestEventFactory implements IRecordFactory<MonitorRequestEvent> {
-	
-	
+
 	@Override
 	public MonitorRequestEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new MonitorRequestEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public MonitorRequestEvent create(final Object[] values) {
-		return new MonitorRequestEvent(values);
+	public String[] getValueNames() {
+		return MonitorRequestEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return MonitorRequestEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return MonitorRequestEvent.SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,19 +32,22 @@ import kieker.common.util.dataformat.VariableLengthEncoding;
  */
 public class VariableLengthEncodingTest {
 
+	/**
+	 * create test.
+	 */
 	public VariableLengthEncodingTest() {
 		// Default Constructor
 	}
-	
+
 	/**
 	 * Tests a value that is encoded into a single byte.
 	 */
 	@Test
 	public void testEncodeOneByteInteger() {
 		final int value = 17;
-		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x11, 0x00, 0x00, 0x00, 0x00);
+		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x11, 0x00, 0x00, 0x00, 0x00); // NOPMD plural not relevant
 
-		final byte[] actual = this.encodeInt(value);
+		final byte[] actual = this.encodeInt(value); // NOPMD plural not relevant
 
 		Assert.assertArrayEquals(expected, actual);
 	}
@@ -54,7 +57,7 @@ public class VariableLengthEncodingTest {
 	 */
 	@Test
 	public void testDecodeOneByteInteger() {
-		final byte[] data = VariableLengthEncodingTest.asByteArray(0x11);
+		final byte[] data = VariableLengthEncodingTest.asByteArray(0x11); // NOPMD plural not relevant
 		final int expected = 17;
 
 		final int actual = this.decodeInt(data);
@@ -68,9 +71,9 @@ public class VariableLengthEncodingTest {
 	@Test
 	public void testEncodeMultiByteInteger() {
 		final int value = 85302;
-		final byte[] expected = VariableLengthEncodingTest.asByteArray(0xB6, 0x9A, 0x05, 0x00, 0x00);
+		final byte[] expected = VariableLengthEncodingTest.asByteArray(0xB6, 0x9A, 0x05, 0x00, 0x00); // NOPMD plural not relevant
 
-		final byte[] actual = this.encodeInt(value);
+		final byte[] actual = this.encodeInt(value); // NOPMD plural not relevant
 
 		Assert.assertArrayEquals(expected, actual);
 	}
@@ -80,7 +83,7 @@ public class VariableLengthEncodingTest {
 	 */
 	@Test
 	public void testDecodeMultiByteInteger() {
-		final byte[] data = VariableLengthEncodingTest.asByteArray(0xB6, 0x9A, 0x05);
+		final byte[] data = VariableLengthEncodingTest.asByteArray(0xB6, 0x9A, 0x05); // NOPMD plural not relevant
 		final int expected = 85302;
 
 		final int actual = this.decodeInt(data);
@@ -94,9 +97,9 @@ public class VariableLengthEncodingTest {
 	@Test
 	public void testEncodeMaxInteger() {
 		final int value = Integer.MAX_VALUE;
-		final byte[] expected = VariableLengthEncodingTest.asByteArray(0xFF, 0xFF, 0xFF, 0xFF, 0x07);
+		final byte[] expected = VariableLengthEncodingTest.asByteArray(0xFF, 0xFF, 0xFF, 0xFF, 0x07); // NOPMD plural not relevant
 
-		final byte[] actual = this.encodeInt(value);
+		final byte[] actual = this.encodeInt(value); // NOPMD plural not relevant
 
 		Assert.assertArrayEquals(expected, actual);
 	}
@@ -106,7 +109,7 @@ public class VariableLengthEncodingTest {
 	 */
 	@Test
 	public void testDecodeMaxInteger() {
-		final byte[] data = VariableLengthEncodingTest.asByteArray(0xFF, 0xFF, 0xFF, 0xFF, 0x07);
+		final byte[] data = VariableLengthEncodingTest.asByteArray(0xFF, 0xFF, 0xFF, 0xFF, 0x07); // NOPMD plural not relevant
 		final int expected = Integer.MAX_VALUE;
 
 		final int actual = this.decodeInt(data);
@@ -120,9 +123,9 @@ public class VariableLengthEncodingTest {
 	@Test
 	public void testEncodeNegativeInteger() {
 		final int value = -13570409;
-		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F);
+		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F); // NOPMD plural not relevant
 
-		final byte[] actual = this.encodeInt(value);
+		final byte[] actual = this.encodeInt(value); // NOPMD plural not relevant
 
 		Assert.assertArrayEquals(expected, actual);
 	}
@@ -132,16 +135,16 @@ public class VariableLengthEncodingTest {
 	 */
 	@Test
 	public void testDecodeNegativeInteger() {
-		final byte[] data = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F);
+		final byte[] data = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F); // NOPMD plural not relevant
 		final int expected = -13570409;
 
-		final int actual = this.decodeInt(data);
+		final int actual = this.decodeInt(data); // NOPMD plural not relevant
 
 		Assert.assertEquals(expected, actual);
 	}
 
 	private static byte[] asByteArray(final int... values) {
-		final byte[] data = new byte[values.length];
+		final byte[] data = new byte[values.length]; // NOPMD plural not relevant
 
 		for (int index = 0; index < values.length; index++) {
 			data[index] = (byte) values[index];
@@ -153,7 +156,7 @@ public class VariableLengthEncodingTest {
 	private byte[] encodeInt(final int value) {
 		final int bufferSize = 5;
 
-		final byte[] data = new byte[bufferSize];
+		final byte[] data = new byte[bufferSize]; // NOPMD plural not relevant
 		final ByteBuffer buffer = ByteBuffer.wrap(data);
 		VariableLengthEncoding.encodeInt(value, buffer);
 

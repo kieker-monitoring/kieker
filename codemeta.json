@@ -1,0 +1,42 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/Apache-2.0",
+    "codeRepository": "https://github.com/kieker-monitoring/kieker",
+    "dateModified": "2020-05-12",
+    "issueTracker": "https://kieker-monitoring.atlassian.net/",
+    "name": "Kieker",
+    "version": "1.16-SNAPSHOT",
+    "description": "Application-level monitoring and dynamic analysis of software systems are a basis for various tasks in software engineering research, such as performance evaluation and reverse engineering. The Kieker framework provides monitoring, analysis, and visualization support for these purposes.",
+    "referencePublication": "https://doi.org/10.1016/j.simpa.2020.100019",
+    "programmingLanguage": [
+        "Java"
+    ],
+    "runtimePlatform": [
+        "JVM"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0001-6625-4335",
+            "givenName": "Wilhelm",
+            "familyName": "Hasselbring",
+            "email": "hasselbring@email.uni-kiel.de",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Kiel University"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-2567-6077",
+            "givenName": "Andre",
+            "familyName": "van Hoorn",
+            "email": "van.hoorn@informatik.uni-stuttgart.de",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "University of Stuttgart"
+            }
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,19 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.5
  */
 public final class CallOperationEventFactory implements IRecordFactory<CallOperationEvent> {
-	
-	
+
 	@Override
 	public CallOperationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CallOperationEvent(deserializer);
 	}
-	
+
 	@Override
-	@Deprecated
-	public CallOperationEvent create(final Object[] values) {
-		return new CallOperationEvent(values);
+	public String[] getValueNames() {
+		return CallOperationEvent.VALUE_NAMES; // NOPMD
 	}
-	
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return CallOperationEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return CallOperationEvent.SIZE;
 	}

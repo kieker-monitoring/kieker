@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.monitoring.core.controller;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.util.classpath.InstantiationFactory;
 
 /**
  * @author Jan Waller
@@ -113,6 +114,6 @@ public abstract class AbstractController {
 	 *            The type of the returned class.
 	 */
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		return ControllerFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
+		return InstantiationFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
 	}
 }

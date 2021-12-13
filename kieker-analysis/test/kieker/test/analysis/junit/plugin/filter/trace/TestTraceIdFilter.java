@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestTraceIdFilter extends AbstractKiekerTest {
@@ -56,7 +56,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> is NOT passed through the filter.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -67,22 +67,22 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 42353; // any number fits
 		final long traceIdNotToPass = 11L; // (must NOT be element of idsToPass)
 
-		final SortedSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<>();
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
+		final ListReader<AbstractTraceEvent> reader = new ListReader<>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig, controller);
-		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), controller);
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 
-		final TraceEventRecords traceEvents =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
-						TestTraceIdFilter.HOSTNAME);
+		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass,
+				TestTraceIdFilter.SESSION_ID,
+				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -107,7 +107,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> IS passed through the filter.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -118,18 +118,18 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final SortedSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<>();
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
+		final ListReader<AbstractTraceEvent> reader = new ListReader<>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, Configuration.toProperty(idsToPass.toArray(new Long[idsToPass.size()])));
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig, controller);
-		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), controller);
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 
 		final TraceEventRecords trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
 				TestTraceIdFilter.HOSTNAME);
@@ -154,7 +154,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 
 	/**
 	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -167,14 +167,14 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 
 		final IAnalysisController controller = new AnalysisController();
 
-		final ListReader<AbstractTraceEvent> reader = new ListReader<AbstractTraceEvent>(new Configuration(), controller);
+		final ListReader<AbstractTraceEvent> reader = new ListReader<>(new Configuration(), controller);
 		final Configuration filterConfig = new Configuration();
 		filterConfig.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString()); // i.e., pass all
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig, controller);
-		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), controller);
+		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
 
-		final TraceEventRecords trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME);
+		final TraceEventRecords trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package kieker.monitoring.writer;
 
 import java.util.concurrent.BlockingQueue;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
@@ -30,7 +31,7 @@ import kieker.common.record.misc.EmptyRecord;
  */
 public class MonitoringWriterThread extends Thread {
 
-	private static final Log LOG = LogFactory.getLog(MonitoringWriterThread.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringWriterThread.class);
 
 	private static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
 
@@ -54,9 +55,7 @@ public class MonitoringWriterThread extends Thread {
 
 	@Override
 	public void run() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(this.getClass().getName() + " is running.");
-		}
+		LOGGER.debug("{} is running.", this.getClass().getName());
 
 		this.writer.onStarting();
 
@@ -67,17 +66,13 @@ public class MonitoringWriterThread extends Thread {
 				record = this.writerQueue.take();
 			}
 		} catch (final InterruptedException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(this.getClass().getName() + " was interrupted.", e);
-			}
+			LOGGER.debug("{} was interrupted.", this.getClass().getName(), e);
 			// do nothing; the thread terminates itself
 		}
 
 		this.writer.onTerminating();
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(this.getClass().getName() + " has finished.");
-		}
+		LOGGER.debug("{} has finished.", this.getClass().getName());
 	}
 
 	/**
@@ -91,7 +86,7 @@ public class MonitoringWriterThread extends Thread {
 			// apply "blocking wait" since we must ensure that this EOF record is inserted to terminate the thread
 			this.writerQueue.put(END_OF_MONITORING_RECORD);
 		} catch (final InterruptedException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 	}
 

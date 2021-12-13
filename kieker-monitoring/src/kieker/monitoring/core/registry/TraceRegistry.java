@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@ import java.util.Stack;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.flow.trace.ApplicationTraceMetadata;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -36,7 +37,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	/** The singleton instance. */
 	INSTANCE;
 
-	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceRegistry.class); // NOPMD (enum logger)
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
 	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32; // NOCS
@@ -44,13 +45,13 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	private final String hostname = MonitoringController.getInstance().getHostname();
 
 	/** the current trace; null if new trace. */
-	private final ThreadLocal<TraceMetadata> traceStorage = new ThreadLocal<TraceMetadata>();
+	private final ThreadLocal<TraceMetadata> traceStorage = new ThreadLocal<>();
 
 	/** used to store the stack of enclosing traces; null if no sub trace created yet. */
-	private final ThreadLocal<Stack<TraceMetadata>> enclosingTraceStack = new ThreadLocal<Stack<TraceMetadata>>();
+	private final ThreadLocal<Stack<TraceMetadata>> enclosingTraceStack = new ThreadLocal<>();
 
 	/** store the parent Trace. */
-	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
+	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<>();
 
 	private final long getNewId() {
 		return this.unique | this.nextTraceId.getAndIncrement();
@@ -60,7 +61,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * Gets a Trace for the current thread. If no trace is active, null is returned.
 	 *
 	 * @return
-	 * 		Trace object or null
+	 *         Trace object or null
 	 */
 	public final TraceMetadata getTrace() {
 		return this.traceStorage.get();
@@ -70,14 +71,14 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * This creates a new unique Trace object and registers it.
 	 *
 	 * @return
-	 * 		Trace object
+	 *         Trace object
 	 */
 	public final ApplicationTraceMetadata registerTrace() {
 		final TraceMetadata enclosingTrace = this.getTrace();
 		if (enclosingTrace != null) { // we create a subtrace
 			Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
 			if (localTraceStack == null) {
-				localTraceStack = new Stack<TraceMetadata>();
+				localTraceStack = new Stack<>();
 				this.enclosingTraceStack.set(localTraceStack);
 			}
 			localTraceStack.push(enclosingTrace);
@@ -89,7 +90,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		final int parentOrderId;
 		if (tp != null) { // we have a known split point
 			if ((enclosingTrace != null) && (enclosingTrace.getTraceId() != tp.traceId)) {
-				LOG.error("Enclosing trace does not match split point. Found: " + enclosingTrace.getTraceId() + " expected: " + tp.traceId);
+				LOGGER.error("Enclosing trace does not match split point. Found: {} expected: {}", enclosingTrace.getTraceId(), enclosingTrace.getTraceId());
 			}
 			parentTraceId = tp.traceId;
 			parentOrderId = tp.orderId;

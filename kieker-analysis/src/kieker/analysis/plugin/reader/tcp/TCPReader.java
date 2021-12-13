@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,9 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -31,15 +34,12 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * This is a reader which reads the records from a TCP port.
@@ -47,9 +47,11 @@ import kieker.common.util.registry.Lookup;
  * @author Jan Waller
  *
  * @since 1.8
+ * @deprecated 1.15 replaced in the TeeTime port by a generic TCP stage
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
@@ -72,7 +74,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private final int port1;
 	private final int port2;
-	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 
 	public TCPReader(final Configuration configuration, final IProjectContext projectContext) {
@@ -103,9 +105,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port1));
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Listening on port " + this.port1);
-			}
+			this.logger.debug("Listening on port {}", this.port1);
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
@@ -128,10 +128,10 @@ public final class TCPReader extends AbstractReaderPlugin {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final ClosedByInterruptException ex) {
-			this.log.warn("Reader interrupted", ex);
+			this.logger.warn("Reader interrupted", ex);
 			return this.terminated;
 		} catch (final IOException ex) {
-			this.log.error("Error while reading", ex);
+			this.logger.error("Error while reading", ex);
 			return false;
 		} finally {
 			if (null != serversocket) {
@@ -153,7 +153,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		} catch (final RecordInstantiationException ex) {
-			this.log.error("Failed to create record", ex);
+			this.logger.error("Failed to create record", ex);
 		}
 	}
 
@@ -161,15 +161,13 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket.close();
 		} catch (final IOException e) {
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Failed to close TCP connection!", e);
-			}
+			this.logger.debug("Failed to close TCP connection!", e);
 		}
 	}
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of TCPReader requested.");
+		this.logger.info("Shutdown of TCPReader requested.");
 		this.terminated = true;
 		this.readerThread.interrupt();
 
@@ -188,14 +186,14 @@ class TCPStringReader extends Thread {
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
-	private static final Log LOG = LogFactory.getLog(TCPStringReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPStringReader.class);
 
 	private final int port;
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 	private volatile boolean terminated;
 	private volatile Thread readerThread;
 
-	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
+	public TCPStringReader(final int port, final ReaderRegistry<String> stringRegistry) {
 		this.port = port;
 		this.stringRegistry = stringRegistry;
 	}
@@ -212,9 +210,7 @@ class TCPStringReader extends Thread {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Listening on port " + this.port);
-			}
+			LOGGER.debug("Listening on port {}", this.port);
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
@@ -234,17 +230,15 @@ class TCPStringReader extends Thread {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final ClosedByInterruptException ex) {
-			LOG.warn("Reader interrupted", ex);
+			LOGGER.warn("Reader interrupted", ex);
 		} catch (final IOException ex) {
-			LOG.error("Error while reading", ex);
+			LOGGER.error("Error while reading", ex);
 		} finally {
 			if (null != serversocket) {
 				try {
 					serversocket.close();
 				} catch (final IOException e) {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Failed to close TCP connection!", e);
-					}
+					LOGGER.debug("Failed to close TCP connection!", e);
 				}
 			}
 		}

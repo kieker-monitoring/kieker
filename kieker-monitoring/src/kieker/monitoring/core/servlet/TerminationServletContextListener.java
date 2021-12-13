@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,21 @@ package kieker.monitoring.core.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.monitoring.core.controller.IStateController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * Use this listener in webapps where ShutdownHook is not called.
- * 
+ *
  * @author Dennis Kieselhorst
- * 
+ *
  * @since 1.3
  */
 public class TerminationServletContextListener implements ServletContextListener {
-	private static final Log LOG = LogFactory.getLog(TerminationServletContextListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TerminationServletContextListener.class);
 
 	private final IStateController ctrl;
 
@@ -45,7 +46,7 @@ public class TerminationServletContextListener implements ServletContextListener
 
 	/**
 	 * Create a new instance utilizing an external state controller.
-	 * 
+	 *
 	 * @param ctrl
 	 *            state controller
 	 */
@@ -59,7 +60,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	@Override
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
-		LOG.info("context destroyed");
+		LOGGER.info("context destroyed");
 	}
 
 	/**
@@ -67,6 +68,6 @@ public class TerminationServletContextListener implements ServletContextListener
 	 */
 	@Override
 	public void contextInitialized(final ServletContextEvent evt) {
-		LOG.info("context initialized");
+		LOGGER.info("context initialized");
 	}
 }

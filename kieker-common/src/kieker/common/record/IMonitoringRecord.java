@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.nio.BufferOverflowException;
 
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * All Kieker monitoring records have to implement this minimal interface.
@@ -57,8 +56,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void setLoggingTimestamp(long timestamp);
 
 	/**
-	 * Creates a string representation of this record.<br/>
-	 * <br/>
+	 * Creates a string representation of this record.<br>
+	 * <br>
 	 *
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 *
@@ -68,27 +67,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 */
 	@Override
 	public String toString();
-
-	/**
-	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
-	 *
-	 * @return An array with the values of the record.
-	 *
-	 * @since 1.2
-	 */
-	public Object[] toArray();
-
-	/**
-	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
-	 *
-	 * @param stringRegistry
-	 *            string registry
-	 *
-	 * @since 1.11
-	 * @deprecated since 1.13 (to be removed in 1.14): Is unnecessary when using the new, serializer-based output.
-	 */
-	@Deprecated
-	public void registerStrings(final IRegistry<String> stringRegistry);
 
 	/**
 	 * This method serializes this record using the given serializer.
@@ -102,21 +80,9 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void serialize(IValueSerializer serializer) throws BufferOverflowException;
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
-	 *
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @since 1.2
-	 */
-	public void initFromArray(Object[] values);
-
-	/**
 	 * This method delivers an array with the classes of the single values for the record.
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
-	 *
-	 * @see #toArray()
 	 *
 	 * @since 1.2
 	 */
@@ -126,8 +92,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method delivers an array containing the value names of the record.
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
-	 *
-	 * @see #toArray()
 	 *
 	 * @since 1.2
 	 */
@@ -139,45 +103,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The size.
 	 *
 	 * @since 1.8
-	 * @deprecated since 1.13 (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
+	 *        might be deprecated since 1.13 removal must be reassessed.
+	 *        Size is relevant for binary deserialization with predefined array sizes.
+	 *        (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
 	 */
-	@Deprecated
 	public int getSize();
 
-	/**
-	 * Any record that implements this interface has to conform to certain specifications.
-	 *
-	 * <p>
-	 * These records can use final fields and thus provide better performance.
-	 * </p>
-	 *
-	 * <ul>
-	 * <li>a constructor accepting a single Object[] as argument.
-	 * <li>a <code>public static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
-	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
-	 * </ul>
-	 *
-	 * @since 1.5
-	 */
-	public static interface Factory { // NOCS (name)
-		// empty marker interface
-	}
-
-	/**
-	 * Any record that implements this interface has to conform to certain specifications.
-	 *
-	 * <p>
-	 * These records can use final fields and thus provide better performance.
-	 * </p>
-	 *
-	 * <ul>
-	 * <li>a constructor accepting a Deserializer as arguments possibly throwing BufferUnderflowException.
-	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * </ul>
-	 *
-	 * @since 1.8
-	 */
-	public static interface BinaryFactory { // NOCS (name)
-		// empty marker interface
-	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.primefaces.model.chart.ChartModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -44,7 +45,8 @@ import kieker.common.record.IMonitoringRecord;
  *            The type of the chart model used by the filter.
  */
 @Plugin(configuration =
-		@Property(name = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
+		@Property(name = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+				defaultValue = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
 public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringRecord, C extends ChartModel> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputPortRecords";
@@ -55,7 +57,7 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(AbstractAggregatingDisplayFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAggregatingDisplayFilter.class);
 
 	protected final TimeUnit timeunit;
 
@@ -72,7 +74,7 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			AbstractAggregatingDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			AbstractAggregatingDisplayFilter.LOGGER.warn("{} is no valid TimeUnit! Using NANOSECONDS instead.", recordTimeunitProperty);
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.util.List;
 
 /**
  * This class realizes an pattern generator for the adaptive monitoring.
- * 
+ *
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class PatternConstructor {
@@ -41,19 +41,19 @@ public final class PatternConstructor {
 	private static final String DEFAULT_THROWS_LIST = "";
 	private static final String DEFAULT_WHITESPACE = " ";
 
-	private final List<String> visibilityList = new ArrayList<String>();
-	private final List<String> abstractNonAbstractList = new ArrayList<String>();
-	private final List<String> staticNonStaticList = new ArrayList<String>();
-	private final List<String> finalNonFinalList = new ArrayList<String>();
-	private final List<String> synchronizedNonSynchronizedList = new ArrayList<String>();
-	private final List<String> nativeNonNativeList = new ArrayList<String>();
-	private final List<String> returnTypeList = new ArrayList<String>();
-	private final List<String> fqClassNameList = new ArrayList<String>();
-	private final List<String> operationNameList = new ArrayList<String>();
-	private final List<String> parameterListList = new ArrayList<String>();
-	private final List<String> whiteSpaceList = new ArrayList<String>();
-	private final List<String> optionalWhitespaceList = new ArrayList<String>();
-	private final List<String> throwsListList = new ArrayList<String>();
+	private final List<String> visibilityList = new ArrayList<>();
+	private final List<String> abstractNonAbstractList = new ArrayList<>();
+	private final List<String> staticNonStaticList = new ArrayList<>();
+	private final List<String> finalNonFinalList = new ArrayList<>();
+	private final List<String> synchronizedNonSynchronizedList = new ArrayList<>();
+	private final List<String> nativeNonNativeList = new ArrayList<>();
+	private final List<String> returnTypeList = new ArrayList<>();
+	private final List<String> fqClassNameList = new ArrayList<>();
+	private final List<String> operationNameList = new ArrayList<>();
+	private final List<String> parameterListList = new ArrayList<>();
+	private final List<String> whiteSpaceList = new ArrayList<>();
+	private final List<String> optionalWhitespaceList = new ArrayList<>();
+	private final List<String> throwsListList = new ArrayList<>();
 
 	/**
 	 * Default constructor.
@@ -64,7 +64,7 @@ public final class PatternConstructor {
 
 	/**
 	 * Construct a list of pattern.
-	 * 
+	 *
 	 * @return List of strings representing pattern
 	 */
 	public List<String> createPatterns() {
@@ -106,7 +106,7 @@ public final class PatternConstructor {
 		}
 		this.optionalWhitespaceList.add("");
 		this.optionalWhitespaceList.addAll(this.whiteSpaceList);
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		for (final String visibility : this.visibilityList) {
 			for (final String abstractNonAbstract : this.abstractNonAbstractList) {

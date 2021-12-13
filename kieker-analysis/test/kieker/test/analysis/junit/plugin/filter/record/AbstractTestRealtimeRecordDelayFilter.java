@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	private IAnalysisController analysisController;
 
 	/** List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}. */
-	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
+	private final List<EmptyRecord> inputRecords = new ArrayList<>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
 	private ListReader<IMonitoringRecord> simpleListReader;
@@ -95,14 +95,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
-
 		// Analysis controller
 		this.analysisController = new AnalysisController();
 
 		// Reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration, this.analysisController);
+		this.simpleListReader = new ListReader<>(readerConfiguration, this.analysisController);
 
 		// Timer
 		final Configuration timerConfig = new Configuration();
@@ -133,7 +132,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 				throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_TIME);
 
 		// Throughput sink
-		this.sinkThroughput = new ListCollectionFilter<Long>(new Configuration(), this.analysisController);
+		this.sinkThroughput = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 		this.analysisController.connect(throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
 				this.sinkThroughput, ListCollectionFilter.INPUT_PORT_NAME);
 		// final TeeFilter tf = new TeeFilter(new Configuration(), this.analysisController);
@@ -145,7 +144,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 				this.countingFilterDelayed, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		// Sink
-		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
@@ -154,12 +153,12 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		long currentTimeSeconds;
 		int curNumRecords = 0;
 
-		final List<Entry<Long, Integer>> eventList = new ArrayList<Entry<Long, Integer>>(this.eventTimeOffsetsSeconds.length);
+		final List<Entry<Long, Integer>> eventList = new ArrayList<>(this.eventTimeOffsetsSeconds.length);
 
 		for (final long eventDelaySeconds : this.eventTimeOffsetsSeconds) {
 			curNumRecords++;
 			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
-			final Entry<Long, Integer> curEntry = new SimpleImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
+			final Entry<Long, Integer> curEntry = new SimpleImmutableEntry<>(eventDelaySeconds, curNumRecords);
 			eventList.add(curEntry);
 			final EmptyRecord r = new EmptyRecord();
 			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));

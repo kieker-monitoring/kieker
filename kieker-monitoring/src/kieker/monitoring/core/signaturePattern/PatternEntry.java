@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.util.regex.Pattern;
 
 /**
  * the activated state is ignored for purposes of equals() and hashcode().
- * 
+ *
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class PatternEntry implements Serializable {
@@ -35,12 +35,12 @@ public class PatternEntry implements Serializable {
 
 	/**
 	 * Creates a new pattern entry using the given parameters.
-	 * 
+	 *
 	 * @param strPattern
 	 *            The pattern string.
 	 * @param activated
 	 *            Determines the activated state.
-	 * 
+	 *
 	 * @throws InvalidPatternException
 	 *             If the given pattern is invalid.
 	 */
@@ -52,7 +52,7 @@ public class PatternEntry implements Serializable {
 
 	/**
 	 * Creates a new pattern entry using the given parameters.
-	 * 
+	 *
 	 * @param strPattern
 	 *            The pattern string.
 	 * @param activated

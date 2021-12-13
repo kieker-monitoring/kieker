@@ -1,4 +1,0 @@
-configFilePath=../config/cs-conf.xml
-customModulesJarPaths=../kieker-checkstyle-extension/build/libs/kieker-checkstyle-extension-1.14-SNAPSHOT.jar
-eclipse.preferences.version=1
-enabled=false

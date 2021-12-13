@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.database.AfterDatabaseEvent;
 import kieker.common.record.database.BeforeDatabaseEvent;
 import kieker.common.record.database.DatabaseFailedEvent;
@@ -57,7 +57,7 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 
-	private static final Log LOG = LogFactory.getLog(AbstractAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAspect.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
@@ -171,10 +171,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the className of the called method
+	 * Retrieves the className of the called method.
 	 *
 	 * @param currentJoinPoint
-	 * @return
+	 *            the current joint point
+	 * @return returns the class name for the given joint point
 	 */
 	public String getJoinPointClassName(final JoinPoint currentJoinPoint) {
 		final String className = currentJoinPoint.getSignature().toString();
@@ -182,10 +183,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the return type of the called method
+	 * Retrieves the return type of the called method.
 	 *
 	 * @param className
-	 * @return
+	 *            class name of a joint point
+	 * @return returns the return type of a joint point
 	 */
 	private String getJoinPointReturnType(final String className) {
 		final String[] splittedTypeName = className.split(" ");
@@ -193,10 +195,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the passed arguments of the JoinPoint
+	 * Retrieves the passed arguments of the JoinPoint.
 	 *
 	 * @param currentJoinPoint
-	 * @return
+	 *            the current joint point
+	 * @return returns the arguments for the given joint point
 	 */
 	public String getJoinPointArguments(final JoinPoint currentJoinPoint) {
 
@@ -210,7 +213,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the parameters of the called method
+	 * Retrieves the parameters of the called method.
 	 *
 	 * @param joinPointArgs
 	 * @return
@@ -235,7 +238,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * Processes the return value of the called method based on the type and returns
-	 * a formatted string afterwards
+	 * a formatted string afterwards.
 	 *
 	 * @param returningObject
 	 * @param returnType
@@ -281,7 +284,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * In case of a result set we are interested in the number of rows (affected
-	 * rows) by the executed statement
+	 * rows) by the executed statement.
 	 *
 	 * @param rawReturnValue
 	 * @return
@@ -295,8 +298,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				}
 			}
 		} catch (final SQLException e) {
-			AbstractAspect.LOG
-					.error(AbstractAspect.LOGGING_PREFIX + "getReturnValue: SQL-Exception: " + e.getMessage()); // NOPMD
+			AbstractAspect.LOGGER.error("{}getReturnValue: SQL-Exception:", AbstractAspect.LOGGING_PREFIX, e);
 		}
 		return String.valueOf(numberOfRows);
 	}

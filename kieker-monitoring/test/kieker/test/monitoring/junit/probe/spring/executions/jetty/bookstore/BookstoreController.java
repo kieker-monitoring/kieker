@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 @Controller
@@ -45,7 +45,7 @@ public final class BookstoreController {
 
 	/**
 	 * Spring maps a specific web request onto this method. In this case it is the home path request.
-	 * 
+	 *
 	 * @return The home path.
 	 */
 	@RequestMapping(value = "/")
@@ -55,12 +55,12 @@ public final class BookstoreController {
 
 	/**
 	 * Spring maps a specific web request onto this method. In this case it is the search path request.
-	 * 
+	 *
 	 * @param term
 	 *            The term to search for.
 	 * @param model
 	 *            The Spring model object.
-	 * 
+	 *
 	 * @return The search path.
 	 */
 	@RequestMapping(value = "/search/{term}", method = RequestMethod.GET)
@@ -71,12 +71,12 @@ public final class BookstoreController {
 
 	/**
 	 * Spring maps a specific web request onto this method. In this case it is the search path request.
-	 * 
+	 *
 	 * @param term
 	 *            The term to search for.
 	 * @param model
 	 *            The Spring model object.
-	 * 
+	 *
 	 * @return The search path.
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)

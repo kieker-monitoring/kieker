@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,17 @@ import java.nio.ByteBuffer;
  * @since 1.13
  */
 public interface IRawDataProcessor {
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
 	 * 
 	 * @param rawData
 	 *            The raw data to decode
-	 *            
+	 * 
 	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(byte[] rawData);
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
 	 * 
@@ -44,7 +44,7 @@ public interface IRawDataProcessor {
 	 *            The raw data to decode
 	 * @param dataSize
 	 *            The size of the contained data
-	 *            
+	 * 
 	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize);

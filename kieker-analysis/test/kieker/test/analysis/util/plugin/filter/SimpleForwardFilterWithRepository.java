@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,14 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 
 /**
  * A simple filter, used only for test purposes.
- * 
+ *
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Plugin(programmaticOnly = true,
 		name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
-		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) },
+		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) }, // NOCS
 		repositoryPorts = @RepositoryPort(name = SimpleForwardFilterWithRepository.REPOSITORY_PORT_NAME, repositoryType = SimpleRepository.class))
 public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	/** The dummy name of the filter. */
@@ -52,7 +52,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this filter.
 	 * @param projectContext
@@ -64,11 +64,11 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port of this method, receiving the new objects.
-	 * 
+	 *
 	 * @param event
 	 *            The next event.
 	 */
-	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class })
+	@InputPort(name = INPUT_PORT_NAME, eventTypes = { Object.class }) // NOCS
 	public final void inputEvent(final Object event) {
 		super.deliver(OUTPUT_PORT_NAME, event);
 	}
