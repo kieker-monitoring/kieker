@@ -26,19 +26,19 @@ import kieker.common.record.flow.IObjectRecord;
 
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.6
  */
-public class AfterConstructorObjectEvent extends AfterConstructorEvent implements IObjectRecord {
+public class AfterConstructorObjectEvent extends AfterConstructorEvent implements IObjectRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING // IClassSignature.classSignature
-			+ TYPE_SIZE_INT; // IObjectRecord.objectId
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_INT; // IObjectRecord.objectId
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -47,7 +47,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		String.class, // IClassSignature.classSignature
 		int.class, // IObjectRecord.objectId
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,14 +57,14 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		"classSignature",
 		"objectId",
 	};
-
+	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
 	private static final long serialVersionUID = 4036418273795790776L;
-
+	
 	/** property declarations. */
 	private final int objectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -81,23 +81,23 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
-			final int objectId) {
+	public AfterConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.objectId = objectId;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AfterConstructorObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -110,7 +110,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +118,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,7 +126,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,6 +135,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +150,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final AfterConstructorObjectEvent castedRecord = (AfterConstructorObjectEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -172,30 +173,30 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		if (this.getObjectId() != castedRecord.getObjectId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
-		code += ((int) this.getObjectId());
-
+		code += ((int)this.getObjectId());
+		
 		return code;
 	}
-
+	
 	public final int getObjectId() {
 		return this.objectId;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -204,22 +205,22 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		String result = "AfterConstructorObjectEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		result += "objectId = ";
 		result += this.getObjectId() + ", ";
-
+		
 		return result;
 	}
 }

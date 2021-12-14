@@ -22,42 +22,43 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Andre van Hoorn, Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.2
  */
-public class BranchingRecord extends AbstractMonitoringRecord {
+public class BranchingRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
-			+ TYPE_SIZE_INT // BranchingRecord.branchID
-			+ TYPE_SIZE_INT; // BranchingRecord.branchingOutcome
-
+			 + TYPE_SIZE_INT // BranchingRecord.branchID
+			 + TYPE_SIZE_INT; // BranchingRecord.branchingOutcome
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp
 		int.class, // BranchingRecord.branchID
 		int.class, // BranchingRecord.branchingOutcome
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"branchID",
 		"branchingOutcome",
 	};
-
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
 	private static final long serialVersionUID = 3957750090047819946L;
-
+	
 	/** property declarations. */
 	private final long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -74,18 +75,19 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		this.branchingOutcome = branchingOutcome;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BranchingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.branchID = deserializer.getInt();
 		this.branchingOutcome = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -95,7 +97,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		serializer.putInt(this.getBranchID());
 		serializer.putInt(this.getBranchingOutcome());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -103,7 +105,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -111,7 +113,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -120,6 +122,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,7 +137,7 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final BranchingRecord castedRecord = (BranchingRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -148,35 +151,37 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getBranchID());
-		code += ((int) this.getBranchingOutcome());
-
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getBranchID());
+		code += ((int)this.getBranchingOutcome());
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	
 	public final int getBranchID() {
 		return this.branchID;
 	}
-
+	
+	
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -185,13 +190,13 @@ public class BranchingRecord extends AbstractMonitoringRecord {
 		String result = "BranchingRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "branchID = ";
 		result += this.getBranchID() + ", ";
-
+		
 		result += "branchingOutcome = ";
 		result += this.getBranchingOutcome() + ", ";
-
+		
 		return result;
 	}
 }

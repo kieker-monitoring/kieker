@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -25,11 +26,13 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.3
  */
 public final class ResourceUtilizationRecordFactory implements IRecordFactory<ResourceUtilizationRecord> {
+	
 
 	@Override
 	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ResourceUtilizationRecord(deserializer);
 	}
+
 
 	@Override
 	public String[] getValueNames() {

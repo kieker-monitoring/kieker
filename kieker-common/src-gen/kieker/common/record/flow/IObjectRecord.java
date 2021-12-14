@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
+
 /**
  * @author Jan Waller
  * 
@@ -22,5 +23,5 @@ package kieker.common.record.flow;
  */
 public interface IObjectRecord extends IFlowRecord, IClassSignature {
 	public int getObjectId();
-
+	
 }

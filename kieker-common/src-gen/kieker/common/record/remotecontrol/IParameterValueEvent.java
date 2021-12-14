@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
+
 /**
  * @author Reiner Jung
  * 
@@ -22,7 +23,7 @@ package kieker.common.record.remotecontrol;
  */
 public interface IParameterValueEvent extends IRemoteControlEvent {
 	public String getName();
-
+	
 	public String getValue();
-
+	
 }

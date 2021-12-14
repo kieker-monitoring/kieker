@@ -24,5 +24,5 @@ import kieker.common.record.IMonitoringRecord;
  */
 public interface IClassSignature extends IMonitoringRecord {
 	public String getClassSignature();
-
+	
 }

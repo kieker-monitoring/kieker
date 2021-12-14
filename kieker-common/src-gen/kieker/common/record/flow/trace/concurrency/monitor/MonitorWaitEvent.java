@@ -22,26 +22,27 @@ import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.8
  */
-public class MonitorWaitEvent extends AbstractMonitorEvent {
+public class MonitorWaitEvent extends AbstractMonitorEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_INT; // AbstractMonitorEvent.lockId
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_INT; // AbstractMonitorEvent.lockId
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 		int.class, // AbstractMonitorEvent.lockId
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -49,9 +50,10 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		"orderIndex",
 		"lockId",
 	};
-
+	
 	private static final long serialVersionUID = -4024730304031335972L;
-
+	
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -68,16 +70,17 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		super(timestamp, traceId, orderIndex, lockId);
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public MonitorWaitEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -88,7 +91,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		serializer.putInt(this.getOrderIndex());
 		serializer.putInt(this.getLockId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -96,7 +99,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -104,7 +107,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,6 +116,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,7 +131,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final MonitorWaitEvent castedRecord = (MonitorWaitEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -144,24 +148,24 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		if (this.getLockId() != castedRecord.getLockId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
-		code += ((int) this.getLockId());
-
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		code += ((int)this.getLockId());
+		
 		return code;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -170,16 +174,16 @@ public class MonitorWaitEvent extends AbstractMonitorEvent {
 		String result = "MonitorWaitEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "lockId = ";
 		result += this.getLockId() + ", ";
-
+		
 		return result;
 	}
 }

@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
+
 /**
  * @author Jan Waller
  * 
@@ -22,11 +23,11 @@ package kieker.common.record.flow;
  */
 public interface ICallRecord extends IOperationRecord {
 	public String getCallerOperationSignature();
-
+	
 	public String getCallerClassSignature();
-
+	
 	public String getCalleeOperationSignature();
-
+	
 	public String getCalleeClassSignature();
-
+	
 }

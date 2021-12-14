@@ -22,20 +22,21 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.5
  */
-public class ConstructionEvent extends AbstractTraceEvent {
+public class ConstructionEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // ConstructionEvent.classSignature
-			+ TYPE_SIZE_INT; // ConstructionEvent.objectId
-
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
+			 + TYPE_SIZE_INT; // ConstructionEvent.objectId
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -43,7 +44,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		String.class, // ConstructionEvent.classSignature
 		int.class, // ConstructionEvent.objectId
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -52,16 +53,16 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		"classSignature",
 		"objectId",
 	};
-
+	
 	/** default constants. */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
 	private static final long serialVersionUID = 5435515970872711524L;
-
+	
 	/** property declarations. */
 	private final String classSignature;
 	private final int objectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -78,22 +79,23 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
+		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
 		this.objectId = objectId;
 	}
+
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ConstructionEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.classSignature = deserializer.getString();
 		this.objectId = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -105,7 +107,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +115,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -121,7 +123,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -130,6 +132,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,7 +147,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final ConstructionEvent castedRecord = (ConstructionEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -164,33 +167,34 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		if (this.getObjectId() != castedRecord.getObjectId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
 		code += this.getClassSignature().hashCode();
-		code += ((int) this.getObjectId());
-
+		code += ((int)this.getObjectId());
+		
 		return code;
 	}
-
+	
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
-
+	
+	
 	public final int getObjectId() {
 		return this.objectId;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -199,19 +203,19 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		String result = "ConstructionEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-
+		
 		result += "objectId = ";
 		result += this.getObjectId() + ", ";
-
+		
 		return result;
 	}
 }

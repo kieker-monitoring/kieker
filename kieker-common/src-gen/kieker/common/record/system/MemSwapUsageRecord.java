@@ -22,23 +22,24 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Andre van Hoorn, Jan Waller
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.3
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord {
+public class MemSwapUsageRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
-			+ TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
-			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
-			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
-			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
-			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
-			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
-			+ TYPE_SIZE_LONG; // MemSwapUsageRecord.swapFree
-
+			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			 + TYPE_SIZE_LONG; // MemSwapUsageRecord.swapFree
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp
 		String.class, // MemSwapUsageRecord.hostname
@@ -49,7 +50,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		long.class, // MemSwapUsageRecord.swapUsed
 		long.class, // MemSwapUsageRecord.swapFree
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -61,7 +62,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		"swapUsed",
 		"swapFree",
 	};
-
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -72,7 +73,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	private static final long serialVersionUID = 638480390439299363L;
-
+	
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
@@ -82,7 +83,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	private final long swapTotal;
 	private final long swapUsed;
 	private final long swapFree;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -103,10 +104,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	 * @param swapFree
 	 *            swapFree
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
-			final long swapUsed, final long swapFree) {
+	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal, final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null ? HOSTNAME : hostname;
+		this.hostname = hostname == null?HOSTNAME:hostname;
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
@@ -115,11 +115,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		this.swapFree = swapFree;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public MemSwapUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -131,7 +132,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		this.swapUsed = deserializer.getLong();
 		this.swapFree = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,7 +147,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		serializer.putLong(this.getSwapUsed());
 		serializer.putLong(this.getSwapFree());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -154,7 +155,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +163,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,6 +172,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -185,7 +187,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -214,60 +216,67 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		if (this.getSwapFree() != castedRecord.getSwapFree()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
+		code += ((int)this.getTimestamp());
 		code += this.getHostname().hashCode();
-		code += ((int) this.getMemTotal());
-		code += ((int) this.getMemUsed());
-		code += ((int) this.getMemFree());
-		code += ((int) this.getSwapTotal());
-		code += ((int) this.getSwapUsed());
-		code += ((int) this.getSwapFree());
-
+		code += ((int)this.getMemTotal());
+		code += ((int)this.getMemUsed());
+		code += ((int)this.getMemFree());
+		code += ((int)this.getSwapTotal());
+		code += ((int)this.getSwapUsed());
+		code += ((int)this.getSwapFree());
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
-
+	
+	
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
-
+	
+	
 	public final long getMemFree() {
 		return this.memFree;
 	}
-
+	
+	
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
-
+	
+	
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
-
+	
+	
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -276,28 +285,28 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord {
 		String result = "MemSwapUsageRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-
+		
 		result += "memTotal = ";
 		result += this.getMemTotal() + ", ";
-
+		
 		result += "memUsed = ";
 		result += this.getMemUsed() + ", ";
-
+		
 		result += "memFree = ";
 		result += this.getMemFree() + ", ";
-
+		
 		result += "swapTotal = ";
 		result += this.getSwapTotal() + ", ";
-
+		
 		result += "swapUsed = ";
 		result += this.getSwapUsed() + ", ";
-
+		
 		result += "swapFree = ";
 		result += this.getSwapFree() + ", ";
-
+		
 		return result;
 	}
 }

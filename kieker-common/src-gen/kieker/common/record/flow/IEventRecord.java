@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
+
 /**
  * @author Jan Waller
  * 
@@ -22,7 +23,6 @@ package kieker.common.record.flow;
  */
 public interface IEventRecord extends IFlowRecord {
 	public long getTimestamp();
-
 	public void setTimestamp(long timestamp);
-
+	
 }
