@@ -18,4 +18,3 @@ include 'kieker-extension-kafka'
 include 'kieker-checkstyle-extension'
 include 'kieker-extension-cassandra'
 include 'kieker-examples'
-
