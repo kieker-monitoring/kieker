@@ -15,78 +15,76 @@
  ***************************************************************************/
 package kieker.extension.cassandra;
 
+import com.datastax.driver.core.BoundStatement;
+
 import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Reiner Jung
  * @since 1.16
  */
-public class CassandraValueSerializer implements IValueSerializer {
+public class CassandraValueSerializer implements IValueSerializer { // NOPMD TooManyMethods
+	
+	private final BoundStatement boundStatement;
+	private int column;
 
-	@Override
-	public void putBoolean(boolean value) {
-		// TODO Auto-generated method stub
-
+	public CassandraValueSerializer(final BoundStatement boundStatement) {
+		this.boundStatement = boundStatement;
 	}
 
 	@Override
-	public void putByte(byte value) {
-		// TODO Auto-generated method stub
-
+	public void putBoolean(final boolean value) {
+		this.boundStatement.setBool(column++, value);
 	}
 
 	@Override
-	public void putChar(char value) {
-		// TODO Auto-generated method stub
-
+	public void putByte(final byte value) {
+		this.boundStatement.setByte(column++, value);
 	}
 
 	@Override
-	public void putShort(short value) {
-		// TODO Auto-generated method stub
-
+	public void putChar(final char value) {
+		this.boundStatement.setString(column++, String.valueOf(value));
 	}
 
 	@Override
-	public void putInt(int value) {
-		// TODO Auto-generated method stub
-
+	public void putShort(final short value) {
+		this.boundStatement.setShort(column++, value);
 	}
 
 	@Override
-	public void putLong(long value) {
-		// TODO Auto-generated method stub
-
+	public void putInt(final int value) {
+		this.boundStatement.setInt(column++, value);
 	}
 
 	@Override
-	public void putFloat(float value) {
-		// TODO Auto-generated method stub
-
+	public void putLong(final long value) {
+		this.boundStatement.setLong(column++, value);
 	}
 
 	@Override
-	public void putDouble(double value) {
-		// TODO Auto-generated method stub
-
+	public void putFloat(final float value) {
+		this.boundStatement.setFloat(column++, value);
 	}
 
 	@Override
-	public <T extends Enum<T>> void putEnumeration(T value) {
-		// TODO Auto-generated method stub
-
+	public void putDouble(final double value) {
+		this.boundStatement.setDouble(column++, value);
 	}
 
 	@Override
-	public void putBytes(byte[] value) {
-		// TODO Auto-generated method stub
-
+	public <T extends Enum<T>> void putEnumeration(final T value) {
+		this.boundStatement.setInt(column++, value.ordinal());
 	}
 
 	@Override
-	public void putString(String value) {
-		// TODO Auto-generated method stub
+	public void putBytes(final byte[] value) {
+		throw new UnsupportedOperationException("Plain byte arrays cannot be stored in Cassandra DB.");
+	}
 
+	@Override
+	public void putString(final String value) {
+		this.boundStatement.setString(column++, value);
 	}
 
 }

@@ -22,15 +22,15 @@ import kieker.common.record.io.AbstractValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
- * 
- * @author Reiner Jung
  *
+ * @author Reiner Jung
+ * @since 1.16
  */
 public class CassandraValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
-	
-	private Row row;
+
+	private final Row row;
 	private int column;
-	
+
 	public CassandraValueDeserializer(final Row row) {
 		this.row = row;
 		this.column = 2; // the original implementation skips two? values
@@ -38,52 +38,52 @@ public class CassandraValueDeserializer extends AbstractValueDeserializer implem
 
 	@Override
 	public boolean getBoolean() {
-		return this.row.getBool(column++);
+		return this.row.getBool(this.column++);
 	}
 
 	@Override
-	public byte getByte() throws NumberFormatException {
-		return this.row.getByte(column++);
+	public byte getByte() throws NumberFormatException { // NOPMD
+		return this.row.getByte(this.column++);
 	}
 
 	@Override
 	public char getChar() {
-		return this.row.getString(column++).charAt(0);
+		return this.row.getString(this.column++).charAt(0);
 	}
 
 	@Override
-	public short getShort() throws NumberFormatException {
-		return this.row.getShort(column++);
+	public short getShort() throws NumberFormatException { // NOPMD
+		return this.row.getShort(this.column++);
 	}
 
 	@Override
-	public int getInt() throws NumberFormatException {
-		return this.row.getInt(column++);
+	public int getInt() throws NumberFormatException { // NOPMD
+		return this.row.getInt(this.column++);
 	}
 
 	@Override
-	public long getLong() throws NumberFormatException {
-		return this.row.getLong(column++);
+	public long getLong() throws NumberFormatException { // NOPMD
+		return this.row.getLong(this.column++);
 	}
 
 	@Override
-	public float getFloat() throws NumberFormatException {
-		return this.row.getFloat(column++);
+	public float getFloat() throws NumberFormatException { // NOPMD
+		return this.row.getFloat(this.column++);
 	}
 
 	@Override
-	public double getDouble() throws NumberFormatException {
-		return this.row.getDouble(column++);
+	public double getDouble() throws NumberFormatException { // NOPMD
+		return this.row.getDouble(this.column++);
 	}
 
 	@Override
 	public String getString() {
-		return this.row.getString(column++);
+		return this.row.getString(this.column++);
 	}
 
 	@Override
 	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
-		final int value = this.row.getInt(column++);
+		final int value = this.row.getInt(this.column++);
 		return this.enumerationValueOf(clazz, value);
 	}
 

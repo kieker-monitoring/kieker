@@ -54,6 +54,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 		CassandraDb database = null;
 		try {
 			database = new CassandraDb(this.keyspace, this.contactPoints);
+			database.connect();
 
 			// index table
 			final ResultSet rs = database.select(new ArrayList<String>(), this.tablePrefix, null);

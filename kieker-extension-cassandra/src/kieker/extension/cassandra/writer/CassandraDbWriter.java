@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datastax.driver.core.BoundStatement;
+
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.exception.MonitoringRecordException;
@@ -33,11 +35,11 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  *
- * @author Armin Moebius, Sven Ulrich
- *
+ * @author Armin Moebius, Sven Ulrich, Reiner Jung
+ * @since 1.16
  */
-public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
-	private static final String PREFIX = CassandraSyncDbWriter.class.getName() + ".";
+public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataClass
+	private static final String PREFIX = CassandraDbWriter.class.getName() + ".";
 
 	public static final String CONFIG_KEYSPACE = PREFIX + "Keyspace";
 	public static final String CONFIG_CONTACTPOINTS = PREFIX + "Contactpoints";
@@ -45,7 +47,7 @@ public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_OVERWRITE = PREFIX + "DropTables";
 	public static final String CONFIG_BENCHMARKID = PREFIX + "BenchmarkId";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraSyncDbWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDbWriter.class);
 
 	private final ConcurrentHashMap<String, String> classes = new ConcurrentHashMap<>();
 
@@ -53,12 +55,13 @@ public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
 	private final String benchmarkId;
 
 	/**
-	 * Creates a new instance of this class using the given parameter
+	 * Creates a new instance of this class using the given parameter.
 	 *
 	 * @param configuration
+	 * @throws ConfigurationException 
 	 * @throws Exception
 	 */
-	public CassandraSyncDbWriter(final Configuration configuration) throws Exception {
+	public CassandraDbWriter(final Configuration configuration) {
 		super(configuration);
 		final String keyspace = configuration.getStringProperty(CONFIG_KEYSPACE);
 		final String[] contactpoints = configuration.getStringArrayProperty(CONFIG_CONTACTPOINTS, ";");
@@ -67,13 +70,17 @@ public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
 		this.benchmarkId = configuration.getStringProperty(CONFIG_BENCHMARKID);
 
 		this.database = new CassandraDb(keyspace, contactpoints, tableprefix, dropTables);
-		this.database.createIndexTable();
 	}
 
 	@Override
 	public void onStarting() {
-		// TODO Auto-generated method stub
-
+		if (this.database.connect()) {
+			try {
+				this.database.createIndexTable();
+			} catch (ConfigurationException ex) {
+				// This is a temporary measure. There should be no exception 
+			}
+		}
 	}
 
 	@Override
@@ -98,7 +105,8 @@ public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
 
 				for (int i = 1; i <= typeArray.length; i++) {
 					values.append(",?");
-					fields.append(",c" + i);
+					fields.append(",c");
+					fields.append(i);
 				}
 
 				final String statement = "INSERT INTO " + tableName + " ( " + fields.toString() + " )  VALUES (" + values.toString() + ")";
@@ -108,14 +116,17 @@ public class CassandraSyncDbWriter extends AbstractMonitoringWriter {
 			}
 		}
 
-		IValueSerializer cassandraSerializer = new CassandraValueSerializer();
+		
+		final BoundStatement boundStatement = this.database.createBoundStatement(this.classes.get(className));
+		// The while section must be reworked
+		final IValueSerializer cassandraSerializer = new CassandraValueSerializer(boundStatement);
 		record.serialize(cassandraSerializer);
 		
 		final List<Object> values = new ArrayList<>();
 		values.add(record.getLoggingTimestamp());
 
 		try {
-			this.database.insert(this.classes.get(className), values);
+			this.database.insert(this.classes.get(className), boundStatement);
 		} catch (final ConfigurationException | MonitoringRecordException exc) {
 			LOGGER.error("Error inserting monitoring record: {}", exc.getLocalizedMessage());
 		}

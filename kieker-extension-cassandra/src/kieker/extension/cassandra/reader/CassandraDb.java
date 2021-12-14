@@ -32,6 +32,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.exceptions.AuthenticationException;
+import com.datastax.driver.core.exceptions.InvalidQueryException;
 import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.datastax.driver.core.exceptions.QueryExecutionException;
 import com.datastax.driver.core.exceptions.QueryValidationException;
@@ -39,6 +41,7 @@ import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
 import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
 
 import kieker.common.exception.ConfigurationException;
+import kieker.common.exception.MonitoringRecordException;
 
 /**
  *
@@ -53,7 +56,7 @@ public class CassandraDb {
 	private Cluster cluster;
 	private List<InetSocketAddress> contactPoints;
 	private String defaultKeyspace;
-	private boolean init = false;
+	private boolean init;
 	private Session session;
 	private final String cassandraDefaultHost = "127.0.0.1";
 	private final String cassandraDefaultPort = "9042";
@@ -61,34 +64,44 @@ public class CassandraDb {
 
 	private Map<Class<?>, String> databaseTypes;
 
-	/** Constructor **/
-
 	/**
-	 * Creates a new instance of this class
-	 */
-	public CassandraDb() {
-		this.initDefault();
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameter
+	 * Creates a new instance of this class using the given parameter.
 	 *
 	 * @param keyspace
 	 * @param contactpoints
 	 * @throws Exception
 	 */
 	public CassandraDb(final String keyspace, final String[] contactpoints) {
-		this();
+		this.initDefault();
 		this.initDatabase(keyspace, contactpoints);
 	}
 
-	/** Setter **/
+	/**
+	 * Establishes a connection to the database
+	 *
+	 * @return
+	 */
+	public void connect() {
+		try {
+			this.closeSession();
+			this.close();
 
+			this.cluster = Cluster.builder().addContactPointsWithPorts(this.contactPoints)
+					.withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
+					.withMaxSchemaAgreementWaitSeconds(60)
+					.build();
+
+			this.session = this.cluster.connect(this.getDefaultKeyspace());
+			this.init = true;
+		} catch (final NoHostAvailableException | AuthenticationException | InvalidQueryException | IllegalStateException exc) {
+			LOGGER.error("Opening Connection to Database failed. {}", exc.getLocalizedMessage());
+			this.init = false;
+		}
+	}
+	
 	public void setDefaultKeyspace(final String defaultKeyspace) {
 		this.defaultKeyspace = defaultKeyspace;
 	}
-
-	/** Getter **/
 
 	public String getDefaultKeyspace() {
 		return this.defaultKeyspace;
@@ -98,7 +111,6 @@ public class CassandraDb {
 		return this.init;
 	}
 
-	/** private **/
 	/**
 	 * Sets the default values for all fields
 	 */
@@ -106,8 +118,47 @@ public class CassandraDb {
 		this.contactPoints = new ArrayList<>();
 		final InetSocketAddress iA = new InetSocketAddress("127.0.0.1", 9042);
 		this.contactPoints.add(iA);
-		this.setDefaultKeyspace("kieker");
+		this.defaultKeyspace = "kieker";
 		this.setDatabasetypes();
+	}
+	
+	/**
+	 * initializes the database connection
+	 *
+	 * @param keyspace
+	 * @param contactpoints
+	 * @param tablePrefix
+	 * @param dropTables
+	 */
+	private void initDatabase(final String keyspace, final String[] contactpoints) {
+		if ((keyspace != null) && !keyspace.isEmpty()) {
+			this.defaultKeyspace = keyspace;
+		}
+
+		if ((contactpoints != null) && (contactpoints.length > 0)) {
+			this.contactPoints.clear();
+
+			for (final String contactpoint : contactpoints) {
+				final String[] array = contactpoint.split(":");
+				final List<String> list = Arrays.asList(array);
+
+				String host = this.cassandraDefaultHost;
+				String port = this.cassandraDefaultPort;
+
+				int index = 1;
+				for (final String s : list) {
+					if (index == 1) {
+						host = s;
+					} else if (index == 2) {
+						port = s;
+					}
+					index++;
+				}
+
+				final InetSocketAddress iA = new InetSocketAddress(host, Integer.parseInt(port));
+				this.contactPoints.add(iA);
+			}
+		}
 	}
 
 	/**
@@ -148,34 +199,7 @@ public class CassandraDb {
 	}
 
 	/**
-	 * Establishes a connection to the database
-	 *
-	 * @return
-	 */
-	private boolean connect() {
-		boolean result = false;
-
-		try {
-			this.closeSession();
-			this.close();
-
-			this.cluster = Cluster.builder().addContactPointsWithPorts(this.contactPoints)
-					.withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
-					.withMaxSchemaAgreementWaitSeconds(60)
-					.build();
-
-			this.session = this.cluster.connect(this.getDefaultKeyspace());
-			result = true;
-		} catch (final Exception exc) {
-			result = false;
-			LOGGER.error("Opening Connection to Database failed", exc);
-		}
-
-		return result;
-	}
-
-	/**
-	 * Closes the cluster
+	 * Closes the cluster.
 	 */
 	private void close() {
 		if ((this.cluster != null) && !this.cluster.isClosed()) {
@@ -184,7 +208,7 @@ public class CassandraDb {
 	}
 
 	/**
-	 * Closes the Session
+	 * Closes the Session.
 	 */
 	private void closeSession() {
 		if ((this.session != null) && !this.session.isClosed()) {
@@ -193,24 +217,24 @@ public class CassandraDb {
 	}
 
 	/**
-	 * Executes the given statement. Returns a ResultSet if the call was successfull
+	 * Executes the given statement. Returns a ResultSet if the call was successful.
 	 *
 	 * @param statement
 	 * @return
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 */
 	private ResultSet execute(final BoundStatement statement) throws ConfigurationException {
 		return this.execute(statement, this.session);
 	}
 
 	/**
-	 * Executes the given statement asynchronous. Returns a ResultSetFuture if the call was succesfull
+	 * Executes the given statement asynchronous. Returns a ResultSetFuture if the call was successful.
 	 *
 	 * @param statement
 	 * @param ignoreFuture
 	 *            ignore Future if return is not important
 	 * @return
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 */
 	private ResultSetFuture executeAsync(final BoundStatement statement, final boolean ignoreFuture) throws ConfigurationException {
 		return this.executeAsync(statement, this.session, ignoreFuture);
@@ -220,15 +244,15 @@ public class CassandraDb {
 	 * Executes the given statement asynchronous. Returns a ResultSetFuture if the call was succesfull
 	 *
 	 * @param statement
-	 * @param session
+	 * @param session2
 	 * @param ignoreFuture
 	 *            ignore Future if return is not important
 	 * @return
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 */
 	private ResultSetFuture executeAsync(final BoundStatement statement, final Session session2, final boolean ignoreFuture) throws ConfigurationException {
 		if (!this.init) {
-			throw new ConfigurationException("Connection not established; please establish a Connection first");
+			throw new ConfigurationException("Connection not established");
 		}
 
 		ResultSetFuture rs = null;
@@ -238,19 +262,19 @@ public class CassandraDb {
 				rs.cancel(true);
 			}
 		} catch (final UnsupportedFeatureException exc) {
-			LOGGER.error("Error executing Statement", exc);
+			LOGGER.error("Error executing statement: {}", exc.getLocalizedMessage());
 		}
 
 		return rs;
 	}
 
 	/**
-	 * Executes the given statement. Returns a ResultSet if the call was successfull
+	 * Executes the given statement. Returns a ResultSet if the call was successful.
 	 *
 	 * @param statement
 	 * @param session2
 	 * @return
-	 * @throws Exception
+	 * @throws ConfigurationException
 	 */
 	private ResultSet execute(final BoundStatement statement, final Session session2) throws ConfigurationException {
 		if (!this.init) {
@@ -261,7 +285,7 @@ public class CassandraDb {
 		try {
 			rs = session2.execute(statement);
 		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
-			LOGGER.error("Error executing Statement {}", exc.getLocalizedMessage());
+			LOGGER.error("Error executing statement: {}", exc.getLocalizedMessage());
 		}
 
 		return rs;
@@ -342,46 +366,7 @@ public class CassandraDb {
 
 	/** public **/
 
-	/**
-	 * initializes the database connection
-	 *
-	 * @param keyspace
-	 * @param contactpoints
-	 * @param tablePrefix
-	 * @param dropTables
-	 */
-	public void initDatabase(final String keyspace, final String[] contactpoints) {
-		if ((keyspace != null) && !keyspace.isEmpty()) {
-			this.setDefaultKeyspace(keyspace);
-		}
 
-		if ((contactpoints != null) && (contactpoints.length > 0)) {
-			this.contactPoints.clear();
-
-			for (final String contactpoint : contactpoints) {
-				final String[] array = contactpoint.split(":");
-				final List<String> list = Arrays.asList(array);
-
-				String host = this.cassandraDefaultHost;
-				String port = this.cassandraDefaultPort;
-
-				int index = 1;
-				for (final String s : list) {
-					if (index == 1) {
-						host = s;
-					} else if (index == 2) {
-						port = s;
-					}
-					index++;
-				}
-
-				final InetSocketAddress iA = new InetSocketAddress(host, Integer.parseInt(port));
-				this.contactPoints.add(iA);
-			}
-		}
-
-		this.init = this.connect();
-	}
 
 	/**
 	 * Closes all open connections to the database
@@ -398,7 +383,7 @@ public class CassandraDb {
 	 * @param values
 	 * @throws Exception
 	 */
-	public void insert(final String statement, final Collection<Object> values) throws ConfigurationException {
+	public void insert(final String statement, final Collection<Object> values) throws MonitoringRecordException, ConfigurationException {
 		final BoundStatement bs = this.getBoundStatement(statement);
 
 		int i = 0;
@@ -408,7 +393,7 @@ public class CassandraDb {
 		}
 
 		if (this.execute(bs) == null) {
-			throw new ConfigurationException("Error inserting monitoring data");
+			throw new MonitoringRecordException("Error inserting monitoring data");
 		}
 	}
 
