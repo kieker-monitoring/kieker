@@ -45,29 +45,6 @@ pipeline {
           }
         }
 
-        stage('Compile') {
-          steps {
-            sh './gradlew compileJava'
-            sh './gradlew compileTestJava'
-            sh 'df'
-          }
-        }
-
-        stage('Unit Test') {
-          steps {
-            sh './gradlew --parallel test jacocoTestReport'
-            jacoco(
-               sourcePattern: '**/src/**',
-               exclusionPattern: '**/test/**'
-            )
-          }
-          post {
-            always {
-              junit '**/build/test-results/test/*.xml'
-            }
-          }
-        }
-
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
@@ -96,6 +73,29 @@ pipeline {
           }
         }
         
+        stage('Compile') {
+          steps {
+            sh './gradlew compileJava'
+            sh './gradlew compileTestJava'
+            sh 'df'
+          }
+        }
+
+        stage('Unit Test') {
+          steps {
+            sh './gradlew --parallel test jacocoTestReport'
+            jacoco(
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
+          }
+        }
+
         stage('Distribution Build') {
           steps {
             sh './gradlew -x test build publishToMavenLocal distribute'
