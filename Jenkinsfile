@@ -55,7 +55,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
-            sh './gradlew -x test check'
+            sh './gradlew --parallel -x test check'
           }
           post {
             always {
