@@ -184,7 +184,7 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-             label 'build-node4'
+             label 'build-node8'
           }
           steps {
             sshagent(credentials: ['kieker-key']) {
