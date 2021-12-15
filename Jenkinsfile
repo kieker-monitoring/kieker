@@ -45,9 +45,17 @@ pipeline {
           }
         }
 
+        stage('Compile') {
+          steps {
+            sh './gradlew compileJava'
+            sh './gradlew compileTestJava'
+            sh 'df'
+          }
+        }
+
         stage('Static Analysis') {
           steps {
-            sh './gradlew check'
+            sh './gradlew -x test check'
           }
           post {
             always {
@@ -73,14 +81,6 @@ pipeline {
           }
         }
         
-        stage('Compile') {
-          steps {
-            sh './gradlew compileJava'
-            sh './gradlew compileTestJava'
-            sh 'df'
-          }
-        }
-
         stage('Unit Test') {
           steps {
             sh './gradlew --parallel test jacocoTestReport'
