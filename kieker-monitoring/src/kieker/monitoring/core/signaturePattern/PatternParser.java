@@ -86,7 +86,7 @@ public final class PatternParser {
 		final String trimPattern = strPattern.trim();
 		if (trimPattern.charAt(0) == SignatureFactory.PATTERN_PREFIX) {
 			try {
-				return Pattern.compile(trimPattern.substring(1));
+				return Pattern.compile(trimPattern);
 			} catch (final PatternSyntaxException pse) {
 				throw new InvalidPatternException("Invalid regular expression", pse);
 			}
