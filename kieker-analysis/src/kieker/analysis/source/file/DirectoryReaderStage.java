@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.stream.Stream;
 
 import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.Bzip2DecompressionFilter;
@@ -74,8 +76,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			}
 
 			/** read log files. */
-			try {
-				Files.list(directory.toPath()).sorted().forEach(logFilePath -> {
+			try (Stream<Path> stream = Files.list(directory.toPath())) {
+				stream.sorted().forEach(logFilePath -> {
 					final File logFile = logFilePath.toFile();
 					final String logFileName = logFile.getName();
 					try (InputStream inputStream = Files.newInputStream(logFile.toPath(), StandardOpenOption.READ)) {

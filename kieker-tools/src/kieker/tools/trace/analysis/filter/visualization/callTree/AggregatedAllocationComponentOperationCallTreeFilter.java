@@ -74,9 +74,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
-				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
-		return destination;
+		return AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
+				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null
 	}
 }
 

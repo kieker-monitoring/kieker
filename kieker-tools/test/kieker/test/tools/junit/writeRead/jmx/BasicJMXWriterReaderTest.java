@@ -112,6 +112,7 @@ public class BasicJMXWriterReaderTest {
 
 	private TestAnalysis createAnalysis() throws Exception {
 		final Configuration jmxReaderConfig = new Configuration();
+
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");

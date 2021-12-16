@@ -16,6 +16,7 @@
 	<rule ref="rulesets/internal/all-java.xml">
 		<exclude name="AvoidCatchingNPE" />
 		<exclude name="AvoidDuplicateLiterals" />
+		<exclude name="AvoidFinalLocalVariable" />
 		<exclude name="AvoidInstantiatingObjectsInLoops" />
 		<exclude name="AvoidLiteralsInIfCondition" />
 		<exclude name="AvoidThrowingNullPointerException" />
