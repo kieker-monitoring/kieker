@@ -59,7 +59,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return new Counter();
 		}
 	};
-	
+
 	@Before("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void beforeConstructor(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -81,9 +81,10 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		// measure before execution
 		final int objectId = System.identityHashCode(thisObject);
-		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId, AbstractAspect.getInterface(thisJoinPoint)));
+		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId,
+				AbstractAspect.getInterface(thisJoinPoint)));
 	}
-	
+
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstructor(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -93,18 +94,18 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		
+
 		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);
-		
+
 		// measure after successful execution
 		CTRLINST.newMonitoringRecord(
 				new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
 	}
 
-	@AfterThrowing(pointcut="monitoredConstructor() && this(thisObject) && notWithinKieker()", throwing="th")
+	@AfterThrowing(pointcut = "monitoredConstructor() && this(thisObject) && notWithinKieker()", throwing = "th")
 	public void afterConstructorThrowing(final Object thisObject, final JoinPoint thisJoinPoint, final Throwable th)
 			throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -114,16 +115,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		
+
 		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);
-		
+
 		CTRLINST.newMonitoringRecord(new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
 				operationSignature, clazz, th.toString(), objectId));
 	}
-	
+
 	@After("monitoredConstructor() && notWithinKieker()")
 	public void afterOperation(final JoinPoint thisJoinPoint) {
 		if (!CTRLINST.isMonitoringEnabled()) {
