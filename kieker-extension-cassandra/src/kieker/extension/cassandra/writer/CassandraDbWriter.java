@@ -23,6 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.exceptions.NoHostAvailableException;
+import com.datastax.driver.core.exceptions.QueryExecutionException;
+import com.datastax.driver.core.exceptions.QueryValidationException;
+import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
@@ -126,8 +130,8 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 		values.add(record.getLoggingTimestamp());
 
 		try {
-			this.database.insert(this.classes.get(className), boundStatement);
-		} catch (final ConfigurationException | MonitoringRecordException exc) {
+			this.database.insert(boundStatement);
+		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
 			LOGGER.error("Error inserting monitoring record: {}", exc.getLocalizedMessage());
 		}
 	}
