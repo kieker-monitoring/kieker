@@ -15,8 +15,10 @@
  ***************************************************************************/
 package kieker.extension.cassandra.reader;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -25,6 +27,7 @@ import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.extension.cassandra.CassandraUtils;
 import kieker.extension.cassandra.CassandraValueDeserializer;
 
 import teetime.framework.AbstractProducerStage;
@@ -40,12 +43,13 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
 	
 	private final String keyspace;
-	private final String[] contactPoints;
+	private final List<InetSocketAddress> contactPoints;
 	private final String tablePrefix;
 	
 	public CassandraSourceStage(final String keyspace, final String[] contactPoints, final String tablePrefix) {
 		this.keyspace = keyspace;
-		this.contactPoints = contactPoints;
+		this.contactPoints = CassandraUtils.computeDatabaseConnections(contactPoints);
+
 		this.tablePrefix = tablePrefix;
 	}
 	
@@ -68,7 +72,6 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 
 				this.table2record(database, tablename, classname);
 			}
-
 		} catch (ConfigurationException exc) {
 			this.logger.error(exc.getMessage());
 		} finally {

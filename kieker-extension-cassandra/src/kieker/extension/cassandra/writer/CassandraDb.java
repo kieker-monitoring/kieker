@@ -16,7 +16,6 @@
 package kieker.extension.cassandra.writer;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,8 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.exceptions.AuthenticationException;
 import com.datastax.driver.core.exceptions.InvalidQueryException;
@@ -39,9 +36,14 @@ import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
 import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
 
 import kieker.common.exception.ConfigurationException;
+import kieker.common.exception.MonitoringRecordException;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueSerializer;
+import kieker.extension.cassandra.CassandraValueSerializer;
 
 /**
- *
+ * 
  * @author Armin Moebius, Sven Ulrich, Reiner Jung
  * @since 1.16
  */
@@ -49,40 +51,33 @@ public class CassandraDb {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDb.class);
 
-	private static final String DEFAULT_KEY_SPACE = "kieker";
-
-	private static final String DEFAULT_TABLE_PREFIX = "kieker";
-
-	private static final String DEFAULT_HOST = "localhost";
-	private static final int DEFAULT_PORT = 9042;
-
-	private final List<InetSocketAddress> contactPoints = new ArrayList<>();
-	private final String defaultKeyspace;
+	private final List<InetSocketAddress> contactPoints;
+	private final String keyspace;
 	private final String tablePrefix;
 	private final boolean dropTables;
 
-	private final Map<String, PreparedStatement> preparedStatements = new ConcurrentHashMap<>();
-
 	private final Map<Class<?>, String> databaseTypeMap = new ConcurrentHashMap<>();
+
+	private final ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement> classes = new ConcurrentHashMap<>();
 
 	private Cluster cluster;
 	private Session session;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameter.
 	 *
 	 * @param keyspace
-	 * @param contactPointSpecs
+	 * @param contactPoints
 	 * @param tablePrefix
 	 * @param dropTables
 	 * @throws Exception
 	 */
-	public CassandraDb(final String keyspace, final String[] contactPointSpecs, final String tablePrefix, final boolean dropTables) {
+	public CassandraDb(final String keyspace, final List<InetSocketAddress> contactPoints, final String tablePrefix, final boolean dropTables) {
 		this.initializeDatabaseTypeMapping();
-		this.defaultKeyspace = (keyspace == null) ? DEFAULT_KEY_SPACE : keyspace; // NOCS avoid inline conditionals
-		this.tablePrefix = (tablePrefix == null) ? DEFAULT_TABLE_PREFIX : tablePrefix; // NOCS avoid inline conditionals
+		this.keyspace = keyspace;
+		this.tablePrefix = tablePrefix;
 		this.dropTables = dropTables;
-		this.computeDatabaseConnections(contactPointSpecs);
+		this.contactPoints = contactPoints;
 	}
 
 	/**
@@ -97,7 +92,8 @@ public class CassandraDb {
 					.withMaxSchemaAgreementWaitSeconds(60)
 					.build();
 
-			this.session = this.cluster.connect(this.defaultKeyspace);
+			this.session = this.cluster.connect(this.keyspace);
+			this.createIndexTable();
 			return true;
 		} catch (final NoHostAvailableException | AuthenticationException | InvalidQueryException | IllegalStateException exc) {
 			LOGGER.error("Opening Connection to Database failed. {}", exc.getLocalizedMessage());
@@ -114,42 +110,87 @@ public class CassandraDb {
 	}
 
 	/**
-	 * Create a bounded statement for a class name.
-	 *
-	 * @param classname
-	 *            name of the class
-	 * @return returns a bound statement
+	 * Insert a record into the database.
+	 * 
+	 * @param record
+	 *            the record
+	 * @param benchmarkId
+	 *            the current benchmarkId
+	 * @throws MonitoringRecordException
+	 *             failed to insert the record or creating and registring the record table in the first place.
 	 */
-	public BoundStatement createBoundStatement(final String classname) {
-		final PreparedStatement preparedStatement = this.session.prepare("STRING-QUERY");
-		return new BoundStatement(preparedStatement);
+	public void insert(final IMonitoringRecord record, final String benchmarkId) throws MonitoringRecordException {
+		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
+		final BoundStatement boundStatement = this.getBoundStatement(this.getPreparedStatement(recordClass, benchmarkId));
+		
+		final IValueSerializer cassandraSerializer = new CassandraValueSerializer(boundStatement);
+		cassandraSerializer.putLong(record.getLoggingTimestamp());
+		record.serialize(cassandraSerializer);
+
+		this.session.execute(boundStatement);
 	}
 
 	/**
-	 * Compute the database connections.
+	 * Create new prepared statement.
 	 *
-	 * @param contactPointSpecs
+	 * @param recordClass
+	 *            record class type
+	 * @param benchmarkId
+	 *            benchmark id
+	 * @return returns prepared statement
+	 * @throws MonitoringRecordException
+	 *             when the creation of a new entry or the table for the record itself failed.
 	 */
-	private void computeDatabaseConnections(final String[] contactPointSpecs) {
-		for (final String contactpoint : contactPointSpecs) {
-			final String[] array = contactpoint.split(":");
-			if (array.length == 2) {
-				final InetSocketAddress socket = new InetSocketAddress(array[0], Integer.parseInt(array[1]));
-				this.contactPoints.add(socket);
-			}
+	private PreparedStatement getPreparedStatement(final Class<? extends IMonitoringRecord> recordClass, final String benchmarkId)
+			throws MonitoringRecordException {
+		PreparedStatement statement = this.classes.get(recordClass);
+		if (statement == null) {
+			statement = this.createRecordInsertStatement(recordClass.getSimpleName(), benchmarkId, recordClass);
+			this.classes.put(recordClass, statement);
+		}
+		return statement;
+	}
+
+	/**
+	 * Create a new prepared statement to insert a new record.
+	 *
+	 * @param className
+	 *            class name for the table
+	 * @param benchmarkId
+	 *            benchmark id
+	 * @param recordClass
+	 *            the record class
+	 * @return a prepared statement
+	 */
+	private PreparedStatement createRecordInsertStatement(final String className, final String benchmarkId,
+			final Class<? extends IMonitoringRecord> recordClass) throws MonitoringRecordException {
+		Class<?>[] typeArray = null;
+		try {
+			typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
+		} catch (final MonitoringRecordException exc) {
+			LOGGER.error("Failed to get types of record: {}", exc.getLocalizedMessage());
 		}
 
-		if (contactPointSpecs.length == 0) {
-			final InetSocketAddress socket = new InetSocketAddress(DEFAULT_HOST, DEFAULT_PORT);
-			this.contactPoints.add(socket);
+		final String tableName = this.createTable(className, typeArray);
+		final StringBuilder values = new StringBuilder();
+		values.append("'" + benchmarkId + "',?");
+
+		final StringBuilder fields = new StringBuilder("benchmark_id,timestamp");
+
+		for (int i = 1; i <= typeArray.length; i++) {
+			values.append(",?");
+			fields.append(",c");
+			fields.append(i);
 		}
+
+		return this.session.prepare(String.format("INSERT INTO %s ( %s )  VALUES (%s)", tableName, fields.toString(), values.toString()));
 	}
 
 	/**
 	 * Prepares the mapping from Java Types to Cassandra types.
 	 */
 	private void initializeDatabaseTypeMapping() {
-		final Class<?>[] primitiveTypes = { String.class, int.class, Integer.class, long.class, Long.class, float.class, Float.class, double.class, 
+		final Class<?>[] primitiveTypes = { String.class, int.class, Integer.class, long.class, Long.class, float.class, Float.class, double.class,
 			Double.class, boolean.class, Boolean.class, char.class, Character.class };
 		final String[] databaseTypes = { "text", "int", "int", "bigint", "bigint", "float", "float", "double", "double", "int", "int", "boolean", "boolean",
 			"varchar", "varchar" };
@@ -165,14 +206,17 @@ public class CassandraDb {
 	 * @return
 	 */
 	private BoundStatement getBoundStatement(final String statement) {
-		PreparedStatement preparedStatement = this.preparedStatements.get(statement);
-		
-		if (preparedStatement == null) {
-			preparedStatement = this.session.prepare(statement);
-			this.preparedStatements.put(statement, preparedStatement);
-		}
+		return new BoundStatement(this.session.prepare(statement));
+	}
 
-		return new BoundStatement(preparedStatement);
+	/**
+	 * Returns a BoundStatement from the given String. Uses the default Session to the keyspace.
+	 *
+	 * @param statement
+	 * @return bound statement
+	 */
+	public BoundStatement getBoundStatement(final PreparedStatement statement) {
+		return new BoundStatement(statement);
 	}
 
 	/**
@@ -180,7 +224,7 @@ public class CassandraDb {
 	 *
 	 * @throws ConfigurationException
 	 */
-	public void createIndexTable() throws ConfigurationException {
+	private void createIndexTable() {
 		if (this.dropTables) {
 			this.dropTable(this.tablePrefix);
 			this.createTableClassLookupTable();
@@ -204,7 +248,7 @@ public class CassandraDb {
 		final String createStatement = String.format("CREATE TABLE %s ( tablename text, classname text, PRIMARY KEY (tablename) )",
 				this.tablePrefix);
 		final BoundStatement boundStatement = this.getBoundStatement(createStatement);
-		
+
 		try {
 			this.session.execute(boundStatement);
 		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
@@ -231,113 +275,60 @@ public class CassandraDb {
 	 * @throws ConfigurationException
 	 *             on errors
 	 */
-	public String createTable(final String className, final Class<?>... columns) throws ConfigurationException {
-		final String tableName = this.tablePrefix + "_" + className;
+	private String createTable(final String className, final Class<?>... columns) throws MonitoringRecordException {
+		final String tableName = this.createTableName(className);
 
 		if (this.dropTables) {
-			dropTable(tableName);
-			createClassTable(tableName, className, columns);
-		} else if (!doesTableExist(tableName)) {
-			createClassTable(tableName, className, columns);
+			this.dropTable(tableName);
+			this.createClassTable(tableName, className, columns);
+		} else if (!this.doesTableExist(tableName)) {
+			this.createClassTable(tableName, className, columns);
 		}
 
 		return tableName;
 	}
 
-	private void createClassTable(final String tableName, final String className, final Class<?>[] columns) throws ConfigurationException {
+	private String createTableName(final String className) {
+		return this.tablePrefix + "_" + className;
+	}
+
+	private void createClassTable(final String tableName, final String className, final Class<?>[] attributeTypes) throws MonitoringRecordException {
+		final BoundStatement boundStatement = this.getBoundStatement(createClassTableString(tableName, attributeTypes));
+
+		try {
+			this.session.execute(boundStatement);
+		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+			throw new MonitoringRecordException(String.format("Creating table %s failed!", tableName), exc);
+		}
+
+		final String addIndex = String.format("INSERT INTO %s (tablename, classname) VALUES('%s','%s')", this.tablePrefix, tableName, className);
+		final BoundStatement index = this.getBoundStatement(addIndex);
+
+		try {
+			this.session.execute(index);
+		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+			throw new MonitoringRecordException(String.format("Adding table %s to index failed!", tableName), exc);
+		}
+	}
+
+	private String createClassTableString(final String tableName, final Class<?>[] attributeTypes) throws MonitoringRecordException {
 		final StringBuilder createTable = new StringBuilder(100);
 		createTable.append(String.format("CREATE TABLE %s (benchmark_id %s, timestamp %s",
 				tableName, this.databaseTypeMap.get(String.class), this.databaseTypeMap.get(long.class)));
 
-		int i = 1;
-		for (final Class<?> c : columns) {
+		int i = 0;
+		for (final Class<?> c : attributeTypes) {
 			createTable.append(", c").append(i++).append(' ');
 			final String databaseType = this.databaseTypeMap.get(c);
 
 			if (databaseType != null) {
 				createTable.append(databaseType);
 			} else {
-				throw new ConfigurationException(String.format("Type '%s' not supported.", c.getSimpleName()));
+				throw new MonitoringRecordException(String.format("Type '%s' not supported.", c.getSimpleName()));
 			}
 		}
 		createTable.append(", PRIMARY KEY (benchmark_id, timestamp)) ");
-
-		final BoundStatement boundStatement = this.getBoundStatement(createTable.toString());
-		
-		try {
-			this.session.execute(boundStatement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
-			LOGGER.error("Creating table {} failed! Cause: {}", tableName, exc.getLocalizedMessage());
-		}
-
-		try {
-			final String addIndex = "INSERT INTO " + this.tablePrefix + " (tablename, classname) VALUES('"
-					+ tableName + "','" + className + "')";
-			final BoundStatement index = this.getBoundStatement(addIndex);
-			this.session.execute(index);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
-				LOGGER.error("Adding table {} to index failed!", tableName);
-		}
-	}
-
-	/**
-	 * Returns the highest found RecordId. If no record or matching table is found; 0 is returned.
-	 *
-	 * @return returns the highest known record id.
-	 * @throws ConfigurationException on errors
-	 */
-	public int getLastRecordId() throws ConfigurationException {
-
-		final List<String> tables = new ArrayList<>();
-		int highestId = 0;
-
-		// get all tables who belong to the current prefix
-		final String statement = "select table_name from tables where keyspace_name ='" + this.defaultKeyspace + "'";
-		final String searchKey = this.tablePrefix + "_";
-		final BoundStatement boundedStatement = this.getBoundStatement(statement);
-		final ResultSet rs = this.session.execute(boundedStatement);
-		if (rs != null) {
-			for (final Row row : rs) {
-				final String table = row.getString("table_name");
-
-				if (table.contains(searchKey)) {
-					tables.add(table);
-				}
-			}
-		}
-
-		if (!tables.isEmpty()) {
-			final String stmt = "select max(id) as id from ";
-
-			for (final String s : tables) {
-				final String tableLookup = stmt + s;
-				final BoundStatement tableStmt = this.getBoundStatement(tableLookup);
-				final ResultSet result = this.session.execute(tableStmt);
-				for (final Row row : result) {
-					final int id = row.getInt("id");
-
-					if (id > highestId) {
-						highestId = id;
-					}
-				}
-			}
-		}
-
-		return highestId;
-	}
-	
-	/**
-	 * Insert one record.
-	 * 
-	 * @param boundStatement record contained in a boundStatement
-	 * @throws NoHostAvailableException
-	 * @throws QueryExecutionException
-	 * @throws QueryValidationException
-	 * @throws UnsupportedFeatureException
-	 */
-	public void insert(final BoundStatement boundStatement) 
-			throws NoHostAvailableException, QueryExecutionException, QueryValidationException, UnsupportedFeatureException {
-		this.session.execute(boundStatement);		
+		return createTable.toString();
 	}
 
 }

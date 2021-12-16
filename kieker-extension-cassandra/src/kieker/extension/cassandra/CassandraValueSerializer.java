@@ -30,6 +30,7 @@ public class CassandraValueSerializer implements IValueSerializer { // NOPMD Too
 
 	public CassandraValueSerializer(final BoundStatement boundStatement) {
 		this.boundStatement = boundStatement;
+		this.column = 1; // start at one, as 0 is the column of the benchmarkId
 	}
 
 	@Override

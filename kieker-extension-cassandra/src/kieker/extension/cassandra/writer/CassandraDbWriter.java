@@ -15,26 +15,14 @@
  ***************************************************************************/
 package kieker.extension.cassandra.writer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
-import com.datastax.driver.core.exceptions.QueryExecutionException;
-import com.datastax.driver.core.exceptions.QueryValidationException;
-import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.IValueSerializer;
-import kieker.extension.cassandra.CassandraValueSerializer;
+import kieker.extension.cassandra.CassandraUtils;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
@@ -45,15 +33,18 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataClass
 	private static final String PREFIX = CassandraDbWriter.class.getName() + ".";
 
-	public static final String CONFIG_KEYSPACE = PREFIX + "Keyspace";
-	public static final String CONFIG_CONTACTPOINTS = PREFIX + "Contactpoints";
-	public static final String CONFIG_TABLEPREFIX = PREFIX + "TablePrefix";
-	public static final String CONFIG_OVERWRITE = PREFIX + "DropTables";
-	public static final String CONFIG_BENCHMARKID = PREFIX + "BenchmarkId";
+	public static final String CONFIG_KEYSPACE = PREFIX + "keyspace";
+	public static final String CONFIG_CONTACTPOINTS = PREFIX + "contactpoints";
+	public static final String CONFIG_TABLE_PREFIX = PREFIX + "tablePrefix";
+	public static final String CONFIG_OVERWRITE = PREFIX + "dropTables";
+	public static final String CONFIG_BENCHMARK_ID = PREFIX + "benchmarkId";
+	
+	private static final String DEFAULT_KEYSPACE = "kieker";
 
+	private static final String DEFAULT_TABLE_PREFIX = "kieker";
+
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDbWriter.class);
-
-	private final ConcurrentHashMap<String, String> classes = new ConcurrentHashMap<>();
 
 	private final CassandraDb database;
 	private final String benchmarkId;
@@ -62,77 +53,31 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	 * Creates a new instance of this class using the given parameter.
 	 *
 	 * @param configuration
-	 * @throws ConfigurationException 
+	 * @throws ConfigurationException
 	 * @throws Exception
 	 */
 	public CassandraDbWriter(final Configuration configuration) {
 		super(configuration);
-		final String keyspace = configuration.getStringProperty(CONFIG_KEYSPACE);
-		final String[] contactpoints = configuration.getStringArrayProperty(CONFIG_CONTACTPOINTS, ";");
-		final String tableprefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
+		final String keyspace = configuration.getStringProperty(CONFIG_KEYSPACE, DEFAULT_KEYSPACE);
+		final String[] contactPointParameters = configuration.getStringArrayProperty(CONFIG_CONTACTPOINTS, ",");
+		final String tablePrefix = configuration.getStringProperty(CONFIG_TABLE_PREFIX, DEFAULT_TABLE_PREFIX);
 		final boolean dropTables = configuration.getBooleanProperty(CONFIG_OVERWRITE);
-		this.benchmarkId = configuration.getStringProperty(CONFIG_BENCHMARKID);
-
-		this.database = new CassandraDb(keyspace, contactpoints, tableprefix, dropTables);
+		this.benchmarkId = configuration.getStringProperty(CONFIG_BENCHMARK_ID);
+		
+		this.database = new CassandraDb(keyspace, CassandraUtils.computeDatabaseConnections(contactPointParameters), tablePrefix, dropTables);
 	}
 
 	@Override
 	public void onStarting() {
-		if (this.database.connect()) {
-			try {
-				this.database.createIndexTable();
-			} catch (ConfigurationException ex) {
-				// This is a temporary measure. There should be no exception 
-			}
-		}
+		this.database.connect();
 	}
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
-		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
-		final String className = recordClass.getSimpleName();
-
-		if (!this.classes.containsKey(className)) {
-			Class<?>[] typeArray = null;
-			try {
-				typeArray = AbstractMonitoringRecord.typesForClass(recordClass);
-			} catch (final MonitoringRecordException exc) {
-				LOGGER.error("Failed to get types of record: {}", exc.getLocalizedMessage());
-			}
-
-			try {
-				final String tableName = this.database.createTable(className, typeArray);
-				final StringBuilder values = new StringBuilder();
-				values.append("'" + this.benchmarkId + "',?");
-
-				final StringBuilder fields = new StringBuilder("benchmark_id,timestamp");
-
-				for (int i = 1; i <= typeArray.length; i++) {
-					values.append(",?");
-					fields.append(",c");
-					fields.append(i);
-				}
-
-				final String statement = "INSERT INTO " + tableName + " ( " + fields.toString() + " )  VALUES (" + values.toString() + ")";
-				this.classes.put(className, statement);
-			} catch (final ConfigurationException exc) {
-				LOGGER.error("Error creating table: {}", exc.getLocalizedMessage());
-			}
-		}
-
-		
-		final BoundStatement boundStatement = this.database.createBoundStatement(this.classes.get(className));
-		// The while section must be reworked
-		final IValueSerializer cassandraSerializer = new CassandraValueSerializer(boundStatement);
-		record.serialize(cassandraSerializer);
-		
-		final List<Object> values = new ArrayList<>();
-		values.add(record.getLoggingTimestamp());
-
 		try {
-			this.database.insert(boundStatement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
-			LOGGER.error("Error inserting monitoring record: {}", exc.getLocalizedMessage());
+			this.database.insert(record, benchmarkId);
+		} catch (MonitoringRecordException e) {
+			LOGGER.error("Error inserting monitoring record: {}", e.getLocalizedMessage());
 		}
 	}
 
@@ -140,5 +85,6 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	public void onTerminating() {
 		this.database.disconnect();
 	}
+
 
 }
