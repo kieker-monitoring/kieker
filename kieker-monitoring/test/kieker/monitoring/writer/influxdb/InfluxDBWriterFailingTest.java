@@ -18,8 +18,10 @@ package kieker.monitoring.writer.influxdb;
 
 import java.io.IOException;
 
+import org.junit.Assume;
 import org.junit.Test;
 
+import kieker.OSUtil;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -44,6 +46,7 @@ public class InfluxDBWriterFailingTest {
 	 */
 	@Test(expected = IOException.class)
 	public void testConnectToInfluxDB() throws IOException {
+		Assume.assumeFalse(OSUtil.isWindows()); 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_URL, "http://localhost");
 		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_PORT, "80");
