@@ -133,6 +133,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
 					LOGGER.error("Error reading mapping file, id must be integer", ex);
+					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
 				final String prevVal = this.readerRegistry.register(id, value);
