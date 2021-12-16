@@ -111,11 +111,11 @@ public final class InstantiationFactory {
 	 *             on configuration errors during instantiation
 	 */
 	public static <C> C createWithConfiguration(final Class<C> implementedInterface, final String className,
-			final kieker.common.configuration.Configuration configuration) throws ConfigurationException {
+			final Configuration configuration) throws ConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(className);
 			if (implementedInterface.isAssignableFrom(clazz)) {
-				final Class<?>[] parameterTypes = { kieker.common.configuration.Configuration.class };
+				final Class<?>[] parameterTypes = { Configuration.class };
 				return InstantiationFactory.instantiateClass(implementedInterface, clazz, parameterTypes,
 						configuration);
 			} else {
