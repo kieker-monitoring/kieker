@@ -99,50 +99,50 @@ public class CassandraDb {
 	 * @return returns a result set
 	 */
 	public ResultSet select(final List<String> fields, final String table, final String whereClause) {
-		String statement = "select ";
+		final StringBuilder statement = new StringBuilder(200);
+		statement.append("SELECT ");
 
-		if ((fields != null) && !fields.isEmpty()) {
+		if (fields != null && !fields.isEmpty()) {
 			for (final String s : fields) {
-				statement += s + ",";
+				statement.append(s);
+				statement.append(',');
 			}
-
-			statement = statement.substring(0, statement.length() - 1);
+			statement.deleteCharAt(statement.length() - 1);
 		} else {
-			statement += "*";
+			statement.append('*');
 		}
 
-		statement += " from " + table;
+		statement.append(" FROM ");
+		statement.append(table);
 
-		if ((whereClause != null) && !whereClause.isEmpty()) {
-			statement += " where " + whereClause;
+		if (whereClause != null && !whereClause.isEmpty()) {
+			statement.append(" WHERE ");
+			statement.append(whereClause);
 		}
 
-		final BoundStatement bs = this.makeBoundStatement(statement);
-
-		return this.execute(bs);
+		return this.execute(this.makeBoundStatement(statement.toString()));
 	}
-	
+
 	/**
 	 * Returns a BoundStatement from the given String. Uses the given Session.
 	 *
 	 * @param statement
-	 * @param session2
 	 * @return
 	 */
 	private BoundStatement makeBoundStatement(final String statement) {
-		PreparedStatement ps =  this.preparedStatements.get(statement); 
-		
-		if (ps == null) {
-			ps = this.session.prepare(statement);
-			this.preparedStatements.put(statement, ps);
+		PreparedStatement preparedStatement = this.preparedStatements.get(statement);
+
+		if (preparedStatement == null) {
+			preparedStatement = this.session.prepare(statement);
+			this.preparedStatements.put(statement, preparedStatement);
 		}
 
-		final BoundStatement bs = new BoundStatement(ps);
-		bs.setFetchSize(10000);
+		final BoundStatement boundStatement = new BoundStatement(preparedStatement);
+		boundStatement.setFetchSize(10000);
 
-		return bs;
+		return boundStatement;
 	}
-	
+
 	/**
 	 * Executes the given statement. Returns a ResultSet if the call was successful.
 	 *
@@ -152,13 +152,13 @@ public class CassandraDb {
 	 *             on error
 	 */
 	private ResultSet execute(final BoundStatement statement) {
-		ResultSet rs = null;
+		ResultSet resultSet = null;
 		try {
-			rs = this.session.execute(statement);
+			resultSet = this.session.execute(statement);
 		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
 			LOGGER.error("Error executing statement: {}", exc.getLocalizedMessage());
 		}
 
-		return rs;
+		return resultSet;
 	}
 }
