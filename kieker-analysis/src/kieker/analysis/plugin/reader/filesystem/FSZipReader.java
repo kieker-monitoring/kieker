@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -87,7 +88,7 @@ public final class FSZipReader implements Runnable {
 	public final void run() {
 		ZipInputStream zipInputStream = null;
 		try {
-			zipInputStream = new ZipInputStream(new FileInputStream(this.zipFile));
+			zipInputStream = new ZipInputStream(Files.newInputStream(this.zipFile.toPath(), StandardOpenOption.READ));
 			ZipEntry zipEntry;
 			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals(FSUtil.MAP_FILENAME)) { // NOCS NOPMD
 				// do nothing, just skip to the map file if present
@@ -117,7 +118,7 @@ public final class FSZipReader implements Runnable {
 		BufferedReader reader = null;
 		DataInputStream input = null;
 		try {
-			zipInputStream = new ZipInputStream(new FileInputStream(this.zipFile));
+			zipInputStream = new ZipInputStream(Files.newInputStream(this.zipFile.toPath(), StandardOpenOption.READ));
 			reader = new BufferedReader(new InputStreamReader(zipInputStream, FSUtil.ENCODING));
 			input = new DataInputStream(new BufferedInputStream(zipInputStream, 1024 * 1024));
 			ZipEntry zipEntry;

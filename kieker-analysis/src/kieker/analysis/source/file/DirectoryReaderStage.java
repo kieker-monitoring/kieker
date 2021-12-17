@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.stream.Stream;
 
 import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
+import kieker.analysis.plugin.reader.depcompression.Bzip2DecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.DeflateDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.GZipDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.NoneDecompressionFilter;
@@ -65,20 +68,20 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 		} else {
 			for (final File mapFile : mapFiles) {
 				final String mapFileName = mapFile.getName();
-				try {
-					this.readMapFile(Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ), mapFileName, registry);
+				try (InputStream inputStream = Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ)) {
+					this.readMapFile(inputStream, mapFileName, registry);
 				} catch (final IOException e) {
 					this.logger.error("Cannot find map file {}.", mapFileName);
 				}
 			}
 
 			/** read log files. */
-			try {
-				Files.list(directory.toPath()).sorted().forEach(logFilePath -> {
+			try (Stream<Path> stream = Files.list(directory.toPath())) {
+				stream.sorted().forEach(logFilePath -> {
 					final File logFile = logFilePath.toFile();
 					final String logFileName = logFile.getName();
-					try {
-						this.readLogFile(Files.newInputStream(logFile.toPath(), StandardOpenOption.READ), logFileName, registry);
+					try (InputStream inputStream = Files.newInputStream(logFile.toPath(), StandardOpenOption.READ)) {
+						this.readLogFile(inputStream, logFileName, registry);
 					} catch (final IOException e) {
 						this.logger.error("Cannot find log file {}.", logFileName);
 					}
@@ -100,6 +103,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			return new XZDecompressionFilter();
 		} else if (FSUtil.ZIP_FILE_EXTENSION.equals(extension)) {
 			return new ZipDecompressionFilter();
+		} else if (FSUtil.BZIP2_FILE_EXTENSION.equals(extension)) {
+			return new Bzip2DecompressionFilter();
 		} else {
 			return new NoneDecompressionFilter();
 		}
@@ -128,14 +133,16 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			deserializerClass = FSReaderUtil.findMapDeserializer(baseName);
 		}
 
-		try {
-			final AbstractMapDeserializer deserializer = deserializerClass.getConstructor().newInstance();
-			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
+		try (InputStream chainedInputStream = decompressionFilter.chainInputStream(inputStream)) {
+			try {
+				final AbstractMapDeserializer deserializer = deserializerClass.getConstructor().newInstance();
+				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
+			}
 		} catch (final IOException ex) {
 			this.logger.error("Reading map file {} failed.", mapFileName);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
 		}
 	}
 
@@ -167,15 +174,18 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 		}
 
 		if (deserializerClass != null) {
-			try {
-				final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Integer.class, ReaderRegistry.class)
-						.newInstance(this.dataBufferSize, registry);
-				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
+			try (InputStream chainedInputStream = decompressionFilter.chainInputStream(inputStream)) {
+				try {
+					final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Integer.class, ReaderRegistry.class)
+							.newInstance(this.dataBufferSize, registry);
+
+					deserializer.processDataStream(chainedInputStream, this.outputPort);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
+				}
 			} catch (final IOException e) {
 				this.logger.error("Reading log file {} failed.", logFileName);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				this.logger.error("Cannot instantiate filter {} for decompression.", deserializerClass.getName());
 			}
 		} else {
 			this.logger.debug("Skipping file {}, as the extension indicates that it is not a log file.", logFileName);

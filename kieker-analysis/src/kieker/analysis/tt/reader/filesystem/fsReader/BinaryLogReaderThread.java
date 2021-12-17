@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package kieker.analysis.tt.reader.filesystem.fsReader;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
@@ -97,7 +98,8 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOGGER.info("Directory '{}' contains no file '{}'. Found '{}' ... switching to legacy mode", this.inputDir, FSUtil.MAP_FILENAME,
+				LOGGER.info("Directory '{}' contains no file '{}'. Found '{}' ... switching to legacy mode",
+						this.inputDir, FSUtil.MAP_FILENAME,
 						FSUtil.LEGACY_MAP_FILENAME);
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
@@ -108,7 +110,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
+			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -119,7 +121,8 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());
+					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.",
+							line, mappingFile.getAbsolutePath());
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
@@ -134,7 +137,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				}
 				final String prevVal = this.readerRegistry.register(id, value);
 				if (prevVal != null) {
-					LOGGER.error("Found addional entry for id='{', old value was '{}' new value is '{}'", id, prevVal, value);
+					LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 				}
 			}
 		} catch (final IOException e) {
@@ -160,7 +163,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 	protected void processNormalInputFile(final File inputFile) {
 		ReadableByteChannel channel = null;
 		try {
-			InputStream fileInputStream = new FileInputStream(inputFile);
+			InputStream fileInputStream = Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ);
 			if (this.shouldDecompress) {
 				@SuppressWarnings("resource")
 				final ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);

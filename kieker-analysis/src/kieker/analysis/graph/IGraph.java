@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface IGraph extends IElement {
 	/**
 	 * Factory method to create a new graph using the default implementation.
 	 *
+	 * @return a new graph instance
 	 * @since 1.14
 	 */
 	public static IGraph create() {

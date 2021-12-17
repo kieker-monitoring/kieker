@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package kieker.analysis.graph.export.dot;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.Path;
 import java.util.function.Function;
 
 import kieker.analysis.graph.IGraph;
@@ -33,25 +33,25 @@ import kieker.analysis.graph.util.FileExtension;
  */
 public class DotFileWriterStage extends DotWriterStage {
 
-	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper) {
+	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper) {
 		this(fileNameMapper, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
-				return Files.newBufferedWriter(Paths.get(fileName), StandardOpenOption.CREATE);
+				return Files.newBufferedWriter(fileName, StandardCharsets.UTF_8);
 			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}
 		}), exportConfiguration);
 	}
 
-	public DotFileWriterStage(final String outputDirectory) {
+	public DotFileWriterStage(final Path outputDirectory) {
 		this(outputDirectory, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final String outputDirectory, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Path outputDirectory, final DotExportConfiguration exportConfiguration) {
 		this(new SimpleFileNameMapper(outputDirectory, FileExtension.DOT), exportConfiguration);
 	}
 

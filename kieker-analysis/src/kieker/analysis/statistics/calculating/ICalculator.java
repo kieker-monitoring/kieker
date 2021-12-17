@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package kieker.analysis.statistics.calculating;
 
-import kieker.analysis.statistics.Statistic;
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  *
@@ -34,6 +36,6 @@ public interface ICalculator<I> {
 	/**
 	 * @since 1.14
 	 */
-	public void calculate(final Statistic statistic, final I input, final Object modelObject);
+	public void calculate(final StatisticRecord statistic, final I input, final EObject modelObject);
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 package kieker.examples.analysis.traceanalysis;
 
 import java.util.concurrent.TimeUnit;
-
-import kieker.analysis.stage.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.stage.flow.EventRecordTraceReconstructionStage;
 import kieker.analysis.stage.general.ListCollectionFilter;
 import kieker.analysis.stage.DynamicEventDispatcher;
 import kieker.analysis.stage.IEventMatcher;
@@ -26,9 +25,9 @@ import kieker.common.exception.ConfigurationException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.tools.source.LogsReaderCompositeStage;
-import kieker.tools.trace.analysis.tt.ExecutionRecordTransformationFilter;
-import kieker.tools.trace.analysis.tt.TraceEventRecords2ExecutionAndMessageTraceFilter;
-import kieker.tools.trace.analysis.tt.trace.reconstruction.TraceReconstructionFilter;
+import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
+import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.AbstractTrace;
 import teetime.framework.Configuration;
@@ -66,25 +65,25 @@ public class TeeTimeConfiguration extends Configuration {
 		
 		dispatcher.registerOutput(traceEventMatcher);
 		
-		ExecutionRecordTransformationFilter executionRecordTransformationFilter = new ExecutionRecordTransformationFilter(systemModelRepository);
+		ExecutionRecordTransformationStage executionRecordTransformationFilter = new ExecutionRecordTransformationStage(systemModelRepository);
 		
 		boolean ignoreInvalidTraces = true;
 		long maxTraceDuration = Long.MAX_VALUE;
 		
-		TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(systemModelRepository, 
+		TraceReconstructionStage traceReconstructionFilter = new TraceReconstructionStage(systemModelRepository, 
 				TimeUnit.NANOSECONDS, ignoreInvalidTraces, maxTraceDuration);
 
 		boolean repairEventBasedTraces = true;
 		long maxTraceTimeout = Long.MAX_VALUE; // deactivate timeout and time input port
 
-		EventRecordTraceReconstructionFilter eventRecordTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(TimeUnit.NANOSECONDS, 
+		EventRecordTraceReconstructionStage eventRecordTraceReconstructionFilter = new EventRecordTraceReconstructionStage(TimeUnit.NANOSECONDS, 
 				repairEventBasedTraces, maxTraceDuration, maxTraceTimeout);
 
 		boolean enhanceJavaContructors = true;
 		boolean enhanceCallDetection = true;
 		boolean ignoreAssumedCalls = false;
 
-		TraceEventRecords2ExecutionAndMessageTraceFilter ter2eamt = new TraceEventRecords2ExecutionAndMessageTraceFilter(systemModelRepository, 
+		TraceEventRecords2ExecutionAndMessageTraceStage ter2eamt = new TraceEventRecords2ExecutionAndMessageTraceStage(systemModelRepository, 
 				enhanceJavaContructors, enhanceCallDetection, ignoreAssumedCalls);
 		
 		Merger<AbstractTrace> merger = new Merger<>();

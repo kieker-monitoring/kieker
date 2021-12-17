@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,8 @@ import kieker.common.record.IMonitoringRecord;
  *            The type of the chart model used by the filter.
  */
 @Plugin(configuration =
-		@Property(name = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
+		@Property(name = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+				defaultValue = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
 public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringRecord, C extends ChartModel> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputPortRecords";

@@ -62,7 +62,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 		final int result = tool.run("Trace Analysis Tool", "trace-analysis", args, new TraceAnalysisParameters());
 
 		if (tool.parameterConfiguration.isPrintSystemModel()) {
-			Path systemModelPath;
+			final Path systemModelPath;
 			try {
 				systemModelPath = Paths.get(tool.parameterConfiguration.getOutputDir().getCanonicalPath(), "system-entities.html");
 
@@ -76,10 +76,10 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 					if (validTraceCounter != null) {
 						tool.logger.debug("");
 						tool.logger.debug("#");
-						tool.logger.debug("# Plugin: " + validTraceCounter.getClass().getName());
+						tool.logger.debug("# Plugin: {}", validTraceCounter.getClass().getName());
+						final int total = validTraceCounter.getTotalCount() + invalidTraceCounter.getTotalCount();
 						tool.logger.debug("Trace processing summary: {} total; {} succeeded; {} failed.",
-								validTraceCounter.getTotalCount() + invalidTraceCounter.getTotalCount(),
-								validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
+								total, validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
 					}
 					if (tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage() != null) {
 						tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage().printStatusMessage();

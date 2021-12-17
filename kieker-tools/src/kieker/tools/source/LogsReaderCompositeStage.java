@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 */
 	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}

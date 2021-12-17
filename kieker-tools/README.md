@@ -1,6 +1,6 @@
 # Kieker Tools
 
-The `tools` directory contains a set of tools prepacked as tar and zip 
+The `tools` directory contains a set of tools prepacked as tar and zip
 archives. Each archive contains one tool with all its libraries and
 start scripts. The start scripts are located in the `bin` directory and
 the libraries in the `lib` directory. In the tool root directory, e.g.,
@@ -24,11 +24,9 @@ You may find more detailed information on all tools at:
 https://kieker-monitoring.atlassian.net/wiki/spaces/DOC/pages/24215566/Kieker+Tools
 
 - collector Can receive events via binary TCP and other means and store
-  them in a Kieker log file or any other Kieker writer storage.
+them in a Kieker log file or any other Kieker writer storage.
 - convert-logging-timestamp convert the logging timestamp of events.
 - log-replayer replay log files
 - resource-monitor monitor resource utilization.
 - trace-analysis perform a trace analysis on Kieker monitoring data
 - trace-analysis-gui a graphical UI controlling the trace-analysis tool
-
-

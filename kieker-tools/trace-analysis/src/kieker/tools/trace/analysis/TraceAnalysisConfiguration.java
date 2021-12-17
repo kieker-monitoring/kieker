@@ -357,7 +357,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	private void createPrintTraceEquivalenceClasses(final SystemModelRepository systemRepository, final Distributor<ExecutionTrace> executionTraceDistributor,
 			final String pathPrefix, final TraceEquivalenceClassModes equivalenceClassMode) {
-		String filePrefix;
+		final String filePrefix;
 		switch (equivalenceClassMode) {
 		case ASSEMBLY:
 			filePrefix = TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX;

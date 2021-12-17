@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.controlflow;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -25,11 +26,13 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 0.91
  */
 public final class OperationExecutionRecordFactory implements IRecordFactory<OperationExecutionRecord> {
+	
 
 	@Override
 	public OperationExecutionRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new OperationExecutionRecord(deserializer);
 	}
+
 
 	@Override
 	public String[] getValueNames() {

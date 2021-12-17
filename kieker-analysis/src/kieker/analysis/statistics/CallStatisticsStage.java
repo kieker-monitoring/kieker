@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,26 @@
 
 package kieker.analysis.statistics;
 
-import kieker.analysis.model.ModelObjectFromOperationCallAccessors;
+import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
+import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.analysis.statistics.calculating.CountCalculator;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
+ * Aggregates calls into execution model.
  *
  * @author Sören Henning
  *
  * @since 1.14
  *
  */
-public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCall> {
+public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCallDurationEvent> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {
-		super(statisticsModel, Units.RESPONSE_TIME, new CountCalculator<>(),
-				ModelObjectFromOperationCallAccessors.createForAggregatedInvocation(executionModel));
+		super(statisticsModel, EPredefinedUnits.INVOCATION, new CountCalculator<>(),
+				ModelObjectFromOperationCallAccessorUtils.findAggregatedInvocation4OperationTuple(executionModel));
 	}
 
 }

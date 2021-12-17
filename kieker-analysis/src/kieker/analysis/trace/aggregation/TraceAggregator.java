@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.util.Map;
 
 import com.google.common.base.Equivalence;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TraceFactory;
 
 /**
  * This class creates aggregated traces from normal {@link Trace}s. Traces are aggregated if they

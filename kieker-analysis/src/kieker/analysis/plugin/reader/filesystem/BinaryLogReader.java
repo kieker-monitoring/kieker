@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import kieker.common.record.misc.EmptyRecord;
  */
 @Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
+
 	@OutputPort(name = BinaryLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the reader") },
 		configuration = {

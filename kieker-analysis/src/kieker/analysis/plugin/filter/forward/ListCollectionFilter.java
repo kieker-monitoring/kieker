@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,8 @@ import kieker.common.configuration.Configuration;
 				eventTypes = Object.class, description = "Provides each incoming object"),
 		configuration = {
 			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
-					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),
+					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+					description = "Sets the maximum number of stored values."),
 			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR,
 					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
 					description = "Determines what happens to new objects when the list is full.") })

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,29 @@
 package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysis.util.stage.trigger.Trigger;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysis.stage.model.ModelRepository;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Sören Henning
  *
+ * @param <T>
+ *            configuration type to be used with a sepecific graph builder.
+ *
  * @since 1.14
  */
-public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, IGraph> {
+public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<ModelRepository, IGraph> {
 
-	private final DependencyGraphCreator graphCreator;
+	private final IDependencyGraphBuilder graphBuilder;
 
-	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
-			final IDependencyGraphBuilderFactory graphBuilderFactory) {
-		this.graphCreator = new DependencyGraphCreator(executionModel, statisticsModel, graphBuilderFactory);
+	public DependencyGraphCreatorStage(final T configuration, final IDependencyGraphBuilderFactory<T> graphBuilderFactory) {
+		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(configuration);
 	}
 
 	@Override
-	protected void execute(final Trigger trigger) {
-		final IGraph graph = this.graphCreator.create();
+	protected void execute(final ModelRepository repository) {
+		final IGraph graph = this.graphBuilder.build(repository);
 		this.outputPort.send(graph);
 	}
 

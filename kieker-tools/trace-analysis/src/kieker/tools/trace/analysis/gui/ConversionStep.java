@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
@@ -244,8 +245,8 @@ public class ConversionStep extends AbstractStep {
 								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
 								picFile.getAbsolutePath(), });
 					final InputStream s = p.getInputStream();
-					writer = new FileOutputStream(picFile.getAbsolutePath() + "."
-							+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH));
+					writer = Files.newOutputStream(Paths.get(picFile.getAbsolutePath() + "."
+							+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH)));
 					int r;
 					final byte[] buffer = new byte[10 * 1024];
 					while ((r = s.read(buffer)) != -1) { // NOPMD
@@ -323,7 +324,7 @@ public class ConversionStep extends AbstractStep {
 			if (!pic2PlotAvailable) {
 				final int result = JOptionPane.showConfirmDialog(this, "The Pic2Plot executable could not be found. Continue?", "Pic2Plot Executable",
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-				return (JOptionPane.YES_OPTION == result);
+				return JOptionPane.YES_OPTION == result;
 			}
 		}
 
@@ -342,7 +343,7 @@ public class ConversionStep extends AbstractStep {
 		final Process p;
 		try {
 			p = Runtime.getRuntime().exec(new String[] { command, parameter, });
-			return (0 == p.waitFor());
+			return 0 == p.waitFor();
 		} catch (final IOException | InterruptedException e) {
 			return false;
 		}

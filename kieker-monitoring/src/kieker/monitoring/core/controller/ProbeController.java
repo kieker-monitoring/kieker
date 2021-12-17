@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ package kieker.monitoring.core.controller;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -497,9 +497,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 				if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
 					if (lastModified > this.lastModifiedTimestamp) {
 						this.lastModifiedTimestamp = lastModified;
-						reader = new BufferedReader(
-								new InputStreamReader(new FileInputStream(file), ProbeController.ENCODING)); // NOPMD
-						// allow access to ENCODING
+						reader = Files.newBufferedReader(file.toPath(), Charset.forName(ProbeController.ENCODING)); // NOPMD allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), false);
 							return;
@@ -530,7 +528,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 							.getResource(this.configFilePathname);
 					if (null != configFileAsResource) {
 						reader = new BufferedReader(
-								new InputStreamReader(configFileAsResource.openStream(), ProbeController.ENCODING)); // NOPMD
+								new InputStreamReader(configFileAsResource.openStream(), Charset.forName(ProbeController.ENCODING))); // NOPMD
 						// allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), true);

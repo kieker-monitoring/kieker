@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.model.MetaModelHandler;
-import kieker.analysis.model.MetaModelHandler.PluginConnection;
-import kieker.analysis.model.MetaModelHandler.RepositoryConnection;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
@@ -46,6 +43,9 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.stage.model.MetaModelHandler;
+import kieker.analysis.stage.model.MetaModelHandler.PluginConnection;
+import kieker.analysis.stage.model.MetaModelHandler.RepositoryConnection;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.KiekerMetadataRecord;
 
@@ -304,7 +304,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		AnalysisController.LOG.info(
-				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
+				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', "
+						+ "experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
 				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(),
 				record.isDebugMode(), record.getTimeOffset(), record.getTimeUnit(), record.getNumberOfRecords());
 	}

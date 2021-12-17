@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package kieker.monitoring.sampler.oshi.samplers;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import org.hyperic.sigar.SigarException;
 
 import kieker.common.record.system.NetworkUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -62,7 +60,7 @@ public final class NetworkUtilizationSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) {
 		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createNetworkUtilizationSignature())) {
 			return;
 		}
@@ -153,11 +151,8 @@ public final class NetworkUtilizationSampler extends AbstractOshiSampler {
 		}
 	}
 
-	private NetworkStatistic getCurrentNetworkStatistic(final ITimeSource timesource, final NetworkIF networkIF)
-			throws SigarException {
+	private NetworkStatistic getCurrentNetworkStatistic(final ITimeSource timesource, final NetworkIF networkIF) {
 		final long currentTimestamp = timesource.getTime();
-		// final NetInterfaceStat interfaceStat =
-		// this.sigar.getNetInterfaceStat(interfaceName);
 		final long speed = networkIF.getSpeed();
 		final long txBytes = networkIF.getBytesSent();
 		// final long txCarrier = interfaceStat.getTxCarrier();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,8 @@ public final class AspectJLoader {
 		}
 
 		LOGGER.info(
-				"Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI. Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
+				"Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI." +
+						"Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
 				KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION);
 
 		if (null != System.getProperty("aj5.def")) {

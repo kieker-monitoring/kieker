@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package kieker.analysis.statistics.calculating;
 
 import java.util.function.Function;
 
-import kieker.analysis.statistics.IProperty;
-import kieker.analysis.statistics.Properties;
-import kieker.analysis.statistics.Statistic;
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
  *
@@ -33,8 +34,6 @@ import kieker.analysis.statistics.Statistic;
  */
 public class TotalCalculator<T> implements ICalculator<T> {
 
-	private static final IProperty TOTAL_PROPERTY = Properties.TOTAL;
-
 	private final Function<T, Long> valueAccessor;
 
 	public TotalCalculator(final Function<T, Long> valueAccessor) {
@@ -42,14 +41,14 @@ public class TotalCalculator<T> implements ICalculator<T> {
 	}
 
 	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
+	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Long oldCount = statistic.getProperty(TOTAL_PROPERTY);
+		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
 		if (oldCount == null) {
-			statistic.setProperty(TOTAL_PROPERTY, value);
+			statistic.getProperties().put(EPropertyType.TOTAL, value);
 		} else {
 			final long newCount = oldCount + value;
-			statistic.setProperty(TOTAL_PROPERTY, newCount);
+			statistic.getProperties().put(EPropertyType.TOTAL, newCount);
 		}
 	}
 

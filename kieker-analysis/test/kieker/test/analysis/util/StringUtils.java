@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package kieker.test.analysis.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.Assert;
 
@@ -54,7 +55,7 @@ public final class StringUtils {
 		final byte[] buffer = new byte[(int) outputFile.length()];
 		BufferedInputStream f = null;
 		try {
-			f = new BufferedInputStream(new FileInputStream(outputFile));
+			f = new BufferedInputStream(Files.newInputStream(outputFile.toPath(), StandardOpenOption.READ));
 			if (f.read(buffer) == -1) {
 				Assert.fail("Failed to read file into buffer: " + outputFile.getAbsolutePath());
 			}

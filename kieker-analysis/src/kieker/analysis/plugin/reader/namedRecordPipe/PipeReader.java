@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,8 @@ import kieker.common.record.IMonitoringRecord;
 	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the PipeReader")
 }, configuration = {
-	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
+	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME,
+			defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
 			description = "The name of the pipe used to read data.")
 })
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {

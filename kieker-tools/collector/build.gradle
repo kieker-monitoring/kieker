@@ -18,7 +18,7 @@ dependencies {
 	implementation project(":kieker-tools")
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
-	
+
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 }

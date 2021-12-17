@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  ***************************************************************************/
 
 package kieker.monitoring.sampler.oshi.samplers;
-
-import org.hyperic.sigar.SigarException;
 
 import kieker.common.record.system.LoadAverageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -40,7 +38,7 @@ public final class LoadAverageSampler extends AbstractOshiSampler {
 	 * Constructs a new {@link AbstractOshiSampler} with given
 	 * {@link HardwareAbstractionLayer} instance used to retrieve the sensor data.
 	 * Users should use the factory method
-	 * {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorLoadAverage()}
+	 * {@link kieker.monitoring.sampler.oshi.OshiSamplerFactory#createSensorLoadAverage()}
 	 * to acquire an instance rather than calling this constructor directly.
 	 *
 	 * @param hardwareAbstractionLayer
@@ -55,7 +53,7 @@ public final class LoadAverageSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) {
 		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createLoadAverageSignature())) {
 			return;
 		}

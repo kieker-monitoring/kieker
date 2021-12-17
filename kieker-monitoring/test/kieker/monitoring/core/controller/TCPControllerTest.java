@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,12 @@ import java.io.IOException;
 
 import org.jctools.queues.MpscArrayQueue;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import kieker.OSUtil;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
@@ -101,6 +103,8 @@ public class TCPControllerTest { // NOFB issues with integration test
 	 */
 	@Test(timeout = 30000)
 	public void testActivationAndDeactivation() throws IOException, InterruptedException {
+		Assume.assumeFalse(OSUtil.isWindows()); 
+		
 		final MonitoringController controller = MonitoringController.createInstance(TCPControllerTest.configuration);
 
 		final String pattern = "void test.pattern()";

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ import java.util.Set;
  *
  * @since 1.14
  *
+ * @deprecated since 1.15 moved to Ecore model
  */
+@Deprecated
 public class Statistic {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 5;

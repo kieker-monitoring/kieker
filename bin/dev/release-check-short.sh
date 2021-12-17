@@ -3,7 +3,7 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-KIEKER_VERSION="1.15-SNAPSHOT"
+KIEKER_VERSION="1.16-SNAPSHOT"
 
 # lists the files included in an archive without extracting it
 function cat_archive_content {
@@ -94,11 +94,6 @@ function assert_files_exist_common {
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty/javadoc/"
 	assert_dir_exists "lib/"
 	assert_dir_exists "lib/framework-libs/"
-	assert_file_exists_regular "lib/sigar/libsigar-x86-linux.so"
-	assert_file_exists_regular "lib/sigar/libsigar-amd64-linux.so"
-	assert_file_exists_regular "lib/sigar/sigar-amd64-winnt.dll"
-	assert_file_exists_regular "lib/sigar/sigar-x86-winnt.dll"
-	assert_file_exists_regular "lib/sigar/sigar-x86-winnt.lib"
 	assert_file_exists_regular "README"
 	assert_file_exists_regular "HISTORY"
 	assert_file_exists_regular "LICENSE"
@@ -198,16 +193,10 @@ function assert_files_exist_bin {
 #	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"-aspectj.jar"
 #	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"-emf.jar"
 #	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"-emf.jar"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 #
 #	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
 #	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
 #	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
-#	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
 #	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
 #	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
 #

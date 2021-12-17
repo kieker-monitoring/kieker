@@ -2,8 +2,8 @@ plugins {
 	id 'application'
 }
 
-sourceCompatibility = sourceVersion
-targetCompatibility = targetVersion
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 distTar.enabled=false
 distZip.enabled=true
@@ -17,11 +17,9 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
-	
 }
 
 
 task uploadArchives {
 	println 'resource-monitor skipped'
 }
-

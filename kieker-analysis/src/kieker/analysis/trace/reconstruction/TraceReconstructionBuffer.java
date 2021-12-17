@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,17 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import kieker.analysis.util.time.Instants;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TraceFactory;
 
 /**
  *
@@ -69,7 +69,7 @@ public class TraceReconstructionBuffer {
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts()
 				.get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
-		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
+		final DeployedOperation operation = component.getOperations().get(record.getOperationSignature());
 		newCall.setOperation(operation);
 
 		newCall.setOrderIndex(record.getOrderIndex());

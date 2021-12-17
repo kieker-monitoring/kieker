@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,36 +22,37 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Christian Wulf
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.13
  */
-public class ThreadMetaData extends AbstractMonitoringRecord {
+public class ThreadMetaData extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // ThreadMetaData.hostname
-			+ TYPE_SIZE_LONG; // ThreadMetaData.threadId
-
+			 + TYPE_SIZE_LONG; // ThreadMetaData.threadId
+	
 	public static final Class<?>[] TYPES = {
 		String.class, // ThreadMetaData.hostname
 		long.class, // ThreadMetaData.threadId
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"hostname",
 		"threadId",
 	};
-
+	
 	/** default constants. */
 	public static final String HOSTNAME = "";
 	private static final long serialVersionUID = 4284309919791475271L;
-
+	
 	/** property declarations. */
 	private final String hostname;
 	private final long threadId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -61,21 +62,22 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 	 *            threadId
 	 */
 	public ThreadMetaData(final String hostname, final long threadId) {
-		this.hostname = hostname == null ? "" : hostname;
+		this.hostname = hostname == null?"":hostname;
 		this.threadId = threadId;
 	}
+
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ThreadMetaData(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.hostname = deserializer.getString();
 		this.threadId = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -84,7 +86,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 		serializer.putString(this.getHostname());
 		serializer.putLong(this.getThreadId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -92,7 +94,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -100,7 +102,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -109,6 +111,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +126,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final ThreadMetaData castedRecord = (ThreadMetaData) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -134,10 +137,9 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 		if (this.getThreadId() != castedRecord.getThreadId()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -145,19 +147,21 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 	public int hashCode() {
 		int code = 0;
 		code += this.getHostname().hashCode();
-		code += ((int) this.getThreadId());
-
+		code += ((int)this.getThreadId());
+		
 		return code;
 	}
-
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	
 	public final long getThreadId() {
 		return this.threadId;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,10 +170,10 @@ public class ThreadMetaData extends AbstractMonitoringRecord {
 		String result = "ThreadMetaData: ";
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-
+		
 		result += "threadId = ";
 		result += this.getThreadId() + ", ";
-
+		
 		return result;
 	}
 }

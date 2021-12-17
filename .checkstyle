@@ -16,9 +16,7 @@
     <filter-data value="examples/userguide/ch3-4--custom-components/src"/>
     <filter-data value="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
     <filter-data value="examples/userguide/appendix-JMS/src"/>
-    <filter-data value="examples/userguide/appendix-Sigar/src"/>
     <filter-data value="examples/JavaEEServletContainerExample/src"/>
-    <filter-data value="examples/monitoring/sampler-sigar/src"/>
     <filter-data value="examples/monitoring/sampler-jvm/src"/>
     <filter-data value="examples/monitoring/probe-aspectj/src"/>
     <filter-data value="examples/monitoring/probe-spring/src"/>

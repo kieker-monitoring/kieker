@@ -41,7 +41,7 @@ Short Long Option                                                 Required Descr
 -n    --realtime-worker-threads <num>                             1        Number of worker threads used in realtime mode
 -r    --realtime <true|false>                                              Replay log data in realtime
 -v    --verbose                                                            verbosely prints additional information
-===== =========================================================== ======== ============================================================================================================================================
+===== =========================================================== ======== =================================================================================================================================================================================================
 
 Example
 -------
@@ -51,7 +51,7 @@ binary release to another directory:
 
 .. code::
   
-  logReplay --inputdirs
+  log-replayer --inputdirs
      examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
      --keep-logging-timestamps true
      --realtime false
@@ -60,7 +60,7 @@ Listing A.3: Execution under UNIX-like systems
 
 .. code::
   
-  logReplay.bat --inputdirs
+  log-replayer --inputdirs
      ..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
      --keep-logging-timestamps true
      --realtime false

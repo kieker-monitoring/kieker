@@ -1,33 +1,24 @@
-apply plugin: 'application'
+plugins {
+   id 'application'
+}
 
 repositories {
-        mavenCentral()
-        maven {
-		url "https://plugins.gradle.org/m2/"
-	}
-        jcenter() 
+	mavenLocal()
+	mavenCentral()
+	maven { url "https://plugins.gradle.org/m2/" }
+	jcenter() 
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
+	compile 'net.kieker-monitoring:kieker:1.15'
 
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
-
-	compile fileTree('lib') {
-		include "kieker-*.jar"
-		include "commons-logging-*.jar"
-		include "amqp-client-*.jar"
-		include "slf4j-api-*.jar"
-	}
+	implementation 'com.rabbitmq:amqp-client:5.8.0'
 }
 
-eclipse {
-  project {
-    name = 'Kieker Example 5 appendix-AMQP'
-  }
-}
 
 def monitoringConfigurationAMQP = 'META-INF/kieker.monitoring.properties'
 

@@ -17,7 +17,7 @@ dependencies {
 	implementation project(":kieker-tools:trace-analysis")
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
-	
+
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 }
@@ -25,4 +25,3 @@ dependencies {
 task uploadArchives {
 	println 'trace-analysis-gui skipped'
 }
-

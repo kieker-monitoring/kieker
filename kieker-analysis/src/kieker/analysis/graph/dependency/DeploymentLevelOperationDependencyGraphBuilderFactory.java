@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,20 @@
 
 package kieker.analysis.graph.dependency;
 
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DeploymentLevelOperationDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory {
+public class DeploymentLevelOperationDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
 
 	public DeploymentLevelOperationDependencyGraphBuilderFactory() {
 		super();
 	}
 
 	@Override
-	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		return new DeploymentLevelOperationDependencyGraphBuilder(executionModel, statisticsModel);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
+		return new DeploymentLevelOperationDependencyGraphBuilder();
 	}
 
 }

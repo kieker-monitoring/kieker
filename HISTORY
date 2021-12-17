@@ -5,6 +5,22 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.15 (November 8, 2021)
+- New features (selection)
+  - Migration of analysis stages to the TeeTime-based Kieker analysis.
+  - Added new analysis stages from the iObserve research project
+- Improvements and refactorings
+  - Improved AspectJ probes, e.g., by introducing before/after advices for cflow pointcuts, OpenJDK 11 support  
+  - Refactored the file system writer 
+- Build scripts and infrastructure
+  - Replaced additional local Jar dependencies by using the Maven dependencies
+  - Converted Kieker tools to multi-project builds
+  - Use of GitHub actions to test common platforms (Linux, Mac, Windows) and Java versions   
+- Documentation
+  - Migrated the deprecated LaTeX-based user guide to Read The Docs (https://kieker-monitoring.readthedocs.io/en/latest/) 
+- Bug fixes and improvements to code, performance, tests, documentation,
+  examples
+
 * 1.14 (May 12, 2020)
 - New features (selection)
   - Integration of a novel pipes-and-filter framework and filters in 

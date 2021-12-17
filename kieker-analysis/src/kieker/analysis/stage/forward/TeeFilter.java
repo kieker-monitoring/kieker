@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package kieker.analysis.stage.forward;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -118,11 +120,11 @@ public class TeeFilter extends AbstractFilter<Object> {
 		this.append = append;
 		PrintStream tmpPrintStream;
 		try {
-			tmpPrintStream = new PrintStream(new FileOutputStream(fileName, this.append), false, this.encoding);
-		} catch (final UnsupportedEncodingException ex) {
-			this.logger.error("Failed to initialize " + fileName, ex);
-			tmpPrintStream = null; // NOPMD (null)
-		} catch (final FileNotFoundException ex) {
+			tmpPrintStream = new PrintStream(Files.newOutputStream(Paths.get(fileName),
+					(this.append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE)), // NOPMD NOCS allow inline
+					false,
+					this.encoding);
+		} catch (final IOException ex) {
 			this.logger.error("Failed to initialize " + fileName, ex);
 			tmpPrintStream = null; // NOPMD (null)
 		}

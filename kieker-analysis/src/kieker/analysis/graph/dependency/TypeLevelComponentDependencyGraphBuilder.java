@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@ package kieker.analysis.graph.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * Dependency graph builder for <strong>component</strong> dependency graphs
@@ -34,8 +32,8 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
  */
 public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public TypeLevelComponentDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		super(executionModel, statisticsModel);
+	public TypeLevelComponentDependencyGraphBuilder() {
+		super();
 	}
 
 	@Override

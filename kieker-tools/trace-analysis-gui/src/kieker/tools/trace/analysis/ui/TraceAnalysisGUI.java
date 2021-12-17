@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -163,9 +166,9 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void loadCurrentConfiguration() {
-		InputStreamReader propertiesFileInputStream = null;
+		Reader propertiesFileInputStream = null;
 		try {
-			propertiesFileInputStream = new InputStreamReader(new FileInputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			propertiesFileInputStream = Files.newBufferedReader(Paths.get("TraceAnalysisGUI.properties"), Charset.forName("UTF-8"));
 			final Properties properties = new Properties();
 			properties.load(propertiesFileInputStream);
 			for (final AbstractStep step : this.steps) {
@@ -192,9 +195,9 @@ public class TraceAnalysisGUI extends JFrame {
 			step.saveCurrentConfiguration(properties);
 		}
 
-		OutputStreamWriter stream = null;
+		BufferedWriter stream = null;
 		try {
-			stream = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			stream = Files.newBufferedWriter(Paths.get("TraceAnalysisGUI.properties"), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 			properties.store(stream, null);
 		} catch (final IOException ex) {
 			LOGGER.warn("Configuration could not be saved", ex);

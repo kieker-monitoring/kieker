@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,14 @@
 
 package kieker.monitoring.probe.disl.flow.operationExecution;
 
+import ch.usi.dag.disl.annotation.AfterReturning;
+import ch.usi.dag.disl.annotation.AfterThrowing;
+import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.annotation.SyntheticLocal;
+import ch.usi.dag.disl.dynamiccontext.DynamicContext;
+import ch.usi.dag.disl.marker.BodyMarker;
+import ch.usi.dag.disl.staticcontext.MethodStaticContext;
+
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -24,14 +32,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.timer.ITimeSource;
-
-import ch.usi.dag.disl.annotation.AfterReturning;
-import ch.usi.dag.disl.annotation.AfterThrowing;
-import ch.usi.dag.disl.annotation.Before;
-import ch.usi.dag.disl.annotation.SyntheticLocal;
-import ch.usi.dag.disl.dynamiccontext.DynamicContext;
-import ch.usi.dag.disl.marker.BodyMarker;
-import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 /**
  * @author Jan Waller

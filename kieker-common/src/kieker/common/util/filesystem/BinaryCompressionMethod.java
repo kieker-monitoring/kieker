@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -47,13 +47,13 @@ public enum BinaryCompressionMethod {
 		@Override
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
-			return new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile), bufferSize));
+			return new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE), bufferSize));
 		}
 
 		@Override
 		// transferred to new API
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
-			return new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), bufferSize));
+			return new DataInputStream(new BufferedInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ), bufferSize));
 		}
 	},
 	/** A binary compression method using the compression format "deflate". */
@@ -61,13 +61,15 @@ public enum BinaryCompressionMethod {
 		@Override
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
-			return new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new FileOutputStream(outputFile)), bufferSize));
+			return new DataOutputStream(
+					new BufferedOutputStream(new DeflaterOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE)), bufferSize));
 		}
 
 		@Override
 		// transferred to new API
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
-			return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new FileInputStream(inputFile)), bufferSize));
+			return new DataInputStream(
+					new BufferedInputStream(new InflaterInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)), bufferSize));
 		}
 	},
 	/** A binary compression method using the compression format "GZIP". */
@@ -75,13 +77,14 @@ public enum BinaryCompressionMethod {
 		@Override
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
-			return new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(outputFile)), bufferSize));
+			return new DataOutputStream(
+					new BufferedOutputStream(new GZIPOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE)), bufferSize));
 		}
 
 		@Override
 		// transferred to new API
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
-			return new DataInputStream(new BufferedInputStream(new GZIPInputStream(new FileInputStream(inputFile)), bufferSize));
+			return new DataInputStream(new BufferedInputStream(new GZIPInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)), bufferSize));
 		}
 	},
 	/** A binary compression method using the compression format "ZIP". */
@@ -89,7 +92,7 @@ public enum BinaryCompressionMethod {
 		@Override
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
-			final ZipOutputStream zipStream = new ZipOutputStream(new FileOutputStream(outputFile));
+			final ZipOutputStream zipStream = new ZipOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE));
 			String shortname = outputFile.getName();
 			shortname = shortname.substring(0, shortname.length() - 4); // strip ".zip"
 			zipStream.putNextEntry(new ZipEntry(shortname));
@@ -99,7 +102,7 @@ public enum BinaryCompressionMethod {
 		// transferred to new API
 		@Override
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
-			final ZipInputStream zipStream = new ZipInputStream(new FileInputStream(inputFile));
+			final ZipInputStream zipStream = new ZipInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ));
 			zipStream.getNextEntry();
 			return new DataInputStream(new BufferedInputStream(zipStream, bufferSize));
 		}

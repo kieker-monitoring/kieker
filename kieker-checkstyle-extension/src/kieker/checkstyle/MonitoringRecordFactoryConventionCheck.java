@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,15 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
+<<<<<<< HEAD
+ * This class extends checkstyle with a new check which makes sure that classes, which implement the {@link kieker.common.record.IMonitoringRecord.Factory} interface, supply the
+ * necessary static field (for the types) and the constructor (working with an array of {@link Object}) for the framework.<br>
+=======
  * This class extends checkstyle with a new check which makes sure that classes,
  * which implement the {@link kieker.common.record.IMonitoringRecord.Factory}
  * interface, supply the necessary static field (for the types) and the
  * constructor (working with an array of {@link Object}) for the framework.<br>
+>>>>>>> master
  * </br>
  *
  * Keep in mind that the check is not perfect, as checkstyle has some

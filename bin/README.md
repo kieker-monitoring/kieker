@@ -8,9 +8,3 @@ They are used in some examples together with the trace-analysis tools.
 Window; `dotPic-fileConverter.bat`
 Other: `dotPic-fileConverter.sh`
 
-# Generate Graph
-
-Generates a graph from Kieker test data.
-
-Windows: `generateGraph.cmd` 
-

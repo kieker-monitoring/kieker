@@ -8,9 +8,10 @@ targetCompatibility = 1.8
 def springVersion = '5.3.1'
 
 repositories {
+	mavenLocal()
 	mavenCentral() 
-        jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	jcenter()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
@@ -18,7 +19,8 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
+	implementation 'org.jctools:jctools-core:2.1.0'
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-expression
 	implementation "org.springframework:spring-aop:${springVersion}"
@@ -26,18 +28,19 @@ dependencies {
 	implementation "org.springframework:spring-context:${springVersion}"
 	implementation "org.springframework:spring-core:${springVersion}"
 	implementation "org.springframework:spring-expression:${springVersion}"
+	implementation "org.springframework:spring-web:${springVersion}"
+	implementation "org.springframework:spring-webmvc:${springVersion}"
 
 	// https://mvnrepository.com/artifact/aopalliance/aopalliance
 	implementation 'aopalliance:aopalliance:1.0'
 
 	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
-	runtime group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.6'
+	runtimeOnly 'org.aspectj:aspectjweaver:1.9.7'
 
 	// https://mvnrepository.com/artifact/commons-logging/commons-logging
-	runtime group: 'commons-logging', name: 'commons-logging', version: '1.2'
+	runtimeOnly 'commons-logging:commons-logging:1.2'
 	
-
-	runtime fileTree('lib') {
+	runtimeOnly fileTree('lib') {
 		include "kieker-*-aspectj.jar"
 	}
 }

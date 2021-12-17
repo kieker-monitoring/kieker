@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,25 +59,21 @@ public class FakeConnectionFactory implements ConnectionFactory {
 
 	@Override
 	public JMSContext createContext() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final String userName, final String password) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final String userName, final String password, final int sessionMode) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JMSContext createContext(final int sessionMode) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,9 +74,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
-				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
-		return destination;
+		return AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
+				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null
 	}
 }
 

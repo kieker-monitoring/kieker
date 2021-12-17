@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.TypeFactory;
 
 /**
  * @author Sören Henning
@@ -49,7 +49,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNonNestedPackage() { // NOPMD (assert is placed in separate method)
@@ -61,7 +61,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNestedPackage() { // NOPMD (assert is placed in separate method)
@@ -73,7 +73,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithoutPackage() { // NOPMD (assert is placed in separate method)
@@ -85,7 +85,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithInnerClass() { // NOPMD (assert is placed in separate method)

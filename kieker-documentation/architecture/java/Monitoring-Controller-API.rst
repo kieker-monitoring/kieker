@@ -83,7 +83,7 @@ Likewise to other monitoring probes described in this userguide (e.g.,
 (lines 60--65), creates a monitoring record (lines 67--71), and passes
 this monitoring record to the monitoring controller
 (line 73). The available OSHI-based samplers for monitoring system-level
-monitoring data, such as CPU and memory usage, are discussed in Appendix \ref{appendix:SigarBasedSamplers}.
+monitoring data, such as CPU and memory usage, are available in **kieker.monitoring.sampler.oshi**.
 
 .. note::
 
@@ -95,7 +95,7 @@ monitoring data, such as CPU and memory usage, are discussed in Appendix \ref{ap
    :emphasize-lines: 9,10,11,12,13,14,16,17,18,19,20,22
 
    @Override
-   public void sample(final IMonitoringController monitoringCtr) throws SigarException {
+   public void sample(final IMonitoringController monitoringCtr) {
       if (!monitoringCtr.isMonitoringEnabled() || 
           !monitoringCtr.isProbeActivated(SignatureFactory.createMemSwapSignature())) {
          return;

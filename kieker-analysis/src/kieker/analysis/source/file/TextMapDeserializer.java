@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 		}
 		final String prevVal = registry.register(id, FSUtil.decodeNewline(value));
 		if (prevVal != null) {
-			LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
+			LOGGER.error("Found additional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 		}
 	}
 

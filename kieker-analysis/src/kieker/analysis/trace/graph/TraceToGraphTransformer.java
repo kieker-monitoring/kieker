@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package kieker.analysis.trace.graph;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.trace.traversal.TraceTraverser;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.Trace;
 
 /**
  * @author Sören Henning

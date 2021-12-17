@@ -32,9 +32,9 @@ import teetime.framework.test.StageTester;
 
 /**
  * @author Reiner Jung
- *
+ * @since 1.15
  */
-public class EquivalenceClassWriterTest {
+public class EquivalenceClassWriterTest { // NOCS test do not need constructors
 
 	@Test
 	public void test() throws IOException, InvalidTraceException {

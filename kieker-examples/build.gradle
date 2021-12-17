@@ -1,45 +1,45 @@
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
-					 'replaceHardCodedVersionNames',
-					 'buildStandaloneExamplesUserguideCh2App', 
-					// 'buildStandaloneExamplesUserguideCh2Instr', 
-					// 'buildStandaloneExamplesUserguideCh34',
-					// 'buildStandaloneExamplesUserguideCh5',
-					// 'buildStandaloneExamplesUserguideAppendixJMS', 
-					// 'buildStandaloneExamplesUserguideAppendixAMQP',
-					// 'buildStandaloneExamplesUserguideAppendixKafka',
-					'buildStandaloneExamplesMonitoringJVM',
-					'buildStandaloneExamplesMonitoringSpring',
-					'buildStandaloneExamplesMonitoringManual',
-					'buildStandaloneExamplesMonitoringAspectJ',
-					'buildStandaloneExamplesMonitoringAdaptive',
-					'buildStandaloneExamplesMonitoringTimesource',
-					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
-					// 'buildStandaloneExamplesUserguideAppendixJavaEE', 
-					// 'replaceAbsoluteByRelativePathsEclipse'
-					]) {
+	'replaceHardCodedVersionNames',
+	'buildStandaloneExamplesUserguideCh2App',
+	// 'buildStandaloneExamplesUserguideCh2Instr',
+	// 'buildStandaloneExamplesUserguideCh34',
+	// 'buildStandaloneExamplesUserguideCh5',
+	// 'buildStandaloneExamplesUserguideAppendixJMS',
+	// 'buildStandaloneExamplesUserguideAppendixAMQP',
+	// 'buildStandaloneExamplesUserguideAppendixKafka',
+	'buildStandaloneExamplesMonitoringJVM',
+	'buildStandaloneExamplesMonitoringSpring',
+	'buildStandaloneExamplesMonitoringManual',
+	'buildStandaloneExamplesMonitoringAspectJ',
+	'buildStandaloneExamplesMonitoringAdaptive',
+	'buildStandaloneExamplesMonitoringTimesource',
+	// 'buildStandaloneExamplesAnalysisTraceAnalysis',
+	// 'buildStandaloneExamplesUserguideAppendixJavaEE',
+	// 'replaceAbsoluteByRelativePathsEclipse'
+	]) {
 }
 
 task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-//	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-//	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-//	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-	
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
-//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-163010944-UTC-constructor-events-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
-	
-//	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${aspectjVersion}.jar")
-  }
+	doLast {
+		regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+		regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+		regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	//	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	//	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	//	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	//	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-163010944-UTC-constructor-events-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+
+	//	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${aspectjVersion}.jar")
+	}
 }
 
 // bookstore
@@ -143,7 +143,6 @@ task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, depen
 	into 'JavaEEServletContainerExample/livedemo-source/lib'
 }
 
-// TODO replace sigar
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
@@ -151,9 +150,6 @@ task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsO
 	from ('..') {
 		include "LICENSE"
 		rename "LICENSE", "kieker-${version}-aspectj.jar.LICENSE"
-	}
-	from ('../lib/sigar') {
-		include '*'
 	}
 	into 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib'
 }
@@ -196,7 +192,7 @@ task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copy
 	tasks = ['jar']
 }
 
-// 
+//
 task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-jar.jar"
@@ -258,21 +254,21 @@ task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: 
 }
 
 task cleanStandaloneExamples(dependsOn: [
-					 'cleanStandaloneExamplesUserguideCh2App', 
-					// 'cleanStandaloneExamplesUserguideCh2Instr', 
-					// 'cleanStandaloneExamplesUserguideCh34',
-					// 'cleanStandaloneExamplesUserguideCh5',
-					// 'cleanStandaloneExamplesUserguideAppendixJMS',
-					// 'cleanStandaloneExamplesUserguideAppendixAMQP',  
-					'cleanStandaloneExamplesMonitoringJVM',
-					'cleanStandaloneExamplesMonitoringSpring',
-					'cleanStandaloneExamplesMonitoringManual',
-					'cleanStandaloneExamplesMonitoringAspectJ',
-					'cleanStandaloneExamplesMonitoringAdaptive',
-					'cleanStandaloneExamplesMonitoringTimesource',
-					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
-					// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
-					]) {
+	'cleanStandaloneExamplesUserguideCh2App',
+	// 'cleanStandaloneExamplesUserguideCh2Instr',
+	// 'cleanStandaloneExamplesUserguideCh34',
+	// 'cleanStandaloneExamplesUserguideCh5',
+	// 'cleanStandaloneExamplesUserguideAppendixJMS',
+	// 'cleanStandaloneExamplesUserguideAppendixAMQP',
+	'cleanStandaloneExamplesMonitoringJVM',
+	'cleanStandaloneExamplesMonitoringSpring',
+	'cleanStandaloneExamplesMonitoringManual',
+	'cleanStandaloneExamplesMonitoringAspectJ',
+	'cleanStandaloneExamplesMonitoringAdaptive',
+	'cleanStandaloneExamplesMonitoringTimesource',
+	// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
+	// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
+	]) {
 }
 
 clean.dependsOn cleanStandaloneExamples
@@ -313,12 +309,10 @@ task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
-// TODO replace sigar with oshi
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 	buildFile = 'JavaEEServletContainerExample/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
-	// delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
 	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
 	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -44,6 +44,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 // to be mocked classes, as this is done for other static classes
 // https://github.com/powermock/powermock/wiki/Mock-System
 @PrepareForTest({ TextMapFileHandler.class }) // NOCS
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class TextMapFileHandlerTest {
 
 	private static final String TEST_PATH = "this/is/a/test/path";
@@ -68,7 +69,7 @@ public class TextMapFileHandlerTest {
 		// mocking file.newBufferedWriter with our dummy writer
 		try {
 			PowerMockito.when(
-					Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE))
+					Files.newBufferedWriter(location, charset))
 					.thenReturn(writer);
 		} catch (final IOException e) {
 			Assert.fail(e.getLocalizedMessage());

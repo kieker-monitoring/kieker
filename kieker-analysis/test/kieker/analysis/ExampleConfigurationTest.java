@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,18 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 
 import org.eclipse.emf.common.util.EMap;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.model.DeploymentModelPrinter;
-import kieker.analysis.util.ComposedKey;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
+import kieker.analysis.stage.model.DeploymentModelPrinter;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeploymentModel;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.Tuple;
 
 import teetime.framework.Execution;
 
@@ -84,7 +85,7 @@ public class ExampleConfigurationTest {
 		// final File exportDirectory = new
 		// File("C:/Users/Soeren/Desktop/kieker-output");
 		// final File exportDirectory = tempFolder.getRoot();
-		final File exportDirectory = new File(projectDir.getFile());
+		final Path exportDirectory = new File(projectDir.getFile()).toPath();
 
 		final ExampleConfiguration configuration = new ExampleConfiguration(importDirectory, exportDirectory);
 		final Execution<ExampleConfiguration> analysis = new Execution<>(configuration);
@@ -98,9 +99,7 @@ public class ExampleConfigurationTest {
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
 
-		// StatisticsModel statisticsModel = configuration.getStatisticsModel();
-
-		final EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
+		final EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();
 		// contains [1, 1, 50] in any order
 		Assert.assertThat(aggregatedInvocations.values().size(), CoreMatchers.is(3));

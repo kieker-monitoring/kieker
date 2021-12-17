@@ -17,7 +17,7 @@ Prerequisites
 - Download `Jetty <https://www.eclipse.org/jetty/download.html>`. Use
   a version which is compatible with your Java version. Kieker 1.14
   with AspectJ will not work with Java 11. This will change in the
-  1.15-SNAPSHOT.
+  1.15 which supports Java 11.
 
 Instrumenting Servlets
 ----------------------

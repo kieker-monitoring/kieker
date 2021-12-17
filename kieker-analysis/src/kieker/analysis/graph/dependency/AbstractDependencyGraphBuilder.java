@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.statistics.Properties;
-import kieker.analysis.statistics.StatisticsModel;
-import kieker.analysis.statistics.Units;
-import kieker.analysis.util.ComposedKey;
+import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.util.ObjectIdentifierRegistry;
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.AggregatedInvocation;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.util.ComposedKey;
 
 /**
  * Abstract template class for dependency graph builders. To use this abstract builder,
@@ -45,23 +46,25 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 
 	private static final Object ENTRY_VERTEX_IDENTIFIER = "entry";
 
-	protected final IGraph graph;
-	protected final ObjectIdentifierRegistry identifierRegistry;
-	protected final ResponseTimeDecorator responseTimeDecorator;
+	protected IGraph graph;
+	protected ObjectIdentifierRegistry identifierRegistry;
+	protected ResponseTimeDecorator responseTimeDecorator;
 
-	protected final ExecutionModel executionModel;
-	protected final StatisticsModel statisticsModel;
+	protected ExecutionModel executionModel;
+	protected StatisticsModel statisticsModel;
 
-	public AbstractDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		this.graph = IGraph.create();
-		this.identifierRegistry = new ObjectIdentifierRegistry();
-		this.responseTimeDecorator = new ResponseTimeDecorator(statisticsModel, ChronoUnit.NANOS);
-		this.executionModel = executionModel;
-		this.statisticsModel = statisticsModel;
-	}
+	public AbstractDependencyGraphBuilder() {}
 
 	@Override
-	public IGraph build() {
+	public IGraph build(final ModelRepository repository) {
+		// TODO this must be refactored and separated out in a separate function
+		this.graph = IGraph.create();
+		this.graph.setName(repository.getName());
+
+		this.executionModel = repository.getModel(ExecutionModel.class);
+		this.statisticsModel = repository.getModel(StatisticsModel.class);
+		this.identifierRegistry = new ObjectIdentifierRegistry();
+		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
 		for (final AggregatedInvocation invocation : this.executionModel.getAggregatedInvocations().values()) {
 			this.handleInvocation(invocation);
 		}
@@ -71,7 +74,8 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	private void handleInvocation(final AggregatedInvocation invocation) {
 		final IVertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
 		final IVertex targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = this.statisticsModel.get(invocation).getStatistic(Units.RESPONSE_TIME).getProperty(Properties.COUNT);
+		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
+				.get(EPropertyType.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 
@@ -85,7 +89,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		return vertex;
 	}
 
-	private IEdge addEdge(final IVertex source, final IVertex target, final long calls) {
+	protected IEdge addEdge(final IVertex source, final IVertex target, final long calls) {
 		final int edgeId = this.identifierRegistry.getIdentifier(ComposedKey.of(source, target));
 		final IEdge edge = source.addEdgeIfAbsent(edgeId, target);
 		edge.setPropertyIfAbsent(PropertyConstants.CALLS, calls);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,12 @@ public enum VertexType {
 	OPERATION_TYPE("operation type"), //
 	ASSEMBLY_COMPONENT("assembly component"), //
 	ASSEMBLY_OPERATION("assembly operation"), //
+	ASSEMBLY_STORAGE("assembly storage"), //
 	DEPLOYMENT_CONTEXT("deployment context"), //
 	DEPLOYED_COMPONENT("deployed component"), //
-	DEPLOYED_OPERATION("deployed operation"); //
+	DEPLOYED_OPERATION("deployed operation"), //
+	DEPLOYED_STORAGE("deployed storage"); //
+
 
 	private final String name;
 

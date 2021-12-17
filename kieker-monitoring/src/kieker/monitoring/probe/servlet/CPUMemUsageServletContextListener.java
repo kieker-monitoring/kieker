@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,11 @@ package kieker.monitoring.probe.servlet;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
 import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
-import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
 
 /**
  * <p>
  * Starts and stops the periodic logging of CPU utilization and Memory usage
- * employing the {@link SigarSamplerFactory} as the Servlet is initialized and
+ * employing the {@link OshiSamplerFactory} as the Servlet is initialized and
  * destroyed respectively. <br/>
  * The initial delay and the sampling period (both given in seconds) can be
  * configured via context-params in the web.xml file, as shown below.
