@@ -59,7 +59,8 @@ def mainSubprojects = [
 	project(':kieker-model'),
 	project(':kieker-analysis'),
 	project(':kieker-tools'),
-	project(':kieker-extension-kafka')
+	project(':kieker-extension-kafka'),
+	project(':kieker-extension-cassandra')
 ]
 
 allprojects {
@@ -363,7 +364,8 @@ def checkSubprojects = [
 	project(':kieker-tools:resource-monitor'),
 	project(':kieker-tools:trace-analysis'),
 	project(':kieker-tools:trace-analysis-gui'),
-	project(':kieker-extension-kafka')
+	project(':kieker-extension-kafka'),
+	project(':kieker-extension-cassandra')
 ]
 
 checkSubprojects.each { project ->

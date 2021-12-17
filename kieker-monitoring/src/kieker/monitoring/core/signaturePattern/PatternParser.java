@@ -97,10 +97,10 @@ public final class PatternParser {
 		} else {
 			final int openingParenthesis = trimPattern.indexOf('(');
 			final int closingParenthesis = trimPattern.indexOf(')');
-			if ((openingParenthesis == -1) || (closingParenthesis == -1)
-					|| (openingParenthesis != trimPattern.lastIndexOf('('))
-					|| (closingParenthesis != trimPattern.lastIndexOf(')'))
-					|| (openingParenthesis > closingParenthesis)) {
+			if (openingParenthesis == -1 || closingParenthesis == -1
+					|| openingParenthesis != trimPattern.lastIndexOf('(')
+					|| closingParenthesis != trimPattern.lastIndexOf(')')
+					|| openingParenthesis > closingParenthesis) {
 				throw new InvalidPatternException("Invalid parentheses");
 			}
 
@@ -116,7 +116,7 @@ public final class PatternParser {
 			final String fqName = tokens[numOfModifiers + 1];
 
 			final int index = fqName.lastIndexOf('.');
-			if ((index == -1) || (index == (fqName.length() - 1))) {
+			if (index == -1 || index == fqName.length() - 1) {
 				throw new InvalidPatternException("Invalid fully qualified type or method name.");
 			}
 			final String fqClassName = fqName.substring(0, index); // NOPMD declaring variable in this context is usefull
@@ -282,7 +282,7 @@ public final class PatternParser {
 	}
 
 	private static String parseFQClassname(final String fqClassname) throws InvalidPatternException {
-		if (fqClassname.contains("...") || fqClassname.endsWith(".") || (fqClassname.length() == 0)) {
+		if (fqClassname.contains("...") || fqClassname.endsWith(".") || fqClassname.length() == 0) {
 			throw new InvalidPatternException("Invalid fully qualified type.");
 		}
 		final String[] tokens = fqClassname.split("\\.");
@@ -301,7 +301,7 @@ public final class PatternParser {
 		int start = 0;
 		final StringBuilder sb = new StringBuilder(128);
 		// test if fq_type starts with ..
-		if ((tokens[0].length() == 0) && (tokens[1].length() == 0)) {
+		if (tokens[0].length() == 0 && tokens[1].length() == 0) {
 			sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			start = 2;
 		} else if (tokens[0].length() == 0) {
@@ -310,7 +310,7 @@ public final class PatternParser {
 
 		final int length = tokens.length;
 
-		for (int i = start; i < (length - 1); i++) {
+		for (int i = start; i < length - 1; i++) {
 			if (tokens[i].length() == 0) {
 				sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			} else {
@@ -358,7 +358,7 @@ public final class PatternParser {
 		Integer old = -1;
 		for (int i = 0; i < numberOfModifiers; i++) {
 			final Integer current = ALLOWED_MODIFIER_WITH_ORDER.get(modifierList[i]);
-			if ((null == current) || (current < old)) {
+			if (null == current || current < old) {
 				throw new InvalidPatternException("Invalid modifier");
 			}
 			old = current;
@@ -462,13 +462,13 @@ public final class PatternParser {
 		}
 		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2])) {
 			sb.append("static\\s");
-		} else if (!NON_STATIC.equals(modifierList[0]) && (!NON_STATIC.equals(modifierList[1])
-				&& !NON_STATIC.equals(modifierList[2]))) {
+		} else if (!NON_STATIC.equals(modifierList[0]) && !NON_STATIC.equals(modifierList[1])
+				&& !NON_STATIC.equals(modifierList[2])) {
 			sb.append("(static\\s)?");
 		}
 		if (FINAL.equals(modifierList[1]) || FINAL.equals(modifierList[2]) || FINAL.equals(modifierList[3])) {
 			sb.append("final\\s");
-		} else if ((!NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2]))
+		} else if (!NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2])
 				&& !NON_FINAL.equals(modifierList[3])) {
 			sb.append("(final\\s)?");
 		}
@@ -615,7 +615,7 @@ public final class PatternParser {
 			}
 			final String params = trimThrowsPattern.replaceFirst("throws(\\s+)", "");
 			final String[] paramList = params.split(",");
-			if ((paramList.length == 1) && "..".equals(paramList[0])) {
+			if (paramList.length == 1 && "..".equals(paramList[0])) {
 				return "(\\sthrows\\s.*)?";
 			}
 			try {
