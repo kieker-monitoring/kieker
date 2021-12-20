@@ -36,8 +36,10 @@ public final class PatternParser {
 	private static final String FINAL = "final";
 	private static final String NON_STATIC = "non_static";
 	private static final String NON_ABSTRACT = "non_abstract";
+	private static final String NON_DEFAULT = "non_default";
 	private static final String STATIC = "static";
 	private static final String ABSTRACT = "abstract";
+	private static final String DEFAULT = "default";
 	private static final String PACKAGE = "package";
 	private static final String MODIFIER_PROTECTED = "protected";
 	private static final String MODIFIER_PRIVATE = "private";
@@ -54,14 +56,16 @@ public final class PatternParser {
 		ALLOWED_MODIFIER_WITH_ORDER.put(PACKAGE, 0);
 		ALLOWED_MODIFIER_WITH_ORDER.put(ABSTRACT, 1);
 		ALLOWED_MODIFIER_WITH_ORDER.put(NON_ABSTRACT, 1);
-		ALLOWED_MODIFIER_WITH_ORDER.put(STATIC, 2);
-		ALLOWED_MODIFIER_WITH_ORDER.put(NON_STATIC, 2);
-		ALLOWED_MODIFIER_WITH_ORDER.put(FINAL, 3);
-		ALLOWED_MODIFIER_WITH_ORDER.put(NON_FINAL, 3);
-		ALLOWED_MODIFIER_WITH_ORDER.put(SYNCHRONIZED, 4);
-		ALLOWED_MODIFIER_WITH_ORDER.put(NON_SYNCHRONIZED, 4);
-		ALLOWED_MODIFIER_WITH_ORDER.put(NATIVE, 5);
-		ALLOWED_MODIFIER_WITH_ORDER.put(NON_NATIVE, 5);
+		ALLOWED_MODIFIER_WITH_ORDER.put(DEFAULT, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_DEFAULT, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(STATIC, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_STATIC, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(FINAL, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_FINAL, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(SYNCHRONIZED, 5);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_SYNCHRONIZED, 5);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NATIVE, 6);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_NATIVE, 6);
 	}
 
 	/**
@@ -383,13 +387,16 @@ public final class PatternParser {
 		case 6:
 			PatternParser.onSixModifiers(modifierList, sb);
 			break;
+		case 7:
+			PatternParser.onSevenModifiers(modifierList, sb);
+			break;
 		default:
 			throw new InvalidPatternException("Too many modifier.");
 		}
 		return sb.toString();
 	}
 
-	private static void onSixModifiers(final String[] modifierList, final StringBuilder sb)
+	private static void onSevenModifiers(final String[] modifierList, final StringBuilder sb)
 			throws InvalidPatternException {
 		PatternParser.appendScope(sb, modifierList[0], true);
 
@@ -398,23 +405,28 @@ public final class PatternParser {
 		} else if (!NON_ABSTRACT.equals(modifierList[1])) {
 			throw new InvalidPatternException("Invalid modifier.");
 		}
-		if (STATIC.equals(modifierList[2])) {
+		if (DEFAULT.equals(modifierList[2])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[2])) {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if (STATIC.equals(modifierList[3])) {
 			sb.append("static\\s");
-		} else if (!NON_STATIC.equals(modifierList[2])) {
+		} else if (!NON_STATIC.equals(modifierList[3])) {
 			throw new InvalidPatternException("Invalid modifier.");
 		}
-		if (FINAL.equals(modifierList[3])) {
+		if (FINAL.equals(modifierList[4])) {
 			sb.append("final\\s");
-		} else if (!NON_FINAL.equals(modifierList[3])) {
+		} else if (!NON_FINAL.equals(modifierList[4])) {
 			throw new InvalidPatternException("Invalid modifier.");
 		}
-		if (SYNCHRONIZED.equals(modifierList[4])) {
+		if (SYNCHRONIZED.equals(modifierList[5])) {
 			sb.append("synchronized\\s");
-		} else if (!NON_SYNCHRONIZED.equals(modifierList[4])) {
+		} else if (!NON_SYNCHRONIZED.equals(modifierList[5])) {
 			throw new InvalidPatternException("Invalid modifier.");
 		}
 
-		PatternParser.checkNativeFail(sb, modifierList[5]);
+		PatternParser.checkNativeFail(sb, modifierList[6]);
 	}
 
 	private static void checkNativeFail(final StringBuilder sb, final String modifier) throws InvalidPatternException {
@@ -425,6 +437,38 @@ public final class PatternParser {
 		}
 	}
 
+	private static void onSixModifiers(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
+		PatternParser.appendScope(sb, modifierList[0], false);
+
+		if (ABSTRACT.equals(modifierList[0]) || ABSTRACT.equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if (!NON_ABSTRACT.equals(modifierList[0]) && !NON_ABSTRACT.equals(modifierList[1])) {
+			sb.append("(abstract\\s)?");
+		}
+		if (DEFAULT.equals(modifierList[1]) || DEFAULT.equals(modifierList[2])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[1]) && !NON_DEFAULT.equals(modifierList[2])) {
+			sb.append("(default\\s)?");
+		}
+		if (STATIC.equals(modifierList[2]) || STATIC.equals(modifierList[3])) {
+			sb.append("static\\s");
+		} else if (!NON_STATIC.equals(modifierList[2]) && !NON_STATIC.equals(modifierList[3])) {
+			sb.append("(static\\s)?");
+		}
+		if (FINAL.equals(modifierList[3]) || FINAL.equals(modifierList[4])) {
+			sb.append("final\\s");
+		} else if (!NON_FINAL.equals(modifierList[3]) && !NON_FINAL.equals(modifierList[4])) {
+			sb.append("(final\\s)?");
+		}
+		if (SYNCHRONIZED.equals(modifierList[4]) || SYNCHRONIZED.equals(modifierList[5])) {
+			sb.append("synchronized\\s");
+		} else if (!NON_SYNCHRONIZED.equals(modifierList[4]) && !NON_SYNCHRONIZED.equals(modifierList[5])) {
+			sb.append("(synchronized\\s)?");
+		}
+
+		PatternParser.checkNative(sb, modifierList[5]);
+	}
+
 	private static void onFiveModifiers(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
 		PatternParser.appendScope(sb, modifierList[0], false);
 
@@ -433,14 +477,19 @@ public final class PatternParser {
 		} else if (!NON_ABSTRACT.equals(modifierList[0]) && !NON_ABSTRACT.equals(modifierList[1])) {
 			sb.append("(abstract\\s)?");
 		}
-		if (STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2])) {
+		if (DEFAULT.equals(modifierList[0]) || DEFAULT.equals(modifierList[1]) || DEFAULT.equals(modifierList[2])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[0]) && !NON_DEFAULT.equals(modifierList[1]) && !NON_DEFAULT.equals(modifierList[2])) {
+			sb.append("(default\\s)?");
+		}
+		if (STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2]) || STATIC.equals(modifierList[3])) {
 			sb.append("static\\s");
-		} else if (!NON_STATIC.equals(modifierList[1]) && !NON_STATIC.equals(modifierList[2])) {
+		} else if (!NON_STATIC.equals(modifierList[1]) && !NON_STATIC.equals(modifierList[2]) && !NON_STATIC.equals(modifierList[3])) {
 			sb.append("(static\\s)?");
 		}
-		if (FINAL.equals(modifierList[2]) || FINAL.equals(modifierList[3])) {
+		if (FINAL.equals(modifierList[2]) || FINAL.equals(modifierList[3]) || FINAL.equals(modifierList[4])) {
 			sb.append("final\\s");
-		} else if (!NON_FINAL.equals(modifierList[2]) && !NON_FINAL.equals(modifierList[3])) {
+		} else if (!NON_FINAL.equals(modifierList[2]) && !NON_FINAL.equals(modifierList[3]) && !NON_FINAL.equals(modifierList[4])) {
 			sb.append("(final\\s)?");
 		}
 		if (SYNCHRONIZED.equals(modifierList[3]) || SYNCHRONIZED.equals(modifierList[4])) {
@@ -460,16 +509,20 @@ public final class PatternParser {
 		} else if (!NON_ABSTRACT.equals(modifierList[0]) && !NON_ABSTRACT.equals(modifierList[1])) {
 			sb.append("(abstract\\s)?");
 		}
-		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2])) {
+		if (DEFAULT.equals(modifierList[0]) || DEFAULT.equals(modifierList[1]) || DEFAULT.equals(modifierList[2])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[0]) && !NON_DEFAULT.equals(modifierList[1]) && !NON_DEFAULT.equals(modifierList[2])) {
+			sb.append("(default\\s)?");
+		}
+		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2]) || STATIC.equals(modifierList[3])) {
 			sb.append("static\\s");
-		} else if (!NON_STATIC.equals(modifierList[0]) && !NON_STATIC.equals(modifierList[1])
-				&& !NON_STATIC.equals(modifierList[2])) {
+		} else if (!NON_STATIC.equals(modifierList[0]) && !NON_STATIC.equals(modifierList[1]) && !NON_STATIC.equals(modifierList[2])
+				&& !NON_STATIC.equals(modifierList[3])) {
 			sb.append("(static\\s)?");
 		}
 		if (FINAL.equals(modifierList[1]) || FINAL.equals(modifierList[2]) || FINAL.equals(modifierList[3])) {
 			sb.append("final\\s");
-		} else if (!NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2])
-				&& !NON_FINAL.equals(modifierList[3])) {
+		} else if (!NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2]) && !NON_FINAL.equals(modifierList[3])) {
 			sb.append("(final\\s)?");
 		}
 		if (SYNCHRONIZED.equals(modifierList[2]) || SYNCHRONIZED.equals(modifierList[3])) {
@@ -483,26 +536,30 @@ public final class PatternParser {
 
 	private static void onThreeModifiers(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
 		PatternParser.appendScope(sb, modifierList[0], false);
+
 		if (ABSTRACT.equals(modifierList[0]) || ABSTRACT.equals(modifierList[1])) {
 			sb.append("abstract\\s");
 		} else if (!NON_ABSTRACT.equals(modifierList[0]) && !NON_ABSTRACT.equals(modifierList[1])) {
 			sb.append("(abstract\\s)?");
 		}
+		if (DEFAULT.equals(modifierList[0]) || DEFAULT.equals(modifierList[1]) || DEFAULT.equals(modifierList[2])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[0]) && !NON_DEFAULT.equals(modifierList[1]) && !NON_DEFAULT.equals(modifierList[2])) {
+			sb.append("(default\\s)?");
+		}
 		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2])) {
 			sb.append("static\\s");
-		} else if (!NON_STATIC.equals(modifierList[0]) && !NON_STATIC.equals(modifierList[1])
-				&& !NON_STATIC.equals(modifierList[2])) {
+		} else if (!NON_STATIC.equals(modifierList[0]) && !NON_STATIC.equals(modifierList[1]) && !NON_STATIC.equals(modifierList[2])) {
 			sb.append("(static\\s)?");
 		}
 		if (FINAL.equals(modifierList[0]) || FINAL.equals(modifierList[1]) || FINAL.equals(modifierList[2])) {
 			sb.append("final\\s");
-		} else if (!NON_FINAL.equals(modifierList[0]) && !NON_FINAL.equals(modifierList[1])
-				&& !NON_FINAL.equals(modifierList[2])) {
+		} else if (!NON_FINAL.equals(modifierList[0]) && !NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2])) {
 			sb.append("(final\\s)?");
 		}
 		if (SYNCHRONIZED.equals(modifierList[1]) || SYNCHRONIZED.equals(modifierList[2])) {
 			sb.append("synchronized\\s");
-		} else if (!NON_SYNCHRONIZED.equals(modifierList[1]) && NON_SYNCHRONIZED.equals(modifierList[2])) {
+		} else if (!NON_SYNCHRONIZED.equals(modifierList[1]) && !NON_SYNCHRONIZED.equals(modifierList[2])) {
 			sb.append("(synchronized\\s)?");
 		}
 
@@ -516,6 +573,11 @@ public final class PatternParser {
 			sb.append("abstract\\s");
 		} else if (!NON_ABSTRACT.equals(modifierList[0]) && !NON_ABSTRACT.equals(modifierList[1])) {
 			sb.append("(abstract\\s)?");
+		}
+		if (DEFAULT.equals(modifierList[0]) || DEFAULT.equals(modifierList[1])) {
+			sb.append("default\\s");
+		} else if (!NON_DEFAULT.equals(modifierList[0]) && !NON_DEFAULT.equals(modifierList[1])) {
+			sb.append("(default\\s)?");
 		}
 		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1])) {
 			sb.append("static\\s");
@@ -539,23 +601,25 @@ public final class PatternParser {
 	private static void onOneModifier(final String[] modifierList, final StringBuilder sb)
 			throws InvalidPatternException {
 		final String[] tokens = { MODIFIER_PUBLIC, MODIFIER_PRIVATE, MODIFIER_PROTECTED, PACKAGE,
-			ABSTRACT, NON_ABSTRACT, STATIC, NON_STATIC, FINAL, NON_FINAL, SYNCHRONIZED, NON_SYNCHRONIZED,
+			ABSTRACT, NON_ABSTRACT, DEFAULT, NON_DEFAULT, STATIC, NON_STATIC, FINAL, NON_FINAL, SYNCHRONIZED, NON_SYNCHRONIZED,
 			NATIVE, NON_NATIVE, };
 		final String[] outputs = {
-			"public\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"private\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"protected\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?abstract\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(synchronized\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(native\\s)?",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?",
+			"public\\s(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"private\\s(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"protected\\s(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?abstract\\s(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?default\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(final\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?(synchronized\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(native\\s)?",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s",
+			"((public|private|protected)\\s)?(abstract\\s)?(default\\s)?(static\\s)?(final\\s)?(synchronized\\s)?",
 		};
 
 		for (int i = 0; i < tokens.length; i++) {
