@@ -31,6 +31,7 @@ public final class SignatureConstructor {
 
 	private static final String DEFAULT_VISIBILITY = "";
 	private static final String DEFAULT_ABSTRACT_NON_ABSTRACT = "";
+	private static final String DEFAULT_DEFAULT_NON_DEFAULT = "";
 	private static final String DEFAULT_STATIC_NON_STATIC = "";
 	private static final String DEFAULT_FINAL_NON_FINAL = "";
 	private static final String DEFAULT_SYNCHRONIZED_NON_SYNCHRONIZED = "";
@@ -43,6 +44,7 @@ public final class SignatureConstructor {
 
 	private final List<String> visibilityList = new ArrayList<>();
 	private final List<String> abstractNonAbstractList = new ArrayList<>();
+	private final List<String> defaultNonDefaultList = new ArrayList<>();
 	private final List<String> staticNonStaticList = new ArrayList<>();
 	private final List<String> finalNonFinalList = new ArrayList<>();
 	private final List<String> synchronizedNonSynchronizedList = new ArrayList<>();
@@ -71,6 +73,9 @@ public final class SignatureConstructor {
 		}
 		if (this.abstractNonAbstractList.isEmpty()) {
 			this.abstractNonAbstractList.add(SignatureConstructor.DEFAULT_ABSTRACT_NON_ABSTRACT);
+		}
+		if (this.defaultNonDefaultList.isEmpty()) {
+			this.defaultNonDefaultList.add(SignatureConstructor.DEFAULT_DEFAULT_NON_DEFAULT);
 		}
 		if (this.staticNonStaticList.isEmpty()) {
 			this.staticNonStaticList.add(SignatureConstructor.DEFAULT_STATIC_NON_STATIC);
@@ -102,42 +107,47 @@ public final class SignatureConstructor {
 		final List<String> result = new ArrayList<>();
 		for (final String visibility : this.visibilityList) { // NOCS
 			for (final String abstractNonAbstract : this.abstractNonAbstractList) {
-				for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
-					for (final String finalNonFinal : this.finalNonFinalList) { // NOCS
-						for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) { // NOCS
-							for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
-								for (final String returnType : this.returnTypeList) { // NOCS
-									for (final String fqClassName : this.fqClassNameList) { // NOCS
-										for (final String operationName : this.operationNameList) { // NOCS
-											for (final String paramList : this.parameterListList) { // NOCS
-												for (final String throwsList : this.throwsListList) { // NOCS
-													final StringBuilder sb = new StringBuilder();
-													if (visibility.length() > 0) {
-														sb.append(visibility).append(' ');
+				for (final String defaultNonDefault : this.defaultNonDefaultList) {
+					for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
+						for (final String finalNonFinal : this.finalNonFinalList) { // NOCS
+							for (final String synchronizedNonSynchronized : this.synchronizedNonSynchronizedList) { // NOCS
+								for (final String nativeNonNative : this.nativeNonNativeList) { // NOCS
+									for (final String returnType : this.returnTypeList) { // NOCS
+										for (final String fqClassName : this.fqClassNameList) { // NOCS
+											for (final String operationName : this.operationNameList) { // NOCS
+												for (final String paramList : this.parameterListList) { // NOCS
+													for (final String throwsList : this.throwsListList) { // NOCS
+														final StringBuilder sb = new StringBuilder();
+														if (visibility.length() > 0) {
+															sb.append(visibility).append(' ');
+														}
+														if (abstractNonAbstract.length() > 0) {
+															sb.append(abstractNonAbstract).append(' ');
+														}
+														if (defaultNonDefault.length() > 0) {
+															sb.append(defaultNonDefault).append(' ');
+														}
+														if (staticNonStatic.length() > 0) {
+															sb.append(staticNonStatic).append(' ');
+														}
+														if (finalNonFinal.length() > 0) {
+															sb.append(finalNonFinal).append(' ');
+														}
+														if (synchronizedNonSynchronized.length() > 0) {
+															sb.append(synchronizedNonSynchronized).append(' ');
+														}
+														if (nativeNonNative.length() > 0) {
+															sb.append(nativeNonNative).append(' ');
+														}
+														if (returnType.length() > 0) {
+															sb.append(returnType).append(' ');
+														}
+														sb.append(fqClassName).append('.').append(operationName).append('(').append(paramList).append(')');
+														if (throwsList.length() > 0) {
+															sb.append(" throws ").append(throwsList);
+														}
+														result.add(sb.toString());
 													}
-													if (abstractNonAbstract.length() > 0) {
-														sb.append(abstractNonAbstract).append(' ');
-													}
-													if (staticNonStatic.length() > 0) {
-														sb.append(staticNonStatic).append(' ');
-													}
-													if (finalNonFinal.length() > 0) {
-														sb.append(finalNonFinal).append(' ');
-													}
-													if (synchronizedNonSynchronized.length() > 0) {
-														sb.append(synchronizedNonSynchronized).append(' ');
-													}
-													if (nativeNonNative.length() > 0) {
-														sb.append(nativeNonNative).append(' ');
-													}
-													if (returnType.length() > 0) {
-														sb.append(returnType).append(' ');
-													}
-													sb.append(fqClassName).append('.').append(operationName).append('(').append(paramList).append(')');
-													if (throwsList.length() > 0) {
-														sb.append(" throws ").append(throwsList);
-													}
-													result.add(sb.toString());
 												}
 											}
 										}
@@ -175,6 +185,19 @@ public final class SignatureConstructor {
 	 */
 	public SignatureConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
 		this.abstractNonAbstractList.add(abstractNonAbstract);
+		return this;
+	}
+
+	/**
+	 * Adds the given string as a default or non default variant.
+	 *
+	 * @param defaultNonDefault
+	 *            The default or non default variant.
+	 *
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
+	public SignatureConstructor addDefaultNonDefaultVariant(final String defaultNonDefault) {
+		this.defaultNonDefaultList.add(defaultNonDefault);
 		return this;
 	}
 

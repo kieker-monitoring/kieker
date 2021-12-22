@@ -43,12 +43,14 @@ Please note that this is going to change in the future.
   
   KiekerPattern: '*' | Modifiers ReturnType FQName '(' WS* Parameters WS* ')' Throws?
   
-  Modifiers: (Visibility WS)? (Abstract WS)? (Static WS)?
+  Modifiers: (Visibility WS)? (Abstract WS)? (Default WS)? (Static WS)?
     (Final WS)? (Synchronized WS)? (Native WS)?
   
   Visibility: "public" | "private" | "protected" | "package"
   
   Abstract: "abstract" | "non_abstract"
+  
+  Default: "default" | "non_default"
   
   Static: "static" | "non_static"
   

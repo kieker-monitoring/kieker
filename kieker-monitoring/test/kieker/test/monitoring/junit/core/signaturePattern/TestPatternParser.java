@@ -44,7 +44,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 	}
 
 	@Test
-	// 160 tests
+	// 928 tests
 	public void patternTest() throws InvalidPatternException {
 		final String pattern = "public void ..Clazz.get*(int, ..) throws ..";
 		final Matcher matcher = PatternParser.parseToPattern(pattern).matcher("");
@@ -52,6 +52,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final SignatureConstructor positiveSignature = new SignatureConstructor();
 		positiveSignature.addVisibilityVariant("public")
 				.addAbstractNonAbstractVariant("").addAbstractNonAbstractVariant("abstract")
+				.addDefaultNonDefaultVariant("").addDefaultNonDefaultVariant("default")
 				.addStaticNonStaticVariant("").addStaticNonStaticVariant("static")
 				.addFinalNonFinalVariant("").addFinalNonFinalVariant("final")
 				.addSynchronizedNonSynchronizedVariant("").addSynchronizedNonSynchronizedVariant("synchronized")
@@ -231,6 +232,13 @@ public class TestPatternParser extends AbstractKiekerTest {
 				}
 			}
 		}
+	}
+
+	@Test
+	public void testDefaultModifier() throws InvalidPatternException {
+		final String signature = "public default void package.Interface.method()";
+		final Pattern pattern = PatternParser.parseToPattern("default ..* package.Interface.method(..)");
+		Assert.assertTrue(pattern.matcher(signature).matches());
 	}
 
 	@Test
