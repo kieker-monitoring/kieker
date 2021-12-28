@@ -152,13 +152,13 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	@Override
 	protected void execute(final Execution execution) throws Exception {
 		synchronized (this) {
-			if (this.terminated || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
+			if (this.terminated || this.traceProcessingErrorOccured && !this.ignoreInvalidTraces) {
 				return;
 			}
 
 			final long traceId = execution.getTraceId();
 
-			this.minTin = ((this.minTin < 0) || (execution.getTin() < this.minTin)) ? execution.getTin() : this.minTin; // NOCS
+			this.minTin = this.minTin < 0 || execution.getTin() < this.minTin ? execution.getTin() : this.minTin; // NOCS
 			this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
 
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
@@ -223,8 +223,9 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 		} catch (final InvalidTraceException ex) {
 			// Transformation failed (i.e., trace invalid)
 			this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
-			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId
-					+ "). \n" + "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
+			final String transformationError = String.format("Failed to transform execution trace to message trace (ID: %s). \n"
+					+ " Reason: %s\n"
+					+ " Trace: ", curTraceId, ex.getMessage(), executionTrace);
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -253,7 +254,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated
-					|| ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDuration))) {
+					|| this.maxTout - this.timeoutMap.first().getMinTin() > this.maxTraceDuration)) {
 				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
@@ -293,7 +294,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
+			if (this.getSuccessCount() > 0 || this.getErrorCount() > 0) {
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
 						.append(LoggingTimestampConverter
 								.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))

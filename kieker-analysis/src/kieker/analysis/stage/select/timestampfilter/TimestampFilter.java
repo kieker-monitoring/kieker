@@ -45,6 +45,10 @@ import teetime.stage.basic.merger.Merger;
  */
 public class TimestampFilter extends CompositeStage {
 
+	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+	/** The default used lower limit for the records. **/
+	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
+
 	private final InputPort<IMonitoringRecord> monitoringRecordsCombinedInputPort;
 
 	private final OutputPort<IMonitoringRecord> recordsWithinTimePeriodOutputPort;
@@ -59,7 +63,6 @@ public class TimestampFilter extends CompositeStage {
 	 *            The upper limit for the time stamps of the records.
 	 */
 	public TimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
-
 		// Instantiate internal stages
 		final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<>(
 				OperationExecutionRecord.class);

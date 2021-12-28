@@ -363,6 +363,7 @@ def checkSubprojects = [
 	project(':kieker-tools:opad'),
 	project(':kieker-tools:resource-monitor'),
 	project(':kieker-tools:trace-analysis'),
+	project(':kieker-tools:trace-analysis-new'),
 	project(':kieker-tools:trace-analysis-gui'),
 	project(':kieker-extension-kafka'),
 	project(':kieker-extension-cassandra')

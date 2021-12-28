@@ -17,8 +17,12 @@ package kieker.tools.trace.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -50,6 +54,7 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.InvalidExecutionTrace;
 import kieker.model.system.model.MessageTrace;
+import kieker.tools.common.DateConverter;
 import kieker.tools.source.LogsReaderCompositeStage;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.visualization.trace.GraphWriterPlugin;
@@ -107,6 +112,22 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
 		final String pathPrefix = this.computePrefix(parameters);
+
+		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		if (parameters.getIgnoreExecutionsBeforeDate() == null) {
+			parameters.setIgnoreExecutionsBeforeDate(Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
+		} else {
+			LOGGER.info("Ignoring records before {} ({})", dateFormat.format(parameters.getIgnoreExecutionsBeforeDate()),
+					parameters.getIgnoreExecutionsBeforeDate());
+		}
+
+		if (parameters.getIgnoreExecutionsAfterDate() == null) {
+			parameters.setIgnoreExecutionsAfterDate(Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
+		} else {
+			LOGGER.info("Ignoring records after {} ({})", dateFormat.format(parameters.getIgnoreExecutionsAfterDate()),
+					parameters.getIgnoreExecutionsAfterDate());
+		}
 
 		final LogsReaderCompositeStage readerStage = new LogsReaderCompositeStage(parameters.getInputDirs(), parameters.isVerbose(), parameters.getReadBufferSize());
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();

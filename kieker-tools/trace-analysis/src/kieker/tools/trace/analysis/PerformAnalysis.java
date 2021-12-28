@@ -318,7 +318,7 @@ public class PerformAnalysis {
 				this.logger.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
 			}
 		}
-		if (!this.parameters.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
+		if (!this.parameters.isIgnoreInvalidTraces() && numErrorCount > 0) {
 			throw new AnalysisTerminationException(numErrorCount + " errors occured in trace processing components");
 		}
 
@@ -1027,11 +1027,19 @@ public class PerformAnalysis {
 			throws AnalysisConfigurationException {
 		// Create the timestamp filter and connect to the reader's output port
 		final Configuration configTimestampFilter = new Configuration();
-		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-				this.longToString(this.parameters.getIgnoreExecutionsBeforeDate()));
+		if (this.parameters.getIgnoreExecutionsBeforeDate() == null) {
+			configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
+		} else {
+			configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+					this.longToString(this.parameters.getIgnoreExecutionsBeforeDate()));
+		}
 
-		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-				this.longToString(this.parameters.getIgnoreExecutionsAfterDate()));
+		if (this.parameters.getIgnoreExecutionsAfterDate() == null) {
+			configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
+		} else {
+			configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+					this.longToString(this.parameters.getIgnoreExecutionsAfterDate()));
+		}
 
 		final TimestampFilter timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
 
@@ -1351,7 +1359,7 @@ public class PerformAnalysis {
 			this.logger.debug("");
 			this.logger.debug("#");
 			this.logger.debug("# Plugin: Trace equivalence report");
-			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses, (numClasses > 1 ? "es" : ""), outputFn); // NOCS
+			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses, numClasses > 1 ? "es" : "", outputFn); // NOCS
 			ps.close();
 		} catch (final FileNotFoundException e) {
 			this.logger.error("File not found", e);

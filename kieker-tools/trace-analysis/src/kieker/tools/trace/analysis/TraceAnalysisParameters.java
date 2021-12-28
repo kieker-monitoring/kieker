@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 
 import com.beust.jcommander.Parameter;
 
-import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.tools.common.DateConverter;
 
 /**
@@ -37,7 +36,7 @@ import kieker.tools.common.DateConverter;
  *
  * @since 1.15
  */
-public class TraceAnalysisParameters {
+public final class TraceAnalysisParameters { // NOPMD configuration class
 
 	@Parameter(names = { "-v", "--verbose" }, description = "verbosely prints additional information")
 	private boolean verbose;
@@ -298,20 +297,22 @@ public class TraceAnalysisParameters {
 	 * @return returns the ignore execution before date value, if none is specified created default value.
 	 */
 	public Long getIgnoreExecutionsBeforeDate() {
-		if (this.ignoreExecutionsBeforeDate == null) {
-			this.ignoreExecutionsBeforeDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
-		}
 		return this.ignoreExecutionsBeforeDate;
+	}
+
+	public void setIgnoreExecutionsBeforeDate(final long ignoreExecutionsBeforeDate) {
+		this.ignoreExecutionsBeforeDate = ignoreExecutionsBeforeDate;
 	}
 
 	/**
 	 * @return returns the ignore execution after date value, if none is specified created default value.
 	 */
 	public Long getIgnoreExecutionsAfterDate() {
-		if (this.ignoreExecutionsAfterDate == null) {
-			this.ignoreExecutionsAfterDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
-		}
 		return this.ignoreExecutionsAfterDate;
+	}
+
+	public void setIgnoreExecutionsAfterDate(final long ignoreExecutionsAfterDate) {
+		this.ignoreExecutionsAfterDate = ignoreExecutionsAfterDate;
 	}
 
 	public boolean isShortLabels() {
@@ -419,4 +420,5 @@ public class TraceAnalysisParameters {
 	public Integer getReadBufferSize() {
 		return this.readBufferSize;
 	}
+
 }
