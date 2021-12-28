@@ -189,6 +189,11 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRequiredInterface/requiredInterfaceType"/>
       </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToInterfaceAssemblyOperationMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToInterfaceAssemblyOperationMapEntry/key"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToInterfaceAssemblyOperationMapEntry/value"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Deployment" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//deployment">
@@ -255,6 +260,11 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedRequiredInterface/requiredInterface"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedRequiredInterface/requires"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//deployment/EStringToInterfaceDeployedOperationMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/EStringToInterfaceDeployedOperationMapEntry/key"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/EStringToInterfaceDeployedOperationMapEntry/value"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Execution" basePackage="kieker.model.analysismodel"

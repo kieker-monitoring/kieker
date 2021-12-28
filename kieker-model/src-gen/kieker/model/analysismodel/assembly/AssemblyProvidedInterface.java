@@ -34,7 +34,7 @@ public interface AssemblyProvidedInterface extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyProvidedInterface_ProvidedOperations()
-	 * @model mapType="kieker.model.analysismodel.assembly.EStringToAssemblyOperationMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.assembly.AssemblyOperation&gt;"
+	 * @model mapType="kieker.model.analysismodel.assembly.EStringToInterfaceAssemblyOperationMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.assembly.AssemblyOperation&gt;"
 	 * @generated
 	 */
 	EMap<String, AssemblyOperation> getProvidedOperations();

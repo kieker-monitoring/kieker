@@ -2,12 +2,8 @@
  */
 package kieker.model.analysismodel.deployment.impl;
 
-import kieker.model.analysismodel.assembly.AssemblyOperation;
-import kieker.model.analysismodel.assembly.AssemblyPackage;
 import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
-
-import kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl;
-
+import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedProvidedInterface;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
 
@@ -49,7 +45,7 @@ public class DeployedProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, AssemblyOperation> providedOperations;
+	protected EMap<String, DeployedOperation> providedOperations;
 
 	/**
 	 * The cached value of the '{@link #getProvidedInterface() <em>Provided Interface</em>}' reference.
@@ -86,9 +82,9 @@ public class DeployedProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * @generated
 	 */
 	@Override
-	public EMap<String, AssemblyOperation> getProvidedOperations() {
+	public EMap<String, DeployedOperation> getProvidedOperations() {
 		if (providedOperations == null) {
-			providedOperations = new EcoreEMap<String,AssemblyOperation>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY, EStringToAssemblyOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
+			providedOperations = new EcoreEMap<String,DeployedOperation>(DeploymentPackage.Literals.ESTRING_TO_INTERFACE_DEPLOYED_OPERATION_MAP_ENTRY, EStringToInterfaceDeployedOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
 		}
 		return providedOperations;
 	}

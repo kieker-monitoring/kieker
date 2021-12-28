@@ -2,7 +2,6 @@
  */
 package kieker.model.analysismodel.deployment;
 
-import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
 
 import org.eclipse.emf.common.util.EMap;
@@ -30,15 +29,15 @@ public interface DeployedProvidedInterface extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Provided Operations</b></em>' map.
 	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link kieker.model.analysismodel.assembly.AssemblyOperation},
+	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeployedOperation},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedProvidedInterface_ProvidedOperations()
-	 * @model mapType="kieker.model.analysismodel.assembly.EStringToAssemblyOperationMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.assembly.AssemblyOperation&gt;"
+	 * @model mapType="kieker.model.analysismodel.deployment.EStringToInterfaceDeployedOperationMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.deployment.DeployedOperation&gt;"
 	 * @generated
 	 */
-	EMap<String, AssemblyOperation> getProvidedOperations();
+	EMap<String, DeployedOperation> getProvidedOperations();
 
 	/**
 	 * Returns the value of the '<em><b>Provided Interface</b></em>' reference.
