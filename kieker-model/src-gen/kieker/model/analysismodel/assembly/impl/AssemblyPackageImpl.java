@@ -127,6 +127,13 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	private EClass assemblyRequiredInterfaceEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eStringToInterfaceAssemblyOperationMapEntryEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -563,6 +570,36 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * @generated
 	 */
 	@Override
+	public EClass getEStringToInterfaceAssemblyOperationMapEntry() {
+		return eStringToInterfaceAssemblyOperationMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEStringToInterfaceAssemblyOperationMapEntry_Key() {
+		return (EAttribute)eStringToInterfaceAssemblyOperationMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEStringToInterfaceAssemblyOperationMapEntry_Value() {
+		return (EReference)eStringToInterfaceAssemblyOperationMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public AssemblyFactory getAssemblyFactory() {
 		return (AssemblyFactory)getEFactoryInstance();
 	}
@@ -629,6 +666,10 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		assemblyRequiredInterfaceEClass = createEClass(ASSEMBLY_REQUIRED_INTERFACE);
 		createEReference(assemblyRequiredInterfaceEClass, ASSEMBLY_REQUIRED_INTERFACE__REQUIRES);
 		createEReference(assemblyRequiredInterfaceEClass, ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE);
+
+		eStringToInterfaceAssemblyOperationMapEntryEClass = createEClass(ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY);
+		createEAttribute(eStringToInterfaceAssemblyOperationMapEntryEClass, ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__KEY);
+		createEReference(eStringToInterfaceAssemblyOperationMapEntryEClass, ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__VALUE);
 	}
 
 	/**
@@ -699,7 +740,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEReference(getEStringToAssemblyStorageMapEntry_Value(), this.getAssemblyStorage(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(assemblyProvidedInterfaceEClass, AssemblyProvidedInterface.class, "AssemblyProvidedInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAssemblyProvidedInterface_ProvidedOperations(), this.getEStringToAssemblyOperationMapEntry(), null, "providedOperations", null, 0, -1, AssemblyProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAssemblyProvidedInterface_ProvidedOperations(), this.getEStringToInterfaceAssemblyOperationMapEntry(), null, "providedOperations", null, 0, -1, AssemblyProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAssemblyProvidedInterface_ProvidedInterfaceType(), theTypePackage.getProvidedInterfaceType(), null, "providedInterfaceType", null, 0, 1, AssemblyProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eStringToAssemblyProvidedInterfaceMapEntryEClass, Map.Entry.class, "EStringToAssemblyProvidedInterfaceMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -709,6 +750,10 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEClass(assemblyRequiredInterfaceEClass, AssemblyRequiredInterface.class, "AssemblyRequiredInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAssemblyRequiredInterface_Requires(), this.getAssemblyProvidedInterface(), null, "requires", null, 0, 1, AssemblyRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAssemblyRequiredInterface_RequiredInterfaceType(), theTypePackage.getRequiredInterfaceType(), null, "requiredInterfaceType", null, 0, 1, AssemblyRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(eStringToInterfaceAssemblyOperationMapEntryEClass, Map.Entry.class, "EStringToInterfaceAssemblyOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToInterfaceAssemblyOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToInterfaceAssemblyOperationMapEntry_Value(), this.getAssemblyOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //AssemblyPackageImpl

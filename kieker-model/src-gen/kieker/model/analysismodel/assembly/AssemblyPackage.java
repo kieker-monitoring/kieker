@@ -555,6 +555,53 @@ public interface AssemblyPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToInterfaceAssemblyOperationMapEntryImpl <em>EString To Interface Assembly Operation Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.model.analysismodel.assembly.impl.EStringToInterfaceAssemblyOperationMapEntryImpl
+	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToInterfaceAssemblyOperationMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Interface Assembly Operation Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Interface Assembly Operation Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -925,6 +972,40 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyRequiredInterface_RequiredInterfaceType();
 
 	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Interface Assembly Operation Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Interface Assembly Operation Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.model.analysismodel.assembly.AssemblyOperation"
+	 * @generated
+	 */
+	EClass getEStringToInterfaceAssemblyOperationMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToInterfaceAssemblyOperationMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToInterfaceAssemblyOperationMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToInterfaceAssemblyOperationMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToInterfaceAssemblyOperationMapEntry_Value();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1238,6 +1319,32 @@ public interface AssemblyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE = eINSTANCE.getAssemblyRequiredInterface_RequiredInterfaceType();
+
+		/**
+		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToInterfaceAssemblyOperationMapEntryImpl <em>EString To Interface Assembly Operation Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.model.analysismodel.assembly.impl.EStringToInterfaceAssemblyOperationMapEntryImpl
+		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToInterfaceAssemblyOperationMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY = eINSTANCE.getEStringToInterfaceAssemblyOperationMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__KEY = eINSTANCE.getEStringToInterfaceAssemblyOperationMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY__VALUE = eINSTANCE.getEStringToInterfaceAssemblyOperationMapEntry_Value();
 
 	}
 

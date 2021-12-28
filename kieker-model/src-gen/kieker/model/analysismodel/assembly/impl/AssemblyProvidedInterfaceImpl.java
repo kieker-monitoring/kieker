@@ -85,7 +85,7 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	@Override
 	public EMap<String, AssemblyOperation> getProvidedOperations() {
 		if (providedOperations == null) {
-			providedOperations = new EcoreEMap<String,AssemblyOperation>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY, EStringToAssemblyOperationMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
+			providedOperations = new EcoreEMap<String,AssemblyOperation>(AssemblyPackage.Literals.ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY, EStringToInterfaceAssemblyOperationMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
 		}
 		return providedOperations;
 	}
