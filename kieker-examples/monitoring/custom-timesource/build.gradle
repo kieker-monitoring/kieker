@@ -42,7 +42,7 @@ task runMonitoring(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
 			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
-	           "-javaagent:lib/kieker-1.16-SNAPSHOT-aspectj.jar",
+	           "-javaagent:lib/kieker-1.15.1-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }
