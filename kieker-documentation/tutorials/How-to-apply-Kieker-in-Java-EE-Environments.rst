@@ -53,7 +53,7 @@ JBoss
 Tomcat
 ======
 
-Copy ``kieker-1.10_aspectj.jar`` into a directory, where it can be accessed
+Copy ``kieker-1.15.1-aspectj.jar`` into a directory, where it can be accessed
 by Tomcat, e.g. ``tomcat/kieker/``.
 
 Tomcat is usually shipped with start scripts ``bin/catalina.(sh|.bat)``. Add
@@ -63,14 +63,14 @@ operation system:
 .. code::
 	
 	set JAVA_OPTS=%JAVA_OPTS%
-		-javaagent:%CATALINA_BASE%\kieker\kieker-1.10_aspectj.jar
+		-javaagent:%CATALINA_BASE%\kieker\kieker-1.15.1-aspectj.jar
 		-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 		-Daj.weaving.verbose=true
 		-Dkieker.monitoring.configuration=%CATALINA_BASE%/kieker/kieker.monitoring.properties
 		-Dorg.aspectj.weaver.loadtime.configuration=...
 	
 	set JAVA_OPTS=${JAVA_OPTS}
-		-javaagent:${CATALINA_BASE}\kieker\kieker-1.10_aspectj.jar
+		-javaagent:${CATALINA_BASE}\kieker\kieker-1.15.1-aspectj.jar
 		-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 		-Daj.weaving.verbose=true
 		-Dkieker.monitoring.configuration=${CATALINA_BASE}/kieker/kieker.monitoring.properties
