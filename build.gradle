@@ -499,6 +499,10 @@ task updateLicenseHeaderYear() {
 task replaceHardCodedVersionNames() {
 	doLast {
 		regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+		
 	}
 }
 compileJava.dependsOn replaceHardCodedVersionNames
