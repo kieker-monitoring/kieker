@@ -18,6 +18,7 @@ technology.
 -  :ref:`gt-manual-monitoring-with-kieker`
 -  :ref:`gt-aspectj-instrumentation-example`
 -  :ref:`gt-using-kieker-trace-analysis`
+-  :ref:`gt-creating-your-own-event-types`
 
 
 | 

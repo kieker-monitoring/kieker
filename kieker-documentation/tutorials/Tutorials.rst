@@ -19,6 +19,8 @@ Collection of reoccurring tasks when using Kieker.
    How-to-Write-Tests-for-Your-own-Kieker-Probes.rst
    How-to-Use-JMS-for-Monitoring.rst
    How-to-use-AMQP-Reader-and-Writer.rst
+   How-to-install-IRL-in-Eclipse.rst
+   How-to-setup-the-IRL-in-Eclipse.rst
 
 
 
