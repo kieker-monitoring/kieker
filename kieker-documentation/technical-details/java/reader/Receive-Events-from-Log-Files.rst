@@ -3,26 +3,13 @@
 Receive Events from Log Files 
 =============================
 
-.. todo::
-  
-  We might want to remove the old teetime file reader filters, as they
-  are no longer used.
-
-The old file reading stages setup in Teetime is rather complicated, uses
-deprecated Kieker API and has a bad separation of concern, e.g.,
-decompression is part of the binary log file reader and not a general
-property of file reading. The following figure depicts this reading
-setup.
-
-.. image:: ../../../images/old-teetime-file-reader.svg
-
-To overcome the limitations and reduce complexity the new Kieker reader
+The Kieker reader
 API uses the depicted ``LogsReaderCompositeStage`` architecture. It
 provides a generic Kieker reader complementing the capabilities of the
 :ref:`technical-details-java-reader-receive-events-from-log-files`.
 The image below depicts the new Teetime-filters providing log file reading.
 
-.. image:: ../../../images/new-teetime-file-reader.svg
+.. image:: images/file-reader.svg
 
 The \ ``LogsReaderCompositeStage`` comprises of two stages
 ``DirectoryScannerStage`` and ``DirectoryReaderStage``, where the first
