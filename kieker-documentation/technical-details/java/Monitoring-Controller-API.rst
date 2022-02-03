@@ -79,7 +79,7 @@ The Listing below shows the **sample** method of the
 usage employing the OSHI library <https://github.com/oshi/oshi>.
 
 Likewise to other monitoring probes described in this userguide (e.g.,
-:ref:`java-monitoring-probe`), it collects the data of interest
+:ref:`technical-details-java-monitoring-controller-api`), it collects the data of interest
 (lines 60--65), creates a monitoring record (lines 67--71), and passes
 this monitoring record to the monitoring controller
 (line 73). The available OSHI-based samplers for monitoring system-level

@@ -7,7 +7,7 @@ In this tutorial we will install Eclipse and install the IRL within Eclipse.
 In case you do have Eclipse installed on your computer, you can switch to
 section 3. After installation you have to setup the IRL for your target
 language, e.g., Java, C or Python. This is explained in 
-:ref:`tutorials-how-to-setup-irl-in-eclipse`
+:ref:`kieker-tools-irl-how-to-setup-the-irl-in-eclipse`
 
 Installing Java
 ---------------

@@ -5,7 +5,7 @@ This is a short introduction to the JMS reader and writer of **Kieker**
 named **AsyncJmsWriter** and **JmsReaderStage**. The directory
 ``examples/userguide/appendix-JMS/`` contains the sources, gradle
 scripts etc. used in this example. It is based on the Bookstore
-application with manual instrumentation presented getting-started_.
+application with manual instrumentation presented :ref:`getting-started`.
 
 The following sections provide step-by-step instructions for the
 ActiveMQ JMS server implementation.

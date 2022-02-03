@@ -1,4 +1,4 @@
-.. _tutorial-servlet-example:
+.. _instrumenting-software-java-servlet-example:
 
 Java Servlet Container Example
 ==============================
@@ -9,7 +9,7 @@ demonstrates how to employ Kieker for monitoring a Java application
 running in a Java Servlet container -- in this case 
 `Jetty <http://www.eclipse.org/jetty/>`. Monitoring probes based on the
 Java Servlet API, Spring and AspectJ are used to monitor execution,
-trace, and session data (see also instrumenting-software-aspectj_).
+trace, and session data (see also :ref:`instrumenting-software-java-aspectj`).
                                   
                                   
 Prerequisites
@@ -118,7 +118,7 @@ above.
    http://localhost:8080/jpetstore/.
    **Kieker** initialization messages should appear in the console output.
    
-   .. image:: ../images/jpetstore-example-FFscrsh.png
+   .. image:: images/jpetstore-example-FFscrsh.png
       :width: 500px
 
 #. Browse through the application to generate some monitoring data.
@@ -132,5 +132,5 @@ above.
    information where the monitoring data is written to (should be a
    ``kieker-<DATE-TIME>/`` directory) located in the default temporary
    directory.
-   This data can be analyzed and visualized using kieker-tools-trace-analysis-tool_.
+   This data can be analyzed and visualized using :ref:`kieker-tools-trace-analysis-tool`.
 

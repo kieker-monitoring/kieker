@@ -118,19 +118,19 @@ configuration to the ``web.xml`` file. The web.xml file is located in
 ``jpetstore-6/src/main/webapp/WEB-INF``
 
 .. code:: xml
-	
-	<filter>
-		<filter−name>sessionAndTraceRegistrationFilter</filter−name>
-		<filter−class>kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter</filter−class>
-		<init−param>
-			<param−name>logFilterExecution</param−name>
-			<param−value>true</param−value>
-		</init−param>
-	</filter>
-	<filter−mapping>
-		<filter−name>sessionAndTraceRegistrationFilter</filter−name>
-		<url−pattern>/∗</url−pattern>
-	</filter−mapping>
+   
+   <filter>
+      <filter−name>sessionAndTraceRegistrationFilter</filter−name>
+      <filter−class>kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter</filter−class>
+      <init−param>
+         <param−name>logFilterExecution</param−name>
+         <param−value>true</param−value>
+      </init−param>
+   </filter>
+   <filter−mapping>
+      <filter−name>sessionAndTraceRegistrationFilter</filter−name>
+      <url−pattern>/∗</url−pattern>
+   </filter−mapping>
 
 In the above snippet, the **Kieker** class
 ``kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter``

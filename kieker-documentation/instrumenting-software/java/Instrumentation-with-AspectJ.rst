@@ -1,4 +1,4 @@
-.. _instrumenting-software-aspectj:
+.. _instrumenting-software-java-aspectj:
 
 Instrumentation with AspectJ 
 ============================
@@ -8,8 +8,8 @@ Instrumentation with AspectJ
   Describe general approach to do so. Refer to a tutorial for a quicker
   approach.
 
-The :ref:`tutorial-servlet-example` contains a some basic introduction to
-using AspectJ probes.
+The :ref:`instrumenting-software-java-servlet-example` contains a some basic 
+introduction to using AspectJ probes.
 
 AspectJ Configuration
 ---------------------
