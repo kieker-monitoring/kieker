@@ -1,4 +1,4 @@
-.. _architecture-receive-events-from-log-files:
+.. _technical-details-java-reader-receive-events-from-log-files:
 
 Receive Events from Log Files 
 =============================

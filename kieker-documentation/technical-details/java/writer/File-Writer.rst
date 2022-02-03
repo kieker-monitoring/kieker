@@ -1,4 +1,4 @@
-.. _architecture-java-file-writer:
+.. _technical-details-java-writer-file-writer:
 
 File Writer 
 ===========
@@ -10,7 +10,7 @@ pool strategies can be used, i.e., a user can collect all information or
 use a log rotation scheme where the amount of space used by logs is
 limited.
 
-.. image:: ../../../images/file-writer-architecture.svg
+.. image:: images/file-writer-architecture.svg
    :width: 600px
 
 File Writer Configuration

@@ -1,7 +1,7 @@
-.. _architecture:
+.. _technical-details:
 
-Architecture
-============
+Technical Details and Architecture of Kieker
+============================================
 
 For certain parts of Kieker, we created architecture documentation to support
 the use of Kieker and development for Kieker.
@@ -15,6 +15,12 @@ Java
 - :ref:`java-analysis-api`
    - :ref:`java-readers-api`
 - :ref:`java-records-api`
+
+C, C++, Fortran
+---------------
+
+Python
+------
 
 Generic
 -------

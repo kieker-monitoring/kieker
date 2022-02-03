@@ -1,4 +1,4 @@
-.. _architecture-file-and-serialization-formats:
+.. _technical-details-file-and-serialization-formats:
 
 File and Serialization Formats
 ==============================

@@ -1,4 +1,4 @@
-.. _tutorials-how-to-install-the-irl-in-eclipse:
+.. _kieker-tools-irl-how-to-install-the-irl-in-eclipse:
 
 How to Install the Instrumentation Record Language in Eclipse
 =============================================================
@@ -40,7 +40,7 @@ Before you can install the IRL in Eclipse you need to install Eclipse.
   dependencies. In case you want to develop with Java, choose
   *Eclipse IDE for Java Developers*
   
-  .. image:: ../images/install-irl/eclipse-installer.png
+  .. image:: images/install-irl/eclipse-installer.png
   
 - Start the installation. This may take a while.
 - After downloading, the installer may ask you whether you trust the Eclipse
@@ -58,22 +58,22 @@ Installing the IRL in Eclipse
   default or use a different name. The documentation will use `eclipse-workspace`
   as the name for the workspace directory.
   
-  .. image:: ../images/install-irl/select-workspace-directory.png
+  .. image:: images/install-irl/select-workspace-directory.png
   
 - Now Eclipse shows its start screen and we can start to install the IRL
   extension.
   
-  .. image:: ../images/install-irl/eclipse-first-start.png
+  .. image:: images/install-irl/eclipse-first-start.png
   
 - Click on *Help* and then *Install new Software* menu entry. This opens up
   the Install dialog.
   
-  .. image:: ../images/install-irl/install-new-component.png
+  .. image:: images/install-irl/install-new-component.png
   
 - Here we need to add the update-site for the IRL. Therefore, click on
   *Add ...* button on the right side. This allows us to add a new repository.
   
-  .. image:: ../images/install-irl/add-kieker-repository.png
+  .. image:: images/install-irl/add-kieker-repository.png
   
 - Enter `Kieker IRL` as name and 
   `https://maui.se.informatik.uni-kiel.de/repo/kdt/snapshot/`
@@ -84,23 +84,23 @@ Installing the IRL in Eclipse
   the entry `Kieker Development Tools`. Check the checkbox in front and click
   the *Next >* button.
   
-  .. image:: ../images/install-irl/select-kieker.png
+  .. image:: images/install-irl/select-kieker.png
   
 - On the next page of the installation dialog the IRL feature is listed.
 
-  .. image:: ../images/install-irl/install-details-kieker.png
+  .. image:: images/install-irl/install-details-kieker.png
 
 - Click on *Finish* to download them.
 - Now a *Security Warning* pops up indicating that our packages are not signed.
   Unfortunately, this is still true, as the signing process is not trivial,
   but will be fixed in future releases.
   
-  .. image:: ../images/install-irl/security-warning-install-anyway.png
+  .. image:: images/install-irl/security-warning-install-anyway.png
   
 - To proceed with clicking on *Install Anyway*.
 - Eclipse will install the extension and ask to restart.
 
-  .. image:: ../images/install-irl/restart-eclipse.png
+  .. image:: images/install-irl/restart-eclipse.png
 
 - Click on *Restart Now*. This ensures that the features are installed
   correctly.

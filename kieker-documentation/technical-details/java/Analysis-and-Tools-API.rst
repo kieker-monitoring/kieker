@@ -1,4 +1,4 @@
-.. _architecture-java-analysis-and-tools-api:
+.. _technical-details-java-analysis-and-tools-api:
 
 Analysis and Tools API (Java) 
 =============================
@@ -28,11 +28,11 @@ readers and receivers in three different ways.
    `collector <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/collector/src/kieker/tools/collector>`_
    is a good example to implement such tool.
 
--  :ref:`architecture-receive-events-from-log-files`
--  :ref:`architecture-receive-events-via-tcp`
--  :ref:`architecutre-receive-events-via-amqp`
--  :ref:`architecture-receive-events-via-jms`
--  :ref:`architecture-receive-events-via-http`
+-  :ref:`technical-details-java-reader-receive-events-from-log-files`
+-  :ref:`technical-details-java-reader-receive-events-via-tcp`
+-  :ref:`technical-details-java-reader-receive-events-via-amqp`
+-  :ref:`technical-details-java-reader-receive-events-via-jms`
+-  :ref:`technical-details-java-reader-receive-events-via-http`
 -  :ref:`developing-with-kieker-writing-tools-and-services`
 -  :ref:`developing-with-kieker-writing-ui-and-web-tool`
 

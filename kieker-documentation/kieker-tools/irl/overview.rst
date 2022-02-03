@@ -5,9 +5,12 @@ Instrumentation Record Language
 
 The **Kieker** Instrumentation Record Language (IRL) can be used
 to define new **Kieker** records also called (monitoring) events.
-To install and setup Eclipse, you may have a look at our tutorials:
-- :ref:`tutorials-how-to-install-the-irl-in-eclipse`
-- :ref:`tutorials-how-to-setup-the-irl-in-eclipse`
+To install and setup Eclipse and detailed language syntax and semantics,
+you may have a look at our tutorials:
+
+- :ref:`kieker-tools-irl-how-to-install-the-irl-in-eclipse`
+- :ref:`kieker-tools-irl-how-to-setup-the-irl-in-eclipse`
+- :ref:`kieker-tools-irl-syntax-semantics`
 
 Language Features
 -----------------
@@ -108,8 +111,4 @@ Model Types
 	sub SubModel2Name ModelName : ExtensionTemplate, AdditionalExtensionTemplate
 
 
-Language Syntax
----------------
-
-:ref:`kieker-tools-irl-syntax-semantics`
 

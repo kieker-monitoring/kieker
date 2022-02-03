@@ -1,4 +1,4 @@
-.. _java-writer-api:
+.. _technical-details-java-writer-api:
 
 Java Writer API
 ===============

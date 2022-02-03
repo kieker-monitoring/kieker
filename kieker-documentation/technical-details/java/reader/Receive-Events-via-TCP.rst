@@ -1,4 +1,4 @@
-.. _architecture-receive-events-via-tcp:
+.. _technical-details-java-reader-receive-events-via-tcp:
 
 Receive Events via TCP from Multiple Sources (MultipleConnectionTcpSourceCompositeStage) 
 ========================================================================================

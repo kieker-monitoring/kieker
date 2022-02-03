@@ -1,4 +1,4 @@
-.. _java-probes-api:
+.. _technical-details-java-probes-api:
 
 Monitoring Probes
 =================

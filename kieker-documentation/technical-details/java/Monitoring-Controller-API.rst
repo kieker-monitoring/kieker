@@ -1,4 +1,4 @@
-.. _java-monitoring-controller-api:
+.. _technical-details-java-monitoring-controller-api:
 
 Java Monitoring Controller
 ==========================
@@ -6,7 +6,7 @@ Java Monitoring Controller
 The **MonitoringController** constructs and controls a 
 **KiekerMonitoringPart** instance.
 
-.. figure:: ../../images/kieker_monitoringControlleruserguide-simplified.svg
+.. figure::images/kieker_monitoringControlleruserguide-simplified.svg
    :width: 600px
 
    Class diagram of the **MonitoringController** (including selected methods)

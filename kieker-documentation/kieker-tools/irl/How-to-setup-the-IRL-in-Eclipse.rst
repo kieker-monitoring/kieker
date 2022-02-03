@@ -1,4 +1,4 @@
-.. _tutorials-how-to-setup-the-irl-in-eclipse:
+.. _kieker-tools-irl-how-to-setup-the-irl-in-eclipse:
 
 How to Setup the IRL in Eclipse
 ===============================
@@ -14,7 +14,7 @@ In case you have not started Eclipse, please do so.
 Click in the menu on *File* > *New* > *Java Project* to create a new Java
 Project.
 
-.. image:: ../images/basic-java-project-with-irl/create-java-project.png
+.. image:: images/basic-java-project-with-irl/create-java-project.png
 
 Give the project a *project name* and click on *Finish*. In this tutorial, we
 call the Project Kieker-Demo, but of course you can give your project any other
@@ -26,33 +26,33 @@ Eclipse will create a basic Java Project without any content beside a
 Next we have to create a package for our files and then create an IRL file.
 First, click on *File* > *New* > *Package*.
 
-.. image:: ../images/basic-java-project-with-irl/create-package.png
+.. image:: images/basic-java-project-with-irl/create-package.png
 
 Here, we create a package `org.kieker.demo` typing this in the name field. You
 can also check the *Create package-info.java* checkbox. Finally click on
 *Finish*.
 
-.. image:: ../images/basic-java-project-with-irl/show-package.png
+.. image:: images/basic-java-project-with-irl/show-package.png
 
 This creates a `package-info.java` file in a package named *org.kieker-demo*.
 Now we can create a IRL file in this package. Lets name it `SpecialEventType.irl`.
 You can give your file any name, but make sure it has the ending irl.
 To create a simple file click on *File* > *New* > *File* and enter a filename.
 
-.. image:: ../images/basic-java-project-with-irl/create-irl-file.png
+.. image:: images/basic-java-project-with-irl/create-irl-file.png
 
 Eclipse may ask you whether you want to *Configure Xtext* with
 *Do you want to convert Kieker-Demo to an Xtext project?*. In that case,
 click on *Yes*, we definitely need to add the Xtext nature to the project.
 
-.. image:: ../images/basic-java-project-with-irl/configure-xtext.png
+.. image:: images/basic-java-project-with-irl/configure-xtext.png
 
 The editor depicts the empty file `SpecialEventType.irl`. First, add the
 *package* and the package name. Then start creating an event type.
 Therefore, entrer *event* followed by the name for the event type. It is custom
 to use Java camel case for the event type name. After the name add curly braces.
 
-.. image:: ../images/basic-java-project-with-irl/project-overview-with-irl.png
+.. image:: images/basic-java-project-with-irl/project-overview-with-irl.png
 
 Now add some attributes to the event, by entring a type name followed by the 
 attribute name. Legal types are all types known to Java, i.e., boolean, int,
@@ -64,14 +64,14 @@ because we have not yet activated a generator. To do so click on the menu
 *Window* > *Preferences*. This opens the preferences window. Select *Kieker IRL*
 in the list on the left.
 
-.. image:: ../images/basic-java-project-with-irl/kieker-preferences.png
+.. image:: images/basic-java-project-with-irl/kieker-preferences.png
 
 Now open that preferences group by *double-click* no it should show a list of
 entries. For us are only compiler and targets relevant.
 
 Click on *Compiler*.
 
-.. image:: ../images/basic-java-project-with-irl/kieker-preferences-compiler-tab.png
+.. image:: images/basic-java-project-with-irl/kieker-preferences-compiler-tab.png
 
 The entry *compiler is activated* should be checked. Below are several output
 folders listed. Open the one named *Java record output folder*. It should show
@@ -81,7 +81,7 @@ output for Java source code. You can also have a look at the
 
 Next, click on *Targets*.
 
-.. image:: ../images/basic-java-project-with-irl/kieker-preferences-targets-tab.png
+.. image:: images/basic-java-project-with-irl/kieker-preferences-targets-tab.png
 
 This lists a set of outputs for different progamming languages. Check the 
 checkboxes for *Java record generator* and *Java factory generator*. You may
@@ -105,7 +105,7 @@ Click on *Apply and Close*
 Now automatically the generator starts and produces the Java version of the
 event type.
 
-.. image:: ../images/basic-java-project-with-irl/project-overview-with-irl.png
+.. image:: images/basic-java-project-with-irl/project-overview-with-irl.png
 
 Note that now there is a *src-gen* directory. Open it. It contains a
 subdirectory called *java* which contains the generated code and package
@@ -132,7 +132,7 @@ clean and then build the code.
 
 Finally, you may inspect the generated code as shown in the image below.
 
-.. image:: ../images/basic-java-project-with-irl/generated-code.png
+.. image:: images/basic-java-project-with-irl/generated-code.png
 
 
 

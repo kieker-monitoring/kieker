@@ -1,4 +1,4 @@
-.. _architecutre-receive-events-via-amqp:
+.. _technical-details-java-reader-receive-events-via-amqp:
 
 Receive Events via AMQP (AMQPReaderStage) 
 =========================================

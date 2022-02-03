@@ -1,4 +1,4 @@
-.. _architecture-receive-events-via-http:
+.. _technical-details-java-reader-receive-events-via-http:
 
 Receive Events via HTTP/JSON (RestServiceCompositeStage) 
 ========================================================

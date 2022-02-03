@@ -1,4 +1,4 @@
-.. _java-records-api:
+.. _technical-details-java-records-api:
 
 Monitoring Records API
 ======================

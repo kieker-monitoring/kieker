@@ -1,4 +1,4 @@
-.. _architecture-receive-events-via-jms:
+.. _technical-details-java-reader-receive-events-via-jms:
 
 Receive Events via JMS (JMSReaderStage) 
 =======================================

@@ -1,4 +1,4 @@
-.. _java-monitoring-api:
+.. _technical-details-java-monitoring-api:
 
 Kieker Java Monitoring API
 ==========================
@@ -18,7 +18,7 @@ component ist the **Monitoring Controller** which utilizes
   Monitoring-Records-API.rst
   Monitoring-Probes-API.rst
   Analysis-and-Tools-API.rst
-  writer/Java-Writer-API.rst
+  writer/api.rst
   writer/File-Writer.rst
   writer/Single-Socket-TCP-Writer.rst
   reader/Receive-Events-from-Log-Files.rst
