@@ -33,6 +33,6 @@ source code.
 * How to support new programming languages
   
   * :ref:`developing-with-kieker-general-language-and-platform-support`
-  * :ref:`architecture-file-and-serialization-formats`
+  * :ref:`technical-details-file-and-serialization-formats`
 
 

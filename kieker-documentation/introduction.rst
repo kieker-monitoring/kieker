@@ -19,11 +19,18 @@ components *KiekerMonitoringPart* and *KiekerAnalysisPart*.
   readers and analysis filters.
 
 Please note that older programs might use a *AnalysisController* setup
-while new analyses and tools reply on :ref:`architecture-java-analysis-and-tools-api`.
+while new analyses and tools reply on :ref:`technical-details-java-analysis-and-tools-api`.
 
 -  In case you want to learn how to apply Kieker to a Java application,
    you find an tutorial under :ref:`getting-started`.
--  For more advanced uses you may consult :ref:`tutorials`
+-  Tutorials and instruction on specific topics can be found here:
+
+   - :ref:`instrumenting-software`
+   - :ref:`collecting-data`
+   - :ref:`analyzing-monitoring-data`
+   - :ref:`contributing-to-kieker`
+   - :ref:`technical-details`
+
 -  All tools are documented under :ref:`kieker-tools`
 -  More documentation and API and other programming languages can be
    found below

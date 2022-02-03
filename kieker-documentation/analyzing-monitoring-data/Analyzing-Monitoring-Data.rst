@@ -14,5 +14,5 @@ and how to create new filters within.
 
 -  :ref:`analyzing-composing-analysis-tools`
 -  :ref:`analyzing-writing-your-own-analysis-stage`
--  :ref:`architecture-java-analysis-and-tools-api`
+-  :ref:`technical-details-java-analysis-and-tools-api`
 

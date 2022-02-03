@@ -11,7 +11,7 @@ topics.
    :maxdepth: 1
 
    Configuring-Kieker.rst   
-   Manual-Instrumentation.rst
+   How-to-instrument-Java-manually.rst
    Instrumentation-with-AspectJ.rst
    Servlet-Instrumentation.rst
    Instrumentation-with-CXF-Interceptors.rst

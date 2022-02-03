@@ -20,8 +20,8 @@ setup with Eclipse.
 Follow the instructions to install and setup the IRL. The latter also contains
 a simple example how to use Kieker IRL in a Java project.
 
-- :ref:`tutorials-how-to-install-the-irl-in-eclipse`
-- :ref:`tutorials-how-to-setup-the-irl-in-eclipse`
+- :ref:`kieker-tools-irl-how-to-install-the-irl-in-eclipse`
+- :ref:`kieker-tools-irl-how-to-setup-the-irl-in-eclipse`
 
 More details on the language can be found in:
 

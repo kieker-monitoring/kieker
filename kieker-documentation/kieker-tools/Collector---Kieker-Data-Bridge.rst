@@ -19,9 +19,9 @@ source and one for the sink.
 
 Currently supported event sources (readers):
 
--  :ref:`architecture-receive-events-via-tcp`
--  :ref:`architecture-receive-events-from-log-files`
--  :ref:`architecture-receive-events-via-http`
+-  :ref:`technical-details-java-reader-receive-events-via-tcp`
+-  :ref:`technical-details-java-reader-receive-events-from-log-files`
+-  :ref:`technical-details-java-reader-receive-events-via-http`
 
 ===== =============== ======== ==================
 Short Long Option     Required Description

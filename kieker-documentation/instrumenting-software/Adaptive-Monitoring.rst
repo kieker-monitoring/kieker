@@ -9,8 +9,8 @@ some content.
 
 .. note::
 
-   There is a section in :ref:`java-monitoring-controller-api` also
-   addressing this topic. The grammar should be moved to API and
+   There is a section in :ref:`technical-details-java-monitoring-controller-api`
+   also addressing this topic. The grammar should be moved to API and
    only referenced from here.
    
 .. note::
