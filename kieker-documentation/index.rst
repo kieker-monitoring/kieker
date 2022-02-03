@@ -18,6 +18,7 @@ Table of Contents
 
    introduction
    getting-started/Getting-Started.rst
+   features/Features.rst
    instrumenting-software/Instrumenting-Software.rst
    collecting-data/Collecting-Data.rst
    analyzing-monitoring-data/Analyzing-Monitoring-Data.rst
