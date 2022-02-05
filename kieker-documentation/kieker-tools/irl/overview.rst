@@ -28,7 +28,20 @@ Language Features
 - Assigning logging semantics
 - Model types, they allow to group event types and then extend all event
   types belonging to the model type together.
-  
+
+Annotations
+"""""""""""
+
+All event types, template types, enumerations, models and sub-models
+can have two annotations. Namely **@author** and **@since**. They allow
+to name the original author of an element and the version since when
+this type is supported by the IRL.
+
+::
+    
+    @author "Ada Lovelace"
+    @since "1.0"
+
 Event Types
 """""""""""
 
@@ -73,6 +86,25 @@ attributes from the templates.
 Attributes
 """"""""""
 
+Event type consist of a set of attributes. They cen either be inherited from
+other event and template types or can be declared. Basically, each attribute
+consists of a *base type* or *enumeration type*, namely, byte, short, int,
+long, char, float, double and string (in future also key and date), and a
+name. Subsequently, you may specify a default value which will be set in case
+the developer does not set that attribute. You can use either literals or a
+defined constant as default values.
+
+Attributes can also have modifiers:
+
+- **auto-increment** is best used with integer values. This modifier
+  instructs to build a getter for that particular attribute which
+  automatically increments the value of the variable. This
+  is helpful to create order sets of events, e.g., traces.
+- **transient** instructs the generator that this attribute must not be
+  stored and serialized.
+- **changeable** creates an attribute which is changeable. In Java this
+  means the value of an attribute can be altered after creation.
+
 ::
 
    event EventName {
@@ -80,11 +112,13 @@ Attributes
       string name
       string sessionName = NO_SESSION
       auto-increment int value
-      transient int key
+      transient int transientValue
       changeable int data // can be changed during analysis
    }
 
-Here an example with semantic annotations
+Attributes can also have semantic annotations. They defined the purpose
+of the attribute. This information helps to automatically generate probes for
+certain event types.
 
 ::
 
@@ -95,9 +129,56 @@ Here an example with semantic annotations
 
 Please note that the available semantics depend on the used semantics model.
 
+Constants
+"""""""""
+
+Constants allow to define constant values which can be used as placeholders
+or defaults. They are similarly defined to attributes, but prefixed with
+the keyword **const**.
+
+Enumeration
+"""""""""""
+
+Enumeration allow to define nominal values in the IRL. This is helpful
+to avoid having to use plain integers for nominal values which can
+lead to all sorts of programming errors.
+
+The basic enumeration is just a set of literals, as shown in the
+upper example. The lower one also assigns values to these literals.
+
+::
+    
+    @author "Ada Lovelace"
+    @since "1.0"
+	enum Colors {
+        Blue, Red, Green, Yellow, Orange, Purple, Aubergine
+	}
+
+	enum Colors {
+        Blue = 1, Red = 2, Green = 4, Yellow = 8, Orange = 16,
+        Purple = 32, Aubergine = 64
+	}
 
 Model Types
 """""""""""
+
+Model types allow to add attributes to a set of event and template types
+across any inheritance structures. For example when developers want to
+add additional attributes to all types used for trace analysis, like
+adding attributes to store invocation and return values to traces.
+
+Without model types, you would have to extend every type which is part of
+the trace events, separately. This is quite cumbersome and might lead to
+errors. Model types allow to address this in a shorter way.
+
+Firstly, you have to define a model. A *model* has a name (below *ModelName*)
+followed by a set of types. Please note that beside the specified types, all
+sub-types are also included in the set.
+
+Secondly, you declare *sub*-model. It has a name (in the example below
+*SubModelName* and *SubModel2Name*) and refers to a model by name (here
+*ModelName*). Subsequently, you can specify a set of attributs enclosed in
+curly braces or refer to a set of template types that declare the extension.
 
 ::
 
