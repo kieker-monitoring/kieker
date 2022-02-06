@@ -58,8 +58,15 @@ There are several different writers available. Most prominent are the
 file to a logging or analysis service.
 
 List of Writers:
-- :ref:`technical-details-java-writer-file-writer`
-- :ref:`technical-details-java-writer-single-socket-tcp-writer`
+
+.. toctree::
+   :maxdepth: 1
+   
+   File-Writer.rst
+   Single-Socket-TCP-Writer.rst
+
+JavaDoc:
+
 - `AmqpWriter <https://github.com/kieker-monitoring/kieker/blob/master/kieker-monitoring/src/kieker/monitoring/writer/amqp/AmqpWriter.java>`
 - `ChunkingAmqpWriter <https://github.com/kieker-monitoring/kieker/blob/master/kieker-monitoring/src/kieker/monitoring/writer/amqp/ChunkingAmqpWriter.java>`
 - `DumpWriter <https://github.com/kieker-monitoring/kieker/blob/master/kieker-monitoring/src/kieker/monitoring/writer/dump/DumpWriter.java>` (does not log anything)

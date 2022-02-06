@@ -38,7 +38,7 @@ the corresponding configuration properties must be set to *true*
 (listing below). The ``\monitoringPropertiesFile`` includes additional
 JMX-related configuration properties.
 
-.. code-block:: parameter
+.. code-block:: properties
 
    ## Whether any JMX functionality is available
    kieker.monitoring.jmx=true

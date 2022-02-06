@@ -1,4 +1,4 @@
-.. _tutorials-how-to-perform-trace-analysis:
+.. _analyzing-monitoring-data-how-to-perform-trace-analysis:
 
 How to perform Trace Analysis 
 =============================
@@ -17,7 +17,7 @@ sequence and dependency diagrams.
 In this tutorial, we will instrument a Java Servlet application with
 interceptors and AspectJ. For other options to generate traces in Java
 and other programming languages, please consult the respective pages in
-:ref:`tutorials-how-to-perform-trace-analysis`
+:ref:`analyzing-monitoring-data-how-to-perform-trace-analysis`
 and :ref:`tutorials-how-to-apply-kieker-in-java-ee-environments`.
 
 We use the ``OperationExecutionRecord`` from the ``controlflow`` package

@@ -17,22 +17,29 @@ API documentation, architecture description and the documentation in this
 section. In that case, always refer to the API, as it is generated from the
 source code.
 
-* Create tooling
+Create tooling
+--------------
 
-  * :ref:`developing-with-kieker-writing-tools-and-services`
-  * :ref:`developing-with-kieker-writing-ui-and-web-tools`
+.. toctree::
+   :maxdepth: 1
+   
+   Writing-Tools-and-Services.rst
+   Writing-UI-and-Web-Tools.rst
 
-* How to write new
 
-  * :ref:`developing-with-kieker-event-types-and-records`
-  * Probes
-  * `Stages (external) <https://teetime-framework.github.io/wiki/home.html>`_
-  * Features of Stages
-  * Serializaion Formats
-  
-* How to support new programming languages
-  
-  * :ref:`developing-with-kieker-general-language-and-platform-support`
+Extend Kieker
+-------------
+
+.. toctree::
+   :maxdepth: 1
+   
+   Event-Types-and-Records.rst
+   How-to-Write-Probes.rst
+   How-to-Write-Tests-for-Your-own-Kieker-Probes.rst
+   How-to-Write-Stages.rst
+   General-Language-and-Platform-Support.rst
+ 
+Related information:
   * :ref:`technical-details-file-and-serialization-formats`
 
 

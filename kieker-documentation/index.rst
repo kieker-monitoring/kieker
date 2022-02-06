@@ -23,6 +23,7 @@ Table of Contents
    collecting-data/Collecting-Data.rst
    analyzing-monitoring-data/Analyzing-Monitoring-Data.rst
    kieker-tools/Kieker-Tools.rst
+   developing-with-kieker/Developing-with-Kieker.rst
    contributing-to-kieker/Contributing-to-Kieker.rst
    technical-details/Technical-Details.rst
    lectures/Lectures.rst

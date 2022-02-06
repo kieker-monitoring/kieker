@@ -9,12 +9,15 @@ the use of Kieker and development for Kieker.
 Java
 ----
 
-- :ref:`technical-details-java-monitoring-controller-api`
-- :ref:`technical-details-java-writer-api`
-- :ref:`technical-details-java-probes-api`
-- :ref:`technical-details-java-records-api`
-- :ref:`technical-details-java-reader-api`
-- :ref:`technical-details-java-analysis-and-tools-api`
+.. toctree::
+   :maxdepth: 1
+   
+   java/Monitoring-Controller-API.rst
+   java/writer/api.rst
+   java/Monitoring-Probes-API.rst
+   java/Monitoring-Records-API.rst
+   java/reader/api.rst
+   java/Analysis-and-Tools-API.rst
 
 C, C++, Fortran
 ---------------
@@ -35,6 +38,9 @@ Python
 Generic
 -------
 
-- :ref:`technical-details-file-and-serialization-formats`
+.. toctree::
+   :maxdepth: 1
+   
+   File-and-Serialization-Formats.rst
 
 
