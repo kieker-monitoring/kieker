@@ -13,11 +13,15 @@ receive data.
 Information on readers and writers can be found here:
 
 - File reader and writer
+
   - :ref:`technical-details-java-writer-file-writer`
   - :ref:`technical-details-java-reader-receive-events-from-log-files`
+
 - TCP reader and writer
+
   - :ref:`technical-details-java-writer-single-socket-tcp-writer`
   - :ref:`technical-details-java-reader-receive-events-via-tcp`
+
 - :ref:`collecting-data-amqp-reader-writer`
 
 
