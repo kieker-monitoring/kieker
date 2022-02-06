@@ -8,9 +8,12 @@ to define new **Kieker** records also called (monitoring) events.
 To install and setup Eclipse and detailed language syntax and semantics,
 you may have a look at our tutorials:
 
-- :ref:`kieker-tools-irl-how-to-install-the-irl-in-eclipse`
-- :ref:`kieker-tools-irl-how-to-setup-the-irl-in-eclipse`
-- :ref:`kieker-tools-irl-syntax-semantics`
+.. toctree::
+   :maxdepth: 1
+   
+   How-to-install-IRL-in-Eclipse.rst
+   How-to-setup-the-IRL-in-Eclipse.rst
+   irl-syntax-semantics.rst
 
 Language Features
 -----------------
@@ -37,7 +40,7 @@ can have two annotations. Namely **@author** and **@since**. They allow
 to name the original author of an element and the version since when
 this type is supported by the IRL.
 
-::
+.. code-block:: irl
     
     @author "Ada Lovelace"
     @since "1.0"
@@ -45,8 +48,8 @@ this type is supported by the IRL.
 Event Types
 """""""""""
 
-::
-
+.. code-block:: irl
+   
    event EventName {
       string name
    }
@@ -62,8 +65,8 @@ the name attribute and adds a children attribute.
 Template Types
 """"""""""""""
 
-::
-
+.. code-block:: irl
+   
    template TraceEvent {
       int traceId
    }
@@ -105,8 +108,8 @@ Attributes can also have modifiers:
 - **changeable** creates an attribute which is changeable. In Java this
   means the value of an attribute can be altered after creation.
 
-::
-
+.. code-block:: irl
+   
    event EventName {
       const string NO_SESSION = "<no-session>"
       string name
@@ -120,12 +123,12 @@ Attributes can also have semantic annotations. They defined the purpose
 of the attribute. This information helps to automatically generate probes for
 certain event types.
 
-::
-
-	event EventName {
-		long value : timestamp
-		string text = "empty" : operationsignature
-	}
+.. code-block:: irl
+   
+   event EventName {
+      long value : timestamp
+      string text = "empty" : operationsignature
+   }
 
 Please note that the available semantics depend on the used semantics model.
 
@@ -146,18 +149,18 @@ lead to all sorts of programming errors.
 The basic enumeration is just a set of literals, as shown in the
 upper example. The lower one also assigns values to these literals.
 
-::
-    
-    @author "Ada Lovelace"
-    @since "1.0"
-	enum Colors {
-        Blue, Red, Green, Yellow, Orange, Purple, Aubergine
-	}
-
-	enum Colors {
-        Blue = 1, Red = 2, Green = 4, Yellow = 8, Orange = 16,
-        Purple = 32, Aubergine = 64
-	}
+.. code-block:: irl
+       
+   @author "Ada Lovelace"
+   @since "1.0"
+   enum Colors {
+      Blue, Red, Green, Yellow, Orange, Purple, Aubergine
+   }
+   
+   enum Colors {
+      Blue = 1, Red = 2, Green = 4, Yellow = 8, Orange = 16,
+      Purple = 32, Aubergine = 64
+   }
 
 Model Types
 """""""""""
@@ -180,16 +183,16 @@ Secondly, you declare *sub*-model. It has a name (in the example below
 *ModelName*). Subsequently, you can specify a set of attributs enclosed in
 curly braces or refer to a set of template types that declare the extension.
 
-::
-
-	model ModelName TypeA, TypeB, TypeC
-	
-	sub SubModelName ModelName {
-		int additionaAttribute
-		const int SOME_CONSTANT = 1
-	}
-	
-	sub SubModel2Name ModelName : ExtensionTemplate, AdditionalExtensionTemplate
+.. code-block:: irl
+   
+   model ModelName TypeA, TypeB, TypeC
+   
+   sub SubModelName ModelName {
+      int additionaAttribute
+      const int SOME_CONSTANT = 1
+   }
+   	
+   sub SubModel2Name ModelName : ExtensionTemplate, AdditionalExtensionTemplate
 
 
 

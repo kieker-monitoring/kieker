@@ -1,4 +1,4 @@
-.. _tutorials-how-to-apply-instrumentation:
+.. _instrumenting-software-java-how-to-apply-instrumentation:
 
 How to Apply Instrumentation 
 ============================

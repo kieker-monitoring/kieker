@@ -31,7 +31,13 @@ source code. For rare cases, where no such technique is applicable,
 Related Topics
 --------------
 
-- :ref:`instrumenting-software-adaptive-monitoring`
+.. toctree::
+   :maxdepth: 1
+   
+   Monitoring-Resource-Consumption.rst
+   Adaptive-Monitoring.rst
+   Application-Traces-in-Java.rst
+
 - Creating Probes
 - Creating new Event Types
 

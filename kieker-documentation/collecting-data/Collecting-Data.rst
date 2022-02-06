@@ -22,7 +22,11 @@ Information on readers and writers can be found here:
   - :ref:`technical-details-java-writer-single-socket-tcp-writer`
   - :ref:`technical-details-java-reader-receive-events-via-tcp`
 
-- :ref:`collecting-data-amqp-reader-writer`
+.. toctree::
+   :maxdepth: 1
+   
+   How-to-use-AMQP-Reader-and-Writer.rst
+
 
 
 

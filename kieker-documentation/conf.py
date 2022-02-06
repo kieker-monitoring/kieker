@@ -12,10 +12,13 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
+# sys.path.append(".")
+# To add a lexer, register it in the lexers.py file and add it as an extension
+import lexers
+extensions = ['IrlLexer', 'GroovyLexer', 'PropertiesLexer', 'XmlLexer']
 
 # -- Project information -----------------------------------------------------
 
@@ -190,3 +193,4 @@ epub_exclude_files = ['search.html']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+

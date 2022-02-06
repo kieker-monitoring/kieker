@@ -75,12 +75,17 @@ Running the Example
 The execution of the example is performed by the following three steps:
 
 #. Start the JMS server (you may have to set your **JAVA_HOME** variable first):
+
    - ``bin/activemq start`` Start of the JMS server under UNIX-like systems
    - ``bin/activemq start`` Start of the JMS server under Windows
+
 #. Start the analysis part (in a new terminal):
+
    - ``./gradlew runAnalysisActiveMQ`` Start the analysis part under UNIX-like systems
-   - ``gradlew.bat runAnalysisActiveMQ``Start the analysis part under Windows
+   - ``gradlew.bat runAnalysisActiveMQ`` Start the analysis part under Windows
+
 #. Start the instrumented Bookstore (in a new terminal):
+
    - ``./gradlew runMonitoringActiveMQ`` Start the analysis part under UNIX-like systems
    - ``gradlew.bat runMonitoringActiveMQ`` Start the analysis part under Windows
 
