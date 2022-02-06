@@ -164,7 +164,7 @@ Quick start
 3. Explain console output and tail -f on monitoring log
 4. Access JPetStore http://localhost:8080/jpetstore/ and click around
 5. Create and show plots
-   .. code-block::
+   ::
       
       jetty-hightide-jpetstore <master>\* $ mkdir plots
       

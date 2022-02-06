@@ -201,7 +201,7 @@ Log to Filesystem and use TraceAnalysis
    3. enable/disable
 
 6. Create and show plots
-   .. code-block::
+   ::
       
       jetty-hightide-jpetstore <master>\* $ mkdir plots
       
