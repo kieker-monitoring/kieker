@@ -78,7 +78,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
+html_theme = 'classic'
 
 # sphinx-glpi-theme
 # cloud_sptheme
@@ -89,12 +89,33 @@ html_theme = 'nature'
 # romnnn_sphinx_press_theme
 # sphinx-corlab-theme
 # sphinx-press-theme
-# 
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {}
+html_theme_options = {
+   "stickysidebar": "true",
+   "footerbgcolor": "#142d51",
+#   "footertextcolor": "",
+   "sidebarbgcolor": "#295aa3",
+#   "sidebarbtncolor": "",
+#   "sidebartextcolor": "",
+#   "sidebarlinkcolor": "",
+   "relbarbgcolor": "#142d51",
+#   "relbartextcolor": "",
+#   "relbarlinkcolor": "",
+   "bgcolor": "#ffffff",
+#   "textcolor": "",
+#   "linkcolor": "",
+#   "visitedlinkcolor": "",
+   "headbgcolor": "#ffffff",
+#   "headtextcolor": "",
+#   "headlinkcolor": "",
+   "codebgcolor": "#d5e6ff",
+#   "codetextcolor": "",
+#   "bodyfont": "",
+#   "headfont": ""
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
