@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.tt.reader.filesystem.fsReader.AsciiLogReader;
+import kieker.analysis.source.file.DirectoryReaderStage;
 import kieker.analysis.tt.writeRead.TestDataRepository;
 import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
@@ -94,7 +94,7 @@ public class AsciiUnknownTypeTest {
 
 		// 3. initialize reader
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
-		final AsciiLogReader asciiLogReader = new AsciiLogReader(monitoringLogDirs, ignoreUnknownRecordTypes, false);
+		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(true, 8192);
 		final List<IMonitoringRecord> outputList = new LinkedList<>();
 
 		// 4. trigger records
@@ -113,7 +113,8 @@ public class AsciiUnknownTypeTest {
 		FileContentUtil.replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, classnameToManipulate + "XYZ");
 
 		// 6b. execute the reader in test configuration
-		StageTester.test(asciiLogReader).and().receive(outputList).from(asciiLogReader.getOutputPort()).start();
+		StageTester.test(directoryReaderStage).and().send(this.tmpFolder.getRoot()).to(directoryReaderStage.getInputPort())
+				.receive(outputList).from(directoryReaderStage.getOutputPort()).start();
 
 		// 7. return actual records (sublist is used to exclude the KiekerMetadataRecord sent by the monitoring controller)
 		return outputList.subList(1, outputList.size());

@@ -20,14 +20,16 @@ package kieker.analysis.tt.reader.filesystem.util;
  * @author Christian Wulf
  *
  * @since 1.10
+ * @deprecated 1.15 can be removed when TextFileStreamProcessor is removed
  */
+@Deprecated
 public final class MappingException extends Exception {
 
 	private static final long serialVersionUID = 7300752837946139350L;
 
 	/**
 	 * Create a mapping exception.
-	 * 
+	 *
 	 * @param text
 	 *            error message
 	 */

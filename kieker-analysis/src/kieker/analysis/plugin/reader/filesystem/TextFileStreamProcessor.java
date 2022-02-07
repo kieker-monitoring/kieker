@@ -36,7 +36,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Reiner Jung
  *
  * @since 1.15
- * @deprecated 1.15 replaced by teetime log reading facilities
+ * @deprecated 1.15 replaced by teetime log reading facilities, can be removed when AsciiLogReaderThread, FSDirectoryReader and FSZipReader (old API) are removed
  */
 @Deprecated
 public class TextFileStreamProcessor {
