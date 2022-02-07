@@ -35,6 +35,13 @@ public class RewriteTime extends AbstractConsumerStage<IMonitoringRecord> {
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 	private Long timeDelta;
 
+	/**
+	 * Create an instance of the timestamp rewriter stage.
+	 */
+	public RewriteTime() {
+		// nothing to do
+	}
+
 	@Override
 	protected void execute(final IMonitoringRecord element) throws Exception {
 		if (this.timeDelta == null) {

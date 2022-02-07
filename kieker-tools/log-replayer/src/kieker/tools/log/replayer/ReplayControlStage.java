@@ -48,7 +48,7 @@ public class ReplayControlStage extends AbstractConsumerStage<IMonitoringRecord>
 	 */
 	public ReplayControlStage(final long unitAdjustment, final Long delayFactor, final Long showRecordCount) {
 		this.unitAdjustment = unitAdjustment;
-		this.delayFactor = delayFactor == null ? 1 : delayFactor;
+		this.delayFactor = delayFactor == null ? 1 : delayFactor; // NOCS
 		this.showRecordCount = showRecordCount;
 	}
 

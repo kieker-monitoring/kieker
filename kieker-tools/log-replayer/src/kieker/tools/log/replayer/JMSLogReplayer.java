@@ -48,7 +48,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @param monitoringConfigurationFile
 	 *            The path of the monitoring.properties file.
 	 */
-	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl,
+			final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile,
 				false, // realtimeMode
 				1.0, // realtimeAccelerationFactor: any value will do because realtimeMode = false

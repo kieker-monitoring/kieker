@@ -43,8 +43,8 @@ public class PiplineConfiguration extends Configuration {
 		OutputPort<IMonitoringRecord> outputPort = reader.getOutputPort();
 
 		if (parameter.getIgnoreBeforeDate() != null || parameter.getIgnoreAfterDate() != null) {
-			final long ignoreBeforeDate = parameter.getIgnoreBeforeDate() != null ? parameter.getIgnoreBeforeDate() : Long.MIN_VALUE;
-			final long ignoreAfterDate = parameter.getIgnoreAfterDate() != null ? parameter.getIgnoreAfterDate() : Long.MAX_VALUE;
+			final long ignoreBeforeDate = parameter.getIgnoreBeforeDate() != null ? parameter.getIgnoreBeforeDate() : Long.MIN_VALUE; // NOCS
+			final long ignoreAfterDate = parameter.getIgnoreAfterDate() != null ? parameter.getIgnoreAfterDate() : Long.MAX_VALUE; // NOCS
 			final TimestampFilter timestampFilter = new TimestampFilter(ignoreBeforeDate, ignoreAfterDate);
 			this.connectPorts(outputPort, timestampFilter.getMonitoringRecordsCombinedInputPort());
 			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();

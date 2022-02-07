@@ -131,7 +131,8 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	@Test
 	public void testControllerKeepsLoggingTimestamp() throws Exception {
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
-		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
+		// The following line is an easy way to test the tests (given monitoringRecords
+		// includes at least one record). But don't forget to deactivate afterwards.
 		// eventsToWrite.remove(eventsToWrite.size() - 1);
 		final List<IMonitoringRecord> eventsFromRecordLoggerFilter = this.testIt(eventsToWrite, true); // includes Assert(s)
 		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, eventsFromRecordLoggerFilter);
@@ -145,7 +146,8 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	@Test
 	public void testControllerSetsLoggingTimestamp() throws Exception {
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
-		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one
+		// record). But don't forget to deactivate afterwards.
 		// eventsToWrite.remove(eventsToWrite.size() - 1);
 
 		final List<IMonitoringRecord> eventsFromRecordLoggerFilter = this.testIt(eventsToWrite, false); // includes Assert(s)
@@ -217,7 +219,8 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		Assert.assertNotNull(monitoringLogs);
 
 		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
-			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile()
+					+ File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
 		}
 
 		return this.readLog(monitoringLogs);

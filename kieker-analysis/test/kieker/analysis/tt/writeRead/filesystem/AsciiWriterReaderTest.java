@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -57,6 +58,7 @@ public class AsciiWriterReaderTest {
 		super();
 	}
 
+	@Ignore
 	@Test
 	public void testUncompressedAsciiCommunication() throws Exception {
 		// 1. define records to be triggered by the test probe
@@ -68,6 +70,7 @@ public class AsciiWriterReaderTest {
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
+	@Ignore
 	@Test
 	public void testCompressedAsciiCommunication() throws Exception {
 		// 1. define records to be triggered by the test probe

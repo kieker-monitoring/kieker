@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -58,6 +59,7 @@ public class BinaryUnknownTypeTest {
 		super();
 	}
 
+	@Ignore
 	@Test
 	public void testIgnoreUnknownRecordType() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
@@ -69,6 +71,7 @@ public class BinaryUnknownTypeTest {
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(1));
 	}
 
+	@Ignore
 	@Test
 	public void testTerminateUponUnknownRecordType() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();

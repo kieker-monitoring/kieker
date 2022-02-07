@@ -113,7 +113,8 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		options.addOption(option);
 
 		option = new Option("a", CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR, true,
-				"Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in realtime mode (defaults to 1.0, i.e., no acceleration/slow down).");
+				"Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in realtime mode"
+						+ " (defaults to 1.0, i.e., no acceleration/slow down).");
 		option.setArgName("factor");
 		option.setRequired(false);
 		option.setValueSeparator('=');
@@ -224,7 +225,8 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			LOGGER.debug("inputDirs: {}", FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(this.inputDirs, ';'));
 			LOGGER.debug("Replaying in {} realtime mode", this.realtimeMode ? "" : "non-"); // NOCS
 			if (this.realtimeMode) {
-				LOGGER.debug("Using {} realtime worker thread {}", this.numRealtimeWorkerThreads, this.numRealtimeWorkerThreads > 1 ? "s" : ""); // NOCS
+				LOGGER.debug("Using {} realtime worker thread {}",
+						this.numRealtimeWorkerThreads, this.numRealtimeWorkerThreads > 1 ? "s" : ""); // NOCS
 			}
 		}
 
@@ -241,9 +243,10 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			}
 		}
 
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(this.monitoringConfigurationFile, this.realtimeMode, this.realtimeAccelerationFactor,
-				this.keepOriginalLoggingTimestamps, this.numRealtimeWorkerThreads, this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp,
-				this.inputDirs);
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(this.monitoringConfigurationFile,
+				this.realtimeMode, this.realtimeAccelerationFactor, this.keepOriginalLoggingTimestamps,
+				this.numRealtimeWorkerThreads, this.ignoreRecordsBeforeTimestamp,
+				this.ignoreRecordsAfterTimestamp, this.inputDirs);
 
 		if (player.replay()) {
 			return true;

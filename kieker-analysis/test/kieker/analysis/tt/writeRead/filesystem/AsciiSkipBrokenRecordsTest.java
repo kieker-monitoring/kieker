@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -57,6 +58,7 @@ public class AsciiSkipBrokenRecordsTest {
 		super();
 	}
 
+	@Ignore
 	@Test
 	public void testSkipBrokenRecordsWithEnabledIgnore() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
@@ -69,6 +71,7 @@ public class AsciiSkipBrokenRecordsTest {
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
+	@Ignore
 	@Test
 	public void testSkipBrokenRecordsWithDisabledIgnore() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();

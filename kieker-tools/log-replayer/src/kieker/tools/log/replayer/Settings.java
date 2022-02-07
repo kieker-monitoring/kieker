@@ -28,7 +28,7 @@ import kieker.tools.common.DateConverter;
  * @since 1.16
  *
  */
-public class Settings {
+public class Settings { // NOCS does not need a constructor
 
 	@Parameter(names = { "-i",
 		"--input" }, required = true, description = "Input data directory.", converter = FileConverter.class)
@@ -68,7 +68,8 @@ public class Settings {
 	private Long ignoreBeforeDate;
 
 	@Parameter(names = { "-ad", "--ignore-records-after-date" }, required = false,
-			description = "Records logged after this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss", converter = DateConverter.class)
+			description = "Records logged after this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss",
+			converter = DateConverter.class)
 	private Long ignoreAfterDate;
 
 	public final File getDataLocation() {

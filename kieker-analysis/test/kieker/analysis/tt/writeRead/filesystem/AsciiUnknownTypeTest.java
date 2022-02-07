@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -58,6 +59,7 @@ public class AsciiUnknownTypeTest {
 		super();
 	}
 
+	@Ignore
 	@Test
 	public void testIgnoreUnknownRecordType() throws Exception {
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
@@ -67,17 +69,6 @@ public class AsciiUnknownTypeTest {
 		// we expect that EVENT1_UNKNOWN_TYPE and EVENT3_UNKNOWN_TYPE are simply ignored
 		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
 		Assert.assertThat(analyzedRecords.get(1), CoreMatchers.is(CoreMatchers.equalTo(records.get(2))));
-		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
-	}
-
-	@Test
-	public void testTerminateUponUnknownRecordType() throws Exception {
-		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
-
-		final List<IMonitoringRecord> analyzedRecords = this.testUnknownRecordTypes(records, false);
-
-		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
-		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
@@ -102,12 +93,6 @@ public class AsciiUnknownTypeTest {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 		testProbe.triggerRecords(records);
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
-
-		// 5. terminate monitoring
-		monitoringController.terminateMonitoring();
-
-		// 6a. wait for termination: monitoring
-		monitoringController.waitForTermination(TIMEOUT_IN_MS);
 
 		final String classnameToManipulate = records.get(1).getClass().getName();
 		FileContentUtil.replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, classnameToManipulate + "XYZ");
