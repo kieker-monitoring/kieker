@@ -37,7 +37,9 @@ import kieker.tools.log.replayer.filter.MonitoringRecordLoggerFilter;
  * @author Andre van Hoorn
  *
  * @since 1.6
+ * @deprecated 1.16 remove in 1.17
  */
+@Deprecated
 public abstract class AbstractLogReplayer {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;

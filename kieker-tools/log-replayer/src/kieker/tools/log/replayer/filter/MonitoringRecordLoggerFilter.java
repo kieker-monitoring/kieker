@@ -38,7 +38,9 @@ import kieker.monitoring.core.controller.MonitoringController;
  * @author Andre van Hoorn
  *
  * @since 1.6
+ * @deprecated since 1.16
  */
+@Deprecated
 @Plugin(description = "A filter which passes received records to the configured monitoring controller", outputPorts = {
 	@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = {
 		IMonitoringRecord.class })

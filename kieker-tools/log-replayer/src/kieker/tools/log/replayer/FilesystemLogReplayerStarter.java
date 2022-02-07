@@ -38,7 +38,9 @@ import kieker.tools.AbstractCommandLineTool;
  * @author Andre van Hoorn, Nils Christian Ehmke
  *
  * @since 0.95a
+ * @deprecated since 1.16
  */
+@Deprecated
 @SuppressWarnings("static-access")
 public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool {
 
@@ -152,7 +154,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			retVal = false;
 		}
 		this.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
-		LOGGER.debug("Keeping original logging timestamps: {}", (this.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
+		LOGGER.debug("Keeping original logging timestamps: {}", this.keepOriginalLoggingTimestamps ? "true" : "false"); // NOCS
 		// 3.) init realtimeMode
 		final String realtimeOptValStr = commandLine.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
@@ -220,9 +222,9 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		// log configuration
 		if (retVal && LOGGER.isDebugEnabled()) {
 			LOGGER.debug("inputDirs: {}", FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(this.inputDirs, ';'));
-			LOGGER.debug("Replaying in {} realtime mode", (this.realtimeMode ? "" : "non-")); // NOCS
+			LOGGER.debug("Replaying in {} realtime mode", this.realtimeMode ? "" : "non-"); // NOCS
 			if (this.realtimeMode) {
-				LOGGER.debug("Using {} realtime worker thread {}", this.numRealtimeWorkerThreads, (this.numRealtimeWorkerThreads > 1 ? "s" : "")); // NOCS
+				LOGGER.debug("Using {} realtime worker thread {}", this.numRealtimeWorkerThreads, this.numRealtimeWorkerThreads > 1 ? "s" : ""); // NOCS
 			}
 		}
 

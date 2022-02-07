@@ -32,7 +32,9 @@ import teetime.stage.basic.AbstractFilter;
  * @author Andre van Hoorn, Lars Bluemke
  *
  * @since 1.6
+ * @deprecated since 1.16
  */
+@Deprecated
 public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringRecord> {
 
 	private static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
