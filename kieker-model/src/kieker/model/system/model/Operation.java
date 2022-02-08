@@ -27,7 +27,7 @@ import kieker.model.repository.AbstractRepository;
  *
  * @since 1.1
  */
-public class Operation {
+public class Operation { // NOPMD DataClass
 
 	/** The ID for the root operation. */
 	public static final int ROOT_OPERATION_ID = AbstractRepository.ROOT_ELEMENT_ID;
@@ -98,7 +98,7 @@ public class Operation {
 	@Override
 	public int hashCode() {
 		int hash = 5;
-		hash = (17 * hash) + this.id;
+		hash = 17 * hash + this.id;
 		return hash;
 	}
 

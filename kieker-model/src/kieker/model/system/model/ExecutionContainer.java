@@ -22,10 +22,10 @@ import java.util.Collections;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-public class ExecutionContainer implements ISystemModelElement {
+public class ExecutionContainer implements ISystemModelElement { // NOPMD DataClass
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
@@ -33,7 +33,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this container.
 	 * @param parent
@@ -49,7 +49,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Delivers the ID of the container.
-	 * 
+	 *
 	 * @return The ID.
 	 */
 	public final int getId() {
@@ -58,7 +58,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Delivers the name of the container.
-	 * 
+	 *
 	 * @return The name.
 	 */
 	public final String getName() {
@@ -67,7 +67,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Delivers the parent of the container.
-	 * 
+	 *
 	 * @return The parent.
 	 */
 	public final ExecutionContainer getParent() {
@@ -76,7 +76,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Delivers a collection containing the added child containers.
-	 * 
+	 *
 	 * @return The child containers.
 	 */
 	public final Collection<ExecutionContainer> getChildContainers() {
@@ -85,7 +85,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * This method adds a given container to the list of child containers.
-	 * 
+	 *
 	 * @param container
 	 *            The new child container.
 	 */
@@ -109,7 +109,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Returns whether this container is a root container.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public boolean isRootContainer() {
@@ -118,7 +118,7 @@ public class ExecutionContainer implements ISystemModelElement {
 
 	/**
 	 * Delivers the identifier (name) of this object.
-	 * 
+	 *
 	 * @return The identifier.
 	 */
 	@Override

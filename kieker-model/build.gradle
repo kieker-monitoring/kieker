@@ -21,10 +21,9 @@ sourceSets {
 		java {
 			srcDir 'src'
 			srcDir 'src-gen'
-			srcDir 'model'
 		}
 		resources {
-			srcDirs = ['src-resources']
+			srcDirs = ['src-resources', 'model']
 		}
 	}
 }
