@@ -15,15 +15,3 @@ dependencies {
 	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
 	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 }
-
-sourceSets {
-	main {
-		java {
-			srcDir 'src'
-			srcDir 'src-gen'
-		}
-		resources {
-			srcDirs = ['src-resources', 'model']
-		}
-	}
-}
