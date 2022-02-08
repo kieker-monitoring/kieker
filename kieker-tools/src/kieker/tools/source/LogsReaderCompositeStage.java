@@ -87,6 +87,26 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}
 
+	/**
+	 * Creates a composite stage to scan and read a set of Kieker log directories.
+	 *
+	 * @param directory
+	 *            list of directories to read
+	 * @param verbose
+	 *            report on every read log file
+	 * @param dataBufferSize
+	 *            buffer size of the data file reader (null == use default setting)
+	 */
+	public LogsReaderCompositeStage(final File directory, final boolean verbose, final Integer dataBufferSize) {
+		final List<File> directories = new ArrayList<>();
+		directories.add(directory);
+
+		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
+
+		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+	}
+
 	@Override
 	public OutputPort<IMonitoringRecord> getOutputPort() {
 		return this.directoryReaderStage.getOutputPort();

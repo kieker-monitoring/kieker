@@ -37,7 +37,9 @@ import kieker.tools.log.replayer.filter.MonitoringRecordLoggerFilter;
  * @author Andre van Hoorn
  *
  * @since 1.6
+ * @deprecated 1.16 remove in 1.17
  */
+@Deprecated
 public abstract class AbstractLogReplayer {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
@@ -137,7 +139,8 @@ public abstract class AbstractLogReplayer {
 			// (Potentially) initializing delay filter
 			if (this.realtimeMode) {
 				final Configuration delayFilterConfiguration = new Configuration();
-				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
+				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS,
+						Integer.toString(this.numRealtimeWorkerThreads));
 				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR,
 						Double.toString(this.realtimeAccelerationFactor));
 				final RealtimeRecordDelayFilter rtFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, analysisInstance);
@@ -150,7 +153,8 @@ public abstract class AbstractLogReplayer {
 			// And finally, we'll add the MonitoringRecordLoggerFilter
 			final Configuration recordLoggerConfig = new Configuration();
 			if (this.monitoringConfigurationFile != null) {
-				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);
+				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN,
+						this.monitoringConfigurationFile);
 			}
 			recordLoggerConfig.setProperty(
 					ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP,
@@ -171,7 +175,8 @@ public abstract class AbstractLogReplayer {
 	}
 
 	/**
-	 * Implementing classes returns the name of the reader's output port which provides the {@link kieker.common.record.IMonitoringRecord}s from the monitoring log.
+	 * Implementing classes returns the name of the reader's output port which provides the
+	 * {@link kieker.common.record.IMonitoringRecord}s from the monitoring log.
 	 *
 	 * @return The name of the reader's output port.
 	 */

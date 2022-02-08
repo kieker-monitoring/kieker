@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.log.replayer.FilesystemLogReplayerStarter'
+mainClassName='kieker.tools.log.replayer.teetime.ReplayerMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 

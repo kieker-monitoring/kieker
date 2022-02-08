@@ -23,11 +23,13 @@ import kieker.common.configuration.Configuration;
 
 /**
  * An implementation of the {@link AbstractLogReplayer}, using the {@link JmsReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
+ * @deprecated since 1.16
  */
+@Deprecated
 public class JMSLogReplayer extends AbstractLogReplayer {
 
 	private final String jmsProviderUrl;
@@ -36,7 +38,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 
 	/**
 	 * Creates a new JMS log replayer.
-	 * 
+	 *
 	 * @param jmsProviderUrl
 	 *            = for instance "tcp://127.0.0.1:3035/"
 	 * @param jmsDestination
@@ -46,7 +48,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @param monitoringConfigurationFile
 	 *            The path of the monitoring.properties file.
 	 */
-	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
+	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl,
+			final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile,
 				false, // realtimeMode
 				1.0, // realtimeAccelerationFactor: any value will do because realtimeMode = false
