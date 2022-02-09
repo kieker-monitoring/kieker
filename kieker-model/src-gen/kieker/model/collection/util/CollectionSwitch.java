@@ -7,9 +7,6 @@ import java.util.Map;
 import kieker.model.analysismodel.type.OperationType;
 
 import kieker.model.collection.*;
-
-import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -85,7 +82,7 @@ public class CollectionSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP: {
-				@SuppressWarnings("unchecked") Map.Entry<Coupling, EMap<String, OperationType>> couplingToOperationMap = (Map.Entry<Coupling, EMap<String, OperationType>>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<Coupling, OperationCollection> couplingToOperationMap = (Map.Entry<Coupling, OperationCollection>)theEObject;
 				T result = caseCouplingToOperationMap(couplingToOperationMap);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -147,7 +144,7 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCouplingToOperationMap(Map.Entry<Coupling, EMap<String, OperationType>> object) {
+	public T caseCouplingToOperationMap(Map.Entry<Coupling, OperationCollection> object) {
 		return null;
 	}
 
