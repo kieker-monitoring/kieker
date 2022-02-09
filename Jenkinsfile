@@ -47,7 +47,8 @@ pipeline {
 
         stage('Change Version Number') {
           steps {
-            sh 'cat gradle.properties | sed s/"kiekerVersion = .*"/"kiekerVersion = 99.9"/g > gradle.properties'
+            sh 'sed -i s/"kiekerVersion = .*"/"kiekerVersion = 99.9"/g gradle.properties'
+            sh 'cat gradle.properties'
           }
         }
 
