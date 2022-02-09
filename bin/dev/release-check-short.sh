@@ -134,7 +134,7 @@ function assert_files_exist_common {
 	done
 
 	information "Making sure that no references to old Kieker Jars included (note that we cannot check inside binary files) ..."
-	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?-[[:alpha:]]+)?\.jar"); then
+	if (grep -r "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?-[[:alpha:]]+)?\.jar"); then
 	    # Don't ask why results not dumped to stdout above
 	    warning "Found old version string. Add/correct replacement regexp in Gradle file?"
 	    error "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
