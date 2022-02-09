@@ -45,54 +45,17 @@ pipeline {
           }
         }
 
+        stage('Change Version Number') {
+          steps {
+            sh 'cat gradle.properties | sed s/"kiekerVersion = .*"/"kiekerVersion = 99.9"/g > gradle.properties'
+          }
+        }
+
         stage('Compile') {
           steps {
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
             sh 'df'
-          }
-        }
-
-        stage('Static Analysis') {
-          steps {
-            sh './gradlew --parallel -x test check'
-          }
-          post {
-            always {
-              // Report results of static analysis tools
-            
-              recordIssues(
-                enabledForFailure: true,
-                tools: [
-                  java(),
-                  javaDoc(),
-                  checkStyle(
-                    pattern: '**/build/reports/checkstyle/*.xml'
-                  ),
-                  pmdParser(
-                    pattern: '**/build/reports/pmd/*.xml'
-                  ),
-                  //spotBugs(
-                  //  pattern: '**/build/reports/findbugs/*.xml'
-                  //)
-                ]
-              )
-            }
-          }
-        }
-        
-        stage('Unit Test') {
-          steps {
-            sh './gradlew --parallel test jacocoTestReport'
-            jacoco(
-               sourcePattern: '**/src/**',
-               exclusionPattern: '**/test/**'
-            )
-          }
-          post {
-            always {
-              junit '**/build/test-results/test/*.xml'
-            }
           }
         }
 
@@ -176,61 +139,6 @@ pipeline {
       }
     }
 
-    stage('Master Specific Stages') {
-      when {
-        beforeAgent true
-        branch 'master'
-      }
-      parallel {
-        stage('Push to Stable') {
-          agent {
-             label 'build-node8'
-          }
-          steps {
-            sshagent(credentials: ['kieker-key']) {
-              sh('''
-                    #!/usr/bin/env bash
-                    set +x
-                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
-                 ''')
-            }
-          }
-          post {
-            cleanup {
-              deleteDir()
-              cleanWs()
-            }
-          }
-        }
-
-        stage('Upload Snapshot Version') {
-          agent {
-            docker {
-              image 'kieker/kieker-build:openjdk8'
-              args env.DOCKER_ARGS
-            }
-          }
-          steps {
-            unstash 'jarArtifacts'
-            withCredentials([
-              usernamePassword(
-                credentialsId: 'artifactupload', 
-                usernameVariable: 'kiekerMavenUser', 
-                passwordVariable: 'kiekerMavenPassword'
-              )
-            ]) {
-              sh './gradlew publish'
-            }
-          }
-          post {
-            cleanup {
-              deleteDir()
-            }
-          }
-        }
-      }
-    }
   }
 }
 
