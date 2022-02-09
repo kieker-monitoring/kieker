@@ -2,12 +2,11 @@
  */
 package kieker.model.collection.impl;
 
-import kieker.model.analysismodel.type.OperationType;
-
 import kieker.model.collection.CollectionPackage;
 import kieker.model.collection.Connections;
 import kieker.model.collection.Coupling;
 
+import kieker.model.collection.OperationCollection;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -43,7 +42,7 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Coupling, EMap<String, OperationType>> connections;
+	protected EMap<Coupling, OperationCollection> connections;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,9 +69,9 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	 * @generated
 	 */
 	@Override
-	public EMap<Coupling, EMap<String, OperationType>> getConnections() {
+	public EMap<Coupling, OperationCollection> getConnections() {
 		if (connections == null) {
-			connections = new EcoreEMap<Coupling,EMap<String, OperationType>>(CollectionPackage.Literals.COUPLING_TO_OPERATION_MAP, CouplingToOperationMapImpl.class, this, CollectionPackage.CONNECTIONS__CONNECTIONS);
+			connections = new EcoreEMap<Coupling,OperationCollection>(CollectionPackage.Literals.COUPLING_TO_OPERATION_MAP, CouplingToOperationMapImpl.class, this, CollectionPackage.CONNECTIONS__CONNECTIONS);
 		}
 		return connections;
 	}

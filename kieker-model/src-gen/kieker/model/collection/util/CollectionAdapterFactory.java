@@ -12,9 +12,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -82,7 +79,7 @@ public class CollectionAdapterFactory extends AdapterFactoryImpl {
 				return createOperationCollectionAdapter();
 			}
 			@Override
-			public Adapter caseCouplingToOperationMap(Map.Entry<Coupling, EMap<String, OperationType>> object) {
+			public Adapter caseCouplingToOperationMap(Map.Entry<Coupling, OperationCollection> object) {
 				return createCouplingToOperationMapAdapter();
 			}
 			@Override

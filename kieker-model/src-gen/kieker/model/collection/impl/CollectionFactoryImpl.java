@@ -7,9 +7,6 @@ import java.util.Map;
 import kieker.model.analysismodel.type.OperationType;
 
 import kieker.model.collection.*;
-
-import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -99,7 +96,7 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<Coupling, EMap<String, OperationType>> createCouplingToOperationMap() {
+	public Map.Entry<Coupling, OperationCollection> createCouplingToOperationMap() {
 		CouplingToOperationMapImpl couplingToOperationMap = new CouplingToOperationMapImpl();
 		return couplingToOperationMap;
 	}

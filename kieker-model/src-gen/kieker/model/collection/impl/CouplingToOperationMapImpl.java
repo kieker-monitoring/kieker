@@ -2,11 +2,10 @@
  */
 package kieker.model.collection.impl;
 
-import kieker.model.analysismodel.type.OperationType;
-
 import kieker.model.collection.CollectionPackage;
 import kieker.model.collection.Coupling;
 
+import kieker.model.collection.OperationCollection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -15,14 +14,10 @@ import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EcoreEMap;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Coupling,EMap<String, OperationType>> {
+public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Coupling,OperationCollection> {
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -50,14 +45,14 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	protected Coupling key;
 
 	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' map.
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, OperationType> value;
+	protected OperationCollection value;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,11 +121,42 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<String, OperationType> getTypedValue() {
-		if (value == null) {
-			value = new EcoreEMap<String,OperationType>(CollectionPackage.Literals.NAME_TO_OPERATION_MAP, NameToOperationMapImpl.class, this, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE);
-		}
+	public OperationCollection getTypedValue() {
 		return value;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTypedValue(OperationCollection newValue, NotificationChain msgs) {
+		OperationCollection oldValue = value;
+		value = newValue;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, oldValue, newValue);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTypedValue(OperationCollection newValue) {
+		if (newValue != value) {
+			NotificationChain msgs = null;
+			if (value != null)
+				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
+			if (newValue != null)
+				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
+			msgs = basicSetTypedValue(newValue, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, newValue, newValue));
 	}
 
 	/**
@@ -144,7 +170,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
 				return basicSetTypedKey(null, msgs);
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-				return ((InternalEList<?>)getTypedValue()).basicRemove(otherEnd, msgs);
+				return basicSetTypedValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -160,8 +186,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
 				return getTypedKey();
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-				if (coreType) return getTypedValue();
-				else return getTypedValue().map();
+				return getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -178,7 +203,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 				setTypedKey((Coupling)newValue);
 				return;
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-				((EStructuralFeature.Setting)getTypedValue()).set(newValue);
+				setTypedValue((OperationCollection)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -196,7 +221,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 				setTypedKey((Coupling)null);
 				return;
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-				getTypedValue().clear();
+				setTypedValue((OperationCollection)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -213,7 +238,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
 				return key != null;
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-				return value != null && !value.isEmpty();
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -275,7 +300,7 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	 * @generated
 	 */
 	@Override
-	public EMap<String, OperationType> getValue() {
+	public OperationCollection getValue() {
 		return getTypedValue();
 	}
 
@@ -285,10 +310,9 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	 * @generated
 	 */
 	@Override
-	public EMap<String, OperationType> setValue(EMap<String, OperationType> value) {
-		EMap<String, OperationType> oldValue = getValue();
-		getTypedValue().clear();
-		getTypedValue().addAll(value);
+	public OperationCollection setValue(OperationCollection value) {
+		OperationCollection oldValue = getValue();
+		setTypedValue(value);
 		return oldValue;
 	}
 
@@ -298,9 +322,9 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<Coupling, EMap<String, OperationType>> getEMap() {
+	public EMap<Coupling, OperationCollection> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<Coupling, EMap<String, OperationType>>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<Coupling, OperationCollection>)container.eGet(eContainmentFeature());
 	}
 
 } //CouplingToOperationMapImpl

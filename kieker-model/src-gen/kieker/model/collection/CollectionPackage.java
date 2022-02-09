@@ -169,7 +169,7 @@ public interface CollectionPackage extends EPackage {
 	int COUPLING_TO_OPERATION_MAP__KEY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' map.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -377,7 +377,7 @@ public interface CollectionPackage extends EPackage {
 	 * @return the meta object for class '<em>Coupling To Operation Map</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyType="kieker.model.collection.Coupling" keyContainment="true"
-	 *        valueMapType="kieker.model.collection.NameToOperationMap&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;"
+	 *        valueType="kieker.model.collection.OperationCollection" valueContainment="true"
 	 * @generated
 	 */
 	EClass getCouplingToOperationMap();
@@ -394,10 +394,10 @@ public interface CollectionPackage extends EPackage {
 	EReference getCouplingToOperationMap_Key();
 
 	/**
-	 * Returns the meta object for the map '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Value</em>'.
+	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getCouplingToOperationMap()
 	 * @generated
@@ -584,7 +584,7 @@ public interface CollectionPackage extends EPackage {
 		EReference COUPLING_TO_OPERATION_MAP__KEY = eINSTANCE.getCouplingToOperationMap_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
