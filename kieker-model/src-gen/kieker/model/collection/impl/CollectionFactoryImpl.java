@@ -62,7 +62,7 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case CollectionPackage.INTERFACE_COLLECTION: return createInterfaceCollection();
+			case CollectionPackage.CONNECTIONS: return createConnections();
 			case CollectionPackage.OPERATION_COLLECTION: return createOperationCollection();
 			case CollectionPackage.COUPLING_TO_OPERATION_MAP: return (EObject)createCouplingToOperationMap();
 			case CollectionPackage.NAME_TO_OPERATION_MAP: return (EObject)createNameToOperationMap();
@@ -78,9 +78,9 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	 * @generated
 	 */
 	@Override
-	public InterfaceCollection createInterfaceCollection() {
-		InterfaceCollectionImpl interfaceCollection = new InterfaceCollectionImpl();
-		return interfaceCollection;
+	public Connections createConnections() {
+		ConnectionsImpl connections = new ConnectionsImpl();
+		return connections;
 	}
 
 	/**

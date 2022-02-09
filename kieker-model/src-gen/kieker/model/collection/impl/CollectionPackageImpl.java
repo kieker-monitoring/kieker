@@ -10,8 +10,8 @@ import kieker.model.analysismodel.type.TypePackage;
 
 import kieker.model.collection.CollectionFactory;
 import kieker.model.collection.CollectionPackage;
+import kieker.model.collection.Connections;
 import kieker.model.collection.Coupling;
-import kieker.model.collection.InterfaceCollection;
 import kieker.model.collection.OperationCollection;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -33,7 +33,7 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass interfaceCollectionEClass = null;
+	private EClass connectionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,8 +133,18 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 	 * @generated
 	 */
 	@Override
-	public EClass getInterfaceCollection() {
-		return interfaceCollectionEClass;
+	public EClass getConnections() {
+		return connectionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConnections_Connections() {
+		return (EReference)connectionsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -296,7 +306,8 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 		isCreated = true;
 
 		// Create classes and their features
-		interfaceCollectionEClass = createEClass(INTERFACE_COLLECTION);
+		connectionsEClass = createEClass(CONNECTIONS);
+		createEReference(connectionsEClass, CONNECTIONS__CONNECTIONS);
 
 		operationCollectionEClass = createEClass(OPERATION_COLLECTION);
 		createEReference(operationCollectionEClass, OPERATION_COLLECTION__CALLER);
@@ -349,12 +360,13 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(interfaceCollectionEClass, InterfaceCollection.class, "InterfaceCollection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(connectionsEClass, Connections.class, "Connections", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConnections_Connections(), this.getCouplingToOperationMap(), null, "connections", null, 0, -1, Connections.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(operationCollectionEClass, OperationCollection.class, "OperationCollection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOperationCollection_Caller(), theTypePackage.getComponentType(), null, "caller", null, 0, 1, OperationCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOperationCollection_Callee(), theTypePackage.getComponentType(), null, "callee", null, 0, 1, OperationCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOperationCollection_Operations(), this.getCouplingToOperationMap(), null, "operations", null, 0, -1, OperationCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOperationCollection_Operations(), this.getNameToOperationMap(), null, "operations", null, 0, -1, OperationCollection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(couplingToOperationMapEClass, Map.Entry.class, "CouplingToOperationMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCouplingToOperationMap_Key(), this.getCoupling(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

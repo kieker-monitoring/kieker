@@ -22,13 +22,13 @@ public interface CollectionFactory extends EFactory {
 	CollectionFactory eINSTANCE = kieker.model.collection.impl.CollectionFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Interface Collection</em>'.
+	 * Returns a new object of class '<em>Connections</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Interface Collection</em>'.
+	 * @return a new object of class '<em>Connections</em>'.
 	 * @generated
 	 */
-	InterfaceCollection createInterfaceCollection();
+	Connections createConnections();
 
 	/**
 	 * Returns a new object of class '<em>Operation Collection</em>'.

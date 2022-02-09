@@ -8,7 +8,9 @@
   <foreignModel>analysiscollections.ecore</foreignModel>
   <genPackages prefix="Collection" basePackage="kieker.model" disposableProviderFactory="true"
       ecorePackage="analysiscollections.ecore#/">
-    <genClasses ecoreClass="analysiscollections.ecore#//InterfaceCollection"/>
+    <genClasses ecoreClass="analysiscollections.ecore#//Connections">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//Connections/connections"/>
+    </genClasses>
     <genClasses ecoreClass="analysiscollections.ecore#//OperationCollection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//OperationCollection/caller"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//OperationCollection/callee"/>

@@ -2,12 +2,15 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="collection" nsURI="http://kieker-monitoring.net/collection"
     nsPrefix="collection">
-  <eClassifiers xsi:type="ecore:EClass" name="InterfaceCollection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Connections">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//CouplingToOperationMap" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperationCollection">
     <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
-        eType="#//CouplingToOperationMap" containment="true"/>
+        eType="#//NameToOperationMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CouplingToOperationMap" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//Coupling"

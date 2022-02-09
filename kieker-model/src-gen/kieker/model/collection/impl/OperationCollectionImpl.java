@@ -6,7 +6,6 @@ import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 
 import kieker.model.collection.CollectionPackage;
-import kieker.model.collection.Coupling;
 import kieker.model.collection.OperationCollection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -68,7 +67,7 @@ public class OperationCollectionImpl extends MinimalEObjectImpl.Container implem
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Coupling, EMap<String, OperationType>> operations;
+	protected EMap<String, OperationType> operations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -175,9 +174,9 @@ public class OperationCollectionImpl extends MinimalEObjectImpl.Container implem
 	 * @generated
 	 */
 	@Override
-	public EMap<Coupling, EMap<String, OperationType>> getOperations() {
+	public EMap<String, OperationType> getOperations() {
 		if (operations == null) {
-			operations = new EcoreEMap<Coupling,EMap<String, OperationType>>(CollectionPackage.Literals.COUPLING_TO_OPERATION_MAP, CouplingToOperationMapImpl.class, this, CollectionPackage.OPERATION_COLLECTION__OPERATIONS);
+			operations = new EcoreEMap<String,OperationType>(CollectionPackage.Literals.NAME_TO_OPERATION_MAP, NameToOperationMapImpl.class, this, CollectionPackage.OPERATION_COLLECTION__OPERATIONS);
 		}
 		return operations;
 	}

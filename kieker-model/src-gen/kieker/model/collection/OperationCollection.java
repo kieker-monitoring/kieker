@@ -74,15 +74,15 @@ public interface OperationCollection extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Operations</b></em>' map.
-	 * The key is of type {@link kieker.model.collection.Coupling},
-	 * and the value is of type list of {@link java.util.Map.Entry<java.lang.String, kieker.model.analysismodel.type.OperationType>},
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.model.analysismodel.type.OperationType},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operations</em>' map.
 	 * @see kieker.model.collection.CollectionPackage#getOperationCollection_Operations()
-	 * @model mapType="kieker.model.collection.CouplingToOperationMap&lt;kieker.model.collection.Coupling, kieker.model.collection.NameToOperationMap&gt;"
+	 * @model mapType="kieker.model.collection.NameToOperationMap&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;"
 	 * @generated
 	 */
-	EMap<Coupling, EMap<String, OperationType>> getOperations();
+	EMap<String, OperationType> getOperations();
 
 } // OperationCollection
