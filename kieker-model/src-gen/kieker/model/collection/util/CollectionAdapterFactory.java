@@ -74,8 +74,8 @@ public class CollectionAdapterFactory extends AdapterFactoryImpl {
 	protected CollectionSwitch<Adapter> modelSwitch =
 		new CollectionSwitch<Adapter>() {
 			@Override
-			public Adapter caseInterfaceCollection(InterfaceCollection object) {
-				return createInterfaceCollectionAdapter();
+			public Adapter caseConnections(Connections object) {
+				return createConnectionsAdapter();
 			}
 			@Override
 			public Adapter caseOperationCollection(OperationCollection object) {
@@ -114,16 +114,16 @@ public class CollectionAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.collection.InterfaceCollection <em>Interface Collection</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.collection.Connections <em>Connections</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.collection.InterfaceCollection
+	 * @see kieker.model.collection.Connections
 	 * @generated
 	 */
-	public Adapter createInterfaceCollectionAdapter() {
+	public Adapter createConnectionsAdapter() {
 		return null;
 	}
 

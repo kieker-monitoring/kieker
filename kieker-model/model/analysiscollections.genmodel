@@ -8,7 +8,9 @@
   <foreignModel>analysiscollections.ecore</foreignModel>
   <genPackages prefix="Collection" basePackage="kieker.model" disposableProviderFactory="true"
       ecorePackage="analysiscollections.ecore#/">
-    <genClasses ecoreClass="analysiscollections.ecore#//InterfaceCollection"/>
+    <genClasses ecoreClass="analysiscollections.ecore#//Connections">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//Connections/connections"/>
+    </genClasses>
     <genClasses ecoreClass="analysiscollections.ecore#//OperationCollection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//OperationCollection/caller"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//OperationCollection/callee"/>
@@ -25,6 +27,12 @@
     <genClasses ecoreClass="analysiscollections.ecore#//Coupling">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//Coupling/caller"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analysiscollections.ecore#//Coupling/callee"/>
+      <genOperations ecoreOperation="analysiscollections.ecore#//Coupling/equals"
+          body="if (value != null) {&#xA;&#x9;if (value instanceof Coupling) {&#xA;&#x9;&#x9;final Coupling coupling = (Coupling) value;&#xA;                if (this.caller == null &amp;&amp; coupling.getCaller() == null) {&#xA;                &#x9;if (this.callee == null &amp;&amp; coupling.getCallee() == null) {&#xA;&#x9;&#x9;&#x9;&#x9;return true;&#xA;&#x9;&#x9;&#x9;} else if (this.callee != null &amp;&amp; coupling.getCallee() != null) {&#xA; &#x9;&#x9;&#x9;&#x9;return this.callee.equals(coupling.getCallee());&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;} else if (this.caller != null &amp;&amp; coupling.getCaller() != null) {&#xA;&#x9;&#x9;&#x9;if (this.callee == null &amp;&amp; coupling.getCallee() == null) {&#xA;&#x9;&#x9;&#x9;&#x9;return this.caller.equals(coupling.getCaller()) ;&#xA;&#x9;&#x9;&#x9;} else if (this.callee != null &amp;&amp; coupling.getCallee() != null) {&#xA;&#x9;&#x9;&#x9;&#x9;return this.caller.equals(coupling.getCaller()) &amp;&amp; this.callee.equals(coupling.getCallee());&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;return false;">
+        <genParameters ecoreParameter="analysiscollections.ecore#//Coupling/equals/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="analysiscollections.ecore#//Coupling/hashCode"
+          body="return (this.caller == null ? 0 : this.caller.hashCode()) ^ (this.callee == null ? 0 : this.callee.hashCode());"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

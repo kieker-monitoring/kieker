@@ -4,6 +4,7 @@ package kieker.model.collection;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -57,32 +58,41 @@ public interface CollectionPackage extends EPackage {
 	CollectionPackage eINSTANCE = kieker.model.collection.impl.CollectionPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.model.collection.impl.InterfaceCollectionImpl <em>Interface Collection</em>}' class.
+	 * The meta object id for the '{@link kieker.model.collection.impl.ConnectionsImpl <em>Connections</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.model.collection.impl.InterfaceCollectionImpl
-	 * @see kieker.model.collection.impl.CollectionPackageImpl#getInterfaceCollection()
+	 * @see kieker.model.collection.impl.ConnectionsImpl
+	 * @see kieker.model.collection.impl.CollectionPackageImpl#getConnections()
 	 * @generated
 	 */
-	int INTERFACE_COLLECTION = 0;
+	int CONNECTIONS = 0;
 
 	/**
-	 * The number of structural features of the '<em>Interface Collection</em>' class.
+	 * The feature id for the '<em><b>Connections</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_COLLECTION_FEATURE_COUNT = 0;
+	int CONNECTIONS__CONNECTIONS = 0;
 
 	/**
-	 * The number of operations of the '<em>Interface Collection</em>' class.
+	 * The number of structural features of the '<em>Connections</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_COLLECTION_OPERATION_COUNT = 0;
+	int CONNECTIONS_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Connections</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTIONS_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.model.collection.impl.OperationCollectionImpl <em>Operation Collection</em>}' class.
@@ -269,24 +279,53 @@ public interface CollectionPackage extends EPackage {
 	int COUPLING_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Equals</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COUPLING___EQUALS__OBJECT = 0;
+
+	/**
+	 * The operation id for the '<em>Hash Code</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COUPLING___HASH_CODE = 1;
+
+	/**
 	 * The number of operations of the '<em>Coupling</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COUPLING_OPERATION_COUNT = 0;
+	int COUPLING_OPERATION_COUNT = 2;
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.model.collection.InterfaceCollection <em>Interface Collection</em>}'.
+	 * Returns the meta object for class '{@link kieker.model.collection.Connections <em>Connections</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Interface Collection</em>'.
-	 * @see kieker.model.collection.InterfaceCollection
+	 * @return the meta object for class '<em>Connections</em>'.
+	 * @see kieker.model.collection.Connections
 	 * @generated
 	 */
-	EClass getInterfaceCollection();
+	EClass getConnections();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.collection.Connections#getConnections <em>Connections</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Connections</em>'.
+	 * @see kieker.model.collection.Connections#getConnections()
+	 * @see #getConnections()
+	 * @generated
+	 */
+	EReference getConnections_Connections();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.collection.OperationCollection <em>Operation Collection</em>}'.
@@ -432,6 +471,26 @@ public interface CollectionPackage extends EPackage {
 	EReference getCoupling_Callee();
 
 	/**
+	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#equals(java.lang.Object) <em>Equals</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Equals</em>' operation.
+	 * @see kieker.model.collection.Coupling#equals(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getCoupling__Equals__Object();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#hashCode() <em>Hash Code</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Hash Code</em>' operation.
+	 * @see kieker.model.collection.Coupling#hashCode()
+	 * @generated
+	 */
+	EOperation getCoupling__HashCode();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -455,14 +514,22 @@ public interface CollectionPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.model.collection.impl.InterfaceCollectionImpl <em>Interface Collection</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.collection.impl.ConnectionsImpl <em>Connections</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.model.collection.impl.InterfaceCollectionImpl
-		 * @see kieker.model.collection.impl.CollectionPackageImpl#getInterfaceCollection()
+		 * @see kieker.model.collection.impl.ConnectionsImpl
+		 * @see kieker.model.collection.impl.CollectionPackageImpl#getConnections()
 		 * @generated
 		 */
-		EClass INTERFACE_COLLECTION = eINSTANCE.getInterfaceCollection();
+		EClass CONNECTIONS = eINSTANCE.getConnections();
+
+		/**
+		 * The meta object literal for the '<em><b>Connections</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONNECTIONS__CONNECTIONS = eINSTANCE.getConnections_Connections();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.collection.impl.OperationCollectionImpl <em>Operation Collection</em>}' class.
@@ -575,6 +642,22 @@ public interface CollectionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COUPLING__CALLEE = eINSTANCE.getCoupling_Callee();
+
+		/**
+		 * The meta object literal for the '<em><b>Equals</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation COUPLING___EQUALS__OBJECT = eINSTANCE.getCoupling__Equals__Object();
+
+		/**
+		 * The meta object literal for the '<em><b>Hash Code</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation COUPLING___HASH_CODE = eINSTANCE.getCoupling__HashCode();
 
 	}
 
