@@ -4,6 +4,7 @@ package kieker.model.collection;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -278,13 +279,31 @@ public interface CollectionPackage extends EPackage {
 	int COUPLING_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Equals</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COUPLING___EQUALS__OBJECT = 0;
+
+	/**
+	 * The operation id for the '<em>Hash Code</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COUPLING___HASH_CODE = 1;
+
+	/**
 	 * The number of operations of the '<em>Coupling</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COUPLING_OPERATION_COUNT = 0;
+	int COUPLING_OPERATION_COUNT = 2;
 
 
 	/**
@@ -452,6 +471,26 @@ public interface CollectionPackage extends EPackage {
 	EReference getCoupling_Callee();
 
 	/**
+	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#equals(java.lang.Object) <em>Equals</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Equals</em>' operation.
+	 * @see kieker.model.collection.Coupling#equals(java.lang.Object)
+	 * @generated
+	 */
+	EOperation getCoupling__Equals__Object();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#hashCode() <em>Hash Code</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Hash Code</em>' operation.
+	 * @see kieker.model.collection.Coupling#hashCode()
+	 * @generated
+	 */
+	EOperation getCoupling__HashCode();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -603,6 +642,22 @@ public interface CollectionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COUPLING__CALLEE = eINSTANCE.getCoupling_Callee();
+
+		/**
+		 * The meta object literal for the '<em><b>Equals</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation COUPLING___EQUALS__OBJECT = eINSTANCE.getCoupling__Equals__Object();
+
+		/**
+		 * The meta object literal for the '<em><b>Hash Code</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation COUPLING___HASH_CODE = eINSTANCE.getCoupling__HashCode();
 
 	}
 

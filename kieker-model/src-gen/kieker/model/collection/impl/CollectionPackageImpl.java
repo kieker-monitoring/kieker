@@ -16,6 +16,7 @@ import kieker.model.collection.OperationCollection;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -283,6 +284,26 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 	 * @generated
 	 */
 	@Override
+	public EOperation getCoupling__Equals__Object() {
+		return couplingEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getCoupling__HashCode() {
+		return couplingEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CollectionFactory getCollectionFactory() {
 		return (CollectionFactory)getEFactoryInstance();
 	}
@@ -325,6 +346,8 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 		couplingEClass = createEClass(COUPLING);
 		createEReference(couplingEClass, COUPLING__CALLER);
 		createEReference(couplingEClass, COUPLING__CALLEE);
+		createEOperation(couplingEClass, COUPLING___EQUALS__OBJECT);
+		createEOperation(couplingEClass, COUPLING___HASH_CODE);
 	}
 
 	/**
@@ -379,6 +402,11 @@ public class CollectionPackageImpl extends EPackageImpl implements CollectionPac
 		initEClass(couplingEClass, Coupling.class, "Coupling", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCoupling_Caller(), theTypePackage.getComponentType(), null, "caller", null, 0, 1, Coupling.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCoupling_Callee(), theTypePackage.getComponentType(), null, "callee", null, 0, 1, Coupling.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getCoupling__Equals__Object(), ecorePackage.getEBoolean(), "equals", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEJavaObject(), "value", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCoupling__HashCode(), ecorePackage.getEInt(), "hashCode", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

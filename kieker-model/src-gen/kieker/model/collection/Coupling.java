@@ -68,4 +68,20 @@ public interface Coupling extends EObject {
 	 */
 	void setCallee(ComponentType value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model valueRequired="true"
+	 * @generated
+	 */
+	boolean equals(Object value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	int hashCode();
+
 } // Coupling

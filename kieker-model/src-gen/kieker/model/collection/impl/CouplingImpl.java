@@ -2,6 +2,7 @@
  */
 package kieker.model.collection.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import kieker.model.analysismodel.type.ComponentType;
 
 import kieker.model.collection.CollectionPackage;
@@ -9,6 +10,7 @@ import kieker.model.collection.Coupling;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -155,6 +157,44 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	 * @generated
 	 */
 	@Override
+	public boolean equals(final Object value) {
+		if (value != null) {
+			if (value instanceof Coupling) {
+				final Coupling coupling = (Coupling) value;
+		                if (this.caller == null && coupling.getCaller() == null) {
+		                	if (this.callee == null && coupling.getCallee() == null) {
+						return true;
+					} else if (this.callee != null && coupling.getCallee() != null) {
+		 				return this.callee.equals(coupling.getCallee());
+					}
+				} else if (this.caller != null && coupling.getCaller() != null) {
+					if (this.callee == null && coupling.getCallee() == null) {
+						return this.caller.equals(coupling.getCaller()) ;
+					} else if (this.callee != null && coupling.getCallee() != null) {
+						return this.caller.equals(coupling.getCaller()) && this.callee.equals(coupling.getCallee());
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int hashCode() {
+		return (this.caller == null ? 0 : this.caller.hashCode()) ^ (this.callee == null ? 0 : this.callee.hashCode());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CollectionPackage.COUPLING__CALLER:
@@ -217,6 +257,22 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 				return callee != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CollectionPackage.COUPLING___EQUALS__OBJECT:
+				return equals(arguments.get(0));
+			case CollectionPackage.COUPLING___HASH_CODE:
+				return hashCode();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //CouplingImpl
