@@ -14,8 +14,6 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-    implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
-
 	implementation fileTree('lib') {
 		include "lib/kieker-1.15.1-aspectj.jar"
 	}

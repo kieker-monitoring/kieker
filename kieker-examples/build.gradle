@@ -289,8 +289,6 @@ task cleanStandaloneExamples(dependsOn: [
 	]) {
 }
 
-clean.dependsOn cleanStandaloneExamples
-
 task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/bookstore-application/build.gradle'
 	tasks = ['clean']
