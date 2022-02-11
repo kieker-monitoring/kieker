@@ -15,7 +15,7 @@ dependencies {
     // you need to ensure by yourself that the following jars are in the lib folder
     // This might be replaced by implementation "net.kieker-monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
     implementation fileTree('lib') {
-        include "kieker-*.jar"
+        include "kieker-${kiekerVersion}-aspectj.jar"
     }
 }
 
@@ -43,7 +43,7 @@ task runMonitoring(type: JavaExec) {
 	// The path to the javaagent file might be replaced by ${System.properties['user.home']}/.m2/repository/net/kieker-monitoring/kieker/${kiekerVersion}/kieker-${kiekerVersion}-aspectj.jar if the jar is in the local maven repository
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
 			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
-	           "-javaagent:lib/kieker-1.15.1-aspectj.jar",
+	           "-javaagent:lib/kieker-${kiekerVersion}-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }
