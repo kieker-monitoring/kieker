@@ -36,7 +36,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore";
+	String eNS_URI = "http://kieker-monitoring.net/analysismodel";
 
 	/**
 	 * The package namespace name.
