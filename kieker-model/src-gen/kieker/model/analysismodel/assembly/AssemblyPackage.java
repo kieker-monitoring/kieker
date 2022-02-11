@@ -481,7 +481,7 @@ public interface AssemblyPackage extends EPackage {
 	int ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' reference.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -912,7 +912,7 @@ public interface AssemblyPackage extends EPackage {
 	 * @return the meta object for class '<em>EString To Assembly Provided Interface Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
-	 *        valueType="kieker.model.analysismodel.assembly.AssemblyProvidedInterface"
+	 *        valueType="kieker.model.analysismodel.assembly.AssemblyProvidedInterface" valueContainment="true"
 	 * @generated
 	 */
 	EClass getEStringToAssemblyProvidedInterfaceMapEntry();
@@ -929,10 +929,10 @@ public interface AssemblyPackage extends EPackage {
 	EAttribute getEStringToAssemblyProvidedInterfaceMapEntry_Key();
 
 	/**
-	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Value</em>'.
+	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyProvidedInterfaceMapEntry()
 	 * @generated
@@ -1287,7 +1287,7 @@ public interface AssemblyPackage extends EPackage {
 		EAttribute ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY = eINSTANCE.getEStringToAssemblyProvidedInterfaceMapEntry_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

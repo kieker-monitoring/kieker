@@ -7,6 +7,7 @@ import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
 
@@ -53,7 +54,7 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	protected String key = KEY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getTypedValue()
@@ -108,14 +109,6 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * @generated
 	 */
 	public AssemblyProvidedInterface getTypedValue() {
-		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (AssemblyProvidedInterface)eResolveProxy(oldValue);
-			if (value != oldValue) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, oldValue, value));
-			}
-		}
 		return value;
 	}
 
@@ -124,8 +117,14 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyProvidedInterface basicGetTypedValue() {
-		return value;
+	public NotificationChain basicSetTypedValue(AssemblyProvidedInterface newValue, NotificationChain msgs) {
+		AssemblyProvidedInterface oldValue = value;
+		value = newValue;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, oldValue, newValue);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -134,10 +133,31 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * @generated
 	 */
 	public void setTypedValue(AssemblyProvidedInterface newValue) {
-		AssemblyProvidedInterface oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, oldValue, value));
+		if (newValue != value) {
+			NotificationChain msgs = null;
+			if (value != null)
+				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, null, msgs);
+			if (newValue != null)
+				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, null, msgs);
+			msgs = basicSetTypedValue(newValue, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, newValue, newValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
+				return basicSetTypedValue(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -151,8 +171,7 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY:
 				return getTypedKey();
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
-				if (resolve) return getTypedValue();
-				return basicGetTypedValue();
+				return getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
