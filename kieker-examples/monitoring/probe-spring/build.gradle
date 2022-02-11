@@ -39,6 +39,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/commons-logging/commons-logging
 	runtimeOnly 'commons-logging:commons-logging:1.2'
 	
+	// This might be replaced by implementation "net.kieker-monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
 	runtimeOnly fileTree('lib') {
 		include "kieker-*-aspectj.jar"
 	}
