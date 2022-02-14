@@ -132,6 +132,11 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//type/RequiredInterfaceType/requires"/>
       </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//type/InterfaceEStringToOperationTypeMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/InterfaceEStringToOperationTypeMapEntry/key"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//type/InterfaceEStringToOperationTypeMapEntry/value"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Assembly" basePackage="kieker.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//assembly">
