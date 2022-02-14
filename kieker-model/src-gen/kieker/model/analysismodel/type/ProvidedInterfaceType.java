@@ -34,7 +34,7 @@ public interface ProvidedInterfaceType extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Provided Operation Types</em>' map.
 	 * @see kieker.model.analysismodel.type.TypePackage#getProvidedInterfaceType_ProvidedOperationTypes()
-	 * @model mapType="kieker.model.analysismodel.type.EStringToOperationTypeMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;" ordered="false"
+	 * @model mapType="kieker.model.analysismodel.type.InterfaceEStringToOperationTypeMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;" ordered="false"
 	 * @generated
 	 */
 	EMap<String, OperationType> getProvidedOperationTypes();

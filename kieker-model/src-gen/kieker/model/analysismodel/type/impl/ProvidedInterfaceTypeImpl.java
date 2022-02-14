@@ -135,7 +135,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public EMap<String, OperationType> getProvidedOperationTypes() {
 		if (providedOperationTypes == null) {
-			providedOperationTypes = new EcoreEMap<String,OperationType>(TypePackage.Literals.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY, EStringToOperationTypeMapEntryImpl.class, this, TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES);
+			providedOperationTypes = new EcoreEMap<String,OperationType>(TypePackage.Literals.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY, InterfaceEStringToOperationTypeMapEntryImpl.class, this, TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES);
 		}
 		return providedOperationTypes;
 	}
