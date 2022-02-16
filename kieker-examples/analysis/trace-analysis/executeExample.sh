@@ -11,6 +11,6 @@ processedCount=$(cat kieker.log | grep "Records processed in total" | awk '{prin
 if (( $processedCount == 6541 )) ; then
 	echo "Run was sucessful"
 else
-	echo "Run had $logCount log entries; error occured"
+	echo "Run had $processedCount log entries; error occured"
 	exit 1
 fi
