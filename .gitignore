@@ -27,6 +27,7 @@ plugin.xml
 /kieker-examples/userguide/ch2--bookstore-application/.gradle
 kieker-examples/monitoring/probe-aspectj/kieker.log
 kieker-examples/monitoring/probe-spring/kieker.log
+kieker-examples/analysis/trace-analysis/kieker.log
 /kieker-tools/*.log
 /kieker-tools/activemq-data
 /kieker-analysis/*.log
