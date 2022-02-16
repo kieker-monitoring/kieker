@@ -195,7 +195,7 @@ task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLib
 // Spring tutorial example
 task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}-jar.jar"
+		include "kieker-${version}.jar"
 	}
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
@@ -211,7 +211,7 @@ task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copy
 //
 task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}-jar.jar"
+		include "kieker-${version}.jar"
 	}
 	into 'monitoring/probe-manual/lib/'
 }
@@ -244,6 +244,8 @@ task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'co
 	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
 	tasks = ['jar']
 }
+
+
 
 task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../build/libs') {
@@ -286,8 +288,6 @@ task cleanStandaloneExamples(dependsOn: [
 	// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
 	]) {
 }
-
-clean.dependsOn cleanStandaloneExamples
 
 task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/bookstore-application/build.gradle'
