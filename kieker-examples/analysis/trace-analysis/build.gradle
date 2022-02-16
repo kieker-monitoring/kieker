@@ -7,6 +7,11 @@ repositories {
 	mavenLocal()
 	mavenCentral() 
 	jcenter()
+	
+	// Currently, TeeTime is not available in regular central repository; this should be removed as soon as TeeTime is released
+	maven {
+		url "https://oss.sonatype.org/content/repositories/snapshots"
+	}
 }
 
 dependencies {
@@ -16,7 +21,7 @@ dependencies {
 	implementation "com.beust:jcommander:1.72"
 
 	implementation 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT'
-	implementation 'net.kieker-monitoring:kieker:${kiekerVersion}'
+	implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
 
 distTar.enabled=false
