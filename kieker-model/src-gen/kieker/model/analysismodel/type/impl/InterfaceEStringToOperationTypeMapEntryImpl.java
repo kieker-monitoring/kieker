@@ -1,13 +1,12 @@
 /**
  */
-package kieker.model.analysismodel.assembly.impl;
+package kieker.model.analysismodel.type.impl;
 
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.TypePackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
 
@@ -20,19 +19,19 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EString To Assembly Provided Interface Map Entry</b></em>'.
+ * An implementation of the model object '<em><b>Interface EString To Operation Type Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,AssemblyProvidedInterface> {
+public class InterfaceEStringToOperationTypeMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,OperationType> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -54,21 +53,21 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	protected String key = KEY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected AssemblyProvidedInterface value;
+	protected OperationType value;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EStringToAssemblyProvidedInterfaceMapEntryImpl() {
+	protected InterfaceEStringToOperationTypeMapEntryImpl() {
 		super();
 	}
 
@@ -79,7 +78,7 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY;
+		return TypePackage.Literals.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY;
 	}
 
 	/**
@@ -100,7 +99,7 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 		String oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY, oldKey, key));
 	}
 
 	/**
@@ -108,7 +107,15 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyProvidedInterface getTypedValue() {
+	public OperationType getTypedValue() {
+		if (value != null && value.eIsProxy()) {
+			InternalEObject oldValue = (InternalEObject)value;
+			value = (OperationType)eResolveProxy(oldValue);
+			if (value != oldValue) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE, oldValue, value));
+			}
+		}
 		return value;
 	}
 
@@ -117,47 +124,20 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(AssemblyProvidedInterface newValue, NotificationChain msgs) {
-		AssemblyProvidedInterface oldValue = value;
+	public OperationType basicGetTypedValue() {
+		return value;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTypedValue(OperationType newValue) {
+		OperationType oldValue = value;
 		value = newValue;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTypedValue(AssemblyProvidedInterface newValue) {
-		if (newValue != value) {
-			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, null, msgs);
-			msgs = basicSetTypedValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE, newValue, newValue));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
-				return basicSetTypedValue(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE, oldValue, value));
 	}
 
 	/**
@@ -168,10 +148,11 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY:
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY:
 				return getTypedKey();
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
-				return getTypedValue();
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE:
+				if (resolve) return getTypedValue();
+				return basicGetTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -184,11 +165,11 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY:
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY:
 				setTypedKey((String)newValue);
 				return;
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
-				setTypedValue((AssemblyProvidedInterface)newValue);
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE:
+				setTypedValue((OperationType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -202,11 +183,11 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY:
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY:
 				setTypedKey(KEY_EDEFAULT);
 				return;
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
-				setTypedValue((AssemblyProvidedInterface)null);
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE:
+				setTypedValue((OperationType)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -220,9 +201,9 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY:
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY:
 				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE:
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE:
 				return value != null;
 		}
 		return super.eIsSet(featureID);
@@ -301,7 +282,7 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * @generated
 	 */
 	@Override
-	public AssemblyProvidedInterface getValue() {
+	public OperationType getValue() {
 		return getTypedValue();
 	}
 
@@ -311,8 +292,8 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * @generated
 	 */
 	@Override
-	public AssemblyProvidedInterface setValue(AssemblyProvidedInterface value) {
-		AssemblyProvidedInterface oldValue = getValue();
+	public OperationType setValue(OperationType value) {
+		OperationType oldValue = getValue();
 		setTypedValue(value);
 		return oldValue;
 	}
@@ -323,9 +304,9 @@ public class EStringToAssemblyProvidedInterfaceMapEntryImpl extends MinimalEObje
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<String, AssemblyProvidedInterface> getEMap() {
+	public EMap<String, OperationType> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<String, AssemblyProvidedInterface>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, OperationType>)container.eGet(eContainmentFeature());
 	}
 
-} //EStringToAssemblyProvidedInterfaceMapEntryImpl
+} //InterfaceEStringToOperationTypeMapEntryImpl
