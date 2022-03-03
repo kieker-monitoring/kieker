@@ -128,12 +128,6 @@ public class AssemblySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case AssemblyPackage.ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, AssemblyOperation> eStringToInterfaceAssemblyOperationMapEntry = (Map.Entry<String, AssemblyOperation>)theEObject;
-				T result = caseEStringToInterfaceAssemblyOperationMapEntry(eStringToInterfaceAssemblyOperationMapEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -285,21 +279,6 @@ public class AssemblySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAssemblyRequiredInterface(AssemblyRequiredInterface object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EString To Interface Assembly Operation Map Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>EString To Interface Assembly Operation Map Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseEStringToInterfaceAssemblyOperationMapEntry(Map.Entry<String, AssemblyOperation> object) {
 		return null;
 	}
 

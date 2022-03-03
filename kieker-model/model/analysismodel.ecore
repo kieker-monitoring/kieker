@@ -222,8 +222,6 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyProvidedInterface">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
-          eType="#//assembly/EStringToInterfaceAssemblyOperationMapEntry" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterfaceType"
           eType="#//type/ProvidedInterfaceType"/>
     </eClassifiers>
@@ -237,11 +235,6 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="requires" eType="#//assembly/AssemblyProvidedInterface"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterfaceType"
           eType="#//type/RequiredInterfaceType"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="EStringToInterfaceAssemblyOperationMapEntry"
-        instanceClassName="java.util.Map$Entry">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//assembly/AssemblyOperation"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
@@ -318,8 +311,6 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyStorage" eType="#//assembly/AssemblyStorage"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedProvidedInterface">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
-          eType="#//deployment/EStringToInterfaceDeployedOperationMapEntry" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterface" eType="#//assembly/AssemblyProvidedInterface"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedProvidedInterfaceMapEntry"
@@ -331,11 +322,6 @@
     <eClassifiers xsi:type="ecore:EClass" name="DeployedRequiredInterface">
       <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterface" eType="#//assembly/AssemblyRequiredInterface"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="requires" eType="#//deployment/DeployedProvidedInterface"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="EStringToInterfaceDeployedOperationMapEntry"
-        instanceClassName="java.util.Map$Entry">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedOperation"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"

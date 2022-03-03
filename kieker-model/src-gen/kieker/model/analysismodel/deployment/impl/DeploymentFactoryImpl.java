@@ -70,7 +70,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 			case DeploymentPackage.DEPLOYED_PROVIDED_INTERFACE: return createDeployedProvidedInterface();
 			case DeploymentPackage.ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY: return (EObject)createEStringToDeployedProvidedInterfaceMapEntry();
 			case DeploymentPackage.DEPLOYED_REQUIRED_INTERFACE: return createDeployedRequiredInterface();
-			case DeploymentPackage.ESTRING_TO_INTERFACE_DEPLOYED_OPERATION_MAP_ENTRY: return (EObject)createEStringToInterfaceDeployedOperationMapEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -201,16 +200,6 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	public DeployedRequiredInterface createDeployedRequiredInterface() {
 		DeployedRequiredInterfaceImpl deployedRequiredInterface = new DeployedRequiredInterfaceImpl();
 		return deployedRequiredInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, DeployedOperation> createEStringToInterfaceDeployedOperationMapEntry() {
-		EStringToInterfaceDeployedOperationMapEntryImpl eStringToInterfaceDeployedOperationMapEntry = new EStringToInterfaceDeployedOperationMapEntryImpl();
-		return eStringToInterfaceDeployedOperationMapEntry;
 	}
 
 	/**
