@@ -22,40 +22,37 @@ task buildStandaloneExamples(dependsOn: [
 }
 
 task replaceHardCodedVersionNames() {
-	doLast {
-		regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("monitoring/probe-aspectj/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/custom-timesource/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/probe-spring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/sampler-jvm/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/probe-manual-tcp/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/probe-manual/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("monitoring/sampler-oshi/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/custom-timesource/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/probe-spring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/sampler-jvm/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/probe-manual-tcp/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/probe-manual/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("monitoring/sampler-oshi/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
 		
-		regexpReplaceInFiles(project.file("userguide/appendix-JMS/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/appendix-Kafka/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/appendix-AMQP/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/manual-instrumentation/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/bookstore-application/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/appendix-JMS/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/appendix-Kafka/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/appendix-AMQP/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/manual-instrumentation/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/bookstore-application/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	
+	regexpReplaceInFiles(project.file("analysis/trace-analysis/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
 		
-		regexpReplaceInFiles(project.file("analysis/trace-analysis/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-		regexpReplaceInFiles(project.file("JavaEEServletContainerExample/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.md"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
 		
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.md"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-		regexpReplaceInFiles(project.file("userguide/manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-		
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-163010944-UTC-constructor-events-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
-		regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
-		
-	}
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-163010944-UTC-constructor-events-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots.sh"), "KIEKER_VERSION=\".*\"", "KIEKER_VERSION=\"${kiekerVersion}\"")
 }
 
 // bookstore
