@@ -43,6 +43,7 @@ task replaceHardCodedVersionNames() {
 	
 	regexpReplaceInFiles(project.file("analysis/trace-analysis/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
 	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
+	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 		
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.md"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
