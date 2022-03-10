@@ -22,9 +22,7 @@ task buildStandaloneExamples(dependsOn: [
 }
 
 task replaceHardCodedVersionNames() {
-	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
-	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
 	regexpReplaceInFiles(project.file("monitoring/custom-timesource/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${kiekerVersion}")
