@@ -3,7 +3,7 @@
 pipeline {
 
   agent none
-
+  
   environment {
     DOCKER_ARGS = ''
   }
@@ -65,6 +65,7 @@ pipeline {
             sh './gradlew -x check -x test build publishToMavenLocal distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'bin/dev/*', name: 'bin-dev'
           }
         }
       }
@@ -79,8 +80,12 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
+          options {
+            skipDefaultCheckout()
+          }
           steps {
             unstash 'distributions'
+            unstash 'bin-dev'
             sh 'bin/dev/release-check-short.sh'
           }
 //          post {
@@ -97,6 +102,9 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
+          options {
+            skipDefaultCheckout()
+          }
           when {
             beforeAgent true
             anyOf {
@@ -107,6 +115,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
+            unstash 'bin-dev'
             sh 'bin/dev/release-check-extended.sh'
           }
 //          post {
@@ -124,6 +133,9 @@ pipeline {
           image 'kieker/kieker-build:openjdk8'
           args env.DOCKER_ARGS
         }
+      }
+      options {
+         skipDefaultCheckout()
       }
       steps {
         unstash 'jarArtifacts'
