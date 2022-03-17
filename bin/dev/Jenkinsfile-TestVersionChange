@@ -83,11 +83,11 @@ pipeline {
             unstash 'distributions'
             sh 'bin/dev/release-check-short.sh'
           }
-          post {
-            cleanup {
-              deleteDir()
-            }
-          }
+//          post {
+//            cleanup {
+//              deleteDir()
+//            }
+//          }
         }
 
         stage('Release Check Extended') {
@@ -109,11 +109,11 @@ pipeline {
             unstash 'distributions'
             sh 'bin/dev/release-check-extended.sh'
           }
-          post {
-            cleanup {
-              deleteDir()
-            }
-          }
+//          post {
+//            cleanup {
+//              deleteDir()
+//            }
+//          }
         }
       }
     }
@@ -132,12 +132,12 @@ pipeline {
             fingerprint: true,
             onlyIfSuccessful: true
       }
-      post {
-        cleanup {
-          deleteDir()
-          cleanWs()
-        }
-      }
+  //    post {
+  //      cleanup {
+  //        deleteDir()
+  //        cleanWs()
+  //      }
+  //    }
     }
 
   }
