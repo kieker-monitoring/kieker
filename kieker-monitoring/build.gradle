@@ -118,7 +118,7 @@ dependencies {
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 
-	integrationTestCompile "junit:junit:$libJunitVersion"
+	integrationTestImplementation "junit:junit:$libJunitVersion"
 }
 
 task iajc(dependsOn: classes) {
