@@ -2,7 +2,6 @@ buildscript {
 	repositories {
 		mavenCentral()
 		maven { url "https://plugins.gradle.org/m2/" }
-		jcenter()
 	}
 
 	dependencies {
@@ -69,7 +68,6 @@ allprojects {
 	repositories {    // must be above subprojects {}
 		mavenLocal()
 		mavenCentral()
-		jcenter() // for mockito
 		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 	}
 }

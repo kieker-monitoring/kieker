@@ -30,7 +30,7 @@ configurations {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 	maven { url "https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2" }
 }
 

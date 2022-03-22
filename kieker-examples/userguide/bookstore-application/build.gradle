@@ -2,7 +2,6 @@ apply plugin: 'application'
 
 repositories {
 	mavenCentral() 
-        jcenter() 
 }
 
 dependencies {
