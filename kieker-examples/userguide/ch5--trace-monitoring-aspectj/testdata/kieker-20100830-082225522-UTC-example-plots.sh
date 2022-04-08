@@ -4,7 +4,7 @@ KIEKER_DIR="$1"
 OUTDIR="$2"
 EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
 
-KIEKER_VERSION="1.15.1"
+KIEKER_VERSION="1.16-SNAPSHOT"
 
 TOOL_DIR=`mktemp -d`
 
