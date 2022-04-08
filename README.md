@@ -7,6 +7,7 @@ runtime behavior — enabling application performance monitoring and architectur
 discovery.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
+and its documentation site https://kieker-monitoring.readthedocs.io/en/latest/
 
 ## Citation
 

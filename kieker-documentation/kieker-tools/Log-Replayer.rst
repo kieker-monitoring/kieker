@@ -18,22 +18,30 @@ applications are:
 Usage
 -----
 
-usage: log-replayer -i <dir1...dirN> -h <hostname> -p <port> [-n] [-d <factor>] [-c <count>] [-V] [-r] [-bd <yyyyMMdd-HHmmss>] [-ad <yyyyMMdd-HHmmss>]
+usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter [-a
+<factor>] [-c <\path\to\monitoring.properties>] [-d] [-h] [-i <dir1
+...dirN>]
 
-===== ============================ ======== ===================================================================================================================================
-Short Long Option                  Required Description
-===== ============================ ======== ===================================================================================================================================
--i    --input                      true     Log directories to read data from
--h    --host                       true     Name or IP address of the host where the data is send to
--p    --port                       true     Output port where the records as send to
--n    --no-delay                   false    Read and send events as fast as possible. (default send in the defined speed)
--d    --delay                      false    Delay factor. Default is 1 = realtime, 2 = twice the speed/half of the delay.
--c    --count                      false    Show count of events sent. Display count every n-th event.
--V    --verbose                    false    Verbosely prints additional information
--r    --time-rewrite               false    Set event timestamps relative to present time.
--bd   --ignore-records-before-date false    Records logged before this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss
--ad   --ignore-records-after-date  false    Records logged after this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss", converter = DateConverter.class)
-===== ============================ ======== ===================================================================================================================================
+[--ignore-records-after-date <yyyyMMdd-HHmmss>]
+[--ignore-records-before-date <yyyyMMdd-HHmmss>] [-k <true|false>]
+
+[-n <num>] [-r <true|false>] [-v]
+
+===== =========================================================== ======== =================================================================================================================================================================================================
+Short Long Option                                                 Required Description
+===== =========================================================== ======== =================================================================================================================================================================================================
+-a    --realtime-acceleration-factor <factor>                              Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in real time mode (defaults to 1.0, i .e ., no acceleration /slow down).
+-c    --monitoring.configuration <\path\to\monitoring.properties>          Configuration to use for the Kieker monitoring instance
+-d    --debug                                                     false    prints additional debug information
+-h    --help                                                      false    prints the usage information for the tool , including available options
+-i    --inputdirs <dir1 ... dirN>                                          Log directories to read data from
+      --ignore-records-after-date <yyyyMMdd-HHmmss>                        Records logged after this date (UTC timezone) are ignored (disabled by default).
+      --ignore-records-before-date <yyyyMMdd-HHmmss>                       Records logged before this date (UTC timezone) are ignored (disabled by default).
+-k    --keep-logging-timestamps <true|false>                      true     Replay the original logging timestamps ( defaults to true )?
+-n    --realtime-worker-threads <num>                             1        Number of worker threads used in realtime mode
+-r    --realtime <true|false>                                              Replay log data in realtime
+-v    --verbose                                                            verbosely prints additional information
+===== =========================================================== ======== =================================================================================================================================================================================================
 
 Example
 -------
@@ -43,17 +51,19 @@ binary release to another directory:
 
 .. code::
   
-  log-replayer --input
+  log-replayer --inputdirs
      examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
-     -h localhost -p 5678
+     --keep-logging-timestamps true
+     --realtime false
 
 Listing A.3: Execution under UNIX-like systems
 
 .. code::
   
-  log-replayer --input
+  log-replayer --inputdirs
      ..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
-     -h localhost -p 5678
+     --keep-logging-timestamps true
+     --realtime false
 
 Listing A.4: Execution under Windows
 
