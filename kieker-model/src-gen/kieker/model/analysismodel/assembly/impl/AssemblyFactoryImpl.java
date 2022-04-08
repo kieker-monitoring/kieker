@@ -68,7 +68,6 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE: return createAssemblyProvidedInterface();
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY: return (EObject)createEStringToAssemblyProvidedInterfaceMapEntry();
 			case AssemblyPackage.ASSEMBLY_REQUIRED_INTERFACE: return createAssemblyRequiredInterface();
-			case AssemblyPackage.ESTRING_TO_INTERFACE_ASSEMBLY_OPERATION_MAP_ENTRY: return (EObject)createEStringToInterfaceAssemblyOperationMapEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -178,16 +177,6 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	public AssemblyRequiredInterface createAssemblyRequiredInterface() {
 		AssemblyRequiredInterfaceImpl assemblyRequiredInterface = new AssemblyRequiredInterfaceImpl();
 		return assemblyRequiredInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, AssemblyOperation> createEStringToInterfaceAssemblyOperationMapEntry() {
-		EStringToInterfaceAssemblyOperationMapEntryImpl eStringToInterfaceAssemblyOperationMapEntry = new EStringToInterfaceAssemblyOperationMapEntryImpl();
-		return eStringToInterfaceAssemblyOperationMapEntry;
 	}
 
 	/**
