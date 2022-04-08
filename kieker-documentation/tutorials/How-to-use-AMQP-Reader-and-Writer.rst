@@ -1,4 +1,4 @@
-.. _collecting-data-amqp-reader-writer:
+.. _tutorial-amqp-reader-writer:
 
 How to use AMQP Writer and Reader
 =================================

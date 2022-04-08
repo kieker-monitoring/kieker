@@ -5,7 +5,7 @@ This is a short introduction to the JMS reader and writer of **Kieker**
 named **AsyncJmsWriter** and **JmsReaderStage**. The directory
 ``examples/userguide/appendix-JMS/`` contains the sources, gradle
 scripts etc. used in this example. It is based on the Bookstore
-application with manual instrumentation presented :ref:`getting-started`.
+application with manual instrumentation presented getting-started_.
 
 The following sections provide step-by-step instructions for the
 ActiveMQ JMS server implementation.
@@ -75,17 +75,12 @@ Running the Example
 The execution of the example is performed by the following three steps:
 
 #. Start the JMS server (you may have to set your **JAVA_HOME** variable first):
-
    - ``bin/activemq start`` Start of the JMS server under UNIX-like systems
    - ``bin/activemq start`` Start of the JMS server under Windows
-
 #. Start the analysis part (in a new terminal):
-
    - ``./gradlew runAnalysisActiveMQ`` Start the analysis part under UNIX-like systems
-   - ``gradlew.bat runAnalysisActiveMQ`` Start the analysis part under Windows
-
+   - ``gradlew.bat runAnalysisActiveMQ``Start the analysis part under Windows
 #. Start the instrumented Bookstore (in a new terminal):
-
    - ``./gradlew runMonitoringActiveMQ`` Start the analysis part under UNIX-like systems
    - ``gradlew.bat runMonitoringActiveMQ`` Start the analysis part under Windows
 

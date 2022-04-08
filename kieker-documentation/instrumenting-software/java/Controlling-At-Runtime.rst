@@ -9,8 +9,7 @@ JMX MBean Access to **MonitoringController**
 
 The **MonitoringController**'s interface methods can
 be accessed as a JMX MBean. For example, this allows to control the
-monitoring state using the methods described in
-:ref:`technical-details-java-monitoring-controller-api`.
+monitoring state using the methods described in :ref:`java-monitoring-controller-api`.
 As a JMX-compliant graphical client that is included in the JDK,
 ``jconsole`` is probably the easiest way to get started. Just keep in
 mind to add **Kieker** to the classpath when calling ``jconsole`` so
@@ -38,7 +37,7 @@ the corresponding configuration properties must be set to *true*
 (listing below). The ``\monitoringPropertiesFile`` includes additional
 JMX-related configuration properties.
 
-.. code-block:: properties
+.. code-block:: parameter
 
    ## Whether any JMX functionality is available
    kieker.monitoring.jmx=true
