@@ -142,13 +142,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	private EClass deployedRequiredInterfaceEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass eStringToInterfaceDeployedOperationMapEntryEClass = null;
-
-	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -575,18 +568,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedProvidedInterface_ProvidedOperations() {
-		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getDeployedProvidedInterface_ProvidedInterface() {
-		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(1);
+		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -647,36 +630,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	@Override
 	public EReference getDeployedRequiredInterface_Requires() {
 		return (EReference)deployedRequiredInterfaceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getEStringToInterfaceDeployedOperationMapEntry() {
-		return eStringToInterfaceDeployedOperationMapEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getEStringToInterfaceDeployedOperationMapEntry_Key() {
-		return (EAttribute)eStringToInterfaceDeployedOperationMapEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getEStringToInterfaceDeployedOperationMapEntry_Value() {
-		return (EReference)eStringToInterfaceDeployedOperationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -750,7 +703,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEOperation(deployedStorageEClass, DEPLOYED_STORAGE___GET_COMPONENT);
 
 		deployedProvidedInterfaceEClass = createEClass(DEPLOYED_PROVIDED_INTERFACE);
-		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
 		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE);
 
 		eStringToDeployedProvidedInterfaceMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY);
@@ -760,10 +712,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deployedRequiredInterfaceEClass = createEClass(DEPLOYED_REQUIRED_INTERFACE);
 		createEReference(deployedRequiredInterfaceEClass, DEPLOYED_REQUIRED_INTERFACE__REQUIRED_INTERFACE);
 		createEReference(deployedRequiredInterfaceEClass, DEPLOYED_REQUIRED_INTERFACE__REQUIRES);
-
-		eStringToInterfaceDeployedOperationMapEntryEClass = createEClass(ESTRING_TO_INTERFACE_DEPLOYED_OPERATION_MAP_ENTRY);
-		createEAttribute(eStringToInterfaceDeployedOperationMapEntryEClass, ESTRING_TO_INTERFACE_DEPLOYED_OPERATION_MAP_ENTRY__KEY);
-		createEReference(eStringToInterfaceDeployedOperationMapEntryEClass, ESTRING_TO_INTERFACE_DEPLOYED_OPERATION_MAP_ENTRY__VALUE);
 	}
 
 	/**
@@ -844,7 +792,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(deployedProvidedInterfaceEClass, DeployedProvidedInterface.class, "DeployedProvidedInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedProvidedInterface_ProvidedOperations(), this.getEStringToInterfaceDeployedOperationMapEntry(), null, "providedOperations", null, 0, -1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedProvidedInterface_ProvidedInterface(), theAssemblyPackage.getAssemblyProvidedInterface(), null, "providedInterface", null, 0, 1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eStringToDeployedProvidedInterfaceMapEntryEClass, Map.Entry.class, "EStringToDeployedProvidedInterfaceMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -854,10 +801,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEClass(deployedRequiredInterfaceEClass, DeployedRequiredInterface.class, "DeployedRequiredInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeployedRequiredInterface_RequiredInterface(), theAssemblyPackage.getAssemblyRequiredInterface(), null, "requiredInterface", null, 0, 1, DeployedRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedRequiredInterface_Requires(), this.getDeployedProvidedInterface(), null, "requires", null, 0, 1, DeployedRequiredInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(eStringToInterfaceDeployedOperationMapEntryEClass, Map.Entry.class, "EStringToInterfaceDeployedOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEStringToInterfaceDeployedOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEStringToInterfaceDeployedOperationMapEntry_Value(), this.getDeployedOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //DeploymentPackageImpl
