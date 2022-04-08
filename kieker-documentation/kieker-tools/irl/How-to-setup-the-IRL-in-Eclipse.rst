@@ -119,7 +119,7 @@ For a plain Java project, we have to add dependenices manually. Create within
 Eclipse in the project a library directory *lib* with *File* > *New* > *Folder*.
 Name the folder *lib*.
 
-On the file system copy the Kieker library jar, e.g., `kieker-1.15-SNAPSHOT.jar`
+On the file system copy the Kieker library jar, e.g., `kieker-1.16-SNAPSHOT.jar`
 to the *lib* directory. Use therefore either command line or your operating
 systems copy functionality.
 
