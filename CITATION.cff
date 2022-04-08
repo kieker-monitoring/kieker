@@ -22,4 +22,4 @@ license: "Apache-2.0"
 message: "If you use this software, please cite https://doi.org/10.1016/j.simpa.2020.100019"
 repository-code: "https://github.com/kieker-monitoring/kieker"
 title: Kieker
-version: "1.15.1"
+version: "1.16-SNAPSHOT"
