@@ -18,7 +18,6 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 	implementation 'org.jctools:jctools-core:2.1.0'
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-expression
@@ -39,6 +38,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/commons-logging/commons-logging
 	runtimeOnly 'commons-logging:commons-logging:1.2'
 	
+	// This might be replaced by implementation "net.kieker-monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
 	runtimeOnly fileTree('lib') {
 		include "kieker-*-aspectj.jar"
 	}

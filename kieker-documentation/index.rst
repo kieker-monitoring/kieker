@@ -18,14 +18,12 @@ Table of Contents
 
    introduction
    getting-started/Getting-Started.rst
-   features/Features.rst
+   tutorials/Tutorials.rst
    instrumenting-software/Instrumenting-Software.rst
-   collecting-data/Collecting-Data.rst
    analyzing-monitoring-data/Analyzing-Monitoring-Data.rst
    kieker-tools/Kieker-Tools.rst
    developing-with-kieker/Developing-with-Kieker.rst
-   contributing-to-kieker/Contributing-to-Kieker.rst
-   technical-details/Technical-Details.rst
+   architecture/Architecture.rst
    lectures/Lectures.rst
    related-work/Related-Work.rst
 

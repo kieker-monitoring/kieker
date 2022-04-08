@@ -1,4 +1,4 @@
-.. _contributing-to-kieker-how-to-contribute-documentation:
+.. _tutorials-how-to-contribute-documentation:
 
 How to contribute Documentation 
 ===============================
