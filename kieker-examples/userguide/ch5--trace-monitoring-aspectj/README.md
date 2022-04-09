@@ -3,12 +3,12 @@
 This directory contains a pre-compiled Jar file which can be started with 
 the 'java' tool using the following commands ('5' starts five requests):
 
-To be able to run this example you need to copy the kieker-1.16-SNAPSHOT-aspectj.jar into the library directory.
+To be able to run this example you need to copy the task ':aspectJJar' property 'archiveFileName' into the library directory.
 
 - UNIX-like systems:
- $ java -javaagent:lib/kieker-1.16-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
+ $ java -javaagent:lib/task ':aspectJJar' property 'archiveFileName' -jar build/libs/BookstoreApplication.jar 5
 - Windows:
- $ java -javaagent:lib\kieker-1.16-SNAPSHOT-aspectj.jar -jar build/libs/BookstoreApplication.jar 5
+ $ java -javaagent:lib\task ':aspectJJar' property 'archiveFileName' -jar build/libs/BookstoreApplication.jar 5
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:

@@ -143,9 +143,9 @@ subprojects {
 	jacocoTestReport {
 		dependsOn test // tests are required to run before generating the report
 		reports {
-			xml.enabled = false
-			csv.enabled = false
-			html.enabled = true
+			xml.required = false
+			csv.required = false
+			html.required = true
 		}
 	}
 
@@ -219,8 +219,8 @@ subprojects {
 
 	tasks.withType(Pmd) {
 		reports {
-			xml.enabled = true
-			html.enabled = true
+			xml.required = true
+			html.required = true
 		}
 		// the following line of code adds our custom PMD rules as jar file to the classpath
 		//pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
@@ -228,8 +228,8 @@ subprojects {
 
 	tasks.withType(Checkstyle) {
 		reports {
-			xml.enabled true
-			html.enabled true
+			xml.required = true
+			html.required = true
 			html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
 		}
 	}
@@ -501,12 +501,12 @@ task replaceHardCodedVersionNames() {
 		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveFileName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
 		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
 		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
 		regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
@@ -631,10 +631,12 @@ task createArtifacts(dependsOn: [ 'mainJar', 'aspectJJar', 'emfJar', 'sourcesJar
 task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
 		description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	// default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
 	configure allArtifacts
 	configure licence
 	configure aopxml
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 	manifest = project.manifest {
 		from sharedManifest
@@ -645,11 +647,13 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
 task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
 		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	// default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
 	classifier = 'emf'
 	configure allArtifacts
 	configure licence
 	configure aopxml
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 	from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
 	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
@@ -669,11 +673,13 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
 		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	// default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
 	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
 	configure aopxml
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
 	from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
