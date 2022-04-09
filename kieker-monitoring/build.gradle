@@ -30,7 +30,7 @@ configurations {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 	maven { url "https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2" }
 }
 
@@ -118,7 +118,7 @@ dependencies {
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 
-	integrationTestCompile "junit:junit:$libJunitVersion"
+	integrationTestImplementation "junit:junit:$libJunitVersion"
 }
 
 task iajc(dependsOn: classes) {

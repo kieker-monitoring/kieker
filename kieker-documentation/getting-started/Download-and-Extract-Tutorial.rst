@@ -27,11 +27,11 @@ contents shown below
 
 The Java sources presented in this user guide, as well as pre-compiled
 binaries, are included in the ``examples/userguide/`` directory. The
-file ``kieker-1.16-SNAPSHOT.jar`` contains the *Kieker.Monitoring* and
+file ``task ':mainJar' property 'archiveFileName'`` contains the *Kieker.Monitoring* and
 *Kieker.Analysis* components, as well as the *Kieker.Trace-Analysis*
 tool. The sample *Kieker.Monitoring configuration*
 file ``kieker.monitoring.ex-ample.properties`` will be detailed in
-Chapter 3. In addition to the ``kieker-1.16-SNAPSHOT.jar`` file,
+Chapter 3. In addition to the ``task ':mainJar' property 'archiveFileName'`` file,
 the ``build/libs/`` directory includes variants of
 this ``.jar`` files with integrated third-party libraries. Additional
 information on these ``.jar`` files and when to use them will follow
