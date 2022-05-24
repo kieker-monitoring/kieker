@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
+import kieker.analysis.architecture.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -48,8 +50,6 @@ import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
-import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
-import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.flow.IFlowRecord;

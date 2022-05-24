@@ -19,6 +19,7 @@ package kieker.analysis.debug.hotspotdetection;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
 
+import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.signature.JavaOperationSignatureExtractor;
 import kieker.analysis.source.file.DirectoryReaderStage;
@@ -30,7 +31,6 @@ import kieker.analysis.stage.model.DeploymentModelAssemblerStage;
 import kieker.analysis.stage.model.OperationAndCallGeneratorStage;
 import kieker.analysis.stage.model.TypeModelAssemblerStage;
 import kieker.analysis.stage.model.data.OperationEvent;
-import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.analysismodel.assembly.AssemblyFactory;

@@ -18,6 +18,7 @@ package kieker.analysis.trace;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.stage.flow.TraceEventRecords;
 import kieker.analysis.util.bookstore.BookstoreEventRecordFactory;

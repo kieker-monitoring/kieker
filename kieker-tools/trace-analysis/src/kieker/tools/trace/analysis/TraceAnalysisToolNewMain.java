@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.trace.InvalidEventRecordTraceCounter;
-import kieker.analysis.trace.ValidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.InvalidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.ValidEventRecordTraceCounter;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.model.repository.SystemModelRepository;

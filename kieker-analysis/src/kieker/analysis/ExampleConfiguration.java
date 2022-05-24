@@ -24,6 +24,10 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.architecture.trace.graph.TraceToGraphTransformerStage;
+import kieker.analysis.architecture.trace.graph.dot.DotTraceGraphFileWriterStage;
+import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
+import kieker.analysis.architecture.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
@@ -46,10 +50,6 @@ import kieker.analysis.stage.model.StaticModelsAssemblerStage;
 import kieker.analysis.stage.model.data.OperationCallDurationEvent;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
-import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
-import kieker.analysis.trace.graph.dot.DotTraceGraphFileWriterStage;
-import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
-import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.flow.IFlowRecord;

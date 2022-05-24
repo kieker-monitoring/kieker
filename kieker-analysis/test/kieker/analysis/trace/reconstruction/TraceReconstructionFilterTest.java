@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.architecture.trace.reconstruction.TraceReconstructionStage;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.util.bookstore.ExecutionFactory;
 import kieker.model.repository.SystemModelRepository;
