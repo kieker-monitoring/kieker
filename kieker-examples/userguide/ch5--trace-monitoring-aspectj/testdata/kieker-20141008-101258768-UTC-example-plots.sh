@@ -6,7 +6,7 @@ EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testd
 
 TOOL_DIR=`mktemp -d`
 
-KIEKER_VERSION="1.16-SNAPSHOT"
+KIEKER_VERSION="2.0.0-SNAPSHOT"
 ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-${KIEKER_VERSION}.zip"
 
 ( cd ${TOOL_DIR} ; unzip -o ${ZIP_NAME} )
