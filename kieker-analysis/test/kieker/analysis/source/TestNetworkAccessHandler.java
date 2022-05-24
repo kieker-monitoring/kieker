@@ -22,6 +22,8 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.generic.source.NetworkAccessHandler;
+
 /**
  * Test the network access handler.
  *

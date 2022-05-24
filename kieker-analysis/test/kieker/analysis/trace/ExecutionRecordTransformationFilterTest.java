@@ -21,6 +21,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.trace.AbstractTraceAnalysisStage;
 import kieker.analysis.architecture.trace.execution.ExecutionRecordTransformationStage;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.controlflow.OperationExecutionRecord;

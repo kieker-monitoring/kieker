@@ -48,7 +48,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  *
  * @since 1.4
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a JMX queue", outputPorts = {
 	@OutputPort(name = JmxReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the JmxReader")
 }, configuration = {

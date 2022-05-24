@@ -40,7 +40,9 @@ import kieker.common.configuration.Configuration;
  * @author Holger Knoche
  *
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public class ChunkingAmqpReader implements IRawDataReader {
 
 	/** The name of the configuration property for the server URI. */

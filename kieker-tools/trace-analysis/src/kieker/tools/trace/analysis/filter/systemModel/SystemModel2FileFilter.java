@@ -34,7 +34,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.5
- * @deprecated since 1.15 ported to TeeTime in {@link kieker.analysis.sink.SystemModel2FileSink}
+ * @deprecated since 1.15 ported to TeeTime in {@link kieker.analysis.generic.sink.SystemModel2FileSink}
  */
 @Deprecated
 @Plugin(

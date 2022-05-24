@@ -41,7 +41,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "Forwards incoming records with delays computed from the timestamp values", outputPorts = {
 	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
 			eventTypes = IMonitoringRecord.class, description = "Outputs the delayed records") },

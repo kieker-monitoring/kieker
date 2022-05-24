@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.sink.display.CPUUtilizationDisplaySink;
+import kieker.analysis.generic.sink.display.CPUUtilizationDisplaySink;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

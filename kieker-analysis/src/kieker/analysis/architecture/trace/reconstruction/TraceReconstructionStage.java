@@ -23,8 +23,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.architecture.trace.AbstractTraceProcessingStage;
 import kieker.analysis.architecture.trace.execution.ExecutionEventProcessingException;
-import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.common.util.dataformat.LoggingTimestampConverter;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;

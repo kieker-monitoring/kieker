@@ -56,7 +56,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  * @author Nils Christian Ehmke, Jan Waller
  *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 

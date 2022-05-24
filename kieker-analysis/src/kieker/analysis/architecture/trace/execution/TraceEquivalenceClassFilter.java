@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.trace.AbstractTraceProcessingStage;
+import kieker.analysis.architecture.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.MessageTrace;

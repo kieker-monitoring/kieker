@@ -35,7 +35,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Christian Wulf
  *
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public class ByteBufferDeserializer {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;

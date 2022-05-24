@@ -24,6 +24,8 @@ import java.time.temporal.TemporalUnit;
 
 import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.architecture.trace.reconstruction.TraceStatisticsDecoratorStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
 import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -34,8 +36,6 @@ import kieker.analysis.graph.export.dot.DotFileWriterStage;
 import kieker.analysis.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
-import kieker.analysis.source.file.DirectoryReaderStage;
-import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.flow.FlowTraceEventMatcher;
 import kieker.analysis.stage.general.CallEventMatcher;
 import kieker.analysis.stage.general.ControlledEventReleaseStage;

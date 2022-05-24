@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.trace;
 
+import kieker.analysis.architecture.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 

@@ -20,11 +20,13 @@ import kieker.analysis.plugin.IPlugin;
 
 /**
  * This is the interface for filter plugins within Kieker.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public interface IFilterPlugin extends IPlugin {
 
 }

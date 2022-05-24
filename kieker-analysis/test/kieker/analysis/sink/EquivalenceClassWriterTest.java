@@ -23,6 +23,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.generic.sink.EquivalenceClassWriter;
 import kieker.analysis.util.bookstore.BookstoreExecutionFactory;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;

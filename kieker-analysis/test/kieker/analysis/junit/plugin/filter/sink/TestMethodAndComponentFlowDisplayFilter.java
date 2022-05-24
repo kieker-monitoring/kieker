@@ -20,8 +20,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.display.TagCloud;
-import kieker.analysis.sink.display.MethodAndComponentFlowDisplaySink;
+import kieker.analysis.generic.sink.display.MethodAndComponentFlowDisplaySink;
+import kieker.analysis.generic.sink.display.TagCloud;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

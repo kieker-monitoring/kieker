@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.sink.display.GCDisplayFilter;
+import kieker.analysis.generic.sink.display.GCDisplayStage;
 import kieker.common.record.jvm.GCRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link GCDisplayFilter}.
+ * Test cases for {@link GCDisplayStage}.
  *
  * @author Lars Bluemke
  *
@@ -50,7 +50,7 @@ public class TestGCDisplayFilter extends AbstractKiekerTest {
 	private static final long COLLECTION_COUNT = 2;
 	private static final long COLLECTION_TIME_MS = 3;
 
-	private GCDisplayFilter gcDisplayFilter;
+	private GCDisplayStage gcDisplayFilter;
 	private final GCRecord record = new GCRecord(TIMESTAMP, HOST_NAME, VM_NAME, GC_NAME, COLLECTION_COUNT, COLLECTION_TIME_MS);
 
 	/**
@@ -65,7 +65,7 @@ public class TestGCDisplayFilter extends AbstractKiekerTest {
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.gcDisplayFilter = new GCDisplayFilter(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
+		this.gcDisplayFilter = new GCDisplayStage(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
 	}
 
 	/**
@@ -80,9 +80,9 @@ public class TestGCDisplayFilter extends AbstractKiekerTest {
 
 		final String id = this.record.getHostname() + " - " + this.record.getVmName() + " - " + this.record.getGcName();
 
-		final long actualCollectionCount = this.gcDisplayFilter.getXYPlot().getEntries(id + " - " + GCDisplayFilter.COLLECTION_COUNT).get(minutesAndSeconds)
+		final long actualCollectionCount = this.gcDisplayFilter.getXYPlot().getEntries(id + " - " + GCDisplayStage.COLLECTION_COUNT).get(minutesAndSeconds)
 				.longValue();
-		final long actualCollectionTime = this.gcDisplayFilter.getXYPlot().getEntries(id + " - " + GCDisplayFilter.COLLECTION_TIME).get(minutesAndSeconds)
+		final long actualCollectionTime = this.gcDisplayFilter.getXYPlot().getEntries(id + " - " + GCDisplayStage.COLLECTION_TIME).get(minutesAndSeconds)
 				.longValue();
 
 		Assert.assertThat(actualCollectionCount, Is.is(COLLECTION_COUNT));

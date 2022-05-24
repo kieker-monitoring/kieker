@@ -31,7 +31,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Holger Knoche
  *
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public class StringRegistryCache {
 
 	private final Cache<Long, ReaderRegistry<String>> cache;

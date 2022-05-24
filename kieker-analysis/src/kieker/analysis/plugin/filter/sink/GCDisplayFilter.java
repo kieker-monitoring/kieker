@@ -19,8 +19,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
+import kieker.analysis.generic.sink.display.XYPlot;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -32,7 +32,9 @@ import kieker.common.record.jvm.GCRecord;
  * @author Nils Christian Ehmke
  *
  * @since 1.10
+ * @deprecated since 1.15.1
  */
+@Deprecated
 @Plugin(configuration = @Property(
 		name = GCDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 		defaultValue = GCDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,

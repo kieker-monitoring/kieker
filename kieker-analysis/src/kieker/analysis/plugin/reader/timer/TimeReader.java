@@ -46,7 +46,9 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Nils Christian Ehmke
  *
  * @since 1.8
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(
 		description = "Delivers the current (system) time in regular intervals",
 		outputPorts = {

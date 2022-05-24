@@ -33,7 +33,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author holger
  *
  * @since 1.12
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public class RegistryRecordHandler implements Runnable {
 
 	/** The default queue size for the registry record queue. */

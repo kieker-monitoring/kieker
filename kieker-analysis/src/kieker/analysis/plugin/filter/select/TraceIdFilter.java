@@ -42,7 +42,9 @@ import kieker.common.record.flow.trace.TraceMetadata;
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 1.2
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",

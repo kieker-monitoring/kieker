@@ -15,9 +15,9 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.IAccessHandler;
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rest.RestServiceStage;
+import kieker.analysis.generic.source.IAccessHandler;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rest.RestServiceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;

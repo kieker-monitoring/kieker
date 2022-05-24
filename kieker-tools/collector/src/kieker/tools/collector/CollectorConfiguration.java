@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.tools.collector;
 
-import kieker.analysis.sink.DataSinkStage;
-import kieker.analysis.source.ISourceCompositeStage;
+import kieker.analysis.generic.sink.DataSinkStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.source.SourceStageFactory;
 

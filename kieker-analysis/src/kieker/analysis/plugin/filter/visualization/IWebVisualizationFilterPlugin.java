@@ -24,7 +24,9 @@ import kieker.analysis.plugin.IPlugin;
  * @author Nils Christian Ehmke
  *
  * @since 1.9
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public interface IWebVisualizationFilterPlugin extends IPlugin {
 
 	/**

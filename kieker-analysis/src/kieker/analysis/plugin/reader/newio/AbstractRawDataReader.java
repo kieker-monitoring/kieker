@@ -37,7 +37,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Holger Knoche
  *
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRawDataReader.class.getCanonicalName());

@@ -46,7 +46,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Holger Knoche
  *
  * @since 1.12
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
 	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output port of the AMQP reader") },

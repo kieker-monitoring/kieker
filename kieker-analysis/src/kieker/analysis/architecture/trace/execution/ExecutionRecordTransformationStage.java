@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.trace.execution;
 
-import kieker.analysis.trace.AbstractTraceAnalysisStage;
+import kieker.analysis.architecture.trace.AbstractTraceAnalysisStage;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;

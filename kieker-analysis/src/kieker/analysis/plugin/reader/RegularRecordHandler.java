@@ -36,7 +36,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Holger Knoche
  *
  * @since 1.12
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public class RegularRecordHandler implements Runnable {
 
 	/** Default queue size for the regular record queue. */
