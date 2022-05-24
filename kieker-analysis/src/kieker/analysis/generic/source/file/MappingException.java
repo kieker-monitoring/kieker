@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,5 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.bridge.connector.http;
 
+package kieker.analysis.generic.source.file;
+
+/**
+ * @author Christian Wulf
+ *
+ * @since 1.10
+ */
+public final class MappingException extends Exception {
+
+	private static final long serialVersionUID = 7300752837946139350L;
+
+	/**
+	 * Create a mapping exception.
+	 *
+	 * @param text
+	 *            error message
+	 */
+	public MappingException(final String text) {
+		super(text);
+	}
+
+}

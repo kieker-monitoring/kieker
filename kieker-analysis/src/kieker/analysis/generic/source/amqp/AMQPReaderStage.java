@@ -56,9 +56,9 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void terminateStage() {
+	public void workCompleted() {
 		this.readerLogic.terminate();
-		super.terminateStage();
+		super.workCompleted();
 	}
 
 	/**

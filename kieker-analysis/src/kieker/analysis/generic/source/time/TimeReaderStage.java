@@ -17,7 +17,6 @@ package kieker.analysis.generic.source.time;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.IProjectContext;
 import kieker.common.record.misc.TimestampRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -31,8 +30,7 @@ import teetime.framework.OutputPort;
  * The reader can be configured to emit an arbitrary amount of signals. It can also be configured to emit an infinite amount of signals.<br>
  * <br>
  *
- * The sent timestamps are created using {@link System#nanoTime()} as a time source, which is being converted to the global time unit (as defined in the
- * configuration from the given {@link IProjectContext}).
+ * The sent timestamps are created using {@link System#nanoTime()} as a time source, which is being converted to the global time unit.
  *
  * Note: This stage is only provided for porting purposes. It is highly recommended to use the @{link TimeSourceStage} instead.
  *

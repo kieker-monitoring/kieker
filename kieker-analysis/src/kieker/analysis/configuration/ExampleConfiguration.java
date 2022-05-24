@@ -143,7 +143,7 @@ public class ExampleConfiguration extends Configuration {
 				.create(exportDirectory);
 		// alternative output stage
 		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory);
-		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage(repository);
+		final TriggerOnTerminationStage<ModelRepository> onTerminationTrigger = new TriggerOnTerminationStage<>(repository);
 
 		final DependencyGraphCreatorStage<IDependencyGraphBuilderConfiguration> dependencyGraphCreator = new DependencyGraphCreatorStage<>(
 				new IDependencyGraphBuilderConfiguration() {

@@ -17,7 +17,6 @@ package kieker.analysis.generic.source.time;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.IProjectContext;
 import kieker.common.record.misc.TimestampRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -31,7 +30,7 @@ import teetime.framework.AbstractProducerStage;
  * <br>
  *
  * The sent timestamps are created using {@link System#nanoTime()} as a time source, which is being converted to the global time unit (as defined in the
- * configuration from the given {@link IProjectContext}).
+ * configuration.
  *
  * @author Reiner Jung
  *

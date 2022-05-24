@@ -90,7 +90,7 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 			final Object element = this.recordQueue.take();
 
 			if (element == this.endToken) {
-				this.terminateStage();
+				this.workCompleted();
 			} else if (element instanceof IMonitoringRecord) {
 				final IMonitoringRecord monitoringRecord = (IMonitoringRecord) element;
 

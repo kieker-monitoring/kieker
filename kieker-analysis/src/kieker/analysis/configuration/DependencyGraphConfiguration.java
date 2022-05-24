@@ -123,7 +123,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		repository.register(StatisticsModel.class, this.statisticsModel);
 		repository.register(SourceModel.class, this.sourceModel);
 
-		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
+		final IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
