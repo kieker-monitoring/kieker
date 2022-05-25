@@ -14,33 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.graph.dependency;
-
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.stage.model.ModelRepository;
-
-import teetime.stage.basic.AbstractTransformation;
+package kieker.analysis.architecture.dependency;
 
 /**
  * @author Sören Henning
  *
- * @param <T>
- *            configuration type to be used with a sepecific graph builder.
- *
  * @since 1.14
  */
-public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<ModelRepository, IGraph> {
+public class DeploymentLevelComponentDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
 
-	private final IDependencyGraphBuilder graphBuilder;
-
-	public DependencyGraphCreatorStage(final T configuration, final IDependencyGraphBuilderFactory<T> graphBuilderFactory) {
-		this.graphBuilder = graphBuilderFactory.createDependencyGraphBuilder(configuration);
+	public DeploymentLevelComponentDependencyGraphBuilderFactory() {
+		super();
 	}
 
 	@Override
-	protected void execute(final ModelRepository repository) {
-		final IGraph graph = this.graphBuilder.build(repository);
-		this.outputPort.send(graph);
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
+		return new DeploymentLevelComponentDependencyGraphBuilder();
 	}
 
 }

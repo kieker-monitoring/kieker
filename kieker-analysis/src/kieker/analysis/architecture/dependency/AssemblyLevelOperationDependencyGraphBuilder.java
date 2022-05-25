@@ -14,48 +14,48 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.graph.dependency;
+package kieker.analysis.architecture.dependency;
 
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.model.analysismodel.assembly.AssemblyComponent;
+import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.type.ComponentType;
-import kieker.model.analysismodel.type.OperationType;
 
 /**
  * Dependency graph builder for <strong>operation</strong> dependency graphs
- * at the <strong>type level</strong>.
+ * at the <strong>assembly level</strong>.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
+public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public TypeLevelOperationDependencyGraphBuilder() {
+	public AssemblyLevelOperationDependencyGraphBuilder() {
 		super();
 	}
 
 	@Override
 	protected IVertex addVertex(final DeployedOperation deployedOperation) {
-		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
-		final ComponentType component = operation.getComponentType();
+		final AssemblyOperation operation = deployedOperation.getAssemblyOperation();
+		final AssemblyComponent component = operation.getAssemblyComponent();
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
-		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
-		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getComponentType().getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getComponentType().getPackage());
 
 		final IGraph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final IVertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.OPERATION_TYPE);
-		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getName());
-		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getReturnType());
-		operationVertex.setPropertyIfAbsent(PropertyConstants.MODIFIERS, operation.getModifiers());
-		operationVertex.setPropertyIfAbsent(PropertyConstants.PARAMETER_TYPES, operation.getParameterTypes());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_OPERATION);
+		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getOperationType().getName());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getOperationType().getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.MODIFIERS, operation.getOperationType().getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.PARAMETER_TYPES, operation.getOperationType().getParameterTypes());
 		this.responseTimeDecorator.decorate(operationVertex, operation);
 
 		return operationVertex;

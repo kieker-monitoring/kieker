@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.graph.dependency;
 
 /**
+ * This package contains all processing filters bundled with kieker.
+ *
+ * Note: currently most filters are kept in kieker.analysisteetime as they are classified as experimental.
+ *
  * @author Reiner Jung
- * @since 1.16
+ * @since 1.15
+ *
  */
-public interface IDependencyGraphBuilderConfiguration {
-}
+package kieker.analysis.architecture.dependency;
+

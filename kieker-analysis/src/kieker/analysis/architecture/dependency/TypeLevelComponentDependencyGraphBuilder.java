@@ -14,38 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.graph.dependency;
+package kieker.analysis.architecture.dependency;
 
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.model.analysismodel.assembly.AssemblyComponent;
-import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * Dependency graph builder for <strong>component</strong> dependency graphs
- * at the <strong>assembly level</strong>.
+ * at the <strong>type level</strong>.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
+public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public AssemblyLevelComponentDependencyGraphBuilder() {
+	public TypeLevelComponentDependencyGraphBuilder() {
 		super();
 	}
 
 	@Override
 	protected IVertex addVertex(final DeployedOperation deployedOperation) {
-		final AssemblyOperation operation = deployedOperation.getAssemblyOperation();
-		final AssemblyComponent component = operation.getAssemblyComponent();
+		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
+		final ComponentType component = operation.getComponentType();
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_COMPONENT);
-		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getComponentType().getName());
-		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getComponentType().getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
 		this.responseTimeDecorator.decorate(componentVertex, component);
 
 		return componentVertex;

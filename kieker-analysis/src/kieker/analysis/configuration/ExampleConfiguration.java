@@ -24,15 +24,15 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.architecture.dependency.DependencyGraphCreatorStage;
+import kieker.analysis.architecture.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.architecture.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.architecture.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysis.architecture.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.architecture.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.generic.source.file.DirectoryReaderStage;
 import kieker.analysis.generic.source.file.DirectoryScannerStage;
-import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
-import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
-import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;

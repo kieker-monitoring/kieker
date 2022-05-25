@@ -18,9 +18,9 @@ package kieker.analysis.graph.dependency.dot;
 
 import java.util.Collection;
 
+import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.graph.IElement;
 import kieker.analysis.graph.IVertex;
-import kieker.analysis.graph.dependency.PropertyConstants;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;

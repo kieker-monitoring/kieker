@@ -14,22 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.graph.dependency;
+package kieker.analysis.architecture.dependency;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TypeLevelComponentDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
+public class AssemblyLevelComponentDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
 
-	public TypeLevelComponentDependencyGraphBuilderFactory() {
+	public AssemblyLevelComponentDependencyGraphBuilderFactory() {
 		super();
 	}
 
 	@Override
 	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
-		return new TypeLevelComponentDependencyGraphBuilder();
+		return new AssemblyLevelComponentDependencyGraphBuilder();
 	}
 
 }

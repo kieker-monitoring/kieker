@@ -14,14 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-/**
- * This package contains all processing filters bundled with kieker.
- *
- * Note: currently most filters are kept in kieker.analysisteetime as they are classified as experimental.
- *
- * @author Reiner Jung
- * @since 1.15
- *
- */
-package kieker.analysis.graph.dependency;
+package kieker.analysis.architecture.dependency;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.14
+ */
+public class DeploymentLevelContextDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> {
+
+	public DeploymentLevelContextDependencyGraphBuilderFactory() {
+		super();
+	}
+
+	@Override
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final IDependencyGraphBuilderConfiguration configuration) {
+		return new DeploymentLevelContextDependencyGraphBuilder();
+	}
+
+}
