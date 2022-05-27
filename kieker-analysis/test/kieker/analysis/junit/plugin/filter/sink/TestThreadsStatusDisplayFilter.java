@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.sink.display.ThreadsStatusDisplaySink;
+import kieker.analysis.generic.sink.display.ThreadsStatusDisplaySink;
 import kieker.common.record.jvm.ThreadsStatusRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

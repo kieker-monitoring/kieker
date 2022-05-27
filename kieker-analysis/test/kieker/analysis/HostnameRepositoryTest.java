@@ -21,6 +21,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.util.HostnameRepository;
+
 /**
  * @author Sören Henning
  *
@@ -48,8 +50,8 @@ public class HostnameRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.HostnameRepository#addEntry(long, java.lang.String)}
-	 * and {@link kieker.analysis.HostnameRepository#getHostname(long)}.
+	 * Test method for {@link kieker.analysis.util.HostnameRepository#addEntry(long, java.lang.String)}
+	 * and {@link kieker.analysis.util.HostnameRepository#getHostname(long)}.
 	 */
 	@Test
 	public void testAddEntryAndGetHostname() {
@@ -61,8 +63,8 @@ public class HostnameRepositoryTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.HostnameRepository#inc(long)} and
-	 * {@link kieker.analysis.HostnameRepository#dec(long)}.
+	 * Test method for {@link kieker.analysis.util.HostnameRepository#inc(long)} and
+	 * {@link kieker.analysis.util.HostnameRepository#dec(long)}.
 	 */
 	@Test
 	public void testAutomaticallyDelete() {

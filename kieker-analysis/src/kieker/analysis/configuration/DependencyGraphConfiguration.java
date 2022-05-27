@@ -22,18 +22,20 @@ import java.nio.file.Paths;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+import kieker.analysis.architecture.dependency.DependencyGraphCreatorStage;
+import kieker.analysis.architecture.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysis.architecture.dependency.IDependencyGraphBuilderConfiguration;
+import kieker.analysis.architecture.dependency.IDependencyGraphBuilderFactory;
+import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
+import kieker.analysis.architecture.trace.reconstruction.TraceStatisticsDecoratorStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.dependency.DependencyGraphCreatorStage;
-import kieker.analysis.graph.dependency.DeploymentLevelOperationDependencyGraphBuilderFactory;
-import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
-import kieker.analysis.graph.dependency.IDependencyGraphBuilderFactory;
 import kieker.analysis.graph.dependency.dot.DotExportConfigurationFactory;
 import kieker.analysis.graph.export.dot.DotFileWriterStage;
 import kieker.analysis.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysis.signature.NameBuilder;
 import kieker.analysis.signature.SignatureExtractor;
-import kieker.analysis.source.file.DirectoryReaderStage;
-import kieker.analysis.source.file.DirectoryScannerStage;
 import kieker.analysis.stage.flow.FlowTraceEventMatcher;
 import kieker.analysis.stage.general.CallEventMatcher;
 import kieker.analysis.stage.general.ControlledEventReleaseStage;
@@ -48,8 +50,6 @@ import kieker.analysis.stage.model.data.CallEvent;
 import kieker.analysis.stage.model.data.OperationEvent;
 import kieker.analysis.statistics.CallStatisticsStage;
 import kieker.analysis.statistics.FullResponseTimeStatisticsStage;
-import kieker.analysis.trace.reconstruction.FlowRecordTraceReconstructionStage;
-import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysis.util.stage.AllowedRecordsFilter;
 import kieker.analysis.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.flow.IFlowRecord;
@@ -123,7 +123,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		repository.register(StatisticsModel.class, this.statisticsModel);
 		repository.register(SourceModel.class, this.sourceModel);
 
-		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
+		final IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);

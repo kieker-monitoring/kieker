@@ -22,8 +22,8 @@ import java.nio.CharBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.generic.source.file.MappingException;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysis.tt.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.IMonitoringRecord;

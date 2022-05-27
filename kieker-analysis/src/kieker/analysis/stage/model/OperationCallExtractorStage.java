@@ -16,8 +16,8 @@
 
 package kieker.analysis.stage.model;
 
-import kieker.analysis.trace.traversal.IOperationCallVisitor;
-import kieker.analysis.trace.traversal.TraceTraverser;
+import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
+import kieker.analysis.architecture.trace.traversal.TraceTraverser;
 import kieker.model.analysismodel.trace.OperationCall;
 import kieker.model.analysismodel.trace.Trace;
 

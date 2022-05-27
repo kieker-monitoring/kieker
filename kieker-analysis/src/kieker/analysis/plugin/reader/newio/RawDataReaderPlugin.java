@@ -37,8 +37,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Holger Knoche
  *
  * @since 1.13
- *
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
 	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output port for the decoded records") },

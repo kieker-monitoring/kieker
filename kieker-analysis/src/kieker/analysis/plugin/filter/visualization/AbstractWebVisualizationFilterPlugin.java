@@ -22,9 +22,11 @@ import kieker.common.configuration.Configuration;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public abstract class AbstractWebVisualizationFilterPlugin extends AbstractFilterPlugin implements IWebVisualizationFilterPlugin {
 
 	public AbstractWebVisualizationFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {

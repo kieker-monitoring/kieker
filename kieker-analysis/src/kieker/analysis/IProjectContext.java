@@ -23,11 +23,13 @@ import kieker.analysis.model.analysisMetaModel.MIProject;
 /**
  * This is the interface which allows the analysis components a slimmed-down access to an instance of the {@link kieker.analysis.AnalysisController}. The methods in
  * this interface should not allow any modifications.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
+ * @deprecated since 1.15.1
  */
+@Deprecated
 public interface IProjectContext {
 
 	/**
@@ -41,40 +43,40 @@ public interface IProjectContext {
 
 	/**
 	 * Delivers the value for the given (global) property within the analysis.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
 	 * @return The value for the given property if it exists, an empty string otherwise.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public String getProperty(final String key);
 
 	/**
 	 * This method delivers the current configuration of this instance as an instance of <code>MIProject</code>.
-	 * 
+	 *
 	 * @return A filled meta model instance.
 	 * @throws AnalysisConfigurationException
 	 *             If the current configuration is somehow invalid.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public MIProject getCurrentConfiguration() throws AnalysisConfigurationException;
 
 	/**
 	 * Delivers the current name of the project.
-	 * 
+	 *
 	 * @return The current project name.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public String getProjectName();
 
 	/**
 	 * Delivers the current state of the analysis controller.
-	 * 
+	 *
 	 * @return The current state.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public STATE getState();

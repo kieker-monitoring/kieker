@@ -21,10 +21,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.graph.dependency.DeploymentLevelContextDependencyGraphBuilder;
-import kieker.analysis.graph.dependency.DeploymentLevelContextDependencyGraphBuilderFactory;
-import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
-import kieker.analysis.graph.dependency.IDependencyGraphBuilderConfiguration;
+import kieker.analysis.architecture.dependency.DeploymentLevelContextDependencyGraphBuilder;
+import kieker.analysis.architecture.dependency.DeploymentLevelContextDependencyGraphBuilderFactory;
+import kieker.analysis.architecture.dependency.IDependencyGraphBuilder;
+import kieker.analysis.architecture.dependency.IDependencyGraphBuilderConfiguration;
 import kieker.analysis.stage.model.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -57,7 +57,7 @@ public class DeploymentLevelContextDependencyGraphBuilderFactoryTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilderFactory#createDependencyGraphBuilder()}.
+	 * Test method for {@link kieker.analysis.architecture.dependency.AssemblyLevelComponentDependencyGraphBuilderFactory#createDependencyGraphBuilder()}.
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {

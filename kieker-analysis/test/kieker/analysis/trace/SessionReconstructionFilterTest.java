@@ -22,9 +22,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.trace.SessionReconstructionFilter;
+import kieker.analysis.architecture.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.architecture.trace.reconstruction.TraceReconstructionStage;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
-import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
@@ -34,7 +35,7 @@ import kieker.model.system.model.ExecutionTraceBasedSession;
 import teetime.framework.test.StageTester;
 
 /**
- * Test suite for the {@link kieker.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter}.
+ * Test suite for the {@link kieker.analysis.architecture.trace.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter}.
  *
  * @author Holger Knoche
  * @since 1.10

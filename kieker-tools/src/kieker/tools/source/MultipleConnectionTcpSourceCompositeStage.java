@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rewriter.ITraceMetadataRewriter;
-import kieker.analysis.source.rewriter.NoneTraceMetadataRewriter;
-import kieker.analysis.source.tcp.MultipleConnectionTcpSourceStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rewriter.ITraceMetadataRewriter;
+import kieker.analysis.generic.source.rewriter.NoneTraceMetadataRewriter;
+import kieker.analysis.generic.source.tcp.MultipleConnectionTcpSourceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;

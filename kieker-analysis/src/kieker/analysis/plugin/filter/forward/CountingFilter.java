@@ -19,9 +19,9 @@ package kieker.analysis.plugin.filter.forward;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.PlainText;
-import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
+import kieker.analysis.generic.sink.display.PlainText;
+import kieker.analysis.generic.sink.display.XYPlot;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -36,7 +36,9 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller, Nils Christian Ehmke
  *
  * @since 1.4
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",
 		outputPorts = {

@@ -25,10 +25,11 @@ import java.lang.annotation.Target;
 /**
  * This annotation can be used to describe the output ports of a plugin. It can only be used <b>within</b> other annotations. It allows to specify the name of the
  * output port and the corresponding event types. There is also a field for a human-readable description available.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
@@ -37,21 +38,21 @@ public @interface OutputPort {
 
 	/**
 	 * The human-readable description of this port.
-	 * 
+	 *
 	 * @return The description for this port.
 	 */
 	String description() default "Output Port";
 
 	/**
 	 * The name which is used to identify this port. It should be unique within the class.
-	 * 
+	 *
 	 * @return The name of this port.
 	 */
 	String name();
 
 	/**
 	 * The event types which are used for this port. If this is empty, everything can be sent through the port.
-	 * 
+	 *
 	 * @return The event types for this class.
 	 */
 	Class<?>[] eventTypes() default {};

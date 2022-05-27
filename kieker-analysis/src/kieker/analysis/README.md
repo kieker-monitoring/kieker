@@ -1,5 +1,20 @@
 # Package Overview
 
+New layout:
+- architecture architecture related classes
+  - trace architecture trace analysis
+  - recovery architecture recovery stages
+  - metrics architecture evaluation stages
+  - repository architecture model repository stages
+  - adaptation adaptation of an architecture
+- behavior user behavior stages
+- generic contains generically usable stages
+- util utility classes/stages
+  - time time utilities
+
+The general idea is that stages and other code are grouped by
+domain, e.g., architecture, performance and behavior.
+
 Current layout
 - configuration (deprecated)
 - trace         Trace analysis and output

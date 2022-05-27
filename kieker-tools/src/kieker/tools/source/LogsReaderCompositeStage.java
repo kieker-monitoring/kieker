@@ -19,9 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.file.DirectoryReaderStage;
-import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 

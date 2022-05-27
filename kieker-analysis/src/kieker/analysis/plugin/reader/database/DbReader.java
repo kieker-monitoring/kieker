@@ -39,7 +39,9 @@ import kieker.common.util.classpath.InstantiationFactory;
  * @author Jan Waller
  *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a database", outputPorts = {
 	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the DBReader")
 }, configuration = {

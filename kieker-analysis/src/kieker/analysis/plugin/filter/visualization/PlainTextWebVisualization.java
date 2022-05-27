@@ -24,7 +24,9 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke
  *
  * @since 1.9
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public final class PlainTextWebVisualization extends AbstractWebVisualizationFilterPlugin {
 
 	/**

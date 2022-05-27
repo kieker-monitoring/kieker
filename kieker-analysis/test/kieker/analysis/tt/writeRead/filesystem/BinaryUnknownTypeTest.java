@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
 import kieker.analysis.tt.writeRead.TestDataRepository;
 import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;

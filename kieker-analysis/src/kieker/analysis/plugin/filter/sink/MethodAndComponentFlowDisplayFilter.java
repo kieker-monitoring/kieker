@@ -16,8 +16,8 @@
 package kieker.analysis.plugin.filter.sink;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.TagCloud;
 import kieker.analysis.display.annotation.Display;
+import kieker.analysis.generic.sink.display.TagCloud;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -31,7 +31,9 @@ import kieker.common.util.signature.ClassOperationSignaturePair;
  * @author Nils Christian Ehmke
  *
  * @since 1.8
+ * @deprecated 1.15.1
  */
+@Deprecated
 @Plugin
 public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 

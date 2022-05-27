@@ -18,9 +18,9 @@ package kieker.analysis.stage.forward;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.analysis.display.PlainText;
-import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
+import kieker.analysis.generic.sink.display.PlainText;
+import kieker.analysis.generic.sink.display.XYPlot;
 
 import teetime.framework.AbstractConsumerStage;
 

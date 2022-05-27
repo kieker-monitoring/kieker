@@ -22,7 +22,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.source.namedpipe.PipeReader;
+import kieker.analysis.generic.source.namedpipe.PipeReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;

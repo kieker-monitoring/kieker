@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
+import kieker.analysis.generic.sink.display.XYPlot;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -31,11 +31,13 @@ import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * This filter provides a simply visualization for the OPAD anomaly detection filter.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
+ * @deprecated 1.15.1
  */
+@Deprecated
 @Plugin(configuration = {
 	@Property(name = AnomalyScoreVisualizationFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 			defaultValue = AnomalyScoreVisualizationFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })

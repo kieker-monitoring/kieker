@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.source.jms.JMSReaderStage;
+import kieker.analysis.generic.source.jms.JMSReaderStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;

@@ -356,7 +356,6 @@ def checkSubprojects = [
 	project(':kieker-tools'),
 	project(':kieker-tools:collector'),
 	project(':kieker-tools:convert-logging-timestamp'),
-	project(':kieker-tools:kdb'),
 	project(':kieker-tools:log-replayer'),
 	project(':kieker-tools:opad'),
 	project(':kieker-tools:resource-monitor'),
@@ -752,7 +751,6 @@ def binaryContent = project.copySpec {
 def tools = [
 	'collector',
 	'convert-logging-timestamp',
-	'kdb',
 	'log-replayer',
 	'resource-monitor',
 	'trace-analysis',
