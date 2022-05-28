@@ -99,11 +99,6 @@ dependencies {
 
 	testImplementation 'org.easymock:easymock:4.3'
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
-	testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
-	testImplementation 'org.powermock:powermock-api-easymock:2.0.9'
-	testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
-	testImplementation 'org.powermock:powermock-core:2.0.9'
-	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.9'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
