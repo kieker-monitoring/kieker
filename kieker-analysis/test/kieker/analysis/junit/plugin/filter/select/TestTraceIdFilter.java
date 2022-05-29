@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.stage.select.traceidfilter.TraceIdFilterOld;
+import kieker.analysis.stage.select.traceidfilter.TraceIdFilter;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -62,7 +62,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
-		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(false, idsToPass);
+		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
@@ -74,7 +74,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		}
 
 		StageTester.test(traceidFilter).and()
-				.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
 		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.producesNothing());
@@ -96,7 +96,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
-		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(false, idsToPass);
+		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
@@ -108,7 +108,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		}
 
 		StageTester.test(traceidFilter).and()
-				.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
 		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
@@ -124,7 +124,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final TraceIdFilterOld traceidFilter = new TraceIdFilterOld(true, new TreeSet<>()); // i.e. pass all
+		final TraceIdFilter traceidFilter = new TraceIdFilter(true, new TreeSet<>()); // i.e. pass all
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
@@ -132,7 +132,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 				.getTraceEvents();
 
 		StageTester.test(traceidFilter).and()
-				.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
 		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
