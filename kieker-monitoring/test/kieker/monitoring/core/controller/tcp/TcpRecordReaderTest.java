@@ -23,11 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,26 +43,23 @@ import kieker.common.registry.writer.WriterRegistry;
  *
  * @since 1.15
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ SingleSocketRecordReader.class, AbstractTcpReader.class, SocketChannel.class })
-@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
-public class SingleSocketRecordReaderTest {
+public class TcpRecordReaderTest {
 
 	private static final int RECEIVING_PORT = 1234;
 	private static final int BUFFER_CAPACITY = 6553500;
-	private static final Logger LOGGER = LoggerFactory.getLogger(SingleSocketRecordReaderTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TcpRecordReaderTest.class);
 	private static final Integer CHUNK_SIZE = 1024;
 	private static final String DUMMY_IP_ADDRESS = "192.168.48.12";
 
 	/** test constructor. */
-	public SingleSocketRecordReaderTest() {
+	public TcpRecordReaderTest() {
 		// nothing to do here
 	}
 
 	/** Test whether the buffer is processed corretly. */
 	@Test
 	public void testOnBufferReceived() {
-		final ByteBuffer buffer = ByteBuffer.allocate(SingleSocketRecordReaderTest.BUFFER_CAPACITY);
+		final ByteBuffer buffer = ByteBuffer.allocate(TcpRecordReaderTest.BUFFER_CAPACITY);
 
 		final ServerSocketChannel mockServerSocket = Mockito.mock(ServerSocketChannel.class);
 		// Set it first
@@ -75,7 +68,7 @@ public class SingleSocketRecordReaderTest {
 		try {
 			// Then mock it
 			Mockito.when(mockServerSocket.accept()).thenReturn(mockSocketChannel);
-			Mockito.when(mockSocketChannel.read(buffer)).thenReturn(SingleSocketRecordReaderTest.CHUNK_SIZE);
+			Mockito.when(mockSocketChannel.read(buffer)).thenReturn(TcpRecordReaderTest.CHUNK_SIZE);
 		} catch (final IOException e) {
 			Assert.fail(e.getMessage());
 		}
@@ -91,9 +84,9 @@ public class SingleSocketRecordReaderTest {
 				Assert.assertTrue("Records must match", record.equals(event));
 			}
 		};
-		final SingleSocketRecordReader reader = new SingleSocketRecordReader(
-				SingleSocketRecordReaderTest.RECEIVING_PORT, SingleSocketRecordReaderTest.BUFFER_CAPACITY,
-				SingleSocketRecordReaderTest.LOGGER, receiver);
+		final TcpRecordReader reader = new TcpRecordReader(
+				TcpRecordReaderTest.RECEIVING_PORT, TcpRecordReaderTest.BUFFER_CAPACITY,
+				TcpRecordReaderTest.LOGGER, receiver);
 
 		this.createData(buffer, event);
 
@@ -129,7 +122,7 @@ public class SingleSocketRecordReaderTest {
 	private String[] createValues(final int amount) {
 		final String[] values = new String[amount];
 		for (int i = 0; i < amount; i++) {
-			values[i] = SingleSocketRecordReaderTest.DUMMY_IP_ADDRESS;
+			values[i] = TcpRecordReaderTest.DUMMY_IP_ADDRESS;
 		}
 		return values;
 	}

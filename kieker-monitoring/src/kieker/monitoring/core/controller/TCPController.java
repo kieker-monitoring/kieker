@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
-import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
+import kieker.monitoring.core.controller.tcp.TcpRecordReader;
 import kieker.monitoring.listener.MonitoringCommandListener;
 
 /**
@@ -44,7 +44,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 
 	// maybe not necessary
 	private final String domain;
-	private SingleSocketRecordReader tcpReader;
+	private TcpRecordReader tcpReader;
 	private boolean tcpEnabled;
 	private Thread readerThread;
 
@@ -70,7 +70,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 			final int port = Integer
 					.parseInt(configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_REMOTE_PORT));
 			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_TCP);
-			this.tcpReader = new SingleSocketRecordReader(port, bufferSize, TCPController.LOGGER, true, listener);
+			this.tcpReader = new TcpRecordReader(port, bufferSize, TCPController.LOGGER, true, listener);
 			TCPController.LOGGER.info("Setup of TCPController listening at {}", port);
 			this.readerThread = new Thread(this.tcpReader);
 		} catch (final NumberFormatException e) {
