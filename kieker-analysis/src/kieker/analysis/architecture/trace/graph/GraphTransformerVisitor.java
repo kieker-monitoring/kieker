@@ -58,7 +58,7 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
-		final DeploymentContext deploymentContext = operationCall.getOperation().getComponent().getDeploymentContext();
+		final DeploymentContext deploymentContext = operationCall.getOperation().getComponent().getContext();
 
 		vertex.setProperty("name", operationType.getName());
 		vertex.setProperty("returnType", operationType.getReturnType());

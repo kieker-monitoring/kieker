@@ -36,7 +36,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Nils Christian Ehmke
  *
  * @since 1.8
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TypeFilterTest extends AbstractKiekerTest {
 
 	private static final String ALLOWED_TYPES = String.class.getName();

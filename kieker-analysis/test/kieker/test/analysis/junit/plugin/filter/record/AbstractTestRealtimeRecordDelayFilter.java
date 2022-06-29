@@ -47,7 +47,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Andre van Hoorn
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
 	private static final long START_TIME_SECONDS = 246561L;

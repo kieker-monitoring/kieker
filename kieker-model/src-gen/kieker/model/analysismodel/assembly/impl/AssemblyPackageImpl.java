@@ -233,7 +233,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * @generated
 	 */
 	@Override
-	public EReference getAssemblyModel_AssemblyComponents() {
+	public EReference getAssemblyModel_Components() {
 		return (EReference)assemblyModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -403,7 +403,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * @generated
 	 */
 	@Override
-	public EOperation getAssemblyOperation__GetAssemblyComponent() {
+	public EOperation getAssemblyOperation__GetComponent() {
 		return assemblyOperationEClass.getEOperations().get(0);
 	}
 
@@ -433,7 +433,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * @generated
 	 */
 	@Override
-	public EOperation getAssemblyStorage__GetAssemblyComponent() {
+	public EOperation getAssemblyStorage__GetComponent() {
 		return assemblyStorageEClass.getEOperations().get(0);
 	}
 
@@ -577,7 +577,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 
 		// Create classes and their features
 		assemblyModelEClass = createEClass(ASSEMBLY_MODEL);
-		createEReference(assemblyModelEClass, ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS);
+		createEReference(assemblyModelEClass, ASSEMBLY_MODEL__COMPONENTS);
 
 		eStringToAssemblyComponentMapEntryEClass = createEClass(ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY);
 		createEAttribute(eStringToAssemblyComponentMapEntryEClass, ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY__KEY);
@@ -598,11 +598,11 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 
 		assemblyOperationEClass = createEClass(ASSEMBLY_OPERATION);
 		createEReference(assemblyOperationEClass, ASSEMBLY_OPERATION__OPERATION_TYPE);
-		createEOperation(assemblyOperationEClass, ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT);
+		createEOperation(assemblyOperationEClass, ASSEMBLY_OPERATION___GET_COMPONENT);
 
 		assemblyStorageEClass = createEClass(ASSEMBLY_STORAGE);
 		createEReference(assemblyStorageEClass, ASSEMBLY_STORAGE__STORAGE_TYPE);
-		createEOperation(assemblyStorageEClass, ASSEMBLY_STORAGE___GET_ASSEMBLY_COMPONENT);
+		createEOperation(assemblyStorageEClass, ASSEMBLY_STORAGE___GET_COMPONENT);
 
 		eStringToAssemblyStorageMapEntryEClass = createEClass(ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY);
 		createEAttribute(eStringToAssemblyStorageMapEntryEClass, ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY);
@@ -654,7 +654,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(assemblyModelEClass, AssemblyModel.class, "AssemblyModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAssemblyModel_AssemblyComponents(), this.getEStringToAssemblyComponentMapEntry(), null, "assemblyComponents", null, 0, -1, AssemblyModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getAssemblyModel_Components(), this.getEStringToAssemblyComponentMapEntry(), null, "components", null, 0, -1, AssemblyModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(eStringToAssemblyComponentMapEntryEClass, Map.Entry.class, "EStringToAssemblyComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToAssemblyComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -676,12 +676,12 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEClass(assemblyOperationEClass, AssemblyOperation.class, "AssemblyOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAssemblyOperation_OperationType(), theTypePackage.getOperationType(), null, "operationType", null, 0, 1, AssemblyOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getAssemblyOperation__GetAssemblyComponent(), this.getAssemblyComponent(), "getAssemblyComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getAssemblyOperation__GetComponent(), this.getAssemblyComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(assemblyStorageEClass, AssemblyStorage.class, "AssemblyStorage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAssemblyStorage_StorageType(), theTypePackage.getStorageType(), null, "storageType", null, 0, 1, AssemblyStorage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getAssemblyStorage__GetAssemblyComponent(), this.getAssemblyComponent(), "getAssemblyComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getAssemblyStorage__GetComponent(), this.getAssemblyComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToAssemblyStorageMapEntryEClass, Map.Entry.class, "EStringToAssemblyStorageMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToAssemblyStorageMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

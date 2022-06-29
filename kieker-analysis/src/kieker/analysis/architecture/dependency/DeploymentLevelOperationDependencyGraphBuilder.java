@@ -41,7 +41,7 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 	protected IVertex addVertex(final DeployedOperation deployedOperation) {
 		final DeployedOperation operation = deployedOperation;
 		final DeployedComponent component = operation.getComponent();
-		final DeploymentContext context = component.getDeploymentContext();
+		final DeploymentContext context = component.getContext();
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);

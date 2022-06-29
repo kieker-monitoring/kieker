@@ -44,7 +44,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated // NOCS
 public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest { // NOPMD,NOCS (test class without constructor)
 
 	private static final String TEST_INVALID = "Test invalid";
@@ -58,7 +60,6 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	 *
 	 * @param maxTraceDuration
 	 * @param maxTraceTimeout
-	 * @return
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -155,7 +156,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		Assert.assertEquals("There should be no trace", 1, sinkPlugin.getList().size());
 	}
 
-	private void runTestEventBasedTraceRepair(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout)
+	private void runTestEventBasedTraceRepair(final TraceEventRecords records,
+			final long maxTraceDuration, final long maxTraceTimeout)
 			throws IllegalStateException,
 			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
@@ -163,9 +165,12 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(maxTraceDuration));
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, Long.toString(maxTraceTimeout));
-		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, "true");
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+				Long.toString(maxTraceDuration));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
+				Long.toString(maxTraceTimeout));
+		configuration.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+				"true");
 		final EventRecordTraceReconstructionFilter traceFilter = new EventRecordTraceReconstructionFilter(configuration, controller);
 
 		final ListCollectionFilter<TraceEventRecords> sinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);

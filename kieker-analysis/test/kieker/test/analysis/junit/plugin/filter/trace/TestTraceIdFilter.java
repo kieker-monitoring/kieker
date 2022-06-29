@@ -39,7 +39,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Andre van Hoorn
  *
  * @since 1.5
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestTraceIdFilter extends AbstractKiekerTest {
 
 	private static final String SESSION_ID = "sv7w1ifhK";

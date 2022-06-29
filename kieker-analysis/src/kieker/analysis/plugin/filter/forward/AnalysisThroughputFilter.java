@@ -19,8 +19,7 @@ package kieker.analysis.plugin.filter.forward;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.generic.sink.display.PlainText;
+import kieker.analysis.plugin.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;

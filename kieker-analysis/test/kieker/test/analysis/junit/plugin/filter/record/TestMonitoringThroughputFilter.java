@@ -42,7 +42,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Henry Grow
  *
  * @since 1.9
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 	private IAnalysisController analysisController;

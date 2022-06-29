@@ -18,6 +18,8 @@ package kieker.analysis.stage.flow;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.trace.flow.ThreadEvent2TraceEventStage;
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
 import kieker.common.record.IMonitoringRecord;
 
 import kieker.test.analysis.util.stage.BookstoreEventRecordFactory;

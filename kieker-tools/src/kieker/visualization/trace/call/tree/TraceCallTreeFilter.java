@@ -18,7 +18,7 @@ package kieker.visualization.trace.call.tree;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.model.repository.AbstractRepository;
 import kieker.model.repository.AllocationComponentOperationPairFactory;
 import kieker.model.repository.SystemModelRepository;

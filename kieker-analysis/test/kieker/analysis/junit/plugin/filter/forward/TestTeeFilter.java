@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.stage.forward.TeeFilter;
+import kieker.analysis.generic.TeeFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

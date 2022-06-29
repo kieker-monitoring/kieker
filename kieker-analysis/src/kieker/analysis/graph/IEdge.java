@@ -20,8 +20,9 @@ package kieker.analysis.graph;
  * @author Sören Henning
  *
  * @since 1.14
- *
+ * @deprecated since 1.15 will be replaced by google graph library
  */
+@Deprecated
 public interface IEdge extends IGraphElement {
 	/**
 	 * @since 1.14

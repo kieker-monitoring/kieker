@@ -16,8 +16,8 @@
 
 package kieker.analysis.statistics;
 
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
-import kieker.analysis.stage.model.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.ModelObjectFromOperationCallAccessorUtils;
+import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;

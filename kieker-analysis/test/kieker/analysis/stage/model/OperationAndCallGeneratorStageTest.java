@@ -23,9 +23,10 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.signature.AbstractSignatureCleaner;
-import kieker.analysis.stage.model.data.CallEvent;
-import kieker.analysis.stage.model.data.OperationEvent;
+import kieker.analysis.architecture.recovery.OperationAndCallGeneratorStage;
+import kieker.analysis.architecture.recovery.data.CallEvent;
+import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.signature.AbstractSignatureCleaner;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;

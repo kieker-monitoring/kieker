@@ -40,7 +40,7 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 	@Override
 	protected IVertex addVertex(final DeployedOperation deployedOperation) {
 		final AssemblyOperation operation = deployedOperation.getAssemblyOperation();
-		final AssemblyComponent component = operation.getAssemblyComponent();
+		final AssemblyComponent component = operation.getComponent();
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
