@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.stage.model.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 

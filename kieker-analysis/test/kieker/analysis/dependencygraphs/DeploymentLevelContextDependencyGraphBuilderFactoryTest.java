@@ -25,7 +25,7 @@ import kieker.analysis.architecture.dependency.DeploymentLevelContextDependencyG
 import kieker.analysis.architecture.dependency.DeploymentLevelContextDependencyGraphBuilderFactory;
 import kieker.analysis.architecture.dependency.IDependencyGraphBuilder;
 import kieker.analysis.architecture.dependency.IDependencyGraphBuilderConfiguration;
-import kieker.analysis.stage.model.ModelRepository;
+import kieker.analysis.architecture.recovery.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.StatisticsFactory;

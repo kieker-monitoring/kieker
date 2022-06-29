@@ -18,7 +18,8 @@ package kieker.analysis.trace;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
+import kieker.analysis.plugin.trace.EventRecordTraceCounter;
 import kieker.analysis.util.bookstore.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.common.util.signature.Signature;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.AbstractMessage;

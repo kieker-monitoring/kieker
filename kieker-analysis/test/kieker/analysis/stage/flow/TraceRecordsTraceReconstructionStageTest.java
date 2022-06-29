@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
+import kieker.analysis.architecture.trace.flow.TraceRecordsTraceReconstructionStage;
 import kieker.analysis.util.bookstore.BookstoreEventRecordFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;

@@ -28,7 +28,7 @@ import kieker.tools.common.DateConverter;
  * @since 1.16
  *
  */
-public class Settings { // NOCS does not need a constructor
+public class Settings { // NOCS, NOPMD does not need a constructor
 
 	@Parameter(names = { "-i",
 		"--input" }, required = true, description = "Input data directory.", converter = FileConverter.class)
@@ -108,7 +108,7 @@ public class Settings { // NOCS does not need a constructor
 		return this.ignoreAfterDate;
 	}
 
-	public boolean getVerbose() {
+	public boolean isVerbose() {
 		return this.verbose;
 	}
 

@@ -170,7 +170,7 @@
   <eSubpackages name="assembly" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/assembly"
       nsPrefix="assembly">
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyModel">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponents" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyComponentMapEntry" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToAssemblyComponentMapEntry"
@@ -200,7 +200,7 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyOperation">
-      <eOperations name="getAssemblyComponent" eType="#//assembly/AssemblyComponent">
+      <eOperations name="getComponent" eType="#//assembly/AssemblyComponent">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
@@ -208,7 +208,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//type/OperationType"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyStorage">
-      <eOperations name="getAssemblyComponent" eType="#//assembly/AssemblyComponent">
+      <eOperations name="getComponent" eType="#//assembly/AssemblyComponent">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyComponent) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
@@ -240,7 +240,7 @@
   <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
       nsPrefix="deployment">
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentModel">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeploymentContextMapEntry"
           containment="true"/>
     </eClassifiers>
@@ -263,7 +263,7 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
-      <eOperations name="getDeploymentContext" eType="#//deployment/DeploymentContext">
+      <eOperations name="getContext" eType="#//deployment/DeploymentContext">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentContext) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>

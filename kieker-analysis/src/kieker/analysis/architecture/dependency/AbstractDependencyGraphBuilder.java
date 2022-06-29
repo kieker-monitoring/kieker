@@ -18,11 +18,11 @@ package kieker.analysis.architecture.dependency;
 
 import java.time.temporal.ChronoUnit;
 
+import kieker.analysis.architecture.recovery.ModelRepository;
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
 import kieker.analysis.graph.IVertex;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
-import kieker.analysis.stage.model.ModelRepository;
 import kieker.analysis.util.ObjectIdentifierRegistry;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.AggregatedInvocation;

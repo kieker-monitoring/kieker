@@ -20,10 +20,11 @@ package kieker.analysis.graph;
  * Direction is used to denote the direction of an edge or location of a vertex on an edge.
  *
  * @author Sören Henning
- * 
+ *
  * @since 1.14
- * 
+ * @deprecated since 1.15 will be replaced by google graph library
  */
+@Deprecated
 public enum Direction {
 
 	OUT, IN, BOTH;

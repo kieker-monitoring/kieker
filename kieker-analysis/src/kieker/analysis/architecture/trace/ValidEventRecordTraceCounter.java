@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.trace;
 
-import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
 
 import teetime.framework.AbstractConsumerStage;
 

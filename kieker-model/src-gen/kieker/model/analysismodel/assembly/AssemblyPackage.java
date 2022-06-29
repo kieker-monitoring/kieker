@@ -68,13 +68,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Components</b></em>' map.
+	 * The feature id for the '<em><b>Components</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS = 0;
+	int ASSEMBLY_MODEL__COMPONENTS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -306,13 +306,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_OPERATION_FEATURE_COUNT = 1;
 
 	/**
-	 * The operation id for the '<em>Get Assembly Component</em>' operation.
+	 * The operation id for the '<em>Get Component</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT = 0;
+	int ASSEMBLY_OPERATION___GET_COMPONENT = 0;
 
 	/**
 	 * The number of operations of the '<em>Operation</em>' class.
@@ -352,13 +352,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_STORAGE_FEATURE_COUNT = 1;
 
 	/**
-	 * The operation id for the '<em>Get Assembly Component</em>' operation.
+	 * The operation id for the '<em>Get Component</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_STORAGE___GET_ASSEMBLY_COMPONENT = 0;
+	int ASSEMBLY_STORAGE___GET_COMPONENT = 0;
 
 	/**
 	 * The number of operations of the '<em>Storage</em>' class.
@@ -556,15 +556,15 @@ public interface AssemblyPackage extends EPackage {
 	EClass getAssemblyModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents <em>Assembly Components</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyModel#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Assembly Components</em>'.
-	 * @see kieker.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents()
+	 * @return the meta object for the map '<em>Components</em>'.
+	 * @see kieker.model.analysismodel.assembly.AssemblyModel#getComponents()
 	 * @see #getAssemblyModel()
 	 * @generated
 	 */
-	EReference getAssemblyModel_AssemblyComponents();
+	EReference getAssemblyModel_Components();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Component Map Entry</em>}'.
@@ -743,14 +743,14 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyOperation_OperationType();
 
 	/**
-	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyOperation#getAssemblyComponent() <em>Get Assembly Component</em>}' operation.
+	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyOperation#getComponent() <em>Get Component</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Assembly Component</em>' operation.
-	 * @see kieker.model.analysismodel.assembly.AssemblyOperation#getAssemblyComponent()
+	 * @return the meta object for the '<em>Get Component</em>' operation.
+	 * @see kieker.model.analysismodel.assembly.AssemblyOperation#getComponent()
 	 * @generated
 	 */
-	EOperation getAssemblyOperation__GetAssemblyComponent();
+	EOperation getAssemblyOperation__GetComponent();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyStorage <em>Storage</em>}'.
@@ -774,14 +774,14 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyStorage_StorageType();
 
 	/**
-	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyStorage#getAssemblyComponent() <em>Get Assembly Component</em>}' operation.
+	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyStorage#getComponent() <em>Get Component</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Assembly Component</em>' operation.
-	 * @see kieker.model.analysismodel.assembly.AssemblyStorage#getAssemblyComponent()
+	 * @return the meta object for the '<em>Get Component</em>' operation.
+	 * @see kieker.model.analysismodel.assembly.AssemblyStorage#getComponent()
 	 * @generated
 	 */
-	EOperation getAssemblyStorage__GetAssemblyComponent();
+	EOperation getAssemblyStorage__GetComponent();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Storage Map Entry</em>}'.
@@ -938,12 +938,12 @@ public interface AssemblyPackage extends EPackage {
 		EClass ASSEMBLY_MODEL = eINSTANCE.getAssemblyModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Components</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Components</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS = eINSTANCE.getAssemblyModel_AssemblyComponents();
+		EReference ASSEMBLY_MODEL__COMPONENTS = eINSTANCE.getAssemblyModel_Components();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map Entry</em>}' class.
@@ -1082,12 +1082,12 @@ public interface AssemblyPackage extends EPackage {
 		EReference ASSEMBLY_OPERATION__OPERATION_TYPE = eINSTANCE.getAssemblyOperation_OperationType();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Assembly Component</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT = eINSTANCE.getAssemblyOperation__GetAssemblyComponent();
+		EOperation ASSEMBLY_OPERATION___GET_COMPONENT = eINSTANCE.getAssemblyOperation__GetComponent();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl <em>Storage</em>}' class.
@@ -1108,12 +1108,12 @@ public interface AssemblyPackage extends EPackage {
 		EReference ASSEMBLY_STORAGE__STORAGE_TYPE = eINSTANCE.getAssemblyStorage_StorageType();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Assembly Component</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ASSEMBLY_STORAGE___GET_ASSEMBLY_COMPONENT = eINSTANCE.getAssemblyStorage__GetAssemblyComponent();
+		EOperation ASSEMBLY_STORAGE___GET_COMPONENT = eINSTANCE.getAssemblyStorage__GetComponent();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl <em>EString To Assembly Storage Map Entry</em>}' class.

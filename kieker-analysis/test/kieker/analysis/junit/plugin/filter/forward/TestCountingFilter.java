@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.stage.forward.CountingFilter;
+import kieker.analysis.generic.CountingFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

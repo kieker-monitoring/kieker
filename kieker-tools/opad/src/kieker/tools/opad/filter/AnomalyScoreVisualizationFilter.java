@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.generic.sink.display.XYPlot;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -48,15 +46,12 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
 
-	private final XYPlot xyplot;
-
 	private final int numberOfEntries;
 
 	public AnomalyScoreVisualizationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-		this.xyplot = new XYPlot(this.numberOfEntries);
 	}
 
 	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { StorableDetectionResult.class })
@@ -76,13 +71,6 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 	private void updateDisplays(final StorableDetectionResult record) {
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
-
-		this.xyplot.setEntry(record.getApplicationName() + " - Actual Value", minutesAndSeconds, record.getValue());
-		this.xyplot.setEntry(record.getApplicationName() + " - Forecast", minutesAndSeconds, record.getForecast());
 	}
 
-	@Display(name = "XYPlot Anomaly Display")
-	public XYPlot getXYPlot() {
-		return this.xyplot;
-	}
 }

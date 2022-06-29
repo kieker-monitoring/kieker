@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.stage.select.traceidfilter.TraceIdFilter;
+import kieker.analysis.architecture.trace.TraceIdFilter;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;

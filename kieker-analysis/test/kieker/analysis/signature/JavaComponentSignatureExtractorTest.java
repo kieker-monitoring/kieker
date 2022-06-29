@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.TypeFactory;
 
@@ -49,7 +50,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNonNestedPackage() { // NOPMD (assert is placed in separate method)
@@ -61,7 +62,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNestedPackage() { // NOPMD (assert is placed in separate method)
@@ -73,7 +74,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithoutPackage() { // NOPMD (assert is placed in separate method)
@@ -85,7 +86,7 @@ public class JavaComponentSignatureExtractorTest {
 
 	/**
 	 * Test method for
-	 * {@link kieker.analysis.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
+	 * {@link kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor#extract(kieker.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithInnerClass() { // NOPMD (assert is placed in separate method)

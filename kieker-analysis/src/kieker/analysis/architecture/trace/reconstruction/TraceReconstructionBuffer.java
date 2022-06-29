@@ -66,7 +66,7 @@ public class TraceReconstructionBuffer {
 		final Instant start = Instants.createFromEpochTimestamp(record.getTimestamp(), this.temporalUnit);
 		newCall.setStart(start);
 
-		final DeploymentContext context = this.deploymentModel.getDeploymentContexts()
+		final DeploymentContext context = this.deploymentModel.getContexts()
 				.get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
 		final DeployedOperation operation = component.getOperations().get(record.getOperationSignature());

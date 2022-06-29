@@ -19,7 +19,7 @@ import java.util.Stack;
 
 import org.slf4j.Logger;
 
-import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;

@@ -35,7 +35,9 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
  * @author Nils Christian Ehmke
  *
  * @since 1.9
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestNoInputPortsForReader extends AbstractDynamicKiekerTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestNoInputPortsForReader.class);

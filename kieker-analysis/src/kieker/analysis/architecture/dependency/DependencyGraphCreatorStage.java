@@ -16,8 +16,8 @@
 
 package kieker.analysis.architecture.dependency;
 
+import kieker.analysis.architecture.recovery.ModelRepository;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.stage.model.ModelRepository;
 
 import teetime.stage.basic.AbstractTransformation;
 

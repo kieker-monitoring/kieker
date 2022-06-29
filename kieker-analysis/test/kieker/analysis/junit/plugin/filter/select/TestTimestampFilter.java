@@ -21,7 +21,7 @@ import java.nio.BufferOverflowException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.stage.select.timestampfilter.TimestampFilter;
+import kieker.analysis.architecture.generic.timestampfilter.TimestampFilter;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
 
