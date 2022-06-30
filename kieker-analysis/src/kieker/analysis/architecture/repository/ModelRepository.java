@@ -13,29 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.architecture.repository;
 
-package kieker.analysis.graph;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
- * Direction is used to denote the direction of an edge or location of a vertex on an edge.
- *
- * @author Sören Henning
- *
- * @since 1.14
- * @deprecated since 1.15 will be replaced by google graph library
+ * @author Reiner Jung
+ * @since 1.15
  */
-@Deprecated
-public enum Direction {
+public class ModelRepository {
 
-	OUT, IN, BOTH;
+	private final String name;
 
-	public Direction opposite() {
-		if (this.equals(OUT)) {
-			return IN;
-		} else if (this.equals(IN)) {
-			return OUT;
-		} else {
-			return BOTH;
-		}
+	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
+
+	public ModelRepository(final String name) {
+		this.name = name;
+	}
+
+	public Map<Class<? extends EObject>, EObject> getModels() {
+		return this.models;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends EObject> T getModel(final Class<T> clazz) {
+		return (T) this.models.get(clazz);
+	}
+
+	public void register(final Class<? extends EObject> key, final EObject value) {
+		this.models.put(key, value);
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

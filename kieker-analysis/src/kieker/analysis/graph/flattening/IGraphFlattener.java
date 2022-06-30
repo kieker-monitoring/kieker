@@ -16,7 +16,10 @@
 
 package kieker.analysis.graph.flattening;
 
-import kieker.analysis.graph.IGraph;
+import com.google.common.graph.MutableNetwork;
+
+import kieker.analysis.graph.IEdge;
+import kieker.analysis.graph.INode;
 
 /**
  * @author Sören Henning
@@ -28,6 +31,6 @@ public interface IGraphFlattener {
 	/**
 	 * @since 1.14
 	 */
-	public void flatten(IGraph graph);
+	public void flatten(MutableNetwork<INode, IEdge> graph);
 
 }

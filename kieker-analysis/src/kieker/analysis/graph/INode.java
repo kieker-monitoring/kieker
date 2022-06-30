@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.architecture.generic.timestampfilter.components;
-
-import kieker.common.record.IMonitoringRecord;
+package kieker.analysis.graph;
 
 /**
- * Concrete implementation of {@link AbstractTimestampFilter}. Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
+ * Generic node interface.
  *
- * @author Andre van Hoorn, Jan Waller, Lars Bluemke
- *
- * @since 1.2
+ * @author Reiner Jung
+ * @since 2.0.0
  */
-public class MonitioringRecordTimestampFilter extends AbstractTimestampFilter<IMonitoringRecord> {
+public interface INode extends IElement {
 
-	public MonitioringRecordTimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
-		super(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-	}
+	public <N extends INode, E extends IEdge> IGraph<N, E> getChildGraph();
 
-	@Override
-	protected long getRecordSpecificTimestamp(final IMonitoringRecord record) {
-		return record.getLoggingTimestamp();
-	}
+	public void removeChildGraph();
 
+	public boolean hasChildGraph();
+
+	public void createChildGraph();
 }

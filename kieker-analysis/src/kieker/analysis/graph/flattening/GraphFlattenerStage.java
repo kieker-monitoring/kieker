@@ -16,7 +16,10 @@
 
 package kieker.analysis.graph.flattening;
 
-import kieker.analysis.graph.IGraph;
+import com.google.common.graph.MutableNetwork;
+
+import kieker.analysis.graph.IEdge;
+import kieker.analysis.graph.INode;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -25,7 +28,7 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.14
  */
-public class GraphFlattenerStage extends AbstractFilter<IGraph> {
+public class GraphFlattenerStage extends AbstractFilter<MutableNetwork<INode, IEdge>> {
 
 	private final IGraphFlattener flattener;
 
@@ -35,7 +38,7 @@ public class GraphFlattenerStage extends AbstractFilter<IGraph> {
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
+	protected void execute(final MutableNetwork<INode, IEdge> graph) {
 		this.flattener.flatten(graph);
 		this.getOutputPort().send(graph);
 	}

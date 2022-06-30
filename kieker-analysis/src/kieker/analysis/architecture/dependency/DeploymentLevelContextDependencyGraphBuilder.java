@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -45,13 +45,13 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 	}
 
 	@Override
-	protected IVertex addVertex(final DeployedOperation deployedOperation) {
+	protected INode addVertex(final DeployedOperation deployedOperation) {
 		final DeployedOperation operation = deployedOperation;
 		final DeployedComponent component = operation.getComponent();
 		final DeploymentContext context = component.getContext();
 
-		final int contextId = this.identifierRegistry.getIdentifier(context);
-		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		final String contextId = String.valueOf(this.identifierRegistry.getIdentifier(context));
+		final INode contextVertex = this.addVertexIfAbsent(this.graph, contextId);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 		this.responseTimeDecorator.decorate(contextVertex, context);

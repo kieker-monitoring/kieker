@@ -13,45 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.impl;
 
-import kieker.analysis.graph.Direction;
 import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IVertex;
 
 /**
- * @author Sören Henning
+ * Basic edge class to contain attributes.
  *
- * @since 1.14
+ * @author Reiner Jung
+ * @since 2.0.0
+ *
  */
-class EdgeImpl extends GraphElementImpl implements IEdge {
+public class EdgeImpl extends ElementImpl implements IEdge {
 
-	private final IVertex outVertex;
-	private final IVertex inVertex;
-
-	protected EdgeImpl(final Object id, final IVertex outVertex, final IVertex inVertex, final GraphImpl graph) {
-		super(id, graph);
-		this.outVertex = outVertex;
-		this.inVertex = inVertex;
-	}
-
-	@Override
-	public void remove() {
-		this.graph.removeEdge(this);
-	}
-
-	@Override
-	public IVertex getVertex(final Direction direction) {
-		switch (direction) {
-		case IN:
-			return this.inVertex;
-		case OUT:
-			return this.outVertex;
-		case BOTH:
-		default:
-			throw ExceptionFactory.bothIsNotSupported();
-		}
+	public EdgeImpl(final String id) {
+		super(id);
 	}
 
 }

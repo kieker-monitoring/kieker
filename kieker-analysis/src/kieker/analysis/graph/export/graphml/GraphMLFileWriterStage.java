@@ -22,7 +22,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.function.Function;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.mapping.SimpleFileNameMapper;
 import kieker.analysis.graph.util.FileExtension;
 
@@ -33,7 +35,7 @@ import kieker.analysis.graph.util.FileExtension;
  */
 public class GraphMLFileWriterStage extends GraphMLWriterStage {
 
-	public GraphMLFileWriterStage(final Function<IGraph, Path> fileNameMapper) {
+	public GraphMLFileWriterStage(final Function<IGraph<INode, IEdge>, Path> fileNameMapper) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
 				return Files.newOutputStream(fileName, StandardOpenOption.CREATE);
@@ -44,7 +46,7 @@ public class GraphMLFileWriterStage extends GraphMLWriterStage {
 	}
 
 	public GraphMLFileWriterStage(final Path outputDirectory) {
-		this(new SimpleFileNameMapper(outputDirectory, FileExtension.GRAPHML));
+		this(new SimpleFileNameMapper<INode, IEdge>(outputDirectory, FileExtension.GRAPHML));
 	}
 
 }

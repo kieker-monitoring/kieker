@@ -16,9 +16,10 @@
 
 package kieker.analysis.graph.flattening;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.traversal.AbstractGraphTraverser;
 import kieker.analysis.graph.traversal.FlatGraphTraverser;
 import kieker.analysis.graph.traversal.IEdgeVisitor;
@@ -38,12 +39,12 @@ public class TopLevelFlattener implements IGraphFlattener, IVertexVisitor, IEdge
 	}
 
 	@Override
-	public void flatten(final IGraph graph) {
+	public void flatten(final MutableNetwork<INode, IEdge> graph) {
 		this.traverser.traverse(graph);
 	}
 
 	@Override
-	public void visitVertex(final IVertex vertex) {
+	public void visitVertex(final INode vertex) {
 		vertex.removeChildGraph();
 	}
 

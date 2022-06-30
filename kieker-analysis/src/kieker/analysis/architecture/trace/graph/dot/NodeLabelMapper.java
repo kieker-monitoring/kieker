@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 
 /**
- * This class is a {@link Function} that maps a {@link IVertex} to a label. The
+ * This class is a {@link Function} that maps a {@link INode} to a label. The
  * desired format is: container + "::\\n" + "@" + stackDepth + ":" + component +
  * "\\n" + name;
  * {@code <DeploymentContext>::\\n@<StackDepth>:<Component>\\n<FullOperationSignature>}
@@ -33,14 +33,14 @@ import kieker.analysis.graph.IVertex;
  * @since 1.14
  *
  */
-public class NodeLabelMapper implements Function<IVertex, String> {
+public class NodeLabelMapper implements Function<INode, String> {
 
 	public NodeLabelMapper() {
 		super();
 	}
 
 	@Override
-	public String apply(final IVertex vertex) {
+	public String apply(final INode vertex) {
 		if (vertex.getProperty("artificial") != null) {
 			return vertex.getProperty("name").toString();
 		}

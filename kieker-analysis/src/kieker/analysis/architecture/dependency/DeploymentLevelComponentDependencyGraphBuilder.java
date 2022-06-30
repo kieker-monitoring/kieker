@@ -16,8 +16,9 @@
 
 package kieker.analysis.architecture.dependency;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -41,19 +42,19 @@ public class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDepe
 	}
 
 	@Override
-	protected IVertex addVertex(final DeployedOperation deployedOperation) {
+	protected INode addVertex(final DeployedOperation deployedOperation) {
 		final DeployedOperation operation = deployedOperation;
 		final DeployedComponent component = operation.getComponent();
 		final DeploymentContext context = component.getContext();
 
-		final int contextId = this.identifierRegistry.getIdentifier(context);
-		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		final String contextId = String.valueOf(this.identifierRegistry.getIdentifier(context));
+		final INode contextVertex = this.addVertexIfAbsent(this.graph, contextId);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 
-		final IGraph contextSubgraph = contextVertex.addChildGraphIfAbsent();
-		final int componentId = this.identifierRegistry.getIdentifier(component);
-		final IVertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
+		final IGraph<INode, IEdge> contextSubgraph = this.addChildGraphIfAbsent(contextVertex);
+		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
+		final INode componentVertex = this.addVertexIfAbsent(contextSubgraph, componentId);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getAssemblyComponent().getComponentType().getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());

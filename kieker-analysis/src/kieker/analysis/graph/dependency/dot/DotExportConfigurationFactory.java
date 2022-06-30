@@ -21,7 +21,7 @@ import java.util.Collection;
 import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.architecture.recovery.signature.NameBuilder;
 import kieker.analysis.graph.IElement;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
@@ -225,7 +225,7 @@ public class DotExportConfigurationFactory {
 		return new StringBuilder().append("<<").append(this.vertexTypeMapper.apply(type)).append(">>");
 	}
 
-	private StringBuilder createOperationLabelFromVertex(final IVertex vertex) {
+	private StringBuilder createOperationLabelFromVertex(final INode vertex) {
 		@SuppressWarnings("unchecked")
 		final Collection<String> modifiers = this.getProperty(vertex, PropertyConstants.MODIFIERS, Collection.class);
 		final String returnType = this.getProperty(vertex, PropertyConstants.RETURN_TYPE, String.class);
@@ -238,7 +238,7 @@ public class DotExportConfigurationFactory {
 				this.nameBuilder.getOperationNameBuilder().build(modifiers, returnType, name, parameterTypes));
 	}
 
-	private StringBuilder createComponentLabelFromVertex(final IVertex vertex) {
+	private StringBuilder createComponentLabelFromVertex(final INode vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyConstants.PACKAGE_NAME, String.class);
@@ -247,14 +247,14 @@ public class DotExportConfigurationFactory {
 				.append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
-	private StringBuilder createContextLabelFromVertex(final IVertex vertex) {
+	private StringBuilder createContextLabelFromVertex(final INode vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 
 		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
 	}
 
-	private StringBuilder createStatisticsFromVertex(final IVertex vertex) {
+	private StringBuilder createStatisticsFromVertex(final INode vertex) {
 		final String timeUnit = this.getProperty(vertex, PropertyConstants.TIME_UNIT).toString();
 		final String minResponseTime = this.getProperty(vertex, PropertyConstants.MIN_REPSONSE_TIME).toString();
 		final String maxResponseTime = this.getProperty(vertex, PropertyConstants.MAX_REPSONSE_TIME).toString();

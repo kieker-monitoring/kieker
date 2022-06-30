@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.type.ComponentType;
@@ -37,12 +37,12 @@ public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependency
 	}
 
 	@Override
-	protected IVertex addVertex(final DeployedOperation deployedOperation) {
+	protected INode addVertex(final DeployedOperation deployedOperation) {
 		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
 		final ComponentType component = operation.getComponentType();
 
-		final int componentId = this.identifierRegistry.getIdentifier(component);
-		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
+		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
+		final INode componentVertex = this.addVertexIfAbsent(this.graph, componentId);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());

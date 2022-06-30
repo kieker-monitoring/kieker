@@ -16,9 +16,12 @@
 
 package kieker.analysis.graph.export;
 
+import com.google.common.graph.MutableNetwork;
+
+import kieker.analysis.graph.GraphFactory;
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.traversal.AbstractGraphTraverser;
 import kieker.analysis.graph.traversal.FlatGraphTraverser;
 import kieker.analysis.graph.traversal.IEdgeVisitor;
@@ -36,18 +39,22 @@ import kieker.analysis.graph.traversal.IVertexVisitor;
  */
 public abstract class AbstractTransformer<O> implements IVertexVisitor, IEdgeVisitor {
 
-	protected IGraph graph;
+	protected IGraph<INode, IEdge> graph;
 
 	private final AbstractGraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
 
-	protected AbstractTransformer(final IGraph graph) {
+	protected AbstractTransformer(final IGraph<INode, IEdge> graph) {
 		this.graph = graph;
+	}
+
+	protected AbstractTransformer(final MutableNetwork<INode, IEdge> graph, final String label) {
+		this.graph = GraphFactory.createGraph(label, graph);
 	}
 
 	public final O transform() {
 		this.beforeTransformation();
 
-		this.graphTraverser.traverse(this.graph);
+		this.graphTraverser.traverse(this.graph.getGraph());
 
 		this.afterTransformation();
 
@@ -58,14 +65,14 @@ public abstract class AbstractTransformer<O> implements IVertexVisitor, IEdgeVis
 
 	protected abstract void afterTransformation();
 
-	protected abstract void transformVertex(IVertex vertex);
+	protected abstract void transformVertex(INode vertex);
 
 	protected abstract void transformEdge(IEdge edge);
 
 	protected abstract O getTransformation();
 
 	@Override
-	public void visitVertex(final IVertex vertex) {
+	public void visitVertex(final INode vertex) {
 		this.transformVertex(vertex);
 	}
 

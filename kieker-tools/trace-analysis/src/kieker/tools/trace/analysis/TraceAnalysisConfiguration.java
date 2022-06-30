@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.architecture.generic.timestampfilter.TimestampFilter;
 import kieker.analysis.architecture.trace.InvalidEventRecordTraceCounter;
 import kieker.analysis.architecture.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
 import kieker.analysis.architecture.trace.TraceIdFilter;
@@ -43,7 +42,8 @@ import kieker.analysis.generic.DynamicEventDispatcher;
 import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
 import kieker.analysis.generic.sink.EquivalenceClassWriter;
-import kieker.analysis.generic.sink.NullStage;
+import kieker.analysis.generic.sink.NullSink;
+import kieker.analysis.generic.timestampfilter.TimestampFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.repository.SystemModelRepository;
@@ -141,9 +141,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 		this.invalidEventRecordTraceCounter = new InvalidEventRecordTraceCounter(parameters.isIgnoreInvalidTraces());
 
 		/** default sinks. */
-		final NullStage execNullStage = new NullStage(false, 1);
-		final NullStage invalidNullStage = new NullStage(false, 1);
-		final NullStage messageNullStage = new NullStage(false, 1);
+		final NullSink execNullStage = new NullSink(false, 1);
+		final NullSink invalidNullStage = new NullSink(false, 1);
+		final NullSink messageNullStage = new NullSink(false, 1);
 
 		/** Merge traces from different analyses. */
 		final Merger<ExecutionTrace> executionTraceMerger = new Merger<>();

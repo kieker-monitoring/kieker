@@ -14,9 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-/**
- * @author Reiner Jung
- * @since 1.15
- */
-package kieker.analysis.architecture.generic.timestampfilter.components;
+package kieker.analysis.generic.timestampfilter.components;
 
+import kieker.common.record.flow.IEventRecord;
+
+/**
+ * Concrete implementation of {@link AbstractTimestampFilter}. Allows to filter {@link IEventRecord} objects based on their given timestamps.
+ *
+ * @author Andre van Hoorn, Jan Waller, Lars Bluemke
+ *
+ * @since 1.2
+ */
+public class EventRecordTimestampFilter extends AbstractTimestampFilter<IEventRecord> {
+
+	public EventRecordTimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
+		super(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+	}
+
+	@Override
+	protected long getRecordSpecificTimestamp(final IEventRecord record) {
+		return record.getTimestamp();
+	}
+
+}

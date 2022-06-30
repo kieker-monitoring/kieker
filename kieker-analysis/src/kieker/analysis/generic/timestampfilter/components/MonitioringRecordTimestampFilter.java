@@ -14,9 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-/**
- * @author Reiner Jung
- * @since 1.15
- */
-package kieker.analysis.events;
+package kieker.analysis.generic.timestampfilter.components;
 
+import kieker.common.record.IMonitoringRecord;
+
+/**
+ * Concrete implementation of {@link AbstractTimestampFilter}. Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
+ *
+ * @author Andre van Hoorn, Jan Waller, Lars Bluemke
+ *
+ * @since 1.2
+ */
+public class MonitioringRecordTimestampFilter extends AbstractTimestampFilter<IMonitoringRecord> {
+
+	public MonitioringRecordTimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
+		super(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+	}
+
+	@Override
+	protected long getRecordSpecificTimestamp(final IMonitoringRecord record) {
+		return record.getLoggingTimestamp();
+	}
+
+}

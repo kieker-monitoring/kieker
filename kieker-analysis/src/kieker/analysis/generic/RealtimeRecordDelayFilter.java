@@ -14,13 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.events.delayfilter;
+package kieker.analysis.generic;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.events.delayfilter.components.RealtimeRecordDelayConsumer;
-import kieker.analysis.events.delayfilter.components.RealtimeRecordDelayProducer;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.CompositeStage;

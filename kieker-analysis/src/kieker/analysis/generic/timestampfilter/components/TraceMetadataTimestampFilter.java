@@ -13,41 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
 
-import java.util.HashMap;
-import java.util.Map;
+package kieker.analysis.generic.timestampfilter.components;
 
-import org.eclipse.emf.ecore.EObject;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
- * @author Reiner Jung
- * @since 1.15
+ * Concrete implementation of {@link AbstractTimestampFilter}. Allows to filter {@link TraceMetadata} objects based on their given timestamps.
+ *
+ * @author Andre van Hoorn, Jan Waller, Lars Bluemke
+ *
+ * @since 1.2
  */
-public class ModelRepository {
+public class TraceMetadataTimestampFilter extends AbstractTimestampFilter<TraceMetadata> {
 
-	private final String name;
-
-	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
-
-	public ModelRepository(final String name) {
-		this.name = name;
+	public TraceMetadataTimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
+		super(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 	}
 
-	public Map<Class<? extends EObject>, EObject> getModels() {
-		return this.models;
+	@Override
+	protected long getRecordSpecificTimestamp(final TraceMetadata record) {
+		return record.getLoggingTimestamp();
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends EObject> T getModel(final Class<T> clazz) {
-		return (T) this.models.get(clazz);
-	}
-
-	public void register(final Class<? extends EObject> key, final EObject value) {
-		this.models.put(key, value);
-	}
-
-	public String getName() {
-		return this.name;
-	}
 }

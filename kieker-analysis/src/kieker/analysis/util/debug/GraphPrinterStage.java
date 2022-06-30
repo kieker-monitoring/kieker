@@ -18,21 +18,22 @@ package kieker.analysis.util.debug;
 
 import java.io.PrintStream;
 
-import kieker.analysis.graph.Direction;
+import com.google.common.graph.EndpointPair;
+
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * This stage prints {@link IGraph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
+ * This stage prints {@link Graph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
+public class GraphPrinterStage extends AbstractConsumerStage<IGraph<INode, IEdge>> {
 
 	private final PrintStream printStream;
 
@@ -46,30 +47,32 @@ public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
-		for (final IVertex vertex : graph.getVertices()) {
-			this.printStream.println("Vertices:");
-			this.printStream.println(vertex.getId());
-			this.printStream.println("    Vertices:");
-			for (final IVertex vertex1 : vertex.getChildGraph().getVertices()) {
-				this.printStream.println("    " + vertex1.getId());
-				this.printStream.println("        Vertices:");
-				for (final IVertex vertex2 : vertex1.getChildGraph().getVertices()) {
-					this.printStream.println("        " + vertex2.getId());
-				}
-				this.printStream.println("        Edges:");
-				for (final IEdge edge2 : vertex1.getChildGraph().getEdges()) {
-					this.printStream.println("        " + edge2.getVertex(Direction.OUT).getId() + "->" + edge2.getVertex(Direction.IN).getId());
-				}
-			}
-			this.printStream.println("    Edges:");
-			for (final IEdge edge1 : vertex.getChildGraph().getEdges()) {
-				this.printStream.println("    " + edge1.getVertex(Direction.OUT).getId() + "->" + edge1.getVertex(Direction.IN).getId());
+	protected void execute(final IGraph<INode, IEdge> graph) {
+		this.printGraph(graph, "");
+	}
+
+	private void printGraph(final IGraph<INode, IEdge> graph, final String offset) {
+		this.printStream.printf("%sGraph %s Vertices:\n", graph.getLabel(), offset);
+		for (final INode node : graph.getGraph().nodes()) {
+			this.printStream.printf("%s%s\n", offset, node.getId());
+			if (node.getChildGraph() != null) {
+				this.printGraph(node.getChildGraph(), "   " + offset);
 			}
 		}
-		this.printStream.println("Edges:");
-		for (final IEdge edge : graph.getEdges()) {
-			this.printStream.println(edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId());
+		this.printStream.printf("%sEdges:\n", offset);
+		for (final IEdge edge : graph.getGraph().edges()) {
+			final EndpointPair<INode> nodePair = graph.getGraph().incidentNodes(edge);
+			final String sourceLabel;
+			final String targetLabel;
+			if (graph.getGraph().isDirected()) {
+				sourceLabel = nodePair.source().getId();
+				targetLabel = nodePair.target().getId();
+			} else {
+				sourceLabel = nodePair.nodeU().getId();
+				targetLabel = nodePair.nodeV().getId();
+			}
+
+			this.printStream.printf("%s -> %s\n", sourceLabel, targetLabel);
 		}
 	}
 

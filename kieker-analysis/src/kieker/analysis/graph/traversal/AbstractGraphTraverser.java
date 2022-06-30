@@ -19,7 +19,10 @@ package kieker.analysis.graph.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.graph.IGraph;
+import com.google.common.graph.MutableNetwork;
+
+import kieker.analysis.graph.IEdge;
+import kieker.analysis.graph.INode;
 
 /**
  * @author Sören Henning
@@ -71,6 +74,6 @@ public abstract class AbstractGraphTraverser {
 		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public abstract void traverse(final IGraph graph);
+	public abstract void traverse(final MutableNetwork<INode, IEdge> graph);
 
 }

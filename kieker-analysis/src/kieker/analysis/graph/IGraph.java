@@ -13,90 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph;
 
-import kieker.analysis.graph.impl.GraphImpl;
+import com.google.common.graph.MutableNetwork;
 
 /**
- * @author Sören Henning
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
  *
- * @since 1.14
- * @deprecated since 1.15 will be replaced by google graph library
+ * @author Reiner Jung
+ * @since 2.0.0
  */
-@Deprecated
-public interface IGraph extends IElement {
+public interface IGraph<N extends INode, E extends IEdge> {
 
-	/**
-	 * Factory method to create a new graph using the default implementation.
-	 *
-	 * @return a new graph instance
-	 * @since 1.14
-	 */
-	public static IGraph create() {
-		// Create an anonymous subclass of GraphImpl to access its protected constructor
-		return new GraphImpl() {
-		};
-	}
+	public MutableNetwork<N, E> getGraph();
 
-	/**
-	 * @since 1.14
-	 */
-	public String getName();
+	public String getLabel();
 
-	/**
-	 * @since 1.14
-	 */
-	public void setName(String name);
-
-	/**
-	 * @since 1.14
-	 */
-	public IVertex addVertex(Object id);
-
-	/**
-	 * @since 1.14
-	 */
-	public IVertex addVertexIfAbsent(Object id);
-
-	/**
-	 * @since 1.14
-	 */
-	public IVertex getVertex(Object id);
-
-	/**
-	 * @since 1.14
-	 */
-	public void removeVertex(IVertex vertex);
-
-	/**
-	 * @since 1.14
-	 */
-	public Iterable<IVertex> getVertices();
-
-	/**
-	 * @since 1.14
-	 */
-	public IEdge addEdge(Object id, IVertex outVertex, IVertex inVertex);
-
-	/**
-	 * @since 1.14
-	 */
-	public IEdge addEdgeIfAbsent(Object id, IVertex outVertex, IVertex inVertex);
-
-	/**
-	 * @since 1.14
-	 */
-	public IEdge getEdge(Object id);
-
-	/**
-	 * @since 1.14
-	 */
-	public void removeEdge(IEdge edge);
-
-	/**
-	 * @since 1.14
-	 */
-	public Iterable<IEdge> getEdges();
-
+	public void setLabel(String label);
 }

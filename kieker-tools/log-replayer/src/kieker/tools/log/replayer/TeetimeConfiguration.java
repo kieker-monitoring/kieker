@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.tools.log.replayer;
 
-import kieker.analysis.architecture.generic.timestampfilter.TimestampFilter;
+import kieker.analysis.generic.timestampfilter.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.log.replayer.stages.DataSendStage;
 import kieker.tools.log.replayer.stages.ReplayControlStage;

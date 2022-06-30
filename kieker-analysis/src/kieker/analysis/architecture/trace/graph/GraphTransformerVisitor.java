@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.architecture.trace.graph;
 
+import java.util.Optional;
+
 import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
+import kieker.analysis.graph.GraphFactory;
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.util.ObjectIdentifierRegistry;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.trace.OperationCall;
@@ -33,10 +35,10 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class GraphTransformerVisitor implements IOperationCallVisitor {
 
-	private final IGraph graph;
+	private final IGraph<INode, IEdge> graph;
 	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();
 
-	public GraphTransformerVisitor(final IGraph graph) {
+	public GraphTransformerVisitor(final IGraph<INode, IEdge> graph) {
 		super();
 		this.graph = graph;
 	}
@@ -52,9 +54,9 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 		}
 	}
 
-	private IVertex addVertex(final OperationCall operationCall) {
+	private INode addVertex(final OperationCall operationCall) {
 		final int vertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final IVertex vertex = this.graph.addVertex(vertexId);
+		final INode vertex = GraphFactory.createNode(String.valueOf(vertexId));
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
@@ -69,43 +71,47 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 		vertex.setProperty("deploymentContext", deploymentContext.getName());
 		vertex.setProperty("stackDepth", operationCall.getStackDepth());
 		// ... maybe further parameters
+		this.graph.getGraph().addNode(vertex);
 
 		return vertex;
 	}
 
 	private IEdge addEdge(final OperationCall operationCall) {
-		final int thisVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final IVertex thisVertex = this.graph.getVertex(thisVertexId);
-		final int parentVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall.getParent());
-		final IVertex parentVertex = this.graph.getVertex(parentVertexId);
+		final String thisVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(operationCall));
+		final Optional<INode> thisVertex = this.graph.getGraph().nodes().stream().filter(node -> thisVertexId.equals(node.getId())).findFirst();
+		final String parentVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(operationCall.getParent()));
+		final Optional<INode> parentVertex = this.graph.getGraph().nodes().stream().filter(node -> parentVertexId.equals(node.getId())).findFirst();
 
-		if (thisVertex == null) {
+		if (!thisVertex.isPresent()) {
 			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
-		} else if (parentVertex == null) {
-			throw new IllegalStateException(
-					"Source vertex not found (operationCall:" + operationCall.getParent() + ").");
+		}
+		if (!parentVertex.isPresent()) {
+			throw new IllegalStateException("Source vertex not found (operationCall:" + operationCall.getParent() + ").");
 		}
 
-		final IEdge edge = this.graph.addEdge(null, parentVertex, thisVertex);
+		final IEdge edge = GraphFactory.createEdge(null);
 		edge.setProperty("orderIndex", operationCall.getOrderIndex() + 1);
+
+		this.graph.getGraph().addEdge(parentVertex.get(), thisVertex.get(), edge);
 
 		return edge;
 	}
 
-	private IVertex addRootVertex(final OperationCall rootOperationCall) {
-		final int rootVertexId = this.objectIdentifierRegistry.getIdentifier(rootOperationCall);
-		final IVertex rootVertex = this.graph.getVertex(rootVertexId);
+	private INode addRootVertex(final OperationCall rootOperationCall) {
+		final String rootVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(rootOperationCall));
+		final Optional<INode> rootVertex = this.graph.getGraph().nodes().stream().filter(node -> rootVertexId.equals(node.getId())).findFirst();
 
-		if (rootVertex == null) {
+		if (!rootVertex.isPresent()) {
 			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
 		}
 
-		final IVertex entryVertex = this.graph.addVertex("'Entry'");
+		final INode entryVertex = GraphFactory.createNode("'Entry'");
 		entryVertex.setProperty("artificial", true);
 		entryVertex.setProperty("name", "'Entry'");
 
-		final IEdge edge = this.graph.addEdge(null, entryVertex, rootVertex);
+		final IEdge edge = GraphFactory.createEdge(null);
 		edge.setProperty("orderIndex", 1);
+		this.graph.getGraph().addEdge(entryVertex, rootVertex.get(), edge);
 
 		return entryVertex;
 	}

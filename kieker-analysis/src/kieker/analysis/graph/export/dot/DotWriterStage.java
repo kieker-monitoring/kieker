@@ -19,7 +19,9 @@ package kieker.analysis.graph.export.dot;
 import java.io.Writer;
 import java.util.function.Function;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 
 import teetime.framework.AbstractConsumerStage;
 
@@ -36,26 +38,26 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.14
  */
-public class DotWriterStage extends AbstractConsumerStage<IGraph> {
+public class DotWriterStage extends AbstractConsumerStage<IGraph<INode, IEdge>> {
 
-	protected final Function<IGraph, Writer> writerMapper;
+	protected final Function<IGraph<INode, IEdge>, Writer> writerMapper;
 
 	protected final DotExportConfiguration exportConfiguration;
 
-	public DotWriterStage(final Function<IGraph, Writer> writerMapper) {
+	public DotWriterStage(final Function<IGraph<INode, IEdge>, Writer> writerMapper) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = new SimpleDotExportConfiguration();
 	}
 
-	public DotWriterStage(final Function<IGraph, Writer> writerMapper, final DotExportConfiguration exportConfiguration) {
+	public DotWriterStage(final Function<IGraph<INode, IEdge>, Writer> writerMapper, final DotExportConfiguration exportConfiguration) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = exportConfiguration;
 	}
 
 	@Override
-	protected final void execute(final IGraph graph) {
+	protected final void execute(final IGraph<INode, IEdge> graph) {
 		final DotExporter dotExporter = new DotExporter(graph, this.writerMapper.apply(graph), this.exportConfiguration);
 		dotExporter.transform();
 	}

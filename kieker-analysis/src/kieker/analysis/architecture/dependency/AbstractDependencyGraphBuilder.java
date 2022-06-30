@@ -17,11 +17,13 @@
 package kieker.analysis.architecture.dependency;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
-import kieker.analysis.architecture.recovery.ModelRepository;
+import kieker.analysis.architecture.repository.ModelRepository;
+import kieker.analysis.graph.GraphFactory;
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.analysis.util.ObjectIdentifierRegistry;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -46,7 +48,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 
 	private static final Object ENTRY_VERTEX_IDENTIFIER = "entry";
 
-	protected IGraph graph;
+	protected IGraph<INode, IEdge> graph;
 	protected ObjectIdentifierRegistry identifierRegistry;
 	protected ResponseTimeDecorator responseTimeDecorator;
 
@@ -56,10 +58,9 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	public AbstractDependencyGraphBuilder() {}
 
 	@Override
-	public IGraph build(final ModelRepository repository) {
+	public IGraph<INode, IEdge> build(final ModelRepository repository) {
 		// TODO this must be refactored and separated out in a separate function
-		this.graph = IGraph.create();
-		this.graph.setName(repository.getName());
+		this.graph = GraphFactory.createGraph(repository.getName());
 
 		this.executionModel = repository.getModel(ExecutionModel.class);
 		this.statisticsModel = repository.getModel(StatisticsModel.class);
@@ -72,28 +73,63 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	}
 
 	private void handleInvocation(final AggregatedInvocation invocation) {
-		final IVertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
-		final IVertex targetVertex = this.addVertex(invocation.getTarget());
+		final INode sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
+		final INode targetVertex = this.addVertex(invocation.getTarget());
 		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
 				.get(EPropertyType.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 
-	protected abstract IVertex addVertex(final DeployedOperation deployedOperation);
+	protected abstract INode addVertex(final DeployedOperation deployedOperation);
 
-	protected IVertex addVertexForEntry() {
-		final int id = this.identifierRegistry.getIdentifier(ENTRY_VERTEX_IDENTIFIER);
-		final IVertex vertex = this.graph.addVertexIfAbsent(id);
+	protected INode addVertexForEntry() {
+		final String id = String.valueOf(this.identifierRegistry.getIdentifier(ENTRY_VERTEX_IDENTIFIER));
+		final Optional<INode> nodeOptional = this.graph.getGraph().nodes().stream().filter(node -> id.equals(node.getId())).findFirst();
+		final INode vertex;
+		if (nodeOptional.isPresent()) {
+			vertex = nodeOptional.get();
+		} else {
+			vertex = GraphFactory.createNode(id);
+			this.graph.getGraph().addNode(vertex);
+		}
+
 		vertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ENTRY);
 		vertex.setProperty(PropertyConstants.NAME, ENTRY_VERTEX_IDENTIFIER);
 		return vertex;
 	}
 
-	protected IEdge addEdge(final IVertex source, final IVertex target, final long calls) {
-		final int edgeId = this.identifierRegistry.getIdentifier(ComposedKey.of(source, target));
-		final IEdge edge = source.addEdgeIfAbsent(edgeId, target);
+	protected IEdge addEdge(final INode source, final INode target, final long calls) {
+		final String edgeId = String.valueOf(this.identifierRegistry.getIdentifier(ComposedKey.of(source, target)));
+		final Optional<IEdge> edgeOptional = this.graph.getGraph().edges().stream().filter(edge -> edgeId.equals(edge.getId())).findFirst();
+
+		final IEdge edge;
+		if (edgeOptional.isPresent()) {
+			edge = edgeOptional.get();
+		} else {
+			edge = GraphFactory.createEdge(edgeId);
+			this.graph.getGraph().addEdge(source, target, edge);
+		}
+
 		edge.setPropertyIfAbsent(PropertyConstants.CALLS, calls);
 		return edge;
+	}
+
+	protected IGraph<INode, IEdge> addChildGraphIfAbsent(final INode node) {
+		if (!node.hasChildGraph()) {
+			node.createChildGraph();
+		}
+		return node.getChildGraph();
+	}
+
+	protected INode addVertexIfAbsent(final IGraph<INode, IEdge> checkGraph, final String id) {
+		final Optional<INode> nodeOptional = checkGraph.getGraph().nodes().stream().filter(node -> id.equals(node.getId())).findFirst();
+		if (nodeOptional.isPresent()) {
+			return nodeOptional.get();
+		} else {
+			final INode node = GraphFactory.createNode(id);
+			checkGraph.getGraph().addNode(node);
+			return node;
+		}
 	}
 
 }

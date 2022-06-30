@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.events;
+package kieker.analysis.generic;
 
 import kieker.common.record.IMonitoringRecord;
 
@@ -28,7 +28,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.8
  */
-public class MonitoringThroughputFilter extends AbstractConsumerStage<IMonitoringRecord> {
+public class MonitoringThroughputStage extends AbstractConsumerStage<IMonitoringRecord> {
 	private final long intervalSize;
 
 	private long currentInterval = -1;
@@ -44,7 +44,7 @@ public class MonitoringThroughputFilter extends AbstractConsumerStage<IMonitorin
 	 * @param intervalSize
 	 *            Determines the interval size. Choose a proper time unit.
 	 */
-	public MonitoringThroughputFilter(final long intervalSize) {
+	public MonitoringThroughputStage(final long intervalSize) {
 		this.intervalSize = intervalSize;
 	}
 

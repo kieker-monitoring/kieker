@@ -14,12 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.generic.timestampfilter;
+package kieker.analysis.generic.timestampfilter;
 
-import kieker.analysis.architecture.generic.timestampfilter.components.EventRecordTimestampFilter;
-import kieker.analysis.architecture.generic.timestampfilter.components.MonitioringRecordTimestampFilter;
-import kieker.analysis.architecture.generic.timestampfilter.components.OperationExecutionRecordTimestampFilter;
-import kieker.analysis.architecture.generic.timestampfilter.components.TraceMetadataTimestampFilter;
+import kieker.analysis.generic.timestampfilter.components.EventRecordTimestampFilter;
+import kieker.analysis.generic.timestampfilter.components.MonitioringRecordTimestampFilter;
+import kieker.analysis.generic.timestampfilter.components.OperationExecutionRecordTimestampFilter;
+import kieker.analysis.generic.timestampfilter.components.TraceMetadataTimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IEventRecord;

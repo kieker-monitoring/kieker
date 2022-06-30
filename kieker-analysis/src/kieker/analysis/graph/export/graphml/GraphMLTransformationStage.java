@@ -18,7 +18,9 @@ package kieker.analysis.graph.export.graphml;
 
 import org.graphdrawing.graphml.GraphmlType;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -27,14 +29,14 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @since 1.14
  */
-public class GraphMLTransformationStage extends AbstractTransformation<IGraph, GraphmlType> {
+public class GraphMLTransformationStage extends AbstractTransformation<IGraph<INode, IEdge>, GraphmlType> {
 
 	public GraphMLTransformationStage() {
 		super();
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
+	protected void execute(final IGraph<INode, IEdge> graph) {
 		final GraphMLTransformer graphMLTransformer = new GraphMLTransformer(graph);
 		final GraphmlType graphmlType = graphMLTransformer.transform();
 

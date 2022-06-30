@@ -18,7 +18,7 @@ package kieker.analysis.architecture.dependency;
 
 import java.time.temporal.ChronoUnit;
 
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.util.time.ChronoUnitToSymbolMapper;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.EPropertyType;
@@ -41,7 +41,7 @@ public class ResponseTimeDecorator {
 		this.timeUnit = ChronoUnitToSymbolMapper.create().apply(chronoUnit);
 	}
 
-	public void decorate(final IVertex vertex, final Object object) {
+	public void decorate(final INode vertex, final Object object) {
 		vertex.setPropertyIfAbsent(PropertyConstants.MIN_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MIN));
 		vertex.setPropertyIfAbsent(PropertyConstants.MAX_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MAX));
 		vertex.setPropertyIfAbsent(PropertyConstants.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, EPropertyType.TOTAL));

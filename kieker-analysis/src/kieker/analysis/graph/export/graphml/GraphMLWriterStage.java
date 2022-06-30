@@ -21,7 +21,9 @@ import java.util.function.Function;
 
 import org.graphdrawing.graphml.GraphmlType;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 import kieker.analysis.util.stage.FunctionStage;
 import kieker.analysis.util.stage.JAXBMarshalStage;
 
@@ -37,15 +39,15 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  */
 public class GraphMLWriterStage extends CompositeStage {
 
-	private final InputPort<IGraph> inputPort;
+	private final InputPort<IGraph<INode, IEdge>> inputPort;
 
-	public GraphMLWriterStage(final Function<IGraph, OutputStream> outputStreamMapper) {
+	public GraphMLWriterStage(final Function<IGraph<INode, IEdge>, OutputStream> outputStreamMapper) {
 
-		final Distributor<IGraph> graphDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<IGraph<INode, IEdge>> graphDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final GraphMLTransformationStage graphMLTransformer = new GraphMLTransformationStage();
 		final JAXBElementWrapperStage jaxbElementWrapper = new JAXBElementWrapperStage();
 		final JAXBMarshalStage<GraphmlType> jaxbMarshaller = new JAXBMarshalStage<>(GraphmlType.class);
-		final FunctionStage<IGraph, OutputStream> outputStreamMapperStage = new FunctionStage<>(outputStreamMapper);
+		final FunctionStage<IGraph<INode, IEdge>, OutputStream> outputStreamMapperStage = new FunctionStage<>(outputStreamMapper);
 
 		this.inputPort = graphDistributor.getInputPort();
 
@@ -57,7 +59,7 @@ public class GraphMLWriterStage extends CompositeStage {
 
 	}
 
-	public InputPort<IGraph> getInputPort() {
+	public InputPort<IGraph<INode, IEdge>> getInputPort() {
 		return this.inputPort;
 	}
 

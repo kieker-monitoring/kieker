@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.events.MonitoringThroughputFilter;
+import kieker.analysis.generic.MonitoringThroughputStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * This test is for the class {@link MonitoringThroughputFilter}.
+ * This test is for the class {@link MonitoringThroughputStage}.
  *
  * @author Henry Grow, Lars Bluemke
  *
@@ -40,7 +40,7 @@ import teetime.framework.test.StageTester;
  */
 public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
-	private MonitoringThroughputFilter monitoringThroughputFilter;
+	private MonitoringThroughputStage monitoringThroughputFilter;
 	// List for the count
 	private List<Long> outputThroughputs;
 	// List for all relayed records
@@ -60,7 +60,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	 */
 	@Before
 	public void before() {
-		this.monitoringThroughputFilter = new MonitoringThroughputFilter(10L);
+		this.monitoringThroughputFilter = new MonitoringThroughputStage(10L);
 		this.outputThroughputs = new ArrayList<>();
 		this.outputRelayedRecords = new ArrayList<>();
 		this.outputUncountedRecords = new ArrayList<>();

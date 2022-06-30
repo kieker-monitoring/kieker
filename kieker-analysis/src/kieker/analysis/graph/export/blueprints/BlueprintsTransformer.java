@@ -19,12 +19,12 @@ package kieker.analysis.graph.export.blueprints;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.graph.EndpointPair;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 
-import kieker.analysis.graph.Direction;
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.export.AbstractTransformer;
 
 /**
@@ -37,14 +37,14 @@ public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blu
 	private static final String LABEL_PROPERTY = "label";
 
 	private final com.tinkerpop.blueprints.Graph transformedGraph = new TinkerGraph();
-	private final Map<IVertex, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
+	private final Map<INode, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
 
-	public BlueprintsTransformer(final IGraph graph) {
+	public BlueprintsTransformer(final IGraph<INode, IEdge> graph) {
 		super(graph);
 	}
 
 	@Override
-	protected void transformVertex(final IVertex vertex) {
+	protected void transformVertex(final INode vertex) {
 		final com.tinkerpop.blueprints.Vertex mappedVertex = this.transformedGraph.addVertex(vertex.getId());
 		this.mappedVertices.put(vertex, mappedVertex);
 		for (final String propertyKey : vertex.getPropertyKeys()) {
@@ -55,8 +55,9 @@ public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blu
 
 	@Override
 	protected void transformEdge(final IEdge edge) {
-		final com.tinkerpop.blueprints.Vertex mappedInVertex = this.mappedVertices.get(edge.getVertex(Direction.IN));
-		final com.tinkerpop.blueprints.Vertex mappedOutVertex = this.mappedVertices.get(edge.getVertex(Direction.OUT));
+		final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+		final com.tinkerpop.blueprints.Vertex mappedInVertex = this.mappedVertices.get(pair.target());
+		final com.tinkerpop.blueprints.Vertex mappedOutVertex = this.mappedVertices.get(pair.source());
 		String label = edge.getProperty(LABEL_PROPERTY);
 		if (label == null) {
 			label = "";

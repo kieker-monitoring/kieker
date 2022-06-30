@@ -22,7 +22,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.mapping.SimpleFileNameMapper;
 import kieker.analysis.graph.util.FileExtension;
 
@@ -33,11 +35,11 @@ import kieker.analysis.graph.util.FileExtension;
  */
 public class DotFileWriterStage extends DotWriterStage {
 
-	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper) {
+	public DotFileWriterStage(final Function<IGraph<INode, IEdge>, Path> fileNameMapper) {
 		this(fileNameMapper, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final Function<IGraph, Path> fileNameMapper, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Function<IGraph<INode, IEdge>, Path> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
 				return Files.newBufferedWriter(fileName, StandardCharsets.UTF_8);
@@ -52,7 +54,7 @@ public class DotFileWriterStage extends DotWriterStage {
 	}
 
 	public DotFileWriterStage(final Path outputDirectory, final DotExportConfiguration exportConfiguration) {
-		this(new SimpleFileNameMapper(outputDirectory, FileExtension.DOT), exportConfiguration);
+		this(new SimpleFileNameMapper<INode, IEdge>(outputDirectory, FileExtension.DOT), exportConfiguration);
 	}
 
 }
