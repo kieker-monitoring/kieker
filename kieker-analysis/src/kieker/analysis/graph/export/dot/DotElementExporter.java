@@ -22,10 +22,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
-import kieker.analysis.graph.Direction;
+import com.google.common.graph.EndpointPair;
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.export.AbstractTransformer;
 import kieker.analysis.graph.util.dot.DotGraphWriter;
 import kieker.analysis.graph.util.dot.attributes.DotClusterAttribute;
@@ -42,30 +44,37 @@ class DotElementExporter extends AbstractTransformer<Void> {
 	protected final DotGraphWriter dotGraphWriter;
 	protected final DotExportConfiguration configuration;
 
-	protected DotElementExporter(final IGraph graph, final DotGraphWriter dotGraphWriter, final DotExportConfiguration configuration) {
+	protected DotElementExporter(final IGraph<INode, IEdge> graph, final DotGraphWriter dotGraphWriter, final DotExportConfiguration configuration) {
 		super(graph);
 		this.dotGraphWriter = dotGraphWriter;
 		this.configuration = configuration;
 	}
 
+	protected DotElementExporter(final MutableNetwork<INode, IEdge> graph, final String label, final DotGraphWriter dotGraphWriter,
+			final DotExportConfiguration configuration) {
+		super(graph, label);
+		this.dotGraphWriter = dotGraphWriter;
+		this.configuration = configuration;
+	}
+
 	@Override
-	protected void transformVertex(final IVertex vertex) {
+	protected void transformVertex(final INode vertex) {
 		try {
 			if (vertex.hasChildGraph()) {
-				final IGraph childGraph = vertex.getChildGraph();
+				final MutableNetwork<INode, IEdge> childGraph = vertex.getChildGraph().getGraph();
 
 				this.dotGraphWriter.addClusterStart(vertex.getId().toString());
 
-				for (final Entry<DotClusterAttribute, Function<IVertex, String>> attribute : this.configuration.getClusterAttributes()) {
+				for (final Entry<DotClusterAttribute, Function<INode, String>> attribute : this.configuration.getClusterAttributes()) {
 					this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(vertex));
 				}
 
-				final DotElementExporter childGraphWriter = new DotElementExporter(childGraph, this.dotGraphWriter, this.configuration);
+				final DotElementExporter childGraphWriter = new DotElementExporter(childGraph, vertex.getId(), this.dotGraphWriter, this.configuration);
 				childGraphWriter.transform();
 
 				this.dotGraphWriter.addClusterStop();
 			} else {
-				this.dotGraphWriter.addNode(vertex.getId().toString(), this.getAttributes(vertex));
+				this.dotGraphWriter.addNode(vertex.getId(), this.getAttributes(vertex));
 			}
 		} catch (final IOException e) {
 			this.handleIOException(e);
@@ -75,8 +84,10 @@ class DotElementExporter extends AbstractTransformer<Void> {
 	@Override
 	protected void transformEdge(final IEdge edge) {
 		try {
-			final String sourceId = edge.getVertex(Direction.OUT).getId().toString();
-			final String targetId = edge.getVertex(Direction.IN).getId().toString();
+			final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+
+			final String sourceId = pair.source().getId();
+			final String targetId = pair.target().getId();
 
 			this.dotGraphWriter.addEdge(sourceId, targetId, this.getAttributes(edge));
 		} catch (final IOException e) {
@@ -100,9 +111,9 @@ class DotElementExporter extends AbstractTransformer<Void> {
 		return attributes;
 	}
 
-	protected Map<String, String> getAttributes(final IVertex vertex) {
+	protected Map<String, String> getAttributes(final INode vertex) {
 		final Map<String, String> attributes = new HashMap<>(); // NOPMD (no concurrent access intended)
-		for (final Entry<DotNodeAttribute, Function<IVertex, String>> entry : this.configuration.getNodeAttributes()) {
+		for (final Entry<DotNodeAttribute, Function<INode, String>> entry : this.configuration.getNodeAttributes()) {
 			final String value = entry.getValue().apply(vertex);
 			if (value != null) {
 				attributes.put(entry.getKey().toString(), value);

@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph;
 
 /**
- * @author Sören Henning
+ * Marker Interface for edges.
  *
- * @since 1.14
- * @deprecated since 1.15 will be replaced by google graph library
+ * @author Reiner jung
+ *
+ * @since 2.0.0
  */
-@Deprecated
-public interface IEdge extends IGraphElement {
-	/**
-	 * @since 1.14
-	 */
-	public IVertex getVertex(Direction direction);
+public interface IEdge extends IElement {
 
 }

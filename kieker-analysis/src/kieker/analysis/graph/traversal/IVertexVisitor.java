@@ -16,7 +16,7 @@
 
 package kieker.analysis.graph.traversal;
 
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 
 /**
  * @author Sören Henning
@@ -27,6 +27,6 @@ public interface IVertexVisitor {
 	/**
 	 * @since 1.14
 	 */
-	public void visitVertex(IVertex vertex);
+	public void visitVertex(INode vertex);
 
 }

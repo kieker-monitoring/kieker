@@ -13,35 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.impl;
 
-import kieker.analysis.graph.IGraphElement;
+import com.google.common.graph.NetworkBuilder;
 
-/**
- * @author Sören Henning
- *
- * @since 1.14
- * @deprecated 1.16 replace when ported to google graph library
- */
-@Deprecated
-abstract class GraphElementImpl extends ElementImpl implements IGraphElement { // NOPMD NOCS (GraphElement is in this context the abstraction of Vertex and Edge))
+import kieker.analysis.graph.GraphFactory;
+import kieker.analysis.graph.IEdge;
+import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 
-	protected final Object id;
-	protected final GraphImpl graph;
+public class NodeImpl<N extends INode, E extends IEdge> extends ElementImpl implements INode {
 
-	protected GraphElementImpl(final Object id, final GraphImpl graph) {
-		super();
-		this.graph = graph;
-		this.id = id;
+	private IGraph<N, E> childGraph = null;
+
+	public NodeImpl(final String id) {
+		super(id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public IGraph<N, E> getChildGraph() {
+		return this.childGraph;
 	}
 
 	@Override
-	public abstract void remove();
+	public void removeChildGraph() {
+		this.childGraph = null;
+	}
 
 	@Override
-	public Object getId() {
-		return this.id;
+	public boolean hasChildGraph() {
+		return this.childGraph != null;
+	}
+
+	@Override
+	public void createChildGraph() {
+		this.childGraph = GraphFactory.createGraph(this.getId(), NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build());
 	}
 
 }

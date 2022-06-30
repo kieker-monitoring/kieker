@@ -13,36 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.graph.impl;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.graph.IElement;
 
 /**
- * @author Sören Henning
  *
- * @since 1.14
- * @deprecated 1.16 replace when ported to google graph library
+ * @author Reiner Jung
+ * @since 2.0.0
+ *
  */
-@Deprecated
-abstract class ElementImpl implements IElement { // NOPMD NOCS (Element is in this context the abstraction of Graph, Vertex, and Edge)
+public class ElementImpl implements IElement {
 
-	protected Map<String, Object> properties = new HashMap<>(); // NOPMD (no concurrent access intended)
+	private final String id;
+	private final ConcurrentHashMap<String, Object> properties = new ConcurrentHashMap<>();
+
+	public ElementImpl(final String id) {
+		this.id = id;
+	}
 
 	@Override
+	public String getId() {
+		return this.id;
+	}
+
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T> T getProperty(final String key) {
 		return (T) this.properties.get(key);
 	}
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		return Collections.unmodifiableSet(this.properties.keySet());
+		return this.properties.keySet();
 	}
 
 	@Override
@@ -52,11 +58,13 @@ abstract class ElementImpl implements IElement { // NOPMD NOCS (Element is in th
 
 	@Override
 	public void setPropertyIfAbsent(final String key, final Object value) {
-		this.properties.putIfAbsent(key, value);
+		if (!this.properties.containsKey(key)) {
+			this.setProperty(key, value);
+		}
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T> T removeProperty(final String key) {
 		return (T) this.properties.remove(key);
 	}

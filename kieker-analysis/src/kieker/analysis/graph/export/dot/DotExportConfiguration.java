@@ -22,9 +22,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.util.dot.attributes.DotClusterAttribute;
 import kieker.analysis.graph.util.dot.attributes.DotEdgeAttribute;
 import kieker.analysis.graph.util.dot.attributes.DotGraphAttribute;
@@ -49,30 +50,33 @@ public class DotExportConfiguration {
 	// way would be to use a List of Pairs of constant size.
 	//
 	// PMD: No concurrent access intended for the following attributes
-	protected final Map<DotGraphAttribute, Function<IGraph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class); // NOPMD (see above)
-	protected final Map<DotNodeAttribute, Function<IGraph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
-	protected final Map<DotEdgeAttribute, Function<IGraph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
-	protected final Map<DotNodeAttribute, Function<IVertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	protected final Map<DotGraphAttribute, Function<MutableNetwork<INode, IEdge>, String>> graphAttributes = new EnumMap<>(
+			DotGraphAttribute.class); // NOPMD (see above)
+	protected final Map<DotNodeAttribute, Function<MutableNetwork<INode, IEdge>, String>> defaultNodeAttributes = new EnumMap<>(
+			DotNodeAttribute.class); // NOPMD (see above)
+	protected final Map<DotEdgeAttribute, Function<MutableNetwork<INode, IEdge>, String>> defaultEdgeAttributes = new EnumMap<>(
+			DotEdgeAttribute.class); // NOPMD (see above)
+	protected final Map<DotNodeAttribute, Function<INode, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
 	protected final Map<DotEdgeAttribute, Function<IEdge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
-	protected final Map<DotClusterAttribute, Function<IVertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
+	protected final Map<DotClusterAttribute, Function<INode, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
 
 	protected DotExportConfiguration() {
 		// Create an empty export configuration
 	}
 
-	public Set<Map.Entry<DotGraphAttribute, Function<IGraph, String>>> getGraphAttributes() {
+	public Set<Map.Entry<DotGraphAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getGraphAttributes() {
 		return Collections.unmodifiableSet(this.graphAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotNodeAttribute, Function<IGraph, String>>> getDefaultNodeAttributes() {
+	public Set<Map.Entry<DotNodeAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getDefaultNodeAttributes() {
 		return Collections.unmodifiableSet(this.defaultNodeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotEdgeAttribute, Function<IGraph, String>>> getDefaultEdgeAttributes() {
+	public Set<Map.Entry<DotEdgeAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getDefaultEdgeAttributes() {
 		return Collections.unmodifiableSet(this.defaultEdgeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotNodeAttribute, Function<IVertex, String>>> getNodeAttributes() {
+	public Set<Map.Entry<DotNodeAttribute, Function<INode, String>>> getNodeAttributes() {
 		return Collections.unmodifiableSet(this.nodeAttributes.entrySet());
 	}
 
@@ -80,7 +84,7 @@ public class DotExportConfiguration {
 		return Collections.unmodifiableSet(this.edgeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotClusterAttribute, Function<IVertex, String>>> getClusterAttributes() {
+	public Set<Map.Entry<DotClusterAttribute, Function<INode, String>>> getClusterAttributes() {
 		return Collections.unmodifiableSet(this.clusterAttributes.entrySet());
 	}
 
@@ -95,19 +99,19 @@ public class DotExportConfiguration {
 			// create a new builder
 		}
 
-		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<IGraph, String> function) {
+		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
 			this.configuration.graphAttributes.put(attribute, function);
 		}
 
-		public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<IGraph, String> function) {
+		public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
 			this.configuration.defaultNodeAttributes.put(attribute, function);
 		}
 
-		public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<IGraph, String> function) {
+		public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
 			this.configuration.defaultEdgeAttributes.put(attribute, function);
 		}
 
-		public void addNodeAttribute(final DotNodeAttribute attribute, final Function<IVertex, String> function) {
+		public void addNodeAttribute(final DotNodeAttribute attribute, final Function<INode, String> function) {
 			this.configuration.nodeAttributes.put(attribute, function);
 		}
 
@@ -115,7 +119,7 @@ public class DotExportConfiguration {
 			this.configuration.edgeAttributes.put(attribute, function);
 		}
 
-		public void addClusterAttribute(final DotClusterAttribute attribute, final Function<IVertex, String> function) {
+		public void addClusterAttribute(final DotClusterAttribute attribute, final Function<INode, String> function) {
 			this.configuration.clusterAttributes.put(attribute, function);
 		}
 

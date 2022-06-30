@@ -13,34 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.graph.flattening;
-
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.INode;
-
-import teetime.stage.basic.AbstractFilter;
+package kieker.analysis.graph;
 
 /**
- * @author Sören Henning
+ * Generic node interface.
  *
- * @since 1.14
+ * @author Reiner Jung
+ * @since 2.0.0
  */
-public class GraphFlattenerStage extends AbstractFilter<MutableNetwork<INode, IEdge>> {
+public interface INode extends IElement {
 
-	private final IGraphFlattener flattener;
+	public <N extends INode, E extends IEdge> IGraph<N, E> getChildGraph();
 
-	public GraphFlattenerStage(final IGraphFlattener flattener) {
-		super();
-		this.flattener = flattener;
-	}
+	public void removeChildGraph();
 
-	@Override
-	protected void execute(final MutableNetwork<INode, IEdge> graph) {
-		this.flattener.flatten(graph);
-		this.getOutputPort().send(graph);
-	}
+	public boolean hasChildGraph();
 
+	public void createChildGraph();
 }

@@ -18,9 +18,10 @@ package kieker.analysis.graph.traversal;
 
 import java.util.List;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 
 /**
  * @author Sören Henning
@@ -42,14 +43,14 @@ public class FlatGraphTraverser extends AbstractGraphTraverser {
 	}
 
 	@Override
-	public void traverse(final IGraph graph) {
-		for (final IVertex vertex : graph.getVertices()) {
+	public void traverse(final MutableNetwork<INode, IEdge> graph) {
+		for (final INode vertex : graph.nodes()) {
 			for (final IVertexVisitor visitor : this.vertexVisitors) {
 				visitor.visitVertex(vertex);
 			}
 		}
 
-		for (final IEdge edge : graph.getEdges()) {
+		for (final IEdge edge : graph.edges()) {
 			for (final IEdgeVisitor visitor : this.edgeVisitors) {
 				visitor.visitEdge(edge);
 			}

@@ -22,10 +22,11 @@ import java.util.Set;
  * @author Sören Henning
  *
  * @since 1.14
- * @deprecated since 1.15 will be replaced by google graph library
  */
-@Deprecated
 public interface IElement {
+
+	public String getId();
+
 	/**
 	 * @since 1.14
 	 */
@@ -50,5 +51,4 @@ public interface IElement {
 	 * @since 1.14
 	 */
 	public <T> T removeProperty(String key);
-
 }

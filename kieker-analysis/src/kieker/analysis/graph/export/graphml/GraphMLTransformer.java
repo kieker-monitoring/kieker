@@ -30,10 +30,12 @@ import org.graphdrawing.graphml.KeyType;
 import org.graphdrawing.graphml.KeyTypeType;
 import org.graphdrawing.graphml.NodeType;
 
-import kieker.analysis.graph.Direction;
+import com.google.common.graph.EndpointPair;
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.export.AbstractTransformer;
 
 /**
@@ -47,15 +49,22 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	private final Set<String> nodeKeys = new HashSet<>();
 	private final Set<String> edgeKeys = new HashSet<>();
 
-	public GraphMLTransformer(final IGraph graph) {
+	public GraphMLTransformer(final IGraph<INode, IEdge> graph) {
 		super(graph);
 		this.graphType = new GraphType();
 		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
-		this.graphType.setId(graph.getName());
+		this.graphType.setId(graph.getLabel());
+	}
+
+	public GraphMLTransformer(final MutableNetwork<INode, IEdge> graph, final String label) {
+		super(graph, label);
+		this.graphType = new GraphType();
+		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
+		this.graphType.setId(label);
 	}
 
 	@Override
-	protected void transformVertex(final IVertex vertex) {
+	protected void transformVertex(final INode vertex) {
 		final NodeType nodeType = new NodeType();
 		nodeType.setId(vertex.getId().toString());
 		final List<Object> dataOrPort = nodeType.getDataOrPort();
@@ -68,7 +77,7 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 		}
 
 		if (vertex.hasChildGraph()) {
-			final IGraph childGraph = vertex.getChildGraph();
+			final IGraph<INode, IEdge> childGraph = vertex.getChildGraph();
 			final GraphMLTransformer graphmlTypeTransformer = new GraphMLTransformer(childGraph);
 			final GraphmlType childGraphmlType = graphmlTypeTransformer.transform();
 			for (final Object childGraphType : childGraphmlType.getGraphOrData()) {
@@ -98,8 +107,9 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	protected void transformEdge(final IEdge edge) {
 		final EdgeType edgeType = new EdgeType();
 		edgeType.setId(edge.getId().toString());
-		edgeType.setSource(edge.getVertex(Direction.OUT).getId().toString());
-		edgeType.setTarget(edge.getVertex(Direction.IN).getId().toString());
+		final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+		edgeType.setSource(pair.source().getId());
+		edgeType.setTarget(pair.target().getId());
 		final List<DataType> data = edgeType.getData();
 		for (final String propertyKey : edge.getPropertyKeys()) {
 			final DataType dataType = new DataType();

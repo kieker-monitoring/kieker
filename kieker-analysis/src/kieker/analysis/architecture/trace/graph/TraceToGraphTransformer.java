@@ -16,9 +16,14 @@
 
 package kieker.analysis.architecture.trace.graph;
 
+import com.google.common.graph.NetworkBuilder;
+
 import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.architecture.trace.traversal.TraceTraverser;
+import kieker.analysis.graph.GraphFactory;
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
+import kieker.analysis.graph.INode;
 import kieker.model.analysismodel.trace.Trace;
 
 /**
@@ -36,9 +41,9 @@ public class TraceToGraphTransformer {
 		// Create a transformer
 	}
 
-	public IGraph transform(final Trace trace) {
-		final IGraph graph = IGraph.create();
-		graph.setName("trace-" + trace.getTraceID());
+	public IGraph<INode, IEdge> transform(final Trace trace) {
+		final IGraph<INode, IEdge> graph = GraphFactory.createGraph("trace-" + trace.getTraceID(),
+				NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build());
 		final IOperationCallVisitor visitor = new GraphTransformerVisitor(graph);
 		this.traceTraverser.traverse(trace, visitor);
 		return graph;

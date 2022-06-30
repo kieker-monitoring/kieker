@@ -16,8 +16,9 @@
 
 package kieker.analysis.architecture.dependency;
 
+import kieker.analysis.graph.IEdge;
 import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.IVertex;
+import kieker.analysis.graph.INode;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -38,28 +39,28 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 	}
 
 	@Override
-	protected IVertex addVertex(final DeployedOperation deployedOperation) {
+	protected INode addVertex(final DeployedOperation deployedOperation) {
 		final DeployedOperation operation = deployedOperation;
 		final DeployedComponent component = operation.getComponent();
 		final DeploymentContext context = component.getContext();
 
-		final int contextId = this.identifierRegistry.getIdentifier(context);
-		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		final String contextId = String.valueOf(this.identifierRegistry.getIdentifier(context));
+		final INode contextVertex = this.addVertexIfAbsent(this.graph, contextId);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 
-		final IGraph contextSubgraph = contextVertex.addChildGraphIfAbsent();
-		contextSubgraph.setName(context.getName());
-		final int componentId = this.identifierRegistry.getIdentifier(component);
-		final IVertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
+		final IGraph<INode, IEdge> contextSubgraph = this.addChildGraphIfAbsent(contextVertex);
+		contextSubgraph.setLabel(context.getName());
+		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
+		final INode componentVertex = this.addVertexIfAbsent(contextSubgraph, componentId);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getAssemblyComponent().getComponentType().getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());
 
-		final IGraph componentSubgraph = componentVertex.addChildGraphIfAbsent();
-		componentSubgraph.setName(component.getAssemblyComponent().getComponentType().getName());
-		final int operationId = this.identifierRegistry.getIdentifier(operation);
-		final IVertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
+		final IGraph<INode, IEdge> componentSubgraph = this.addChildGraphIfAbsent(componentVertex);
+		componentSubgraph.setLabel(component.getAssemblyComponent().getComponentType().getName());
+		final String operationId = String.valueOf(this.identifierRegistry.getIdentifier(operation));
+		final INode operationVertex = this.addVertexIfAbsent(componentSubgraph, operationId);
 		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_OPERATION);
 		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getAssemblyOperation().getOperationType().getName());
 		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getAssemblyOperation().getOperationType().getReturnType());
