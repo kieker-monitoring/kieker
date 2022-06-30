@@ -28,7 +28,7 @@ import teetime.framework.AbstractConsumerStage;
  * @since 1.15
  *
  */
-public class NullStage extends AbstractConsumerStage<Object> {
+public class NullSink extends AbstractConsumerStage<Object> {
 
 	public static final int DEFAULT_REPORT_INTERVAL = 100000;
 
@@ -44,7 +44,7 @@ public class NullStage extends AbstractConsumerStage<Object> {
 	 * @param silent
 	 *            silent operations.
 	 */
-	public NullStage(final boolean silent) {
+	public NullSink(final boolean silent) {
 		this(silent, DEFAULT_REPORT_INTERVAL);
 	}
 
@@ -56,7 +56,7 @@ public class NullStage extends AbstractConsumerStage<Object> {
 	 * @param reportInterval
 	 *            number of records to be received before logging
 	 */
-	public NullStage(final boolean silent, final int reportInterval) {
+	public NullSink(final boolean silent, final int reportInterval) {
 		this.silent = silent;
 		this.reportInterval = reportInterval;
 	}

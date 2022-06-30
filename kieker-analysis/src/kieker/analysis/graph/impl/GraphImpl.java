@@ -33,7 +33,9 @@ import kieker.analysis.graph.IVertex;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 public class GraphImpl extends ElementImpl implements IGraph {
 
 	protected String name = "G";

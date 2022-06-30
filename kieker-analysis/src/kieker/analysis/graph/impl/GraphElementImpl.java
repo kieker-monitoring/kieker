@@ -22,7 +22,9 @@ import kieker.analysis.graph.IGraphElement;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 abstract class GraphElementImpl extends ElementImpl implements IGraphElement { // NOPMD NOCS (GraphElement is in this context the abstraction of Vertex and Edge))
 
 	protected final Object id;

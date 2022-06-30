@@ -24,7 +24,9 @@ import kieker.analysis.graph.IVertex;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 class EdgeImpl extends GraphElementImpl implements IEdge {
 
 	private final IVertex outVertex;

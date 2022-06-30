@@ -14,26 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.generic.timestampfilter.components;
-
-import kieker.common.record.flow.trace.TraceMetadata;
-
 /**
- * Concrete implementation of {@link AbstractTimestampFilter}. Allows to filter {@link TraceMetadata} objects based on their given timestamps.
- *
- * @author Andre van Hoorn, Jan Waller, Lars Bluemke
- *
- * @since 1.2
+ * @author Reiner Jung
+ * @since 1.15
  */
-public class TraceMetadataTimestampFilter extends AbstractTimestampFilter<TraceMetadata> {
+package kieker.analysis.generic.timestampfilter.components;
 
-	public TraceMetadataTimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
-		super(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-	}
-
-	@Override
-	protected long getRecordSpecificTimestamp(final TraceMetadata record) {
-		return record.getLoggingTimestamp();
-	}
-
-}

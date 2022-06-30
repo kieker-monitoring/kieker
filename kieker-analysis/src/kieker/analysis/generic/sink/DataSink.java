@@ -32,9 +32,9 @@ import teetime.framework.AbstractConsumerStage;
  * @author Reiner Jung
  * @since 1.15
  */
-public class DataSinkStage extends AbstractConsumerStage<IMonitoringRecord> {
+public class DataSink extends AbstractConsumerStage<IMonitoringRecord> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DataSinkStage.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataSink.class);
 
 	private final IMonitoringController ctrl;
 
@@ -46,8 +46,8 @@ public class DataSinkStage extends AbstractConsumerStage<IMonitoringRecord> {
 	 * @param configuration
 	 *            kieker configuration containing the dump stage writer setup
 	 */
-	public DataSinkStage(final Configuration configuration) {
-		DataSinkStage.LOGGER.debug("Configuration complete.");
+	public DataSink(final Configuration configuration) {
+		DataSink.LOGGER.debug("Configuration complete.");
 
 		this.ctrl = MonitoringController.createInstance(configuration);
 	}
@@ -57,7 +57,7 @@ public class DataSinkStage extends AbstractConsumerStage<IMonitoringRecord> {
 		this.count++;
 		this.ctrl.newMonitoringRecord(record);
 		if ((this.count % 100000) == 0) {
-			DataSinkStage.LOGGER.info("Saved {} records.", this.count);
+			DataSink.LOGGER.info("Saved {} records.", this.count);
 		}
 	}
 

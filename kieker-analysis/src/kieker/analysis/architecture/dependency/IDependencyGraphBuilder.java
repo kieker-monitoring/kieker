@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.architecture.recovery.ModelRepository;
+import kieker.analysis.architecture.repository.ModelRepository;
 import kieker.analysis.graph.IGraph;
 
 /**

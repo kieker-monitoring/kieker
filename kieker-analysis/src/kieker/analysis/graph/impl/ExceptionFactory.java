@@ -22,7 +22,9 @@ package kieker.analysis.graph.impl;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 final class ExceptionFactory {
 
 	private ExceptionFactory() {}

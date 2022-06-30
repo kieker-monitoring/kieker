@@ -30,7 +30,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.8
  */
-public class AnalysisThroughputFilter extends AbstractStage {
+public class AnalysisThroughputStage extends AbstractStage {
 
 	private final InputPort<IMonitoringRecord> recordsInputPort = this.createInputPort();
 	private final InputPort<Long> timestampsInputPort = this.createInputPort();
@@ -43,7 +43,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 	/**
 	 * Default constructor.
 	 */
-	public AnalysisThroughputFilter() {
+	public AnalysisThroughputStage() {
 		// empty default constructor
 	}
 

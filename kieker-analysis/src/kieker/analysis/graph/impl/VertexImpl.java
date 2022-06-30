@@ -32,7 +32,9 @@ import kieker.analysis.graph.IVertex;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 class VertexImpl extends GraphElementImpl implements IVertex {
 
 	protected Map<Object, IEdge> outEdges = new HashMap<>(); // NOPMD (no concurrent access intended)

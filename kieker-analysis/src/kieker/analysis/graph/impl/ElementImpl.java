@@ -27,7 +27,9 @@ import kieker.analysis.graph.IElement;
  * @author Sören Henning
  *
  * @since 1.14
+ * @deprecated 1.16 replace when ported to google graph library
  */
+@Deprecated
 abstract class ElementImpl implements IElement { // NOPMD NOCS (Element is in this context the abstraction of Graph, Vertex, and Edge)
 
 	protected Map<String, Object> properties = new HashMap<>(); // NOPMD (no concurrent access intended)
