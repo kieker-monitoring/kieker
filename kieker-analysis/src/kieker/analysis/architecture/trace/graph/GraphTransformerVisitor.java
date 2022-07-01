@@ -18,11 +18,11 @@ package kieker.analysis.architecture.trace.graph;
 import java.util.Optional;
 
 import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
-import kieker.analysis.graph.GraphFactory;
-import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.INode;
-import kieker.analysis.util.ObjectIdentifierRegistry;
+import kieker.analysis.generic.graph.GraphFactory;
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.util.FullyQualifiedNamesFactory;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.trace.OperationCall;
 import kieker.model.analysismodel.type.ComponentType;
@@ -35,10 +35,9 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class GraphTransformerVisitor implements IOperationCallVisitor {
 
-	private final IGraph<INode, IEdge> graph;
-	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();
+	private final IGraph graph;
 
-	public GraphTransformerVisitor(final IGraph<INode, IEdge> graph) {
+	public GraphTransformerVisitor(final IGraph graph) {
 		super();
 		this.graph = graph;
 	}
@@ -55,8 +54,7 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 	}
 
 	private INode addVertex(final OperationCall operationCall) {
-		final int vertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final INode vertex = GraphFactory.createNode(String.valueOf(vertexId));
+		final INode vertex = GraphFactory.createNode(FullyQualifiedNamesFactory.createFullyQualifiedName(operationCall));
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
@@ -77,10 +75,10 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 	}
 
 	private IEdge addEdge(final OperationCall operationCall) {
-		final String thisVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(operationCall));
-		final Optional<INode> thisVertex = this.graph.getGraph().nodes().stream().filter(node -> thisVertexId.equals(node.getId())).findFirst();
-		final String parentVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(operationCall.getParent()));
-		final Optional<INode> parentVertex = this.graph.getGraph().nodes().stream().filter(node -> parentVertexId.equals(node.getId())).findFirst();
+		final String thisVertexId = FullyQualifiedNamesFactory.createFullyQualifiedName(operationCall);
+		final Optional<INode> thisVertex = this.graph.findNode(thisVertexId);
+		final String parentVertexId = FullyQualifiedNamesFactory.createFullyQualifiedName(operationCall.getParent());
+		final Optional<INode> parentVertex = this.graph.findNode(parentVertexId);
 
 		if (!thisVertex.isPresent()) {
 			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
@@ -98,9 +96,8 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 	}
 
 	private INode addRootVertex(final OperationCall rootOperationCall) {
-		final String rootVertexId = String.valueOf(this.objectIdentifierRegistry.getIdentifier(rootOperationCall));
-		final Optional<INode> rootVertex = this.graph.getGraph().nodes().stream().filter(node -> rootVertexId.equals(node.getId())).findFirst();
-
+		final String rootVertexId = FullyQualifiedNamesFactory.createFullyQualifiedName(rootOperationCall);
+		final Optional<INode> rootVertex = this.graph.findNode(rootVertexId);
 		if (!rootVertex.isPresent()) {
 			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
 		}

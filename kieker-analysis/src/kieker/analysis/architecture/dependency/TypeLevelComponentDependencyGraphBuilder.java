@@ -16,8 +16,8 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.graph.INode;
-import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.util.FullyQualifiedNamesFactory;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
@@ -41,8 +41,7 @@ public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependency
 		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
 		final ComponentType component = operation.getComponentType();
 
-		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
-		final INode componentVertex = this.addVertexIfAbsent(this.graph, componentId);
+		final INode componentVertex = this.addVertexIfAbsent(this.graph, FullyQualifiedNamesFactory.createFullyQualifiedName(component));
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
