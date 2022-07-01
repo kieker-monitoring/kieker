@@ -18,10 +18,10 @@ package kieker.analysis.architecture.trace.graph.dot;
 
 import java.nio.file.Path;
 
-import kieker.analysis.graph.export.dot.DotExportConfiguration;
-import kieker.analysis.graph.export.dot.DotFileWriterStage;
-import kieker.analysis.graph.util.dot.attributes.DotEdgeAttribute;
-import kieker.analysis.graph.util.dot.attributes.DotNodeAttribute;
+import kieker.analysis.generic.sink.graph.dot.DotExportMapper;
+import kieker.analysis.generic.sink.graph.dot.DotFileWriterStage;
+import kieker.analysis.generic.sink.graph.dot.attributes.DotEdgeAttribute;
+import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
 
 /**
  * @author Sören Henning
@@ -30,17 +30,17 @@ import kieker.analysis.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotTraceGraphFileWriterStage extends DotFileWriterStage { // NOPMD (class serves only as constructor)
 
-	public DotTraceGraphFileWriterStage(final Path outputDirectory, final DotExportConfiguration exportConfiguration) {
+	public DotTraceGraphFileWriterStage(final Path outputDirectory, final DotExportMapper exportConfiguration) {
 		super(outputDirectory, exportConfiguration);
 	}
 
 	public static DotTraceGraphFileWriterStage create(final Path outputDirectory) {
-		final DotExportConfiguration.Builder exportConfigurationBuilder = new DotExportConfiguration.Builder();
+		final DotExportMapper.Builder exportConfigurationBuilder = new DotExportMapper.Builder();
 		exportConfigurationBuilder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, g -> "none");
 		exportConfigurationBuilder.addEdgeAttribute(DotEdgeAttribute.LABEL,
 				e -> e.getProperty("orderIndex").toString() + '.');
 		exportConfigurationBuilder.addNodeAttribute(DotNodeAttribute.LABEL, new NodeLabelMapper());
-		final DotExportConfiguration exportConfiguration = exportConfigurationBuilder.build();
+		final DotExportMapper exportConfiguration = exportConfigurationBuilder.build();
 
 		return new DotTraceGraphFileWriterStage(outputDirectory, exportConfiguration);
 	}

@@ -20,9 +20,9 @@ import java.io.PrintStream;
 
 import com.google.common.graph.EndpointPair;
 
-import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.INode;
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
 
 import teetime.framework.AbstractConsumerStage;
 
@@ -33,7 +33,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.14
  */
-public class GraphPrinterStage extends AbstractConsumerStage<IGraph<INode, IEdge>> {
+public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
 
 	private final PrintStream printStream;
 
@@ -47,11 +47,11 @@ public class GraphPrinterStage extends AbstractConsumerStage<IGraph<INode, IEdge
 	}
 
 	@Override
-	protected void execute(final IGraph<INode, IEdge> graph) {
+	protected void execute(final IGraph graph) {
 		this.printGraph(graph, "");
 	}
 
-	private void printGraph(final IGraph<INode, IEdge> graph, final String offset) {
+	private void printGraph(final IGraph graph, final String offset) {
 		this.printStream.printf("%sGraph %s Vertices:\n", graph.getLabel(), offset);
 		for (final INode node : graph.getGraph().nodes()) {
 			this.printStream.printf("%s%s\n", offset, node.getId());

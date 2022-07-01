@@ -17,9 +17,7 @@
 package kieker.analysis.architecture.dependency;
 
 import kieker.analysis.architecture.repository.ModelRepository;
-import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.INode;
+import kieker.analysis.generic.graph.IGraph;
 
 /**
  * @author Sören Henning
@@ -31,6 +29,6 @@ public interface IDependencyGraphBuilder {
 	/**
 	 * @since 1.16
 	 */
-	public IGraph<INode, IEdge> build(ModelRepository repository);
+	public IGraph build(ModelRepository repository);
 
 }

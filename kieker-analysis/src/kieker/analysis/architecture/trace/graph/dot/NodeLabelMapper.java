@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import kieker.analysis.graph.INode;
+import kieker.analysis.generic.graph.INode;
 
 /**
  * This class is a {@link Function} that maps a {@link INode} to a label. The
