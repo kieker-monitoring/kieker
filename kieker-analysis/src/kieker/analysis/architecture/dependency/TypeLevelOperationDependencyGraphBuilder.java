@@ -16,10 +16,9 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.graph.IEdge;
-import kieker.analysis.graph.IGraph;
-import kieker.analysis.graph.INode;
-import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.util.FullyQualifiedNamesFactory;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
@@ -43,15 +42,13 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
 		final ComponentType component = operation.getComponentType();
 
-		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
-		final INode componentVertex = this.addVertexIfAbsent(this.graph, componentId);
+		final INode componentVertex = this.addVertexIfAbsent(this.graph, FullyQualifiedNamesFactory.createFullyQualifiedName(component));
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
 
-		final IGraph<INode, IEdge> componentSubgraph = this.addChildGraphIfAbsent(componentVertex);
-		final String operationId = String.valueOf(this.identifierRegistry.getIdentifier(operation));
-		final INode operationVertex = this.addVertexIfAbsent(componentSubgraph, operationId);
+		final IGraph componentSubgraph = this.addChildGraphIfAbsent(componentVertex);
+		final INode operationVertex = this.addVertexIfAbsent(componentSubgraph, FullyQualifiedNamesFactory.createFullyQualifiedName(operation));
 		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.OPERATION_TYPE);
 		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getName());
 		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getReturnType());

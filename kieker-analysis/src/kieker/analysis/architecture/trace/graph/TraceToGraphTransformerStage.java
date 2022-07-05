@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.trace.graph;
 
-import kieker.analysis.graph.IGraph;
+import kieker.analysis.generic.graph.IGraph;
 import kieker.model.analysismodel.trace.Trace;
 
 import teetime.stage.basic.AbstractTransformation;

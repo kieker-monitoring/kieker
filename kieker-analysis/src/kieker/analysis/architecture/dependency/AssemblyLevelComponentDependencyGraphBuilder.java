@@ -16,8 +16,8 @@
 
 package kieker.analysis.architecture.dependency;
 
-import kieker.analysis.graph.INode;
-import kieker.analysis.graph.dependency.vertextypes.VertexType;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.util.FullyQualifiedNamesFactory;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -41,8 +41,7 @@ public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDepend
 		final AssemblyOperation operation = deployedOperation.getAssemblyOperation();
 		final AssemblyComponent component = operation.getComponent();
 
-		final String componentId = String.valueOf(this.identifierRegistry.getIdentifier(component));
-		final INode componentVertex = this.addVertexIfAbsent(this.graph, componentId);
+		final INode componentVertex = this.addVertexIfAbsent(this.graph, FullyQualifiedNamesFactory.createFullyQualifiedName(component));
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getComponentType().getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getComponentType().getPackage());

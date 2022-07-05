@@ -18,7 +18,7 @@ package kieker.analysis.architecture.dependency;
 
 import java.time.temporal.ChronoUnit;
 
-import kieker.analysis.graph.INode;
+import kieker.analysis.generic.graph.INode;
 import kieker.analysis.util.time.ChronoUnitToSymbolMapper;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.EPropertyType;
