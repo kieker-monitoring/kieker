@@ -23,8 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.architecture.recovery.data.CallEvent;
 import kieker.analysis.architecture.recovery.data.OperationEvent;
-import kieker.analysis.architecture.recovery.signature.AbstractSignatureCleaner;
-import kieker.analysis.architecture.recovery.signature.NullSignatureCleaner;
+import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcessor;
+import kieker.analysis.architecture.recovery.signature.NullSignatureProcessor;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -49,26 +49,22 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
 	private final boolean createEntryCall;
 
-	private final AbstractSignatureCleaner componentCleaner;
-
-	private final AbstractSignatureCleaner operationCleaner;
+	private final AbstractSignatureProcessor processor;
 
 	/**
 	 * Create stage.
 	 */
-	public OperationAndCallGeneratorStage(final boolean createEntryCall, final AbstractSignatureCleaner componentCleaner,
-			final AbstractSignatureCleaner operationCleaner) {
+	public OperationAndCallGeneratorStage(final boolean createEntryCall, final AbstractSignatureProcessor processor) {
 		super();
 		this.createEntryCall = createEntryCall;
-		this.componentCleaner = componentCleaner;
-		this.operationCleaner = operationCleaner;
+		this.processor = processor;
 	}
 
 	/**
 	 * Create stage.
 	 */
 	public OperationAndCallGeneratorStage(final boolean createEntryCall) {
-		this(createEntryCall, new NullSignatureCleaner(false), new NullSignatureCleaner(false));
+		this(createEntryCall, new NullSignatureProcessor(false));
 	}
 
 	@Override
@@ -94,9 +90,12 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	private void processBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
 		final TraceData traceData = this.traceDataMap.get(beforeOperationEvent.getTraceId());
 
+		this.processor.processSignatures(beforeOperationEvent.getClassSignature(),
+				beforeOperationEvent.getOperationSignature());
+
 		final OperationEvent newEvent = new OperationEvent(traceData.getMetadata().getHostname(),
-				this.componentCleaner.processSignature(beforeOperationEvent.getClassSignature()),
-				this.operationCleaner.processSignature(beforeOperationEvent.getOperationSignature()));
+				this.processor.getComponentSignature(),
+				this.processor.getOperationSignature());
 		if (!traceData.getOperationStack().empty()) {
 			this.operationOutputPort.send(newEvent);
 		} else {
@@ -119,13 +118,16 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 		final Stack<OperationEvent> stack = traceData.getOperationStack();
 		if (!stack.isEmpty()) {
 			final OperationEvent lastEvent = stack.pop();
-			if (!lastEvent.getComponentSignature().equals(this.componentCleaner.processSignature(afterOperationEvent.getClassSignature()))
-					|| !lastEvent.getOperationSignature().equals(this.operationCleaner.processSignature(afterOperationEvent.getOperationSignature()))) {
+
+			this.processor.processSignatures(afterOperationEvent.getClassSignature(), afterOperationEvent.getOperationSignature());
+
+			if (!lastEvent.getComponentSignature().equals(this.processor.getComponentSignature())
+					|| !lastEvent.getOperationSignature().equals(this.processor.getOperationSignature())) {
 				this.logger.error("Broken trace, expected {}:{}, but got {}:{}",
 						lastEvent.getComponentSignature(),
 						lastEvent.getOperationSignature(),
-						this.componentCleaner.processSignature(afterOperationEvent.getClassSignature()),
-						this.operationCleaner.processSignature(afterOperationEvent.getOperationSignature()));
+						this.processor.getComponentSignature(),
+						this.processor.getOperationSignature());
 			}
 			if (stack.isEmpty()) { // trace is complete
 				this.traceDataMap.remove(afterOperationEvent.getTraceId());
