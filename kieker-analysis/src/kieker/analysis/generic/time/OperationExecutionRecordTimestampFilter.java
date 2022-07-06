@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.generic.timestampfilter.components;
+package kieker.analysis.generic.time;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 

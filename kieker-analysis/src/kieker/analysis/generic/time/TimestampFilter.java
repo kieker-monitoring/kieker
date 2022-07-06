@@ -14,12 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.generic.timestampfilter;
+package kieker.analysis.generic.time;
 
-import kieker.analysis.generic.timestampfilter.components.EventRecordTimestampFilter;
-import kieker.analysis.generic.timestampfilter.components.MonitioringRecordTimestampFilter;
-import kieker.analysis.generic.timestampfilter.components.OperationExecutionRecordTimestampFilter;
-import kieker.analysis.generic.timestampfilter.components.TraceMetadataTimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IEventRecord;
@@ -32,7 +28,8 @@ import teetime.stage.InstanceOfFilter;
 import teetime.stage.basic.merger.Merger;
 
 /**
- * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
+ * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps. It handles flow events with their own timestamp and logging timestamp for
+ * all other records and event types.
  *
  * This class has several specialized internal filters to distinguish different timestamps for different record types. It has one input port and two output ports.
  *
