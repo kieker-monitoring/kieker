@@ -192,7 +192,7 @@ pipeline {
                     #!/usr/bin/env bash
                     set +x
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                    git push -v git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
                  ''')
             }
           }
