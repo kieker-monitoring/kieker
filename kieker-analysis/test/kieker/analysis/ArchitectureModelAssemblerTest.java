@@ -25,7 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.architecture.recovery.TypeModelAssembler;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
 import kieker.model.analysismodel.sources.SourceModel;
@@ -61,7 +61,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.architecture.recovery.TypeModelAssembler#addOperation(kieker.analysis.architecture.recovery.data.OperationEvent)}.
+	 * Test method for {@link kieker.analysis.architecture.recovery.TypeModelAssembler#addOperation(kieker.analysis.architecture.recovery.events.OperationEvent)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {

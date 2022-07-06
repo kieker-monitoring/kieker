@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.data;
+package kieker.analysis.architecture.recovery.events;
 
 /**
  * Represent one operation event.

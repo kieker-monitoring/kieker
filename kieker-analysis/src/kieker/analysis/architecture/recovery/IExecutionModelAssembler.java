@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery;
 
-import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 
 /**
  * @author Reiner Jung

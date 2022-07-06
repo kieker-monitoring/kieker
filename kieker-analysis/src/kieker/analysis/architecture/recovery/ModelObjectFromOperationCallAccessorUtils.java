@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;

@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.recovery;
 
-import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 
 import teetime.stage.basic.AbstractFilter;
 
