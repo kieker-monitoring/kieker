@@ -183,6 +183,7 @@ pipeline {
       }
       parallel {
         stage('Push to Stable') {
+          agent any
           steps {
             sshagent(credentials: ['kieker-key']) {
               sh('''
