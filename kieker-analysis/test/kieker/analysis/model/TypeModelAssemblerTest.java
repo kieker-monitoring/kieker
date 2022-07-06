@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.architecture.recovery.TypeModelAssembler;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.IOperationSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;

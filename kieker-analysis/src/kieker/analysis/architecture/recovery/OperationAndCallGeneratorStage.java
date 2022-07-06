@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.analysis.architecture.recovery.data.CallEvent;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.CallEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.AbstractSignatureCleaner;
 import kieker.analysis.architecture.recovery.signature.NullSignatureCleaner;
 import kieker.common.record.flow.IFlowRecord;

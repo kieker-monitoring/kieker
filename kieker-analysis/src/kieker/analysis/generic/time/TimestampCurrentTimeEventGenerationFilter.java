@@ -14,9 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.generic.time.events;
+package kieker.analysis.generic.time;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.TimestampRecord;
 
 /**
@@ -41,7 +40,7 @@ import kieker.common.record.misc.TimestampRecord;
  *
  * @since 1.3
  */
-public class RecordCurrentTimeEventGenerationFilter extends AbstractCurrentTimeEventGenerationFilter<IMonitoringRecord> {
+public class TimestampCurrentTimeEventGenerationFilter extends AbstractCurrentTimeEventGenerationFilter<Long> {
 
 	/**
 	 * Creates an event generator which generates time events with the given resolution in timeunits.
@@ -49,7 +48,7 @@ public class RecordCurrentTimeEventGenerationFilter extends AbstractCurrentTimeE
 	 * @param timerResolution
 	 *            The timer resolution used
 	 */
-	public RecordCurrentTimeEventGenerationFilter(final long timerResolution) {
+	public TimestampCurrentTimeEventGenerationFilter(final long timerResolution) {
 		super(timerResolution);
 	}
 
@@ -57,13 +56,11 @@ public class RecordCurrentTimeEventGenerationFilter extends AbstractCurrentTimeE
 	 * Evaluates the given timestamp internal current time which may lead to
 	 * newly generated events via currentTimeRecordOutputPort.
 	 *
-	 * @param record
-	 *            The next record.
+	 * @param timestamp
+	 *            The next timestamp.
 	 */
 	@Override
-	protected void execute(final IMonitoringRecord record) {
-		final long timestamp = record.getLoggingTimestamp();
-
+	protected void execute(final Long timestamp) {
 		if (timestamp < 0) {
 			this.logger.warn("Received timestamp value < 0: " + timestamp);
 			return;

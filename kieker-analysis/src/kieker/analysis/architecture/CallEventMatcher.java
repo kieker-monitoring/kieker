@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.architecture;
 
-import kieker.analysis.architecture.recovery.data.CallEvent;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.CallEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.generic.IControlEventMatcher;
 
 /**

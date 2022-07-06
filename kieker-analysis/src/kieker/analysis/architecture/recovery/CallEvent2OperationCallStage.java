@@ -15,9 +15,9 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery;
 
-import kieker.analysis.architecture.recovery.data.CallEvent;
-import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.CallEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;

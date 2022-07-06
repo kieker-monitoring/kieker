@@ -18,7 +18,7 @@ package kieker.analysis.architecture.trace.flow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.generic.IControlEventMatcher;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
