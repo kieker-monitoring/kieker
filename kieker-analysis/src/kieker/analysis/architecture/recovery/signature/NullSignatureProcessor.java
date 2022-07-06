@@ -16,30 +16,34 @@
 package kieker.analysis.architecture.recovery.signature;
 
 /**
- * Signature cleanup facility.
+ * Do nothing processor. However, supports conversion to lower case.
  *
  * @author Reiner Jung
  * @since 1.15
  */
-public abstract class AbstractSignatureCleaner {
+public class NullSignatureProcessor extends AbstractSignatureProcessor {
 
-	protected boolean caseInsensitive;
+	private String componentSignature;
+	private String operationSignature;
 
-	public AbstractSignatureCleaner(final boolean caseInsensitive) {
-		this.caseInsensitive = caseInsensitive;
+	public NullSignatureProcessor(final boolean caseInsensitive) {
+		super(caseInsensitive);
 	}
 
-	protected String removeTrailingUnderscore(final String string) {
-		if (string.endsWith("_")) {
-			return string.substring(0, string.length() - 1);
-		} else {
-			return string;
-		}
+	@Override
+	public void processSignatures(final String componentSignature, final String operationSignature) { // NOCS field name hiding
+		this.componentSignature = this.convertToLowerCase(componentSignature);
+		this.operationSignature = this.convertToLowerCase(operationSignature);
 	}
 
-	protected String convertToLowerCase(final String string) {
-		return this.caseInsensitive ? string.toLowerCase() : string; // NOCS NOPMD
+	@Override
+	public String getComponentSignature() {
+		return this.componentSignature;
 	}
 
-	public abstract String processSignature(final String signature);
+	@Override
+	public String getOperationSignature() {
+		return this.operationSignature;
+	}
+
 }

@@ -23,7 +23,7 @@ import kieker.analysis.architecture.recovery.AssemblyModelAssemblerStage;
 import kieker.analysis.architecture.recovery.DeploymentModelAssemblerStage;
 import kieker.analysis.architecture.recovery.OperationAndCallGeneratorStage;
 import kieker.analysis.architecture.recovery.TypeModelAssemblerStage;
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
 import kieker.analysis.architecture.trace.flow.FlowTraceEventMatcher;

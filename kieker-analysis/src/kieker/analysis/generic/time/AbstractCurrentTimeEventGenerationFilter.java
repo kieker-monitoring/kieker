@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.generic.time.events;
+package kieker.analysis.generic.time;
 
 import kieker.common.record.misc.TimestampRecord;
 

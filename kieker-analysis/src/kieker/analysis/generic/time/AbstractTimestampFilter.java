@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.generic.timestampfilter.components;
+package kieker.analysis.generic.time;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;

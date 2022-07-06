@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.recovery;
 
-import kieker.analysis.architecture.recovery.data.OperationEvent;
+import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.IOperationSignatureExtractor;
 import kieker.model.analysismodel.sources.SourceModel;

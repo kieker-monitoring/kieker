@@ -43,7 +43,7 @@ import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
 import kieker.analysis.generic.sink.EquivalenceClassWriter;
 import kieker.analysis.generic.sink.NullSink;
-import kieker.analysis.generic.timestampfilter.TimestampFilter;
+import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.repository.SystemModelRepository;

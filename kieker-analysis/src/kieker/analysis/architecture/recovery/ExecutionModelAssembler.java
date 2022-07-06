@@ -16,7 +16,7 @@
 
 package kieker.analysis.architecture.recovery;
 
-import kieker.analysis.architecture.recovery.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
