@@ -183,12 +183,6 @@ pipeline {
       }
       parallel {
         stage('Push to Stable') {
-          agent {
-             docker {
-                image 'kieker/kieker-build:openjdk8'
-                args env.DOCKER_ARGS
-             }
-          }
           steps {
             sshagent(credentials: ['kieker-key']) {
               sh('''
