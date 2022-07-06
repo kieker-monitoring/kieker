@@ -25,7 +25,6 @@ import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcessor;
 import kieker.analysis.architecture.recovery.signature.NullSignatureProcessor;
-
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -54,6 +53,11 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 
 	/**
 	 * Create stage.
+	 *
+	 * @param createEntryCall
+	 *            if true, create a call for the implied call from external
+	 * @param processor
+	 *            signature processor to be used to interpret component and operation signatures
 	 */
 	public OperationAndCallGeneratorStage(final boolean createEntryCall, final AbstractSignatureProcessor processor) {
 		super();
@@ -63,6 +67,9 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 
 	/**
 	 * Create stage.
+	 *
+	 * @param createEntryCall
+	 *            if true, create a call for the implied call from external
 	 */
 	public OperationAndCallGeneratorStage(final boolean createEntryCall) {
 		this(createEntryCall, new NullSignatureProcessor(false));

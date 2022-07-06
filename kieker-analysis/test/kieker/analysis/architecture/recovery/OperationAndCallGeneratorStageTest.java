@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.stage.model;
+package kieker.analysis.architecture.recovery;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -23,11 +23,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.architecture.recovery.OperationAndCallGeneratorStage;
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcessor;
-
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;

@@ -16,10 +16,11 @@
 package kieker.analysis.architecture.recovery.signature;
 
 /**
- * Signature processing facility designed to cleanup and restructure operation and component signatures of monitoring data
+ * Signature processing facility designed to cleanup and restructure operation and
+ * component signatures of monitoring data.
  *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
 public abstract class AbstractSignatureProcessor {
 
