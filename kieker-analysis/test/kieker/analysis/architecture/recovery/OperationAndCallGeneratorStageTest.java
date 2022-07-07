@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.stage.model;
+package kieker.analysis.architecture.recovery;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -23,10 +23,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.architecture.recovery.OperationAndCallGeneratorStage;
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
-import kieker.analysis.architecture.recovery.signature.AbstractSignatureCleaner;
+import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcessor;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -112,8 +111,8 @@ public class OperationAndCallGeneratorStageTest { // NOCS NOPMD
 	}
 
 	private void specialCleanupExecute(final boolean caseInsenstive) {
-		final OperationAndCallGeneratorStage stage = new OperationAndCallGeneratorStage(false, this.createComponentCleaner(caseInsenstive),
-				this.createOperationCleaner(caseInsenstive));
+		final OperationAndCallGeneratorStage stage = new OperationAndCallGeneratorStage(false,
+				this.createProcessor(caseInsenstive));
 		final List<IFlowRecord> events = this.createPathClassTrace();
 		StageTester.test(stage).and().send(events).to(stage.getInputPort()).start();
 
@@ -138,23 +137,26 @@ public class OperationAndCallGeneratorStageTest { // NOCS NOPMD
 		return events;
 	}
 
-	private AbstractSignatureCleaner createOperationCleaner(final boolean caseInsensitive) {
-		return new AbstractSignatureCleaner(caseInsensitive) {
+	private AbstractSignatureProcessor createProcessor(final boolean caseInsensitive) {
+		return new AbstractSignatureProcessor(caseInsensitive) {
+
+			private String componentSignature;
+			private String operationSignature;
 
 			@Override
-			public String processSignature(final String signature) {
-				return this.convertToLowerCase(this.removeTrailingUnderscore(signature));
+			public void processSignatures(final String componentSignature, final String operationSignature) {
+				this.componentSignature = this.convertToLowerCase(this.removeTrailingUnderscore(componentSignature));
+				this.operationSignature = this.convertToLowerCase(this.removeTrailingUnderscore(operationSignature));
 			}
 
-		};
-	}
-
-	private AbstractSignatureCleaner createComponentCleaner(final boolean caseInsensitive) {
-		return new AbstractSignatureCleaner(caseInsensitive) {
+			@Override
+			public String getComponentSignature() {
+				return this.componentSignature;
+			}
 
 			@Override
-			public String processSignature(final String signature) {
-				return this.convertToLowerCase(this.removeTrailingUnderscore(signature));
+			public String getOperationSignature() {
+				return this.operationSignature;
 			}
 
 		};
