@@ -19,7 +19,7 @@ dependencies {
 	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
-	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
+	api "com.google.guava:guava:$guavaVersion"	// used by StringRegistryCache for amqp reader
 	api 'de.cau.cs.se.teetime:teetime:3.1.0'
 
 	implementation 'javax.jms:javax.jms-api:2.0.1'
