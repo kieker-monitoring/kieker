@@ -106,7 +106,7 @@ final class ReaderThread extends Thread {
 			} catch (final ClosedSelectorException e1) {
 				this.logger.error("Selector has already been closed.", e1);
 			} catch (final IOException e2) {
-				this.logger.error("IO error while reading from connection.", e2);
+				this.logger.info("IO error while reading from connection.");
 			} catch (final InterruptedException e) {
 				this.logger.warn("Thread.sleep was interrupted.");
 			}
@@ -143,7 +143,7 @@ final class ReaderThread extends Thread {
 		buffer.flip();
 
 		try {
-			while ((buffer.position() + 4) < buffer.limit()) {
+			while (buffer.position() + 4 < buffer.limit()) {
 				buffer.mark();
 				if (!this.onBufferReceived(connection)) {
 					return;
@@ -174,8 +174,8 @@ final class ReaderThread extends Thread {
 
 	private boolean registerRegistryEntry(final Connection connection) {
 		// identify string identifier and string length
-		if (connection.getBuffer().remaining() < (INT_BYTES
-				+ INT_BYTES)) {
+		if (connection.getBuffer().remaining() < INT_BYTES
+				+ INT_BYTES) {
 			// incomplete record, move back
 			connection.getBuffer().reset();
 			connection.getBuffer().compact();
@@ -248,5 +248,6 @@ final class ReaderThread extends Thread {
 
 	public void terminate() {
 		this.active = false;
+		this.readSelector.wakeup();
 	}
 }
