@@ -24,9 +24,8 @@ import java.nio.file.Paths;
 
 import org.junit.Assert;
 
+import kieker.analysis.util.StringUtils;
 import kieker.common.util.filesystem.FSUtil;
-
-import kieker.test.analysis.util.StringUtils;
 
 /**
  * @author Christian Wulf
