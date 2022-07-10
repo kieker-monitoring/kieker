@@ -30,6 +30,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.reader.list.ListReader;
+import kieker.analysis.util.StringUtils;
 import kieker.common.configuration.Configuration;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;
@@ -38,7 +39,6 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.analysis.util.StringUtils;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.bookstore.BookstoreExecutionFactory;
