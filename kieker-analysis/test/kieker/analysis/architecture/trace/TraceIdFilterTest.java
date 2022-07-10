@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.junit.plugin.filter.select;
+package kieker.analysis.architecture.trace;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,7 +22,6 @@ import java.util.TreeSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.architecture.trace.TraceIdFilter;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -35,7 +34,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.5
  */
-public class TestTraceIdFilter extends AbstractKiekerTest {
+public class TraceIdFilterTest extends AbstractKiekerTest {
 
 	private static final String SESSION_ID = "sv7w1ifhK";
 	private static final String HOSTNAME = "srv098";
@@ -43,7 +42,7 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	/**
 	 * Empty default constructor.
 	 */
-	public TestTraceIdFilter() {
+	public TraceIdFilterTest() {
 		// empty default constructor
 	}
 
@@ -65,8 +64,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
-						TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TraceIdFilterTest.SESSION_ID,
+						TraceIdFilterTest.HOSTNAME)
 				.getTraceEvents();
 
 		for (final AbstractTraceEvent e : traceEvents) {
@@ -99,8 +98,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass);
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
-						TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TraceIdFilterTest.SESSION_ID,
+						TraceIdFilterTest.HOSTNAME)
 				.getTraceEvents();
 
 		for (final AbstractTraceEvent e : traceEvents) {
@@ -127,8 +126,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final TraceIdFilter traceidFilter = new TraceIdFilter(true, new TreeSet<>()); // i.e. pass all
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
-						TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TraceIdFilterTest.SESSION_ID,
+						TraceIdFilterTest.HOSTNAME)
 				.getTraceEvents();
 
 		StageTester.test(traceidFilter).and()

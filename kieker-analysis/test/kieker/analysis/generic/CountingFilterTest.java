@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.junit.plugin.filter.forward;
+package kieker.analysis.generic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import kieker.analysis.generic.CountingFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -36,7 +34,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.6
  */
-public class TestCountingFilter extends AbstractKiekerTest {
+public class CountingFilterTest extends AbstractKiekerTest {
 
 	private CountingFilter countingFilter;
 	private List<Object> testElements;
@@ -44,7 +42,7 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	/**
 	 * Empty default constructor.
 	 */
-	public TestCountingFilter() {
+	public CountingFilterTest() {
 		// empty default constructor
 	}
 

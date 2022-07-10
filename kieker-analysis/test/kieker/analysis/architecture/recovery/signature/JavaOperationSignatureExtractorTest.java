@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.signature;
+package kieker.analysis.architecture.recovery.signature;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +26,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.TypeFactory;
 

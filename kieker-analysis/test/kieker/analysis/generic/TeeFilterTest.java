@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.junit.plugin.filter.forward;
+package kieker.analysis.generic;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.generic.TeeFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -41,9 +40,9 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.10
  */
-public class TestTeeFilter extends AbstractKiekerTest {
+public class TeeFilterTest extends AbstractKiekerTest {
 
-	public TestTeeFilter() {
+	public TeeFilterTest() {
 		// empty default constructor
 	}
 

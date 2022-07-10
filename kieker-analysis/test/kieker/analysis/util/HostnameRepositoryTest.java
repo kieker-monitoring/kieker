@@ -14,14 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis;
+package kieker.analysis.util;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import kieker.analysis.util.HostnameRepository;
 
 /**
  * @author Sören Henning

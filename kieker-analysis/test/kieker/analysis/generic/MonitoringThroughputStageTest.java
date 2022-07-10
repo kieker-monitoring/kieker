@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.junit.plugin.filter.record;
+package kieker.analysis.generic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.generic.MonitoringThroughputStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
@@ -38,7 +37,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.9
  */
-public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
+public class MonitoringThroughputStageTest extends AbstractKiekerTest {
 
 	private MonitoringThroughputStage monitoringThroughputFilter;
 	// List for the count
@@ -51,7 +50,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	/**
 	 * Default constructor.
 	 */
-	public TestMonitoringThroughputFilter() {
+	public MonitoringThroughputStageTest() {
 		// empty default constructor
 	}
 

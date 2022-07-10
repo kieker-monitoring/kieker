@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.model;
+package kieker.analysis.architecture.recovery;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.architecture.recovery.AbstractSourceModelAssembler;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.sources.SourcesFactory;
 import kieker.model.analysismodel.type.ComponentType;
@@ -31,7 +30,7 @@ import kieker.model.analysismodel.type.TypeFactory;
  * @author Reiner Jung
  * @since 1.15
  */
-public class AbstractModelAssemblerTest { // NOCS NOPMD this is a test class
+public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test class
 
 	private static final String LABEL = "LABEL";
 	private static final String SECOND = "SECOND";

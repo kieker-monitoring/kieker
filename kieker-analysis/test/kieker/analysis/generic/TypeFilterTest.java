@@ -14,15 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.junit.plugin.filter.select;
+package kieker.analysis.generic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import kieker.analysis.generic.TypeFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -35,7 +33,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.8
  */
-public class TestTypeFilter extends AbstractKiekerTest {
+public class TypeFilterTest extends AbstractKiekerTest {
 
 	private static final Class<?>[] ALLOWED_TYPES = { String.class };
 
@@ -45,7 +43,7 @@ public class TestTypeFilter extends AbstractKiekerTest {
 	/**
 	 * Default constructor.
 	 */
-	public TestTypeFilter() {
+	public TypeFilterTest() {
 		// empty default constructor
 	}
 
