@@ -18,10 +18,6 @@ package kieker.analysis.generic;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.generic.DynamicEventDispatcher;
-import kieker.analysis.generic.IEventMatcher;
-import kieker.analysis.generic.ImplementsEventMatcher;
-
 import teetime.framework.test.StageTester;
 
 /**

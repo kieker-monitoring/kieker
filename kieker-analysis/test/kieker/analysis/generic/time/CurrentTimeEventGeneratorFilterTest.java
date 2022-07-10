@@ -23,8 +23,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.generic.time.RecordCurrentTimeEventGenerationFilter;
-import kieker.analysis.generic.time.TimestampCurrentTimeEventGenerationFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
@@ -63,7 +61,7 @@ public class CurrentTimeEventGeneratorFilterTest extends AbstractKiekerTest {
 	public void testSecondWithinBoundNoEvent() { // NOPMD (assert in method)
 		final long resolution = 1000;
 		final long firstT = 15;
-		final long secondT = (firstT + resolution) - 1;
+		final long secondT = firstT + resolution - 1;
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT }, true);
 		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT }, false);
 	}
@@ -101,11 +99,11 @@ public class CurrentTimeEventGeneratorFilterTest extends AbstractKiekerTest {
 	public void testGapIntermediateEvents() { // NOPMD (assert in method)
 		final long resolution = 6;
 		final long firstT = 5;
-		final long secondT = firstT + (5 * resolution) + 1;
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, true);
-		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + (2 * resolution),
-			firstT + (3 * resolution), firstT + (4 * resolution), firstT + (5 * resolution), }, false);
+		final long secondT = firstT + 5 * resolution + 1;
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + 2 * resolution,
+			firstT + 3 * resolution, firstT + 4 * resolution, firstT + 5 * resolution, }, true);
+		this.compareInputAndOutput(resolution, new long[] { firstT, secondT }, new long[] { firstT, firstT + resolution, firstT + 2 * resolution,
+			firstT + 3 * resolution, firstT + 4 * resolution, firstT + 5 * resolution, }, false);
 	}
 
 	/**
