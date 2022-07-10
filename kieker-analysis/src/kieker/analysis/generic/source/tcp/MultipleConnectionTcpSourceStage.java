@@ -117,7 +117,7 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 			try {
 				this.reader.join();
 			} catch (final InterruptedException e) {
-				this.logger.error("Reader termination was interrupted.", e);
+				this.logger.warn("Reader termination was interrupted.");
 			}
 		}
 
