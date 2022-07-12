@@ -50,7 +50,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Jan Waller
  *
  * @since 1.5
+ * @deprecated
  */
+@Deprecated
 public final class TestAnalysis {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestAnalysis.class);
 	private static final boolean LOADCONFIG = false;
