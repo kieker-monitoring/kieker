@@ -31,7 +31,9 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
  * @author Florian Fittkau, Jan Waller
  *
  * @since 1.9
+ * @deprecated
  */
+@Deprecated
 public final class TestExplorVizExportWriter {
 
 	private TestExplorVizExportWriter() {
@@ -46,7 +48,7 @@ public final class TestExplorVizExportWriter {
 
 		int traceId = 0;
 
-		while (traceId < (1000 * 1000 * 10)) {
+		while (traceId < 1000 * 1000 * 10) {
 			final TraceEventRecords events = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(traceId * 1000L, traceId++, "", "localhost");
 			ctrl.newMonitoringRecord(events.getTraceMetadata());
 			for (final AbstractTraceEvent event : events.getTraceEvents()) {
