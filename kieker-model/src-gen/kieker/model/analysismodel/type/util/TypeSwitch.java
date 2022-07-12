@@ -110,6 +110,30 @@ public class TypeSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case TypePackage.PROVIDED_INTERFACE_TYPE: {
+				ProvidedInterfaceType providedInterfaceType = (ProvidedInterfaceType)theEObject;
+				T result = caseProvidedInterfaceType(providedInterfaceType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypePackage.ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, ProvidedInterfaceType> eStringToProvidedInterfaceTypeMapEntry = (Map.Entry<String, ProvidedInterfaceType>)theEObject;
+				T result = caseEStringToProvidedInterfaceTypeMapEntry(eStringToProvidedInterfaceTypeMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypePackage.REQUIRED_INTERFACE_TYPE: {
+				RequiredInterfaceType requiredInterfaceType = (RequiredInterfaceType)theEObject;
+				T result = caseRequiredInterfaceType(requiredInterfaceType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, OperationType> interfaceEStringToOperationTypeMapEntry = (Map.Entry<String, OperationType>)theEObject;
+				T result = caseInterfaceEStringToOperationTypeMapEntry(interfaceEStringToOperationTypeMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -216,6 +240,66 @@ public class TypeSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseStorageType(StorageType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Provided Interface Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Provided Interface Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProvidedInterfaceType(ProvidedInterfaceType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Provided Interface Type Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Provided Interface Type Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToProvidedInterfaceTypeMapEntry(Map.Entry<String, ProvidedInterfaceType> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Required Interface Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Required Interface Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRequiredInterfaceType(RequiredInterfaceType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Interface EString To Operation Type Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Interface EString To Operation Type Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseInterfaceEStringToOperationTypeMapEntry(Map.Entry<String, OperationType> object) {
 		return null;
 	}
 

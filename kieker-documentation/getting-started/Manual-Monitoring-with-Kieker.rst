@@ -15,8 +15,8 @@ the instrumentation of the application, and the actual monitoring.
    detail, the quick start example uses manual instrumentation.
 
 The first step is to copy the **Kieker** jar-file
-kieker-1.16-SNAPSHOT-emf.jar to the lib/ directory of the example directory.
-The file is located in the ``kieker-1.16-SNAPSHOT/build/libs/`` directory of the
+task ':emfJar' property 'archiveFileName' to the lib/ directory of the example directory.
+The file is located in the ``kieker-2.0.0-SNAPSHOT/build/libs/`` directory of the
 extracted **Kieker** archive (see download instructions). In the example
 directory for this section, this file is already included, as
 illustrated below.
@@ -25,10 +25,11 @@ illustrated below.
    -  ``userguide/``
 
       -  ``ch2–manual-instrumentation/``
+         
          -  ``build/`` Directory for the Java class files
          -  ``lib/`` Directory for the required libraries
 
-            -  ``kieker-1.16-SNAPSHOT-emf.jar``
+            -  ``task ':emfJar' property 'archiveFileName'``
 
          -  ``src/`` The directory for the source code files
 
@@ -137,9 +138,9 @@ i.e. ``examples/userguide/ch2-manual-instrumentation/``.
 .. code:: shell
 	
 	javac src/kieker/examples/userguide/ch2bookstore/manual/∗.java \
-		-classpath lib/kieker-1.16-SNAPSHOT-emf.jar -d build/
+		-classpath lib/task ':emfJar' property 'archiveFileName' -d build/
 	
-	java -classpath build/:lib/kieker-1.16-SNAPSHOT-emf.jar \
+	java -classpath build/:lib/task ':emfJar' property 'archiveFileName' \
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Under Windows it is necessary to separate the classpath elements by a
@@ -150,9 +151,9 @@ for the Windows PowerShell. Also input each command on one line
 .. code:: shell
 	
 	javac src\kieker\examples\userguide\ch2bookstore\manual\∗.java
-		-classpath lib\kieker-1.16-SNAPSHOT-emf.jar -d build\
+		-classpath lib\task ':emfJar' property 'archiveFileName' -d build\
 	
-	java -classpath build\;lib\kieker-1.16-SNAPSHOT-emf.jar
+	java -classpath build\;lib\task ':emfJar' property 'archiveFileName'
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 If everything worked correctly, a new directory for the monitoring data

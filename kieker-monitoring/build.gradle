@@ -30,8 +30,7 @@ configurations {
 }
 
 repositories {
-	jcenter()
-	maven { url "https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2" }
+	mavenCentral()
 }
 
 dependencies {
@@ -46,6 +45,9 @@ dependencies {
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
 	implementation 'com.github.oshi:oshi-core:3.12.2'
+
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation 'org.influxdb:influxdb-java:2.21'
 
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-server.jar')
@@ -79,6 +81,12 @@ dependencies {
 	implementation "org.springframework:spring-web:$springVersion"
 	implementation "org.springframework:spring-webmvc:$springVersion"
 
+	// influxdb
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation 'org.influxdb:influxdb-java:2.22'
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
 
@@ -90,11 +98,6 @@ dependencies {
 
 	testImplementation 'org.easymock:easymock:4.3'
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
-	testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
-	testImplementation 'org.powermock:powermock-api-easymock:2.0.9'
-	testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
-	testImplementation 'org.powermock:powermock-core:2.0.9'
-	testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.9'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
@@ -109,7 +112,7 @@ dependencies {
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 
-	integrationTestCompile "junit:junit:$libJunitVersion"
+	integrationTestImplementation "junit:junit:$libJunitVersion"
 }
 
 task iajc(dependsOn: classes) {

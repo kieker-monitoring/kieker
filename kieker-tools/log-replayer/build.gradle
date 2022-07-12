@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.log.replayer.FilesystemLogReplayerStarter'
+mainClassName='kieker.tools.log.replayer.teetime.ReplayerMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
@@ -22,6 +22,8 @@ dependencies {
 	testImplementation project(':kieker-monitoring').sourceSets.test.output
 	testImplementation project(':kieker-analysis').sourceSets.test.output
 	testImplementation project(':kieker-tools').sourceSets.test.output
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 }
 
 task uploadArchives {

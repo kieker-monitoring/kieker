@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.trace.InvalidEventRecordTraceCounter;
-import kieker.analysis.trace.ValidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.InvalidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.ValidEventRecordTraceCounter;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.model.repository.SystemModelRepository;
@@ -76,10 +76,10 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 					if (validTraceCounter != null) {
 						tool.logger.debug("");
 						tool.logger.debug("#");
-						tool.logger.debug("# Plugin: " + validTraceCounter.getClass().getName());
+						tool.logger.debug("# Plugin: {}", validTraceCounter.getClass().getName());
+						final int total = validTraceCounter.getTotalCount() + invalidTraceCounter.getTotalCount();
 						tool.logger.debug("Trace processing summary: {} total; {} succeeded; {} failed.",
-								validTraceCounter.getTotalCount() + invalidTraceCounter.getTotalCount(),
-								validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
+								total, validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
 					}
 					if (tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage() != null) {
 						tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage().printStatusMessage();

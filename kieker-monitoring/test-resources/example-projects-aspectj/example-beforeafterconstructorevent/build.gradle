@@ -17,7 +17,7 @@ repositories {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 	maven { url 'http://repo1.maven.org/maven2' }
 }
 
@@ -45,7 +45,7 @@ sourceSets.test {
 }
 
 tasks.test {
-    jvmArgs=[ '-javaagent:../../../../build/libs/kieker-1.15-SNAPSHOT-aspectj.jar',
+    jvmArgs=[ "-javaagent:../../../../build/libs/kieker-${kiekerVersion}-aspectj.jar",
      		  '-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
 			  '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			  '-Daj.weaving.verbose=true' ]

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,31 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
+
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 
+
 /**
  * @author Nils Christian Ehmke
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public abstract class AbstractJVMRecord extends AbstractMonitoringRecord {
-
+public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {			
+	
+		
 	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
 	private static final long serialVersionUID = -961661872949303914L;
-
+	
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final String vmName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -49,22 +52,25 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord {
 	 */
 	public AbstractJVMRecord(final long timestamp, final String hostname, final String vmName) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null ? "" : hostname;
-		this.vmName = vmName == null ? "" : vmName;
+		this.hostname = hostname == null?"":hostname;
+		this.vmName = vmName == null?"":vmName;
 	}
+
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AbstractJVMRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.vmName = deserializer.getString();
 	}
+	
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -79,7 +85,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final AbstractJVMRecord castedRecord = (AbstractJVMRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -93,35 +99,37 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord {
 		if (!this.getVmName().equals(castedRecord.getVmName())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
+		code += ((int)this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getVmName().hashCode();
-
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	
 	public final String getVmName() {
 		return this.vmName;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -130,13 +138,13 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord {
 		String result = "AbstractJVMRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-
+		
 		result += "vmName = ";
 		result += this.getVmName() + ", ";
-
+		
 		return result;
 	}
 }

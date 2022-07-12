@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@ package kieker.analysis.plugin.filter.forward;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.PlainText;
-import kieker.analysis.display.annotation.Display;
+import kieker.analysis.plugin.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -33,7 +32,9 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  *
  * @since 1.8
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A filter computing the throughput of the analysis",
 		outputPorts = {
 			@OutputPort(name = AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = Object.class,

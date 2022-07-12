@@ -5,7 +5,6 @@ plugins {
 repositories {
 	mavenLocal()
 	mavenCentral() 
-	jcenter() 
 }
 
 sourceSets {
@@ -26,7 +25,7 @@ dependencies {
   implementation 'org.slf4j:slf4j-api:1.7.30'
   implementation 'org.codehaus.groovy:groovy-all:3.0.2'
   
-  implementation 'net.kieker-monitoring:kieker:1.16-SNAPSHOT'
+  implementation 'net.kieker-monitoring:${kiekerVersion}'
   
   implementation fileTree('livedemo-source/lib') {
     include '*.jar'

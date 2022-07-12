@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,21 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Teerat Pitakrat
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.12
  */
-public class LoadAverageRecord extends AbstractMonitoringRecord {
+public class LoadAverageRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
-			+ TYPE_SIZE_STRING // LoadAverageRecord.hostname
-			+ TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
-			+ TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
-			+ TYPE_SIZE_DOUBLE; // LoadAverageRecord.fifteenMinLoadAverage
-
+			 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
+			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
+			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
+			 + TYPE_SIZE_DOUBLE; // LoadAverageRecord.fifteenMinLoadAverage
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // LoadAverageRecord.timestamp
 		String.class, // LoadAverageRecord.hostname
@@ -43,7 +44,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		double.class, // LoadAverageRecord.fiveMinLoadAverage
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -52,7 +53,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		"fiveMinLoadAverage",
 		"fifteenMinLoadAverage",
 	};
-
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -60,14 +61,14 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
 	private static final long serialVersionUID = -664763923774505966L;
-
+	
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final double oneMinLoadAverage;
 	private final double fiveMinLoadAverage;
 	private final double fifteenMinLoadAverage;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -82,20 +83,20 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 	 * @param fifteenMinLoadAverage
 	 *            fifteenMinLoadAverage
 	 */
-	public LoadAverageRecord(final long timestamp, final String hostname, final double oneMinLoadAverage, final double fiveMinLoadAverage,
-			final double fifteenMinLoadAverage) {
+	public LoadAverageRecord(final long timestamp, final String hostname, final double oneMinLoadAverage, final double fiveMinLoadAverage, final double fifteenMinLoadAverage) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null ? HOSTNAME : hostname;
+		this.hostname = hostname == null?HOSTNAME:hostname;
 		this.oneMinLoadAverage = oneMinLoadAverage;
 		this.fiveMinLoadAverage = fiveMinLoadAverage;
 		this.fifteenMinLoadAverage = fifteenMinLoadAverage;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public LoadAverageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -104,7 +105,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		this.fiveMinLoadAverage = deserializer.getDouble();
 		this.fifteenMinLoadAverage = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +117,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		serializer.putDouble(this.getFiveMinLoadAverage());
 		serializer.putDouble(this.getFifteenMinLoadAverage());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +125,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +133,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,6 +142,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,7 +157,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final LoadAverageRecord castedRecord = (LoadAverageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -175,45 +177,49 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
+		code += ((int)this.getTimestamp());
 		code += this.getHostname().hashCode();
-		code += ((int) this.getOneMinLoadAverage());
-		code += ((int) this.getFiveMinLoadAverage());
-		code += ((int) this.getFifteenMinLoadAverage());
-
+		code += ((int)this.getOneMinLoadAverage());
+		code += ((int)this.getFiveMinLoadAverage());
+		code += ((int)this.getFifteenMinLoadAverage());
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	
 	public final double getOneMinLoadAverage() {
 		return this.oneMinLoadAverage;
 	}
-
+	
+	
 	public final double getFiveMinLoadAverage() {
 		return this.fiveMinLoadAverage;
 	}
-
+	
+	
 	public final double getFifteenMinLoadAverage() {
 		return this.fifteenMinLoadAverage;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -222,19 +228,19 @@ public class LoadAverageRecord extends AbstractMonitoringRecord {
 		String result = "LoadAverageRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-
+		
 		result += "oneMinLoadAverage = ";
 		result += this.getOneMinLoadAverage() + ", ";
-
+		
 		result += "fiveMinLoadAverage = ";
 		result += this.getFiveMinLoadAverage() + ", ";
-
+		
 		result += "fifteenMinLoadAverage = ";
 		result += this.getFifteenMinLoadAverage() + ", ";
-
+		
 		return result;
 	}
 }

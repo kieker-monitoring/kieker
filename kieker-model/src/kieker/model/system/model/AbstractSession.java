@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 	 */
 	public AbstractSession(final String sessionId) {
 		this.sessionId = sessionId;
-		this.containedTraces = new TreeSet<T>(this.getOrderComparator());
+		this.containedTraces = new TreeSet<>(this.getOrderComparator());
 	}
 
 	/**

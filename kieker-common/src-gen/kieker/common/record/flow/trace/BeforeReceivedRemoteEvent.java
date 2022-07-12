@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,21 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+
 /**
  * @author Felix Eichhorst
- *         API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
+public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.timestamp
-			+ TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId
-			+ TYPE_SIZE_INT // BeforeReceivedRemoteEvent.callerOrderIndex
-			+ TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.traceId
-			+ TYPE_SIZE_INT; // BeforeReceivedRemoteEvent.orderIndex
-
+			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId
+			 + TYPE_SIZE_INT // BeforeReceivedRemoteEvent.callerOrderIndex
+			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.traceId
+			 + TYPE_SIZE_INT; // BeforeReceivedRemoteEvent.orderIndex
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // BeforeReceivedRemoteEvent.timestamp
 		long.class, // BeforeReceivedRemoteEvent.callerTraceId
@@ -43,7 +44,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		long.class, // BeforeReceivedRemoteEvent.traceId
 		int.class, // BeforeReceivedRemoteEvent.orderIndex
 	};
-
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -52,7 +53,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		"traceId",
 		"orderIndex",
 	};
-
+	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long CALLER_TRACE_ID = -1L;
@@ -60,14 +61,14 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	private static final long serialVersionUID = -2469910628320520231L;
-
+	
 	/** property declarations. */
 	private final long timestamp;
 	private final long callerTraceId;
 	private final int callerOrderIndex;
 	private final long traceId;
 	private final int orderIndex;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -90,11 +91,12 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		this.orderIndex = orderIndex;
 	}
 
+
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
-	 *             when the record could not be deserialized
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeReceivedRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -103,7 +105,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +117,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +125,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,7 +133,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,6 +142,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		return SIZE;
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -154,7 +157,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final BeforeReceivedRemoteEvent castedRecord = (BeforeReceivedRemoteEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -174,45 +177,49 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
 			return false;
 		}
-
+		
 		return true;
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int) this.getTimestamp());
-		code += ((int) this.getCallerTraceId());
-		code += ((int) this.getCallerOrderIndex());
-		code += ((int) this.getTraceId());
-		code += ((int) this.getOrderIndex());
-
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getCallerTraceId());
+		code += ((int)this.getCallerOrderIndex());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		
 		return code;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	
 	public final long getCallerTraceId() {
 		return this.callerTraceId;
 	}
-
+	
+	
 	public final int getCallerOrderIndex() {
 		return this.callerOrderIndex;
 	}
-
+	
+	
 	public final long getTraceId() {
 		return this.traceId;
 	}
-
+	
+	
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -221,19 +228,19 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord {
 		String result = "BeforeReceivedRemoteEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-
+		
 		result += "callerTraceId = ";
 		result += this.getCallerTraceId() + ", ";
-
+		
 		result += "callerOrderIndex = ";
 		result += this.getCallerOrderIndex() + ", ";
-
+		
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-
+		
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-
+		
 		return result;
 	}
 }

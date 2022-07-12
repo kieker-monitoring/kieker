@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 
 import com.beust.jcommander.Parameter;
 
-import kieker.analysis.plugin.filter.select.TimestampFilter;
+import kieker.analysis.generic.time.TimestampFilter;
 import kieker.tools.common.DateConverter;
 
 /**

@@ -53,24 +53,9 @@ pipeline {
           }
         }
 
-        stage('Unit Test') {
-          steps {
-            sh './gradlew --parallel test jacocoTestReport'
-            jacoco(
-               sourcePattern: '**/src/**',
-               exclusionPattern: '**/test/**'
-            )
-          }
-          post {
-            always {
-              junit '**/build/test-results/test/*.xml'
-            }
-          }
-        }
-
         stage('Static Analysis') {
           steps {
-            sh './gradlew check'
+            sh './gradlew --parallel -x test check'
           }
           post {
             always {
@@ -96,6 +81,21 @@ pipeline {
           }
         }
         
+        stage('Unit Test') {
+          steps {
+            sh './gradlew --parallel test jacocoTestReport'
+            jacoco(
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
+          }
+        }
+
         stage('Distribution Build') {
           steps {
             sh './gradlew -x test build publishToMavenLocal distribute'
@@ -183,16 +183,14 @@ pipeline {
       }
       parallel {
         stage('Push to Stable') {
-          agent {
-             label 'build-node4'
-          }
+          agent any
           steps {
             sshagent(credentials: ['kieker-key']) {
               sh('''
                     #!/usr/bin/env bash
                     set +x
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                    git push -v git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
                  ''')
             }
           }

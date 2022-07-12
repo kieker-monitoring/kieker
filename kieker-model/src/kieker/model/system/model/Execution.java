@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ package kieker.model.system.model;
  *
  * @since 1.1
  */
-public class Execution {
+public class Execution { // NOPMD DataClass
 
 	/** This constant marks that an execution has no session ID. */
 	public static final String NO_SESSION_ID = "<NOSESSIONID>";
@@ -181,25 +181,25 @@ public class Execution {
 		}
 		final Execution other = (Execution) obj;
 		return this.allocationComponent.equals(other.allocationComponent) && this.operation.equals(other.operation)
-				&& this.sessionId.equals(other.sessionId) && (this.traceId == other.traceId) && (this.eoi == other.eoi)
-				&& (this.ess == other.ess) && (this.tin == other.tin) && (this.tout == other.tout)
-				&& (this.assumed == other.assumed);
+				&& this.sessionId.equals(other.sessionId) && this.traceId == other.traceId && this.eoi == other.eoi
+				&& this.ess == other.ess && this.tin == other.tin && this.tout == other.tout
+				&& this.assumed == other.assumed;
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS (inline ?)
-		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS
+		hash = 43 * hash + (this.operation != null ? this.operation.hashCode() : 0); // NOCS (inline ?)
+		hash = 43 * hash + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS
 																											// (inline
 																											// ?)
-		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32));
-		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS (inline ?)
-		hash = (43 * hash) + this.eoi;
-		hash = (43 * hash) + this.ess;
-		hash = (43 * hash) + (int) (this.tin ^ (this.tin >>> 32));
-		hash = (43 * hash) + (int) (this.tout ^ (this.tout >>> 32));
-		hash = (43 * hash) + (this.assumed ? 5643 : 5648); // NOCS (inline ?)
+		hash = 43 * hash + (int) (this.traceId ^ this.traceId >>> 32);
+		hash = 43 * hash + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS (inline ?)
+		hash = 43 * hash + this.eoi;
+		hash = 43 * hash + this.ess;
+		hash = 43 * hash + (int) (this.tin ^ this.tin >>> 32);
+		hash = 43 * hash + (int) (this.tout ^ this.tout >>> 32);
+		hash = 43 * hash + (this.assumed ? 5643 : 5648); // NOCS (inline ?)
 		return hash;
 	}
 
@@ -209,7 +209,7 @@ public class Execution {
 		strBuild.append(this.traceId).append('[').append(this.eoi).append(',').append(this.ess).append("] ")
 				.append(this.tin).append('-').append(this.tout).append(' ').append(this.allocationComponent.toString())
 				.append('.').append(this.operation.getSignature().getName()).append(' ')
-				.append((this.sessionId != null) ? this.sessionId : Execution.NO_SESSION_ID); // NOCS
+				.append(this.sessionId != null ? this.sessionId : Execution.NO_SESSION_ID); // NOCS
 
 		if (this.assumed) {
 			strBuild.append(" (assumed)");

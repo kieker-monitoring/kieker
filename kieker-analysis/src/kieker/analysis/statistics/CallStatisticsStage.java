@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package kieker.analysis.statistics;
 
-import kieker.analysis.stage.model.ModelObjectFromOperationCallAccessorUtils;
-import kieker.analysis.stage.model.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.ModelObjectFromOperationCallAccessorUtils;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;

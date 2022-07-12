@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,18 @@ import kieker.common.configuration.Configuration;
 
 /**
  * Extends the {@link AbstractFilterPlugin} with possibilities to update properties that are marked as updateable.
- * 
+ *
  * @author Thomas Duellmann, Tobias Rudolph, Markus Fischer
- * 
+ *
  * @since 1.10
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a Configuration object and an IProjectContext.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -48,14 +50,14 @@ public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugi
 
 	/**
 	 * Set current configuration. Example implementation:
-	 * 
+	 *
 	 * <pre>
 	 * // The following condition is true, if key exists in config object AND (update and isUpdateable is true OR update is false)
 	 * if (!update || isPropertyUpdateable(CONFIG_PROPERTY_PROP_NAME)) {
 	 * 	this.localProperty = config.getLongProperty(CONFIG_PROPERTY_PROP_NAME);
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * @param config
 	 *            Configuration object that contains the configuration to be set.
 	 * @param update
@@ -65,7 +67,7 @@ public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugi
 
 	/**
 	 * Checks whether the property with the given name is marked as updateable.
-	 * 
+	 *
 	 * @param propertyName
 	 *            Name of the property to check
 	 * @return true if marked as updateable, else false.

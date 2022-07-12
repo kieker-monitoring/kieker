@@ -36,7 +36,9 @@ public enum EPredefinedUnits implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	RESPONSE_TIME(2, "RESPONSE_TIME", "RESPONSE_TIME"), /**
+	RESPONSE_TIME(2, "RESPONSE_TIME", "RESPONSE_TIME"),
+
+	/**
 	 * The '<em><b>INVOCATION</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

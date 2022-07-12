@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.DeploymentModel#getDeploymentContexts <em>Deployment Contexts</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.deployment.DeploymentModel#getContexts <em>Contexts</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel()
@@ -24,16 +24,16 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeploymentModel extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Deployment Contexts</b></em>' map.
+	 * Returns the value of the '<em><b>Contexts</b></em>' map.
 	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeploymentContext},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deployment Contexts</em>' map.
-	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel_DeploymentContexts()
+	 * @return the value of the '<em>Contexts</em>' map.
+	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel_Contexts()
 	 * @model mapType="kieker.model.analysismodel.deployment.EStringToDeploymentContextMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.deployment.DeploymentContext&gt;" ordered="false"
 	 * @generated
 	 */
-	EMap<String, DeploymentContext> getDeploymentContexts();
+	EMap<String, DeploymentContext> getContexts();
 
 } // DeploymentModel

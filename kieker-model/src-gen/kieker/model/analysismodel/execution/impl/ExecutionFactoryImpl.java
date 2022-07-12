@@ -5,8 +5,8 @@ package kieker.model.analysismodel.execution.impl;
 import java.util.Map;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
-
 import kieker.model.analysismodel.deployment.DeployedStorage;
+
 import kieker.model.analysismodel.execution.*;
 
 import org.eclipse.emf.ecore.EClass;

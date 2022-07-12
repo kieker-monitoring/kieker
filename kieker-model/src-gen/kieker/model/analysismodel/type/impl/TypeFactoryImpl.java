@@ -65,6 +65,10 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 			case TypePackage.ESTRING_TO_STORAGE_TYPE_MAP_ENTRY: return (EObject)createEStringToStorageTypeMapEntry();
 			case TypePackage.OPERATION_TYPE: return createOperationType();
 			case TypePackage.STORAGE_TYPE: return createStorageType();
+			case TypePackage.PROVIDED_INTERFACE_TYPE: return createProvidedInterfaceType();
+			case TypePackage.ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY: return (EObject)createEStringToProvidedInterfaceTypeMapEntry();
+			case TypePackage.REQUIRED_INTERFACE_TYPE: return createRequiredInterfaceType();
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: return (EObject)createInterfaceEStringToOperationTypeMapEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -142,6 +146,48 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 	public StorageType createStorageType() {
 		StorageTypeImpl storageType = new StorageTypeImpl();
 		return storageType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ProvidedInterfaceType createProvidedInterfaceType() {
+		ProvidedInterfaceTypeImpl providedInterfaceType = new ProvidedInterfaceTypeImpl();
+		return providedInterfaceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, ProvidedInterfaceType> createEStringToProvidedInterfaceTypeMapEntry() {
+		EStringToProvidedInterfaceTypeMapEntryImpl eStringToProvidedInterfaceTypeMapEntry = new EStringToProvidedInterfaceTypeMapEntryImpl();
+		return eStringToProvidedInterfaceTypeMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RequiredInterfaceType createRequiredInterfaceType() {
+		RequiredInterfaceTypeImpl requiredInterfaceType = new RequiredInterfaceTypeImpl();
+		return requiredInterfaceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, OperationType> createInterfaceEStringToOperationTypeMapEntry() {
+		InterfaceEStringToOperationTypeMapEntryImpl interfaceEStringToOperationTypeMapEntry = new InterfaceEStringToOperationTypeMapEntryImpl();
+		return interfaceEStringToOperationTypeMapEntry;
 	}
 
 	/**

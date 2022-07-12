@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 
 	@Override
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
-		return TYPES;
+		return TYPES.clone();
 	}
 
 	@Override
@@ -90,10 +90,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 
 	@Override
 	public final boolean equals(final Object obj) { // not used method (needed for findbugs)
-		if (this == obj) {
-			return true;
-		}
-		return false;
+		return (this == obj);
 	}
 
 	@Override

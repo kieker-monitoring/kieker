@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.stage.model.data.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 

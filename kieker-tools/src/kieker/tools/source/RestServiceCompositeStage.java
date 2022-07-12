@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.IAccessHandler;
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rest.RestServiceStage;
+import kieker.analysis.generic.source.IAccessHandler;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rest.RestServiceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;

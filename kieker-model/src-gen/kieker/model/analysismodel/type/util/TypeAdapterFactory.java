@@ -98,6 +98,22 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 				return createStorageTypeAdapter();
 			}
 			@Override
+			public Adapter caseProvidedInterfaceType(ProvidedInterfaceType object) {
+				return createProvidedInterfaceTypeAdapter();
+			}
+			@Override
+			public Adapter caseEStringToProvidedInterfaceTypeMapEntry(Map.Entry<String, ProvidedInterfaceType> object) {
+				return createEStringToProvidedInterfaceTypeMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseRequiredInterfaceType(RequiredInterfaceType object) {
+				return createRequiredInterfaceTypeAdapter();
+			}
+			@Override
+			public Adapter caseInterfaceEStringToOperationTypeMapEntry(Map.Entry<String, OperationType> object) {
+				return createInterfaceEStringToOperationTypeMapEntryAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -212,6 +228,62 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStorageTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.type.ProvidedInterfaceType <em>Provided Interface Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType
+	 * @generated
+	 */
+	public Adapter createProvidedInterfaceTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Provided Interface Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToProvidedInterfaceTypeMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.type.RequiredInterfaceType <em>Required Interface Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.type.RequiredInterfaceType
+	 * @generated
+	 */
+	public Adapter createRequiredInterfaceTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Interface EString To Operation Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createInterfaceEStringToOperationTypeMapEntryAdapter() {
 		return null;
 	}
 

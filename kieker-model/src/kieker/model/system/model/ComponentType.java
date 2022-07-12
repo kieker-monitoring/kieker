@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import java.util.Collections;
 
 /**
  * This class represents the type of a component within the trace analysis tool.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-public class ComponentType {
+public class ComponentType { // NOPMD DataClass
+
 	private final int id;
 	private final String packageName;
 	private final String typeName;
@@ -36,7 +37,7 @@ public class ComponentType {
 	/**
 	 * // NOCS requests implementation of equals and hashCode in pairs// NOCS requests implementation of equals and hashCode in pairs* Creates a new instance of this
 	 * class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of the component type.
 	 * @param packageName
@@ -52,7 +53,7 @@ public class ComponentType {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of the component type.
 	 * @param fullqualifiedTypeName
@@ -82,7 +83,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the ID of the component type.
-	 * 
+	 *
 	 * @return The ID.
 	 */
 	public final int getId() {
@@ -91,7 +92,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the name of the type.
-	 * 
+	 *
 	 * @return The type name.
 	 */
 	public final String getTypeName() {
@@ -100,7 +101,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the package name of this type.
-	 * 
+	 *
 	 * @return The package name.
 	 */
 	public final String getPackageName() {
@@ -109,11 +110,11 @@ public class ComponentType {
 
 	/**
 	 * Delivers the full qualified name of this type (the packages are separated with '.').
-	 * 
+	 *
 	 * @return The full qualified name.
 	 */
 	public final String getFullQualifiedName() {
-		if ((this.packageName == null) || (this.packageName.length() == 0)) {
+		if (this.packageName == null || this.packageName.length() == 0) {
 			return this.typeName;
 		}
 		return this.packageName + "." + this.typeName;
@@ -121,7 +122,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers a collection containing the available operations within this component type.
-	 * 
+	 *
 	 * @return The operations.
 	 */
 	public final Collection<Operation> getOperations() {
@@ -130,10 +131,10 @@ public class ComponentType {
 
 	/**
 	 * This method adds a given operation to the list of available operations.
-	 * 
+	 *
 	 * @param op
 	 *            The operation to be added.
-	 * 
+	 *
 	 * @return The added operation.
 	 */
 	public final Operation addOperation(final Operation op) {

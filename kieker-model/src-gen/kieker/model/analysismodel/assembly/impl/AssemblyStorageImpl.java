@@ -43,6 +43,7 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected StorageType storageType;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,7 +109,7 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public AssemblyComponent getAssemblyComponent() {
+	public AssemblyComponent getComponent() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
 			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
@@ -187,8 +188,8 @@ public class AssemblyStorageImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case AssemblyPackage.ASSEMBLY_STORAGE___GET_ASSEMBLY_COMPONENT:
-				return getAssemblyComponent();
+			case AssemblyPackage.ASSEMBLY_STORAGE___GET_COMPONENT:
+				return getComponent();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
