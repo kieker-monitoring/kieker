@@ -4,7 +4,7 @@
 
 rm monitoring-logs/* -rf
 
-cp ../../../build/libs/kieker-1.16-SNAPSHOT-aspectj.jar lib/
+cp ../../../build/libs/kieker-2.0.0-SNAPSHOT-aspectj.jar lib/
 ./gradlew runMonitoring
 
 logCount=$(cat monitoring-logs/kieker-*/kieker-*.dat | wc -l)
