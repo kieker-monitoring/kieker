@@ -15,37 +15,27 @@
  ***************************************************************************/
 package kieker.analysis.architecture;
 
+import java.time.Duration;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
-import kieker.analysis.generic.IControlEventMatcher;
 
-/**
- * Check whether a CallEvent can be released based on an OperationEvent.
- *
- * @author Reiner Jung
- * @since 1.15
- */
-public class CallEventMatcher implements IControlEventMatcher<OperationEvent, CallEvent> {
+public class CallEventMatcherTest {
 
-	public CallEventMatcher() {
-		// empty constructor
-	}
+	@Test
+	public void test() {
+		final OperationEvent caller = new OperationEvent("host", "component", "caller");
+		final OperationEvent callee = new OperationEvent("host", "component", "callee");
+		final OperationEvent callee2 = new OperationEvent("host", "component", "callee2");
 
-	@Override
-	public boolean requiresControlEvent(final CallEvent baseEvent) {
-		return true;
-	}
+		final CallEvent callEvent = new CallEvent(caller, callee, Duration.ZERO);
 
-	@Override
-	public boolean checkControlEvent(final OperationEvent controlEvent, final CallEvent baseEvent) {
-		final OperationEvent callee = baseEvent.getCallee();
-		return callee.getComponentSignature().equals(controlEvent.getComponentSignature())
-				&& callee.getOperationSignature().equals(controlEvent.getOperationSignature());
-	}
-
-	@Override
-	public boolean keepControlEvent(final CallEvent baseEvent) {
-		return false;
+		final CallEventMatcher matcher = new CallEventMatcher();
+		Assert.assertTrue(matcher.checkControlEvent(callee, callEvent));
+		Assert.assertFalse(matcher.checkControlEvent(callee2, callEvent));
 	}
 
 }

@@ -40,7 +40,7 @@ import kieker.common.record.remotecontrol.UpdateParameterEvent;
  * connections and keeps them open.
  *
  * @author Marc Adolf
- *
+ * @since 1.14
  */
 public class DummyProbeController implements IProbeController {
 
@@ -192,7 +192,7 @@ public class DummyProbeController implements IProbeController {
 		TcpControlConnection currentConnection = this.knownAddresses.get(writerKey);
 
 		// if host was never used or an other module was there before, create a new connection
-		if ((currentConnection == null) || (currentConnection.getServiceComponent() != hostname)) {
+		if (currentConnection == null || currentConnection.getServiceComponent() != hostname) {
 			currentConnection = new TcpControlConnection(ip, port, hostname, null);
 			this.knownAddresses.put(writerKey, currentConnection);
 		}
