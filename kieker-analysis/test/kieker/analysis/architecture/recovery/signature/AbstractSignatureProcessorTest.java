@@ -15,15 +15,19 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery.signature;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-public class AbstractSignatureProcessorTest {
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
+public class AbstractSignatureProcessorTest { // NOCS tests an abstract class
 
 	@Test
 	public void testProcessSignatures() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }

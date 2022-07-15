@@ -480,7 +480,7 @@
 		<!-- Checks that classes (except abtract one) define a ctor and don't rely 
 			on the default one. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->
-		<module name="MissingCtor" />
+		<!--  module name="MissingCtor" -->
 
 		<!-- Checks that switch statement has "default" clause. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->

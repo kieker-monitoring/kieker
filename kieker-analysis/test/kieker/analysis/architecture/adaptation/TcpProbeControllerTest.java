@@ -15,15 +15,19 @@
  ***************************************************************************/
 package kieker.analysis.architecture.adaptation;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class TcpProbeControllerTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }

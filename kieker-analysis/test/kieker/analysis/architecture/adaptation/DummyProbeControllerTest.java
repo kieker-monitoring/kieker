@@ -15,39 +15,44 @@
  ***************************************************************************/
 package kieker.analysis.architecture.adaptation;
 
-import static org.junit.Assert.*;
+import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class DummyProbeControllerTest {
 
 	@Test
 	public void testControlProbe() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	public void testUpdateProbeParameter() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	public void testActivateMonitoredPattern() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	public void testActivateParameterMonitoredPattern() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	public void testDeactivateMonitoredPattern() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 	@Test
 	public void testIsKnownHost() {
-		fail("Not yet implemented");
+		Assert.fail("Not yet implemented");
 	}
 
 }
