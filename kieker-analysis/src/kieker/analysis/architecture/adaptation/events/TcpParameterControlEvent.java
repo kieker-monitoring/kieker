@@ -24,7 +24,7 @@ import java.util.Map;
  * @author Marc Adolf
  * @since 1.15
  */
-public class TcpUpdateParameterEvent extends AbstractTcpControlEvent implements IParameterEvent {
+public class TcpParameterControlEvent extends AbstractTcpControlEvent implements IParameterEvent {
 
 	private final Map<String, List<String>> parameters;
 
@@ -39,7 +39,7 @@ public class TcpUpdateParameterEvent extends AbstractTcpControlEvent implements 
 	 *            a map of parameters and a list of each entry per parameter
 	 *
 	 */
-	public TcpUpdateParameterEvent(final String operationSignature, final long triggerTimestamp,
+	public TcpParameterControlEvent(final String operationSignature, final long triggerTimestamp,
 			final Map<String, List<String>> parameters) {
 		super(operationSignature, triggerTimestamp);
 		this.parameters = parameters;
@@ -62,7 +62,7 @@ public class TcpUpdateParameterEvent extends AbstractTcpControlEvent implements 
 	 *            a map of parameters and a list of each entry per parameter
 	 *
 	 */
-	public TcpUpdateParameterEvent(final String ip, final int port, final String hostname, final String pattern,
+	public TcpParameterControlEvent(final String ip, final int port, final String hostname, final String pattern,
 			final long triggerTimestamp, final Map<String, List<String>> parameters) {
 		super(ip, port, hostname, pattern, triggerTimestamp);
 		this.parameters = parameters;

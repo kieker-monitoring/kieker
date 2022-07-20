@@ -27,7 +27,7 @@ import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationParameterControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpDeactivationControlEvent;
-import kieker.analysis.architecture.adaptation.events.TcpUpdateParameterEvent;
+import kieker.analysis.architecture.adaptation.events.TcpParameterControlEvent;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.ActivationParameterEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
@@ -85,8 +85,8 @@ public class DummyProbeController implements IProbeController {
 			}
 		} else if (event instanceof TcpDeactivationControlEvent) {
 			this.deactivateMonitoredPattern(ip, port, hostname, pattern);
-		} else if (event instanceof TcpUpdateParameterEvent) {
-			this.updateProbeParameter(ip, port, hostname, pattern, ((TcpUpdateParameterEvent) event).getParameters());
+		} else if (event instanceof TcpParameterControlEvent) {
+			this.updateProbeParameter(ip, port, hostname, pattern, ((TcpParameterControlEvent) event).getParameters());
 		} else {
 			DummyProbeController.LOGGER.error("Received Unknown TCP control event: {}", event.getClass().getName());
 		}

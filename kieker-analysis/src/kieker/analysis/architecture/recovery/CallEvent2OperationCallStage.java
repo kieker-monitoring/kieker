@@ -51,8 +51,23 @@ public class CallEvent2OperationCallStage extends AbstractTransformation<CallEve
 
 	private DeployedOperation findDeployedOperation(final OperationEvent operationEvent) {
 		final DeploymentContext context = this.deploymentModel.getContexts().get(operationEvent.getHostname());
+		if (context == null) {
+			this.logger.error("The deployment context {} does not exist in the deployment model.", operationEvent.getHostname());
+			return null;
+		}
 		final DeployedComponent component = context.getComponents().get(operationEvent.getComponentSignature());
+		if (component == null) {
+			this.logger.error("The deployed component {} does not exist in the deployment context {}.", operationEvent.getComponentSignature(),
+					operationEvent.getHostname());
+			return null;
+		}
 		final DeployedOperation operation = component.getOperations().get(operationEvent.getOperationSignature());
+		if (operation == null) {
+			this.logger.error("The deployed operation {} does not exist in the deployment component {}::{}.", operationEvent.getOperationSignature(),
+					operationEvent.getComponentSignature(),
+					operationEvent.getHostname());
+			return null;
+		}
 
 		return operation;
 	}

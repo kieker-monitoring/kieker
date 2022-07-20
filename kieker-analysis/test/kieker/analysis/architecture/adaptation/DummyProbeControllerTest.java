@@ -15,23 +15,42 @@
  ***************************************************************************/
 package kieker.analysis.architecture.adaptation;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
+import kieker.analysis.architecture.adaptation.events.TcpActivationControlEvent;
+
 /**
+ * Testing whether the dummy control prove controller stores information correctly.
+ * This test is not very useful.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
 public class DummyProbeControllerTest {
 
-	@Test
-	public void testControlProbe() {
-		Assert.fail("Not yet implemented");
-	}
+	private static final String IP = "1.2.3.4";
+	private static final int PORT = 1234;
+	private static final String CONTROL_HOST = "test-host";
+	private static final String PATTERN = "*";
+	private static final Map<String, List<String>> PARAMETERS = new HashMap<>();
 
 	@Test
 	public void testUpdateProbeParameter() {
+		final DummyProbeController controller = new DummyProbeController();
+
+		try {
+			controller.updateProbeParameter(IP, PORT, CONTROL_HOST, PATTERN, PARAMETERS);
+			final AbstractTcpControlEvent event = new TcpActivationControlEvent(IP, PORT, CONTROL_HOST, "*", 0);
+			controller.controlProbe(event);
+		} catch (final RemoteControlFailedException e) {
+			Assert.fail("Remote connection failed. Cannot happen with dummy controller.");
+		}
 		Assert.fail("Not yet implemented");
 	}
 
