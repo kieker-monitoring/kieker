@@ -1,3 +1,5 @@
+.. _developing-with-kieker-java-kieker-architecture-model:
+
 Kieker Architecture Model
 =========================
 

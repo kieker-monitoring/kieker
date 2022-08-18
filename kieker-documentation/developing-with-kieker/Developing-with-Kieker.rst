@@ -36,9 +36,11 @@ source code.
   * :ref:`architecture-file-and-serialization-formats`
   
 * Kieker architecture
+
   * Java
 
-    * :ref:`developing-with-kieker-architecture-java-monitoring-controller-api`
+    * :ref:`developing-with-kieker-java-architecture-monitoring-controller-api`
+    * :ref:`developing-with-kieker-java-architecture-log-file-reader`
 
   * Python
   * C, C++, Fortran and similar languages

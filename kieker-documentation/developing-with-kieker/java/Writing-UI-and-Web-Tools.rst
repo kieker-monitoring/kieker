@@ -1,4 +1,4 @@
-.. _developing-with-kieker-writing-ui-and-web-tools:
+.. _developing-with-kieker-java-writing-ui-and-web-tools:
 
 Writing UI and Web Tools 
 ========================
