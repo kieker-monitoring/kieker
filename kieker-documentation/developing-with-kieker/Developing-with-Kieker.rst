@@ -19,8 +19,8 @@ source code.
 
 * Create tooling
 
-  * :ref:`developing-with-kieker-writing-tools-and-services`
-  * :ref:`developing-with-kieker-writing-ui-and-web-tools`
+  * :ref:`developing-with-kieker-java-writing-tools-and-services`
+  * :ref:`developing-with-kieker-java-writing-ui-and-web-tools`
 
 * How to write new
 
@@ -34,5 +34,11 @@ source code.
   
   * :ref:`developing-with-kieker-general-language-and-platform-support`
   * :ref:`architecture-file-and-serialization-formats`
+  
+* Kieker architecture
+  * Java
 
+    * :ref:`developing-with-kieker-architecture-java-monitoring-controller-api`
 
+  * Python
+  * C, C++, Fortran and similar languages

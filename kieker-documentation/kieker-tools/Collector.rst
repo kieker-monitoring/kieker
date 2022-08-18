@@ -1,21 +1,20 @@
 .. _kieker-tools-collector:
 
-Collector - Kieker Data Bridge 
-===============================================
+Collector
+=========
 
-Created by Reiner Jung, last modified on Apr 23, 2020
+Kieker supports for different programming languages and probes to send
+monitoring data via TCP to a remote host. In distributed systems, this
+can imply that multiple probes send data simultaneously. The Kieker
+Collector allows to collect this data from different sources and stores them in
+one kieker log, a database or relays it to analysis software.
 
-There are two bridges available in Kieker. The new version is called
-**Collector** and the old deprecated one is called **Kieker Data
-Bridge** (KDB). This is the documentation for the new *Collector*. For
-the old KDB please refer to its usage message for help.
-
-The *Collector* supports any ISourceCompositeStage compatible event
-source provided by Kieker tools. As sinks, the collector supports all
-Kieker writers based on the ``DataSinkStage`` from Kieker. The
-*Collector* is configured via a configuration file. The configuration
-file consists of three parts one for basic Kieker settings, one for the
-source and one for the sink.
+The **Collector** supports any ISourceCompositeStage compatible event
+source provided by Kieker tools, including TCP binary streams. As sinks,
+the collector supports all Kieker writers based on the ``DataSinkStage`` from
+Kieker. The *Collector* is configured via a configuration file. The
+configuration file consists of three parts one for basic Kieker settings, one
+for the source and one for the sink.
 
 Currently supported event sources (readers):
 
@@ -71,11 +70,13 @@ in the process.
 .. code-block:: shell
   
   # File reader
-
+  
   kieker.tools.source=kieker.tools.source.LogsReaderCompositeStage
   kieker.tools.source.LogsReaderCompositeStage.logDirectories=$INPUT_DIR
   ## Buffer size
   kieker.tools.source.LogsReaderCompositeStage.bufferSize = 8192
+
+Store the output in a Kieker log.
 
 .. code-block:: shell
 
@@ -125,4 +126,6 @@ in the process.
 Instead of generating text log files, you may use the
 ``BinaryLogStreamHandler`` to produce binary output. Also can specify a
 compression algorithm for the log and map files, or use a totally
-different Kieker writer. For more details on the writer see `architecture-java-file-writer`.
+different Kieker writer. For more details on the writer see 
+`architecture-java-file-writer`.
+
