@@ -24,8 +24,9 @@ dependencies {
   implementation 'ch.qos.logback:logback-classic:1.1.7'
   implementation 'org.slf4j:slf4j-api:1.7.30'
   implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+  implementation 'javax.annotation:javax.annotation-api:1.3.2'
   
-  implementation "net.kieker-monitoring:${kiekerVersion}"
+  implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
   
   implementation fileTree('livedemo-source/lib') {
     include '*.jar'
