@@ -5,6 +5,9 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.15.2 (July 6, 2022)
+- Fix security vulnerability sonatype-2020-0926 by update to guava 31.1-jre
+
 * 1.15.1 (February 4, 2022)
 - Bugfixes
   - Extended PatternParser to handle 'default' modifier
