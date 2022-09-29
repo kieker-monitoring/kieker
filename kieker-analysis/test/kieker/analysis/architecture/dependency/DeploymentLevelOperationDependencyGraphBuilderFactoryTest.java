@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.architecture.repository.ArchitectureModelUtils;
 import kieker.analysis.architecture.repository.ModelRepository;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -58,8 +59,8 @@ public class DeploymentLevelOperationDependencyGraphBuilderFactoryTest {
 	@Test
 	public void testCreateDependencyGraphBuilder() {
 		final ModelRepository repository = new ModelRepository("test");
-		repository.register(ExecutionModel.class, this.executionModel);
-		repository.register(StatisticsModel.class, this.statisticsModel);
+		repository.register(ArchitectureModelUtils.EXECUTION_MODEL, this.executionModel);
+		repository.register(ArchitectureModelUtils.STATISTICS_MODEL, this.statisticsModel);
 
 		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(new IDependencyGraphBuilderConfiguration() {
 		});

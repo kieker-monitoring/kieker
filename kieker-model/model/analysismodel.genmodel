@@ -363,15 +363,14 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/failedCause"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Sources" basePackage="kieker.model.analysismodel" disposableProviderFactory="true"
-        ecorePackage="analysismodel.ecore#//sources">
-      <genClasses image="false" ecoreClass="analysismodel.ecore#//sources/SourceModel">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//sources/SourceModel/sources"/>
+    <nestedGenPackages prefix="Source" disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//source">
+      <genClasses ecoreClass="analysismodel.ecore#//source/SourceModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//source/SourceModel/sources"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//sources/EObjectToSourcesEntry">
+      <genClasses ecoreClass="analysismodel.ecore#//source/EObjectToSourceEntry">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//sources/EObjectToSourcesEntry/key"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//sources/EObjectToSourcesEntry/value"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//source/EObjectToSourceEntry/key"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//source/EObjectToSourceEntry/value"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

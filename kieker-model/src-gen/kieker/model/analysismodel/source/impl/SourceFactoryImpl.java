@@ -1,10 +1,10 @@
 /**
  */
-package kieker.model.analysismodel.sources.impl;
+package kieker.model.analysismodel.source.impl;
 
 import java.util.Map;
 
-import kieker.model.analysismodel.sources.*;
+import kieker.model.analysismodel.source.*;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -22,24 +22,24 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
+public class SourceFactoryImpl extends EFactoryImpl implements SourceFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static SourcesFactory init() {
+	public static SourceFactory init() {
 		try {
-			SourcesFactory theSourcesFactory = (SourcesFactory)EPackage.Registry.INSTANCE.getEFactory(SourcesPackage.eNS_URI);
-			if (theSourcesFactory != null) {
-				return theSourcesFactory;
+			SourceFactory theSourceFactory = (SourceFactory)EPackage.Registry.INSTANCE.getEFactory(SourcePackage.eNS_URI);
+			if (theSourceFactory != null) {
+				return theSourceFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new SourcesFactoryImpl();
+		return new SourceFactoryImpl();
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SourcesFactoryImpl() {
+	public SourceFactoryImpl() {
 		super();
 	}
 
@@ -60,8 +60,8 @@ public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case SourcesPackage.SOURCE_MODEL: return createSourceModel();
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY: return (EObject)createEObjectToSourcesEntry();
+			case SourcePackage.SOURCE_MODEL: return createSourceModel();
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY: return (EObject)createEObjectToSourceEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -83,9 +83,9 @@ public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<EObject, EList<String>> createEObjectToSourcesEntry() {
-		EObjectToSourcesEntryImpl eObjectToSourcesEntry = new EObjectToSourcesEntryImpl();
-		return eObjectToSourcesEntry;
+	public Map.Entry<EObject, EList<String>> createEObjectToSourceEntry() {
+		EObjectToSourceEntryImpl eObjectToSourceEntry = new EObjectToSourceEntryImpl();
+		return eObjectToSourceEntry;
 	}
 
 	/**
@@ -94,8 +94,8 @@ public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
 	 * @generated
 	 */
 	@Override
-	public SourcesPackage getSourcesPackage() {
-		return (SourcesPackage)getEPackage();
+	public SourcePackage getSourcePackage() {
+		return (SourcePackage)getEPackage();
 	}
 
 	/**
@@ -105,8 +105,8 @@ public class SourcesFactoryImpl extends EFactoryImpl implements SourcesFactory {
 	 * @generated
 	 */
 	@Deprecated
-	public static SourcesPackage getPackage() {
-		return SourcesPackage.eINSTANCE;
+	public static SourcePackage getPackage() {
+		return SourcePackage.eINSTANCE;
 	}
 
-} //SourcesFactoryImpl
+} //SourceFactoryImpl

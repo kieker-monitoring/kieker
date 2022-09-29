@@ -27,8 +27,8 @@ import org.junit.Test;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -65,8 +65,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourceModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
+		final SourceModel sourcesModel = SourceFactory.eINSTANCE.createSourceModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourcesModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addOperation(this.beforeOperationEvent1);

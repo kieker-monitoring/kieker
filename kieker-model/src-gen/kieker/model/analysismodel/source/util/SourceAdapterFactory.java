@@ -1,10 +1,10 @@
 /**
  */
-package kieker.model.analysismodel.sources.util;
+package kieker.model.analysismodel.source.util;
 
 import java.util.Map;
 
-import kieker.model.analysismodel.sources.*;
+import kieker.model.analysismodel.source.*;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -20,17 +20,17 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see kieker.model.analysismodel.sources.SourcesPackage
+ * @see kieker.model.analysismodel.source.SourcePackage
  * @generated
  */
-public class SourcesAdapterFactory extends AdapterFactoryImpl {
+public class SourceAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static SourcesPackage modelPackage;
+	protected static SourcePackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -38,9 +38,9 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SourcesAdapterFactory() {
+	public SourceAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = SourcesPackage.eINSTANCE;
+			modelPackage = SourcePackage.eINSTANCE;
 		}
 	}
 
@@ -69,15 +69,15 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SourcesSwitch<Adapter> modelSwitch =
-		new SourcesSwitch<Adapter>() {
+	protected SourceSwitch<Adapter> modelSwitch =
+		new SourceSwitch<Adapter>() {
 			@Override
 			public Adapter caseSourceModel(SourceModel object) {
 				return createSourceModelAdapter();
 			}
 			@Override
-			public Adapter caseEObjectToSourcesEntry(Map.Entry<EObject, EList<String>> object) {
-				return createEObjectToSourcesEntryAdapter();
+			public Adapter caseEObjectToSourceEntry(Map.Entry<EObject, EList<String>> object) {
+				return createEObjectToSourceEntryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -100,13 +100,13 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.sources.SourceModel <em>Source Model</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.source.SourceModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.sources.SourceModel
+	 * @see kieker.model.analysismodel.source.SourceModel
 	 * @generated
 	 */
 	public Adapter createSourceModelAdapter() {
@@ -114,7 +114,7 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EObject To Sources Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EObject To Source Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -123,7 +123,7 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 	 * @see java.util.Map.Entry
 	 * @generated
 	 */
-	public Adapter createEObjectToSourcesEntryAdapter() {
+	public Adapter createEObjectToSourceEntryAdapter() {
 		return null;
 	}
 
@@ -139,4 +139,4 @@ public class SourcesAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //SourcesAdapterFactory
+} //SourceAdapterFactory

@@ -24,10 +24,8 @@ import kieker.model.analysismodel.execution.Tuple;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
-import kieker.model.analysismodel.sources.SourcesPackage;
-
-import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
-
+import kieker.model.analysismodel.source.SourcePackage;
+import kieker.model.analysismodel.source.impl.SourcePackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -181,8 +179,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
-		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
+		SourcePackageImpl theSourcePackage = (SourcePackageImpl)(registeredPackage instanceof SourcePackageImpl ? registeredPackage : SourcePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theExecutionPackage.createPackageContents();
@@ -192,7 +190,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		theAssemblyPackage.createPackageContents();
 		theDeploymentPackage.createPackageContents();
 		theTracePackage.createPackageContents();
-		theSourcesPackage.createPackageContents();
+		theSourcePackage.createPackageContents();
 
 		// Initialize created meta-data
 		theExecutionPackage.initializePackageContents();
@@ -202,7 +200,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		theAssemblyPackage.initializePackageContents();
 		theDeploymentPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
-		theSourcesPackage.initializePackageContents();
+		theSourcePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theExecutionPackage.freeze();

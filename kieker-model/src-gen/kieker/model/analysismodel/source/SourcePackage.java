@@ -1,6 +1,6 @@
 /**
  */
-package kieker.model.analysismodel.sources;
+package kieker.model.analysismodel.source;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -19,18 +19,18 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see kieker.model.analysismodel.sources.SourcesFactory
+ * @see kieker.model.analysismodel.source.SourceFactory
  * @model kind="package"
  * @generated
  */
-public interface SourcesPackage extends EPackage {
+public interface SourcePackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "sources";
+	String eNAME = "source";
 
 	/**
 	 * The package namespace URI.
@@ -38,7 +38,7 @@ public interface SourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore/sources";
+	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore/source";
 
 	/**
 	 * The package namespace name.
@@ -46,7 +46,7 @@ public interface SourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "sources";
+	String eNS_PREFIX = "source";
 
 	/**
 	 * The singleton instance of the package.
@@ -54,14 +54,14 @@ public interface SourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	SourcesPackage eINSTANCE = kieker.model.analysismodel.sources.impl.SourcesPackageImpl.init();
+	SourcePackage eINSTANCE = kieker.model.analysismodel.source.impl.SourcePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.sources.impl.SourceModelImpl <em>Source Model</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.source.impl.SourceModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.sources.impl.SourceModelImpl
-	 * @see kieker.model.analysismodel.sources.impl.SourcesPackageImpl#getSourceModel()
+	 * @see kieker.model.analysismodel.source.impl.SourceModelImpl
+	 * @see kieker.model.analysismodel.source.impl.SourcePackageImpl#getSourceModel()
 	 * @generated
 	 */
 	int SOURCE_MODEL = 0;
@@ -76,7 +76,7 @@ public interface SourcesPackage extends EPackage {
 	int SOURCE_MODEL__SOURCES = 0;
 
 	/**
-	 * The number of structural features of the '<em>Source Model</em>' class.
+	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -85,7 +85,7 @@ public interface SourcesPackage extends EPackage {
 	int SOURCE_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Source Model</em>' class.
+	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -94,14 +94,14 @@ public interface SourcesPackage extends EPackage {
 	int SOURCE_MODEL_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl <em>EObject To Sources Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl <em>EObject To Source Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl
-	 * @see kieker.model.analysismodel.sources.impl.SourcesPackageImpl#getEObjectToSourcesEntry()
+	 * @see kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl
+	 * @see kieker.model.analysismodel.source.impl.SourcePackageImpl#getEObjectToSourceEntry()
 	 * @generated
 	 */
-	int EOBJECT_TO_SOURCES_ENTRY = 1;
+	int EOBJECT_TO_SOURCE_ENTRY = 1;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' reference.
@@ -110,7 +110,7 @@ public interface SourcesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EOBJECT_TO_SOURCES_ENTRY__KEY = 0;
+	int EOBJECT_TO_SOURCE_ENTRY__KEY = 0;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute list.
@@ -119,59 +119,59 @@ public interface SourcesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EOBJECT_TO_SOURCES_ENTRY__VALUE = 1;
+	int EOBJECT_TO_SOURCE_ENTRY__VALUE = 1;
 
 	/**
-	 * The number of structural features of the '<em>EObject To Sources Entry</em>' class.
+	 * The number of structural features of the '<em>EObject To Source Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EOBJECT_TO_SOURCES_ENTRY_FEATURE_COUNT = 2;
+	int EOBJECT_TO_SOURCE_ENTRY_FEATURE_COUNT = 2;
 
 	/**
-	 * The number of operations of the '<em>EObject To Sources Entry</em>' class.
+	 * The number of operations of the '<em>EObject To Source Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EOBJECT_TO_SOURCES_ENTRY_OPERATION_COUNT = 0;
+	int EOBJECT_TO_SOURCE_ENTRY_OPERATION_COUNT = 0;
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.model.analysismodel.sources.SourceModel <em>Source Model</em>}'.
+	 * Returns the meta object for class '{@link kieker.model.analysismodel.source.SourceModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Source Model</em>'.
-	 * @see kieker.model.analysismodel.sources.SourceModel
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.model.analysismodel.source.SourceModel
 	 * @generated
 	 */
 	EClass getSourceModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.sources.SourceModel#getSources <em>Sources</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.source.SourceModel#getSources <em>Sources</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Sources</em>'.
-	 * @see kieker.model.analysismodel.sources.SourceModel#getSources()
+	 * @see kieker.model.analysismodel.source.SourceModel#getSources()
 	 * @see #getSourceModel()
 	 * @generated
 	 */
 	EReference getSourceModel_Sources();
 
 	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EObject To Sources Entry</em>}'.
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EObject To Source Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>EObject To Sources Entry</em>'.
+	 * @return the meta object for class '<em>EObject To Source Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyType="org.eclipse.emf.ecore.EObject"
 	 *        valueDataType="org.eclipse.emf.ecore.EString" valueMany="true"
 	 * @generated
 	 */
-	EClass getEObjectToSourcesEntry();
+	EClass getEObjectToSourceEntry();
 
 	/**
 	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
@@ -179,10 +179,10 @@ public interface SourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Key</em>'.
 	 * @see java.util.Map.Entry
-	 * @see #getEObjectToSourcesEntry()
+	 * @see #getEObjectToSourceEntry()
 	 * @generated
 	 */
-	EReference getEObjectToSourcesEntry_Key();
+	EReference getEObjectToSourceEntry_Key();
 
 	/**
 	 * Returns the meta object for the attribute list '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -190,10 +190,10 @@ public interface SourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute list '<em>Value</em>'.
 	 * @see java.util.Map.Entry
-	 * @see #getEObjectToSourcesEntry()
+	 * @see #getEObjectToSourceEntry()
 	 * @generated
 	 */
-	EAttribute getEObjectToSourcesEntry_Value();
+	EAttribute getEObjectToSourceEntry_Value();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -202,7 +202,7 @@ public interface SourcesPackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	SourcesFactory getSourcesFactory();
+	SourceFactory getSourceFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -219,11 +219,11 @@ public interface SourcesPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.sources.impl.SourceModelImpl <em>Source Model</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.source.impl.SourceModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.sources.impl.SourceModelImpl
-		 * @see kieker.model.analysismodel.sources.impl.SourcesPackageImpl#getSourceModel()
+		 * @see kieker.model.analysismodel.source.impl.SourceModelImpl
+		 * @see kieker.model.analysismodel.source.impl.SourcePackageImpl#getSourceModel()
 		 * @generated
 		 */
 		EClass SOURCE_MODEL = eINSTANCE.getSourceModel();
@@ -237,14 +237,14 @@ public interface SourcesPackage extends EPackage {
 		EReference SOURCE_MODEL__SOURCES = eINSTANCE.getSourceModel_Sources();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl <em>EObject To Sources Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl <em>EObject To Source Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl
-		 * @see kieker.model.analysismodel.sources.impl.SourcesPackageImpl#getEObjectToSourcesEntry()
+		 * @see kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl
+		 * @see kieker.model.analysismodel.source.impl.SourcePackageImpl#getEObjectToSourceEntry()
 		 * @generated
 		 */
-		EClass EOBJECT_TO_SOURCES_ENTRY = eINSTANCE.getEObjectToSourcesEntry();
+		EClass EOBJECT_TO_SOURCE_ENTRY = eINSTANCE.getEObjectToSourceEntry();
 
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' reference feature.
@@ -252,7 +252,7 @@ public interface SourcesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EOBJECT_TO_SOURCES_ENTRY__KEY = eINSTANCE.getEObjectToSourcesEntry_Key();
+		EReference EOBJECT_TO_SOURCE_ENTRY__KEY = eINSTANCE.getEObjectToSourceEntry_Key();
 
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute list feature.
@@ -260,8 +260,8 @@ public interface SourcesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EOBJECT_TO_SOURCES_ENTRY__VALUE = eINSTANCE.getEObjectToSourcesEntry_Value();
+		EAttribute EOBJECT_TO_SOURCE_ENTRY__VALUE = eINSTANCE.getEObjectToSourceEntry_Value();
 
 	}
 
-} //SourcesPackage
+} //SourcePackage

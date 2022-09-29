@@ -26,8 +26,10 @@ import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.ExecutionPackage;
 import kieker.model.analysismodel.execution.Invocation;
 import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * Abstract template class for dependency graph builders. To use this abstract builder,
@@ -55,8 +57,8 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	public IGraph build(final ModelRepository repository) {
 		this.graph = GraphFactory.createGraph(repository.getName());
 
-		this.executionModel = repository.getModel(ExecutionModel.class);
-		this.statisticsModel = repository.getModel(StatisticsModel.class);
+		this.executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
+		this.statisticsModel = repository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL);
 		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
 		for (final Invocation invocation : this.executionModel.getAggregatedInvocations().values()) {
 			this.handleInvocation(invocation);

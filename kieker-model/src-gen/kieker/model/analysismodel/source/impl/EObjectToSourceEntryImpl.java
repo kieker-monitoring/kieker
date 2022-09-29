@@ -1,10 +1,10 @@
 /**
  */
-package kieker.model.analysismodel.sources.impl;
+package kieker.model.analysismodel.source.impl;
 
 import java.util.Collection;
 
-import kieker.model.analysismodel.sources.SourcesPackage;
+import kieker.model.analysismodel.source.SourcePackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -23,19 +23,19 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EObject To Sources Entry</b></em>'.
+ * An implementation of the model object '<em><b>EObject To Source Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link kieker.model.analysismodel.sources.impl.EObjectToSourcesEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.source.impl.EObjectToSourceEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,EList<String>> {
+public class EObjectToSourceEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,EList<String>> {
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -61,7 +61,7 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EObjectToSourcesEntryImpl() {
+	protected EObjectToSourceEntryImpl() {
 		super();
 	}
 
@@ -72,7 +72,7 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return SourcesPackage.Literals.EOBJECT_TO_SOURCES_ENTRY;
+		return SourcePackage.Literals.EOBJECT_TO_SOURCE_ENTRY;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 			key = eResolveProxy(oldKey);
 			if (key != oldKey) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY, oldKey, key));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY, oldKey, key));
 			}
 		}
 		return key;
@@ -110,7 +110,7 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 		EObject oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET, SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY, oldKey, key));
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	 */
 	public EList<String> getTypedValue() {
 		if (value == null) {
-			value = new EDataTypeUniqueEList<String>(String.class, this, SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__VALUE);
+			value = new EDataTypeUniqueEList<String>(String.class, this, SourcePackage.EOBJECT_TO_SOURCE_ENTRY__VALUE);
 		}
 		return value;
 	}
@@ -133,10 +133,10 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY:
 				if (resolve) return getTypedKey();
 				return basicGetTypedKey();
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__VALUE:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__VALUE:
 				return getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -151,10 +151,10 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY:
 				setTypedKey((EObject)newValue);
 				return;
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__VALUE:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__VALUE:
 				getTypedValue().clear();
 				getTypedValue().addAll((Collection<? extends String>)newValue);
 				return;
@@ -170,10 +170,10 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY:
 				setTypedKey((EObject)null);
 				return;
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__VALUE:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__VALUE:
 				getTypedValue().clear();
 				return;
 		}
@@ -188,9 +188,9 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__KEY:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__KEY:
 				return key != null;
-			case SourcesPackage.EOBJECT_TO_SOURCES_ENTRY__VALUE:
+			case SourcePackage.EOBJECT_TO_SOURCE_ENTRY__VALUE:
 				return value != null && !value.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -297,4 +297,4 @@ public class EObjectToSourcesEntryImpl extends MinimalEObjectImpl.Container impl
 		return container == null ? null : (EMap<EObject, EList<String>>)container.eGet(eContainmentFeature());
 	}
 
-} //EObjectToSourcesEntryImpl
+} //EObjectToSourceEntryImpl

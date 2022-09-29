@@ -1,6 +1,6 @@
 /**
  */
-package kieker.model.analysismodel.sources.impl;
+package kieker.model.analysismodel.source.impl;
 
 import java.util.Map;
 
@@ -20,9 +20,9 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
-import kieker.model.analysismodel.sources.SourcesPackage;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
+import kieker.model.analysismodel.source.SourcePackage;
 
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
@@ -49,7 +49,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
+public class SourcePackageImpl extends EPackageImpl implements SourcePackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -62,7 +62,7 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass eObjectToSourcesEntryEClass = null;
+	private EClass eObjectToSourceEntryEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -75,12 +75,12 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see kieker.model.analysismodel.sources.SourcesPackage#eNS_URI
+	 * @see kieker.model.analysismodel.source.SourcePackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private SourcesPackageImpl() {
-		super(eNS_URI, SourcesFactory.eINSTANCE);
+	private SourcePackageImpl() {
+		super(eNS_URI, SourceFactory.eINSTANCE);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>This method is used to initialize {@link SourcesPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link SourcePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -102,12 +102,12 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static SourcesPackage init() {
-		if (isInited) return (SourcesPackage)EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
+	public static SourcePackage init() {
+		if (isInited) return (SourcePackage)EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredSourcesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		SourcesPackageImpl theSourcesPackage = registeredSourcesPackage instanceof SourcesPackageImpl ? (SourcesPackageImpl)registeredSourcesPackage : new SourcesPackageImpl();
+		Object registeredSourcePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		SourcePackageImpl theSourcePackage = registeredSourcePackage instanceof SourcePackageImpl ? (SourcePackageImpl)registeredSourcePackage : new SourcePackageImpl();
 
 		isInited = true;
 
@@ -128,7 +128,7 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
 
 		// Create package meta-data objects
-		theSourcesPackage.createPackageContents();
+		theSourcePackage.createPackageContents();
 		theAnalysismodelPackage.createPackageContents();
 		theStatisticsPackage.createPackageContents();
 		theTypePackage.createPackageContents();
@@ -138,7 +138,7 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 		theTracePackage.createPackageContents();
 
 		// Initialize created meta-data
-		theSourcesPackage.initializePackageContents();
+		theSourcePackage.initializePackageContents();
 		theAnalysismodelPackage.initializePackageContents();
 		theStatisticsPackage.initializePackageContents();
 		theTypePackage.initializePackageContents();
@@ -148,11 +148,11 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 		theTracePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theSourcesPackage.freeze();
+		theSourcePackage.freeze();
 
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(SourcesPackage.eNS_URI, theSourcesPackage);
-		return theSourcesPackage;
+		EPackage.Registry.INSTANCE.put(SourcePackage.eNS_URI, theSourcePackage);
+		return theSourcePackage;
 	}
 
 	/**
@@ -181,8 +181,8 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getEObjectToSourcesEntry() {
-		return eObjectToSourcesEntryEClass;
+	public EClass getEObjectToSourceEntry() {
+		return eObjectToSourceEntryEClass;
 	}
 
 	/**
@@ -191,8 +191,8 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getEObjectToSourcesEntry_Key() {
-		return (EReference)eObjectToSourcesEntryEClass.getEStructuralFeatures().get(0);
+	public EReference getEObjectToSourceEntry_Key() {
+		return (EReference)eObjectToSourceEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -201,8 +201,8 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getEObjectToSourcesEntry_Value() {
-		return (EAttribute)eObjectToSourcesEntryEClass.getEStructuralFeatures().get(1);
+	public EAttribute getEObjectToSourceEntry_Value() {
+		return (EAttribute)eObjectToSourceEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -211,8 +211,8 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 	 * @generated
 	 */
 	@Override
-	public SourcesFactory getSourcesFactory() {
-		return (SourcesFactory)getEFactoryInstance();
+	public SourceFactory getSourceFactory() {
+		return (SourceFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -237,9 +237,9 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 		sourceModelEClass = createEClass(SOURCE_MODEL);
 		createEReference(sourceModelEClass, SOURCE_MODEL__SOURCES);
 
-		eObjectToSourcesEntryEClass = createEClass(EOBJECT_TO_SOURCES_ENTRY);
-		createEReference(eObjectToSourcesEntryEClass, EOBJECT_TO_SOURCES_ENTRY__KEY);
-		createEAttribute(eObjectToSourcesEntryEClass, EOBJECT_TO_SOURCES_ENTRY__VALUE);
+		eObjectToSourceEntryEClass = createEClass(EOBJECT_TO_SOURCE_ENTRY);
+		createEReference(eObjectToSourceEntryEClass, EOBJECT_TO_SOURCE_ENTRY__KEY);
+		createEAttribute(eObjectToSourceEntryEClass, EOBJECT_TO_SOURCE_ENTRY__VALUE);
 	}
 
 	/**
@@ -273,11 +273,11 @@ public class SourcesPackageImpl extends EPackageImpl implements SourcesPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(sourceModelEClass, SourceModel.class, "SourceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSourceModel_Sources(), this.getEObjectToSourcesEntry(), null, "sources", null, 0, -1, SourceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSourceModel_Sources(), this.getEObjectToSourceEntry(), null, "sources", null, 0, -1, SourceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(eObjectToSourcesEntryEClass, Map.Entry.class, "EObjectToSourcesEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEObjectToSourcesEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEObjectToSourcesEntry_Value(), ecorePackage.getEString(), "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(eObjectToSourceEntryEClass, Map.Entry.class, "EObjectToSourceEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEObjectToSourceEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEObjectToSourceEntry_Value(), ecorePackage.getEString(), "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
-} //SourcesPackageImpl
+} //SourcePackageImpl

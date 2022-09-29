@@ -447,13 +447,13 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="failedCause" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="sources" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/sources"
-      nsPrefix="sources">
+  <eSubpackages name="source" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/source"
+      nsPrefix="source">
     <eClassifiers xsi:type="ecore:EClass" name="SourceModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
-          eType="#//sources/EObjectToSourcesEntry" containment="true"/>
+          eType="#//source/EObjectToSourceEntry" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="EObjectToSourcesEntry" instanceClassName="java.util.Map$Entry">
+    <eClassifiers xsi:type="ecore:EClass" name="EObjectToSourceEntry" instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" upperBound="-1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
