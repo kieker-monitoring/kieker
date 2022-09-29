@@ -25,10 +25,8 @@ import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.execution.Invocation;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
@@ -60,17 +58,16 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		this.executionModel = repository.getModel(ExecutionModel.class);
 		this.statisticsModel = repository.getModel(StatisticsModel.class);
 		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
-		for (final AggregatedInvocation invocation : this.executionModel.getAggregatedInvocations().values()) {
+		for (final Invocation invocation : this.executionModel.getAggregatedInvocations().values()) {
 			this.handleInvocation(invocation);
 		}
 		return this.graph;
 	}
 
-	private void handleInvocation(final AggregatedInvocation invocation) {
-		final INode sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
-		final INode targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
-				.get(EPropertyType.COUNT);
+	private void handleInvocation(final Invocation invocation) {
+		final INode sourceVertex = invocation.getCaller() != null ? this.addVertex(invocation.getCaller()) : this.addVertexForEntry(); // NOCS (declarative)
+		final INode targetVertex = this.addVertex(invocation.getCallee());
+		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getProperties().get(PropertyConstants.CALLS);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 

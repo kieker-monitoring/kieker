@@ -25,15 +25,15 @@ import org.eclipse.emf.ecore.EObject;
 public interface StatisticRecord extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' map.
-	 * The key is of type {@link kieker.model.analysismodel.statistics.EPropertyType},
+	 * The key is of type {@link java.lang.String},
 	 * and the value is of type {@link java.lang.Object},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Properties</em>' map.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getStatisticRecord_Properties()
-	 * @model mapType="kieker.model.analysismodel.statistics.EPropertyTypeToValue&lt;kieker.model.analysismodel.statistics.EPropertyType, org.eclipse.emf.ecore.EJavaObject&gt;"
+	 * @model mapType="kieker.model.analysismodel.statistics.EPropertyTypeToValue&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject&gt;"
 	 * @generated
 	 */
-	EMap<EPropertyType, Object> getProperties();
+	EMap<String, Object> getProperties();
 
 } // StatisticRecord

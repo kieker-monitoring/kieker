@@ -2,7 +2,7 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.FloatValue;
+import kieker.model.analysismodel.statistics.DoubleMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,44 +13,44 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Float Value</b></em>'.
+ * An implementation of the model object '<em><b>Double Measurement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.FloatValueImpl#getMeasurement <em>Measurement</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.DoubleMeasurementImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FloatValueImpl extends ValueImpl implements FloatValue {
+public class DoubleMeasurementImpl extends ScalarMeasurementImpl implements DoubleMeasurement {
 	/**
-	 * The default value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float MEASUREMENT_EDEFAULT = 0.0F;
+	protected static final double VALUE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected float measurement = MEASUREMENT_EDEFAULT;
+	protected double value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FloatValueImpl() {
+	protected DoubleMeasurementImpl() {
 		super();
 	}
 
@@ -61,7 +61,7 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.FLOAT_VALUE;
+		return StatisticsPackage.Literals.DOUBLE_MEASUREMENT;
 	}
 
 	/**
@@ -70,8 +70,8 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	 * @generated
 	 */
 	@Override
-	public float getMeasurement() {
-		return measurement;
+	public double getValue() {
+		return value;
 	}
 
 	/**
@@ -80,11 +80,11 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	 * @generated
 	 */
 	@Override
-	public void setMeasurement(float newMeasurement) {
-		float oldMeasurement = measurement;
-		measurement = newMeasurement;
+	public void setValue(double newValue) {
+		double oldValue = value;
+		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.FLOAT_VALUE__MEASUREMENT, oldMeasurement, measurement));
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.DOUBLE_MEASUREMENT__VALUE, oldValue, value));
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.FLOAT_VALUE__MEASUREMENT:
-				return getMeasurement();
+			case StatisticsPackage.DOUBLE_MEASUREMENT__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -109,8 +109,8 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.FLOAT_VALUE__MEASUREMENT:
-				setMeasurement((Float)newValue);
+			case StatisticsPackage.DOUBLE_MEASUREMENT__VALUE:
+				setValue((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -124,8 +124,8 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.FLOAT_VALUE__MEASUREMENT:
-				setMeasurement(MEASUREMENT_EDEFAULT);
+			case StatisticsPackage.DOUBLE_MEASUREMENT__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -139,8 +139,8 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.FLOAT_VALUE__MEASUREMENT:
-				return measurement != MEASUREMENT_EDEFAULT;
+			case StatisticsPackage.DOUBLE_MEASUREMENT__VALUE:
+				return value != VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -155,10 +155,10 @@ public class FloatValueImpl extends ValueImpl implements FloatValue {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (measurement: ");
-		result.append(measurement);
+		result.append(" (value: ");
+		result.append(value);
 		result.append(')');
 		return result.toString();
 	}
 
-} //FloatValueImpl
+} //DoubleMeasurementImpl

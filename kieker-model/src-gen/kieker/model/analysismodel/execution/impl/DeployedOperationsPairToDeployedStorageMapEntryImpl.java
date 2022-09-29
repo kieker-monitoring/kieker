@@ -5,8 +5,8 @@ package kieker.model.analysismodel.execution.impl;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
 
-import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.StorageDataflow;
 import kieker.model.analysismodel.execution.Tuple;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -24,19 +24,19 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Deployed Operations Pair To Aggregated Storage Access Map Entry</b></em>'.
+ * An implementation of the model object '<em><b>Deployed Operations Pair To Deployed Storage Map Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl#getTypedValue <em>Value</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedStorageMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedStorageMapEntryImpl#getTypedKey <em>Key</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedStorage>,AggregatedStorageAccess> {
+public class DeployedOperationsPairToDeployedStorageMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedStorage>,StorageDataflow> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -45,7 +45,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 * @ordered
 	 */
-	protected AggregatedStorageAccess value;
+	protected StorageDataflow value;
 
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' containment reference.
@@ -62,7 +62,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl() {
+	protected DeployedOperationsPairToDeployedStorageMapEntryImpl() {
 		super();
 	}
 
@@ -73,7 +73,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY;
+		return ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY;
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AggregatedStorageAccess getTypedValue() {
+	public StorageDataflow getTypedValue() {
 		return value;
 	}
 
@@ -90,11 +90,11 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(AggregatedStorageAccess newValue, NotificationChain msgs) {
-		AggregatedStorageAccess oldValue = value;
+	public NotificationChain basicSetTypedValue(StorageDataflow newValue, NotificationChain msgs) {
+		StorageDataflow oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE, oldValue, newValue);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE, oldValue, newValue);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -105,18 +105,18 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedValue(AggregatedStorageAccess newValue) {
+	public void setTypedValue(StorageDataflow newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
 			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE, null, msgs);
+				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE, null, msgs);
 			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE, null, msgs);
+				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE, null, msgs);
 			msgs = basicSetTypedValue(newValue, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE, newValue, newValue));
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE, newValue, newValue));
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 		Tuple<DeployedOperation, DeployedStorage> oldKey = key;
 		key = newKey;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY, oldKey, newKey);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY, oldKey, newKey);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -152,14 +152,14 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 		if (newKey != key) {
 			NotificationChain msgs = null;
 			if (key != null)
-				msgs = ((InternalEObject)key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY, null, msgs);
+				msgs = ((InternalEObject)key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY, null, msgs);
 			if (newKey != null)
-				msgs = ((InternalEObject)newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY, null, msgs);
+				msgs = ((InternalEObject)newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY, null, msgs);
 			msgs = basicSetTypedKey(newKey, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY, newKey, newKey));
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY, newKey, newKey));
 	}
 
 	/**
@@ -170,9 +170,9 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE:
 				return basicSetTypedValue(null, msgs);
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY:
 				return basicSetTypedKey(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -186,9 +186,9 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE:
 				return getTypedValue();
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY:
 				return getTypedKey();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -203,10 +203,10 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE:
-				setTypedValue((AggregatedStorageAccess)newValue);
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE:
+				setTypedValue((StorageDataflow)newValue);
 				return;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY:
 				setTypedKey((Tuple<DeployedOperation, DeployedStorage>)newValue);
 				return;
 		}
@@ -221,10 +221,10 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE:
-				setTypedValue((AggregatedStorageAccess)null);
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE:
+				setTypedValue((StorageDataflow)null);
 				return;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY:
 				setTypedKey((Tuple<DeployedOperation, DeployedStorage>)null);
 				return;
 		}
@@ -239,9 +239,9 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__VALUE:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__VALUE:
 				return value != null;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY__KEY:
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY__KEY:
 				return key != null;
 		}
 		return super.eIsSet(featureID);
@@ -304,7 +304,7 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@Override
-	public AggregatedStorageAccess getValue() {
+	public StorageDataflow getValue() {
 		return getTypedValue();
 	}
 
@@ -314,8 +314,8 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@Override
-	public AggregatedStorageAccess setValue(AggregatedStorageAccess value) {
-		AggregatedStorageAccess oldValue = getValue();
+	public StorageDataflow setValue(StorageDataflow value) {
+		StorageDataflow oldValue = getValue();
 		setTypedValue(value);
 		return oldValue;
 	}
@@ -326,9 +326,9 @@ public class DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl extends
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> getEMap() {
+	public EMap<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow>)container.eGet(eContainmentFeature());
 	}
 
-} //DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl
+} //DeployedOperationsPairToDeployedStorageMapEntryImpl

@@ -77,24 +77,32 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createExecutionModelAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> object) {
 				return createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter();
 			}
 			@Override
-			public Adapter caseAggregatedInvocation(AggregatedInvocation object) {
-				return createAggregatedInvocationAdapter();
+			public Adapter caseInvocation(Invocation object) {
+				return createInvocationAdapter();
 			}
 			@Override
-			public Adapter caseAggregatedStorageAccess(AggregatedStorageAccess object) {
-				return createAggregatedStorageAccessAdapter();
+			public Adapter caseStorageDataflow(StorageDataflow object) {
+				return createStorageDataflowAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> object) {
-				return createDeployedOperationsPairToAggregatedStorageAccessMapEntryAdapter();
+			public Adapter caseDeployedOperationsPairToDeployedStorageMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> object) {
+				return createDeployedOperationsPairToDeployedStorageMapEntryAdapter();
 			}
 			@Override
 			public <F, S> Adapter caseTuple(Tuple<F, S> object) {
 				return createTupleAdapter();
+			}
+			@Override
+			public Adapter caseOperationDataflow(OperationDataflow object) {
+				return createOperationDataflowAdapter();
+			}
+			@Override
+			public Adapter caseDeployedOperationsPairToDeployedOperationsMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> object) {
+				return createDeployedOperationsPairToDeployedOperationsMapEntryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -145,35 +153,35 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.AggregatedInvocation <em>Aggregated Invocation</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.Invocation <em>Invocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.execution.AggregatedInvocation
+	 * @see kieker.model.analysismodel.execution.Invocation
 	 * @generated
 	 */
-	public Adapter createAggregatedInvocationAdapter() {
+	public Adapter createInvocationAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.AggregatedStorageAccess <em>Aggregated Storage Access</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.StorageDataflow <em>Storage Dataflow</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.execution.AggregatedStorageAccess
+	 * @see kieker.model.analysismodel.execution.StorageDataflow
 	 * @generated
 	 */
-	public Adapter createAggregatedStorageAccessAdapter() {
+	public Adapter createStorageDataflowAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Deployed Storage Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -182,7 +190,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * @see java.util.Map.Entry
 	 * @generated
 	 */
-	public Adapter createDeployedOperationsPairToAggregatedStorageAccessMapEntryAdapter() {
+	public Adapter createDeployedOperationsPairToDeployedStorageMapEntryAdapter() {
 		return null;
 	}
 
@@ -197,6 +205,34 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTupleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.execution.OperationDataflow <em>Operation Dataflow</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.execution.OperationDataflow
+	 * @generated
+	 */
+	public Adapter createOperationDataflowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Deployed Operations Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createDeployedOperationsPairToDeployedOperationsMapEntryAdapter() {
 		return null;
 	}
 

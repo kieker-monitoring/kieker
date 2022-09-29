@@ -2,7 +2,7 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.LongValue;
+import kieker.model.analysismodel.statistics.IntMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,44 +13,44 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Long Value</b></em>'.
+ * An implementation of the model object '<em><b>Int Measurement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.LongValueImpl#getMeasurement <em>Measurement</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.IntMeasurementImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class LongValueImpl extends ValueImpl implements LongValue {
+public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeasurement {
 	/**
-	 * The default value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final long MEASUREMENT_EDEFAULT = 0L;
+	protected static final int VALUE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected long measurement = MEASUREMENT_EDEFAULT;
+	protected int value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LongValueImpl() {
+	protected IntMeasurementImpl() {
 		super();
 	}
 
@@ -61,7 +61,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.LONG_VALUE;
+		return StatisticsPackage.Literals.INT_MEASUREMENT;
 	}
 
 	/**
@@ -70,8 +70,8 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	 * @generated
 	 */
 	@Override
-	public long getMeasurement() {
-		return measurement;
+	public int getValue() {
+		return value;
 	}
 
 	/**
@@ -80,11 +80,11 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	 * @generated
 	 */
 	@Override
-	public void setMeasurement(long newMeasurement) {
-		long oldMeasurement = measurement;
-		measurement = newMeasurement;
+	public void setValue(int newValue) {
+		int oldValue = value;
+		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.LONG_VALUE__MEASUREMENT, oldMeasurement, measurement));
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.INT_MEASUREMENT__VALUE, oldValue, value));
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				return getMeasurement();
+			case StatisticsPackage.INT_MEASUREMENT__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -109,8 +109,8 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				setMeasurement((Long)newValue);
+			case StatisticsPackage.INT_MEASUREMENT__VALUE:
+				setValue((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -124,8 +124,8 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				setMeasurement(MEASUREMENT_EDEFAULT);
+			case StatisticsPackage.INT_MEASUREMENT__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -139,8 +139,8 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				return measurement != MEASUREMENT_EDEFAULT;
+			case StatisticsPackage.INT_MEASUREMENT__VALUE:
+				return value != VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -155,10 +155,10 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (measurement: ");
-		result.append(measurement);
+		result.append(" (value: ");
+		result.append(value);
 		result.append(')');
 		return result.toString();
 	}
 
-} //LongValueImpl
+} //IntMeasurementImpl

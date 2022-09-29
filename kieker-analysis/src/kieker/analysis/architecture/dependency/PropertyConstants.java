@@ -49,6 +49,8 @@ public final class PropertyConstants {
 
 	public static final String TIME_UNIT = "time unit";
 
+	public static final String RESPONSE_TIME = "response time";
+
 	private PropertyConstants() {}
 
 }

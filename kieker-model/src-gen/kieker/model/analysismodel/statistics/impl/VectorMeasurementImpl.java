@@ -2,54 +2,52 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.StatisticRecord;
-import kieker.model.analysismodel.statistics.Statistics;
+import java.util.Collection;
+
+import kieker.model.analysismodel.statistics.ScalarMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.statistics.VectorMeasurement;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
-import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EcoreEMap;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Statistics</b></em>'.
+ * An implementation of the model object '<em><b>Vector Measurement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticsImpl#getStatistics <em>Statistics</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl#getValues <em>Values</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StatisticsImpl extends MinimalEObjectImpl.Container implements Statistics {
+public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeasurement {
 	/**
-	 * The cached value of the '{@link #getStatistics() <em>Statistics</em>}' map.
+	 * The cached value of the '{@link #getValues() <em>Values</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStatistics()
+	 * @see #getValues()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<EPredefinedUnits, StatisticRecord> statistics;
+	protected EList<ScalarMeasurement> values;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected StatisticsImpl() {
+	protected VectorMeasurementImpl() {
 		super();
 	}
 
@@ -60,7 +58,7 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.STATISTICS;
+		return StatisticsPackage.Literals.VECTOR_MEASUREMENT;
 	}
 
 	/**
@@ -69,11 +67,11 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * @generated
 	 */
 	@Override
-	public EMap<EPredefinedUnits, StatisticRecord> getStatistics() {
-		if (statistics == null) {
-			statistics = new EcoreEMap<EPredefinedUnits,StatisticRecord>(StatisticsPackage.Literals.UNITS_TO_STATISTICS_MAP_ENTRY, UnitsToStatisticsMapEntryImpl.class, this, StatisticsPackage.STATISTICS__STATISTICS);
+	public EList<ScalarMeasurement> getValues() {
+		if (values == null) {
+			values = new EObjectContainmentEList<ScalarMeasurement>(ScalarMeasurement.class, this, StatisticsPackage.VECTOR_MEASUREMENT__VALUES);
 		}
-		return statistics;
+		return values;
 	}
 
 	/**
@@ -84,8 +82,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				return ((InternalEList<?>)getStatistics()).basicRemove(otherEnd, msgs);
+			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+				return ((InternalEList<?>)getValues()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -98,9 +96,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				if (coreType) return getStatistics();
-				else return getStatistics().map();
+			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+				return getValues();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,11 +107,13 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				((EStructuralFeature.Setting)getStatistics()).set(newValue);
+			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+				getValues().clear();
+				getValues().addAll((Collection<? extends ScalarMeasurement>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -128,8 +127,8 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				getStatistics().clear();
+			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+				getValues().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -143,10 +142,10 @@ public class StatisticsImpl extends MinimalEObjectImpl.Container implements Stat
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTICS__STATISTICS:
-				return statistics != null && !statistics.isEmpty();
+			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+				return values != null && !values.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //StatisticsImpl
+} //VectorMeasurementImpl

@@ -78,32 +78,44 @@ public class ExecutionSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> deployedOperationsPairToAggregatedInvocationMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> deployedOperationsPairToAggregatedInvocationMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation>)theEObject;
 				T result = caseDeployedOperationsPairToAggregatedInvocationMapEntry(deployedOperationsPairToAggregatedInvocationMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ExecutionPackage.AGGREGATED_INVOCATION: {
-				AggregatedInvocation aggregatedInvocation = (AggregatedInvocation)theEObject;
-				T result = caseAggregatedInvocation(aggregatedInvocation);
+			case ExecutionPackage.INVOCATION: {
+				Invocation invocation = (Invocation)theEObject;
+				T result = caseInvocation(invocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ExecutionPackage.AGGREGATED_STORAGE_ACCESS: {
-				AggregatedStorageAccess aggregatedStorageAccess = (AggregatedStorageAccess)theEObject;
-				T result = caseAggregatedStorageAccess(aggregatedStorageAccess);
+			case ExecutionPackage.STORAGE_DATAFLOW: {
+				StorageDataflow storageDataflow = (StorageDataflow)theEObject;
+				T result = caseStorageDataflow(storageDataflow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> deployedOperationsPairToAggregatedStorageAccessMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess>)theEObject;
-				T result = caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(deployedOperationsPairToAggregatedStorageAccessMapEntry);
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> deployedOperationsPairToDeployedStorageMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow>)theEObject;
+				T result = caseDeployedOperationsPairToDeployedStorageMapEntry(deployedOperationsPairToDeployedStorageMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ExecutionPackage.TUPLE: {
 				Tuple<?, ?> tuple = (Tuple<?, ?>)theEObject;
 				T result = caseTuple(tuple);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExecutionPackage.OPERATION_DATAFLOW: {
+				OperationDataflow operationDataflow = (OperationDataflow)theEObject;
+				T result = caseOperationDataflow(operationDataflow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> deployedOperationsPairToDeployedOperationsMapEntry = (Map.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow>)theEObject;
+				T result = caseDeployedOperationsPairToDeployedOperationsMapEntry(deployedOperationsPairToDeployedOperationsMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -137,52 +149,52 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+	public T caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Aggregated Invocation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Invocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Aggregated Invocation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Invocation</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAggregatedInvocation(AggregatedInvocation object) {
+	public T caseInvocation(Invocation object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Aggregated Storage Access</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Storage Dataflow</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Aggregated Storage Access</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Storage Dataflow</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAggregatedStorageAccess(AggregatedStorageAccess object) {
+	public T caseStorageDataflow(StorageDataflow object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Deployed Storage Map Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Aggregated Storage Access Map Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Deployed Storage Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDeployedOperationsPairToAggregatedStorageAccessMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> object) {
+	public T caseDeployedOperationsPairToDeployedStorageMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> object) {
 		return null;
 	}
 
@@ -198,6 +210,36 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public <F, S> T caseTuple(Tuple<F, S> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Operation Dataflow</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Operation Dataflow</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOperationDataflow(OperationDataflow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Deployed Operations Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Deployed Operations Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeployedOperationsPairToDeployedOperationsMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> object) {
 		return null;
 	}
 

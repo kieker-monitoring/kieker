@@ -17,9 +17,9 @@
 package kieker.analysis.architecture.recovery;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Invocation;
 import kieker.model.analysismodel.execution.Tuple;
 import kieker.model.analysismodel.sources.SourceModel;
 import kieker.model.analysismodel.trace.OperationCall;
@@ -43,20 +43,20 @@ public class TraceBasedExecutionModelAssembler extends AbstractSourceModelAssemb
 	@Override
 	public void addOperationCall(final OperationCall operationCall) {
 		// Check if operationCall is an entry operation call. If so than source is null
-		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
-		final DeployedOperation target = operationCall.getOperation();
+		final DeployedOperation caller = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
+		final DeployedOperation callee = operationCall.getOperation();
 
-		this.addExecution(source, target);
+		this.addExecution(caller, callee);
 	}
 
-	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
+	protected void addExecution(final DeployedOperation caller, final DeployedOperation callee) {
 		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
-		key.setFirst(source);
-		key.setSecond(target);
+		key.setFirst(caller);
+		key.setSecond(callee);
 		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
-			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-			invocation.setSource(source);
-			invocation.setTarget(target);
+			final Invocation invocation = this.factory.createInvocation();
+			invocation.setCaller(caller);
+			invocation.setCallee(callee);
 
 			this.updateSourceModel(invocation);
 

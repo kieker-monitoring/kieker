@@ -4,8 +4,8 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.time.Instant;
 
+import kieker.model.analysismodel.statistics.Measurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
-import kieker.model.analysismodel.statistics.Value;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -16,18 +16,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Value</b></em>'.
+ * An implementation of the model object '<em><b>Measurement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.ValueImpl#getTimestamp <em>Timestamp</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.MeasurementImpl#getTimestamp <em>Timestamp</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class ValueImpl extends MinimalEObjectImpl.Container implements Value {
+public abstract class MeasurementImpl extends MinimalEObjectImpl.Container implements Measurement {
 	/**
 	 * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -53,7 +53,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ValueImpl() {
+	protected MeasurementImpl() {
 		super();
 	}
 
@@ -64,7 +64,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.VALUE;
+		return StatisticsPackage.Literals.MEASUREMENT;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 		Instant oldTimestamp = timestamp;
 		timestamp = newTimestamp;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.VALUE__TIMESTAMP, oldTimestamp, timestamp));
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.MEASUREMENT__TIMESTAMP, oldTimestamp, timestamp));
 	}
 
 	/**
@@ -98,7 +98,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.VALUE__TIMESTAMP:
+			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
 				return getTimestamp();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -112,7 +112,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.VALUE__TIMESTAMP:
+			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
 				setTimestamp((Instant)newValue);
 				return;
 		}
@@ -127,7 +127,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.VALUE__TIMESTAMP:
+			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
 				setTimestamp(TIMESTAMP_EDEFAULT);
 				return;
 		}
@@ -142,7 +142,7 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.VALUE__TIMESTAMP:
+			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
 				return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
 		}
 		return super.eIsSet(featureID);
@@ -164,4 +164,4 @@ public abstract class ValueImpl extends MinimalEObjectImpl.Container implements 
 		return result.toString();
 	}
 
-} //ValueImpl
+} //MeasurementImpl

@@ -106,7 +106,12 @@ public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a
 		}
 		final String influxDBVersion = pong.getVersion();
 		final String[] splitVersion = influxDBVersion.split("\\.");
-		this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		try {
+			this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		} catch (final NumberFormatException ex) {
+			this.influxDBMajorVersion = 0;
+			LOGGER.error("InfluxDB major version number is not a number, but {}", splitVersion[0]);
+		}
 		LOGGER.info("Version: {}", influxDBVersion);
 		LOGGER.info("Response time: {}", pong.getResponseTime());
 

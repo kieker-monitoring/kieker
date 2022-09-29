@@ -2,7 +2,7 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.DoubleValue;
+import kieker.model.analysismodel.statistics.LongMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -13,44 +13,44 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Double Value</b></em>'.
+ * An implementation of the model object '<em><b>Long Measurement</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.DoubleValueImpl#getMeasurement <em>Measurement</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.statistics.impl.LongMeasurementImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DoubleValueImpl extends ValueImpl implements DoubleValue {
+public class LongMeasurementImpl extends ScalarMeasurementImpl implements LongMeasurement {
 	/**
-	 * The default value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double MEASUREMENT_EDEFAULT = 0.0;
+	protected static final long VALUE_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMeasurement()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected double measurement = MEASUREMENT_EDEFAULT;
+	protected long value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DoubleValueImpl() {
+	protected LongMeasurementImpl() {
 		super();
 	}
 
@@ -61,7 +61,7 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return StatisticsPackage.Literals.DOUBLE_VALUE;
+		return StatisticsPackage.Literals.LONG_MEASUREMENT;
 	}
 
 	/**
@@ -70,8 +70,8 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	 * @generated
 	 */
 	@Override
-	public double getMeasurement() {
-		return measurement;
+	public long getValue() {
+		return value;
 	}
 
 	/**
@@ -80,11 +80,11 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	 * @generated
 	 */
 	@Override
-	public void setMeasurement(double newMeasurement) {
-		double oldMeasurement = measurement;
-		measurement = newMeasurement;
+	public void setValue(long newValue) {
+		long oldValue = value;
+		value = newValue;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.DOUBLE_VALUE__MEASUREMENT, oldMeasurement, measurement));
+			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.LONG_MEASUREMENT__VALUE, oldValue, value));
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.DOUBLE_VALUE__MEASUREMENT:
-				return getMeasurement();
+			case StatisticsPackage.LONG_MEASUREMENT__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -109,8 +109,8 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.DOUBLE_VALUE__MEASUREMENT:
-				setMeasurement((Double)newValue);
+			case StatisticsPackage.LONG_MEASUREMENT__VALUE:
+				setValue((Long)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -124,8 +124,8 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.DOUBLE_VALUE__MEASUREMENT:
-				setMeasurement(MEASUREMENT_EDEFAULT);
+			case StatisticsPackage.LONG_MEASUREMENT__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -139,8 +139,8 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.DOUBLE_VALUE__MEASUREMENT:
-				return measurement != MEASUREMENT_EDEFAULT;
+			case StatisticsPackage.LONG_MEASUREMENT__VALUE:
+				return value != VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -155,10 +155,10 @@ public class DoubleValueImpl extends ValueImpl implements DoubleValue {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (measurement: ");
-		result.append(measurement);
+		result.append(" (value: ");
+		result.append(value);
 		result.append(')');
 		return result.toString();
 	}
 
-} //DoubleValueImpl
+} //LongMeasurementImpl

@@ -14,16 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.statistics;
+package kieker.analysis.statistics.calculating;
+
+import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
+ *
+ * @param <I>
+ *            Type of elements
  *
  * @author Sören Henning
  *
  * @since 1.14
- * @deprecated since 1.15 moved to Ecore model
+ *
  */
-@Deprecated
-public interface IProperty {
+public abstract class AbstractCalculator<I> {
 
+	private final String propertyName;
+
+	public AbstractCalculator(final String propertyName) {
+		this.propertyName = propertyName;
+	}
+
+	/**
+	 * @param statistic
+	 *            the statistic record to process
+	 * @param input
+	 *            the input to be processed
+	 * @param modelObject
+	 *            the associated model object
+	 *
+	 * @since 1.14
+	 */
+	public abstract void calculate(final StatisticRecord statistic, final I input, final EObject modelObject);
+
+	protected String getPropertyName() {
+		return this.propertyName;
+	}
 }

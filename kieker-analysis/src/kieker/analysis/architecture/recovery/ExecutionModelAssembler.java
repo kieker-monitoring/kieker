@@ -17,9 +17,9 @@
 package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.Invocation;
 import kieker.model.analysismodel.sources.SourceModel;
 
 /**
@@ -43,9 +43,9 @@ public class ExecutionModelAssembler extends AbstractSourceModelAssembler implem
 	@Override
 	public void addOperationCall(final OperationCallDurationEvent operationCall) {
 		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall.getOperationCall())) {
-			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-			invocation.setSource(operationCall.getOperationCall().getFirst());
-			invocation.setTarget(operationCall.getOperationCall().getSecond());
+			final Invocation invocation = this.factory.createInvocation();
+			invocation.setCaller(operationCall.getOperationCall().getFirst());
+			invocation.setCallee(operationCall.getOperationCall().getSecond());
 
 			this.updateSourceModel(invocation);
 
