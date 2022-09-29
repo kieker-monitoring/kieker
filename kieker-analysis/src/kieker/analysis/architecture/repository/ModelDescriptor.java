@@ -18,6 +18,12 @@ package kieker.analysis.architecture.repository;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EFactory;
 
+/**
+ * Contains information for a single model in the model repository.
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class ModelDescriptor {
 
 	private final String filename;
