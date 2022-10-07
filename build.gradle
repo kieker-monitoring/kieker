@@ -966,12 +966,12 @@ publishing {
 					developer {
 						id = 'thomas.duellmann'
 						name = 'Thomas F. Duellmann'
-						email = 'duellmann@informatik.uni-stuttgart.de'
+						email = 'duellmann@hitec-hamburg.de'
 					}
 					developer {
 						id = 'andre.van.hoorn'
 						name = 'Andre van Hoorn'
-						email = 'van.hoorn@informatik.uni-stuttgart.de'
+						email = 'andre.van.hoorn@uni-hamburg.de'
 					}
 					developer {
 						id = 'reiner.jung'
@@ -979,9 +979,9 @@ publishing {
 						email = 'reiner.jung@email.uni-kiel.de'
 					}
 					developer {
-						id = 'christian.wulf'
-						name = 'Christian Wulf'
-						email = 'christian.wulf@email.uni-kiel.de'
+						id = 'david.georg.reichelt'
+						name = 'David Georg Reichelt'
+						email = 'd.g.reichelt@lancaster.ac.uk'
 					}
 				}
 
