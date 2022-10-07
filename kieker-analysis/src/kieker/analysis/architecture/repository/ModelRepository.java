@@ -18,6 +18,7 @@ package kieker.analysis.architecture.repository;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -28,23 +29,30 @@ public class ModelRepository {
 
 	private final String name;
 
-	private final Map<Class<? extends EObject>, EObject> models = new HashMap<>();
+	private final Map<EClass, EObject> models = new HashMap<>();
+
+	private final Map<EClass, ModelDescriptor> descriptors = new HashMap<>();
 
 	public ModelRepository(final String name) {
 		this.name = name;
 	}
 
-	public Map<Class<? extends EObject>, EObject> getModels() {
+	public Map<EClass, EObject> getModels() {
 		return this.models;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends EObject> T getModel(final Class<T> clazz) {
-		return (T) this.models.get(clazz);
+	public <T extends EObject> T getModel(final EClass eClass) {
+		return (T) this.models.get(eClass);
 	}
 
-	public void register(final Class<? extends EObject> key, final EObject value) {
-		this.models.put(key, value);
+	public <T extends EObject> ModelDescriptor getModelDescriptor(final EClass eClass) {
+		return this.descriptors.get(eClass);
+	}
+
+	public void register(final ModelDescriptor descriptor, final EObject value) {
+		this.models.put(descriptor.getRootClass(), value);
+		this.descriptors.put(descriptor.getRootClass(), descriptor);
 	}
 
 	public String getName() {

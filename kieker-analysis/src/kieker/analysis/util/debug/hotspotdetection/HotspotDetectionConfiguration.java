@@ -37,8 +37,8 @@ import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -63,7 +63,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 		final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
 		final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 		final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
-		final SourceModel sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+		final SourceModel sourceModel = SourceFactory.eINSTANCE.createSourceModel();
 
 		// Create the stages
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);

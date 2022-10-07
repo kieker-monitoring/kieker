@@ -229,6 +229,39 @@ pipeline {
         }
       }
     }
+    
+    stage('RC Specific Stage') {
+      when {
+        beforeAgent true
+        branch '*-RC'
+      }
+      
+      agent {
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+        }
+      }
+
+      steps {
+            unstash 'jarArtifacts'
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactupload', 
+                usernameVariable: 'kiekerMavenUser', 
+                passwordVariable: 'kiekerMavenPassword'
+              )
+            ]) {
+              sh './gradlew publish'
+            }
+      }
+      
+      post {
+        cleanup {
+          deleteDir()
+        }
+      }
+    }
   }
 }
 

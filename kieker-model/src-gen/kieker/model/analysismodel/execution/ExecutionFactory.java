@@ -31,22 +31,22 @@ public interface ExecutionFactory extends EFactory {
 	ExecutionModel createExecutionModel();
 
 	/**
-	 * Returns a new object of class '<em>Aggregated Invocation</em>'.
+	 * Returns a new object of class '<em>Invocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Aggregated Invocation</em>'.
+	 * @return a new object of class '<em>Invocation</em>'.
 	 * @generated
 	 */
-	AggregatedInvocation createAggregatedInvocation();
+	Invocation createInvocation();
 
 	/**
-	 * Returns a new object of class '<em>Aggregated Storage Access</em>'.
+	 * Returns a new object of class '<em>Storage Dataflow</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Aggregated Storage Access</em>'.
+	 * @return a new object of class '<em>Storage Dataflow</em>'.
 	 * @generated
 	 */
-	AggregatedStorageAccess createAggregatedStorageAccess();
+	StorageDataflow createStorageDataflow();
 
 	/**
 	 * Returns a new object of class '<em>Tuple</em>'.
@@ -56,6 +56,15 @@ public interface ExecutionFactory extends EFactory {
 	 * @generated
 	 */
 	<F, S> Tuple<F, S> createTuple();
+
+	/**
+	 * Returns a new object of class '<em>Operation Dataflow</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Operation Dataflow</em>'.
+	 * @generated
+	 */
+	OperationDataflow createOperationDataflow();
 
 	/**
 	 * Returns the package supported by this factory.

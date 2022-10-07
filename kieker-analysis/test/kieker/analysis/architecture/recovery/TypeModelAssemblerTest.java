@@ -25,8 +25,8 @@ import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtrac
 import kieker.analysis.architecture.recovery.signature.IOperationSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
@@ -50,7 +50,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	@Before
 	public void setUp() throws Exception {
 		this.typeModel = TypeFactory.eINSTANCE.createTypeModel();
-		this.sourceModel = SourcesFactory.eINSTANCE.createSourceModel();
+		this.sourceModel = SourceFactory.eINSTANCE.createSourceModel();
 	}
 
 	/**

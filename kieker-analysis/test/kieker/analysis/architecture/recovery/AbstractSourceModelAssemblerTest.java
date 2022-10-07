@@ -19,8 +19,8 @@ import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.TypeFactory;
 
@@ -37,7 +37,7 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 
 	@Test
 	public void testUpdateSourceModel() {
-		final SourceModel model = SourcesFactory.eINSTANCE.createSourceModel();
+		final SourceModel model = SourceFactory.eINSTANCE.createSourceModel();
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};
@@ -61,7 +61,7 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 
 	@Test
 	public void testUpdateSourceModel2Label() {
-		final SourceModel model = SourcesFactory.eINSTANCE.createSourceModel();
+		final SourceModel model = SourceFactory.eINSTANCE.createSourceModel();
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};

@@ -16,11 +16,11 @@
 
 package kieker.analysis.statistics;
 
+import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.architecture.recovery.ModelObjectFromOperationCallAccessorUtils;
 import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
@@ -34,7 +34,7 @@ import kieker.model.analysismodel.statistics.StatisticsModel;
 public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCallDurationEvent> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {
-		super(statisticsModel, EPredefinedUnits.INVOCATION, new CountCalculator<>(),
+		super(statisticsModel, new CountCalculator<>(PropertyConstants.CALLS),
 				ModelObjectFromOperationCallAccessorUtils.findAggregatedInvocation4OperationTuple(executionModel));
 	}
 

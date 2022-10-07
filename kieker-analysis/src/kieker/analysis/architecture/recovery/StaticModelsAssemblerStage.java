@@ -22,8 +22,8 @@ import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
-import kieker.model.analysismodel.sources.SourceModel;
-import kieker.model.analysismodel.sources.SourcesFactory;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
@@ -48,7 +48,7 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 
 	public StaticModelsAssemblerStage(final String sourceLabel, final SignatureExtractor signatureExtractor) {
 		this(TypeFactory.eINSTANCE.createTypeModel(), AssemblyFactory.eINSTANCE.createAssemblyModel(), DeploymentFactory.eINSTANCE.createDeploymentModel(),
-				SourcesFactory.eINSTANCE.createSourceModel(), sourceLabel, signatureExtractor);
+				SourceFactory.eINSTANCE.createSourceModel(), sourceLabel, signatureExtractor);
 	}
 
 	public StaticModelsAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel,

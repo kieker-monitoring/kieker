@@ -4,11 +4,11 @@ package kieker.model.analysismodel.execution.impl;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
-
-import kieker.model.analysismodel.execution.AggregatedInvocation;
-import kieker.model.analysismodel.execution.AggregatedStorageAccess;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Invocation;
+import kieker.model.analysismodel.execution.OperationDataflow;
+import kieker.model.analysismodel.execution.StorageDataflow;
 import kieker.model.analysismodel.execution.Tuple;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -33,7 +33,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedStorageAccesses <em>Aggregated Storage Accesses</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getStorageDataflow <em>Storage Dataflow</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getOperationDataflow <em>Operation Dataflow</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,17 +48,27 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
+	protected EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> aggregatedInvocations;
 
 	/**
-	 * The cached value of the '{@link #getAggregatedStorageAccesses() <em>Aggregated Storage Accesses</em>}' map.
+	 * The cached value of the '{@link #getStorageDataflow() <em>Storage Dataflow</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAggregatedStorageAccesses()
+	 * @see #getStorageDataflow()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> aggregatedStorageAccesses;
+	protected EMap<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> storageDataflow;
+
+	/**
+	 * The cached value of the '{@link #getOperationDataflow() <em>Operation Dataflow</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationDataflow()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> operationDataflow;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -84,9 +95,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<Tuple<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
+	public EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
+			aggregatedInvocations = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,Invocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
 	}
@@ -97,11 +108,24 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<Tuple<DeployedOperation, DeployedStorage>, AggregatedStorageAccess> getAggregatedStorageAccesses() {
-		if (aggregatedStorageAccesses == null) {
-			aggregatedStorageAccesses = new EcoreEMap<Tuple<DeployedOperation, DeployedStorage>,AggregatedStorageAccess>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_STORAGE_ACCESS_MAP_ENTRY, DeployedOperationsPairToAggregatedStorageAccessMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES);
+	public EMap<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> getStorageDataflow() {
+		if (storageDataflow == null) {
+			storageDataflow = new EcoreEMap<Tuple<DeployedOperation, DeployedStorage>,StorageDataflow>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY, DeployedOperationsPairToDeployedStorageMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW);
 		}
-		return aggregatedStorageAccesses;
+		return storageDataflow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EMap<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> getOperationDataflow() {
+		if (operationDataflow == null) {
+			operationDataflow = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,OperationDataflow>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY, DeployedOperationsPairToDeployedOperationsMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW);
+		}
+		return operationDataflow;
 	}
 
 	/**
@@ -114,8 +138,10 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return ((InternalEList<?>)getAggregatedInvocations()).basicRemove(otherEnd, msgs);
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
-				return ((InternalEList<?>)getAggregatedStorageAccesses()).basicRemove(otherEnd, msgs);
+			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
+				return ((InternalEList<?>)getStorageDataflow()).basicRemove(otherEnd, msgs);
+			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
+				return ((InternalEList<?>)getOperationDataflow()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -131,9 +157,12 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				if (coreType) return getAggregatedInvocations();
 				else return getAggregatedInvocations().map();
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
-				if (coreType) return getAggregatedStorageAccesses();
-				else return getAggregatedStorageAccesses().map();
+			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
+				if (coreType) return getStorageDataflow();
+				else return getStorageDataflow().map();
+			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
+				if (coreType) return getOperationDataflow();
+				else return getOperationDataflow().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -149,8 +178,11 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				((EStructuralFeature.Setting)getAggregatedInvocations()).set(newValue);
 				return;
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
-				((EStructuralFeature.Setting)getAggregatedStorageAccesses()).set(newValue);
+			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
+				((EStructuralFeature.Setting)getStorageDataflow()).set(newValue);
+				return;
+			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
+				((EStructuralFeature.Setting)getOperationDataflow()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -167,8 +199,11 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				getAggregatedInvocations().clear();
 				return;
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
-				getAggregatedStorageAccesses().clear();
+			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
+				getStorageDataflow().clear();
+				return;
+			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
+				getOperationDataflow().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -184,8 +219,10 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return aggregatedInvocations != null && !aggregatedInvocations.isEmpty();
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_STORAGE_ACCESSES:
-				return aggregatedStorageAccesses != null && !aggregatedStorageAccesses.isEmpty();
+			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
+				return storageDataflow != null && !storageDataflow.isEmpty();
+			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
+				return operationDataflow != null && !operationDataflow.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
