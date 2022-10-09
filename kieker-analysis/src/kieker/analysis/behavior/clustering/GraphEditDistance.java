@@ -27,7 +27,7 @@ import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.Edge;
 import kieker.analysis.behavior.model.EventGroup;
 import kieker.analysis.behavior.model.Node;
-import kieker.analysis.behavior.mtree.DistanceFunction;
+import kieker.analysis.behavior.mtree.IDistanceFunction;
 
 /**
  * This class calculates a custom graph edit distance between two Behavior Models.
@@ -42,7 +42,7 @@ import kieker.analysis.behavior.mtree.DistanceFunction;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class GraphEditDistance implements DistanceFunction<BehaviorModel> {
+public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 
 	// The operation costs. They can be changed by the "setConfiguration" function
 	private final double nodeInsertCost;
@@ -50,7 +50,7 @@ public class GraphEditDistance implements DistanceFunction<BehaviorModel> {
 	private final double eventGroupInsertCost;
 
 	/**
-	 * the WEIGTHING assigns events a insertion and duplication costs
+	 * the WEIGTHING assigns events a insertion and duplication costs.
 	 */
 	private final IParameterWeighting weighting;
 
@@ -60,7 +60,7 @@ public class GraphEditDistance implements DistanceFunction<BehaviorModel> {
 
 	/**
 	 * This can be used, to set the node, edge and eventgroup insertion cost for the Graph Edit
-	 * Distance Algorithm to the values in the configuration
+	 * Distance Algorithm to the values in the configuration.
 	 */
 	public GraphEditDistance(final double nodeInsertCost, final double edgeInsertCost, final double eventGroupInsertCost, final IParameterWeighting weighting) {
 		this.nodeInsertCost = nodeInsertCost;

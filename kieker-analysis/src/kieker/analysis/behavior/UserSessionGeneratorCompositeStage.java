@@ -19,9 +19,7 @@ import kieker.analysis.behavior.clustering.IModelGenerationFilterFactory;
 import kieker.analysis.behavior.clustering.UserSessionOperationCleanupStage;
 import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
-import kieker.common.exception.ConfigurationException;
 import kieker.common.records.session.ISessionEvent;
-import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
@@ -34,7 +32,6 @@ import teetime.framework.OutputPort;
  *
  */
 // TODO check naming for stage
-@ReceiveUnfilteredConfiguration
 public class UserSessionGeneratorCompositeStage extends CompositeStage {
 
 	private final UserSessionOperationCleanupStage userSessionOperationCleanupStage;
@@ -43,10 +40,12 @@ public class UserSessionGeneratorCompositeStage extends CompositeStage {
 	/**
 	 * Create the user session generator stage.
 	 *
-	 * @param configuration
-	 *            containing all configuration parameters
-	 * @throws ConfigurationException
-	 *             on errors in configuration
+	 * @param entryCallMatcher
+	 *            matcher to check on entry calls to filter out requests that do not belong to the behavior, e.g., loading images
+	 * @param cleanupRewriter
+	 *            cleanup rewriter
+	 * @param filterRulesFactory
+	 *            filter rules factory
 	 */
 	public UserSessionGeneratorCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher, final ITraceSignatureCleanupRewriter cleanupRewriter,
 			final IModelGenerationFilterFactory filterRulesFactory) {

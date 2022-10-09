@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (c) 2012-2013 Eduardo R. D'Avila (https://github.com/erdavila)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
+package kieker.analysis.behavior.mtree;
 
 /**
- * Naive weighting for parameter. Essentially, it ignores them.
+ * An object that can calculate the distance between two data objects.
  *
- * @author Reiner Jung
+ * @param <T>
+ *            The type of the data objects.
+ * 
+ * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
-public class NaiveParameterWeighting implements IParameterWeighting {
+public interface IDistanceFunction<T> {
 
-	public NaiveParameterWeighting() {
-		// default constructor
-	}
-
-	@Override
-	public double getInsertCost(final String[] parameterNames) {
-		return 1;
-	}
-
-	@Override
-	public double getDuplicateCost(final String[] parameterNames) {
-		return 1;
-	}
+	double calculate(T data1, T data2);
 
 }

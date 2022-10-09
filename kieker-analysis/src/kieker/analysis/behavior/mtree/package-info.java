@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,28 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
-
-/**
- * Naive weighting for parameter. Essentially, it ignores them.
- *
- * @author Reiner Jung
- * @since 2.0.0
- */
-public class NaiveParameterWeighting implements IParameterWeighting {
-
-	public NaiveParameterWeighting() {
-		// default constructor
-	}
-
-	@Override
-	public double getInsertCost(final String[] parameterNames) {
-		return 1;
-	}
-
-	@Override
-	public double getDuplicateCost(final String[] parameterNames) {
-		return 1;
-	}
-
-}
+package kieker.analysis.behavior.mtree;

@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
 import java.io.BufferedReader;
@@ -7,26 +22,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class Fixture {
+final class Fixture {
 
-	static class Action {
-		char cmd;
-		Data data;
-		Data queryData;
-		double radius;
-		int limit;
-
-		private Action(final char cmd, final Data data, final Data queryData, final double radius, final int limit) {
-			this.cmd = cmd;
-			this.data = data;
-			this.queryData = queryData;
-			this.radius = radius;
-			this.limit = limit;
-		}
-	}
-
+	private final List<Action> actions;
 	private final int dimensions;
-	List<Action> actions;
+
+	private Fixture(final int dimensions) {
+		this.dimensions = dimensions;
+		this.actions = new ArrayList<>();
+	}
 
 	static String path(final String fixtureName) {
 		return "cpp/tests/fixtures/" + fixtureName + ".txt";
@@ -71,9 +75,8 @@ class Fixture {
 		}
 	}
 
-	private Fixture(final int dimensions) {
-		this.dimensions = dimensions;
-		this.actions = new ArrayList<>();
+	public List<Action> getActions() {
+		return this.actions;
 	}
 
 	private Data readData(final List<String> fields) {
@@ -83,4 +86,41 @@ class Fixture {
 		}
 		return new Data(values);
 	}
+
+	static final class Action {
+		private final char cmd;
+		private final Data data;
+		private final Data queryData;
+		private final double radius;
+		private final int limit;
+
+		private Action(final char cmd, final Data data, final Data queryData, final double radius, final int limit) {
+			this.cmd = cmd;
+			this.data = data;
+			this.queryData = queryData;
+			this.radius = radius;
+			this.limit = limit;
+		}
+
+		public char getCmd() {
+			return this.cmd;
+		}
+
+		public Data getData() {
+			return this.data;
+		}
+
+		public int getLimit() {
+			return this.limit;
+		}
+
+		public Data getQueryData() {
+			return this.queryData;
+		}
+
+		public double getRadius() {
+			return this.radius;
+		}
+	}
+
 }

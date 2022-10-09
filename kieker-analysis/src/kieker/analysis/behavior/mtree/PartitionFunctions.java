@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright (c) 2012-2013 Eduardo R. D'Avila (https://github.com/erdavila)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
 import java.util.ArrayList;
@@ -10,8 +25,11 @@ import java.util.Set;
 import kieker.analysis.behavior.mtree.utils.Pair;
 
 /**
- * Some pre-defined implementations of {@linkplain PartitionFunction partition
+ * Some pre-defined implementations of {@linkplain IPartitionFunction partition
  * functions}.
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
  */
 public final class PartitionFunctions {
 
@@ -21,14 +39,18 @@ public final class PartitionFunctions {
 	private PartitionFunctions() {}
 
 	/**
-	 * A {@linkplain PartitionFunction partition function} that tries to
+	 * A {@linkplain IPartitionFunction partition function} that tries to
 	 * distribute the data objects equally between the promoted data objects,
 	 * associating to each promoted data objects the nearest data objects.
 	 *
-	 * @param <DATA>
+	 * @param <T>
 	 *            The type of the data objects.
 	 */
-	public static class BalancedPartition<DATA> implements PartitionFunction<DATA> {
+	public static class BalancedPartition<T> implements IPartitionFunction<T> {
+
+		public BalancedPartition() {
+			// default constructor
+		}
 
 		/**
 		 * Processes the balanced partition.
@@ -49,53 +71,53 @@ public final class PartitionFunctions {
 		 *     Return result
 		 * </pre>
 		 *
-		 * @see mtree.PartitionFunction#process(mtree.utils.Pair, java.util.Set, mtree.DistanceFunction)
+		 * @see mtree.IPartitionFunction#process(mtree.utils.Pair, java.util.Set, mtree.IDistanceFunction)
 		 */
 		@Override
-		public Pair<Set<DATA>> process(
-				final Pair<DATA> promoted,
-				final Set<DATA> dataSet,
-				final DistanceFunction<? super DATA> distanceFunction) {
-			final List<DATA> queue1 = new ArrayList<>(dataSet);
+		public Pair<Set<T>> process(
+				final Pair<T> promoted,
+				final Set<T> dataSet,
+				final IDistanceFunction<? super T> distanceFunction) {
+			final List<T> queue1 = new ArrayList<>(dataSet);
 			// Sort by distance to the first promoted data
-			Collections.sort(queue1, new Comparator<DATA>() {
+			Collections.sort(queue1, new Comparator<T>() {
 				@Override
-				public int compare(final DATA data1, final DATA data2) {
-					final double distance1 = distanceFunction.calculate(data1, promoted.first);
-					final double distance2 = distanceFunction.calculate(data2, promoted.first);
+				public int compare(final T data1, final T data2) {
+					final double distance1 = distanceFunction.calculate(data1, promoted.getFirst());
+					final double distance2 = distanceFunction.calculate(data2, promoted.getFirst());
 					return Double.compare(distance1, distance2);
 				}
 			});
 
-			final List<DATA> queue2 = new ArrayList<>(dataSet);
+			final List<T> queue2 = new ArrayList<>(dataSet);
 			// Sort by distance to the second promoted data
-			Collections.sort(queue2, new Comparator<DATA>() {
+			Collections.sort(queue2, new Comparator<T>() {
 				@Override
-				public int compare(final DATA data1, final DATA data2) {
-					final double distance1 = distanceFunction.calculate(data1, promoted.second);
-					final double distance2 = distanceFunction.calculate(data2, promoted.second);
+				public int compare(final T data1, final T data2) {
+					final double distance1 = distanceFunction.calculate(data1, promoted.getSecond());
+					final double distance2 = distanceFunction.calculate(data2, promoted.getSecond());
 					return Double.compare(distance1, distance2);
 				}
 			});
 
-			final Pair<Set<DATA>> partitions = new Pair<>(new HashSet<DATA>(), new HashSet<DATA>());
+			final Pair<Set<T>> partitions = new Pair<>(new HashSet<T>(), new HashSet<T>());
 
 			int index1 = 0;
 			int index2 = 0;
 
 			while (index1 < queue1.size() || index2 != queue2.size()) {
 				while (index1 < queue1.size()) {
-					final DATA data = queue1.get(index1++);
-					if (!partitions.second.contains(data)) {
-						partitions.first.add(data);
+					final T data = queue1.get(index1++);
+					if (!partitions.getSecond().contains(data)) {
+						partitions.getFirst().add(data);
 						break;
 					}
 				}
 
 				while (index2 < queue2.size()) {
-					final DATA data = queue2.get(index2++);
-					if (!partitions.first.contains(data)) {
-						partitions.second.add(data);
+					final T data = queue2.get(index2++);
+					if (!partitions.getFirst().contains(data)) {
+						partitions.getSecond().add(data);
 						break;
 					}
 				}

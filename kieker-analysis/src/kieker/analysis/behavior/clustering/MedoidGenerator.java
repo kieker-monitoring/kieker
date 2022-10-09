@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.behavior.model.BehaviorModel;
-import kieker.analysis.behavior.mtree.DistanceFunction;
+import kieker.analysis.behavior.mtree.IDistanceFunction;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -34,9 +34,9 @@ import teetime.stage.basic.AbstractTransformation;
 public class MedoidGenerator extends AbstractTransformation<Clustering<BehaviorModel>, BehaviorModel> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MedoidGenerator.class);
 
-	private final DistanceFunction<BehaviorModel> dm;
+	private final IDistanceFunction<BehaviorModel> dm;
 
-	public MedoidGenerator(final DistanceFunction<BehaviorModel> dm) {
+	public MedoidGenerator(final IDistanceFunction<BehaviorModel> dm) {
 		this.dm = dm;
 	}
 

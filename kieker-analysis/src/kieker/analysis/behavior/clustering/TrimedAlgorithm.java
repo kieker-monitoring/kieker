@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.behavior.clustering;
 
-import kieker.analysis.behavior.mtree.DistanceFunction;
+import kieker.analysis.behavior.mtree.IDistanceFunction;
 
 /**
  * An implementation of the trimed algorithm. The algorithm is proposed in the paper "A
@@ -35,9 +35,9 @@ public class TrimedAlgorithm<T> {
 
 	private final T[] models;
 
-	private final DistanceFunction<T> dm;
+	private final IDistanceFunction<T> dm;
 
-	public TrimedAlgorithm(final T[] models, final DistanceFunction<T> dm) {
+	public TrimedAlgorithm(final T[] models, final IDistanceFunction<T> dm) {
 		this.lowerBounds = new double[models.length];
 		this.models = models;
 		this.dm = dm;

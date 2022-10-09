@@ -25,8 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import kieker.analysis.behavior.clustering.GraphEditDistance;
-import kieker.analysis.behavior.clustering.MTreeGeneratorStage;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.mtree.MTree;
 
@@ -35,9 +33,9 @@ import teetime.framework.test.StageTester;
 /**
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class MTreeGeneratorTest {
+public class MTreeGeneratorTest { // NOCS constructor
 
 	private MTreeGeneratorStage<BehaviorModel> mtreeGenerator;
 	private GraphEditDistance mockGED;
@@ -105,7 +103,7 @@ public class MTreeGeneratorTest {
 
 		final Iterator<MTree<BehaviorModel>.ResultItem> iter = solutions.get(0).getNearest(this.model1).iterator();
 
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model1));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));
 		MatcherAssert.assertThat(iter.hasNext(), Matchers.is(false));
 		MatcherAssert.assertThat(solutions.size(), Matchers.is(1));
 
@@ -126,20 +124,20 @@ public class MTreeGeneratorTest {
 		Iterator<MTree<BehaviorModel>.ResultItem> iter = solutions.get(0).getNearest(this.model1).iterator();
 
 		// System.out.println(this.mockGED.calculate(iter.next().data, this.model1));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model1));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model2));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model3));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model4));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model2));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model3));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model4));
 
 		MatcherAssert.assertThat(iter.hasNext(), Matchers.is(false));
 		MatcherAssert.assertThat(solutions.size(), Matchers.is(1));
 
 		iter = solutions.get(0).getNearest(this.model3).iterator();
 
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model3));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model4));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model2));
-		MatcherAssert.assertThat(iter.next().data, Matchers.is(this.model1));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model3));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model4));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model2));
+		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));
 
 	}
 

@@ -15,45 +15,32 @@
  ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
-import java.util.List;
 import java.util.Set;
 
 import kieker.analysis.behavior.mtree.utils.Pair;
-import kieker.analysis.behavior.mtree.utils.Utils;
 
 /**
- * Some pre-defined implementations of {@linkplain IPromotionFunction promotion
- * functions}.
+ * An object that chooses a pair from a set of data objects.
  *
+ * @param <T>
+ *            The type of the data objects.
+ * 
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
-public final class PromotionFunctions {
+public interface IPromotionFunction<T> {
 
 	/**
-	 * Don't let anyone instantiate this class.
-	 */
-	private PromotionFunctions() {}
-
-	/**
-	 * A {@linkplain IPromotionFunction promotion function} object that randomly
-	 * chooses ("promotes") two data objects.
+	 * Chooses (promotes) a pair of objects according to some criteria that is
+	 * suitable for the application using the M-Tree.
 	 *
-	 * @param <T>
-	 *            The type of the data objects.
+	 * @param dataSet
+	 *            The set of objects to choose a pair from.
+	 * @param distanceFunction
+	 *            A function that can be used for choosing the
+	 *            promoted objects.
+	 * @return A pair of chosen objects.
 	 */
-	public static class RandomPromotion<T> implements IPromotionFunction<T> {
-
-		public RandomPromotion() {
-			// default constructor
-		}
-
-		@Override
-		public Pair<T> process(final Set<T> dataSet,
-				final IDistanceFunction<? super T> distanceFunction) {
-			final List<T> promotedList = Utils.randomSample(dataSet, 2);
-			return new Pair<>(promotedList.get(0), promotedList.get(1));
-		}
-	}
+	Pair<T> process(Set<T> dataSet, IDistanceFunction<? super T> distanceFunction);
 
 }

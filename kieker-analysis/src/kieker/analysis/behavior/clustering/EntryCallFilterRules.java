@@ -80,7 +80,7 @@ public class EntryCallFilterRules {
 		for (final Pattern filterRule : this.filterList) {
 
 			final boolean isMatch = filterRule.matcher(signature).matches();
-			isAllowed = this.blackListMode ? !isMatch && isAllowed : isAllowed || isMatch;
+			isAllowed = this.blackListMode ? !isMatch && isAllowed : isAllowed || isMatch; // NOCS
 		}
 		return isAllowed;
 	}

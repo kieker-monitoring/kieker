@@ -29,7 +29,12 @@ import teetime.stage.basic.AbstractTransformation;
  * @since 2.0.0
  */
 public class BehaviorModelToOpticsDataConverterStage extends AbstractTransformation<BehaviorModel, OpticsData> {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorModelToOpticsDataConverterStage.class);
+
+	public BehaviorModelToOpticsDataConverterStage() {
+		// default constructor
+	}
 
 	@Override
 	protected void execute(final BehaviorModel model) throws Exception {

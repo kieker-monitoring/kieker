@@ -20,7 +20,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.behavior.mtree.DistanceFunction;
+import kieker.analysis.behavior.mtree.IDistanceFunction;
 import kieker.analysis.behavior.mtree.MTree;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -38,14 +38,14 @@ public class MTreeGeneratorStage<T> extends AbstractTransformation<List<T>, MTre
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MTreeGeneratorStage.class);
 
-	private final DistanceFunction<T> distanceFunction;
+	private final IDistanceFunction<T> distanceFunction;
 
 	// The minimal and the maximal amount of objects a node can contain. The root may contain fewer
 	// objects
 	private int minNodeCapacity = 25;
 	private int maxNodeCapacity = 49;
 
-	public MTreeGeneratorStage(final DistanceFunction<T> distanceFunction) {
+	public MTreeGeneratorStage(final IDistanceFunction<T> distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
 

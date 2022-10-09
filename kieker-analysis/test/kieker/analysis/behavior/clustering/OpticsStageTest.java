@@ -25,10 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.behavior.TestHelper;
-import kieker.analysis.behavior.clustering.Clustering;
-import kieker.analysis.behavior.clustering.ExtractDBScanClustersStage;
-import kieker.analysis.behavior.clustering.OpticsData;
-import kieker.analysis.behavior.clustering.OpticsStage;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.mtree.MTree;
 
@@ -38,9 +34,9 @@ import teetime.framework.test.StageTester;
  * Only tested with identical models. The evaluation showed it is able to cluster more complex data
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class OpticsStageTest {
+public class OpticsStageTest { // NOCS test class does not need a constructor
 
 	private MTree<OpticsData> mTree;
 	private List<OpticsData> models;

@@ -16,10 +16,10 @@
 package kieker.analysis.behavior.clustering;
 
 import kieker.analysis.behavior.model.BehaviorModel;
-import kieker.analysis.behavior.mtree.DistanceFunction;
+import kieker.analysis.behavior.mtree.IDistanceFunction;
 
 /**
- * A wrapper class for behavior models, which assigns the models additional information: If the
+ * A wrapper class for behavior models, which assigns the models additional information. If the
  * Model was visited before, how big the core distance is and how big the reachability distance is
  *
  * @author Lars Jürgensen
@@ -87,9 +87,13 @@ public class OpticsData {
 		return OpticsData.GED;
 	}
 
-	private static class OPTICSDataGED implements DistanceFunction<OpticsData> {
+	private static class OPTICSDataGED implements IDistanceFunction<OpticsData> {
 
-		private final DistanceFunction<BehaviorModel> distanceFunction = new GraphEditDistance();
+		private final IDistanceFunction<BehaviorModel> distanceFunction = new GraphEditDistance();
+
+		public OPTICSDataGED() {
+			// default constructor
+		}
 
 		@Override
 		public double calculate(final OpticsData model1, final OpticsData model2) {

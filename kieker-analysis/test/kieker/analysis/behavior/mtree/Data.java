@@ -1,11 +1,26 @@
+/***************************************************************************
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
-import kieker.analysis.behavior.mtree.DistanceFunctions.EuclideanCoordinate;
+import kieker.analysis.behavior.mtree.DistanceFunctions.IEuclideanCoordinate;
 
-class Data implements EuclideanCoordinate, Comparable<Data> {
+class Data implements IEuclideanCoordinate, Comparable<Data> {
 
 	private final int[] values;
-	private final int hashCode;
+	private final int hashCodeValue;
 
 	Data(final int... values) {
 		this.values = values;
@@ -14,7 +29,7 @@ class Data implements EuclideanCoordinate, Comparable<Data> {
 		for (final int value : values) {
 			hashCode = 31 * hashCode + value;
 		}
-		this.hashCode = hashCode;
+		this.hashCodeValue = hashCode;
 	}
 
 	@Override
@@ -29,7 +44,7 @@ class Data implements EuclideanCoordinate, Comparable<Data> {
 
 	@Override
 	public int hashCode() {
-		return this.hashCode;
+		return this.hashCodeValue;
 	}
 
 	@Override

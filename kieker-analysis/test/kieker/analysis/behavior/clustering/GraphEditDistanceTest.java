@@ -21,15 +21,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.behavior.TestHelper;
-import kieker.analysis.behavior.clustering.GraphEditDistance;
 import kieker.analysis.behavior.model.BehaviorModel;
 
 /**
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class GraphEditDistanceTest {
+public class GraphEditDistanceTest { // NOCS constructor
 
 	private final GraphEditDistance ged = new GraphEditDistance();
 

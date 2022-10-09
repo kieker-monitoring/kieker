@@ -32,6 +32,10 @@ public class BehaviorModel {
 
 	private Set<Edge> edges = new HashSet<>();
 
+	public BehaviorModel() {
+		// default constructor
+	}
+
 	public Map<String, Node> getNodes() {
 		return this.nodes;
 	}

@@ -24,7 +24,7 @@ import java.util.Set;
  *
  * @param <T>
  *            The type of the data in the clusters
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
@@ -33,6 +33,10 @@ public class Clustering<T> {
 	private Set<T> noise = new HashSet<>();
 
 	private Set<Set<T>> clusters = new HashSet<>();
+
+	public Clustering() {
+		// default constructor
+	}
 
 	public Set<T> getNoise() {
 		return this.noise;

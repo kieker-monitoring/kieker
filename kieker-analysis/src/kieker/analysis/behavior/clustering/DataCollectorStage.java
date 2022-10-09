@@ -26,7 +26,7 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
- * Collect objects until a time trigger has been received or rhe maximal amount of
+ * Collect objects until a time trigger has been received or the maximal amount of
  * events have been collected.
  *
  * @param <T>
@@ -52,12 +52,7 @@ public class DataCollectorStage<T> extends AbstractStage {
 
 	/**
 	 * Collect behavior models and send them based on an external time trigger to the mtree
-	 * generation and a clustering stage
-	 *
-	 * @param keepTime
-	 *            the time interval to keep user sessions
-	 * @param minCollectionSize
-	 *            minimal number of collected user session
+	 * generation and a clustering stage.
 	 */
 	public DataCollectorStage() {
 		this.declareActive();

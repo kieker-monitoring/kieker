@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
 import java.io.File;
@@ -12,20 +27,14 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.behavior.mtree.ComposedSplitFunction;
-import kieker.analysis.behavior.mtree.DistanceFunction;
-import kieker.analysis.behavior.mtree.DistanceFunctions;
-import kieker.analysis.behavior.mtree.MTree;
-import kieker.analysis.behavior.mtree.PartitionFunctions;
-import kieker.analysis.behavior.mtree.PromotionFunction;
 import kieker.analysis.behavior.mtree.utils.Pair;
 import kieker.analysis.behavior.mtree.utils.Utils;
 
 class MTreeClass extends MTree<Data> {
 
-	private static final PromotionFunction<Data> nonRandomPromotion = new PromotionFunction<Data>() {
+	private static final IPromotionFunction<Data> NON_RANDOM_PROMOTION = new IPromotionFunction<Data>() {
 		@Override
-		public Pair<Data> process(final Set<Data> dataSet, final DistanceFunction<? super Data> distanceFunction) {
+		public Pair<Data> process(final Set<Data> dataSet, final IDistanceFunction<? super Data> distanceFunction) {
 			return Utils.minMax(dataSet);
 		}
 	};
@@ -33,139 +42,146 @@ class MTreeClass extends MTree<Data> {
 	MTreeClass() {
 		super(2, DistanceFunctions.EUCLIDEAN,
 				new ComposedSplitFunction<>(
-						nonRandomPromotion,
+						NON_RANDOM_PROMOTION,
 						new PartitionFunctions.BalancedPartition<Data>()));
 	}
 
 	@Override
 	public void add(final Data data) {
 		super.add(data);
-		this._check();
+		this.check();
 	}
 
 	@Override
 	public boolean remove(final Data data) {
 		final boolean result = super.remove(data);
-		this._check();
+		this.check();
 		return result;
 	}
 
-	DistanceFunction<? super Data> getDistanceFunction() {
+	IDistanceFunction<? super Data> getDistanceFunction() {
 		return this.distanceFunction;
 	}
 };
 
 public class MTreeTest {
 
+	private final MTreeClass mtree = new MTreeClass();
+	private final Set<Data> allData = new HashSet<>();
+
+	public MTreeTest() {
+		// default constructor
+	}
+
 	@Test
 	public void testEmpty() {
-		this._checkNearestByRange(new Data(1, 2, 3), 4);
-		this._checkNearestByLimit(new Data(1, 2, 3), 4);
+		this.checkNearestByRange(new Data(1, 2, 3), 4);
+		this.checkNearestByLimit(new Data(1, 2, 3), 4);
 	}
 
 	@Test
 	public void test01() {
-		this._test("f01");
+		this.testFunction("f01");
 	}
 
 	@Test
 	public void test02() {
-		this._test("f02");
+		this.testFunction("f02");
 	}
 
 	@Test
 	public void test03() {
-		this._test("f03");
+		this.testFunction("f03");
 	}
 
 	@Test
 	public void test04() {
-		this._test("f04");
+		this.testFunction("f04");
 	}
 
 	@Test
 	public void test05() {
-		this._test("f05");
+		this.testFunction("f05");
 	}
 
 	@Test
 	public void test06() {
-		this._test("f06");
+		this.testFunction("f06");
 	}
 
 	@Test
 	public void test07() {
-		this._test("f07");
+		this.testFunction("f07");
 	}
 
 	@Test
 	public void test08() {
-		this._test("f08");
+		this.testFunction("f08");
 	}
 
 	@Test
 	public void test09() {
-		this._test("f09");
+		this.testFunction("f09");
 	}
 
 	@Test
 	public void test10() {
-		this._test("f10");
+		this.testFunction("f10");
 	}
 
 	@Test
 	public void test11() {
-		this._test("f11");
+		this.testFunction("f11");
 	}
 
 	@Test
 	public void test12() {
-		this._test("f12");
+		this.testFunction("f12");
 	}
 
 	@Test
 	public void test13() {
-		this._test("f13");
+		this.testFunction("f13");
 	}
 
 	@Test
 	public void test14() {
-		this._test("f14");
+		this.testFunction("f14");
 	}
 
 	@Test
 	public void test15() {
-		this._test("f15");
+		this.testFunction("f15");
 	}
 
 	@Test
 	public void test16() {
-		this._test("f16");
+		this.testFunction("f16");
 	}
 
 	@Test
 	public void test17() {
-		this._test("f17");
+		this.testFunction("f17");
 	}
 
 	@Test
 	public void test18() {
-		this._test("f18");
+		this.testFunction("f18");
 	}
 
 	@Test
 	public void test19() {
-		this._test("f19");
+		this.testFunction("f19");
 	}
 
 	@Test
 	public void test20() {
-		this._test("f20");
+		this.testFunction("f20");
 	}
 
 	@Test
 	public void testLots() {
-		this._test("fLots");
+		this.testFunction("fLots");
 	}
 
 	@Test
@@ -195,12 +211,12 @@ public class MTreeTest {
 
 	@Test
 	public void testGeneratedCase01() {
-		this._test("fG01");
+		this.testFunction("fG01");
 	}
 
 	@Test
 	public void testGeneratedCase02() {
-		this._test("fG02");
+		this.testFunction("fG02");
 	}
 
 	@Test
@@ -217,7 +233,7 @@ public class MTreeTest {
 		if (!fixtureFile.exists()) {
 			throw new RuntimeException("The file " + fixtureFile + " does not exist");
 		}
-		this._test(fixtureName);
+		this.testFunction(fixtureName);
 	}
 
 	private void assertIterator(
@@ -226,8 +242,8 @@ public class MTreeTest {
 			final boolean expectedHasNext,
 			final MTree<Integer>.ResultItem ri,
 			final Iterator<MTree<Integer>.ResultItem> i) {
-		Assert.assertEquals(expectedData, ri.data.intValue());
-		Assert.assertEquals(expectedDistance, ri.distance, 0.0);
+		Assert.assertEquals(expectedData, ri.getData().intValue());
+		Assert.assertEquals(expectedDistance, ri.getDistance(), 0.0);
 		Assert.assertEquals(expectedHasNext, i.hasNext());
 		if (!expectedHasNext) {
 			try {
@@ -242,7 +258,7 @@ public class MTreeTest {
 	@Test
 	public void testIterators() {
 		final MTree<Integer> mt = new MTree<>(
-				new DistanceFunction<Integer>() {
+				new IDistanceFunction<Integer>() {
 					@Override
 					public double calculate(final Integer data1, final Integer data2) {
 						return Math.abs(data1 - data2);
@@ -337,58 +353,55 @@ public class MTreeTest {
 		this.assertIterator(4, 4, false, ri2, i2);
 	}
 
-	private final MTreeClass mtree = new MTreeClass();
-	private final Set<Data> allData = new HashSet<>();
-
-	private void _test(final String fixtureName) {
+	private void testFunction(final String fixtureName) {
 		final Fixture fixture = Fixture.load(fixtureName);
-		this._testFixture(fixture);
+		this.testFixture(fixture);
 	}
 
-	private void _testFixture(final Fixture fixture) {
-		for (final Fixture.Action action : fixture.actions) {
-			switch (action.cmd) {
+	private void testFixture(final Fixture fixture) {
+		for (final Fixture.Action action : fixture.getActions()) {
+			switch (action.getCmd()) {
 			case 'A':
-				this.allData.add(action.data);
-				this.mtree.add(action.data);
+				this.allData.add(action.getData());
+				this.mtree.add(action.getData());
 				break;
 			case 'R':
-				this.allData.remove(action.data);
-				final boolean removed = this.mtree.remove(action.data);
+				this.allData.remove(action.getData());
+				final boolean removed = this.mtree.remove(action.getData());
 				assert removed;
 				break;
 			default:
-				throw new RuntimeException(Character.toString(action.cmd));
+				throw new RuntimeException(action.getData().toString());
 			}
 
-			this._checkNearestByRange(action.queryData, action.radius);
-			this._checkNearestByLimit(action.queryData, action.limit);
+			this.checkNearestByRange(action.getQueryData(), action.getRadius());
+			this.checkNearestByLimit(action.getQueryData(), action.getLimit());
 		}
 	}
 
-	private void _checkNearestByRange(final Data queryData, final double radius) {
+	private void checkNearestByRange(final Data queryData, final double radius) {
 		final List<MTreeClass.ResultItem> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
 		final MTreeClass.Query query = this.mtree.getNearestByRange(queryData, radius);
 
 		for (final MTreeClass.ResultItem ri : query) {
 			results.add(ri);
-			strippedResults.add(ri.data);
+			strippedResults.add(ri.getData());
 		}
 
 		double previousDistance = 0;
 
 		for (final MTreeClass.ResultItem result : results) {
 			// Check if increasing distance
-			Assert.assertTrue(previousDistance <= result.distance);
-			previousDistance = result.distance;
+			Assert.assertTrue(previousDistance <= result.getDistance());
+			previousDistance = result.getDistance();
 
 			// Check if every item in the results came from the generated queryData
-			Assert.assertTrue(this.allData.contains(result.data));
+			Assert.assertTrue(this.allData.contains(result.getData()));
 
 			// Check if every item in the results is within the range
-			Assert.assertTrue(result.distance <= radius);
-			Assert.assertEquals(this.mtree.getDistanceFunction().calculate(result.data, queryData), result.distance, 0.0);
+			Assert.assertTrue(result.getDistance() <= radius);
+			Assert.assertEquals(this.mtree.getDistanceFunction().calculate(result.getData(), queryData), result.getDistance(), 0.0);
 		}
 
 		for (final Data data : this.allData) {
@@ -401,14 +414,14 @@ public class MTreeTest {
 		}
 	}
 
-	private void _checkNearestByLimit(final Data queryData, final int limit) {
+	private void checkNearestByLimit(final Data queryData, final int limit) {
 		final List<MTreeClass.ResultItem> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
 		final MTreeClass.Query query = this.mtree.getNearestByLimit(queryData, limit);
 
 		for (final MTreeClass.ResultItem ri : query) {
 			results.add(ri);
-			strippedResults.add(ri.data);
+			strippedResults.add(ri.getData());
 		}
 
 		if (limit <= this.allData.size()) {
@@ -422,17 +435,17 @@ public class MTreeTest {
 		double previousDistance = 0.0;
 		for (final MTreeClass.ResultItem ri : results) {
 			// Check if increasing distance
-			Assert.assertTrue(previousDistance <= ri.distance);
-			previousDistance = ri.distance;
+			Assert.assertTrue(previousDistance <= ri.getDistance());
+			previousDistance = ri.getDistance();
 
 			// Check if every item in the results came from the generated queryData
-			Assert.assertTrue(this.allData.contains(ri.data));
+			Assert.assertTrue(this.allData.contains(ri.getData()));
 
 			// Check if items are not repeated
-			Assert.assertEquals(1, Collections.frequency(strippedResults, ri.data));
+			Assert.assertEquals(1, Collections.frequency(strippedResults, ri.getData()));
 
-			final double distance = this.mtree.getDistanceFunction().calculate(ri.data, queryData);
-			Assert.assertEquals(distance, ri.distance, 0.0);
+			final double distance = this.mtree.getDistanceFunction().calculate(ri.getData(), queryData);
+			Assert.assertEquals(distance, ri.getDistance(), 0.0);
 			farthest = Math.max(farthest, distance);
 		}
 		for (final Data data : this.allData) {
@@ -441,7 +454,7 @@ public class MTreeTest {
 				Assert.assertTrue(strippedResults.contains(data));
 			} else if (distance > farthest) {
 				Assert.assertFalse(strippedResults.contains(data));
-			} else {
+			} else { // NOCS
 				// distance == farthest
 			}
 		}

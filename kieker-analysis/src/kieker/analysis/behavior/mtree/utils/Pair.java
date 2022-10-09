@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright (c) 2012-2013 Eduardo R. D'Avila (https://github.com/erdavila)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree.utils;
 
 /**
@@ -6,7 +21,7 @@ package kieker.analysis.behavior.mtree.utils;
  * @param <T>
  *            The type of the objects.
  *
- * @author
+ * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
 public class Pair<T> {
@@ -14,12 +29,12 @@ public class Pair<T> {
 	/**
 	 * The first object.
 	 */
-	public T first;
+	private T first;
 
 	/**
 	 * The second object.
 	 */
-	public T second;
+	private T second;
 
 	/**
 	 * Creates a pair of {@code null} objects.
@@ -60,6 +75,14 @@ public class Pair<T> {
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+
+	public T getFirst() {
+		return this.first;
+	}
+
+	public T getSecond() {
+		return this.second;
 	}
 
 }

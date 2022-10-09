@@ -31,14 +31,18 @@ import kieker.analysis.behavior.model.Node;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * Converts User Sessions into BehaviorModelGEDs
+ * Converts User Sessions into {@link BehaviorModel}s.
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
 public class UserSessionToModelConverter extends AbstractTransformation<UserSession, BehaviorModel> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionToModelConverter.class);
+
+	public UserSessionToModelConverter() {
+		// default constructor
+	}
 
 	@Override
 	protected void execute(final UserSession session) throws Exception {
@@ -55,7 +59,7 @@ public class UserSessionToModelConverter extends AbstractTransformation<UserSess
 	}
 
 	/**
-	 * Converts a list of events into a behavior model
+	 * Converts a list of events into a behavior model.
 	 *
 	 * @param events
 	 *            The list of events
@@ -94,7 +98,7 @@ public class UserSessionToModelConverter extends AbstractTransformation<UserSess
 	}
 
 	/**
-	 * Adds an edge to a model, if the edge does not exist already
+	 * Adds an edge to a model, if the edge does not exist already.
 	 *
 	 * @param event
 	 * @param model

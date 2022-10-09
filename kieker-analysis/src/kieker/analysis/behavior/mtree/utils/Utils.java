@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright (c) 2012-2013 Eduardo R. D'Avila (https://github.com/erdavila)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.behavior.mtree.utils;
 
 import java.util.ArrayList;
@@ -8,6 +23,9 @@ import java.util.Random;
 
 /**
  * Some utilities.
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
  */
 public final class Utils {
 
@@ -53,17 +71,18 @@ public final class Utils {
 	 *
 	 * @param collection
 	 *            The collection.
-	 * @param n
+	 * @param numberOfElements
 	 *            The number of elements to choose.
 	 * @param <T>
 	 *            The type of the elements.
 	 * @return A list with the chosen elements.
 	 */
-	public static <T> List<T> randomSample(final Collection<T> collection, int n) {
+	public static <T> List<T> randomSample(final Collection<T> collection, final int numberOfElements) {
 		final List<T> list = new ArrayList<>(collection);
-		final List<T> sample = new ArrayList<>(n);
+		final List<T> sample = new ArrayList<>(numberOfElements);
 		final Random random = new Random();
-		while (n > 0 && !list.isEmpty()) {
+		int count = numberOfElements;
+		while (count > 0 && !list.isEmpty()) {
 			final int index = random.nextInt(list.size());
 			sample.add(list.get(index));
 			final int indexLast = list.size() - 1;
@@ -71,7 +90,7 @@ public final class Utils {
 			if (index < indexLast) {
 				list.set(index, last);
 			}
-			n--;
+			count--;
 		}
 		return sample;
 	}

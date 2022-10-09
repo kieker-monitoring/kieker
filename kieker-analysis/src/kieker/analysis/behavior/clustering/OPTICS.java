@@ -25,7 +25,7 @@ import kieker.analysis.behavior.mtree.MTree;
 
 /**
  * An implementation of the OPTICS algorithm. A detailed explanation of the algorithm can be found
- * in the paper "OPTICS: ordering points to identify the clustering structure"
+ * in the paper "OPTICS: ordering points to identify the clustering structure".
  *
  * @author Lars Jürgensen
  * @since 2.0.0
@@ -94,7 +94,7 @@ public class OPTICS {
 
 		while (results.hasNext()) {
 			resultAmount++;
-			last = results.next().data;
+			last = results.next().getData();
 		}
 
 		if (resultAmount < this.getMinPTs()) {
@@ -114,7 +114,7 @@ public class OPTICS {
 		final List<OpticsData> neighbors = new ArrayList<>();
 
 		while (it.hasNext()) {
-			neighbors.add(it.next().data);
+			neighbors.add(it.next().getData());
 		}
 
 		return neighbors;

@@ -15,45 +15,35 @@
  ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
-import java.util.List;
 import java.util.Set;
 
 import kieker.analysis.behavior.mtree.utils.Pair;
-import kieker.analysis.behavior.mtree.utils.Utils;
 
 /**
- * Some pre-defined implementations of {@linkplain IPromotionFunction promotion
- * functions}.
+ * An object with partitions a set of data into two sub-sets.
  *
+ * @param <T>
+ *            The type of the data on the sets.
+ * 
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
-public final class PromotionFunctions {
+public interface IPartitionFunction<T> {
 
 	/**
-	 * Don't let anyone instantiate this class.
-	 */
-	private PromotionFunctions() {}
-
-	/**
-	 * A {@linkplain IPromotionFunction promotion function} object that randomly
-	 * chooses ("promotes") two data objects.
+	 * Executes the partitioning.
 	 *
-	 * @param <T>
-	 *            The type of the data objects.
+	 * @param promoted
+	 *            The pair of data objects that will guide the partition
+	 *            process.
+	 * @param dataSet
+	 *            The original set of data objects to be partitioned.
+	 * @param distanceFunction
+	 *            A {@linkplain IDistanceFunction distance function}
+	 *            to be used on the partitioning.
+	 * @return A pair of partition sub-sets. Each sub-set must correspond to one
+	 *         of the {@code promoted} data objects.
 	 */
-	public static class RandomPromotion<T> implements IPromotionFunction<T> {
-
-		public RandomPromotion() {
-			// default constructor
-		}
-
-		@Override
-		public Pair<T> process(final Set<T> dataSet,
-				final IDistanceFunction<? super T> distanceFunction) {
-			final List<T> promotedList = Utils.randomSample(dataSet, 2);
-			return new Pair<>(promotedList.get(0), promotedList.get(1));
-		}
-	}
+	Pair<Set<T>> process(Pair<T> promoted, Set<T> dataSet, IDistanceFunction<? super T> distanceFunction);
 
 }

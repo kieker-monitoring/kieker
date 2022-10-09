@@ -36,9 +36,9 @@ import teetime.framework.test.StageTester;
 /**
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class UserSessionToModelGeneratorTest {
+public class UserSessionToModelGeneratorTest { // NOCS constructor
 
 	private final UserSessionToModelConverter converter = new UserSessionToModelConverter();
 
