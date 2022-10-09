@@ -21,7 +21,7 @@ dependencies {
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api "com.google.guava:guava:$guavaVersion"	// used by StringRegistryCache for amqp reader
 	api 'nz.ac.waikato.cms.weka:weka-stable:3.6.13' // used by behavior analysis
-	
+
 	api 'de.cau.cs.se.teetime:teetime:3.1.0'
 
 	implementation 'javax.jms:javax.jms-api:2.0.1'
