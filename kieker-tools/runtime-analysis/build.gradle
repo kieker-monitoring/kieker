@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.runtime.analysis.RuntimeAnalysisMain'
+// mainClassName='kieker.tools.runtime.analysis.RuntimeAnalysisMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
