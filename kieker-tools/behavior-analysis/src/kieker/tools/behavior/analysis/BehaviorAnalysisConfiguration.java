@@ -38,7 +38,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 /**
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
 public class BehaviorAnalysisConfiguration extends Configuration {
 
@@ -56,6 +56,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 				settings.getMinPts(), settings.getMaxAmount());
 		final Distributor<Clustering<BehaviorModel>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
+		// Replace this for file based operation with an end of execution trigger.
 		final TimeReaderStage timerStage = new TimeReaderStage(1l, 1l);
 
 		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
@@ -70,6 +71,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		}
 
 		if (settings.getMedoidOutputPath() != null) {
+			// TODO move settings to settings
 			final IParameterWeighting weighting = ParameterEvaluationUtils.createFromConfiguration(IParameterWeighting.class, configuration,
 					ConfigurationKeys.PARAMETER_WEIGHTING, "missing parameter weighting function.");
 

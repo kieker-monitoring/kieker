@@ -18,6 +18,9 @@ package kieker.analysis.behavior.acceptance.matcher;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
@@ -28,6 +31,8 @@ import kieker.analysis.behavior.data.EntryCallEvent;
  * @since 2.0.0
  */
 public class GenericEntryCallAcceptanceMatcher implements IEntryCallAcceptanceMatcher {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GenericEntryCallAcceptanceMatcher.class);
 
 	private final List<Pattern> classPatterns;
 	private final List<Pattern> operationPatterns;
@@ -63,6 +68,7 @@ public class GenericEntryCallAcceptanceMatcher implements IEntryCallAcceptanceMa
 				return true;
 			}
 		}
+		LOGGER.debug("Discarded signature {}", signature);
 		return false;
 	}
 

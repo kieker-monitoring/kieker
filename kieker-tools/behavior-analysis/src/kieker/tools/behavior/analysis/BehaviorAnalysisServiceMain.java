@@ -77,14 +77,17 @@ public final class BehaviorAnalysisServiceMain
 
 		final String medoidsOutputFile = configuration.getStringProperty(ConfigurationKeys.MEDOIDS_OUTPUT_FILE);
 		if (medoidsOutputFile != null) {
-			this.parameterConfiguration.setClusterOutputPath(Paths.get(medoidsOutputFile));
+			this.parameterConfiguration.setMedoidOutputPath(Paths.get(medoidsOutputFile));
 		}
 
 		/** For SessionAcceptanceFilter. */
 		this.parameterConfiguration.setClassSignatureAcceptancePatterns(
-				this.readSignatures(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE, "class signature patterns", commander));
+				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE), "class signature patterns",
+						commander));
 		this.parameterConfiguration.setOperationSignatureAcceptancePatterns(
-				this.readSignatures(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE, "operation signature patterns", commander));
+				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE), "operation signature patterns",
+						commander));
+		// TODO make this an enumeration
 		this.parameterConfiguration.setAcceptanceMatcherMode(configuration.getBooleanProperty(ConfigurationKeys.SIGNATURE_ACCEPTANCE_MATCHER_MODE, false));
 
 		/** For TraceSignatureProcessor. */

@@ -46,7 +46,7 @@ public class TimeReaderStage extends AbstractProducerStage<Long> {
 	private final long delay;
 
 	private final TimeUnit timeunit = TimeUnit.NANOSECONDS;
-	private final long numberOfImpulses;
+	private long numberOfImpulses;
 	private final boolean infinite;
 
 	public TimeReaderStage(final long delay, final Long numberOfImpulses) {
@@ -63,6 +63,7 @@ public class TimeReaderStage extends AbstractProducerStage<Long> {
 			this.outputPort.send(timestamp);
 			this.timestampsRecordOutputPort.send(new TimestampRecord(timestamp));
 			Thread.sleep(this.delay / 1000 / 1000);
+			this.numberOfImpulses--;
 		}
 		this.workCompleted();
 	}

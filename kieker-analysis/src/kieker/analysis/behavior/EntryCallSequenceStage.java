@@ -39,7 +39,7 @@ import teetime.framework.OutputPort;
  * @author Alessandro Guisa
  * @author Christoph Dornieden
  *
- * @version 1.0
+ * @since 2.0.0
  */
 public final class EntryCallSequenceStage extends AbstractStage {
 	/** time until a session expires. */
@@ -114,7 +114,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 			final UserSession session = this.sessions.get(sessionId);
 			final long exitTime = session.getExitTime();
 
-			final boolean isExpired = exitTime + EntryCallSequenceStage.USER_SESSION_EXPIRATIONTIME < timeNow;
+			final boolean isExpired = (exitTime + EntryCallSequenceStage.USER_SESSION_EXPIRATIONTIME) < timeNow;
 
 			if (isExpired) {
 				this.userSessionOutputPort.send(session);
