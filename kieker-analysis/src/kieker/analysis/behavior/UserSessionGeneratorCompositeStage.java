@@ -15,10 +15,12 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
-import kieker.analysis.behavior.clustering.IModelGenerationFilterFactory;
-import kieker.analysis.behavior.clustering.UserSessionOperationCleanupStage;
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
+import kieker.analysis.behavior.acceptance.matcher.SessionAcceptanceFilter;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
+import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
+import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorFilter;
 import kieker.common.records.session.ISessionEvent;
 
 import teetime.framework.CompositeStage;
@@ -26,29 +28,25 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
- * This is based on UserSessionGeneratorCompositeStage.
+ * Create user sessions based on @{link EntryCallEvent}s.
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-// TODO check naming for stage
 public class UserSessionGeneratorCompositeStage extends CompositeStage {
 
-	private final UserSessionOperationCleanupStage userSessionOperationCleanupStage;
 	private final EntryCallSequenceStage entryCallSequence;
+	private final TraceSignatureProcessorFilter traceOperationCleanupFilter;
 
 	/**
 	 * Create the user session generator stage.
 	 *
 	 * @param entryCallMatcher
 	 *            matcher to check on entry calls to filter out requests that do not belong to the behavior, e.g., loading images
-	 * @param cleanupRewriter
+	 * @param traceSignatureProcessor
 	 *            cleanup rewriter
-	 * @param filterRulesFactory
-	 *            filter rules factory
 	 */
-	public UserSessionGeneratorCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher, final ITraceSignatureCleanupRewriter cleanupRewriter,
-			final IModelGenerationFilterFactory filterRulesFactory) {
+	public UserSessionGeneratorCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher, final ITraceSignatureProcessor traceSignatureProcessor) {
 
 		/** -- create stages. -- */
 		/** Create EntryCallSequence */
@@ -56,19 +54,15 @@ public class UserSessionGeneratorCompositeStage extends CompositeStage {
 		/** Create SessionAcceptanceFilter */
 		final SessionAcceptanceFilter sessionAcceptanceFilter = new SessionAcceptanceFilter(entryCallMatcher);
 		/** Create TraceOperationsCleanupFilter */
-		final TraceOperationCleanupFilter traceOperationCleanupFilter = new TraceOperationCleanupFilter(
-				cleanupRewriter);
-		/** Create UserSessionOperationsFilter */
-		this.userSessionOperationCleanupStage = new UserSessionOperationCleanupStage(filterRulesFactory.createFilter());
+		this.traceOperationCleanupFilter = new TraceSignatureProcessorFilter(
+				traceSignatureProcessor);
 
 		/** Connect all ports */
 		this.connectPorts(this.entryCallSequence.getUserSessionOutputPort(), sessionAcceptanceFilter.getInputPort());
-		this.connectPorts(sessionAcceptanceFilter.getOutputPort(), traceOperationCleanupFilter.getInputPort());
-		this.connectPorts(traceOperationCleanupFilter.getOutputPort(),
-				this.userSessionOperationCleanupStage.getInputPort());
+		this.connectPorts(sessionAcceptanceFilter.getOutputPort(), this.traceOperationCleanupFilter.getInputPort());
 	}
 
-	public InputPort<PayloadAwareEntryCallEvent> getInputPort() {
+	public InputPort<EntryCallEvent> getInputPort() {
 		return this.entryCallSequence.getEntryCallInputPort();
 	}
 
@@ -77,7 +71,7 @@ public class UserSessionGeneratorCompositeStage extends CompositeStage {
 	}
 
 	public OutputPort<UserSession> getSessionOutputPort() {
-		return this.userSessionOperationCleanupStage.getOutputPort();
+		return this.traceOperationCleanupFilter.getOutputPort();
 	}
 
 }

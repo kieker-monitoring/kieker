@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior;
+package kieker.analysis.behavior.acceptance.matcher;
+
+import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
- * Interface for a rewriter on class and operation signatures.
+ * Interface for EntryCallEvent acceptance matcher. Not every EntryCallEvent might represent and
+ * relevant behavior trace. For example, returning images or CSS is usually not part of the user behavior
+ * which is relevant to us. Therefore, such matcher can be passed to the TraceAcceptanceFilter to
+ * which then only forwards accepted calls.
  *
  * @author Reiner Jung
- *
+ * @since 2.0.0
  */
-public interface ITraceSignatureCleanupRewriter {
+public interface IEntryCallAcceptanceMatcher {
 
 	/**
-	 * Rewrite the class signature.
+	 * Match whether the call is correct of interest for the application.
 	 *
-	 * @param classSignature
-	 *            old signature
-	 * @return new signature
+	 * @param call
+	 *            one entry call event
+	 * @return true on success
 	 */
-	String rewriteClassSignature(String classSignature);
-
-	/**
-	 * Rewrite the operation signature.
-	 *
-	 * @param operationSignature
-	 *            old signature
-	 * @return new signature
-	 */
-	String rewriteOperationSignature(String operationSignature);
-
+	boolean match(final EntryCallEvent call);
 }

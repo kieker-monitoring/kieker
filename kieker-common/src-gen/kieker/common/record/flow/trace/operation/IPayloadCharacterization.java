@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2017 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
+package kieker.common.record.flow.trace.operation;
+
+import kieker.common.record.IMonitoringRecord;
 
 /**
- * Interface for factories creating {@link EntryCallFilterRules}. Necessary to be instantiable so
- * different versions can be used depending on configuration.
- *
- * @author Christoph Dornieden
+ * @author Reiner Jung
+ * 
  * @since 2.0.0
  */
-public interface IModelGenerationFilterFactory {
-
-	/**
-	 * create a {@link EntryCallFilterRules}.
-	 *
-	 * @return specific {@link EntryCallFilterRules}
-	 */
-	EntryCallFilterRules createFilter();
+public interface IPayloadCharacterization extends IMonitoringRecord {
+	public String[] getParameters();
+	
+	public String[] getValues();
+	
+	public int getRequestType();
+	
 }

@@ -68,7 +68,7 @@ public class GraphEditDistanceTest { // NOCS constructor
 		double result1 = this.ged.calculate(model1, model2);
 		double result2 = this.ged.calculate(model2, model1);
 
-		Assert.assertEquals(result1, result2);
+		Assert.assertEquals(result1, result2, 0.0001);
 
 		model1 = TestHelper.createBehaviorModelA();
 		model2 = TestHelper.createBehaviorModelC();
@@ -76,7 +76,7 @@ public class GraphEditDistanceTest { // NOCS constructor
 		result1 = this.ged.calculate(model1, model2);
 		result2 = this.ged.calculate(model2, model1);
 
-		Assert.assertEquals(result1, result2);
+		Assert.assertEquals(result1, result2, 0.0001);
 
 		model1 = TestHelper.createBehaviorModelA();
 		model2 = TestHelper.createBehaviorModelD();
@@ -84,7 +84,7 @@ public class GraphEditDistanceTest { // NOCS constructor
 		result1 = this.ged.calculate(model1, model2);
 		result2 = this.ged.calculate(model2, model1);
 
-		Assert.assertEquals(result1, result2);
+		Assert.assertEquals(result1, result2, 0.0001);
 
 		model1 = TestHelper.createBehaviorModelA();
 		model2 = TestHelper.createBehaviorModelE();
@@ -92,7 +92,7 @@ public class GraphEditDistanceTest { // NOCS constructor
 		result1 = this.ged.calculate(model1, model2);
 		result2 = this.ged.calculate(model2, model1);
 
-		Assert.assertEquals(result1, result2);
+		Assert.assertEquals(result1, result2, 0.0001);
 	}
 
 	@Test

@@ -16,18 +16,24 @@
 package kieker.tools.behavior.analysis;
 
 import kieker.analysis.behavior.ClusterMedoidSink;
-import kieker.analysis.behavior.ClusteringSink;
+import kieker.analysis.behavior.ClusteringFileSink;
 import kieker.analysis.behavior.ModelGenerationCompositeStage;
+import kieker.analysis.behavior.acceptance.matcher.GenericEntryCallAcceptanceMatcher;
+import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
+import kieker.analysis.behavior.clustering.Clustering;
 import kieker.analysis.behavior.clustering.ClusteringCompositeStage;
 import kieker.analysis.behavior.clustering.GraphEditDistance;
 import kieker.analysis.behavior.clustering.IParameterWeighting;
 import kieker.analysis.behavior.clustering.NaiveMediodGenerator;
+import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.generic.source.time.TimeReaderStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.ParameterEvaluationUtils;
 import kieker.tools.source.LogsReaderCompositeStage;
 
 import teetime.framework.Configuration;
+import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
  *
@@ -41,30 +47,29 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 
 		final LogsReaderCompositeStage reader = new LogsReaderCompositeStage(configuration);
 
-		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(settings.getEntryCallAcceptanceMatcher(),
-				settings.getTraceSignatureCleanupRewriter(),
-				settings.getModelGenerationFilterFactory());
-
-		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
-
+		final IEntryCallAcceptanceMatcher entryCallAcceptanceMatcher = new GenericEntryCallAcceptanceMatcher(settings.getClassSignatureAcceptancePatterns(),
+				settings.getOperationSignatureAcceptancePatterns(),
+				settings.isAcceptanceMatcherMode());
+		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
+				settings.getTraceSignatureProcessor());
 		final ClusteringCompositeStage clustering = new ClusteringCompositeStage(settings.getClusteringDistance(),
 				settings.getMinPts(), settings.getMaxAmount());
+		final Distributor<Clustering<BehaviorModel>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		final TimeReaderStage timerStage = new TimeReaderStage(1l, 1l);
 
+		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
+
 		this.connectPorts(modelGeneration.getModelOutputPort(), clustering.getModelInputPort());
 		this.connectPorts(timerStage.getOutputPort(), clustering.getTimerInputPort());
+		this.connectPorts(clustering.getOutputPort(), distributor.getInputPort());
 
-		// configure sink. The only one of the clustering sinks should be enabled. This can be
-		// improved
-		// with a sink factory
-
-		if (settings.isReturnClustering()) {
-			final ClusteringSink sink = new ClusteringSink(settings.getOutputUrl());
-			this.connectPorts(clustering.getOutputPort(), sink.getInputPort());
+		if (settings.getClusterOutputPath() != null) {
+			final ClusteringFileSink sink = new ClusteringFileSink(settings.getClusterOutputPath());
+			this.connectPorts(distributor.getNewOutputPort(), sink.getInputPort());
 		}
 
-		if (settings.isReturnMedoids()) {
+		if (settings.getMedoidOutputPath() != null) {
 			final IParameterWeighting weighting = ParameterEvaluationUtils.createFromConfiguration(IParameterWeighting.class, configuration,
 					ConfigurationKeys.PARAMETER_WEIGHTING, "missing parameter weighting function.");
 
@@ -78,11 +83,10 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 			final GraphEditDistance graphEditDistance = new GraphEditDistance(nodeInsertCost, edgeInsertCost, eventGroupInsertCost, weighting);
 
 			final NaiveMediodGenerator medoid = new NaiveMediodGenerator(graphEditDistance);
-			final ClusterMedoidSink sink = new ClusterMedoidSink(settings.getOutputUrl());
+			final ClusterMedoidSink sink = new ClusterMedoidSink(settings.getMedoidOutputPath());
 
-			this.connectPorts(clustering.getOutputPort(), medoid.getInputPort());
+			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());
 			this.connectPorts(medoid.getOutputPort(), sink.getInputPort());
 		}
-
 	}
 }

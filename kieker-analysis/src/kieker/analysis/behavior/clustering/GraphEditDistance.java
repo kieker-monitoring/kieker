@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.Edge;
 import kieker.analysis.behavior.model.EventGroup;
@@ -202,19 +202,19 @@ public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 		double distance = 0;
 
 		// at first all events are unvisited
-		final Queue<PayloadAwareEntryCallEvent> unvisitedEvents1 = new LinkedList<>(eventGroup1.getEvents());
-		final Queue<PayloadAwareEntryCallEvent> unvisitedEvents2 = new LinkedList<>(eventGroup2.getEvents());
+		final Queue<EntryCallEvent> unvisitedEvents1 = new LinkedList<>(eventGroup1.getEvents());
+		final Queue<EntryCallEvent> unvisitedEvents2 = new LinkedList<>(eventGroup2.getEvents());
 
 		while (!unvisitedEvents1.isEmpty()) {
 
-			final List<PayloadAwareEntryCallEvent> matches1 = new ArrayList<>();
-			final List<PayloadAwareEntryCallEvent> matches2 = new ArrayList<>();
+			final List<EntryCallEvent> matches1 = new ArrayList<>();
+			final List<EntryCallEvent> matches2 = new ArrayList<>();
 
-			final PayloadAwareEntryCallEvent event = unvisitedEvents1.poll();
+			final EntryCallEvent event = unvisitedEvents1.poll();
 			matches1.add(event);
 
 			// find equal events in same event group
-			for (final PayloadAwareEntryCallEvent potentialMatch : unvisitedEvents1) {
+			for (final EntryCallEvent potentialMatch : unvisitedEvents1) {
 
 				if (GraphEditDistance.haveSameValues(event, potentialMatch)) {
 
@@ -224,7 +224,7 @@ public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 			unvisitedEvents1.removeAll(matches1);
 
 			// find equal events in other event group
-			for (final PayloadAwareEntryCallEvent potentialMatch : unvisitedEvents2) {
+			for (final EntryCallEvent potentialMatch : unvisitedEvents2) {
 				if (GraphEditDistance.haveSameValues(event, potentialMatch)) {
 					matches2.add(potentialMatch);
 				}
@@ -246,11 +246,11 @@ public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 		// maybe some events are left in the second group, which weren't in the first group
 		while (!unvisitedEvents2.isEmpty()) {
 
-			final PayloadAwareEntryCallEvent event1 = unvisitedEvents2.poll();
+			final EntryCallEvent event1 = unvisitedEvents2.poll();
 
-			final List<PayloadAwareEntryCallEvent> equalEvents = new ArrayList<>();
+			final List<EntryCallEvent> equalEvents = new ArrayList<>();
 
-			for (final PayloadAwareEntryCallEvent event2 : unvisitedEvents2) {
+			for (final EntryCallEvent event2 : unvisitedEvents2) {
 				if (GraphEditDistance.haveSameValues(event1, event2)) {
 
 					equalEvents.add(event2);
@@ -295,17 +295,16 @@ public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 	private double eventGroupInsertionCost(final EventGroup eventGroup) {
 		double distance = this.eventGroupInsertCost;
 
-		final Queue<PayloadAwareEntryCallEvent> queue = new LinkedList<>(eventGroup.getEvents());
+		final Queue<EntryCallEvent> queue = new LinkedList<>(eventGroup.getEvents());
 
-		final List<PayloadAwareEntryCallEvent> equalEvents = new ArrayList<>();
+		final List<EntryCallEvent> equalEvents = new ArrayList<>();
 
 		while (!queue.isEmpty()) {
-			final PayloadAwareEntryCallEvent event1 = queue.poll();
+			final EntryCallEvent event1 = queue.poll();
 			// look for equal events, as they can be duplicated, instead of created
-			for (final PayloadAwareEntryCallEvent event2 : queue) {
+			for (final EntryCallEvent event2 : queue) {
 				if (GraphEditDistance.haveSameValues(event1, event2)) {
 					equalEvents.add(event2);
-
 				}
 			}
 			queue.removeAll(equalEvents);
@@ -321,8 +320,8 @@ public class GraphEditDistance implements IDistanceFunction<BehaviorModel> {
 	 *
 	 * @return True, if both events share the exact same values, false otherwise
 	 */
-	private static boolean haveSameValues(final PayloadAwareEntryCallEvent event1,
-			final PayloadAwareEntryCallEvent event2) {
+	private static boolean haveSameValues(final EntryCallEvent event1,
+			final EntryCallEvent event2) {
 		return Arrays.equals(event1.getValues(), event2.getValues());
 	}
 }

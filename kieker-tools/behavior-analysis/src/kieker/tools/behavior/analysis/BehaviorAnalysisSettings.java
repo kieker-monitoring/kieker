@@ -16,12 +16,13 @@
 package kieker.tools.behavior.analysis;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import com.beust.jcommander.Parameter;
 
-import kieker.analysis.behavior.IEntryCallAcceptanceMatcher;
-import kieker.analysis.behavior.ITraceSignatureCleanupRewriter;
-import kieker.analysis.behavior.clustering.IModelGenerationFilterFactory;
+import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 
 /**
  *
@@ -33,12 +34,13 @@ public class BehaviorAnalysisSettings {
 	@Parameter(names = { "-c", "--configuration" }, required = true, description = "Configuration file")
 	private File configurationFile;
 
-	private String outputUrl;
-	private boolean returnMedoids;
-	private boolean returnClustering;
-	private IEntryCallAcceptanceMatcher entryCallAcceptanceMatcher;
-	private ITraceSignatureCleanupRewriter traceSignatureCleanupRewriter;
-	private IModelGenerationFilterFactory modelGenerationFilterFactory;
+	private Path clusterOutputPath;
+	private Path medoidOutputPath;
+
+	private List<Pattern> classSignatureAcceptancePatterns;
+	private List<Pattern> operationSignatureAcceptancePatterns;
+	private boolean acceptanceMatcherMode;
+	private ITraceSignatureProcessor traceSignatureProcessor;
 
 	private double clusteringDistance;
 
@@ -54,52 +56,28 @@ public class BehaviorAnalysisSettings {
 		this.configurationFile = configurationFile;
 	}
 
-	public void setOutputUrl(final String outputUrl) {
-		this.outputUrl = outputUrl;
+	public Path getClusterOutputPath() {
+		return this.clusterOutputPath;
 	}
 
-	public String getOutputUrl() {
-		return this.outputUrl;
+	public void setClusterOutputPath(final Path clusterOutputPath) {
+		this.clusterOutputPath = clusterOutputPath;
 	}
 
-	public void setReturnMedoids(final boolean returnMedoids) {
-		this.returnMedoids = returnMedoids;
+	public Path getMedoidOutputPath() {
+		return this.medoidOutputPath;
 	}
 
-	public boolean isReturnMedoids() {
-		return this.returnMedoids;
+	public void setMedoidOutputPath(final Path medoidOutputPath) {
+		this.medoidOutputPath = medoidOutputPath;
 	}
 
-	public void setReturnClustering(final boolean returnClustering) {
-		this.returnClustering = returnClustering;
+	public void setTraceSignatureProcessor(final ITraceSignatureProcessor traceSignatureProcessor) {
+		this.traceSignatureProcessor = traceSignatureProcessor;
 	}
 
-	public boolean isReturnClustering() {
-		return this.returnClustering;
-	}
-
-	public void setEntryCallAcceptanceMatcher(final IEntryCallAcceptanceMatcher entryCallAcceptanceMatcher) {
-		this.entryCallAcceptanceMatcher = entryCallAcceptanceMatcher;
-	}
-
-	public IEntryCallAcceptanceMatcher getEntryCallAcceptanceMatcher() {
-		return this.entryCallAcceptanceMatcher;
-	}
-
-	public void setTraceSignatureCleanupRewriter(final ITraceSignatureCleanupRewriter traceSignatureCleanupRewriter) {
-		this.traceSignatureCleanupRewriter = traceSignatureCleanupRewriter;
-	}
-
-	public ITraceSignatureCleanupRewriter getTraceSignatureCleanupRewriter() {
-		return this.traceSignatureCleanupRewriter;
-	}
-
-	public void setModelGenerationFilterFactory(final IModelGenerationFilterFactory modelGenerationFilterFactory) {
-		this.modelGenerationFilterFactory = modelGenerationFilterFactory;
-	}
-
-	public IModelGenerationFilterFactory getModelGenerationFilterFactory() {
-		return this.modelGenerationFilterFactory;
+	public ITraceSignatureProcessor getTraceSignatureProcessor() {
+		return this.traceSignatureProcessor;
 	}
 
 	public void setClusteringDistance(final double clusteringDistance) {
@@ -110,19 +88,44 @@ public class BehaviorAnalysisSettings {
 		return this.clusteringDistance;
 	}
 
-	public void setMinPts(int minPts) {
+	public void setMinPts(final int minPts) {
 		this.minPts = minPts;
 	}
-	
+
 	public int getMinPts() {
-		return minPts;
+		return this.minPts;
 	}
 
-	public void setMaxAmount(int maxAmount) {
+	public void setMaxAmount(final int maxAmount) {
 		this.maxAmount = maxAmount;
 	}
 
 	public int getMaxAmount() {
-		return maxAmount;
+		return this.maxAmount;
 	}
+
+	public List<Pattern> getClassSignatureAcceptancePatterns() {
+		return this.classSignatureAcceptancePatterns;
+	}
+
+	public void setClassSignatureAcceptancePatterns(final List<Pattern> classSignatureAcceptancePatterns) {
+		this.classSignatureAcceptancePatterns = classSignatureAcceptancePatterns;
+	}
+
+	public List<Pattern> getOperationSignatureAcceptancePatterns() {
+		return this.operationSignatureAcceptancePatterns;
+	}
+
+	public void setOperationSignatureAcceptancePatterns(final List<Pattern> operationSignatureAcceptancePatterns) {
+		this.operationSignatureAcceptancePatterns = operationSignatureAcceptancePatterns;
+	}
+
+	public boolean isAcceptanceMatcherMode() {
+		return this.acceptanceMatcherMode;
+	}
+
+	public void setAcceptanceMatcherMode(final boolean acceptanceMatcherMode) {
+		this.acceptanceMatcherMode = acceptanceMatcherMode;
+	}
+
 }

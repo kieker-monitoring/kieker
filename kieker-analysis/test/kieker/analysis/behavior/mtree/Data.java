@@ -17,6 +17,11 @@ package kieker.analysis.behavior.mtree;
 
 import kieker.analysis.behavior.mtree.DistanceFunctions.IEuclideanCoordinate;
 
+/**
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 class Data implements IEuclideanCoordinate, Comparable<Data> {
 
 	private final int[] values;

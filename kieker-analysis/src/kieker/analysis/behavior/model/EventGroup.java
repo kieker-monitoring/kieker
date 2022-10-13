@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
  * An EventGroup contains all events of an edge, which have the same parameters.
@@ -32,7 +33,7 @@ public class EventGroup {
 	// the parameters of the events of the EventGroup can be an attribute, as all events have the
 	// same parameters
 	private final String[] parameters;
-	private final List<PayloadAwareEntryCallEvent> events;
+	private final List<EntryCallEvent> events;
 
 	public EventGroup(final String[] parameters) {
 		this.parameters = parameters;
@@ -43,11 +44,11 @@ public class EventGroup {
 		return this.parameters;
 	}
 
-	public List<PayloadAwareEntryCallEvent> getEvents() {
+	public List<EntryCallEvent> getEvents() {
 		return this.events;
 	}
 
-	public boolean hasSameParameters(final PayloadAwareEntryCallEvent event) {
+	public boolean hasSameParameters(final EntryCallEvent event) {
 		return Arrays.equals(event.getParameters(), this.parameters);
 	}
 

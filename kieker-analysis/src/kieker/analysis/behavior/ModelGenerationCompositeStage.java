@@ -15,8 +15,9 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
-import kieker.analysis.behavior.clustering.IModelGenerationFilterFactory;
+import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.model.BehaviorModel;
+import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.generic.DynamicEventDispatcher;
 import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
@@ -41,8 +42,7 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 	private final InputPort<Object> inputPort;
 
 	public ModelGenerationCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher,
-			final ITraceSignatureCleanupRewriter cleanupRewriter,
-			final IModelGenerationFilterFactory filterRulesFactory)
+			final ITraceSignatureProcessor traceSignatureProcessor)
 			throws ConfigurationException {
 
 		final DynamicEventDispatcher eventDispatcher = new DynamicEventDispatcher(null, true, true, false);
@@ -50,8 +50,8 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 		final IEventMatcher<IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
 
 		final UserSessionGeneratorCompositeStage sessionGenerator = new UserSessionGeneratorCompositeStage(
-				entryCallMatcher, cleanupRewriter, filterRulesFactory);
-		final UserSessionToModelConverter sessionToModel = new UserSessionToModelConverter();
+				entryCallMatcher, traceSignatureProcessor);
+		final UserSessionToBehaviorModelTransformation sessionToModel = new UserSessionToBehaviorModelTransformation();
 
 		this.inputPort = eventDispatcher.getInputPort();
 

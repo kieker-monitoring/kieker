@@ -24,8 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.behavior.TestHelper;
-import kieker.analysis.behavior.UserSessionToModelConverter;
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.UserSessionToBehaviorModelTransformation;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.Edge;
@@ -40,7 +40,7 @@ import teetime.framework.test.StageTester;
  */
 public class UserSessionToModelGeneratorTest { // NOCS constructor
 
-	private final UserSessionToModelConverter converter = new UserSessionToModelConverter();
+	private final UserSessionToBehaviorModelTransformation converter = new UserSessionToBehaviorModelTransformation();
 
 	private UserSession session;
 
@@ -49,23 +49,23 @@ public class UserSessionToModelGeneratorTest { // NOCS constructor
 
 		final String[] parameters1 = { "view A" };
 		final String[] values1 = { "" };
-		final PayloadAwareEntryCallEvent event1 = TestHelper.createEvent(1, "A", parameters1, values1);
+		final EntryCallEvent event1 = TestHelper.createEvent(1, "A", parameters1, values1);
 
 		final String[] parameters2 = { "view B" };
 		final String[] values2 = { "" };
-		final PayloadAwareEntryCallEvent event2 = TestHelper.createEvent(2, "B", parameters2, values2);
+		final EntryCallEvent event2 = TestHelper.createEvent(2, "B", parameters2, values2);
 
 		final String[] parameters3 = { "stay at B" };
 		final String[] values3 = { "with value 1" };
-		final PayloadAwareEntryCallEvent event3 = TestHelper.createEvent(3, "B", parameters3, values3);
+		final EntryCallEvent event3 = TestHelper.createEvent(3, "B", parameters3, values3);
 
 		final String[] parameters4 = { "stay at B" };
 		final String[] values4 = { "with value 2" };
-		final PayloadAwareEntryCallEvent event4 = TestHelper.createEvent(4, "B", parameters4, values4);
+		final EntryCallEvent event4 = TestHelper.createEvent(4, "B", parameters4, values4);
 
 		final String[] parameters5 = { "stay at B with other parameter name" };
 		final String[] values5 = { "" };
-		final PayloadAwareEntryCallEvent event5 = TestHelper.createEvent(5, "B", parameters5, values5);
+		final EntryCallEvent event5 = TestHelper.createEvent(5, "B", parameters5, values5);
 
 		this.session = new UserSession("", "");
 

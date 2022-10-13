@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
+package kieker.analysis.behavior.acceptance.matcher;
 
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Stage to filter unwanted events from user session.
+ * Tests whether a trace contains only operations which are considered valid trace elements. In
+ * effect it ignores invalid sessions.
  *
- * @author Jannis Kuckei
+ * @author Reiner Jung
  * @since 2.0.0
  */
-public final class UserSessionOperationCleanupStage extends AbstractConsumerStage<UserSession> {
-	private final OutputPort<UserSession> outputPort = this.createOutputPort();
+public class SessionAcceptanceFilter extends AbstractConsumerStage<UserSession> {
 
-	private final EntryCallFilterRules filter;
+	private final OutputPort<UserSession> outputPort = this.createOutputPort();
+	private final IEntryCallAcceptanceMatcher matcher;
 
 	/**
-	 * Create a user session cleanup stage.
+	 * Create an acceptance filter with an external matcher.
 	 *
-	 * @param filter
-	 *            external filter rule to be used
+	 * @param matcher
+	 *            a acceptance matcher
 	 */
-	public UserSessionOperationCleanupStage(final EntryCallFilterRules filter) {
-		super();
-		this.filter = filter;
+	public SessionAcceptanceFilter(final IEntryCallAcceptanceMatcher matcher) {
+		this.matcher = matcher;
 	}
 
 	@Override
 	protected void execute(final UserSession session) throws Exception {
-		final UserSession filteredUserSession = new UserSession(session.getHost(), session.getSessionId());
-		session.getEvents().stream().filter(this.filter::isAllowed).forEach(filteredUserSession::add);
-
-		this.outputPort.send(filteredUserSession);
+		for (int i = 0; i < session.getEvents().size(); i++) {
+			final EntryCallEvent call = session.getEvents().get(i);
+			if (!this.matcher.match(call)) {
+				session.getEvents().remove(i);
+				i--;
+			}
+		}
+		if (session.getEvents().size() > 0) {
+			this.outputPort.send(session);
+		}
 	}
 
 	public OutputPort<UserSession> getOutputPort() {
 		return this.outputPort;
 	}
+
 }

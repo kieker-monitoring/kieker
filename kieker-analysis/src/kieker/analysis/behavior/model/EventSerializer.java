@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
  * A serializer, which serializes an PayloadAwareEntryCallEvent by printing the operation signature,
@@ -31,7 +31,7 @@ import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class EventSerializer extends StdSerializer<PayloadAwareEntryCallEvent> {
+public class EventSerializer extends StdSerializer<EntryCallEvent> {
 
 	private static final long serialVersionUID = -1964014516300428956L;
 
@@ -39,12 +39,12 @@ public class EventSerializer extends StdSerializer<PayloadAwareEntryCallEvent> {
 		this(null);
 	}
 
-	public EventSerializer(final Class<PayloadAwareEntryCallEvent> t) {
+	public EventSerializer(final Class<EntryCallEvent> t) {
 		super(t);
 	}
 
 	@Override
-	public void serialize(final PayloadAwareEntryCallEvent event, final JsonGenerator jsonGenerator,
+	public void serialize(final EntryCallEvent event, final JsonGenerator jsonGenerator,
 			final SerializerProvider provider) throws IOException, JsonGenerationException {
 		jsonGenerator.writeStartObject();
 		jsonGenerator.writeStringField("operationSignature", event.getOperationSignature());

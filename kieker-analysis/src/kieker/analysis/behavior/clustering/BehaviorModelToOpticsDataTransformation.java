@@ -28,18 +28,18 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class BehaviorModelToOpticsDataConverterStage extends AbstractTransformation<BehaviorModel, OpticsData> {
+public class BehaviorModelToOpticsDataTransformation extends AbstractTransformation<BehaviorModel, OpticsData> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorModelToOpticsDataConverterStage.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorModelToOpticsDataTransformation.class);
 
-	public BehaviorModelToOpticsDataConverterStage() {
+	public BehaviorModelToOpticsDataTransformation() {
 		// default constructor
 	}
 
 	@Override
 	protected void execute(final BehaviorModel model) throws Exception {
 		this.outputPort.send(new OpticsData(model));
-		BehaviorModelToOpticsDataConverterStage.LOGGER.info("Converted BehaviorModelGED to OpticsData");
+		BehaviorModelToOpticsDataTransformation.LOGGER.debug("Converted BehaviorModel to OpticsData");
 	}
 
 }

@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.behavior.data.EntryCallEvent;
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.Edge;
@@ -36,25 +35,25 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class UserSessionToModelConverter extends AbstractTransformation<UserSession, BehaviorModel> {
+public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, BehaviorModel> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionToModelConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionToBehaviorModelTransformation.class);
 
-	public UserSessionToModelConverter() {
+	public UserSessionToBehaviorModelTransformation() {
 		// default constructor
 	}
 
 	@Override
 	protected void execute(final UserSession session) throws Exception {
 
-		UserSessionToModelConverter.LOGGER.info("Received user session");
+		UserSessionToBehaviorModelTransformation.LOGGER.info("Received user session");
 
 		// sort events by the time they occurred
 		session.sortEventsBy(UserSession.SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME);
 		final List<EntryCallEvent> entryCalls = session.getEvents();
 
-		this.outputPort.send(UserSessionToModelConverter.eventsToModel(entryCalls));
-		UserSessionToModelConverter.LOGGER.info("Created BehaviorModelGED");
+		this.outputPort.send(UserSessionToBehaviorModelTransformation.eventsToModel(entryCalls));
+		UserSessionToBehaviorModelTransformation.LOGGER.info("Created BehaviorModelGED");
 
 	}
 
@@ -78,7 +77,7 @@ public class UserSessionToModelConverter extends AbstractTransformation<UserSess
 
 		// for all events
 		while (iterator.hasNext()) {
-			final PayloadAwareEntryCallEvent event = (PayloadAwareEntryCallEvent) iterator.next();
+			final EntryCallEvent event = iterator.next();
 
 			// current node is an existing node with the same name or if non-existing a new node
 			currentNode = model.getNodes().get(event.getOperationSignature());
@@ -90,7 +89,7 @@ public class UserSessionToModelConverter extends AbstractTransformation<UserSess
 			model.getNodes().put(event.getOperationSignature(), currentNode);
 
 			// add edge to model
-			UserSessionToModelConverter.addEdge(event, model, lastNode, currentNode);
+			UserSessionToBehaviorModelTransformation.addEdge(event, model, lastNode, currentNode);
 			lastNode = currentNode;
 		}
 		return model;
@@ -105,7 +104,7 @@ public class UserSessionToModelConverter extends AbstractTransformation<UserSess
 	 * @param source
 	 * @param target
 	 */
-	public static void addEdge(final PayloadAwareEntryCallEvent event, final BehaviorModel model,
+	public static void addEdge(final EntryCallEvent event, final BehaviorModel model,
 			final Node source, final Node target) {
 		final Edge matchingEdge = source.getOutgoingEdges().get(target);
 

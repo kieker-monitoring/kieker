@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
 import kieker.common.records.session.ISessionEvent;
 import kieker.common.records.session.SessionEndEvent;
@@ -49,7 +49,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 	/** output ports. */
 	private final OutputPort<UserSession> userSessionOutputPort = this.createOutputPort();
 
-	private final InputPort<PayloadAwareEntryCallEvent> entryCallInputPort = this.createInputPort();
+	private final InputPort<EntryCallEvent> entryCallInputPort = this.createInputPort();
 	private final InputPort<ISessionEvent> sessionEventInputPort = this.createInputPort();
 
 	/**
@@ -69,7 +69,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 		this.removeExpiredSessions();
 	}
 
-	private void processEntryCallEvent(final PayloadAwareEntryCallEvent event) {
+	private void processEntryCallEvent(final EntryCallEvent event) {
 		if (event != null) {
 			/**
 			 * add the event to the corresponding user session in case the user session is not yet
@@ -141,7 +141,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 		return this.userSessionOutputPort;
 	}
 
-	public InputPort<PayloadAwareEntryCallEvent> getEntryCallInputPort() {
+	public InputPort<EntryCallEvent> getEntryCallInputPort() {
 		return this.entryCallInputPort;
 	}
 

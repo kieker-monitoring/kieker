@@ -16,18 +16,16 @@
 package kieker.analysis.behavior;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import kieker.analysis.behavior.clustering.Clustering;
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.EventSerializer;
 
@@ -38,41 +36,40 @@ import teetime.framework.AbstractConsumerStage;
  * part of the JSON result
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class ClusteringSink extends AbstractConsumerStage<Clustering<BehaviorModel>> {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteringSink.class);
+public class ClusteringFileSink extends AbstractConsumerStage<Clustering<BehaviorModel>> {
 
 	private final ObjectMapper objectMapper;
 
-	private final String filename;
+	private final Path path;
 
 	/**
 	 * Create behavior model writer.
 	 *
-	 * @param baseUrl
-	 *            base url
+	 * @param path
+	 *            path
 	 */
-	public ClusteringSink(final String filename) {
+	public ClusteringFileSink(final Path path) {
 		this.objectMapper = new ObjectMapper();
-		this.filename = filename;
+		this.path = path;
 	}
 
 	@Override
 	protected void execute(final Clustering<BehaviorModel> clustering) throws IOException {
-		ClusteringSink.LOGGER.info("Write models to " + this.filename);
-		final FileWriter fw = new FileWriter(this.filename);
-		final BufferedWriter bw = new BufferedWriter(fw);
-		this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+		this.logger.info("Write models to {}", this.path.toString());
+		try (final BufferedWriter bw = Files.newBufferedWriter(this.path)) {
+			this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-		// this custom serializer just prints the values array of an event
-		final SimpleModule module = new SimpleModule();
-		module.addSerializer(PayloadAwareEntryCallEvent.class, new EventSerializer());
-		this.objectMapper.registerModule(module);
+			// this custom serializer just prints the values array of an event
+			final SimpleModule module = new SimpleModule();
+			module.addSerializer(EntryCallEvent.class, new EventSerializer());
+			this.objectMapper.registerModule(module);
 
-		this.objectMapper.writeValue(bw, clustering);
-		fw.close();
+			this.objectMapper.writeValue(bw, clustering);
+		} catch (final IOException e) {
+			this.logger.error("Writing to {} failed", this.path.toString());
+		}
 	}
 
 }

@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.analysis.behavior.mtree;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,6 +29,11 @@ import org.junit.Test;
 import kieker.analysis.behavior.mtree.utils.Pair;
 import kieker.analysis.behavior.mtree.utils.Utils;
 
+/**
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 class MTreeClass extends MTree<Data> {
 
 	private static final IPromotionFunction<Data> NON_RANDOM_PROMOTION = new IPromotionFunction<Data>() {
@@ -217,23 +221,6 @@ public class MTreeTest {
 	@Test
 	public void testGeneratedCase02() {
 		this.testFunction("fG02");
-	}
-
-	@Test
-	public void testNotRandom() {
-		/*
-		 * To generate a random test, execute the following commands:
-		 * py/mtree/tests/fixtures/generator.py -a500 -r0.2 > py/mtree/tests/fixtures/fNotRandom.py
-		 * cpp/convert-fixture-to-cpp.py fNotRandom > cpp/tests/fixtures/fNotRandom.txt
-		 */
-
-		final String fixtureName = "fNotRandom";
-		final String fixtureFileName = Fixture.path(fixtureName);
-		final File fixtureFile = new File(fixtureFileName);
-		if (!fixtureFile.exists()) {
-			throw new RuntimeException("The file " + fixtureFile + " does not exist");
-		}
-		this.testFunction(fixtureName);
 	}
 
 	private void assertIterator(

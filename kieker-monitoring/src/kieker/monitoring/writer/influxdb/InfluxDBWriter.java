@@ -38,7 +38,10 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * @author Teerat Pitakrat
  *
  * @since 1.13
+ * @deprecated 2.0.0
  */
+// TODO influxDB API has changed
+@Deprecated
 public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a data class
 
 	public static final String CONFIG_PROPERTY_DB_URL = "databaseURL";
@@ -106,7 +109,11 @@ public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a
 		}
 		final String influxDBVersion = pong.getVersion();
 		final String[] splitVersion = influxDBVersion.split("\\.");
-		this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		if (influxDBVersion.equals("unknown")) {
+			this.influxDBMajorVersion = 0;
+		} else {
+			this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		}
 		LOGGER.info("Version: {}", influxDBVersion);
 		LOGGER.info("Response time: {}", pong.getResponseTime());
 

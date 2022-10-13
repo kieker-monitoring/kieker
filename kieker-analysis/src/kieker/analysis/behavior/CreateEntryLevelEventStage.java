@@ -18,11 +18,12 @@ package kieker.analysis.behavior;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.trace.operation.EntryLevelBeforeOperationEvent;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -32,8 +33,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Reiner Jung
  * @since 2.0.0
  */
-// make this generic for EntryCallEvent and PayloadAwareEntryCallEvent
-public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowRecord, PayloadAwareEntryCallEvent> {
+public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowRecord, EntryCallEvent> {
 
 	private final Map<Long, TraceMetadata> registeredTraces = new HashMap<>();
 	private final Map<Long, BeforeOperationEvent> registeredBeforeOperationEvents = new HashMap<>();
@@ -47,14 +47,14 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 	@Override
 	protected void execute(final IFlowRecord element) throws Exception {
 		if (element instanceof TraceMetadata) {
-			this.registeredTraces.put(((TraceMetadata) element).getTraceId(), (TraceMetadata) element);
+			this.registerTraceMetadata((TraceMetadata) element);
 		}
 		if (this.waitForCompleteTrace) {
 			if (element instanceof BeforeOperationEvent) {
 				final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
 				if (beforeOperationEvent.getOrderIndex() == 0) {
-					if (this.registeredTraces.containsKey(beforeOperationEvent.getTraceId())) {
-						this.registeredBeforeOperationEvents.put(beforeOperationEvent.getTraceId(), beforeOperationEvent);
+					if (this.containsTrace(beforeOperationEvent.getTraceId())) {
+						this.registerBeforeOperationEvent(beforeOperationEvent);
 					} else {
 						this.logger.error("Received BeforeOperationEvent for unknown trace {}", beforeOperationEvent.getTraceId());
 					}
@@ -62,51 +62,89 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 			} else if (element instanceof AfterOperationEvent) {
 				final AfterOperationEvent afterOperationEvent = (AfterOperationEvent) element;
 				if (afterOperationEvent.getOrderIndex() == 0) {
-					if (this.registeredTraces.containsKey(afterOperationEvent.getTraceId())) {
-						this.outputPort.send(this.createPayloadAwareEntryCallEvent(afterOperationEvent));
+					if (this.containsTrace(afterOperationEvent.getTraceId())) {
+						this.outputPort.send(this.createEntryCallEvent(afterOperationEvent));
+						this.registeredBeforeOperationEvents.remove(afterOperationEvent.getTraceId());
+						this.registeredTraces.remove(afterOperationEvent.getTraceId());
 					} else {
 						this.logger.error("Received AfterOperationEvent for unknown trace {}", afterOperationEvent.getTraceId());
 					}
 				}
-			} else {
-				if (element instanceof BeforeOperationEvent) {
-					final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
-					if (beforeOperationEvent.getOrderIndex() == 0) {
-						if (this.registeredTraces.containsKey(beforeOperationEvent.getTraceId())) {
-							this.outputPort.send(this.createPayloadAwareEntryCallEvent(beforeOperationEvent));
-							this.registeredTraces.remove(beforeOperationEvent.getTraceId());
-						} else {
-							this.logger.error("Received BeforeOperationEvent for unknown trace {}", beforeOperationEvent.getTraceId());
-						}
+			}
+		} else {
+			if (element instanceof BeforeOperationEvent) {
+				final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
+				if (beforeOperationEvent.getOrderIndex() == 0) {
+					if (this.containsTrace(beforeOperationEvent.getTraceId())) {
+						this.outputPort.send(this.createEntryCallEvent(beforeOperationEvent));
+						this.registeredTraces.remove(beforeOperationEvent.getTraceId());
+					} else {
+						this.logger.error("Received BeforeOperationEvent for unknown trace {}", beforeOperationEvent.getTraceId());
 					}
 				}
 			}
 		}
 	}
 
-	// TODO this must be made changeable to EntryCallEvent and PAyloadAwareEntryCallEvent
-	private PayloadAwareEntryCallEvent createPayloadAwareEntryCallEvent(final AfterOperationEvent afterOperationEvent) {
-		final BeforeOperationEvent beforeOperationEvent = this.registeredBeforeOperationEvents.get(afterOperationEvent.getTraceId());
-		final TraceMetadata traceMetadata = this.registeredTraces.get(afterOperationEvent.getTraceId());
-
-		final String[] parameters = new String[0];
-		final String[] values = new String[0];
-		final int requestType = 0;
-		return new PayloadAwareEntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
-				beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
-				traceMetadata.getSessionId(), traceMetadata.getHostname(), parameters, values, requestType);
+	private void registerTraceMetadata(final TraceMetadata traceMetadata) {
+		this.registeredTraces.put(traceMetadata.getTraceId(), traceMetadata);
 	}
 
-	// TODO this must be made changeable to EntryCallEvent and PAyloadAwareEntryCallEvent
-	private PayloadAwareEntryCallEvent createPayloadAwareEntryCallEvent(final BeforeOperationEvent beforeOperationEvent) {
-		final TraceMetadata traceMetadata = this.registeredTraces.get(beforeOperationEvent.getTraceId());
+	public boolean containsTrace(final Long traceId) {
+		return this.registeredTraces.containsKey(traceId);
+	}
 
-		final String[] parameters = new String[0];
-		final String[] values = new String[0];
-		final int requestType = 0;
-		return new PayloadAwareEntryCallEvent(beforeOperationEvent.getTimestamp(), beforeOperationEvent.getTimestamp(),
-				beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
-				traceMetadata.getSessionId(), traceMetadata.getHostname(), parameters, values, requestType);
+	private void registerBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {
+		this.registeredBeforeOperationEvents.put(beforeOperationEvent.getTraceId(), beforeOperationEvent);
+	}
+
+	/**
+	 * Create {@link EntryCallEvent} or {@link EntryCallEvent} based on the before event alone. Here execution time is always zero, as the
+	 * afterOperationEvent is ignored.
+	 *
+	 * @param beforeOperationEvent
+	 *            before operation event
+	 * @return returns an entry call event.
+	 */
+	private EntryCallEvent createEntryCallEvent(final BeforeOperationEvent beforeOperationEvent) {
+		final TraceMetadata traceMetadata = this.registeredTraces.get(beforeOperationEvent.getTraceId());
+		if (beforeOperationEvent instanceof EntryLevelBeforeOperationEvent) {
+			final EntryLevelBeforeOperationEvent entryLevelbeforeOperationEvent = (EntryLevelBeforeOperationEvent) beforeOperationEvent;
+			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), beforeOperationEvent.getTimestamp(),
+					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+					traceMetadata.getSessionId(), traceMetadata.getHostname(), entryLevelbeforeOperationEvent.getParameters(),
+					entryLevelbeforeOperationEvent.getValues(),
+					entryLevelbeforeOperationEvent.getRequestType());
+		} else {
+			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), beforeOperationEvent.getTimestamp(),
+					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+					traceMetadata.getSessionId(), traceMetadata.getHostname(), new String[0], new String[0], 0);
+		}
+	}
+
+	/**
+	 * Create {@link EntryCallEvent} or {@link EntryCallEvent} based on the before and after event. Thus this create events with a useable execution
+	 * time.
+	 *
+	 * @param beforeOperationEvent
+	 *            before operation event
+	 * @return returns an entry call event.
+	 */
+	private EntryCallEvent createEntryCallEvent(final AfterOperationEvent afterOperationEvent) {
+		final TraceMetadata traceMetadata = this.registeredTraces.get(afterOperationEvent.getTraceId());
+		final BeforeOperationEvent beforeOperationEvent = this.registeredBeforeOperationEvents.get(afterOperationEvent.getTraceId());
+		if (beforeOperationEvent instanceof EntryLevelBeforeOperationEvent) {
+			final EntryLevelBeforeOperationEvent entryLevelbeforeOperationEvent = (EntryLevelBeforeOperationEvent) beforeOperationEvent;
+			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
+					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+					traceMetadata.getSessionId(), traceMetadata.getHostname(), entryLevelbeforeOperationEvent.getParameters(),
+					entryLevelbeforeOperationEvent.getValues(),
+					entryLevelbeforeOperationEvent.getRequestType());
+		} else {
+			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
+					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+					traceMetadata.getSessionId(), traceMetadata.getHostname(), new String[0], new String[0], 0);
+		}
 	}
 
 }

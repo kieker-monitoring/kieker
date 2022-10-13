@@ -38,7 +38,7 @@ public class ClusteringCompositeStage extends CompositeStage {
 
 	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final int maxAmount) {
 
-		final BehaviorModelToOpticsDataConverterStage modelToOptics = new BehaviorModelToOpticsDataConverterStage();
+		final BehaviorModelToOpticsDataTransformation modelToOptics = new BehaviorModelToOpticsDataTransformation();
 
 		final OpticsStage optics = new OpticsStage(clusteringDistance, minPts);
 

@@ -22,7 +22,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 final class Fixture {
+
+	private static final String FIXTURE_DIRECTORY = "test-resources/fixtures/";
 
 	private final List<Action> actions;
 	private final int dimensions;
@@ -33,7 +40,7 @@ final class Fixture {
 	}
 
 	static String path(final String fixtureName) {
-		return "cpp/tests/fixtures/" + fixtureName + ".txt";
+		return FIXTURE_DIRECTORY + fixtureName + ".txt";
 	}
 
 	static Fixture load(final String fixtureName) {

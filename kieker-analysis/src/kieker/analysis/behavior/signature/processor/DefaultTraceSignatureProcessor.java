@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2017 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior;
-
-import kieker.analysis.behavior.data.EntryCallEvent;
+package kieker.analysis.behavior.signature.processor;
 
 /**
- * Interface for EntryCallEvent acceptance matcher. Not every EntryCallEvent might represent and
- * relevant trace. For example, returning images or CSS is usually not part of the user behavior
- * which is relevant to us. Therefore, such matcher can be passed to the TraceAcceptanceFilter to
- * which then only forwards accepted calls.
- *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public interface IEntryCallAcceptanceMatcher {
+public class DefaultTraceSignatureProcessor implements ITraceSignatureProcessor {
 
-	/**
-	 * Match whether the call is correct of interest for the application.
-	 *
-	 * @param call
-	 *            one entry call event
-	 * @return true on success
-	 */
-	boolean match(final EntryCallEvent call);
+	@Override
+	public String rewriteClassSignature(final String classSignature) {
+		return classSignature;
+	}
+
+	@Override
+	public String rewriteOperationSignature(final String operationSignature) {
+		return operationSignature;
+	}
+
 }

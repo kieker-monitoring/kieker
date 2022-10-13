@@ -18,7 +18,7 @@ package kieker.analysis.behavior;
 import java.util.List;
 
 import kieker.analysis.behavior.clustering.OpticsData;
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.model.BehaviorModel;
 import kieker.analysis.behavior.model.Edge;
 import kieker.analysis.behavior.model.Node;
@@ -33,9 +33,9 @@ public final class TestHelper {
 
 	private TestHelper() {};
 
-	public static PayloadAwareEntryCallEvent createEvent(final int time, final String name, final String[] parameters,
+	public static EntryCallEvent createEvent(final int time, final String name, final String[] parameters,
 			final String[] values) {
-		return new PayloadAwareEntryCallEvent(time, time + 1, name, name, "session", "host", parameters, values, 0);
+		return new EntryCallEvent(time, time + 1, name, name, "session", "host", parameters, values, 0);
 
 	}
 

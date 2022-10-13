@@ -13,48 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior;
+package kieker.analysis.behavior.signature.processor;
 
 import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
 
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+import teetime.stage.basic.AbstractFilter;
 
 /**
- * Tests whether a trace contains only operations which are considered valid trace elements. In
- * effect it ignores invalid sessions.
+ * Filter to rewrite and process class and operation signatures.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class SessionAcceptanceFilter extends AbstractConsumerStage<UserSession> {
+public class TraceSignatureProcessorFilter extends AbstractFilter<UserSession> {
 
-	private final OutputPort<UserSession> outputPort = this.createOutputPort();
-	private final IEntryCallAcceptanceMatcher matcher;
+	private final ITraceSignatureProcessor processor;
 
 	/**
-	 * Create an acceptance filter with an external matcher.
+	 * Create the cleanup.
 	 *
-	 * @param matcher
-	 *            a acceptance matcher
+	 * @param processor
+	 *            rewrite rule class.
 	 */
-	public SessionAcceptanceFilter(final IEntryCallAcceptanceMatcher matcher) {
-		this.matcher = matcher;
+	public TraceSignatureProcessorFilter(final ITraceSignatureProcessor processor) {
+		this.processor = processor;
 	}
 
 	@Override
 	protected void execute(final UserSession session) throws Exception {
-		for (final EntryCallEvent call : session.getEvents()) {
-			if (!this.matcher.match(call)) {
-				return;
-			}
+		for (final EntryCallEvent event : session.getEvents()) {
+			event.setClassSignature(this.processor.rewriteClassSignature(event.getClassSignature()));
+			event.setOperationSignature(this.processor.rewriteOperationSignature(event.getOperationSignature()));
 		}
-		this.outputPort.send(session);
-	}
 
-	public OutputPort<UserSession> getOutputPort() {
-		return this.outputPort;
+		this.outputPort.send(session);
 	}
 
 }

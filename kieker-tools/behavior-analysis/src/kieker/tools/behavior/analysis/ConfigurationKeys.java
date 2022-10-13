@@ -15,111 +15,51 @@
  ***************************************************************************/
 package kieker.tools.behavior.analysis;
 
-import kieker.analysis.behavior.clustering.IModelGenerationFilterFactory;
-
 public class ConfigurationKeys {
 
 	private static final String PREFIX = "kieker.tools.behavior.";
-
-	/** Select clustering filter. */
-	public static final String BEHAVIOR_CLUSTERING = ConfigurationKeys.PREFIX + "filter";
-
-	/** Set whether a behavior visualization sink shall be created. STRING ARRAY. */
-	public static final String BEHAVIOR_CLUSTERING_SINK = ConfigurationKeys.PREFIX + "sink";
-
-	/** poepke approach. */
-	public static final String BEHAVIOR_VISUALIZATION_URL = ConfigurationKeys.PREFIX + "visualizationUrl";
-
-	public static final String BEHAVIOR_CLOSED_WORKLOAD = ConfigurationKeys.PREFIX + "closed.workload";
-
-	public static final String BEHAVIOR_THINK_TIME = ConfigurationKeys.PREFIX + "think.time";
-
-	public static final String BEHAVIOR_VARIANCE_OF_USER_GROUPS = ConfigurationKeys.PREFIX
-			+ "variance.of.user.groups";
 
 	public static final String PARAMETER_WEIGHTING = PREFIX + "parameterWeighting";
 
 	/**
 	 * Service Behavior Analysis
 	 */
-	public static final String GED_PREFIX = "org.iobserve.service.behavior.analysis.";
+	public static final String MAX_MODEL_AMOUNT = ConfigurationKeys.PREFIX + "maxModelAmount";
 
-	public static final String MAX_MODEL_AMOUNT = ConfigurationKeys.GED_PREFIX + "maxModelAmount";
+	public static final String CLUSTER_OUTPUT_FILE = ConfigurationKeys.PREFIX + "clusterOutputFile";
 
-	public static final String RESULT_URL = ConfigurationKeys.GED_PREFIX + "outputUrl";
+	public static final String CLUSTER_OUTPUT_URL = ConfigurationKeys.PREFIX + "clusterOutputUrl";
 
-	public static final String RETURN_CLUSTERING = ConfigurationKeys.GED_PREFIX + "returnClustering";
-
-	public static final String RETURN_MEDOIDS = ConfigurationKeys.GED_PREFIX + "returnMedoids";
+	public static final String MEDOIDS_OUTPUT_FILE = ConfigurationKeys.PREFIX + "medoidsOutputPath";
 
 	/**
 	 * Optics Clustering.
 	 */
 
-	public static final String EPSILON = ConfigurationKeys.GED_PREFIX + "epsilon";
+	public static final String EPSILON = ConfigurationKeys.PREFIX + "epsilon";
 
-	public static final String MIN_PTS = ConfigurationKeys.GED_PREFIX + "minPts";
+	public static final String MIN_PTS = ConfigurationKeys.PREFIX + "minPts";
 
 	/**
 	 * Graph Edit Distance.
 	 */
 
-	public static final String NODE_INSERTION_COST = ConfigurationKeys.GED_PREFIX + "nodeInsertionCost";
+	public static final String NODE_INSERTION_COST = ConfigurationKeys.PREFIX + "nodeInsertionCost";
 
-	public static final String EDGE_INSERTION_COST = ConfigurationKeys.GED_PREFIX + "edgeInsertionCost";
+	public static final String EDGE_INSERTION_COST = ConfigurationKeys.PREFIX + "edgeInsertionCost";
 
-	public static final String EVENT_GROUP_INSERTION_COST = ConfigurationKeys.GED_PREFIX + "eventGroupInsertionCost";
-
-	// maybe this is not used in behavior clustering code?
-	/** Set trace matcher required for EntryCallStage. STRING */
-	// public static final String TRACE_MATCHER = ConfigurationKeys.PREFIX + "behavior."
-	// + IEntryCallTraceMatcher.class.getSimpleName();
-	//
-	// /** Set acceptance matcher required for SessionAcceptanceFilter. STRING */
-	// public static final String ENTRY_CALL_ACCEPTANCE_MATCHER = ConfigurationKeys.PREFIX + "behavior."
-	// + IEntryCallAcceptanceMatcher.class.getSimpleName();
-	//
-	// /** Set cleanup rewriter required for TraceOperationCleanupFilter. STRING */
-	// public static final String CLEANUP_REWRITER = ConfigurationKeys.PREFIX + "behavior."
-	// + ITraceSignatureCleanupRewriter.class.getSimpleName();
+	public static final String EVENT_GROUP_INSERTION_COST = ConfigurationKeys.PREFIX + "eventGroupInsertionCost";
 
 	/**
-	 * Set entry call filter rules factory required for TSessionOperationsFilter. STRING
-	 */
-	public static final String ENTRY_CALL_FILTER_RULES_FACTORY = ConfigurationKeys.PREFIX + "behavior."
-			+ IModelGenerationFilterFactory.class.getSimpleName();
-
-	/** Set time interval required for TimeTriggerFilter. LONG */
-	public static final String TRIGGER_INTERVAL = ConfigurationKeys.PREFIX + "behavior." + "triggerInterval";
-
-	/**
-	 * Set behaviour model sink base url to configure file writing directory STRING.
-	 */
-	public static final String SINK_BASE_URL = ConfigurationKeys.PREFIX + "behavior.sink.baseUrl";
-
-	/**
-	 * Specific to Similarity Matching.
+	 *
 	 */
 
-	/**
-	 * Set parameter similarity radius DOUBLE.
-	 */
-	public static final String SIM_MATCH_RADIUS_PARAMS = ConfigurationKeys.PREFIX + "behavior.sm.parameters.radius";
+	public static final String TRACE_SIGNATURE_PROCESSOR = PREFIX + "traceSignatureProcessor";
 
-	/**
-	 * Set structure similarity radius DOUBLE.
-	 */
-	public static final String SIM_MATCH_RADIUS_STRUCTURE = ConfigurationKeys.PREFIX + "behavior.sm.structure.radius";
+	public static final String CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE = PREFIX + "classSignatureAcceptancePatternFile";
 
-	public static final String SINGLE_EVENT_MODE = ConfigurationKeys.PREFIX + "singleEventMode";
+	public static final String OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE = PREFIX + "operationSignatureAcceptancePatternFile";
 
-	/**
-	 * Set similarity radius DOUBLE.
-	 */
-	public static final String SIM_MATCH_RADIUS = ConfigurationKeys.PREFIX + "behavior.sm.radius";
-
-	public static final String TRACE_OPERATION_CLEANUP_REWRITER = PREFIX + "trace.operation.cleanup.rewriter";
-
-	public static final String ENTRY_CALL_ACCEPTANCE_MATCHER = PREFIX + "call.acceptance.matcher";
+	public static final String SIGNATURE_ACCEPTANCE_MATCHER_MODE = PREFIX + "signatureAcceptancePatternMode";
 
 }

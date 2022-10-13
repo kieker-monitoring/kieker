@@ -16,6 +16,8 @@
 package kieker.analysis.behavior.data;
 
 /**
+ * Entry call events with request data.
+ *
  * @author Reiner Jung
  * @since 2.0.0
  */
@@ -29,15 +31,22 @@ public class EntryCallEvent {
 	private final String sessionId;
 	private final String hostname;
 
-	public EntryCallEvent(final long entryTime, final long exitTime, final String operationSignature, final String classSignature, final String sessionId,
-			final String hostname) {
-		super();
+	private final String[] parameters;
+	private final String[] values;
+	private final int requestType;
+
+	public EntryCallEvent(final long entryTime, final long exitTime, final String operationSignature, final String classSignature,
+			final String sessionId, final String hostname,
+			final String[] parameters, final String[] values, final int requestType) {
 		this.entryTime = entryTime;
 		this.exitTime = exitTime;
 		this.operationSignature = operationSignature;
 		this.classSignature = classSignature;
 		this.sessionId = sessionId;
 		this.hostname = hostname;
+		this.parameters = parameters;
+		this.values = values;
+		this.requestType = requestType;
 	}
 
 	public String getOperationSignature() {
@@ -70,6 +79,18 @@ public class EntryCallEvent {
 
 	public String getHostname() {
 		return this.hostname;
+	}
+
+	public String[] getParameters() {
+		return this.parameters;
+	}
+
+	public String[] getValues() {
+		return this.values;
+	}
+
+	public int getRequestType() {
+		return this.requestType;
 	}
 
 }

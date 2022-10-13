@@ -18,7 +18,7 @@ package kieker.analysis.behavior.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.behavior.data.PayloadAwareEntryCallEvent;
+import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
  * The edge between two nodes of a BehaviorModel.
@@ -58,7 +58,7 @@ public class Edge {
 	 * @param target
 	 *            the target node of the edge
 	 */
-	public Edge(final PayloadAwareEntryCallEvent event, final Node source,
+	public Edge(final EntryCallEvent event, final Node source,
 			final Node target) {
 		this.eventGroups = new ArrayList<>();
 		this.addEvent(event);
@@ -72,7 +72,7 @@ public class Edge {
 	 * @param event
 	 *            the event which should be added to the edge
 	 */
-	public void addEvent(final PayloadAwareEntryCallEvent event) {
+	public void addEvent(final EntryCallEvent event) {
 		boolean success = false;
 		for (final EventGroup eventGroup : this.eventGroups) {
 			if (eventGroup.hasSameParameters(event)) {

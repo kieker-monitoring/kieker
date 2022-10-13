@@ -13,35 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
+package kieker.analysis.behavior.signature.processor;
 
 /**
- * Factory for creating a filter for JPetStore call events.
+ * Interface for a rewriter on class and operation signatures.
  *
- * @author Christoph Dornieden
+ * @author Reiner Jung
  * @since 2.0.0
  */
-public final class JPetStoreEntryCallRulesFactory implements IModelGenerationFilterFactory {
-
-	public JPetStoreEntryCallRulesFactory() {
-		// empty constructor
-	}
+public interface ITraceSignatureProcessor {
 
 	/**
-	 * Create an entry call filter rule for the JPetStore.
+	 * Rewrite the class signature.
 	 *
-	 * @return return the filter
+	 * @param classSignature
+	 *            old signature
+	 * @return new signature
 	 */
-	@Override
-	public EntryCallFilterRules createFilter() {
-		final EntryCallFilterRules modelGenerationFilter;
-		modelGenerationFilter = new EntryCallFilterRules(true);
+	String rewriteClassSignature(String classSignature);
 
-		modelGenerationFilter.addFilterRule(".*css.*");
-		modelGenerationFilter.addFilterRule(".*gif");
-		modelGenerationFilter.addFilterRule(".*images.*");
-
-		return modelGenerationFilter;
-	}
+	/**
+	 * Rewrite the operation signature.
+	 *
+	 * @param operationSignature
+	 *            old signature
+	 * @return new signature
+	 */
+	String rewriteOperationSignature(String operationSignature);
 
 }
