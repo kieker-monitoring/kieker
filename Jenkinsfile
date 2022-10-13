@@ -252,9 +252,20 @@ pipeline {
                 credentialsId: 'artifactupload', 
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
-              )
-            ]) {
-              sh './gradlew publish'
+              ),
+              usernamePassword(
+                credentialsId: 'sonatype-pgp-passphrase',
+                usernameVariable: 'PASS_USER',
+                passwordVariable: 'PASSPHRASE'
+              ),
+              file(
+                credentialsId: 'sonatype-pgp-key', 
+                variable: 'KEY_FILE'),
+              string(
+                credentialsId: 'sonatype-key-id',
+                variable: 'KEY_ID')
+              ]) {
+              sh './gradlew publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
             }
       }
       
