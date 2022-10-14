@@ -27,7 +27,7 @@ import teetime.framework.OutputPort;
 
 /**
  * Collect objects until a time trigger has been received or the maximal amount of
- * events have been collected.
+ * events have been collected. On termination, it sends out its remaining content
  *
  * @param <T>
  *            type of the objects collected
@@ -70,13 +70,13 @@ public class DataCollectorStage<T> extends AbstractStage {
 
 		// if new object received
 		if (newData != null) {
-			DataCollectorStage.LOGGER.info("Received a behavior model!");
+			DataCollectorStage.LOGGER.debug("Received a behavior model!");
 			this.dataList.add(newData);
 
 			// if maximum amount of objects is reached
 			if (this.stopAfterAmount) {
 				if (this.dataList.size() >= this.maxAmount) {
-					DataCollectorStage.LOGGER.info("Reached model amount maximum, sending models..");
+					DataCollectorStage.LOGGER.debug("Reached model amount maximum, sending models..");
 					this.opticsOutputPort.send(this.dataList);
 					this.mTreeOutputPort.send(this.dataList);
 					this.dataList = new ArrayList<>();
@@ -84,13 +84,21 @@ public class DataCollectorStage<T> extends AbstractStage {
 			}
 		}
 
-		// if time triger event occured
+		// if time trigger event occured
 		final Long triggerTime = this.timeTriggerInputPort.receive();
 		if (triggerTime != null) {
 			DataCollectorStage.LOGGER.debug("Sending models...");
 			this.opticsOutputPort.send(this.dataList);
 			this.mTreeOutputPort.send(this.dataList);
 		}
+	}
+
+	@Override
+	protected void onTerminating() {
+		DataCollectorStage.LOGGER.debug("Sending models...");
+		this.opticsOutputPort.send(this.dataList);
+		this.mTreeOutputPort.send(this.dataList);
+		super.onTerminating();
 	}
 
 	public InputPort<T> getDataInputPort() {

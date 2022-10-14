@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import com.beust.jcommander.JCommander;
 
+import kieker.analysis.behavior.acceptance.matcher.EAcceptanceMode;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.AbstractService;
@@ -70,6 +71,13 @@ public final class BehaviorAnalysisServiceMain
 	@Override
 	protected boolean checkConfiguration(final kieker.common.configuration.Configuration configuration,
 			final JCommander commander) {
+		final String userSessionTimeout = configuration.getStringProperty(ConfigurationKeys.USER_SESSION_TIMEOUT, null);
+		if (userSessionTimeout == null) {
+			this.parameterConfiguration.setUserSessionTimeout(null);
+		} else {
+			this.parameterConfiguration.setUserSessionTimeout(Long.parseLong(userSessionTimeout));
+		}
+
 		final String clusterOutputFile = configuration.getStringProperty(ConfigurationKeys.CLUSTER_OUTPUT_FILE);
 		if (clusterOutputFile != null) {
 			this.parameterConfiguration.setClusterOutputPath(Paths.get(clusterOutputFile));
@@ -88,7 +96,8 @@ public final class BehaviorAnalysisServiceMain
 				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE), "operation signature patterns",
 						commander));
 		// TODO make this an enumeration
-		this.parameterConfiguration.setAcceptanceMatcherMode(configuration.getBooleanProperty(ConfigurationKeys.SIGNATURE_ACCEPTANCE_MATCHER_MODE, false));
+		this.parameterConfiguration.setAcceptanceMatcherMode(
+				configuration.getEnumProperty(ConfigurationKeys.SIGNATURE_ACCEPTANCE_MATCHER_MODE, EAcceptanceMode.class, EAcceptanceMode.NORMAL));
 
 		/** For TraceSignatureProcessor. */
 		this.parameterConfiguration.setTraceSignatureProcessor(ParameterEvaluationUtils.createFromConfiguration(

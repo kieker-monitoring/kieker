@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import com.beust.jcommander.Parameter;
 
+import kieker.analysis.behavior.acceptance.matcher.EAcceptanceMode;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 
 /**
@@ -39,7 +40,7 @@ public class BehaviorAnalysisSettings {
 
 	private List<Pattern> classSignatureAcceptancePatterns;
 	private List<Pattern> operationSignatureAcceptancePatterns;
-	private boolean acceptanceMatcherMode;
+	private EAcceptanceMode acceptanceMatcherMode;
 	private ITraceSignatureProcessor traceSignatureProcessor;
 
 	private double clusteringDistance;
@@ -47,6 +48,8 @@ public class BehaviorAnalysisSettings {
 	private int minPts;
 
 	private int maxAmount;
+
+	private Long userSessionTimeout;
 
 	public final File getConfigurationFile() {
 		return this.configurationFile;
@@ -120,12 +123,20 @@ public class BehaviorAnalysisSettings {
 		this.operationSignatureAcceptancePatterns = operationSignatureAcceptancePatterns;
 	}
 
-	public boolean isAcceptanceMatcherMode() {
+	public EAcceptanceMode getAcceptanceMatcherMode() {
 		return this.acceptanceMatcherMode;
 	}
 
-	public void setAcceptanceMatcherMode(final boolean acceptanceMatcherMode) {
+	public void setAcceptanceMatcherMode(final EAcceptanceMode acceptanceMatcherMode) {
 		this.acceptanceMatcherMode = acceptanceMatcherMode;
+	}
+
+	public Long getUserSessionTimeout() {
+		return this.userSessionTimeout;
+	}
+
+	public void setUserSessionTimeout(final Long userSessionTimeout) {
+		this.userSessionTimeout = userSessionTimeout;
 	}
 
 }

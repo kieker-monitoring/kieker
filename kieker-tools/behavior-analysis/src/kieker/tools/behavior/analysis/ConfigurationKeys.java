@@ -62,4 +62,6 @@ public class ConfigurationKeys {
 
 	public static final String SIGNATURE_ACCEPTANCE_MATCHER_MODE = PREFIX + "signatureAcceptancePatternMode";
 
+	public static final String USER_SESSION_TIMEOUT = PREFIX + "usesSessionTimeout";
+
 }

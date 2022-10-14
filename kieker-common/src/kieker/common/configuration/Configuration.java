@@ -164,7 +164,7 @@ public class Configuration extends Properties {
 		try {
 			return Integer.parseInt(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type int, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -213,7 +213,7 @@ public class Configuration extends Properties {
 		try {
 			return Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type long, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -266,7 +266,37 @@ public class Configuration extends Properties {
 		try {
 			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type double, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a double. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A double with the value of the given property or the default value
+	 */
+	public final <T extends Enum<T>> T getEnumProperty(final String key, final Class<T> enumType, final T defaultValue) {
+		final String propertyValue = this.getPropertyValueInternal(key);
+
+		if (propertyValue == null) {
+			return defaultValue;
+		} else {
+			final T[] results = enumType.getEnumConstants();
+			for (final T value : results) {
+				if (value.name().toLowerCase().equals(propertyValue)) {
+					return value;
+				}
+			}
+
+			LOGGER.warn("Error parsing configuration property '{}' of type {}, found value '{}', using default value {}",
+					key, enumType.getSimpleName(), defaultValue);
 			return defaultValue;
 		}
 	}

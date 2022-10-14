@@ -30,7 +30,7 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @param <T>
  *            The type, which the objects should have
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
@@ -54,11 +54,11 @@ public class MTreeGeneratorStage<T> extends AbstractTransformation<List<T>, MTre
 		final MTree<T> mtree = new MTree<>(this.minNodeCapacity, this.maxNodeCapacity, this.distanceFunction, null);
 
 		if (models != null) {
-			MTreeGeneratorStage.LOGGER.info("Received " + models.size() + " new models");
+			MTreeGeneratorStage.LOGGER.debug("Received {} new models", models.size());
 			for (final T model : models) {
 				mtree.add(model);
 			}
-			MTreeGeneratorStage.LOGGER.info("Created MTree");
+			MTreeGeneratorStage.LOGGER.debug("Created MTree");
 
 			this.outputPort.send(mtree);
 

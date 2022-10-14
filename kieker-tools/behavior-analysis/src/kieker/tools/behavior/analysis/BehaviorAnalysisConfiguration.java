@@ -49,9 +49,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 
 		final IEntryCallAcceptanceMatcher entryCallAcceptanceMatcher = new GenericEntryCallAcceptanceMatcher(settings.getClassSignatureAcceptancePatterns(),
 				settings.getOperationSignatureAcceptancePatterns(),
-				settings.isAcceptanceMatcherMode());
+				settings.getAcceptanceMatcherMode());
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
-				settings.getTraceSignatureProcessor());
+				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
 		final ClusteringCompositeStage clustering = new ClusteringCompositeStage(settings.getClusteringDistance(),
 				settings.getMinPts(), settings.getMaxAmount());
 		final Distributor<Clustering<BehaviorModel>> distributor = new Distributor<>(new CopyByReferenceStrategy());

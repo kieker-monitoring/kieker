@@ -93,4 +93,9 @@ public class EntryCallEvent {
 		return this.requestType;
 	}
 
+	@Override
+	public String toString() {
+		return this.getClassSignature() + "::" + this.getOperationSignature() + " " + this.getEntryTime();
+	}
+
 }

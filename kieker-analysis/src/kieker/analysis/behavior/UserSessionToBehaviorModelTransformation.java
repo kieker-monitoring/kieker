@@ -53,7 +53,7 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 		final List<EntryCallEvent> entryCalls = session.getEvents();
 
 		this.outputPort.send(UserSessionToBehaviorModelTransformation.eventsToModel(entryCalls));
-		UserSessionToBehaviorModelTransformation.LOGGER.info("Created BehaviorModelGED");
+		UserSessionToBehaviorModelTransformation.LOGGER.debug("Created BehaviorModelGED");
 
 	}
 

@@ -42,8 +42,6 @@ import teetime.framework.OutputPort;
  * @since 2.0.0
  */
 public final class EntryCallSequenceStage extends AbstractStage {
-	/** time until a session expires. */
-	private static final long USER_SESSION_EXPIRATIONTIME = 360000000000L;
 	/** map of sessions. */
 	private final Map<String, UserSession> sessions = new HashMap<>();
 	/** output ports. */
@@ -51,13 +49,14 @@ public final class EntryCallSequenceStage extends AbstractStage {
 
 	private final InputPort<EntryCallEvent> entryCallInputPort = this.createInputPort();
 	private final InputPort<ISessionEvent> sessionEventInputPort = this.createInputPort();
+	private final Long userSessionTimeout;
 
 	/**
 	 * Create this filter.
 	 *
 	 */
-	public EntryCallSequenceStage() {
-		// TODO make expiration time configurable
+	public EntryCallSequenceStage(final Long userSessionTimeout) {
+		this.userSessionTimeout = userSessionTimeout;
 	}
 
 	@Override
@@ -65,8 +64,9 @@ public final class EntryCallSequenceStage extends AbstractStage {
 		this.processSessionEvent(this.sessionEventInputPort.receive());
 		this.processEntryCallEvent(this.entryCallInputPort.receive());
 
-		// TODO make this an option
-		this.removeExpiredSessions();
+		if (this.userSessionTimeout != null) {
+			this.removeExpiredSessions();
+		}
 	}
 
 	private void processEntryCallEvent(final EntryCallEvent event) {
@@ -114,7 +114,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 			final UserSession session = this.sessions.get(sessionId);
 			final long exitTime = session.getExitTime();
 
-			final boolean isExpired = (exitTime + EntryCallSequenceStage.USER_SESSION_EXPIRATIONTIME) < timeNow;
+			final boolean isExpired = (exitTime + this.userSessionTimeout) < timeNow;
 
 			if (isExpired) {
 				this.userSessionOutputPort.send(session);

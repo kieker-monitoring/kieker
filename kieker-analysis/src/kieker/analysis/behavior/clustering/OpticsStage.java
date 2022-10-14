@@ -67,7 +67,7 @@ public class OpticsStage extends AbstractStage {
 
 		// We need the list of all objects and the MTree with all objects for the algorithm
 		if (!this.mTreeInputQueue.isEmpty() && !this.modelsInputQueue.isEmpty()) {
-			OpticsStage.LOGGER.info("received models and mtrees, begins to calculate optics result");
+			OpticsStage.LOGGER.debug("received models and mtrees, begins to calculate optics result");
 			final MTree<OpticsData> mtree = this.mTreeInputQueue.poll();
 			final List<OpticsData> models = this.modelsInputQueue.poll();
 
@@ -86,7 +86,7 @@ public class OpticsStage extends AbstractStage {
 		return this.outputPort;
 	}
 
-	public InputPort<MTree<OpticsData>> getmTreeInputPort() {
+	public InputPort<MTree<OpticsData>> getMTreeInputPort() {
 		return this.mTreeInputPort;
 	}
 

@@ -63,7 +63,7 @@ public class ClusteringCompositeStage extends CompositeStage {
 
 		this.connectPorts(collector.getmTreeOutputPort(), mTreeGenerator.getInputPort());
 
-		this.connectPorts(mTreeGenerator.getOutputPort(), optics.getmTreeInputPort());
+		this.connectPorts(mTreeGenerator.getOutputPort(), optics.getMTreeInputPort());
 
 		this.connectPorts(collector.getOpticsOutputPort(), optics.getModelsInputPort());
 

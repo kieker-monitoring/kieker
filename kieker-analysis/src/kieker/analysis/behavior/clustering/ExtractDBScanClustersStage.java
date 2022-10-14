@@ -46,7 +46,7 @@ public class ExtractDBScanClustersStage extends AbstractTransformation<List<Opti
 	@Override
 	protected void execute(final List<OpticsData> opticsResults) throws Exception {
 
-		ExtractDBScanClustersStage.LOGGER.info("received optics result");
+		ExtractDBScanClustersStage.LOGGER.debug("received optics result");
 		for (final OpticsData model : opticsResults) {
 			ExtractDBScanClustersStage.LOGGER.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
 					+ Double.toString(model.getCoreDistance()));
@@ -56,10 +56,10 @@ public class ExtractDBScanClustersStage extends AbstractTransformation<List<Opti
 		Set<BehaviorModel> currentCluster = clustering.getNoise();
 
 		for (final OpticsData model : opticsResults) {
-			if (model.getReachabilityDistance() == OpticsData.UNDEFINED
-					|| model.getReachabilityDistance() > this.clusteringDistance) {
-				if (model.getCoreDistance() <= this.clusteringDistance
-						&& model.getCoreDistance() != OpticsData.UNDEFINED) {
+			if ((model.getReachabilityDistance() == OpticsData.UNDEFINED)
+					|| (model.getReachabilityDistance() > this.clusteringDistance)) {
+				if ((model.getCoreDistance() <= this.clusteringDistance)
+						&& (model.getCoreDistance() != OpticsData.UNDEFINED)) {
 					final Set<BehaviorModel> newCluster = new HashSet<>();
 					clustering.addCluster(newCluster);
 					newCluster.add(model.getData());
@@ -71,7 +71,7 @@ public class ExtractDBScanClustersStage extends AbstractTransformation<List<Opti
 				currentCluster.add(model.getData());
 			}
 		}
-		ExtractDBScanClustersStage.LOGGER.info("generated " + clustering.getClusters().size() + " clusters");
+		ExtractDBScanClustersStage.LOGGER.info("generated " + clustering.getClusters().size() + " clusters.");
 
 		this.getOutputPort().send(clustering);
 	}

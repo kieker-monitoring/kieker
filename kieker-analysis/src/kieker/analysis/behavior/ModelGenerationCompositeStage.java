@@ -41,16 +41,27 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 
 	private final InputPort<Object> inputPort;
 
+	/**
+	 * Generating user behavior graphs.
+	 *
+	 * @param entryCallMatcher
+	 *            matcher to decide which events are actually part of the user behavior
+	 * @param traceSignatureProcessor
+	 *            processing the event's class and operation signature
+	 * @param userSessionTimeout
+	 *            timeout for observe sessions
+	 * @throws ConfigurationException
+	 */
 	public ModelGenerationCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher,
-			final ITraceSignatureProcessor traceSignatureProcessor)
+			final ITraceSignatureProcessor traceSignatureProcessor, final Long userSessionTimeout)
 			throws ConfigurationException {
 
 		final DynamicEventDispatcher eventDispatcher = new DynamicEventDispatcher(null, true, true, false);
-		final CreateEntryLevelEventStage createEntryLevelEventStage = new CreateEntryLevelEventStage(true); // TODO make this an option
+		final CreateEntryLevelEventStage createEntryLevelEventStage = new CreateEntryLevelEventStage(true); // TODO make this true/false an option
 		final IEventMatcher<IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
 
 		final UserSessionGeneratorCompositeStage sessionGenerator = new UserSessionGeneratorCompositeStage(
-				entryCallMatcher, traceSignatureProcessor);
+				entryCallMatcher, traceSignatureProcessor, userSessionTimeout);
 		final UserSessionToBehaviorModelTransformation sessionToModel = new UserSessionToBehaviorModelTransformation();
 
 		this.inputPort = eventDispatcher.getInputPort();
