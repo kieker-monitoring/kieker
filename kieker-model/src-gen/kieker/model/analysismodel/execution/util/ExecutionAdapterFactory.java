@@ -77,8 +77,8 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createExecutionModelAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> object) {
-				return createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter();
+			public Adapter caseDeployedOperationsPairToInvocationMapEntry(Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> object) {
+				return createDeployedOperationsPairToInvocationMapEntryAdapter();
 			}
 			@Override
 			public Adapter caseInvocation(Invocation object) {
@@ -139,7 +139,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Invocation Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -148,7 +148,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * @see java.util.Map.Entry
 	 * @generated
 	 */
-	public Adapter createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter() {
+	public Adapter createDeployedOperationsPairToInvocationMapEntryAdapter() {
 		return null;
 	}
 

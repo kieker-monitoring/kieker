@@ -338,8 +338,8 @@
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
       nsPrefix="execution">
     <eClassifiers xsi:type="ecore:EClass" name="ExecutionModel">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
-          ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="invocations" ordered="false"
+          upperBound="-1" eType="#//execution/DeployedOperationsPairToInvocationMapEntry"
           containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="storageDataflow" ordered="false"
           upperBound="-1" eType="#//execution/DeployedOperationsPairToDeployedStorageMapEntry"
@@ -348,7 +348,7 @@
           upperBound="-1" eType="#//execution/DeployedOperationsPairToDeployedOperationsMapEntry"
           containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedInvocationMapEntry"
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToInvocationMapEntry"
         instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//execution/Invocation"
           containment="true"/>

@@ -42,14 +42,14 @@ public class ExecutionModelAssembler extends AbstractSourceModelAssembler implem
 
 	@Override
 	public void addOperationCall(final OperationCallDurationEvent operationCall) {
-		if (!this.executionModel.getAggregatedInvocations().containsKey(operationCall.getOperationCall())) {
+		if (!this.executionModel.getInvocations().containsKey(operationCall.getOperationCall())) {
 			final Invocation invocation = this.factory.createInvocation();
 			invocation.setCaller(operationCall.getOperationCall().getFirst());
 			invocation.setCallee(operationCall.getOperationCall().getSecond());
 
 			this.updateSourceModel(invocation);
 
-			this.executionModel.getAggregatedInvocations().put(operationCall.getOperationCall(), invocation);
+			this.executionModel.getInvocations().put(operationCall.getOperationCall(), invocation);
 		}
 	}
 

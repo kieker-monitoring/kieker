@@ -53,14 +53,14 @@ public class TraceBasedExecutionModelAssembler extends AbstractSourceModelAssemb
 		final Tuple<DeployedOperation, DeployedOperation> key = this.factory.createTuple();
 		key.setFirst(caller);
 		key.setSecond(callee);
-		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
+		if (!this.executionModel.getInvocations().containsKey(key)) {
 			final Invocation invocation = this.factory.createInvocation();
 			invocation.setCaller(caller);
 			invocation.setCallee(callee);
 
 			this.updateSourceModel(invocation);
 
-			this.executionModel.getAggregatedInvocations().put(key, invocation);
+			this.executionModel.getInvocations().put(key, invocation);
 		}
 	}
 
