@@ -60,7 +60,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		this.executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
 		this.statisticsModel = repository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL);
 		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
-		for (final Invocation invocation : this.executionModel.getAggregatedInvocations().values()) {
+		for (final Invocation invocation : this.executionModel.getInvocations().values()) {
 			this.handleInvocation(invocation);
 		}
 		return this.graph;

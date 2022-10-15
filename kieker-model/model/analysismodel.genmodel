@@ -289,13 +289,13 @@
         <genEnumLiterals ecoreEnumLiteral="analysismodel.ecore#//execution/EDirection/BOTH"/>
       </genEnums>
       <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/invocations"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/storageDataflow"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/operationDataflow"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/value"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/key"/>
+      <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToInvocationMapEntry">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToInvocationMapEntry/value"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToInvocationMapEntry/key"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//execution/Invocation">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
