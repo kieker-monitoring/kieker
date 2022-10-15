@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getInvocations <em>Invocations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getStorageDataflow <em>Storage Dataflow</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.ExecutionModel#getOperationDataflow <em>Operation Dataflow</em>}</li>
  * </ul>
@@ -29,17 +29,17 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ExecutionModel extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' map.
+	 * Returns the value of the '<em><b>Invocations</b></em>' map.
 	 * The key is of type {@link kieker.model.analysismodel.execution.Tuple<kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation>},
 	 * and the value is of type {@link kieker.model.analysismodel.execution.Invocation},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Aggregated Invocations</em>' map.
-	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getExecutionModel_AggregatedInvocations()
-	 * @model mapType="kieker.model.analysismodel.execution.DeployedOperationsPairToAggregatedInvocationMapEntry&lt;kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;, kieker.model.analysismodel.execution.Invocation&gt;" ordered="false"
+	 * @return the value of the '<em>Invocations</em>' map.
+	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getExecutionModel_Invocations()
+	 * @model mapType="kieker.model.analysismodel.execution.DeployedOperationsPairToInvocationMapEntry&lt;kieker.model.analysismodel.execution.Tuple&lt;kieker.model.analysismodel.deployment.DeployedOperation, kieker.model.analysismodel.deployment.DeployedOperation&gt;, kieker.model.analysismodel.execution.Invocation&gt;" ordered="false"
 	 * @generated
 	 */
-	EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> getAggregatedInvocations();
+	EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> getInvocations();
 
 	/**
 	 * Returns the value of the '<em><b>Storage Dataflow</b></em>' map.

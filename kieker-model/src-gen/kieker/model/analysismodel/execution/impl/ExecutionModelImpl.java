@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getInvocations <em>Invocations</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getStorageDataflow <em>Storage Dataflow</em>}</li>
  *   <li>{@link kieker.model.analysismodel.execution.impl.ExecutionModelImpl#getOperationDataflow <em>Operation Dataflow</em>}</li>
  * </ul>
@@ -41,14 +41,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements ExecutionModel {
 	/**
-	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' map.
+	 * The cached value of the '{@link #getInvocations() <em>Invocations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAggregatedInvocations()
+	 * @see #getInvocations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> aggregatedInvocations;
+	protected EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> invocations;
 
 	/**
 	 * The cached value of the '{@link #getStorageDataflow() <em>Storage Dataflow</em>}' map.
@@ -95,11 +95,11 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 */
 	@Override
-	public EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> getAggregatedInvocations() {
-		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,Invocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
+	public EMap<Tuple<DeployedOperation, DeployedOperation>, Invocation> getInvocations() {
+		if (invocations == null) {
+			invocations = new EcoreEMap<Tuple<DeployedOperation, DeployedOperation>,Invocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_INVOCATION_MAP_ENTRY, DeployedOperationsPairToInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__INVOCATIONS);
 		}
-		return aggregatedInvocations;
+		return invocations;
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
-				return ((InternalEList<?>)getAggregatedInvocations()).basicRemove(otherEnd, msgs);
+			case ExecutionPackage.EXECUTION_MODEL__INVOCATIONS:
+				return ((InternalEList<?>)getInvocations()).basicRemove(otherEnd, msgs);
 			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
 				return ((InternalEList<?>)getStorageDataflow()).basicRemove(otherEnd, msgs);
 			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
@@ -154,9 +154,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
-				if (coreType) return getAggregatedInvocations();
-				else return getAggregatedInvocations().map();
+			case ExecutionPackage.EXECUTION_MODEL__INVOCATIONS:
+				if (coreType) return getInvocations();
+				else return getInvocations().map();
 			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
 				if (coreType) return getStorageDataflow();
 				else return getStorageDataflow().map();
@@ -175,8 +175,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
-				((EStructuralFeature.Setting)getAggregatedInvocations()).set(newValue);
+			case ExecutionPackage.EXECUTION_MODEL__INVOCATIONS:
+				((EStructuralFeature.Setting)getInvocations()).set(newValue);
 				return;
 			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
 				((EStructuralFeature.Setting)getStorageDataflow()).set(newValue);
@@ -196,8 +196,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
-				getAggregatedInvocations().clear();
+			case ExecutionPackage.EXECUTION_MODEL__INVOCATIONS:
+				getInvocations().clear();
 				return;
 			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
 				getStorageDataflow().clear();
@@ -217,8 +217,8 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
-				return aggregatedInvocations != null && !aggregatedInvocations.isEmpty();
+			case ExecutionPackage.EXECUTION_MODEL__INVOCATIONS:
+				return invocations != null && !invocations.isEmpty();
 			case ExecutionPackage.EXECUTION_MODEL__STORAGE_DATAFLOW:
 				return storageDataflow != null && !storageDataflow.isEmpty();
 			case ExecutionPackage.EXECUTION_MODEL__OPERATION_DATAFLOW:
