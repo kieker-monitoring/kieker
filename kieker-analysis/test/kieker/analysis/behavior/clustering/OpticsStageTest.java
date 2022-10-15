@@ -118,7 +118,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		final List<List<OpticsData>> solutions = new ArrayList<>();
 
 		StageTester.test(optics).and().send(modelsInputList).to(optics.getModelsInputPort()).and().send(mTreeInputList)
-				.to(optics.getmTreeInputPort()).and().receive(solutions).from(optics.getOutputPort()).start();
+				.to(optics.getMTreeInputPort()).and().receive(solutions).from(optics.getOutputPort()).start();
 
 		return solutions.get(0);
 	}

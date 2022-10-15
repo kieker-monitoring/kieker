@@ -19,7 +19,11 @@ package kieker.analysis.behavior.signature.processor;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class DefaultTraceSignatureProcessor implements ITraceSignatureProcessor {
+public class BasicTraceSignatureProcessor implements ITraceSignatureProcessor {
+
+	public BasicTraceSignatureProcessor() {
+		// default constructor
+	}
 
 	@Override
 	public String rewriteClassSignature(final String classSignature) {

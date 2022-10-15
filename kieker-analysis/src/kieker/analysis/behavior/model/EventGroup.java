@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import kieker.analysis.behavior.data.EntryCallEvent;
-import kieker.analysis.behavior.data.EntryCallEvent;
 
 /**
  * An EventGroup contains all events of an edge, which have the same parameters.

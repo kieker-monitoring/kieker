@@ -2,13 +2,13 @@ plugins {
 	id 'application'
 }
 
-sourceCompatibility = 11
+sourceCompatibility = 8
 targetCompatibility = 8
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.behavior.analysis.BehaviorAnalysisMain'
+mainClassName='kieker.tools.behavior.analysis.BehaviorAnalysisServiceMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 

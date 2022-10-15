@@ -83,7 +83,7 @@ public class Configuration extends Properties {
 	 */
 	public final String getStringProperty(final String key, final String defaultValue) {
 		final String s = super.getProperty(key);
-		return (s == null) ? defaultValue : s.trim(); // NOCS
+		return s == null ? defaultValue : s.trim(); // NOCS
 	}
 
 	/**
@@ -290,13 +290,13 @@ public class Configuration extends Properties {
 		} else {
 			final T[] results = enumType.getEnumConstants();
 			for (final T value : results) {
-				if (value.name().toLowerCase().equals(propertyValue)) {
+				if (value.name().equalsIgnoreCase(propertyValue)) {
 					return value;
 				}
 			}
 
 			LOGGER.warn("Error parsing configuration property '{}' of type {}, found value '{}', using default value {}",
-					key, enumType.getSimpleName(), defaultValue);
+					key, enumType.getSimpleName(), propertyValue, defaultValue);
 			return defaultValue;
 		}
 	}
@@ -386,7 +386,7 @@ public class Configuration extends Properties {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);
-			if (i < (values.length - 1)) {
+			if (i < values.length - 1) {
 				sb.append('|');
 			}
 		}
@@ -423,15 +423,15 @@ public class Configuration extends Properties {
 
 		final int numberPathElements = path.size();
 		final Iterator<String> pathIter = path.iterator();
-		for (int i = 0; i < (numberPathElements - 1); i++) {
+		for (int i = 0; i < numberPathElements - 1; i++) {
 			sb.append(pathIter.next()).append('/');
 		}
 		if (pathIter.hasNext()) {
 			sb.append(pathIter.next());
 		}
 		if (endsWithSlash
-				&& (sb.length() != 0) // not if the path is now empty
-				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
+				&& sb.length() != 0 // not if the path is now empty
+				&& (sb.length() != 1 || sb.charAt(0) != '/')) { // not if the path is now '/'
 			sb.append('/');
 		}
 
@@ -450,7 +450,7 @@ public class Configuration extends Properties {
 	private static List<String> generatePath(final String workingPathname) {
 		final String[] components = workingPathname.split("/");
 
-		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
+		final LinkedList<String> path = new LinkedList<>(); // NOCS NOPMD
 
 		// resolve ., .., and //
 		for (final String component : components) {
@@ -540,7 +540,7 @@ public class Configuration extends Properties {
 	 */
 	public void setDefaultConfiguration(final Configuration defaultConfiguration) {
 		Configuration conf = this;
-		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
+		while (conf.defaults != null && conf.defaults instanceof Configuration) {
 			conf = (Configuration) conf.defaults;
 		}
 		if (conf.defaults == null) {
