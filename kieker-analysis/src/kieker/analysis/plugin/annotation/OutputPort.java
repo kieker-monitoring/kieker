@@ -16,6 +16,7 @@
 
 package kieker.analysis.plugin.annotation;
 
+import java.lang.Deprecated;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -34,6 +35,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 @Inherited
+@Deprecated
 public @interface OutputPort {
 
 	/**

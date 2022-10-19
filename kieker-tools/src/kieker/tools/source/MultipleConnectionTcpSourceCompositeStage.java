@@ -66,6 +66,7 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 	 * @throws ConfigurationException
 	 *             on configuration errors during instantiation
 	 */
+	@Deprecated
 	public MultipleConnectionTcpSourceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final int inputPort = configuration.getIntProperty(MultipleConnectionTcpSourceCompositeStage.SOURCE_PORT,
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_SOURCE_PORT);

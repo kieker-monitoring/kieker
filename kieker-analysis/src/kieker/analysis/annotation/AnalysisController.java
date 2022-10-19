@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.annotation;
 
+import java.lang.Deprecated;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -34,6 +35,7 @@ import kieker.analysis.plugin.annotation.Property;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface AnalysisController {
 
 	/**

@@ -32,6 +32,7 @@ import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypePackage;
 
 /**
+ * The standard model descriptors.
  *
  * @author Reiner Jung
  * @since 2.0.0
