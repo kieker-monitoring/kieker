@@ -341,10 +341,10 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="invocations" ordered="false"
           upperBound="-1" eType="#//execution/DeployedOperationsPairToInvocationMapEntry"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="storageDataflow" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="storageDataflows" ordered="false"
           upperBound="-1" eType="#//execution/DeployedOperationsPairToDeployedStorageMapEntry"
           containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="operationDataflow" ordered="false"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operationDataflows" ordered="false"
           upperBound="-1" eType="#//execution/DeployedOperationsPairToDeployedOperationsMapEntry"
           containment="true"/>
     </eClassifiers>

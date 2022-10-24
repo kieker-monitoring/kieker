@@ -78,22 +78,22 @@ public interface ExecutionPackage extends EPackage {
 	int EXECUTION_MODEL__INVOCATIONS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Storage Dataflow</b></em>' map.
+	 * The feature id for the '<em><b>Storage Dataflows</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_MODEL__STORAGE_DATAFLOW = 1;
+	int EXECUTION_MODEL__STORAGE_DATAFLOWS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Operation Dataflow</b></em>' map.
+	 * The feature id for the '<em><b>Operation Dataflows</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_MODEL__OPERATION_DATAFLOW = 2;
+	int EXECUTION_MODEL__OPERATION_DATAFLOWS = 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -504,26 +504,26 @@ public interface ExecutionPackage extends EPackage {
 	EReference getExecutionModel_Invocations();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.execution.ExecutionModel#getStorageDataflow <em>Storage Dataflow</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.execution.ExecutionModel#getStorageDataflows <em>Storage Dataflows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Storage Dataflow</em>'.
-	 * @see kieker.model.analysismodel.execution.ExecutionModel#getStorageDataflow()
+	 * @return the meta object for the map '<em>Storage Dataflows</em>'.
+	 * @see kieker.model.analysismodel.execution.ExecutionModel#getStorageDataflows()
 	 * @see #getExecutionModel()
 	 * @generated
 	 */
-	EReference getExecutionModel_StorageDataflow();
+	EReference getExecutionModel_StorageDataflows();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.execution.ExecutionModel#getOperationDataflow <em>Operation Dataflow</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.execution.ExecutionModel#getOperationDataflows <em>Operation Dataflows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Operation Dataflow</em>'.
-	 * @see kieker.model.analysismodel.execution.ExecutionModel#getOperationDataflow()
+	 * @return the meta object for the map '<em>Operation Dataflows</em>'.
+	 * @see kieker.model.analysismodel.execution.ExecutionModel#getOperationDataflows()
 	 * @see #getExecutionModel()
 	 * @generated
 	 */
-	EReference getExecutionModel_OperationDataflow();
+	EReference getExecutionModel_OperationDataflows();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Invocation Map Entry</em>}'.
@@ -852,20 +852,20 @@ public interface ExecutionPackage extends EPackage {
 		EReference EXECUTION_MODEL__INVOCATIONS = eINSTANCE.getExecutionModel_Invocations();
 
 		/**
-		 * The meta object literal for the '<em><b>Storage Dataflow</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Storage Dataflows</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXECUTION_MODEL__STORAGE_DATAFLOW = eINSTANCE.getExecutionModel_StorageDataflow();
+		EReference EXECUTION_MODEL__STORAGE_DATAFLOWS = eINSTANCE.getExecutionModel_StorageDataflows();
 
 		/**
-		 * The meta object literal for the '<em><b>Operation Dataflow</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Operation Dataflows</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXECUTION_MODEL__OPERATION_DATAFLOW = eINSTANCE.getExecutionModel_OperationDataflow();
+		EReference EXECUTION_MODEL__OPERATION_DATAFLOWS = eINSTANCE.getExecutionModel_OperationDataflows();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToInvocationMapEntryImpl <em>Deployed Operations Pair To Invocation Map Entry</em>}' class.
