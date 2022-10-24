@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.analysis.annotation;
 
-import java.lang.Deprecated;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
