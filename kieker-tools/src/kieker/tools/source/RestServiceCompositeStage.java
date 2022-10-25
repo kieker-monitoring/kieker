@@ -62,6 +62,7 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 	 * @throws ConfigurationException
 	 *             on configuration errors
 	 */
+	@Deprecated
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final String hostname = configuration.getStringProperty(RestServiceCompositeStage.SERVICE_HOSTNAME);
 		final int port = configuration.getIntProperty(RestServiceCompositeStage.SERVICE_PORT);

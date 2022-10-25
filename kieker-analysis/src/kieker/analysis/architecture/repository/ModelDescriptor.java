@@ -30,6 +30,16 @@ public class ModelDescriptor {
 	private final EClass rootClass;
 	private final EFactory factory;
 
+	/**
+	 * Model descriptor.
+	 *
+	 * @param filename
+	 *            filename for the model
+	 * @param rootClass
+	 *            root class of the model as EClass instance
+	 * @param factory
+	 *            factory for the model
+	 */
 	public ModelDescriptor(final String filename, final EClass rootClass, final EFactory factory) {
 		this.filename = filename;
 		this.rootClass = rootClass;

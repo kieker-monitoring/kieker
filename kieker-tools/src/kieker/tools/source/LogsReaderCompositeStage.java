@@ -53,6 +53,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 * @param configuration
 	 *            configuration for the enclosed filters
 	 */
+	@Deprecated
 	public LogsReaderCompositeStage(final Configuration configuration) {
 		final String[] directoryNames = configuration.getStringArrayProperty(LOG_DIRECTORIES, ":");
 		final List<File> directories = new ArrayList<>(directoryNames.length);

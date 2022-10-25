@@ -33,6 +33,12 @@ public class ModelRepository {
 
 	private final Map<EClass, ModelDescriptor> descriptors = new HashMap<>();
 
+	/**
+	 * Create a new model repository with the given name.
+	 *
+	 * @param name
+	 *            name of the repository
+	 */
 	public ModelRepository(final String name) {
 		this.name = name;
 	}

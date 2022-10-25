@@ -24,6 +24,7 @@ package kieker.analysis.plugin.annotation;
  * @since 1.6
  * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public @interface Property {
 
 	/**
