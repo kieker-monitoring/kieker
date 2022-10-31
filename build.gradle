@@ -922,7 +922,8 @@ distribute.mustRunAfter enableRTests
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
-	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+	println 'Going to sign for releasing: ' + isReleaseVersion
+	required { isReleaseVersion }
 	sign configurations.archives
 }
 
