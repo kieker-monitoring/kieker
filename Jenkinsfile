@@ -259,7 +259,7 @@ pipeline {
                 passwordVariable: 'PASSPHRASE'
               ),
               file(
-                credentialsId: 'sonatype-pgp-key', 
+                credentialsId: 'sonatype-pgp-key-2', 
                 variable: 'KEY_FILE'),
               string(
                 credentialsId: 'sonatype-key-id',
