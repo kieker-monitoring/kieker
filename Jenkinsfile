@@ -265,7 +265,7 @@ pipeline {
                 credentialsId: 'sonatype-key-id',
                 variable: 'KEY_ID')
               ]) {
-              sh './gradlew publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
+              sh './gradlew signArchives publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
             }
       }
       
