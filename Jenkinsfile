@@ -254,15 +254,15 @@ pipeline {
                 passwordVariable: 'kiekerMavenPassword'
               ),
               usernamePassword(
-                credentialsId: 'sonatype-pgp-passphrase',
+                credentialsId: 'kieker-pgp-passphrase',
                 usernameVariable: 'PASS_USER',
                 passwordVariable: 'PASSPHRASE'
               ),
               file(
-                credentialsId: 'sonatype-pgp-key-2', 
+                credentialsId: 'kieker-pgp-key-2', 
                 variable: 'KEY_FILE'),
               string(
-                credentialsId: 'sonatype-key-id',
+                credentialsId: 'kieker-key-id',
                 variable: 'KEY_ID')
               ]) {
               sh './gradlew signArchives publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
