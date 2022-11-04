@@ -253,10 +253,9 @@ pipeline {
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
               ),
-              usernamePassword(
+              string(
                 credentialsId: 'kieker-pgp-passphrase',
-                usernameVariable: 'PASS_USER',
-                passwordVariable: 'PASSPHRASE'
+                variable: 'PASSPHRASE'
               ),
               file(
                 credentialsId: 'kieker-pgp-key-2', 
