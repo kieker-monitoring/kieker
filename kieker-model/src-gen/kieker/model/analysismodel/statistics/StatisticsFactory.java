@@ -22,15 +22,6 @@ public interface StatisticsFactory extends EFactory {
 	StatisticsFactory eINSTANCE = kieker.model.analysismodel.statistics.impl.StatisticsFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Statistics</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Statistics</em>'.
-	 * @generated
-	 */
-	Statistics createStatistics();
-
-	/**
 	 * Returns a new object of class '<em>Statistic Record</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -40,49 +31,58 @@ public interface StatisticsFactory extends EFactory {
 	StatisticRecord createStatisticRecord();
 
 	/**
-	 * Returns a new object of class '<em>Time Series</em>'.
+	 * Returns a new object of class '<em>Scalar Measurement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Time Series</em>'.
+	 * @return a new object of class '<em>Scalar Measurement</em>'.
 	 * @generated
 	 */
-	<V extends Value, U extends Unit<V>> TimeSeries<V, U> createTimeSeries();
+	ScalarMeasurement createScalarMeasurement();
 
 	/**
-	 * Returns a new object of class '<em>Int Value</em>'.
+	 * Returns a new object of class '<em>Vector Measurement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Int Value</em>'.
+	 * @return a new object of class '<em>Vector Measurement</em>'.
 	 * @generated
 	 */
-	IntValue createIntValue();
+	VectorMeasurement createVectorMeasurement();
 
 	/**
-	 * Returns a new object of class '<em>Long Value</em>'.
+	 * Returns a new object of class '<em>Int Measurement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Long Value</em>'.
+	 * @return a new object of class '<em>Int Measurement</em>'.
 	 * @generated
 	 */
-	LongValue createLongValue();
+	IntMeasurement createIntMeasurement();
 
 	/**
-	 * Returns a new object of class '<em>Float Value</em>'.
+	 * Returns a new object of class '<em>Long Measurement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Float Value</em>'.
+	 * @return a new object of class '<em>Long Measurement</em>'.
 	 * @generated
 	 */
-	FloatValue createFloatValue();
+	LongMeasurement createLongMeasurement();
 
 	/**
-	 * Returns a new object of class '<em>Double Value</em>'.
+	 * Returns a new object of class '<em>Float Measurement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Double Value</em>'.
+	 * @return a new object of class '<em>Float Measurement</em>'.
 	 * @generated
 	 */
-	DoubleValue createDoubleValue();
+	FloatMeasurement createFloatMeasurement();
+
+	/**
+	 * Returns a new object of class '<em>Double Measurement</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Double Measurement</em>'.
+	 * @generated
+	 */
+	DoubleMeasurement createDoubleMeasurement();
 
 	/**
 	 * Returns a new object of class '<em>Model</em>'.
@@ -94,13 +94,49 @@ public interface StatisticsFactory extends EFactory {
 	StatisticsModel createStatisticsModel();
 
 	/**
-	 * Returns a new object of class '<em>Time Series Statistics</em>'.
+	 * Returns a new object of class '<em>Unit</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Time Series Statistics</em>'.
+	 * @return a new object of class '<em>Unit</em>'.
 	 * @generated
 	 */
-	TimeSeriesStatistics createTimeSeriesStatistics();
+	Unit createUnit();
+
+	/**
+	 * Returns a new object of class '<em>Composed Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composed Unit</em>'.
+	 * @generated
+	 */
+	ComposedUnit createComposedUnit();
+
+	/**
+	 * Returns a new object of class '<em>Simple Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple Unit</em>'.
+	 * @generated
+	 */
+	SimpleUnit createSimpleUnit();
+
+	/**
+	 * Returns a new object of class '<em>SI Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>SI Unit</em>'.
+	 * @generated
+	 */
+	SIUnit createSIUnit();
+
+	/**
+	 * Returns a new object of class '<em>Custom Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Custom Unit</em>'.
+	 * @generated
+	 */
+	CustomUnit createCustomUnit();
 
 	/**
 	 * Returns the package supported by this factory.

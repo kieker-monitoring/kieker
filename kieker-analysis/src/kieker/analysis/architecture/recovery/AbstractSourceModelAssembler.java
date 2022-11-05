@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.source.SourceModel;
 
 /**
  * Helper functions for SourceModel.

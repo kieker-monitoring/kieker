@@ -34,6 +34,7 @@ import kieker.analysis.plugin.annotation.Property;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface AnalysisController {
 
 	/**

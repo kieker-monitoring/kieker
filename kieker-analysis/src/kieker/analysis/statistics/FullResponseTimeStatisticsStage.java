@@ -20,8 +20,8 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
@@ -34,7 +34,7 @@ import kieker.model.analysismodel.statistics.StatisticsModel;
 public class FullResponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCallDurationEvent> {
 
 	public FullResponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCallDurationEvent, EObject> objectAccesor) {
-		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
+		super(statisticsModel, PropertyConstants.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
 	}
 
 }

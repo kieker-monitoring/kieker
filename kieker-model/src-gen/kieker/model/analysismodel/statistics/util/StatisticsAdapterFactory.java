@@ -70,60 +70,68 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	protected StatisticsSwitch<Adapter> modelSwitch =
 		new StatisticsSwitch<Adapter>() {
 			@Override
-			public Adapter caseStatistics(Statistics object) {
-				return createStatisticsAdapter();
-			}
-			@Override
-			public Adapter caseUnitsToStatisticsMapEntry(Map.Entry<EPredefinedUnits, StatisticRecord> object) {
-				return createUnitsToStatisticsMapEntryAdapter();
-			}
-			@Override
 			public Adapter caseStatisticRecord(StatisticRecord object) {
 				return createStatisticRecordAdapter();
 			}
 			@Override
-			public Adapter caseEPropertyTypeToValue(Map.Entry<EPropertyType, Object> object) {
+			public Adapter caseEPropertyTypeToValue(Map.Entry<String, Object> object) {
 				return createEPropertyTypeToValueAdapter();
 			}
 			@Override
-			public <V extends Value, U extends Unit<V>> Adapter caseTimeSeries(TimeSeries<V, U> object) {
-				return createTimeSeriesAdapter();
+			public Adapter caseMeasurement(Measurement object) {
+				return createMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseValue(Value object) {
-				return createValueAdapter();
+			public Adapter caseScalarMeasurement(ScalarMeasurement object) {
+				return createScalarMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseIntValue(IntValue object) {
-				return createIntValueAdapter();
+			public Adapter caseVectorMeasurement(VectorMeasurement object) {
+				return createVectorMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseLongValue(LongValue object) {
-				return createLongValueAdapter();
+			public Adapter caseIntMeasurement(IntMeasurement object) {
+				return createIntMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseFloatValue(FloatValue object) {
-				return createFloatValueAdapter();
+			public Adapter caseLongMeasurement(LongMeasurement object) {
+				return createLongMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseDoubleValue(DoubleValue object) {
-				return createDoubleValueAdapter();
+			public Adapter caseFloatMeasurement(FloatMeasurement object) {
+				return createFloatMeasurementAdapter();
 			}
 			@Override
-			public <V extends Value> Adapter caseUnit(Unit<V> object) {
-				return createUnitAdapter();
+			public Adapter caseDoubleMeasurement(DoubleMeasurement object) {
+				return createDoubleMeasurementAdapter();
 			}
 			@Override
 			public Adapter caseStatisticsModel(StatisticsModel object) {
 				return createStatisticsModelAdapter();
 			}
 			@Override
-			public Adapter caseEObjectToStatisticsMapEntry(Map.Entry<EObject, Statistics> object) {
+			public Adapter caseEObjectToStatisticsMapEntry(Map.Entry<EObject, StatisticRecord> object) {
 				return createEObjectToStatisticsMapEntryAdapter();
 			}
 			@Override
-			public Adapter caseTimeSeriesStatistics(TimeSeriesStatistics object) {
-				return createTimeSeriesStatisticsAdapter();
+			public Adapter caseUnit(Unit object) {
+				return createUnitAdapter();
+			}
+			@Override
+			public Adapter caseComposedUnit(ComposedUnit object) {
+				return createComposedUnitAdapter();
+			}
+			@Override
+			public Adapter caseSimpleUnit(SimpleUnit object) {
+				return createSimpleUnitAdapter();
+			}
+			@Override
+			public Adapter caseSIUnit(SIUnit object) {
+				return createSIUnitAdapter();
+			}
+			@Override
+			public Adapter caseCustomUnit(CustomUnit object) {
+				return createCustomUnitAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -144,34 +152,6 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Statistics <em>Statistics</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.Statistics
-	 * @generated
-	 */
-	public Adapter createStatisticsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Units To Statistics Map Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createUnitsToStatisticsMapEntryAdapter() {
-		return null;
-	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.StatisticRecord <em>Statistic Record</em>}'.
@@ -202,86 +182,100 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.TimeSeries <em>Time Series</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Measurement <em>Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.TimeSeries
+	 * @see kieker.model.analysismodel.statistics.Measurement
 	 * @generated
 	 */
-	public Adapter createTimeSeriesAdapter() {
+	public Adapter createMeasurementAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.Value <em>Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.ScalarMeasurement <em>Scalar Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.Value
+	 * @see kieker.model.analysismodel.statistics.ScalarMeasurement
 	 * @generated
 	 */
-	public Adapter createValueAdapter() {
+	public Adapter createScalarMeasurementAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.IntValue <em>Int Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.VectorMeasurement <em>Vector Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.IntValue
+	 * @see kieker.model.analysismodel.statistics.VectorMeasurement
 	 * @generated
 	 */
-	public Adapter createIntValueAdapter() {
+	public Adapter createVectorMeasurementAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.LongValue <em>Long Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.IntMeasurement <em>Int Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.LongValue
+	 * @see kieker.model.analysismodel.statistics.IntMeasurement
 	 * @generated
 	 */
-	public Adapter createLongValueAdapter() {
+	public Adapter createIntMeasurementAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.FloatValue <em>Float Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.LongMeasurement <em>Long Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.FloatValue
+	 * @see kieker.model.analysismodel.statistics.LongMeasurement
 	 * @generated
 	 */
-	public Adapter createFloatValueAdapter() {
+	public Adapter createLongMeasurementAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.DoubleValue <em>Double Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.FloatMeasurement <em>Float Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.DoubleValue
+	 * @see kieker.model.analysismodel.statistics.FloatMeasurement
 	 * @generated
 	 */
-	public Adapter createDoubleValueAdapter() {
+	public Adapter createFloatMeasurementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.DoubleMeasurement <em>Double Measurement</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.DoubleMeasurement
+	 * @generated
+	 */
+	public Adapter createDoubleMeasurementAdapter() {
 		return null;
 	}
 
@@ -296,6 +290,62 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.ComposedUnit <em>Composed Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.ComposedUnit
+	 * @generated
+	 */
+	public Adapter createComposedUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.SimpleUnit <em>Simple Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.SimpleUnit
+	 * @generated
+	 */
+	public Adapter createSimpleUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.SIUnit <em>SI Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.SIUnit
+	 * @generated
+	 */
+	public Adapter createSIUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.CustomUnit <em>Custom Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.model.analysismodel.statistics.CustomUnit
+	 * @generated
+	 */
+	public Adapter createCustomUnitAdapter() {
 		return null;
 	}
 
@@ -324,20 +374,6 @@ public class StatisticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEObjectToStatisticsMapEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.model.analysismodel.statistics.TimeSeriesStatistics <em>Time Series Statistics</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.model.analysismodel.statistics.TimeSeriesStatistics
-	 * @generated
-	 */
-	public Adapter createTimeSeriesStatisticsAdapter() {
 		return null;
 	}
 

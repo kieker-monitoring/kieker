@@ -2,7 +2,7 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.Statistics;
+import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,Statistics> {
+public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EObject,StatisticRecord> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -41,7 +41,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 * @ordered
 	 */
-	protected Statistics value;
+	protected StatisticRecord value;
 
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
@@ -77,7 +77,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Statistics getTypedValue() {
+	public StatisticRecord getTypedValue() {
 		return value;
 	}
 
@@ -86,8 +86,8 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(Statistics newValue, NotificationChain msgs) {
-		Statistics oldValue = value;
+	public NotificationChain basicSetTypedValue(StatisticRecord newValue, NotificationChain msgs) {
+		StatisticRecord oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE, oldValue, newValue);
@@ -101,7 +101,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedValue(Statistics newValue) {
+	public void setTypedValue(StatisticRecord newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
 			if (value != null)
@@ -193,7 +193,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
-				setTypedValue((Statistics)newValue);
+				setTypedValue((StatisticRecord)newValue);
 				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
 				setTypedKey((EObject)newValue);
@@ -211,7 +211,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE:
-				setTypedValue((Statistics)null);
+				setTypedValue((StatisticRecord)null);
 				return;
 			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY:
 				setTypedKey((EObject)null);
@@ -293,7 +293,7 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public Statistics getValue() {
+	public StatisticRecord getValue() {
 		return getTypedValue();
 	}
 
@@ -303,8 +303,8 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@Override
-	public Statistics setValue(Statistics value) {
-		Statistics oldValue = getValue();
+	public StatisticRecord setValue(StatisticRecord value) {
+		StatisticRecord oldValue = getValue();
 		setTypedValue(value);
 		return oldValue;
 	}
@@ -315,9 +315,9 @@ public class EObjectToStatisticsMapEntryImpl extends MinimalEObjectImpl.Containe
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<EObject, Statistics> getEMap() {
+	public EMap<EObject, StatisticRecord> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<EObject, Statistics>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<EObject, StatisticRecord>)container.eGet(eContainmentFeature());
 	}
 
 } //EObjectToStatisticsMapEntryImpl

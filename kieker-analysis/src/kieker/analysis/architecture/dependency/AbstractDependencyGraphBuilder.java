@@ -25,11 +25,11 @@ import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.execution.AggregatedInvocation;
 import kieker.model.analysismodel.execution.ExecutionModel;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.EPropertyType;
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Invocation;
 import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * Abstract template class for dependency graph builders. To use this abstract builder,
@@ -57,20 +57,19 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	public IGraph build(final ModelRepository repository) {
 		this.graph = GraphFactory.createGraph(repository.getName());
 
-		this.executionModel = repository.getModel(ExecutionModel.class);
-		this.statisticsModel = repository.getModel(StatisticsModel.class);
+		this.executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
+		this.statisticsModel = repository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL);
 		this.responseTimeDecorator = new ResponseTimeDecorator(this.statisticsModel, ChronoUnit.NANOS);
-		for (final AggregatedInvocation invocation : this.executionModel.getAggregatedInvocations().values()) {
+		for (final Invocation invocation : this.executionModel.getInvocations().values()) {
 			this.handleInvocation(invocation);
 		}
 		return this.graph;
 	}
 
-	private void handleInvocation(final AggregatedInvocation invocation) {
-		final INode sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
-		final INode targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getStatistics().get(EPredefinedUnits.INVOCATION).getProperties()
-				.get(EPropertyType.COUNT);
+	private void handleInvocation(final Invocation invocation) {
+		final INode sourceVertex = invocation.getCaller() != null ? this.addVertex(invocation.getCaller()) : this.addVertexForEntry(); // NOCS (declarative)
+		final INode targetVertex = this.addVertex(invocation.getCallee());
+		final long calls = (Long) this.statisticsModel.getStatistics().get(invocation).getProperties().get(PropertyConstants.CALLS);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 

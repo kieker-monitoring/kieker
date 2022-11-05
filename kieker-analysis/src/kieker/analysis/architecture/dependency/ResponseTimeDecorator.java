@@ -20,8 +20,6 @@ import java.time.temporal.ChronoUnit;
 
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.util.time.ChronoUnitToSymbolMapper;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
@@ -42,17 +40,17 @@ public class ResponseTimeDecorator {
 	}
 
 	public void decorate(final INode vertex, final Object object) {
-		vertex.setPropertyIfAbsent(PropertyConstants.MIN_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MIN));
-		vertex.setPropertyIfAbsent(PropertyConstants.MAX_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MAX));
-		vertex.setPropertyIfAbsent(PropertyConstants.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, EPropertyType.TOTAL));
-		vertex.setPropertyIfAbsent(PropertyConstants.MEAN_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MEAN));
-		vertex.setPropertyIfAbsent(PropertyConstants.MEDIAN_REPSONSE_TIME, this.getStatisticValue(object, EPropertyType.MEDIAN));
+		vertex.setPropertyIfAbsent(PropertyConstants.MIN_REPSONSE_TIME, this.getStatisticValue(object, PropertyConstants.MIN_REPSONSE_TIME));
+		vertex.setPropertyIfAbsent(PropertyConstants.MAX_REPSONSE_TIME, this.getStatisticValue(object, PropertyConstants.MAX_REPSONSE_TIME));
+		vertex.setPropertyIfAbsent(PropertyConstants.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, PropertyConstants.TOTAL_RESPONSE_TIME));
+		vertex.setPropertyIfAbsent(PropertyConstants.MEAN_REPSONSE_TIME, this.getStatisticValue(object, PropertyConstants.MEAN_REPSONSE_TIME));
+		vertex.setPropertyIfAbsent(PropertyConstants.MEDIAN_REPSONSE_TIME, this.getStatisticValue(object, PropertyConstants.MEDIAN_REPSONSE_TIME));
 		vertex.setPropertyIfAbsent(PropertyConstants.TIME_UNIT, this.timeUnit);
 	}
 
-	private long getStatisticValue(final Object object, final EPropertyType property) {
+	private long getStatisticValue(final Object object, final String property) {
 		if (this.statisticsModel.getStatistics().containsKey(object)) {
-			final Long value = (Long) this.statisticsModel.getStatistics().get(object).getStatistics().get(EPredefinedUnits.RESPONSE_TIME).getProperties()
+			final Long value = (Long) this.statisticsModel.getStatistics().get(object).getProperties()
 					.get(property);
 			if (value != null) {
 				return value;

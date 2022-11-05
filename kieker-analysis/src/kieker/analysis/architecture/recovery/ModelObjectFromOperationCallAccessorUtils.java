@@ -67,7 +67,7 @@ public final class ModelObjectFromOperationCallAccessorUtils {
 			final Tuple<DeployedOperation, DeployedOperation> key = ExecutionFactory.eINSTANCE.createTuple();
 			key.setFirst(source);
 			key.setSecond(target);
-			return executionModel.getAggregatedInvocations().get(key);
+			return executionModel.getInvocations().get(key);
 		};
 	}
 
@@ -80,7 +80,7 @@ public final class ModelObjectFromOperationCallAccessorUtils {
 	 */
 	public static final Function<OperationCallDurationEvent, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
 		return operationCall -> {
-			return executionModel.getAggregatedInvocations().get(operationCall.getOperationCall());
+			return executionModel.getInvocations().get(operationCall.getOperationCall());
 		};
 	}
 }

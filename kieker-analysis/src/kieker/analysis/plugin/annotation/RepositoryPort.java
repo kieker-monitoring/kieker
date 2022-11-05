@@ -37,6 +37,7 @@ import kieker.analysis.repository.AbstractRepository;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 @Inherited
+@Deprecated
 public @interface RepositoryPort {
 
 	/**

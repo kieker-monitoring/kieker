@@ -25,7 +25,7 @@ import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentContext;
 import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
-import kieker.model.analysismodel.sources.SourceModel;
+import kieker.model.analysismodel.source.SourceModel;
 
 /**
  * @author Sören Henning
