@@ -1,240 +1,240 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven { url "https://plugins.gradle.org/m2/" }
-		jcenter()
-	}
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        jcenter()
+    }
 
-	dependencies {
-		classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
-		//classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
-	}
+    dependencies {
+        classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
+        //classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
+    }
 }
 
 plugins {
-	id 'java'        // required for compileJava.dependsOn, manifest etc.
-	id 'java-library'
-	id 'maven-publish'
-	id 'signing'
-	id 'jacoco'
-	id "com.diffplug.spotless" version "5.17.1"
+    id 'java'        // required for compileJava.dependsOn, manifest etc.
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'jacoco'
+    id "com.diffplug.spotless" version "5.17.1"
 }
 
 configurations {
-	resultJar
-	emfJarConfig
-	aspectJarConfig
+    resultJar
+    emfJarConfig
+    aspectJarConfig
 }
 
 spotless {
-	format 'misc', {
-		// define the files to apply `misc` to
-		target '*.gradle', '*.md', '.gitignore'
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '*.gradle', '*.md', '.gitignore'
 
-		// define the steps to apply to those files
-		trimTrailingWhitespace()
-		indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
-		endWithNewline()
-	}
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+        endWithNewline()
+    }
 }
 
 dependencies {
-	resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-	resultJar "org.jctools:jctools-core:$libJctoolsVersion"
+    resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+    resultJar "org.jctools:jctools-core:$libJctoolsVersion"
 
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+    emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
-	aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
-	aspectJarConfig "com.rabbitmq:amqp-client:5.13.0"
+    aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
+    aspectJarConfig "com.rabbitmq:amqp-client:5.13.0"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 // FIXME the jar tasks should handle this requirement instead.
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
-	project(':kieker-common'),
-	project(':kieker-monitoring'),
-	project(':kieker-model'),
-	project(':kieker-analysis'),
-	project(':kieker-tools'),
-	project(':kieker-extension-kafka'),
-	project(':kieker-extension-cassandra')
+    project(':kieker-common'),
+    project(':kieker-monitoring'),
+    project(':kieker-model'),
+    project(':kieker-analysis'),
+    project(':kieker-tools'),
+    project(':kieker-extension-kafka'),
+    project(':kieker-extension-cassandra')
 ]
 
 allprojects {
-	version = kiekerVersion
+    version = kiekerVersion
 
-	repositories {    // must be above subprojects {}
-		mavenLocal()
-		mavenCentral()
-		jcenter() // for mockito
-		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-	}
+    repositories {    // must be above subprojects {}
+        mavenLocal()
+        mavenCentral()
+        jcenter() // for mockito
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
 }
 
 subprojects {
-	apply plugin: 'java'
-	apply plugin: 'jacoco'
-	apply plugin: 'com.diffplug.spotless'
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.diffplug.spotless'
 
-	sourceCompatibility = sourceVersion
-	targetCompatibility = targetVersion
+    sourceCompatibility = sourceVersion
+    targetCompatibility = targetVersion
 
-	// Encoding should be UTF-8
-	compileJava.options.encoding = 'UTF-8'
-	compileTestJava.options.encoding = 'UTF-8'
+    // Encoding should be UTF-8
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
 
-	sourceSets {
-		main {
-			java {
-				srcDir 'src'
-				srcDir 'src-gen'
-			}
-			resources {
-				srcDirs = ['src-resources']
-			}
-		}
-		test {
-			java {
-				srcDir 'test'
-				srcDir 'test-gen'
-			}
-			resources {
-				srcDirs = ['test-resources']
-			}
-		}
-		integrationTest {
-			java {
-				srcDirs = ['test-integration']
+    sourceSets {
+        main {
+            java {
+                srcDir 'src'
+                srcDir 'src-gen'
+            }
+            resources {
+                srcDirs = ['src-resources']
+            }
+        }
+        test {
+            java {
+                srcDir 'test'
+                srcDir 'test-gen'
+            }
+            resources {
+                srcDirs = ['test-resources']
+            }
+        }
+        integrationTest {
+            java {
+                srcDirs = ['test-integration']
 
-				compileClasspath += main.compileClasspath + test.compileClasspath
-				runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
-			}
-		}
-	}
+                compileClasspath += main.compileClasspath + test.compileClasspath
+                runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
+            }
+        }
+    }
 
-	test {
-		finalizedBy jacocoTestReport // report is always generated after tests run
+    test {
+        finalizedBy jacocoTestReport // report is always generated after tests run
 
-		systemProperty "java.io.tmpdir", "${buildDir}"
-		ignoreFailures = false
-		maxHeapSize = "2g"            // Set limit to prevent Travis-CI build to crash
+        systemProperty "java.io.tmpdir", "${buildDir}"
+        ignoreFailures = false
+        maxHeapSize = "2g"            // Set limit to prevent Travis-CI build to crash
 
-		testLogging {
-			showCauses = 'true'
-			exceptionFormat = 'full'
-			showExceptions = 'true'
-			showStandardStreams = 'true'
-		}
+        testLogging {
+            showCauses = 'true'
+            exceptionFormat = 'full'
+            showExceptions = 'true'
+            showStandardStreams = 'true'
+        }
 
-		jacoco {
-			enabled = true
-		}
+        jacoco {
+            enabled = true
+        }
 
-		afterTest { desc, result ->
-			println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
-		}
-	}
+        afterTest { desc, result ->
+            println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+        }
+    }
 
-	jacoco {
-		toolVersion = '0.8.6'
-	}
+    jacoco {
+        toolVersion = '0.8.6'
+    }
 
-	jacocoTestReport {
-		dependsOn test // tests are required to run before generating the report
-		reports {
-			xml.enabled = false
-			csv.enabled = false
-			html.enabled = true
-		}
-	}
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+        reports {
+            xml.enabled = false
+            csv.enabled = false
+            html.enabled = true
+        }
+    }
 
-	spotless {
-		format 'misc', {
-			// define the files to apply `misc` to
-			target '*.gradle', '*.md', '.gitignore'
+    spotless {
+        format 'misc', {
+            // define the files to apply `misc` to
+            target '*.gradle', '*.md', '.gitignore'
 
-			// define the steps to apply to those files
-			trimTrailingWhitespace()
-			indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
-			endWithNewline()
-		}
-	}
+            // define the steps to apply to those files
+            trimTrailingWhitespace()
+            indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
+            endWithNewline()
+        }
+    }
 
-	task integrationTest(type: Test) {
-		testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
-		classpath = project.sourceSets.integrationTest.runtimeClasspath
-	}
-	check.dependsOn integrationTest
+    task integrationTest(type: Test) {
+        testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
+        classpath = project.sourceSets.integrationTest.runtimeClasspath
+    }
+    check.dependsOn integrationTest
 
-	tasks.withType(Zip) {
-		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	}
-	tasks.withType(Distribution) {
-		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	}
+    tasks.withType(Zip) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    tasks.withType(Distribution) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 
-	// --- quality assurance plugins ---
+    // --- quality assurance plugins ---
 
-	apply plugin: 'pmd'
-	pmd {    // is represented by the groovy class "PmdExtension"
-		// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
-		toolVersion = pmdVersion
-		ignoreFailures = true
-		consoleOutput = true
+    apply plugin: 'pmd'
+    pmd {    // is represented by the groovy class "PmdExtension"
+        // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+        toolVersion = pmdVersion
+        ignoreFailures = true
+        consoleOutput = true
 
-		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
-		ruleSets = []
-		ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
-	}
+        // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
+        ruleSets = []
+        ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
+    }
 
-	apply plugin: 'checkstyle'
-	checkstyle {
-		toolVersion = checkstyleVersion
-		ignoreFailures = true
-		showViolations = false
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion = checkstyleVersion
+        ignoreFailures = true
+        showViolations = false
 
-		configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
-		configDirectory = rootProject.file(dirConfig)
-	}
+        configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
+        configDirectory = rootProject.file(dirConfig)
+    }
 
-	//apply plugin: "com.github.spotbugs"
-	//spotbugs {
-	//   toolVersion = spotbugsVersion
-	//   ignoreFailures = false
-	//   showStackTraces = true
-	//   showProgress = false
-	//   effort = 'max'
-	//   reportLevel = 'low'
-	// visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
-	// omitVisitors = [ 'FindNonShortCircuit' ]
-	// reportsDir = file("$buildDir/spotbugs")
-	// includeFilter = file("include.xml")
-	//   excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
-	// onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
-	// maxHeapSize = '1g'
-	// extraArgs = [ '-nested:false' ]
-	// jvmArgs = [ '-Duser.language=ja' ]
-	//}
+    //apply plugin: "com.github.spotbugs"
+    //spotbugs {
+    //   toolVersion = spotbugsVersion
+    //   ignoreFailures = false
+    //   showStackTraces = true
+    //   showProgress = false
+    //   effort = 'max'
+    //   reportLevel = 'low'
+    // visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+    // omitVisitors = [ 'FindNonShortCircuit' ]
+    // reportsDir = file("$buildDir/spotbugs")
+    // includeFilter = file("include.xml")
+    //   excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+    // onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
+    // maxHeapSize = '1g'
+    // extraArgs = [ '-nested:false' ]
+    // jvmArgs = [ '-Duser.language=ja' ]
+    //}
 
-	tasks.withType(Pmd) {
-		reports {
-			xml.enabled = true
-			html.enabled = true
-		}
-		// the following line of code adds our custom PMD rules as jar file to the classpath
-		//pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
-	}
+    tasks.withType(Pmd) {
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+        // the following line of code adds our custom PMD rules as jar file to the classpath
+        //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+    }
 
-	tasks.withType(Checkstyle) {
-		reports {
-			xml.enabled true
-			html.enabled true
-			html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
-		}
-	}
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled true
+            html.enabled true
+            html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
+        }
+    }
 
 //    tasks.withType(Spotbugs) {
 //        reports {
@@ -243,234 +243,234 @@ subprojects {
 //        }
 //    }
 
-	// Those are some dependencies which are needed by all subprojects
-	dependencies {
-		// checkstyle project(':kieker-checkstyle-extension')
+    // Those are some dependencies which are needed by all subprojects
+    dependencies {
+        // checkstyle project(':kieker-checkstyle-extension')
 
-		// compile-time dependency due to the annotation SuppressFBWarnings()
-		//implementation "com.google.code.findbugs:findbugs:${fbVersion}"
+        // compile-time dependency due to the annotation SuppressFBWarnings()
+        //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
-		implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+        implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
-		// enable logging for test runs
-		testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+        // enable logging for test runs
+        testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
-		testImplementation "org.mockito:mockito-core:$libMockitoVersion"
-		testImplementation "junit:junit:$libJunitVersion"
-		testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
-	}
+        testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+        testImplementation "junit:junit:$libJunitVersion"
+        testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+    }
 
 }
 
 def parseCheckstyleReport(File reportFile) {
-	def errors = 0
-	def warnings = 0
-	def infos = 0
+    def errors = 0
+    def warnings = 0
+    def infos = 0
 
-	if (reportFile.exists()) {
-		def xmlFile = (new XmlParser()).parse(reportFile)
-		xmlFile.'file'.'error'.each { issue ->
-			switch (issue.attribute("severity")) {
-				case "error":
-					errors++
-					break;
-				case "warning":
-					warnings++
-					break;
-				default:
-					infos++
-					break;
-			}
-		}
-	}
-	return [errors, warnings, infos]
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'file'.'error'.each { issue ->
+            switch (issue.attribute("severity")) {
+                case "error":
+                    errors++
+                    break;
+                case "warning":
+                    warnings++
+                    break;
+                default:
+                    infos++
+                    break;
+            }
+        }
+    }
+    return [errors, warnings, infos]
 }
 
 def parseFindbugsReport(File reportFile) {
-	def errors = 0
-	def warnings = 0
-	def infos = 0
+    def errors = 0
+    def warnings = 0
+    def infos = 0
 
-	if (reportFile.exists()) {
-		def xmlFile = (new XmlParser()).parse(reportFile)
-		xmlFile.'FindBugsSummary'.each { issue ->
-			def prio1Bugs = issue.attribute("priority_1")
-			def prio2Bugs = issue.attribute("priority_2")
-			def bugsTotal = issue.attribute("total_bugs")
-			def prio1BugsInt = 0
-			def prio2BugsInt = 0
-			def bugsTotalInt = 0
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'FindBugsSummary'.each { issue ->
+            def prio1Bugs = issue.attribute("priority_1")
+            def prio2Bugs = issue.attribute("priority_2")
+            def bugsTotal = issue.attribute("total_bugs")
+            def prio1BugsInt = 0
+            def prio2BugsInt = 0
+            def bugsTotalInt = 0
 
-			if (prio1Bugs != null) {
-				prio1BugsInt = Integer.valueOf(prio1Bugs)
-			}
+            if (prio1Bugs != null) {
+                prio1BugsInt = Integer.valueOf(prio1Bugs)
+            }
 
-			if (prio2Bugs != null) {
-				prio2BugsInt = Integer.valueOf(prio2Bugs)
-			}
+            if (prio2Bugs != null) {
+                prio2BugsInt = Integer.valueOf(prio2Bugs)
+            }
 
-			if (bugsTotal != null) {
-				bugsTotalInt = Integer.valueOf(bugsTotal)
-			}
+            if (bugsTotal != null) {
+                bugsTotalInt = Integer.valueOf(bugsTotal)
+            }
 
-			errors += prio1BugsInt
-			warnings += prio2BugsInt
-			infos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
-		}
-	}
-	return [errors, warnings, infos]
+            errors += prio1BugsInt
+            warnings += prio2BugsInt
+            infos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
+        }
+    }
+    return [errors, warnings, infos]
 }
 
 def parsePmdReport(File reportFile) {
-	def errors = 0
-	def warnings = 0
-	def infos = 0
+    def errors = 0
+    def warnings = 0
+    def infos = 0
 
-	if (reportFile.exists()) {
-		def xmlFile = (new XmlParser()).parse(reportFile)
-		xmlFile.'file'.'violation'.each { issue ->
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'file'.'violation'.each { issue ->
 
-			// https://github.com/jenkinsci/pmd-plugin/blob/master/src/main/java/hudson/plugins/pmd/parser/PmdParser.java#L26-L29
-			switch (issue.attribute("priority")) {
-				case "1":
-				case "2":
-					errors++
-					break;
-				case "3":
-				case "4":
-					warnings++;
-					break;
-				case "5":
-				default:
-					infos++
-					break;
-			}
-		}
-	}
-	return [errors, warnings, infos]
+            // https://github.com/jenkinsci/pmd-plugin/blob/master/src/main/java/hudson/plugins/pmd/parser/PmdParser.java#L26-L29
+            switch (issue.attribute("priority")) {
+                case "1":
+                case "2":
+                    errors++
+                    break;
+                case "3":
+                case "4":
+                    warnings++;
+                    break;
+                case "5":
+                default:
+                    infos++
+                    break;
+            }
+        }
+    }
+    return [errors, warnings, infos]
 }
 
 def checkSubprojects = [
-	project(':kieker-common'),
-	project(':kieker-monitoring'),
-	project(':kieker-model'),
-	project(':kieker-analysis'),
-	project(':kieker-tools'),
-	project(':kieker-tools:collector'),
-	project(':kieker-tools:convert-logging-timestamp'),
-	project(':kieker-tools:kdb'),
-	project(':kieker-tools:log-replayer'),
-	project(':kieker-tools:opad'),
-	project(':kieker-tools:resource-monitor'),
-	project(':kieker-tools:trace-analysis'),
-	project(':kieker-tools:trace-analysis-gui'),
-	project(':kieker-extension-kafka'),
-	project(':kieker-extension-cassandra')
+    project(':kieker-common'),
+    project(':kieker-monitoring'),
+    project(':kieker-model'),
+    project(':kieker-analysis'),
+    project(':kieker-tools'),
+    project(':kieker-tools:collector'),
+    project(':kieker-tools:convert-logging-timestamp'),
+    project(':kieker-tools:kdb'),
+    project(':kieker-tools:log-replayer'),
+    project(':kieker-tools:opad'),
+    project(':kieker-tools:resource-monitor'),
+    project(':kieker-tools:trace-analysis'),
+    project(':kieker-tools:trace-analysis-gui'),
+    project(':kieker-extension-kafka'),
+    project(':kieker-extension-cassandra')
 ]
 
 checkSubprojects.each { project ->
-	configure(project) {
+    configure(project) {
 
-		task checkThresholds(dependsOn: ["build"]) {
-			doLast {
-				def reportTypes = ['main', 'test']
+        task checkThresholds(dependsOn: ["build"]) {
+            doLast {
+                def reportTypes = ['main', 'test']
 
-				// Begin Checkstyle report parsing
-				def csErrors = 0
-				def csWarnings = 0
-				def csInfos = 0
+                // Begin Checkstyle report parsing
+                def csErrors = 0
+                def csWarnings = 0
+                def csInfos = 0
 
-				def p = project
+                def p = project
 
-				reportTypes.each { String type ->
-					def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
-					def reportResults = parseCheckstyleReport(reportFile)
-					csErrors += reportResults[0]
-					csWarnings += reportResults[1]
-					csInfos += reportResults[2]
-				}
-				// End Checkstyle report parsing
+                reportTypes.each { String type ->
+                    def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
+                    def reportResults = parseCheckstyleReport(reportFile)
+                    csErrors += reportResults[0]
+                    csWarnings += reportResults[1]
+                    csInfos += reportResults[2]
+                }
+                // End Checkstyle report parsing
 
-				// Begin Findbugs report parsing
-				def fbErrors = 0
-				def fbWarnings = 0
-				def fbInfos = 0
+                // Begin Findbugs report parsing
+                def fbErrors = 0
+                def fbWarnings = 0
+                def fbInfos = 0
 
-				reportTypes.each { String type ->
-					def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-					def reportResults = parseFindbugsReport(reportFile)
-					fbErrors += reportResults[0]
-					fbWarnings += reportResults[1]
-					fbInfos += reportResults[2]
-				}
-				// End Findbugs report parsing
+                reportTypes.each { String type ->
+                    def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
+                    def reportResults = parseFindbugsReport(reportFile)
+                    fbErrors += reportResults[0]
+                    fbWarnings += reportResults[1]
+                    fbInfos += reportResults[2]
+                }
+                // End Findbugs report parsing
 
-				// Begin PMD report parsing
-				def pmdErrors = 0
-				def pmdWarnings = 0
-				def pmdInfos = 0
+                // Begin PMD report parsing
+                def pmdErrors = 0
+                def pmdWarnings = 0
+                def pmdInfos = 0
 
-				reportTypes.each { String type ->
-					def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
-					def reportResults = parsePmdReport(reportFile)
-					pmdErrors += reportResults[0]
-					pmdWarnings += reportResults[1]
-					pmdInfos += reportResults[2]
-				}
-				// End PMD report parsing
+                reportTypes.each { String type ->
+                    def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
+                    def reportResults = parsePmdReport(reportFile)
+                    pmdErrors += reportResults[0]
+                    pmdWarnings += reportResults[1]
+                    pmdInfos += reportResults[2]
+                }
+                // End PMD report parsing
 
-				// Print results
-				println("Static analysis results:")
-				println()
-				println(" Checkstyle:")
-				println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
-				println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
-				println("  Info: " + csInfos)
-				println()
-				println(" Findbugs:")
-				println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
-				println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
-				println("  Info: " + fbInfos)
-				println()
-				println(" PMD:")
-				println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
-				println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
-				println("  Info: " + pmdInfos)
-				println()
+                // Print results
+                println("Static analysis results:")
+                println()
+                println(" Checkstyle:")
+                println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
+                println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
+                println("  Info: " + csInfos)
+                println()
+                println(" Findbugs:")
+                println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
+                println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
+                println("  Info: " + fbInfos)
+                println()
+                println(" PMD:")
+                println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
+                println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
+                println("  Info: " + pmdInfos)
+                println()
 
-				def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
+                def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
 
-				// Fail build if Checkstyle thresholds are violated
-				if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
-					throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold + "." + eclipseUserHint)
-				}
+                // Fail build if Checkstyle thresholds are violated
+                if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
+                    throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold + "." + eclipseUserHint)
+                }
 
-				if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
-					throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold + "." + eclipseUserHint)
-				}
+                if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
+                    throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold + "." + eclipseUserHint)
+                }
 
-				// Fail build if Findbugs thresholds are violated
-				if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-					throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold + ".")
-				}
+                // Fail build if Findbugs thresholds are violated
+                if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
+                    throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold + ".")
+                }
 
-				if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-					throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold + ".")
-				}
+                if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
+                    throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold + ".")
+                }
 
-				// Fail build if PMD thresholds are violated
-				if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
-					throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold + "." + eclipseUserHint)
-				}
+                // Fail build if PMD thresholds are violated
+                if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
+                    throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold + "." + eclipseUserHint)
+                }
 
-				if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
-					throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold + "." + eclipseUserHint)
-				}
-			}
-		}
+                if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
+                    throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold + "." + eclipseUserHint)
+                }
+            }
+        }
 
-		tasks.check.finalizedBy(checkThresholds)
-	}
+        tasks.check.finalizedBy(checkThresholds)
+    }
 }
 
 // Execute 'checkThresholds' after all check tasks in the subprojects have been executed
@@ -480,147 +480,147 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["checkThresholds"])
 
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
-	//println "Replacing $searchExp by $replaceExp in $file"
-	String contents = file.getText('UTF-8')
-	contents = contents.replaceAll(searchExp, replaceExp)
-	file.write(contents, 'UTF-8')
+    //println "Replacing $searchExp by $replaceExp in $file"
+    String contents = file.getText('UTF-8')
+    contents = contents.replaceAll(searchExp, replaceExp)
+    file.write(contents, 'UTF-8')
 }
 
 task updateLicenseHeaderYear() {
-	doLast {
-		FileTree tree = fileTree(dir: '.', include: '**/*.java')
-		tree.each { File file ->
-			regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2022 Kieker Project')
-		}
-		regexpReplaceInFiles(project.file("kieker-common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
-	}
+    doLast {
+        FileTree tree = fileTree(dir: '.', include: '**/*.java')
+        tree.each { File file ->
+            regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2022 Kieker Project')
+        }
+        regexpReplaceInFiles(project.file("kieker-common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
+    }
 }
 
 task replaceHardCodedVersionNames() {
-	doLast {
-		regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-		regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    doLast {
+        regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+        regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+        regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+        regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
-		regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
-		regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
+        regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
+        regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
 
-	}
+    }
 }
 compileJava.dependsOn replaceHardCodedVersionNames
 
 
 def reportingCompatibleJavaVersionPresent() {
-	switch (JavaVersion.current()) {
-		case JavaVersion.VERSION_1_7:
-		case JavaVersion.VERSION_1_8:
-			return true;
-		default:
-			println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
-			return false;
-	}
+    switch (JavaVersion.current()) {
+        case JavaVersion.VERSION_1_7:
+        case JavaVersion.VERSION_1_8:
+            return true;
+        default:
+            println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
+            return false;
+    }
 }
 
 def resolveRelativeToParent(String directory, String file) {
-	return rootProject.file(directory + '/' + file)
+    return rootProject.file(directory + '/' + file)
 }
 
 def resolveLibrary(String library) {
-	def libraryDir = rootProject.file(dirLib)
-	return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+    def libraryDir = rootProject.file(dirLib)
+    return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
 }
 
 def today() {
-	def date = new Date()
-	def formattedDate = date.format('yyyy-MM-dd')
-	return formattedDate
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd')
+    return formattedDate
 }
 
 def year() {
-	def date = new Date()
-	def formattedDate = date.format('yyyy')
-	return formattedDate
+    def date = new Date()
+    def formattedDate = date.format('yyyy')
+    return formattedDate
 }
 
 def monthMMM() {
-	def date = new Date()
-	def formattedDate = date.format('MMM')
-	return formattedDate
+    def date = new Date()
+    def formattedDate = date.format('MMM')
+    return formattedDate
 }
 
 
 task apidoc(type: Javadoc) {
-	description = 'Generate the Javadoc API documentation for the Kieker Framework'
+    description = 'Generate the Javadoc API documentation for the Kieker Framework'
 
-	source mainSubprojects.collect { project -> project.sourceSets.main.allJava }
-	classpath = files(mainSubprojects.collect { project -> project.sourceSets.main.compileClasspath })
-	destinationDir = new File(projectDir, 'docs')
+    source mainSubprojects.collect { project -> project.sourceSets.main.allJava }
+    classpath = files(mainSubprojects.collect { project -> project.sourceSets.main.compileClasspath })
+    destinationDir = new File(projectDir, 'docs')
 
-	failOnError = false
+    failOnError = false
 
-	title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
-	options.header = "Kieker $kiekerVersion"
-	options.footer = "Kieker $kiekerVersion"
-	options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://kieker-monitoring.net\">http://kieker-monitoring.net</a>"
-	options.author = "true"
-	options.version = "false"
-	options.use = "true"
-	options.tags = ["generated", "ordered", "model"]
-	options.encoding = "UTF-8"
-	options.charSet = "UTF-8"
-	options.docEncoding = "UTF-8"
+    title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
+    options.header = "Kieker $kiekerVersion"
+    options.footer = "Kieker $kiekerVersion"
+    options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://kieker-monitoring.net\">http://kieker-monitoring.net</a>"
+    options.author = "true"
+    options.version = "false"
+    options.use = "true"
+    options.tags = ["generated", "ordered", "model"]
+    options.encoding = "UTF-8"
+    options.charSet = "UTF-8"
+    options.docEncoding = "UTF-8"
 }
 
 ext.sharedManifest = manifest {
-	attributes(
-			"Specification-Title": kiekerName,
-			"Specification-Version": kiekerVersion,
-			"Specification-Vendor": kiekerCopyright,
-			"Implementation-Title": kiekerName,
-			"Implementation-Version": kiekerVersion + " (" + today() + ")",
-			"Implementation-Vendor": kiekerCopyright,
-			"kieker" // The section name
-	)
+    attributes(
+            "Specification-Title": kiekerName,
+            "Specification-Version": kiekerVersion,
+            "Specification-Vendor": kiekerCopyright,
+            "Implementation-Title": kiekerName,
+            "Implementation-Version": kiekerVersion + " (" + today() + ")",
+            "Implementation-Vendor": kiekerCopyright,
+            "kieker" // The section name
+    )
 }
 
 def allArtifacts = {
-	mainSubprojects.each { subproject ->
-		from subproject.configurations.archives.allArtifacts.files.collect {
-			zipTree(it)
-		}
-	}
+    mainSubprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
 }
 
 def licence = {
-	from file('LICENSE')
+    from file('LICENSE')
 }
 
 def aopxml = {
-	from(file('kieker-examples/aop.example.xml')) {
-		into 'META-INF'
-	}
+    from(file('kieker-examples/aop.example.xml')) {
+        into 'META-INF'
+    }
 }
 
 // Remove the default 'jar' artifact because we have our own artifacts: mainJar, emfJar, aspectJJar
 // If you don't do this, we get trouble with the Maven upload task having two Jars (default, mainJar)
 // with the same type and classifier.
 configurations.archives.artifacts.with { archives ->
-	def jarArtifact
-	archives.each {
-		if (it.file =~ 'jar') {
-			jarArtifact = it
-		}
-	}
-	println "JAR to delete: ${jarArtifact}"
-	remove(jarArtifact)
+    def jarArtifact
+    archives.each {
+        if (it.file =~ 'jar') {
+            jarArtifact = it
+        }
+    }
+    println "JAR to delete: ${jarArtifact}"
+    remove(jarArtifact)
 }
 
 /**
@@ -631,286 +631,286 @@ task createArtifacts(dependsOn: [ 'mainJar', 'aspectJJar', 'emfJar', 'sourcesJar
 
 /** Kieker jar without aspectj and emf. */
 task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
-		description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
+        description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	configure allArtifacts
-	configure licence
-	configure aopxml
+    // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+    configure allArtifacts
+    configure licence
+    configure aopxml
 
-	manifest = project.manifest {
-		from sharedManifest
-	}
+    manifest = project.manifest {
+        from sharedManifest
+    }
 }
 
 /** Kieker jar with emf libraries. */
 task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
-		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
+        description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	classifier = 'emf'
-	configure allArtifacts
-	configure licence
-	configure aopxml
+    // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+    classifier = 'emf'
+    configure allArtifacts
+    configure licence
+    configure aopxml
 
-	from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
-	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
-	from('lib') {
-		include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
-	}
+    from('lib') {
+        include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
+        include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
+        include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
+    }
 
-	manifest = project.manifest {
-		from sharedManifest
-	}
+    manifest = project.manifest {
+        from sharedManifest
+    }
 }
 
 /** Kieker jar with aspectJ tooling. */
 task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
-		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
+        description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
 ) {
-	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	classifier = 'aspectj'
-	configure allArtifacts
-	configure licence
-	configure aopxml
+    // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+    classifier = 'aspectj'
+    configure allArtifacts
+    configure licence
+    configure aopxml
 
-	from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
+    from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
-	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
-	from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
+    from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+    from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
 
-	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
-	manifest = project.manifest {
-		from sharedManifest
-		attributes(
-				"Can-Redefine-Classes": 'true',
-				"Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
-		)
-		attributes(
-				"Specification-Title": "AspectJ Weaver Classes",
-				"Specification-Version": aspectjVersion,
-				"Specification-Vendor": "aspectj.org",
-				"Implementation-Title": "org.aspectj.weaver",
-				"Implementation-Version": aspectjVersion,
-				"Implementation-Vendor": "aspectj.org",
-				"Can-Redefine-Classes": "true",
-				"Premain-Class": "org.aspectj.weaver.loadtime.Agent",
-				"org/aspectj/weaver/" // The section name
-		)
-	}
+    manifest = project.manifest {
+        from sharedManifest
+        attributes(
+                "Can-Redefine-Classes": 'true',
+                "Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
+        )
+        attributes(
+                "Specification-Title": "AspectJ Weaver Classes",
+                "Specification-Version": aspectjVersion,
+                "Specification-Vendor": "aspectj.org",
+                "Implementation-Title": "org.aspectj.weaver",
+                "Implementation-Version": aspectjVersion,
+                "Implementation-Vendor": "aspectj.org",
+                "Can-Redefine-Classes": "true",
+                "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
+                "org/aspectj/weaver/" // The section name
+        )
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = 'sources'
-	from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
+    classifier = 'sources'
+    from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
 }
 
 task javadocJar(type: Jar, dependsOn: apidoc) {
-	classifier = 'javadoc'
-	from apidoc.destinationDir
+    classifier = 'javadoc'
+    from apidoc.destinationDir
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-	dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+    dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 
 /**
 * Collect binary content.
 */
 def binaryContent = project.copySpec {
-	from(projectDir) {
-		include 'LICENSE'
-		include 'HISTORY'
+    from(projectDir) {
+        include 'LICENSE'
+        include 'HISTORY'
 
-		include 'bin/**'
-		include 'lib/**'
-		include 'javadoc/**'
-		include 'build/libs/*'
+        include 'bin/**'
+        include 'lib/**'
+        include 'javadoc/**'
+        include 'build/libs/*'
 
-		exclude 'bin/**/*.class'
-		exclude '**/.gradle/**'
-		exclude 'lib/static-analysis/'
-		exclude 'bin/dev/release-check*'
-		exclude 'caches/**'
-	}
-	from('kieker-documentation') {
-		include 'README-bin'
-		rename 'README-bin', 'README'
-	}
-	exclude '**/*.log'
-	into kiekerPackagenamebase + "-" + kiekerVersion
+        exclude 'bin/**/*.class'
+        exclude '**/.gradle/**'
+        exclude 'lib/static-analysis/'
+        exclude 'bin/dev/release-check*'
+        exclude 'caches/**'
+    }
+    from('kieker-documentation') {
+        include 'README-bin'
+        rename 'README-bin', 'README'
+    }
+    exclude '**/*.log'
+    into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
 def tools = [
-	'collector',
-	'convert-logging-timestamp',
-	'kdb',
-	'log-replayer',
-	'resource-monitor',
-	'trace-analysis',
-	'trace-analysis-gui'
+    'collector',
+    'convert-logging-timestamp',
+    'kdb',
+    'log-replayer',
+    'resource-monitor',
+    'trace-analysis',
+    'trace-analysis-gui'
 ]
 
 /** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
-	tools.each {
-		from("kieker-tools/${it}/build/distributions") {
-			include "**"
-		}
-	}
-	from("kieker-tools") {
-		include "README.md"
-	}
-	into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
+    tools.each {
+        from("kieker-tools/${it}/build/distributions") {
+            include "**"
+        }
+    }
+    from("kieker-tools") {
+        include "README.md"
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
 }
 
 /** collect all libraries in kieker-tools. */
 def libraryContent = project.copySpec {
-	from('kieker-tools/**/build/libs') {
-	include '**jar'
-	}
-	into kiekerPackagenamebase + "-" + kiekerVersion + "/build/libs"
+    from('kieker-tools/**/build/libs') {
+    include '**jar'
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/build/libs"
 }
 
 /** collect example content for the binary distribution. */
 def exampleContent = project.copySpec {
 
-	from('kieker-examples') {
-		include '**'
+    from('kieker-examples') {
+        include '**'
 
-		exclude '**/JavaEEServletContainerExample/build.xml'
-		exclude '**/livedemo-source/**'
-		exclude '**/.gradle/**'
-		exclude '**/build/**'
-		exclude '*gradle*'
-		exclude '**/*.log'
-	}
+        exclude '**/JavaEEServletContainerExample/build.xml'
+        exclude '**/livedemo-source/**'
+        exclude '**/.gradle/**'
+        exclude '**/build/**'
+        exclude '*gradle*'
+        exclude '**/*.log'
+    }
 
-	from('kieker-monitoring/src-resources/META-INF') {
-		include 'kieker.monitoring.default.properties'
-		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
-	}
-	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
+    from('kieker-monitoring/src-resources/META-INF') {
+        include 'kieker.monitoring.default.properties'
+        rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
 
-	with {
-		from('kieker-examples') {
-			include '**/build/libs/**'
-		}
-		includeEmptyDirs = false
-	}
+    with {
+        from('kieker-examples') {
+            include '**/build/libs/**'
+        }
+        includeEmptyDirs = false
+    }
 }
 
 def exampleJavaEEContent = project.copySpec {
-	from('kieker-monitoring/src-resources/META-INF') {
-		include 'kieker.monitoring.default.properties'
-		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.properties'
-	}
-	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
+    from('kieker-monitoring/src-resources/META-INF') {
+        include 'kieker.monitoring.default.properties'
+        rename 'kieker.monitoring.default.properties', 'kieker.monitoring.properties'
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
 /** binary distribution in zip format. */
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-	classifier = 'binaries'
-	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    classifier = 'binaries'
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-	classifier = 'binaries'
-	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    classifier = 'binaries'
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
-	compression = Compression.GZIP
-	archiveExtension = 'tar.gz'
+    compression = Compression.GZIP
+    archiveExtension = 'tar.gz'
 }
 
 /** collect all sources. */
 def sourceContent = project.copySpec {
-	from(projectDir) {
-		include '**/**' // '*' doesn't seem to include hidden files
-		include 'bin/**'
-		include 'src/**'
-		include 'lib/**'
+    from(projectDir) {
+        include '**/**' // '*' doesn't seem to include hidden files
+        include 'bin/**'
+        include 'src/**'
+        include 'lib/**'
 
-		exclude 'README'
-		exclude 'javadoc/**'
-		exclude 'kieker-examples/analysis/**/.classpath'
-		exclude 'kieker-examples/monitoring/**/.classpath'
-		exclude 'kieker-examples/userguide/**/.classpath'
-		exclude 'kieker-examples/analysis/**/.settings'
-		exclude 'kieker-examples/monitoring/**/.settings'
-		exclude 'kieker-examples/userguide/**/.settings'
-		exclude '**/build/**'
-		exclude 'build-eclipse/'
-		exclude '**/.gradle/**'
-		exclude '**/*.log'
-		exclude 'caches/**'
-		exclude 'docs/**'
-	exclude '**/?/**'
-		// Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
-		exclude {
-			jars ->
-				jars.file.path.contains('kieker-examples') &&
-						jars.file.name.endsWith('.jar') &&
-						!jars.file.name.startsWith('opencsv-') &&
-						!jars.file.path.contains('JavaEEServletContainerExample')
-		}
-	}
-	from('kieker-documentation') {
-		include 'README-src'
-		rename 'README-src', 'README'
-	}
-	into kiekerPackagenamebase + "-" + kiekerVersion
+        exclude 'README'
+        exclude 'javadoc/**'
+        exclude 'kieker-examples/analysis/**/.classpath'
+        exclude 'kieker-examples/monitoring/**/.classpath'
+        exclude 'kieker-examples/userguide/**/.classpath'
+        exclude 'kieker-examples/analysis/**/.settings'
+        exclude 'kieker-examples/monitoring/**/.settings'
+        exclude 'kieker-examples/userguide/**/.settings'
+        exclude '**/build/**'
+        exclude 'build-eclipse/'
+        exclude '**/.gradle/**'
+        exclude '**/*.log'
+        exclude 'caches/**'
+        exclude 'docs/**'
+    exclude '**/?/**'
+        // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
+        exclude {
+            jars ->
+                jars.file.path.contains('kieker-examples') &&
+                        jars.file.name.endsWith('.jar') &&
+                        !jars.file.name.startsWith('opencsv-') &&
+                        !jars.file.path.contains('JavaEEServletContainerExample')
+        }
+    }
+    from('kieker-documentation') {
+        include 'README-src'
+        rename 'README-src', 'README'
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
-	description = 'Distributes source archive.'
-	classifier = 'sources'
-	with sourceContent
+    description = 'Distributes source archive.'
+    classifier = 'sources'
+    with sourceContent
 }
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
-	description = 'Distributes source archive.'
-	classifier = 'sources'
-	with sourceContent
+    description = 'Distributes source archive.'
+    classifier = 'sources'
+    with sourceContent
 
-	compression = Compression.GZIP
-	archiveExtension = 'tar.gz'
+    compression = Compression.GZIP
+    archiveExtension = 'tar.gz'
 }
 
 task startRServe() {
-	doLast {
-		String osName = System.getProperty("os.name").toLowerCase();
-		if (osName.contains("windows")) {
-			'bin/dev/rserve-control.bat start'.execute()
-		} else {
-			'bin/dev/rserve-control.sh start'.execute()
-		}
-	}
+    doLast {
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            'bin/dev/rserve-control.bat start'.execute()
+        } else {
+            'bin/dev/rserve-control.sh start'.execute()
+        }
+    }
 }
 distribute.mustRunAfter startRServe
 
 task stopRServe(type: Exec) {
-	String osName = System.getProperty("os.name").toLowerCase();
-	if (osName.contains("windows")) {
-		commandLine 'bin/dev/rserve-control.bat', 'stop'
-	} else {
-		commandLine 'bin/dev/rserve-control.sh', 'stop'
-	}
-	ignoreExitValue = true
+    String osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("windows")) {
+        commandLine 'bin/dev/rserve-control.bat', 'stop'
+    } else {
+        commandLine 'bin/dev/rserve-control.sh', 'stop'
+    }
+    ignoreExitValue = true
 }
 startRServe.finalizedBy stopRServe
 stopRServe.mustRunAfter distribute
 
 task enableRTests() {
-	doLast {
-		tasks.withType(Test) {
-			systemProperties['TestKiekerRTests'] = 'true'
-		}
-	}
+    doLast {
+        tasks.withType(Test) {
+            systemProperties['TestKiekerRTests'] = 'true'
+        }
+    }
 }
 distribute.mustRunAfter enableRTests
 
@@ -922,113 +922,111 @@ distribute.mustRunAfter enableRTests
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
-	println 'Going to sign for releasing: ' + isReleaseVersion
-	required { isReleaseVersion }
-	sign configurations.archives
+    println 'Going to sign for releasing: ' + isReleaseVersion
+    required { isReleaseVersion }
+    sign configurations.archives
 }
 
 artifacts {
-	archives mainJar
-	archives emfJar
-	archives aspectJJar
-	archives sourcesJar
-	archives javadocJar
+    archives mainJar
+    archives emfJar
+    archives aspectJJar
+    archives sourcesJar
+    archives javadocJar
 }
 
+# publishing
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-		artifact mainJar
-		artifact emfJar
-		artifact aspectJJar
-		artifact sourcesJar
-		artifact javadocJar
+    publications {
+        mavenJava(MavenPublication) {
+            artifact mainJar
+            artifact emfJar
+            artifact aspectJJar
+            artifact sourcesJar
+            artifact javadocJar
 
-			pom {
-				groupId = 'net.kieker-monitoring'
-				artifactId = 'kieker'
-				version = version
-				name = 'Kieker Monitoring and Analysis Framework'
-				description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
-				url = 'http://kieker-monitoring.net'
-//                properties = [
-//                    myProp: "value",
-//                    "prop.with.dots": "anotherValue"
-//                ]
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
 
-				licenses {
-					license {
-						name = 'The Apache Software License, Version 2.0'
-						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					}
-				}
+                configurations.resultJar.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+            
+            pom {
+                groupId = 'net.kieker-monitoring'
+                artifactId = 'kieker'
+                version = version
+                name = 'Kieker Monitoring and Analysis Framework'
+                description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+                url = 'http://kieker-monitoring.net'
 
-				developers {
-					developer {
-						id = 'thomas.duellmann'
-						name = 'Thomas F. Duellmann'
-						email = 'duellmann@hitec-hamburg.de'
-					}
-					developer {
-						id = 'andre.van.hoorn'
-						name = 'Andre van Hoorn'
-						email = 'andre.van.hoorn@uni-hamburg.de'
-					}
-					developer {
-						id = 'reiner.jung'
-						name = 'Reiner Jung'
-						email = 'reiner.jung@email.uni-kiel.de'
-					}
-					developer {
-						id = 'david.georg.reichelt'
-						name = 'David Georg Reichelt'
-						email = 'd.g.reichelt@lancaster.ac.uk'
-					}
-				}
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
 
-				scm {
-					connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
-					developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
-					url = 'https://github.com/kieker-monitoring/kieker'
-				}
-			}
+                developers {
+                    developer {
+                        id = 'thomas.duellmann'
+                        name = 'Thomas F. Duellmann'
+                        email = 'duellmann@hitec-hamburg.de'
+                    }
+                    developer {
+                        id = 'andre.van.hoorn'
+                        name = 'Andre van Hoorn'
+                        email = 'andre.van.hoorn@uni-hamburg.de'
+                    }
+                    developer {
+                        id = 'reiner.jung'
+                        name = 'Reiner Jung'
+                        email = 'reiner.jung@email.uni-kiel.de'
+                    }
+                    developer {
+                        id = 'david.georg.reichelt'
+                        name = 'David Georg Reichelt'
+                        email = 'd.g.reichelt@lancaster.ac.uk'
+                    }
+                }
 
-			pom.withXml {
-				def dependenciesNode = asNode().appendNode('dependencies')
+                scm {
+                    connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+                    developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+                    url = 'https://github.com/kieker-monitoring/kieker'
+                }
+            }
 
-				configurations.resultJar.allDependencies.each {
-					def dependencyNode = dependenciesNode.appendNode('dependency')
-					dependencyNode.appendNode('groupId', it.group)
-					dependencyNode.appendNode('artifactId', it.name)
-					dependencyNode.appendNode('version', it.version)
-				}
-			}
-		}
-	}
+        }
+    }
 
-	repositories {
-		maven {
-			def mavenUser = "NoMavenUser"
-			if (System.env.kiekerMavenUser != null) {
-				mavenUser = System.env.kiekerMavenUser
-			}
-			def mavenPassword = "NoMavenPassword"
-			if (System.env.kiekerMavenPassword != null) {
-				mavenPassword = System.env.kiekerMavenPassword
-			}
-			credentials {
-				username = mavenUser
-				password = mavenPassword
-			}
+    repositories {
+        maven {
+            def mavenUser = "NoMavenUser"
+            if (System.env.kiekerMavenUser != null) {
+                mavenUser = System.env.kiekerMavenUser
+            }
+            def mavenPassword = "NoMavenPassword"
+            if (System.env.kiekerMavenPassword != null) {
+                mavenPassword = System.env.kiekerMavenPassword
+            }
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
 
-			// for local tests:
-			//def releasesRepoUrl = "file:///tmp/myRepo/releases"
-			//def snapshotsRepoUrl = "file://localhost/tmp/myRepo/snapshots"
-			// Maven central:
-			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            // for local tests:
+            //def releasesRepoUrl = "file:///tmp/myRepo/releases"
+            //def snapshotsRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+            // Maven central:
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 
-			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-		}
-	}
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
 }
