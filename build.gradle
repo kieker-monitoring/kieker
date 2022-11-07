@@ -928,7 +928,6 @@ artifacts {
     archives javadocJar
 }
 
-# publishing
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -1028,5 +1027,5 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
     println 'Going to sign for releasing: ' + isReleaseVersion
     required { isReleaseVersion }
-    sign configurations.archives
+    sign publishing.publications.mavenJava
 }
