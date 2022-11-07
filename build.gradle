@@ -920,13 +920,6 @@ distribute.mustRunAfter enableRTests
 //signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
 //
 
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-signing {
-    println 'Going to sign for releasing: ' + isReleaseVersion
-    required { isReleaseVersion }
-    sign configurations.archives
-}
-
 artifacts {
     archives mainJar
     archives emfJar
@@ -1029,4 +1022,11 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
     }
+}
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+signing {
+    println 'Going to sign for releasing: ' + isReleaseVersion
+    required { isReleaseVersion }
+    sign configurations.archives
 }
