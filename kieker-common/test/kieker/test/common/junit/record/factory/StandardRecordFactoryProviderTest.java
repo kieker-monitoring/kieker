@@ -8,6 +8,7 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.factory.StandardRecordFactoryProvider;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.factory.TestRecord;
 
 /**
@@ -16,7 +17,7 @@ import kieker.test.common.util.record.factory.TestRecord;
  * @author Holger Knoche
  * @since 2.0
  */
-public class StandardRecordFactoryProviderTest {
+public class StandardRecordFactoryProviderTest extends AbstractKiekerTest {
     
     private StandardRecordFactoryProvider provider;
 
