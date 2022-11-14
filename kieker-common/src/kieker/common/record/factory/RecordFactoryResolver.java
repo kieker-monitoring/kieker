@@ -84,7 +84,7 @@ public class RecordFactoryResolver {
 		}		
 	}
 
-	/* default */ IRecordFactoryProvider determineProviderFor(final Class<?> recordClass) {
+	private IRecordFactoryProvider determineProviderFor(final Class<?> recordClass) {
 		final Optional<IRecordFactoryProvider> applicableProvider = this.factoryProviders.stream()
 			.filter(provider -> provider.isApplicableTo(recordClass))
 			.findFirst();
