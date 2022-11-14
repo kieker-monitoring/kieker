@@ -46,7 +46,11 @@ public class RecordFactoryResolver {
 		this(ServiceLoader.load(IRecordFactoryProvider.class));
 	}
 	
-	/* default */ RecordFactoryResolver(final Iterable<IRecordFactoryProvider> factoryProviders) {
+	/**
+	 * Creates a new record factory resolver with the given factory providers.
+	 * @param factoryProviders The factory providers to use
+	 */
+	public RecordFactoryResolver(final Iterable<IRecordFactoryProvider> factoryProviders) {
 		this.factoryProviders = StreamSupport.stream(factoryProviders.spliterator(), false)
 			.collect(Collectors.toList());
 	}

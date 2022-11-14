@@ -16,18 +16,23 @@
 
 package kieker.test.common.junit.record.factory;
 
+import java.util.Arrays;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
+import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.factory.IRecordFactoryProvider;
+import kieker.common.record.factory.RecordFactory;
 import kieker.common.record.factory.RecordFactoryResolver;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
-
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * @author Christian Wulf
@@ -36,39 +41,216 @@ import kieker.test.common.util.record.factory.TestRecord;
  */
 public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
-	private RecordFactoryResolver recordFactoryResolver;
-
 	/** test constructor. */
 	public RecordFactoryResolverTest() {
 		// Nothing to do
 	}
 
-	@Before
-	public void before() throws Exception {
-		this.recordFactoryResolver = new RecordFactoryResolver();
-	}
-
+	/**
+	 * Test case: The expected factory is returned for a record with an according factory using the standard resolution
+	 * strategy.
+	 */
 	@Test
-	public void testRecordWithFactory() {
+	public void testRecordWithFactoryUsingStandardResolution() {
 		final String recordClassName = AfterOperationEvent.class.getName();
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
+		
+		final RecordFactoryResolver resolver = new RecordFactoryResolver();
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
+		
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 	}
 
-	@Test
-	public void testRecordWithoutFactory() {
-		final String recordClassName = TestRecord.class.getName();
-		@SuppressWarnings("unused")
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
-		Assert.assertNull(recordFactory);
-	}
-
+	/**
+	 * Test case: No factory is returned for a record that does not exist.
+	 */
 	@Test
 	public void testNotExistingRecord() {
 		final String recordClassName = "record.that.does.not.exist";
-		@SuppressWarnings("unused")
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
+
+		final RecordFactoryResolver resolver = new RecordFactoryResolver();
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
+		
 		Assert.assertNull(recordFactory);
+	}
+
+	/**
+	 * Test case: The expected factory is returned for a record that is explicitly annotated with a factory.
+	 */
+	@Test
+	public void testAnnotatedFactory() {
+		final String recordClassName = RecordTypeWithAnnotatedFactory.class.getName();
+
+		final RecordFactoryResolver resolver = new RecordFactoryResolver();
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
+		
+		Assert.assertNotNull(recordFactory);
+		Assert.assertEquals(AnnotatedRecordFactory.class, recordFactory.getClass());
+	}
+
+	/**
+	 * Test case: The appropriate factories are returned when one or more specific providers are given.
+	 */
+	@Test
+	public void testGivenFactoryProviders() {
+		final String recordClassNameA = RecordTypeA.class.getName();
+		final String recordClassNameB = RecordTypeB.class.getName();
+		final String fallbackClassName = AfterOperationEvent.class.getName();
+
+		final RecordFactoryResolver resolver = new RecordFactoryResolver(Arrays.asList(new ProviderA(), new ProviderB()));
+		final IRecordFactory<? extends IMonitoringRecord> factoryForRecordA = resolver.get(recordClassNameA);
+		final IRecordFactory<? extends IMonitoringRecord> factoryForRecordB = resolver.get(recordClassNameB);		
+
+		// Assert that the factories returned by the providers match the expectations
+		Assert.assertNotNull(factoryForRecordA);
+		Assert.assertEquals(RecordTypeFactoryA.class, factoryForRecordA.getClass());
+		Assert.assertNotNull(factoryForRecordB);
+		Assert.assertEquals(RecordTypeFactoryB.class, factoryForRecordB.getClass());
+
+		// Make sure that the default resolution is used when no provider matches
+		final IRecordFactory<? extends IMonitoringRecord> factoryForFallback = resolver.get(fallbackClassName);
+		Assert.assertNotNull(factoryForFallback);
+		Assert.assertEquals(AfterOperationEventFactory.class, factoryForFallback.getClass());
+	}
+
+	/**
+	 * First record type for the provider test.
+	 */
+	private static class RecordTypeA extends AbstractDummyRecord {
+
+	}
+
+	/**
+	 * Record factory for RecordTypeA. The name is explicitly chosen not to match the default pattern.
+	 */
+	public static class RecordTypeFactoryA extends AbstractDummyRecordFactory<RecordTypeA> {
+
+		@Override
+		public RecordTypeA create(IValueDeserializer deserializer) throws RecordInstantiationException {
+			return null;
+		}
+
+	}
+
+	/**
+	 * Provider for RecordTypeA.
+	 */
+	private static class ProviderA implements IRecordFactoryProvider {
+
+		@Override
+		public boolean isApplicableTo(Class<?> recordClass) {
+			return (recordClass == RecordTypeA.class);
+		}
+
+		@Override
+		public IRecordFactory<?> createFactoryFor(Class<?> recordClass) {
+			return new RecordTypeFactoryA();
+		}
+		
+	}
+
+	/**
+	 * Second record type for the provider test.
+	 */
+	private static class RecordTypeB extends AbstractDummyRecord {
+
+	}
+
+	/**
+	 * Record factory for RecordTypeB. The name is explicitly chosen not to match the default pattern.
+	 */
+	public static class RecordTypeFactoryB extends AbstractDummyRecordFactory<RecordTypeB> {
+
+		@Override
+		public RecordTypeB create(IValueDeserializer deserializer) throws RecordInstantiationException {
+			return null;
+		}
+
+	}
+
+	/**
+	 * Provider for RecordTypeB.
+	 */
+	private static class ProviderB implements IRecordFactoryProvider {
+
+		@Override
+		public boolean isApplicableTo(Class<?> recordClass) {
+			return (recordClass == RecordTypeB.class);
+		}
+
+		@Override
+		public IRecordFactory<?> createFactoryFor(Class<?> recordClass) {
+			return new RecordTypeFactoryB();
+		}
+		
+	}
+
+	/**
+	 * Test record type with an explicitly annotated factory.
+	 */
+	@RecordFactory(AnnotatedRecordFactory.class)
+	private static class RecordTypeWithAnnotatedFactory extends AbstractDummyRecord {
+
+	}
+
+	/**
+	 * Record factory for the annotation test.
+	 */
+	public static class AnnotatedRecordFactory extends AbstractDummyRecordFactory<AbstractDummyRecord> {
+
+		@Override
+		public AbstractDummyRecord create(IValueDeserializer deserializer) throws RecordInstantiationException {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
+	/**
+	 * Convenience superclass for dummy records.
+	 */
+	private static abstract class AbstractDummyRecord extends AbstractMonitoringRecord {
+
+		@Override
+		public void serialize(IValueSerializer serializer) {
+			// Do nothing			
+		}
+
+		@Override
+		public Class<?>[] getValueTypes() {
+			return new Class<?>[0];
+		}
+
+		@Override
+		public String[] getValueNames() {
+			return new String[0];
+		}
+
+		@Override
+		public int getSize() {
+			return 0;
+		}
+
+	}
+
+	/**
+	 * Convenience superclass for dummy record factories.
+	 */
+	private static abstract class AbstractDummyRecordFactory<T extends AbstractDummyRecord> implements IRecordFactory<T> {
+
+		@Override
+		public String[] getValueNames() {
+			return new String[0];
+		}
+
+		@Override
+		public Class<?>[] getValueTypes() {
+			return new Class<?>[0];
+		}
+
+		@Override
+		public int getRecordSizeInBytes() {
+			return 0;
+		}
+
 	}
 
 }
