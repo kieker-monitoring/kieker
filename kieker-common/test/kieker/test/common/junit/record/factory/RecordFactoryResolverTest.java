@@ -117,6 +117,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	private static class RecordTypeA extends AbstractDummyRecord {
 
+		public RecordTypeA() {
+			// Empty constructor
+		}
+
 	}
 
 	/**
@@ -124,9 +128,13 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	public static class RecordTypeFactoryA extends AbstractDummyRecordFactory<RecordTypeA> {
 
+		public RecordTypeFactoryA() {
+			// Empty constructor
+		}
+
 		@Override
-		public RecordTypeA create(IValueDeserializer deserializer) throws RecordInstantiationException {
-			return null;
+		public RecordTypeA create(final IValueDeserializer deserializer) {
+			return new RecordTypeA();
 		}
 
 	}
@@ -136,13 +144,17 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	private static class ProviderA implements IRecordFactoryProvider {
 
+		public ProviderA() {
+			// Empty constructor
+		}
+
 		@Override
-		public boolean isApplicableTo(Class<?> recordClass) {
+		public boolean isApplicableTo(final Class<?> recordClass) {
 			return (recordClass == RecordTypeA.class);
 		}
 
 		@Override
-		public IRecordFactory<?> createFactoryFor(Class<?> recordClass) {
+		public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
 			return new RecordTypeFactoryA();
 		}
 		
@@ -153,6 +165,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	private static class RecordTypeB extends AbstractDummyRecord {
 
+		public RecordTypeB() {
+			// Empty constructor
+		}
+
 	}
 
 	/**
@@ -160,9 +176,13 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	public static class RecordTypeFactoryB extends AbstractDummyRecordFactory<RecordTypeB> {
 
+		public RecordTypeFactoryB() {
+			// Empty constructor
+		}
+
 		@Override
-		public RecordTypeB create(IValueDeserializer deserializer) throws RecordInstantiationException {
-			return null;
+		public RecordTypeB create(final IValueDeserializer deserializer) {
+			return new RecordTypeB();
 		}
 
 	}
@@ -172,13 +192,17 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	private static class ProviderB implements IRecordFactoryProvider {
 
+		public ProviderB() {
+			// Empty constructor
+		}
+
 		@Override
-		public boolean isApplicableTo(Class<?> recordClass) {
+		public boolean isApplicableTo(final Class<?> recordClass) {
 			return (recordClass == RecordTypeB.class);
 		}
 
 		@Override
-		public IRecordFactory<?> createFactoryFor(Class<?> recordClass) {
+		public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
 			return new RecordTypeFactoryB();
 		}
 		
@@ -190,6 +214,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	@RecordFactory(AnnotatedRecordFactory.class)
 	private static class RecordTypeWithAnnotatedFactory extends AbstractDummyRecord {
 
+		public RecordTypeWithAnnotatedFactory() {
+			// Empty constructor
+		}
+
 	}
 
 	/**
@@ -197,9 +225,13 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	 */
 	public static class AnnotatedRecordFactory extends AbstractDummyRecordFactory<AbstractDummyRecord> {
 
+		public AnnotatedRecordFactory() {
+			// Empty constructor
+		}
+
 		@Override
-		public AbstractDummyRecord create(IValueDeserializer deserializer) throws RecordInstantiationException {
-			throw new UnsupportedOperationException();
+		public AbstractDummyRecord create(final IValueDeserializer deserializer) {
+			return new RecordTypeWithAnnotatedFactory();
 		}
 
 	}
@@ -207,10 +239,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	/**
 	 * Convenience superclass for dummy records.
 	 */
-	private static abstract class AbstractDummyRecord extends AbstractMonitoringRecord {
+	private abstract static class AbstractDummyRecord extends AbstractMonitoringRecord {
 
 		@Override
-		public void serialize(IValueSerializer serializer) {
+		public void serialize(final IValueSerializer serializer) {
 			// Do nothing			
 		}
 
@@ -233,8 +265,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 	/**
 	 * Convenience superclass for dummy record factories.
+	 * 
+	 * @param <T> The record type created by this factory
 	 */
-	private static abstract class AbstractDummyRecordFactory<T extends AbstractDummyRecord> implements IRecordFactory<T> {
+	private abstract static class AbstractDummyRecordFactory<T extends AbstractDummyRecord> implements IRecordFactory<T> {
 
 		@Override
 		public String[] getValueNames() {
