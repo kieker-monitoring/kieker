@@ -50,7 +50,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	public static final int USAGE_EXIT_CODE = 4;
 
 	/** logger for all tools. */
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD logging must not be static, confuses user
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName()); // NOPMD logging must not be static, confuses user
 
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
