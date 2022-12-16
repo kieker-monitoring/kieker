@@ -15,15 +15,16 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery;
 
-import kieker.model.analysismodel.trace.OperationCall;
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 
 /**
- *
  * @author Reiner Jung
+ *
  * @since 1.15
+ *
  */
-public interface ITraceBasedExecutionModelAssembler {
+public interface IOperationCallModelAssembler {
 
-	void addOperationCall(OperationCall operationCall);
+	void addOperationCall(OperationCallDurationEvent operationCall);
 
 }

@@ -32,7 +32,7 @@ import kieker.model.analysismodel.source.SourceModel;
  *
  * @since 1.14
  */
-public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
+public class DeploymentModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 	private final AssemblyModel assemblyModel;
@@ -45,6 +45,7 @@ public class DeploymentModelAssembler extends AbstractSourceModelAssembler {
 		this.deploymentModel = deploymentModel;
 	}
 
+	@Override
 	public void addOperation(final OperationEvent event) {
 		final String hostname = event.getHostname();
 		final String classSignature = event.getComponentSignature();

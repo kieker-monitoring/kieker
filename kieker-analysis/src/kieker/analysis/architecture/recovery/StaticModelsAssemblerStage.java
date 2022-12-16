@@ -59,13 +59,14 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 		this.deploymentModel = deploymentModel;
 		this.sourceModel = sourceModel;
 
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, this.sourceModel, sourceLabel,
+		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(new TypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
 				signatureExtractor.getComponentSignatureExtractor(),
-				signatureExtractor.getOperationSignatureExtractor());
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel, this.sourceModel,
-				sourceLabel);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel, this.sourceModel,
-				sourceLabel);
+				signatureExtractor.getOperationSignatureExtractor()));
+		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(new AssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
+				sourceLabel));
+		final OperationEventModelAssemblerStage deploymentModelAssembler = new OperationEventModelAssemblerStage(
+				new DeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
+						sourceLabel));
 
 		this.inputPort = typeModelAssembler.getInputPort();
 		this.outputPort = deploymentModelAssembler.getOutputPort();

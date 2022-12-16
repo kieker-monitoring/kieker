@@ -16,31 +16,36 @@
 package kieker.analysis.architecture.recovery.events;
 
 /**
- * Represent one operation event.
- *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
-public class OperationEvent extends AbstractElementEvent {
+public class StorageEvent extends AbstractElementEvent {
 
-	private final String operationSignature;
+	private final String storageSignature;
+	private final String storageType;
 
-	public OperationEvent(final String hostname, final String componentSignature, final String operationSignature) {
+	public StorageEvent(final String hostname, final String componentSignature, final String storageSignature, final String storageType) {
 		super(hostname, componentSignature);
-		this.operationSignature = operationSignature;
+		this.storageSignature = storageSignature;
+		this.storageType = storageType;
 	}
 
-	public String getOperationSignature() {
-		return this.operationSignature;
+	public String getStorageSignature() {
+		return this.storageSignature;
+	}
+
+	public String getStorageType() {
+		return this.storageType;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof OperationEvent) {
-			final OperationEvent operation = (OperationEvent) obj;
-			return this.compare(this.getComponentSignature(), operation.getComponentSignature())
-					&& this.compare(this.operationSignature, operation.getOperationSignature())
-					&& this.compare(this.getHostname(), operation.getHostname());
+		if (obj instanceof StorageEvent) {
+			final StorageEvent storage = (StorageEvent) obj;
+			return this.compare(this.getComponentSignature(), storage.getComponentSignature())
+					&& this.compare(this.storageSignature, storage.getStorageSignature())
+					&& this.compare(this.storageType, storage.getStorageSignature())
+					&& this.compare(this.getHostname(), storage.getHostname());
 		} else {
 			return super.equals(obj);
 		}
@@ -63,6 +68,7 @@ public class OperationEvent extends AbstractElementEvent {
 
 	@Override
 	public String toString() {
-		return String.format("%s>%s:%s", this.getHostname(), this.getComponentSignature(), this.operationSignature);
+		return String.format("%s>%s:%s", this.getHostname(), this.getComponentSignature(), this.storageSignature);
 	}
+
 }
