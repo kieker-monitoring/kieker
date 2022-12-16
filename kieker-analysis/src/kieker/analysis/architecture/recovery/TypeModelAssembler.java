@@ -30,7 +30,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class TypeModelAssembler extends AbstractSourceModelAssembler {
+public class TypeModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 	private final IComponentSignatureExtractor componentSignatureExtractor;
@@ -48,6 +48,7 @@ public class TypeModelAssembler extends AbstractSourceModelAssembler {
 		this.operationSignatureExtractor = operationSignatureExtractor;
 	}
 
+	@Override
 	public void addOperation(final OperationEvent event) {
 		final String componentSignature = event.getComponentSignature();
 		final String operationSignature = event.getOperationSignature();

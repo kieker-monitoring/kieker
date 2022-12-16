@@ -41,7 +41,7 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};
-		final AbstractSourceModelAssembler assembler = new AbstractSourceModelAssembler(model, LABEL) {
+		final AbstractModelAssembler assembler = new AbstractModelAssembler(model, LABEL) {
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -65,7 +65,7 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		final ComponentType[] types = {
 			this.createType("Type1"), this.createType("Type2"), this.createType("Type3"), this.createType("Type4"),
 		};
-		final AbstractSourceModelAssembler assembler = new AbstractSourceModelAssembler(model, LABEL) {
+		final AbstractModelAssembler assembler = new AbstractModelAssembler(model, LABEL) {
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -73,7 +73,7 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
 		}
-		final AbstractSourceModelAssembler assembler2 = new AbstractSourceModelAssembler(model, SECOND) {
+		final AbstractModelAssembler assembler2 = new AbstractModelAssembler(model, SECOND) {
 		};
 		for (final ComponentType type : types) {
 			assembler2.updateSourceModel(type);

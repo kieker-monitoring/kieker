@@ -13,29 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.architecture.recovery;
-
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-
-import teetime.stage.basic.AbstractFilter;
-
-/**
- * @author Reiner Jung
- * @since 1.15
- */
-public class ExecutionModelAssemblerStage extends AbstractFilter<OperationCallDurationEvent> {
-
-	private final IExecutionModelAssembler assembler;
-
-	public ExecutionModelAssemblerStage(final IExecutionModelAssembler assembler) {
-		this.assembler = assembler;
-	}
-
-	@Override
-	protected void execute(final OperationCallDurationEvent operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
-	}
-
-}
+package kieker.analysis.architecture.recovery.dataflow;
