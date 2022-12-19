@@ -7,11 +7,11 @@ The **Kieker** download site http://kieker-monitoring.net/download/
 provides archives of the binary and source distribution, special
 bundles, the Javadoc~API, as well as additional examples. For this quick
 start guide, **Kieker's** binary distribution, e.g.,
-``kieker-1.15.2-binaries.zip``, is required and must be downloaded. After
+``kieker-2.0.0-SNAPSHOT-binaries.zip``, is required and must be downloaded. After
 having extracted the archive, you'll find the directory structure and
 contents shown below
 
--  ``kieker-1.15.2-binaries/``
+-  ``kieker-2.0.0-SNAPSHOT-binaries/``
 
    -  ``bin`` Call scripts for old style **Kieker** tools
    -  ``build/libs`` **Kieker** framework libraries
