@@ -646,6 +646,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 ) {
   // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
   classifier = 'emf'
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   configure allArtifacts
   configure licence
   configure aopxml
@@ -670,6 +671,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
 ) {
   // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
   classifier = 'aspectj'
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   configure allArtifacts
   configure licence
   configure aopxml
