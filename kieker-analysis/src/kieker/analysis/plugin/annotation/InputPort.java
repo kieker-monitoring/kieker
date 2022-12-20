@@ -27,33 +27,35 @@ import java.lang.annotation.Target;
  * else.<br>
  * Furthermore the port allows to specify the event types for this port and the name. There is also a
  * field for a human-readable description available.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Inherited
+@Deprecated
 public @interface InputPort {
 
 	/**
 	 * The human-readable description of this port.
-	 * 
+	 *
 	 * @return The description for this port.
 	 */
 	String description() default "Input Port";
 
 	/**
 	 * The name which is used to identify this port. It should be unique within the class.
-	 * 
+	 *
 	 * @return The name of this port.
 	 */
 	String name();
 
 	/**
 	 * The event types which are used for this port. If this is empty, everything can be received through the port.
-	 * 
+	 *
 	 * @return The event types for this class.
 	 */
 	Class<?>[] eventTypes() default {};

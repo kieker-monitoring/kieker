@@ -41,7 +41,7 @@ which must be set to a port (default 5678) and a hostname (e.g. localhost)
 specifying the computer receiving the monitoring data.
 
 Use the Kieker collector to receive the data.
-https://kieker-monitoring.readthedocs.io/en/latest/kieker-tools/Collector---Kieker-Data-Bridge.html
+https://kieker-monitoring.readthedocs.io/en/latest/kieker-tools/Collector.html
 
 
 AspectC++ AOP

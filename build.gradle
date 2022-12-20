@@ -2,7 +2,6 @@ buildscript {
   repositories {
     mavenCentral()
     maven { url "https://plugins.gradle.org/m2/" }
-    jcenter()
   }
 
   dependencies {
@@ -69,7 +68,6 @@ allprojects {
   repositories {    // must be above subprojects {}
     mavenLocal()
     mavenCentral()
-    jcenter() // for mockito
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
 }
@@ -358,7 +356,6 @@ def checkSubprojects = [
   project(':kieker-tools'),
   project(':kieker-tools:collector'),
   project(':kieker-tools:convert-logging-timestamp'),
-  project(':kieker-tools:kdb'),
   project(':kieker-tools:log-replayer'),
   project(':kieker-tools:opad'),
   project(':kieker-tools:resource-monitor'),
@@ -748,7 +745,6 @@ def binaryContent = project.copySpec {
 def tools = [
   'collector',
   'convert-logging-timestamp',
-  'kdb',
   'log-replayer',
   'resource-monitor',
   'trace-analysis',
@@ -919,6 +915,12 @@ distribute.mustRunAfter enableRTests
 //signing.password=XXX
 //signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
 //
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+signing {
+	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+	sign configurations.archives
+}
 
 artifacts {
   archives mainJar

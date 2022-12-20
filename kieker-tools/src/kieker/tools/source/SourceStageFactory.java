@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.util.classpath.InstantiationFactory;

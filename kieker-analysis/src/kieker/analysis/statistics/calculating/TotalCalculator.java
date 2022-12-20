@@ -20,7 +20,6 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -32,23 +31,24 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  *
  * @since 1.14
  */
-public class TotalCalculator<T> implements ICalculator<T> {
+public class TotalCalculator<T> extends AbstractCalculator<T> {
 
 	private final Function<T, Long> valueAccessor;
 
-	public TotalCalculator(final Function<T, Long> valueAccessor) {
+	public TotalCalculator(final String propertyName, final Function<T, Long> valueAccessor) {
+		super(propertyName);
 		this.valueAccessor = valueAccessor;
 	}
 
 	@Override
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
-		if (oldCount == null) {
-			statistic.getProperties().put(EPropertyType.TOTAL, value);
+		final Long oldTotal = (Long) statistic.getProperties().get(this.getPropertyName());
+		if (oldTotal == null) {
+			statistic.getProperties().put(this.getPropertyName(), value);
 		} else {
-			final long newCount = oldCount + value;
-			statistic.getProperties().put(EPropertyType.TOTAL, newCount);
+			final long newTotal = oldTotal + value;
+			statistic.getProperties().put(this.getPropertyName(), newTotal);
 		}
 	}
 

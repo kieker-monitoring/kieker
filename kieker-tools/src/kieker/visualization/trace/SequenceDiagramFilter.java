@@ -30,7 +30,7 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.common.util.signature.Signature;
 import kieker.model.repository.AllocationRepository;
 import kieker.model.repository.SystemModelRepository;

@@ -36,7 +36,9 @@ import kieker.common.configuration.Configuration;
  * @author Jan Waller
  *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "Filters incoming objects based on their type", outputPorts = {
 	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = Object.class,
 			description = "Forwards events matching the configured types"),

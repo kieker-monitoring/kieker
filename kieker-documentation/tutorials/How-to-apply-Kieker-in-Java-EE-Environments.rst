@@ -11,7 +11,7 @@ to use AspectJ to monitor method calls in different JavaEE environments.
 Jetty
 -----
 
-Copy ``kieker-1.15.1-aspectj.jar`` into a directory, where it can be accessed
+Copy ``task ':aspectJJar' property 'archiveFileName'`` into a directory, where it can be accessed
 by Jetty, e.g. ``jetty/kieker/``.
 
 Jetty is usually shipped with a configuration file start.ini in which
@@ -20,7 +20,7 @@ start parameters are defined. Add the following snippet to this file:
 .. code::
 	
 	--exec
-	-javaagent:kieker/kieker-1.15.1-aspectj.jar
+	-javaagent:kieker/task ':aspectJJar' property 'archiveFileName'
 	-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 	-Daj.weaving.verbose=true
 
@@ -53,7 +53,7 @@ JBoss
 Tomcat
 ======
 
-Copy ``kieker-1.15.1-aspectj.jar`` into a directory, where it can be accessed
+Copy ``kieker-1.10_aspectj.jar`` into a directory, where it can be accessed
 by Tomcat, e.g. ``tomcat/kieker/``.
 
 Tomcat is usually shipped with start scripts ``bin/catalina.(sh|.bat)``. Add
@@ -63,14 +63,14 @@ operation system:
 .. code::
 	
 	set JAVA_OPTS=%JAVA_OPTS%
-		-javaagent:%CATALINA_BASE%\kieker\kieker-1.15.1-aspectj.jar
+		-javaagent:%CATALINA_BASE%\kieker\kieker-1.10_aspectj.jar
 		-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 		-Daj.weaving.verbose=true
 		-Dkieker.monitoring.configuration=%CATALINA_BASE%/kieker/kieker.monitoring.properties
 		-Dorg.aspectj.weaver.loadtime.configuration=...
 	
 	set JAVA_OPTS=${JAVA_OPTS}
-		-javaagent:${CATALINA_BASE}\kieker\kieker-1.15.1-aspectj.jar
+		-javaagent:${CATALINA_BASE}\kieker\kieker-1.10_aspectj.jar
 		-Dkieker.monitoring.skipDefaultAOPConfiguration=true
 		-Daj.weaving.verbose=true
 		-Dkieker.monitoring.configuration=${CATALINA_BASE}/kieker/kieker.monitoring.properties
@@ -103,7 +103,7 @@ and adapt the paths to your situation.
 
 .. code::
 	
-	<jvm-options>-javaagent:${com.sun.aas.installRoot}/lib/kieker-1.15.1-aspectj.jar</jvm-options>
+	<jvm-options>-javaagent:${com.sun.aas.installRoot}/lib/task ':aspectJJar' property 'archiveFileName'</jvm-options>
 	<jvm-options>-Dkieker.monitoring.skipDefaultAOPConfiguration=true</jvm-options>
 	<jvm-options>-Daj.weaving.verbose=true</jvm-options>
 	<jvm-options>-Dkieker.monitoring.configuration=${com.sun.aas.installRoot}/kieker/kieker.monitoring.properties</jvm-options>
@@ -173,7 +173,7 @@ gewünschten Paketnamen ein.
 	
 	set "JAVA_OPTS=%JAVA_OPTS% -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 	
-	set "JAVA_OPTS=%JAVA_OPTS% -Xbootclasspath/p:%WILDFLY%/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar;%WILDFLY%\modules\system\layers\base\kieker\main\kieker-1.15.1.jar;%WILDFLY%\modules\system\layers\base\org\aspectj\main\aspectjweaver.jar"
+	set "JAVA_OPTS=%JAVA_OPTS% -Xbootclasspath/p:%WILDFLY%/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar;%WILDFLY%\modules\system\layers\base\kieker\main\task ':mainJar' property 'archiveFileName';%WILDFLY%\modules\system\layers\base\org\aspectj\main\aspectjweaver.jar"
 
 -  Anschließend werden Einstellungen für das Monitoring durch Kieker
    vorgenommen:

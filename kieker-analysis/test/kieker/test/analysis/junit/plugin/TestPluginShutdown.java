@@ -41,7 +41,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	static final AtomicInteger SHUTDOWNORDER = new AtomicInteger(); // NOPMD package for inner class

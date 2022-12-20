@@ -24,12 +24,12 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.architecture.trace.execution.ExecutionEventProcessingException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.trace.execution.ExecutionEventProcessingException;
 import kieker.common.configuration.Configuration;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;

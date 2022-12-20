@@ -27,7 +27,9 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke, Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 

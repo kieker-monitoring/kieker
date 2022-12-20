@@ -6,7 +6,6 @@ plugins {
 repositories {
 	mavenLocal()
 	mavenCentral() 
-	jcenter()
 }
 
 dependencies {
@@ -15,7 +14,7 @@ dependencies {
 	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 	implementation "com.beust:jcommander:1.72"
 
-	implementation 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT'
+	implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
 	implementation 'net.kieker-monitoring:kieker:${kiekerVersion}'
 }
 

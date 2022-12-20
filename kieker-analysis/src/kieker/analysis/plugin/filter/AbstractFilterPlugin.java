@@ -26,17 +26,19 @@ import kieker.common.configuration.Configuration;
 /**
  * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
 
 	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext

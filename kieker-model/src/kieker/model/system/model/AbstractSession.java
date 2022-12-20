@@ -49,7 +49,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 	 */
 	public AbstractSession(final String sessionId) {
 		this.sessionId = sessionId;
-		this.containedTraces = new TreeSet<T>(this.getOrderComparator());
+		this.containedTraces = new TreeSet<>(this.getOrderComparator());
 	}
 
 	/**

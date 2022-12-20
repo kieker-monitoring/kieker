@@ -32,7 +32,9 @@ import kieker.test.analysis.util.repository.SimpleRepository;
  * @author Nils Christian Ehmke, Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 @Plugin(programmaticOnly = true,
 		name = SimpleForwardFilterWithRepository.FILTER_NAME, description = SimpleForwardFilterWithRepository.FILTER_DESCRIPTION,
 		outputPorts = { @OutputPort(name = SimpleForwardFilterWithRepository.OUTPUT_PORT_NAME, eventTypes = { Object.class }) }, // NOCS

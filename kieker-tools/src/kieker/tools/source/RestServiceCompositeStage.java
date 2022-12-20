@@ -15,9 +15,9 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.IAccessHandler;
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rest.RestServiceStage;
+import kieker.analysis.generic.source.IAccessHandler;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rest.RestServiceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
@@ -62,6 +62,7 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 	 * @throws ConfigurationException
 	 *             on configuration errors
 	 */
+	@Deprecated
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final String hostname = configuration.getStringProperty(RestServiceCompositeStage.SERVICE_HOSTNAME);
 		final int port = configuration.getIntProperty(RestServiceCompositeStage.SERVICE_PORT);

@@ -51,6 +51,6 @@ public interface AssemblyStorage extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AssemblyComponent getAssemblyComponent();
+	AssemblyComponent getComponent();
 
 } // AssemblyStorage

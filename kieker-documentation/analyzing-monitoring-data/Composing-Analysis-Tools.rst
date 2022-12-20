@@ -1,4 +1,4 @@
-.._ analyzing-composing-analysis-tools:
+.. _analyzing-composing-analysis-tools:
 
 Composing Analysis Tools 
 ========================

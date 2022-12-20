@@ -19,9 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.file.DirectoryReaderStage;
-import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -53,6 +53,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 * @param configuration
 	 *            configuration for the enclosed filters
 	 */
+	@Deprecated
 	public LogsReaderCompositeStage(final Configuration configuration) {
 		final String[] directoryNames = configuration.getStringArrayProperty(LOG_DIRECTORIES, ":");
 		final List<File> directories = new ArrayList<>(directoryNames.length);
@@ -81,6 +82,26 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 *            buffer size of the data file reader (null == use default setting)
 	 */
 	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
+		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
+
+		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+	}
+
+	/**
+	 * Creates a composite stage to scan and read a set of Kieker log directories.
+	 *
+	 * @param directory
+	 *            list of directories to read
+	 * @param verbose
+	 *            report on every read log file
+	 * @param dataBufferSize
+	 *            buffer size of the data file reader (null == use default setting)
+	 */
+	public LogsReaderCompositeStage(final File directory, final boolean verbose, final Integer dataBufferSize) {
+		final List<File> directories = new ArrayList<>();
+		directories.add(directory);
+
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
 

@@ -29,7 +29,7 @@ illustrated below.
          -  ``build/`` Directory for the Java class files
          -  ``lib/`` Directory for the required libraries
 
-            -  ``kieker-1.15.1-emf.jar``
+            -  ``task ':emfJar' property 'archiveFileName'``
 
          -  ``src/`` The directory for the source code files
 

@@ -18,10 +18,11 @@ package kieker.analysis.statistics.calculating;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
+ * Computes mean from total amount and number of elements.
+ *
  * @param <T>
  *            Type of elements
  *
@@ -29,19 +30,34 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  *
  * @since 1.14
  */
-public class MeanCalculator<T> implements ICalculator<T> {
+public class MeanCalculator<T> extends AbstractCalculator<T> {
 
-	public MeanCalculator() {
-		// Create Calculator
+	private final String totalName;
+	private final String countName;
+
+	/**
+	 * Create a mean calculator.
+	 *
+	 * @param propertyName
+	 *            property name of the property containing the mean value
+	 * @param totalName
+	 *            property name of the property containing the total amount
+	 * @param countName
+	 *            property name of the property containing the number of elements
+	 */
+	public MeanCalculator(final String propertyName, final String totalName, final String countName) {
+		super(propertyName);
+		this.totalName = totalName;
+		this.countName = countName;
 	}
 
 	@Override
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
-		final Long total = (Long) statistic.getProperties().get(EPropertyType.TOTAL);
-		final Long count = (Long) statistic.getProperties().get(EPropertyType.COUNT);
-		if ((total != null) && (count != null)) {
+		final Long total = (Long) statistic.getProperties().get(this.totalName);
+		final Long count = (Long) statistic.getProperties().get(this.countName);
+		if (total != null && count != null) {
 			final Long avg = total / count;
-			statistic.getProperties().put(EPropertyType.MEAN, avg);
+			statistic.getProperties().put(this.getPropertyName(), avg);
 		}
 	}
 

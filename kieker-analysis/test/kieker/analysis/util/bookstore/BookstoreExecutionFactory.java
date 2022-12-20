@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.util.bookstore;
 
-import kieker.analysis.trace.AbstractTraceAnalysisStage;
+import kieker.analysis.architecture.trace.AbstractTraceAnalysisStage;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;

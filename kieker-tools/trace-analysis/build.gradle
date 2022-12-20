@@ -29,7 +29,7 @@ task uploadArchives {
 
 task replaceHardCodedVersionNames() {
 	doLast {
-		regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+//		regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
 	}
 }
 

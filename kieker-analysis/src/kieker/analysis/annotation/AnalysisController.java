@@ -25,21 +25,23 @@ import kieker.analysis.plugin.annotation.Property;
 
 /**
  * This is the annotation to supply a default configuration for the analysis controller.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
+ * @deprecated since 1.15.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
+@Deprecated
 public @interface AnalysisController {
 
 	/**
 	 * The list of possible properties for the analysis controller.
-	 * 
+	 *
 	 * @return A list of properties.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	Property[] configuration() default {};

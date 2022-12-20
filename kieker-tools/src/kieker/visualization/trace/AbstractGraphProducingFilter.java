@@ -16,7 +16,7 @@
 package kieker.visualization.trace;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.model.repository.SystemModelRepository;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement;

@@ -33,7 +33,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Holger Knoche
  *
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin
 public abstract class AbstractStringRegistryReaderPlugin extends AbstractReaderPlugin {
 

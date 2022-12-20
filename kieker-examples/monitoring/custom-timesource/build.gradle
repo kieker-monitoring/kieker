@@ -2,8 +2,7 @@ apply plugin: 'application'
 
 repositories {
 	mavenLocal()
-	mavenCentral() 
-	jcenter()
+	mavenCentral()
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
