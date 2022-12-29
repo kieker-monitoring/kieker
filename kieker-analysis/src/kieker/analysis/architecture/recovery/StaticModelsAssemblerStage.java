@@ -18,13 +18,9 @@ package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.SignatureExtractor;
-import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
-import kieker.model.analysismodel.deployment.DeploymentFactory;
 import kieker.model.analysismodel.deployment.DeploymentModel;
-import kieker.model.analysismodel.source.SourceFactory;
 import kieker.model.analysismodel.source.SourceModel;
-import kieker.model.analysismodel.type.TypeFactory;
 import kieker.model.analysismodel.type.TypeModel;
 
 import teetime.framework.CompositeStage;
@@ -32,6 +28,10 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
+ * Composite stage covering @{link TypeModel}, @{link AssemblyModel}, @{link DeploymentModel}
+ * and @{link SourceModel} in one stage. Receives @{link OperationEvent}s and sends them out
+ * unmodified. State changes happen in the used models.
+ *
  * @author Sören Henning
  *
  * @since 1.14
@@ -46,11 +46,22 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 	private final InputPort<OperationEvent> inputPort;
 	private final OutputPort<OperationEvent> outputPort;
 
-	public StaticModelsAssemblerStage(final String sourceLabel, final SignatureExtractor signatureExtractor) {
-		this(TypeFactory.eINSTANCE.createTypeModel(), AssemblyFactory.eINSTANCE.createAssemblyModel(), DeploymentFactory.eINSTANCE.createDeploymentModel(),
-				SourceFactory.eINSTANCE.createSourceModel(), sourceLabel, signatureExtractor);
-	}
-
+	/**
+	 * Create a static model assembler stage.
+	 *
+	 * @param typeModel
+	 *            type model
+	 * @param assemblyModel
+	 *            assembly model
+	 * @param deploymentModel
+	 *            deployment model
+	 * @param sourceModel
+	 *            source model
+	 * @param sourceLabel
+	 *            label to be used for all added model elements
+	 * @param signatureExtractor
+	 *            signature extractor for @{link OperationEvent}s to determine package, component and operation names
+	 */
 	public StaticModelsAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel,
 			final DeploymentModel deploymentModel, final SourceModel sourceModel, final String sourceLabel,
 			final SignatureExtractor signatureExtractor) {
@@ -59,11 +70,13 @@ public class StaticModelsAssemblerStage extends CompositeStage {
 		this.deploymentModel = deploymentModel;
 		this.sourceModel = sourceModel;
 
-		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(new TypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
-				signatureExtractor.getComponentSignatureExtractor(),
-				signatureExtractor.getOperationSignatureExtractor()));
-		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(new AssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
-				sourceLabel));
+		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(
+				new TypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
+						signatureExtractor.getComponentSignatureExtractor(),
+						signatureExtractor.getOperationSignatureExtractor()));
+		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(
+				new AssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
+						sourceLabel));
 		final OperationEventModelAssemblerStage deploymentModelAssembler = new OperationEventModelAssemblerStage(
 				new DeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
 						sourceLabel));
