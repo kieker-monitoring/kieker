@@ -17,12 +17,18 @@ package kieker.analysis.behavior;
 
 import java.util.List;
 
-import kieker.analysis.behavior.clustering.OpticsData;
-import kieker.analysis.behavior.data.EntryCallEvent;
-import kieker.analysis.behavior.model.BehaviorModel;
-import kieker.analysis.behavior.model.Edge;
-import kieker.analysis.behavior.model.Node;
-import kieker.analysis.behavior.mtree.MTree;
+import com.google.common.graph.MutableNetwork;
+import com.google.common.graph.NetworkBuilder;
+
+import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.clustering.BasicCostFunction;
+import kieker.analysis.generic.graph.clustering.OpticsData;
+import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
+import kieker.analysis.generic.graph.impl.EdgeImpl;
+import kieker.analysis.generic.graph.impl.NodeImpl;
+import kieker.analysis.generic.graph.mtree.MTree;
 
 /**
  *
@@ -39,168 +45,91 @@ public final class TestHelper {
 
 	}
 
-	public static BehaviorModel createBehaviorModelA() {
+	public static MutableNetwork<INode, IEdge> createBehaviorModelA() {
 
-		final BehaviorModel model = new BehaviorModel();
-
-		TestHelper.addNode(model, "Init");
-		TestHelper.addNode(model, "A");
-		TestHelper.addNode(model, "B");
-		TestHelper.addNode(model, "C");
-
-		final String[] parameters = {};
-		final String[] values = {};
-
-		final Edge edge1 = TestHelper.addEdge(model, "Init", "A");
-
-		edge1.addEvent(TestHelper.createEvent(0, "A", parameters, values));
-
-		final Edge edge2 = TestHelper.addEdge(model, "A", "B");
-		edge2.addEvent(TestHelper.createEvent(1, "A", parameters, values));
-
-		final Edge edge3 = TestHelper.addEdge(model, "B", "C");
-		edge3.addEvent(TestHelper.createEvent(2, "C", parameters, values));
-
-		return model;
-
-	}
-
-	// only difference to A: different values
-	public static BehaviorModel createBehaviorModelB() {
-
-		final BehaviorModel model = new BehaviorModel();
+		final MutableNetwork<INode, IEdge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
 
 		TestHelper.addNode(model, "Init");
 		TestHelper.addNode(model, "A");
 		TestHelper.addNode(model, "B");
 		TestHelper.addNode(model, "C");
 
-		final String[] parameters = {};
-		final String[] values = { "different value" };
-
-		final Edge edge1 = TestHelper.addEdge(model, "Init", "A");
-
-		edge1.addEvent(TestHelper.createEvent(0, "A", parameters, values));
-
-		final Edge edge2 = TestHelper.addEdge(model, "A", "B");
-		edge2.addEvent(TestHelper.createEvent(1, "A", parameters, values));
-
-		final Edge edge3 = TestHelper.addEdge(model, "B", "C");
-		edge3.addEvent(TestHelper.createEvent(2, "C", parameters, values));
+		TestHelper.addEdge(model, "Init", "A");
+		TestHelper.addEdge(model, "A", "B");
+		TestHelper.addEdge(model, "B", "C");
 
 		return model;
-	}
 
-	// only difference to A: different parameterNames
-	public static BehaviorModel createBehaviorModelC() {
-
-		final BehaviorModel model = new BehaviorModel();
-
-		TestHelper.addNode(model, "Init");
-		TestHelper.addNode(model, "A");
-		TestHelper.addNode(model, "B");
-		TestHelper.addNode(model, "C");
-
-		final String[] parameters = { "different parameters" };
-		final String[] values = {};
-
-		final Edge edge1 = TestHelper.addEdge(model, "Init", "A");
-
-		edge1.addEvent(TestHelper.createEvent(0, "A", parameters, values));
-
-		final Edge edge2 = TestHelper.addEdge(model, "A", "B");
-		edge2.addEvent(TestHelper.createEvent(1, "A", parameters, values));
-
-		final Edge edge3 = TestHelper.addEdge(model, "B", "C");
-		edge3.addEvent(TestHelper.createEvent(2, "C", parameters, values));
-
-		return model;
 	}
 
 	// only difference to A: additional edge
-	public static BehaviorModel createBehaviorModelD() {
+	public static MutableNetwork<INode, IEdge> createBehaviorModelD() {
 
-		final BehaviorModel model = new BehaviorModel();
+		final MutableNetwork<INode, IEdge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
 
 		TestHelper.addNode(model, "Init");
 		TestHelper.addNode(model, "A");
 		TestHelper.addNode(model, "B");
 		TestHelper.addNode(model, "C");
 
-		final String[] parameters = {};
-		final String[] values = {};
-
-		final Edge edge1 = TestHelper.addEdge(model, "Init", "A");
-
-		edge1.addEvent(TestHelper.createEvent(0, "A", parameters, values));
-
-		final Edge edge2 = TestHelper.addEdge(model, "A", "B");
-		edge2.addEvent(TestHelper.createEvent(1, "A", parameters, values));
-
-		final Edge edge3 = TestHelper.addEdge(model, "B", "C");
-		edge3.addEvent(TestHelper.createEvent(2, "C", parameters, values));
-
-		final Edge edge4 = TestHelper.addEdge(model, "C", "B");
-		edge4.addEvent(TestHelper.createEvent(3, "B", parameters, values));
+		TestHelper.addEdge(model, "Init", "A");
+		TestHelper.addEdge(model, "A", "B");
+		TestHelper.addEdge(model, "B", "C");
+		TestHelper.addEdge(model, "C", "B");
 
 		return model;
 
 	}
 
 	// only difference to A: additional node
-	public static BehaviorModel createBehaviorModelE() {
+	public static MutableNetwork<INode, IEdge> createBehaviorModelE() {
 
-		final BehaviorModel model = new BehaviorModel();
+		final MutableNetwork<INode, IEdge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
 
 		TestHelper.addNode(model, "Init");
 		TestHelper.addNode(model, "A");
 		TestHelper.addNode(model, "B");
 		TestHelper.addNode(model, "C");
-		TestHelper.addNode(model, "D"); // unconnected, but sould still increase distance
+		TestHelper.addNode(model, "D"); // unconnected, but should still increase distance
 
-		final String[] parameters = {};
-		final String[] values = {};
-
-		final Edge edge1 = TestHelper.addEdge(model, "Init", "A");
-
-		edge1.addEvent(TestHelper.createEvent(0, "A", parameters, values));
-
-		final Edge edge2 = TestHelper.addEdge(model, "A", "B");
-		edge2.addEvent(TestHelper.createEvent(1, "A", parameters, values));
-
-		final Edge edge3 = TestHelper.addEdge(model, "B", "C");
-		edge3.addEvent(TestHelper.createEvent(2, "C", parameters, values));
+		TestHelper.addEdge(model, "Init", "A");
+		TestHelper.addEdge(model, "A", "B");
+		TestHelper.addEdge(model, "B", "C");
 
 		return model;
 	}
 
-	public static void addNode(final BehaviorModel model, final String nodeName) {
-		final Node node = new Node(nodeName);
-		model.getNodes().put(nodeName, node);
+	public static void addNode(final MutableNetwork<INode, IEdge> model, final String nodeName) {
+		final INode node = new NodeImpl(nodeName);
+		model.addNode(node);
 	}
 
-	public static Edge addEdge(final BehaviorModel model, final String sourceName,
+	public static IEdge addEdge(final MutableNetwork<INode, IEdge> model, final String sourceName,
 			final String targetName) {
-		final Node source = model.getNodes().get(sourceName);
-		final Node target = model.getNodes().get(targetName);
+		final INode source = TestHelper.findNode(model, sourceName);
+		final INode target = TestHelper.findNode(model, targetName);
 
-		final Edge edge = new Edge(source, target);
-		source.getOutgoingEdges().put(target, edge);
-		source.getIngoingEdges().put(source, edge);
-		model.getEdges().add(edge);
+		final IEdge edge = new EdgeImpl("");
+
+		model.addEdge(source, target, edge);
+
 		return edge;
 	}
 
-	public static MTree<OpticsData> generateMTree(final List<OpticsData> models) {
+	public static MTree<OpticsData<INode, IEdge>> generateMTree(final List<OpticsData<INode, IEdge>> models) {
 
 		// final GraphEditDistance ged = new GraphEditDistance();
-		final MTree<OpticsData> mtree = new MTree<>(20, 40, OpticsData.getDistanceFunction(), null);
+		final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(1, 1);
+		final MTree<OpticsData<INode, IEdge>> mtree = new MTree<>(20, 40, new OPTICSDataGED<>(costFunction), null);
 
-		for (final OpticsData model : models) {
+		for (final OpticsData<INode, IEdge> model : models) {
 			mtree.add(model);
 		}
 
 		return mtree;
 	}
 
+	public static <E extends IEdge> INode findNode(final MutableNetwork<INode, E> model, final String signature) {
+		return model.nodes().stream().filter(node -> node.getId().equals(signature)).findFirst().get();
+	}
 }

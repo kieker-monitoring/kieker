@@ -18,7 +18,7 @@ package kieker.analysis.behavior;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -63,7 +63,7 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 					final AfterOperationEvent afterOperationEvent = (AfterOperationEvent) element;
 					if (afterOperationEvent.getOrderIndex() == 0) {
 						if (this.containsTrace(afterOperationEvent.getTraceId())) {
-							this.outputPort.send(this.createEntryCallEvent(afterOperationEvent));
+							this.createEntryCallEvent(afterOperationEvent);
 							this.registeredBeforeOperationEvents.remove(afterOperationEvent.getTraceId());
 							this.registeredTraces.remove(afterOperationEvent.getTraceId());
 						} else {
@@ -131,20 +131,25 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 	 *            before operation event
 	 * @return returns an entry call event.
 	 */
-	private EntryCallEvent createEntryCallEvent(final AfterOperationEvent afterOperationEvent) {
+	private void createEntryCallEvent(final AfterOperationEvent afterOperationEvent) {
 		final TraceMetadata traceMetadata = this.registeredTraces.get(afterOperationEvent.getTraceId());
 		final BeforeOperationEvent beforeOperationEvent = this.registeredBeforeOperationEvents.get(afterOperationEvent.getTraceId());
-		if (beforeOperationEvent instanceof EntryLevelBeforeOperationEvent) {
-			final EntryLevelBeforeOperationEvent entryLevelbeforeOperationEvent = (EntryLevelBeforeOperationEvent) beforeOperationEvent;
-			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
-					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
-					traceMetadata.getSessionId(), traceMetadata.getHostname(), entryLevelbeforeOperationEvent.getParameters(),
-					entryLevelbeforeOperationEvent.getValues(),
-					entryLevelbeforeOperationEvent.getRequestType());
+		if (beforeOperationEvent != null) {
+			if (beforeOperationEvent instanceof EntryLevelBeforeOperationEvent) {
+				final EntryLevelBeforeOperationEvent entryLevelbeforeOperationEvent = (EntryLevelBeforeOperationEvent) beforeOperationEvent;
+				this.outputPort.send(new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
+						beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+						traceMetadata.getSessionId(), traceMetadata.getHostname(), entryLevelbeforeOperationEvent.getParameters(),
+						entryLevelbeforeOperationEvent.getValues(),
+						entryLevelbeforeOperationEvent.getRequestType()));
+			} else {
+				this.outputPort.send(new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
+						beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
+						traceMetadata.getSessionId(), traceMetadata.getHostname(), new String[0], new String[0], 0));
+			}
 		} else {
-			return new EntryCallEvent(beforeOperationEvent.getTimestamp(), afterOperationEvent.getTimestamp(),
-					beforeOperationEvent.getOperationSignature(), beforeOperationEvent.getClassSignature(),
-					traceMetadata.getSessionId(), traceMetadata.getHostname(), new String[0], new String[0], 0);
+			this.logger.error("Missing EntryLevelBeforeOperationEvent or BeforeOperationEvent found for AfterOperationEvent traceId={}, orderIndex={}",
+					afterOperationEvent.getTraceId(), afterOperationEvent.getOrderIndex());
 		}
 	}
 

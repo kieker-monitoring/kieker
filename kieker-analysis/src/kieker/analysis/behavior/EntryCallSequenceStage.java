@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
-import kieker.common.records.session.ISessionEvent;
-import kieker.common.records.session.SessionEndEvent;
-import kieker.common.records.session.SessionStartEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.common.record.session.ISessionEvent;
+import kieker.common.record.session.SessionEndEvent;
+import kieker.common.record.session.SessionStartEvent;
 
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
@@ -114,7 +114,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 			final UserSession session = this.sessions.get(sessionId);
 			final long exitTime = session.getExitTime();
 
-			final boolean isExpired = (exitTime + this.userSessionTimeout) < timeNow;
+			final boolean isExpired = exitTime + this.userSessionTimeout < timeNow;
 
 			if (isExpired) {
 				this.userSessionOutputPort.send(session);

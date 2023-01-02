@@ -15,17 +15,17 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.graph.MutableNetwork;
+import com.google.common.graph.NetworkBuilder;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
-import kieker.analysis.behavior.model.BehaviorModel;
+import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.Edge;
-import kieker.analysis.behavior.model.Node;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.impl.NodeImpl;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -35,9 +35,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, BehaviorModel> {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionToBehaviorModelTransformation.class);
+public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, MutableNetwork<INode, Edge>> {
 
 	public UserSessionToBehaviorModelTransformation() {
 		// default constructor
@@ -45,15 +43,14 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 
 	@Override
 	protected void execute(final UserSession session) throws Exception {
-
-		UserSessionToBehaviorModelTransformation.LOGGER.info("Received user session");
+		this.logger.info("Received user session");
 
 		// sort events by the time they occurred
 		session.sortEventsBy(UserSession.SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME);
 		final List<EntryCallEvent> entryCalls = session.getEvents();
 
-		this.outputPort.send(UserSessionToBehaviorModelTransformation.eventsToModel(entryCalls));
-		UserSessionToBehaviorModelTransformation.LOGGER.debug("Created BehaviorModelGED");
+		this.outputPort.send(this.eventsToModel(entryCalls));
+		this.logger.debug("Created BehaviorModel");
 
 	}
 
@@ -64,36 +61,36 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 	 *            The list of events
 	 * @return The behavior model
 	 */
-	public static BehaviorModel eventsToModel(final List<EntryCallEvent> events) {
-		final BehaviorModel model = new BehaviorModel();
-
-		final Iterator<EntryCallEvent> iterator = events.iterator();
+	public MutableNetwork<INode, Edge> eventsToModel(final List<EntryCallEvent> events) {
+		final MutableNetwork<INode, Edge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
 
 		// start with the node "init"
-		Node currentNode = new Node("Init");
-		model.getNodes().put("Init", currentNode);
+		INode currentNode = new NodeImpl("Init");
+		model.addNode(currentNode);
 
-		Node lastNode = currentNode;
+		INode lastNode = currentNode;
 
 		// for all events
-		while (iterator.hasNext()) {
-			final EntryCallEvent event = iterator.next();
-
+		for (final EntryCallEvent event : events) {
 			// current node is an existing node with the same name or if non-existing a new node
-			currentNode = model.getNodes().get(event.getOperationSignature());
-			if (currentNode == null) {
-				currentNode = new Node(event.getOperationSignature());
+			final Optional<INode> currentNodeOptional = this.findNode(model, event.getOperationSignature());
+			if (!currentNodeOptional.isPresent()) {
+				currentNode = new NodeImpl(event.getOperationSignature());
+				// add node to model
+				model.addNode(currentNode);
+			} else {
+				currentNode = currentNodeOptional.get();
 			}
 
-			// add node to model
-			model.getNodes().put(event.getOperationSignature(), currentNode);
-
 			// add edge to model
-			UserSessionToBehaviorModelTransformation.addEdge(event, model, lastNode, currentNode);
+			this.addEdge(event, model, lastNode, currentNode);
 			lastNode = currentNode;
 		}
 		return model;
+	}
 
+	private Optional<INode> findNode(final MutableNetwork<INode, Edge> model, final String signature) {
+		return model.nodes().stream().filter(node -> node.getId().equals(signature)).findFirst();
 	}
 
 	/**
@@ -104,19 +101,15 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 	 * @param source
 	 * @param target
 	 */
-	public static void addEdge(final EntryCallEvent event, final BehaviorModel model,
-			final Node source, final Node target) {
-		final Edge matchingEdge = source.getOutgoingEdges().get(target);
+	public void addEdge(final EntryCallEvent event, final MutableNetwork<INode, Edge> model,
+			final INode source, final INode target) {
+		final Optional<Edge> matchingEdgeOptional = model.edgeConnecting(source, target);
 
 		// if edge does not exist yet
-		if (matchingEdge == null) {
-			final Edge newEdge = new Edge(event, source, target);
-			// add references to the model and the nodes
-			source.getOutgoingEdges().put(target, newEdge);
-			target.getIngoingEdges().put(source, newEdge);
-			model.getEdges().add(newEdge);
+		if (!matchingEdgeOptional.isPresent()) {
+			model.addEdge(source, target, new Edge(source.getId() + ":" + target.getId(), event));
 		} else { // if edge already exists
-			matchingEdge.addEvent(event);
+			matchingEdgeOptional.get().addEvent(event);
 		}
 	}
 

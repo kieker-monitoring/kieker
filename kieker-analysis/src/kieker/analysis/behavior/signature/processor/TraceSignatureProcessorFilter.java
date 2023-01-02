@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.behavior.signature.processor;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
+import kieker.analysis.behavior.events.EntryCallEvent;
 
 import teetime.stage.basic.AbstractFilter;
 

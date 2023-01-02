@@ -15,31 +15,38 @@
  ***************************************************************************/
 package kieker.analysis.behavior.clustering;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.graph.MutableNetwork;
 
-import kieker.analysis.behavior.model.BehaviorModel;
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.clustering.OpticsData;
+import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * Converts Behavior Models to Optics Data objects. This is necessary for the optics algorithm.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class BehaviorModelToOpticsDataTransformation extends AbstractTransformation<BehaviorModel, OpticsData> {
+public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends IEdge> extends AbstractTransformation<MutableNetwork<N, E>, OpticsData<N, E>> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BehaviorModelToOpticsDataTransformation.class);
+	private final OPTICSDataGED<N, E> opticsGed;
 
-	public BehaviorModelToOpticsDataTransformation() {
-		// default constructor
+	public BehaviorModelToOpticsDataTransformation(final OPTICSDataGED<N, E> opticsGed) {
+		this.opticsGed = opticsGed;
 	}
 
 	@Override
-	protected void execute(final BehaviorModel model) throws Exception {
-		this.outputPort.send(new OpticsData(model));
-		BehaviorModelToOpticsDataTransformation.LOGGER.debug("Converted BehaviorModel to OpticsData");
+	protected void execute(final MutableNetwork<N, E> model) throws Exception {
+		this.outputPort.send(new OpticsData<>(model, this.opticsGed));
+		this.logger.debug("Converted BehaviorModel to OpticsData");
 	}
 
 }

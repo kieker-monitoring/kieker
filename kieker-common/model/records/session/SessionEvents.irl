@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.records.session
+package kieker.common.record.session
 
 import kieker.common.record.flow.IEventRecord
 

@@ -15,15 +15,20 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
-import kieker.analysis.behavior.model.BehaviorModel;
+import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.behavior.model.Edge;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
+import kieker.analysis.generic.CountingFilter;
 import kieker.analysis.generic.DynamicEventDispatcher;
 import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
+import kieker.analysis.generic.graph.INode;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.common.records.session.ISessionEvent;
+import kieker.common.record.session.ISessionEvent;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
@@ -37,7 +42,7 @@ import teetime.framework.OutputPort;
  */
 public class ModelGenerationCompositeStage extends CompositeStage {
 
-	private final OutputPort<BehaviorModel> modelOutputPort;
+	private final OutputPort<MutableNetwork<INode, Edge>> modelOutputPort;
 
 	private final InputPort<Object> inputPort;
 
@@ -68,8 +73,11 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 
 		eventDispatcher.registerOutput(flowRecordMatcher);
 
+		final CountingFilter<EntryCallEvent> callCounter = new CountingFilter<>(true, 10, "entry");
+
 		this.connectPorts(flowRecordMatcher.getOutputPort(), createEntryLevelEventStage.getInputPort());
-		this.connectPorts(createEntryLevelEventStage.getOutputPort(), sessionGenerator.getInputPort());
+		this.connectPorts(createEntryLevelEventStage.getOutputPort(), callCounter.getInputPort());
+		this.connectPorts(callCounter.getRelayedEventsOutputPort(), sessionGenerator.getInputPort());
 
 		final IEventMatcher<ISessionEvent> sessionMatcher = new ImplementsEventMatcher<>(ISessionEvent.class, null);
 		eventDispatcher.registerOutput(sessionMatcher);
@@ -81,7 +89,7 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 		this.modelOutputPort = this.createOutputPort(sessionToModel.getOutputPort());
 	}
 
-	public OutputPort<BehaviorModel> getModelOutputPort() {
+	public OutputPort<MutableNetwork<INode, Edge>> getModelOutputPort() {
 		return this.modelOutputPort;
 	}
 

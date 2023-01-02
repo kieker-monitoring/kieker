@@ -116,26 +116,6 @@ public final class BehaviorAnalysisServiceMain
 		return true;
 	}
 
-	private final <T extends Enum<T>> T getEnumProperty(final kieker.common.configuration.Configuration configuration, final String key, final Class<T> enumType,
-			final T defaultValue) {
-		final String propertyValue = configuration.getStringProperty(key);
-
-		if (propertyValue == null) {
-			return defaultValue;
-		} else {
-			final T[] results = enumType.getEnumConstants();
-			for (final T value : results) {
-				if (value.name().equalsIgnoreCase(propertyValue)) {
-					return value;
-				}
-			}
-
-			this.logger.warn("Error parsing configuration property '{}' of type {}, found value '{}', using default value {}",
-					key, enumType.getSimpleName(), propertyValue, defaultValue);
-			return defaultValue;
-		}
-	}
-
 	private List<Pattern> readSignatures(final String filename, final String errorMessage, final JCommander commander) {
 		final File file = new File(filename);
 		if (ParameterEvaluationUtils.isFileReadable(file, errorMessage, commander)) {

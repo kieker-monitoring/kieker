@@ -18,7 +18,8 @@ package kieker.analysis.behavior.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.generic.graph.impl.EdgeImpl;
 
 /**
  * The edge between two nodes of a BehaviorModel.
@@ -26,26 +27,15 @@ import kieker.analysis.behavior.data.EntryCallEvent;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class Edge {
+public class Edge extends EdgeImpl {
 
-	private final List<EventGroup> eventGroups;
-
-	private final Node source;
-
-	private final Node target;
+	private final List<EventGroup> eventGroups = new ArrayList<>();
 
 	/**
-	 * Create a new edge between two nodes.
-	 *
-	 * @param source
-	 *            the source node of the edge
-	 * @param target
-	 *            the target node of the edge
+	 * Create a new edge without an entry call event attached.
 	 */
-	public Edge(final Node source, final Node target) {
-		this.eventGroups = new ArrayList<>();
-		this.source = source;
-		this.target = target;
+	public Edge(final String id) {
+		super(id);
 	}
 
 	/**
@@ -53,17 +43,10 @@ public class Edge {
 	 *
 	 * @param event
 	 *            the event which is represented by the edge
-	 * @param source
-	 *            the source node of the edge
-	 * @param target
-	 *            the target node of the edge
 	 */
-	public Edge(final EntryCallEvent event, final Node source,
-			final Node target) {
-		this.eventGroups = new ArrayList<>();
+	public Edge(final String id, final EntryCallEvent event) {
+		super(id);
 		this.addEvent(event);
-		this.source = source;
-		this.target = target;
 	}
 
 	/**
@@ -86,14 +69,6 @@ public class Edge {
 			newEventGroup.getEvents().add(event);
 			this.eventGroups.add(newEventGroup);
 		}
-	}
-
-	public Node getSource() {
-		return this.source;
-	}
-
-	public Node getTarget() {
-		return this.target;
 	}
 
 	public List<EventGroup> getEventGroups() {

@@ -17,19 +17,22 @@ package kieker.analysis.behavior.model.generation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.graph.EndpointPair;
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.behavior.TestHelper;
 import kieker.analysis.behavior.UserSessionToBehaviorModelTransformation;
-import kieker.analysis.behavior.data.EntryCallEvent;
 import kieker.analysis.behavior.data.UserSession;
-import kieker.analysis.behavior.model.BehaviorModel;
+import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.Edge;
-import kieker.analysis.behavior.model.Node;
+import kieker.analysis.generic.graph.INode;
 
 import teetime.framework.test.StageTester;
 
@@ -78,34 +81,37 @@ public class UserSessionToModelGeneratorTest { // NOCS constructor
 
 	@Test
 	public void test() {
-		final BehaviorModel model = this.startAndGetSolutions(this.session);
+		final MutableNetwork<INode, Edge> model = this.startAndGetSolutions(this.session);
 
 		// 3 nodes: A, B, Init
-		MatcherAssert.assertThat(model.getNodes().size(), Matchers.is(3));
+		MatcherAssert.assertThat(model.nodes().size(), Matchers.is(3));
 
 		// 3 edges (Init -> A, A -> B, B -> B)
-		MatcherAssert.assertThat(model.getEdges().size(), Matchers.is(3));
+		MatcherAssert.assertThat(model.edges().size(), Matchers.is(3));
 
-		final Node nodeB = model.getNodes().get("B");
+		final INode nodeB = TestHelper.findNode(model, "B");
 
 		// only 1 edge: (B -> B)
-		MatcherAssert.assertThat(nodeB.getOutgoingEdges().size(), Matchers.is(1));
-
-		// get edge to itself
-		final Edge edgeBtoB = nodeB.getOutgoingEdges().get(nodeB);
+		MatcherAssert.assertThat(this.getSelfEdges(model, nodeB).count(), Matchers.is(1L));
 
 		// two event groups
-		MatcherAssert.assertThat(edgeBtoB.getEventGroups().size(), Matchers.is(2));
-
+		MatcherAssert.assertThat(this.getSelfEdges(model, nodeB).findFirst().get().getEventGroups().size(), Matchers.is(2));
 	}
 
-	private BehaviorModel startAndGetSolutions(final UserSession input) {
+	private Stream<Edge> getSelfEdges(final MutableNetwork<INode, Edge> model, final INode node) {
+		return model.incidentEdges(node).stream().filter(edge -> {
+			final EndpointPair<INode> endpoint = model.incidentNodes(edge);
+			return endpoint.source() == endpoint.target();
+		});
+	}
+
+	private MutableNetwork<INode, Edge> startAndGetSolutions(final UserSession input) {
 		// prepare input
 		final List<UserSession> inputList = new ArrayList<>();
 		inputList.add(input);
 
 		// get output
-		final List<BehaviorModel> solutions = new ArrayList<>();
+		final List<MutableNetwork<INode, Edge>> solutions = new ArrayList<>();
 		StageTester.test(this.converter).and().send(input).to(this.converter.getInputPort()).and().receive(solutions)
 				.from(this.converter.getOutputPort()).start();
 		return solutions.get(0);

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
 
 /**
  * A serializer, which serializes an PayloadAwareEntryCallEvent by printing the operation signature,
@@ -33,6 +33,7 @@ import kieker.analysis.behavior.data.EntryCallEvent;
  */
 public class EventSerializer extends StdSerializer<EntryCallEvent> {
 
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = -1964014516300428956L;
 
 	public EventSerializer() {

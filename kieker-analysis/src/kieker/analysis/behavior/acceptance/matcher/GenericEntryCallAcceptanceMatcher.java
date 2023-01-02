@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
 
 /**
  * Allows to match operation and class signatures regarding a set of patterns to decide

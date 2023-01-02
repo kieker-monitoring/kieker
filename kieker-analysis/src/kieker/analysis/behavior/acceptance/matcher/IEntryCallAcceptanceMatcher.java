@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.behavior.acceptance.matcher;
 
-import kieker.analysis.behavior.data.EntryCallEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
 
 /**
  * Interface for EntryCallEvent acceptance matcher. Not every EntryCallEvent might represent and

@@ -21,7 +21,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import kieker.common.records.session.ISessionEvent;
+import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.common.record.session.ISessionEvent;
 
 /**
  * Represents a user session.
@@ -31,7 +32,6 @@ import kieker.common.records.session.ISessionEvent;
  * @author Christoph Dornieden
  *
  * @since 2.0.0
- *
  */
 public final class UserSession {
 
