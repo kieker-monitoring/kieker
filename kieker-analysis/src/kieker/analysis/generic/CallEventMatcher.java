@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture;
+package kieker.analysis.generic;
 
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
-import kieker.analysis.generic.IControlEventMatcher;
 
 /**
  * Check whether a CallEvent can be released based on an OperationEvent.
