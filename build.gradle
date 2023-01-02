@@ -354,6 +354,7 @@ def checkSubprojects = [
 	project(':kieker-model'),
 	project(':kieker-analysis'),
 	project(':kieker-tools'),
+	project(':kieker-tools:behavior-analysis'),
 	project(':kieker-tools:collector'),
 	project(':kieker-tools:convert-logging-timestamp'),
 	project(':kieker-tools:log-replayer'),
@@ -749,6 +750,7 @@ def binaryContent = project.copySpec {
 }
 
 def tools = [
+	'behavior-analysis',
 	'collector',
 	'convert-logging-timestamp',
 	'log-replayer',
