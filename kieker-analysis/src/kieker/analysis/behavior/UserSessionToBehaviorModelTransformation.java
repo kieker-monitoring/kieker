@@ -24,7 +24,9 @@ import com.google.common.graph.NetworkBuilder;
 import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.Edge;
+import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.impl.GraphImpl;
 import kieker.analysis.generic.graph.impl.NodeImpl;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -35,7 +37,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, MutableNetwork<INode, Edge>> {
+public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, IGraph<INode, Edge>> {
 
 	public UserSessionToBehaviorModelTransformation() {
 		// default constructor
@@ -49,7 +51,7 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 		session.sortEventsBy(UserSession.SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME);
 		final List<EntryCallEvent> entryCalls = session.getEvents();
 
-		this.outputPort.send(this.eventsToModel(entryCalls));
+		this.outputPort.send(new GraphImpl<>(session.getSessionId(), this.eventsToModel(entryCalls)));
 		this.logger.debug("Created BehaviorModel");
 
 	}

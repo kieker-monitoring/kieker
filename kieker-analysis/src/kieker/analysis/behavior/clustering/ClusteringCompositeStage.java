@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.behavior.clustering;
 
 import com.google.common.graph.MutableNetwork;
 
-import kieker.analysis.behavior.clustering.BehaviorModelToOpticsDataTransformation;
 import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.clustering.BasicCostFunction;
+import kieker.analysis.generic.graph.clustering.Clustering;
+import kieker.analysis.generic.graph.clustering.DataCollectorStage;
+import kieker.analysis.generic.graph.clustering.ExtractDBScanClustersStage;
+import kieker.analysis.generic.graph.clustering.MTreeGeneratorStage;
+import kieker.analysis.generic.graph.clustering.OpticsData;
 import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
+import kieker.analysis.generic.graph.clustering.OpticsStage;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
@@ -42,7 +49,7 @@ import teetime.framework.OutputPort;
  */
 public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends CompositeStage {
 
-	private final InputPort<MutableNetwork<N, E>> modelInputPort;
+	private final InputPort<IGraph<N, E>> modelInputPort;
 	private final InputPort<Long> timerInputPort;
 	private final OutputPort<Clustering<MutableNetwork<N, E>>> outputPort;
 
@@ -85,7 +92,7 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 		this.outputPort = clustering.getOutputPort();
 	}
 
-	public InputPort<MutableNetwork<N, E>> getModelInputPort() {
+	public InputPort<IGraph<N, E>> getModelInputPort() {
 		return this.modelInputPort;
 	}
 

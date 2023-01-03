@@ -17,9 +17,6 @@ package kieker.analysis.generic.graph.clustering;
 
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.generic.graph.IEdge;
@@ -29,18 +26,22 @@ import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * The naive medoid algorithm, where all pairwise distances are calculated
+ * The naive medoid algorithm, where all pairwise distances are calculated.
+ *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
 public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends AbstractTransformation<Clustering<MutableNetwork<N, E>>, MutableNetwork<N, E>> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(NaiveMediodGenerator.class);
 
-	private final IDistanceFunction<MutableNetwork<N, E>> dm;
+	private final IDistanceFunction<MutableNetwork<N, E>> distanceFunction;
 
-	public NaiveMediodGenerator(final IDistanceFunction<MutableNetwork<N, E>> dm) {
-		this.dm = dm;
+	public NaiveMediodGenerator(final IDistanceFunction<MutableNetwork<N, E>> distanceFunction) {
+		this.distanceFunction = distanceFunction;
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends Abst
 
 			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
 			if (cluster.length == 0) {
-				NaiveMediodGenerator.LOGGER.warn("Empty cluster received");
+				this.logger.warn("Empty cluster received");
 				return;
 			}
 
@@ -63,7 +64,7 @@ public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends Abst
 				// calculate the distance to the other objects
 				for (int j = 0; j < cluster.length; j++) {
 					if (i != j) {
-						distanceSum += this.dm.calculate(cluster[i], cluster[j]);
+						distanceSum += this.distanceFunction.calculate(cluster[i], cluster[j]);
 					}
 
 				}
@@ -78,7 +79,7 @@ public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends Abst
 			this.outputPort.send(medoid);
 		}
 
-		NaiveMediodGenerator.LOGGER.info("mediod generated");
+		this.logger.info("mediod generated");
 	}
 
 }
