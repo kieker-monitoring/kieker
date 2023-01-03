@@ -17,7 +17,6 @@ package kieker.tools.behavior.analysis;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,11 +27,12 @@ import kieker.analysis.behavior.clustering.IParameterWeighting;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 
 /**
+ * All settings of the behavior analysis.
  *
  * @author Lars Jürgensen
- *
+ * @since 2.0.0
  */
-public class BehaviorAnalysisSettings {
+public final class BehaviorAnalysisSettings {
 
 	@Parameter(names = { "-c", "--configuration" }, required = true, description = "Configuration file")
 	private File configurationFile;
@@ -64,6 +64,10 @@ public class BehaviorAnalysisSettings {
 	private int dataBufferSize;
 
 	private boolean verbose;
+
+	public BehaviorAnalysisSettings() {
+		// default constructor
+	}
 
 	public final File getConfigurationFile() {
 		return this.configurationFile;
@@ -189,7 +193,7 @@ public class BehaviorAnalysisSettings {
 		return this.directories;
 	}
 
-	public void setDirectories(final ArrayList<File> directories) {
+	public void setDirectories(final List<File> directories) {
 		this.directories = directories;
 	}
 

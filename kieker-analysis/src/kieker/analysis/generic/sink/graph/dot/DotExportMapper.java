@@ -93,44 +93,4 @@ public class DotExportMapper<N extends INode, E extends IEdge> {
 		return Collections.unmodifiableSet(this.clusterAttributes.entrySet());
 	}
 
-	/**
-	 * @since 1.14
-	 */
-	public class Builder {
-
-		private final DotExportMapper configuration = new DotExportMapper<N, E>();
-
-		public Builder() {
-			// create a new builder
-		}
-
-		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<MutableNetwork<N, E>, String> function) {
-			this.configuration.graphAttributes.put(attribute, function);
-		}
-
-		public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<MutableNetwork<N, E>, String> function) {
-			this.configuration.defaultNodeAttributes.put(attribute, function);
-		}
-
-		public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<MutableNetwork<N, E>, String> function) {
-			this.configuration.defaultEdgeAttributes.put(attribute, function);
-		}
-
-		public void addNodeAttribute(final DotNodeAttribute attribute, final Function<N, String> function) {
-			this.configuration.nodeAttributes.put(attribute, function);
-		}
-
-		public void addEdgeAttribute(final DotEdgeAttribute attribute, final Function<E, String> function) {
-			this.configuration.edgeAttributes.put(attribute, function);
-		}
-
-		public void addClusterAttribute(final DotClusterAttribute attribute, final Function<N, String> function) {
-			this.configuration.clusterAttributes.put(attribute, function);
-		}
-
-		public DotExportMapper build() {
-			return this.configuration;
-		}
-
-	}
 }

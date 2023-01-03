@@ -92,11 +92,11 @@ public final class BehaviorAnalysisServiceMain
 
 		/** For SessionAcceptanceFilter. */
 		this.settings.setClassSignatureAcceptancePatterns(
-				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE), "class signature patterns",
-						commander));
+				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
+						"class signature patterns", commander));
 		this.settings.setOperationSignatureAcceptancePatterns(
-				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE), "operation signature patterns",
-						commander));
+				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
+						"operation signature patterns", commander));
 		this.settings.setAcceptanceMatcherMode(
 				configuration.getEnumProperty(ConfigurationKeys.SIGNATURE_ACCEPTANCE_MATCHER_MODE, EAcceptanceMode.class, EAcceptanceMode.NORMAL));
 

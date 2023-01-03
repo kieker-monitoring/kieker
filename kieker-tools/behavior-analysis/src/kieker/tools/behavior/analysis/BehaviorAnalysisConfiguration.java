@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2017 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright (C) 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		// Replace this for file based operation with an end of execution trigger.
-		final TimeReaderStage timerStage = new TimeReaderStage(1l, 1l);
+		final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
 
 		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
 
