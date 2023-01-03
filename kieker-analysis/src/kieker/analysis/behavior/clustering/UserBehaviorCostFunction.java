@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Queue;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
-import kieker.analysis.behavior.model.Edge;
 import kieker.analysis.behavior.model.EventGroup;
+import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.BasicCostFunction;
 
@@ -32,7 +32,7 @@ import kieker.analysis.generic.graph.clustering.BasicCostFunction;
  * @since 2.0.0
  *
  */
-public class UserBehaviorCostFunction extends BasicCostFunction<INode, Edge> {
+public class UserBehaviorCostFunction extends BasicCostFunction<INode, UserBehaviorEdge> {
 
 	private final double eventGroupInsertCost;
 	private final IParameterWeighting weighting; // the WEIGTHING assigns events a insertion and duplication costs.
@@ -45,7 +45,7 @@ public class UserBehaviorCostFunction extends BasicCostFunction<INode, Edge> {
 	}
 
 	@Override
-	public double computeEdgeInsertionCost(final Edge edge) {
+	public double computeEdgeInsertionCost(final UserBehaviorEdge edge) {
 		double distance = super.computeEdgeInsertionCost(edge);
 
 		for (final EventGroup eventGroup : edge.getEventGroups()) {
@@ -61,7 +61,7 @@ public class UserBehaviorCostFunction extends BasicCostFunction<INode, Edge> {
 	 *
 	 */
 	@Override
-	public double edgeAnnotationDistance(final Edge edge1, final Edge edge2) {
+	public double edgeAnnotationDistance(final UserBehaviorEdge edge1, final UserBehaviorEdge edge2) {
 		double distance = super.edgeAnnotationDistance(edge1, edge2);
 
 		for (final EventGroup eventGroup1 : edge1.getEventGroups()) {
@@ -170,7 +170,10 @@ public class UserBehaviorCostFunction extends BasicCostFunction<INode, Edge> {
 	}
 
 	/**
-	 * calculates the insertion cost of an eventgroup including the insertion cost of the events
+	 * calculates the insertion cost of an eventgroup including the insertion cost of the events.
+	 *
+	 * @param eventGroup
+	 *            event group
 	 */
 	private double eventGroupInsertionCost(final EventGroup eventGroup) {
 		double distance = this.eventGroupInsertCost;
@@ -196,11 +199,10 @@ public class UserBehaviorCostFunction extends BasicCostFunction<INode, Edge> {
 	}
 
 	/**
-	 * checks if two events share the same values
+	 * checks if two events share the same values.
 	 *
 	 * @return True, if both events share the exact same values, false otherwise
-	 */ // TODO Auto-generated method stub
-
+	 */
 	private boolean haveSameValues(final EntryCallEvent event1,
 			final EntryCallEvent event2) {
 		return Arrays.equals(event1.getValues(), event2.getValues());
