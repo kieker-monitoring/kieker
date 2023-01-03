@@ -34,41 +34,47 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotEdgeAttribute;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-class DotElementTransformer extends AbstractTransformer<Void> {
+class DotElementTransformer<N extends INode, E extends IEdge> extends AbstractTransformer<Void, N, E> {
 
 	protected final DotGraphWriter dotGraphWriter;
-	protected final DotExportMapper configuration;
+	protected final DotExportMapper<N, E> configuration;
 
-	protected DotElementTransformer(final IGraph graph, final DotGraphWriter dotGraphWriter, final DotExportMapper configuration) {
+	protected DotElementTransformer(final IGraph<N, E> graph, final DotGraphWriter dotGraphWriter, final DotExportMapper<N, E> configuration) {
 		super(graph);
 		this.dotGraphWriter = dotGraphWriter;
 		this.configuration = configuration;
 	}
 
-	protected DotElementTransformer(final MutableNetwork<INode, IEdge> graph, final String label, final DotGraphWriter dotGraphWriter,
-			final DotExportMapper configuration) {
+	protected DotElementTransformer(final MutableNetwork<N, E> graph, final String label, final DotGraphWriter dotGraphWriter,
+			final DotExportMapper<N, E> configuration) {
 		super(graph, label);
 		this.dotGraphWriter = dotGraphWriter;
 		this.configuration = configuration;
 	}
 
 	@Override
-	protected void transformVertex(final INode vertex) {
+	protected void transformVertex(final N vertex) {
 		try {
 			if (vertex.hasChildGraph()) {
-				final MutableNetwork<INode, IEdge> childGraph = vertex.getChildGraph().getGraph();
+				final MutableNetwork<N, E> childGraph = vertex.getChildGraph().getGraph();
 
 				this.dotGraphWriter.addClusterStart(vertex.getId());
 
-				for (final Entry<DotClusterAttribute, Function<INode, String>> attribute : this.configuration.getClusterAttributes()) {
+				for (final Entry<DotClusterAttribute, Function<N, String>> attribute : this.configuration.getClusterAttributes()) {
 					this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(vertex));
 				}
 
-				final DotElementTransformer childGraphWriter = new DotElementTransformer(childGraph, vertex.getId(), this.dotGraphWriter, this.configuration);
+				final DotElementTransformer<N, E> childGraphWriter = new DotElementTransformer<>(childGraph, vertex.getId(), this.dotGraphWriter,
+						this.configuration);
 				childGraphWriter.transform();
 
 				this.dotGraphWriter.addClusterStop();
@@ -81,9 +87,9 @@ class DotElementTransformer extends AbstractTransformer<Void> {
 	}
 
 	@Override
-	protected void transformEdge(final IEdge edge) {
+	protected void transformEdge(final E edge) {
 		try {
-			final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+			final EndpointPair<N> pair = this.graph.getGraph().incidentNodes(edge);
 
 			final String sourceId = pair.source().getId();
 			final String targetId = pair.target().getId();
@@ -99,9 +105,9 @@ class DotElementTransformer extends AbstractTransformer<Void> {
 		throw new IllegalStateException(ioException);
 	}
 
-	protected Map<String, String> getAttributes(final IEdge edge) {
+	protected Map<String, String> getAttributes(final E edge) {
 		final Map<String, String> attributes = new HashMap<>(); // NOPMD (no concurrent access intended)
-		for (final Entry<DotEdgeAttribute, Function<IEdge, String>> entry : this.configuration.getEdgeAttributes()) {
+		for (final Entry<DotEdgeAttribute, Function<E, String>> entry : this.configuration.getEdgeAttributes()) {
 			final String value = entry.getValue().apply(edge);
 			if (value != null) {
 				attributes.put(entry.getKey().toString(), value);
@@ -110,9 +116,9 @@ class DotElementTransformer extends AbstractTransformer<Void> {
 		return attributes;
 	}
 
-	protected Map<String, String> getAttributes(final INode vertex) {
+	protected Map<String, String> getAttributes(final N vertex) {
 		final Map<String, String> attributes = new HashMap<>(); // NOPMD (no concurrent access intended)
-		for (final Entry<DotNodeAttribute, Function<INode, String>> entry : this.configuration.getNodeAttributes()) {
+		for (final Entry<DotNodeAttribute, Function<N, String>> entry : this.configuration.getNodeAttributes()) {
 			final String value = entry.getValue().apply(vertex);
 			if (value != null) {
 				attributes.put(entry.getKey().toString(), value);

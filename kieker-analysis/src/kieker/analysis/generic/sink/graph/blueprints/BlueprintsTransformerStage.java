@@ -16,24 +16,31 @@
 
 package kieker.analysis.generic.sink.graph.blueprints;
 
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class BlueprintsTransformerStage extends AbstractTransformation<IGraph, com.tinkerpop.blueprints.Graph> {
+public class BlueprintsTransformerStage<N extends INode, E extends IEdge> extends AbstractTransformation<IGraph<N, E>, com.tinkerpop.blueprints.Graph> {
 
 	public BlueprintsTransformerStage() {
 		super();
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
-		final BlueprintsTransformer transformer = new BlueprintsTransformer(graph);
+	protected void execute(final IGraph<N, E> graph) {
+		final BlueprintsTransformer<N, E> transformer = new BlueprintsTransformer<>(graph);
 		this.getOutputPort().send(transformer.transform());
 	}
 

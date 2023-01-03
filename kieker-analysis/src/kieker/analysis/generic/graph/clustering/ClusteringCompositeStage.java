@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.clustering;
+package kieker.analysis.generic.graph.clustering;
 
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.BasicCostFunction;
-import kieker.analysis.generic.graph.clustering.Clustering;
-import kieker.analysis.generic.graph.clustering.DataCollectorStage;
-import kieker.analysis.generic.graph.clustering.ExtractDBScanClustersStage;
-import kieker.analysis.generic.graph.clustering.MTreeGeneratorStage;
-import kieker.analysis.generic.graph.clustering.OpticsData;
 import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
-import kieker.analysis.generic.graph.clustering.OpticsStage;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
@@ -49,51 +41,41 @@ import teetime.framework.OutputPort;
  */
 public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends CompositeStage {
 
-	private final InputPort<IGraph<N, E>> modelInputPort;
+	private final InputPort<OpticsData<N, E>> inputPort;
 	private final InputPort<Long> timerInputPort;
 	private final OutputPort<Clustering<MutableNetwork<N, E>>> outputPort;
 
 	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final int maxAmount,
-			final BasicCostFunction<N, E> costFunction) {
+			final OPTICSDataGED<N, E> distanceFunction) {
 
-		final OPTICSDataGED<N, E> distanceFunction = new OPTICSDataGED<>(costFunction);
-
-		final BehaviorModelToOpticsDataTransformation<N, E> modelToOptics = new BehaviorModelToOpticsDataTransformation<>(distanceFunction);
-
-		final OpticsStage<N, E> optics = new OpticsStage<>(clusteringDistance, minPts);
-
-		final MTreeGeneratorStage<OpticsData<N, E>> mTreeGenerator = new MTreeGeneratorStage<>(distanceFunction);
-
-		final DataCollectorStage<OpticsData<N, E>> collector;
-
+		final DataCollectorStage<OpticsData<N, E>> dataCollectorStage;
 		if (maxAmount != -1) {
-			collector = new DataCollectorStage<>(maxAmount);
-
+			dataCollectorStage = new DataCollectorStage<>(maxAmount);
 		} else {
-			collector = new DataCollectorStage<>();
+			dataCollectorStage = new DataCollectorStage<>();
 		}
+
+		final MTreeGeneratorStage<OpticsData<N, E>> mTreeGeneratorStage = new MTreeGeneratorStage<>(distanceFunction);
+
+		final OpticsStage<N, E> opticsStage = new OpticsStage<>(clusteringDistance, minPts);
 
 		final ExtractDBScanClustersStage<N, E> clustering = new ExtractDBScanClustersStage<>(clusteringDistance);
 
-		this.modelInputPort = modelToOptics.getInputPort();
+		this.timerInputPort = dataCollectorStage.getTimeTriggerInputPort();
 
-		this.timerInputPort = collector.getTimeTriggerInputPort();
+		this.inputPort = dataCollectorStage.getDataInputPort();
 
-		this.connectPorts(modelToOptics.getOutputPort(), collector.getDataInputPort());
+		this.connectPorts(dataCollectorStage.getmTreeOutputPort(), mTreeGeneratorStage.getInputPort());
+		this.connectPorts(mTreeGeneratorStage.getOutputPort(), opticsStage.getMTreeInputPort());
 
-		this.connectPorts(collector.getmTreeOutputPort(), mTreeGenerator.getInputPort());
-
-		this.connectPorts(mTreeGenerator.getOutputPort(), optics.getMTreeInputPort());
-
-		this.connectPorts(collector.getOpticsOutputPort(), optics.getModelsInputPort());
-
-		this.connectPorts(optics.getOutputPort(), clustering.getInputPort());
+		this.connectPorts(dataCollectorStage.getOpticsOutputPort(), opticsStage.getModelsInputPort());
+		this.connectPorts(opticsStage.getOutputPort(), clustering.getInputPort());
 
 		this.outputPort = clustering.getOutputPort();
 	}
 
-	public InputPort<IGraph<N, E>> getModelInputPort() {
-		return this.modelInputPort;
+	public InputPort<OpticsData<N, E>> getInputPort() {
+		return this.inputPort;
 	}
 
 	public InputPort<Long> getTimerInputPort() {

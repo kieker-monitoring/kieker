@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
+package kieker.analysis.generic.graph.traversal;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.analysis.generic.graph.INode;
 
 /**
- * @author Reiner Jung
- * 
- * @since 1.10
+ * @param <N>
+ *            node type
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
-public interface IOperationSignature extends IMonitoringRecord {
-	public String getOperationSignature();
-	
+public interface INodeVisitor<N extends INode> {
+
+	/**
+	 * Visitor for nodes.
+	 *
+	 * @param node
+	 *            node to be visited
+	 *
+	 * @since 1.14
+	 */
+	public void visitNode(N node);
+
 }

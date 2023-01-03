@@ -17,12 +17,14 @@ package kieker.tools.behavior.analysis;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import com.beust.jcommander.Parameter;
 
 import kieker.analysis.behavior.acceptance.matcher.EAcceptanceMode;
+import kieker.analysis.behavior.clustering.IParameterWeighting;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 
 /**
@@ -50,6 +52,18 @@ public class BehaviorAnalysisSettings {
 	private int maxAmount;
 
 	private Long userSessionTimeout;
+
+	private double nodeInsertCost;
+	private double edgeInsertCost;
+	private double eventGroupInsertCost;
+
+	private IParameterWeighting weighting;
+
+	private List<File> directories;
+
+	private int dataBufferSize;
+
+	private boolean verbose;
 
 	public final File getConfigurationFile() {
 		return this.configurationFile;
@@ -137,6 +151,62 @@ public class BehaviorAnalysisSettings {
 
 	public void setUserSessionTimeout(final Long userSessionTimeout) {
 		this.userSessionTimeout = userSessionTimeout;
+	}
+
+	public double getNodeInsertCost() {
+		return this.nodeInsertCost;
+	}
+
+	public void setNodeInsertCost(final double nodeInsertCost) {
+		this.nodeInsertCost = nodeInsertCost;
+	}
+
+	public double getEdgeInsertCost() {
+		return this.edgeInsertCost;
+	}
+
+	public void setEdgeInsertCost(final double edgeInsertCost) {
+		this.edgeInsertCost = edgeInsertCost;
+	}
+
+	public double getEventGroupInsertCost() {
+		return this.eventGroupInsertCost;
+	}
+
+	public void setEventGroupInsertCost(final double eventGroupInsertCost) {
+		this.eventGroupInsertCost = eventGroupInsertCost;
+	}
+
+	public IParameterWeighting getWeighting() {
+		return this.weighting;
+	}
+
+	public void setWeighting(final IParameterWeighting weighting) {
+		this.weighting = weighting;
+	}
+
+	public List<File> getDirectories() {
+		return this.directories;
+	}
+
+	public void setDirectories(final ArrayList<File> directories) {
+		this.directories = directories;
+	}
+
+	public int getDataBufferSize() {
+		return this.dataBufferSize;
+	}
+
+	public void setDataBufferSize(final int dataBufferSize) {
+		this.dataBufferSize = dataBufferSize;
+	}
+
+	public boolean isVerbose() {
+		return this.verbose;
+	}
+
+	public void setVerbose(final boolean verbose) {
+		this.verbose = verbose;
 	}
 
 }

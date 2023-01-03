@@ -17,7 +17,7 @@
 package kieker.analysis.behavior.clustering;
 
 /**
- * An interface to assign insertion and duplication costs to events
+ * An interface to assign insertion and duplication costs to events.
  *
  * @author Lars Jürgensen
  * @since 2.0.0

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
-
-import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Reiner Jung
- * 
- * @since 1.10
+ *
+ * @since 1.15
  */
-public interface IOperationSignature extends IMonitoringRecord {
-	public String getOperationSignature();
-	
-}
+package kieker.analysis.generic.sink.graph;
+

@@ -24,13 +24,21 @@ import kieker.analysis.generic.graph.INode;
 /**
  * @author Sören Henning
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @since 1.14
  */
-public interface IGraphFlattener {
+public interface IGraphFlattener<N extends INode, E extends IEdge> {
 
 	/**
+	 * @param graph
+	 *            graph to be flattened
+	 *
 	 * @since 1.14
 	 */
-	public void flatten(MutableNetwork<INode, IEdge> graph);
+	public void flatten(MutableNetwork<N, E> graph);
 
 }

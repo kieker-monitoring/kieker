@@ -19,9 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.generic.graph.IEdge;
@@ -44,8 +41,6 @@ import teetime.stage.basic.AbstractTransformation;
 public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 		extends AbstractTransformation<List<OpticsData<N, E>>, Clustering<MutableNetwork<N, E>>> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExtractDBScanClustersStage.class);
-
 	private final double clusteringDistance;
 
 	public ExtractDBScanClustersStage(final double clusteringDistance) {
@@ -55,9 +50,9 @@ public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 	@Override
 	protected void execute(final List<OpticsData<N, E>> opticsResults) throws Exception {
 
-		ExtractDBScanClustersStage.LOGGER.debug("received optics result");
+		this.logger.debug("received optics result");
 		for (final OpticsData<N, E> model : opticsResults) {
-			ExtractDBScanClustersStage.LOGGER.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
+			this.logger.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
 					+ Double.toString(model.getCoreDistance()));
 		}
 		final Clustering<MutableNetwork<N, E>> clustering = new Clustering<>();
@@ -80,7 +75,7 @@ public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 				currentCluster.add(model.getData());
 			}
 		}
-		ExtractDBScanClustersStage.LOGGER.info("generated " + clustering.getClusters().size() + " clusters.");
+		this.logger.info("generated " + clustering.getClusters().size() + " clusters.");
 
 		this.getOutputPort().send(clustering);
 	}

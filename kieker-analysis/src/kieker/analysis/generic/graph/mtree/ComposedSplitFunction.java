@@ -26,7 +26,7 @@ import kieker.analysis.generic.graph.mtree.utils.Pair;
  *
  * @param <T>
  *            The type of the data objects.
- * 
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
@@ -38,6 +38,11 @@ public class ComposedSplitFunction<T> implements ISplitFunction<T> {
 	/**
 	 * The constructor of a {@link ISplitFunction} composed by a
 	 * {@link IPromotionFunction} and a {@link IPartitionFunction}.
+	 *
+	 * @param promotionFunction
+	 *            promotion function
+	 * @param partitionFunction
+	 *            partition function
 	 */
 	public ComposedSplitFunction(
 			final IPromotionFunction<T> promotionFunction,
