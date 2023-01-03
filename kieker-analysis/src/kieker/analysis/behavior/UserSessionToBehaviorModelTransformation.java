@@ -23,8 +23,10 @@ import com.google.common.graph.NetworkBuilder;
 
 import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
-import kieker.analysis.behavior.model.Edge;
+import kieker.analysis.behavior.model.UserBehaviorEdge;
+import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.impl.GraphImpl;
 import kieker.analysis.generic.graph.impl.NodeImpl;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -35,7 +37,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, MutableNetwork<INode, Edge>> {
+public class UserSessionToBehaviorModelTransformation extends AbstractTransformation<UserSession, IGraph<INode, UserBehaviorEdge>> {
 
 	public UserSessionToBehaviorModelTransformation() {
 		// default constructor
@@ -49,7 +51,7 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 		session.sortEventsBy(UserSession.SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME);
 		final List<EntryCallEvent> entryCalls = session.getEvents();
 
-		this.outputPort.send(this.eventsToModel(entryCalls));
+		this.outputPort.send(new GraphImpl<>(session.getSessionId(), this.eventsToModel(entryCalls)));
 		this.logger.debug("Created BehaviorModel");
 
 	}
@@ -61,8 +63,8 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 	 *            The list of events
 	 * @return The behavior model
 	 */
-	public MutableNetwork<INode, Edge> eventsToModel(final List<EntryCallEvent> events) {
-		final MutableNetwork<INode, Edge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
+	public MutableNetwork<INode, UserBehaviorEdge> eventsToModel(final List<EntryCallEvent> events) {
+		final MutableNetwork<INode, UserBehaviorEdge> model = NetworkBuilder.directed().allowsSelfLoops(true).build();
 
 		// start with the node "init"
 		INode currentNode = new NodeImpl("Init");
@@ -89,7 +91,7 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 		return model;
 	}
 
-	private Optional<INode> findNode(final MutableNetwork<INode, Edge> model, final String signature) {
+	private Optional<INode> findNode(final MutableNetwork<INode, UserBehaviorEdge> model, final String signature) {
 		return model.nodes().stream().filter(node -> node.getId().equals(signature)).findFirst();
 	}
 
@@ -101,13 +103,13 @@ public class UserSessionToBehaviorModelTransformation extends AbstractTransforma
 	 * @param source
 	 * @param target
 	 */
-	public void addEdge(final EntryCallEvent event, final MutableNetwork<INode, Edge> model,
+	public void addEdge(final EntryCallEvent event, final MutableNetwork<INode, UserBehaviorEdge> model,
 			final INode source, final INode target) {
-		final Optional<Edge> matchingEdgeOptional = model.edgeConnecting(source, target);
+		final Optional<UserBehaviorEdge> matchingEdgeOptional = model.edgeConnecting(source, target);
 
 		// if edge does not exist yet
 		if (!matchingEdgeOptional.isPresent()) {
-			model.addEdge(source, target, new Edge(source.getId() + ":" + target.getId(), event));
+			model.addEdge(source, target, new UserBehaviorEdge(source.getId() + ":" + target.getId(), event));
 		} else { // if edge already exists
 			matchingEdgeOptional.get().addEvent(event);
 		}

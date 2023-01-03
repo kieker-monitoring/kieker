@@ -20,13 +20,13 @@ import com.google.common.graph.MutableNetwork;
 import kieker.analysis.behavior.ModelGenerationCompositeStage;
 import kieker.analysis.behavior.acceptance.matcher.GenericEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
+import kieker.analysis.behavior.clustering.ClusteringCompositeStage;
 import kieker.analysis.behavior.clustering.IParameterWeighting;
 import kieker.analysis.behavior.clustering.UserBehaviorCostFunction;
-import kieker.analysis.behavior.model.Edge;
+import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.ClusterMedoidSink;
 import kieker.analysis.generic.graph.clustering.Clustering;
-import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
 import kieker.analysis.generic.graph.clustering.NaiveMediodGenerator;
@@ -68,9 +68,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 				settings.getAcceptanceMatcherMode());
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
 				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
-		final ClusteringCompositeStage clustering = new ClusteringCompositeStage(settings.getClusteringDistance(),
+		final ClusteringCompositeStage<INode, UserBehaviorEdge> clustering = new ClusteringCompositeStage<>(settings.getClusteringDistance(),
 				settings.getMinPts(), settings.getMaxAmount(), costFunction);
-		final Distributor<Clustering<MutableNetwork<INode, Edge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		// Replace this for file based operation with an end of execution trigger.
 		final TimeReaderStage timerStage = new TimeReaderStage(1l, 1l);
@@ -82,15 +82,15 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		this.connectPorts(clustering.getOutputPort(), distributor.getInputPort());
 
 		if (settings.getClusterOutputPath() != null) {
-			final ClusteringFileSink sink = new ClusteringFileSink(settings.getClusterOutputPath());
+			final ClusteringFileSink<INode, UserBehaviorEdge> sink = new ClusteringFileSink<>(settings.getClusterOutputPath());
 			this.connectPorts(distributor.getNewOutputPort(), sink.getInputPort());
 		}
 
 		if (settings.getMedoidOutputPath() != null) {
-			final GraphEditDistance<INode, Edge> graphEditDistance = new GraphEditDistance<>(costFunction);
+			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
-			final NaiveMediodGenerator medoid = new NaiveMediodGenerator(graphEditDistance);
-			final ClusterMedoidSink sink = new ClusterMedoidSink(settings.getMedoidOutputPath());
+			final NaiveMediodGenerator<INode, UserBehaviorEdge> medoid = new NaiveMediodGenerator<>(graphEditDistance);
+			final ClusterMedoidSink<INode, UserBehaviorEdge> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());
 			this.connectPorts(medoid.getOutputPort(), sink.getInputPort());

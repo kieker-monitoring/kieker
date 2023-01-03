@@ -19,9 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
@@ -37,12 +34,11 @@ import teetime.framework.OutputPort;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
 public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage {
-	private static final Logger LOGGER = LoggerFactory.getLogger(OpticsStage.class);
 
 	private final OutputPort<List<OpticsData<N, E>>> outputPort = this.createOutputPort();
 
@@ -74,7 +70,7 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 
 		// We need the list of all objects and the MTree with all objects for the algorithm
 		if (!this.mTreeInputQueue.isEmpty() && !this.modelsInputQueue.isEmpty()) {
-			OpticsStage.LOGGER.debug("received models and mtrees, begins to calculate optics result");
+			this.logger.debug("received models and mtrees, begins to calculate optics result");
 			final MTree<OpticsData<N, E>> mtree = this.mTreeInputQueue.poll();
 			final List<OpticsData<N, E>> models = this.modelsInputQueue.poll();
 
@@ -82,7 +78,7 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 
 			final List<OpticsData<N, E>> result = optics.calculate();
 
-			OpticsStage.LOGGER.info("send optics result");
+			this.logger.info("send optics result");
 
 			this.outputPort.send(result);
 		}

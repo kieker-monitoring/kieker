@@ -23,7 +23,7 @@ import kieker.analysis.generic.graph.mtree.MTree;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * A stage to generate an M-Tree with objects of a generic type, with a given distance function
+ * A stage to generate an M-Tree with objects of a generic type, with a given distance function.
  *
  * @param <T>
  *            The type, which the objects should have

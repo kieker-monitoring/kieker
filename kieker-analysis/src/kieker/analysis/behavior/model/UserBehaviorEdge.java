@@ -27,30 +27,35 @@ import kieker.analysis.generic.graph.impl.EdgeImpl;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class Edge extends EdgeImpl {
+public class UserBehaviorEdge extends EdgeImpl {
 
 	private final List<EventGroup> eventGroups = new ArrayList<>();
 
 	/**
 	 * Create a new edge without an entry call event attached.
+	 *
+	 * @param id
+	 *            edge id
 	 */
-	public Edge(final String id) {
+	public UserBehaviorEdge(final String id) {
 		super(id);
 	}
 
 	/**
 	 * Create a new edge between two nodes.
 	 *
+	 * @param id
+	 *            edge id
 	 * @param event
 	 *            the event which is represented by the edge
 	 */
-	public Edge(final String id, final EntryCallEvent event) {
+	public UserBehaviorEdge(final String id, final EntryCallEvent event) {
 		super(id);
 		this.addEvent(event);
 	}
 
 	/**
-	 * Add a new event to the edge
+	 * Add a new event to the edge.
 	 *
 	 * @param event
 	 *            the event which should be added to the edge

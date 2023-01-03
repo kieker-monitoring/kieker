@@ -22,17 +22,22 @@ import com.google.common.graph.MutableNetwork;
 /**
  * The Kieker IGraph is based on the google Graph library. It addes primarily the notion of a name for the graph and subgraphs inside nodes.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public interface IGraph {
+public interface IGraph<N extends INode, E extends IEdge> {
 
 	/**
 	 * Get the underlying google graph (network).
 	 *
 	 * @return return the graph
 	 */
-	public MutableNetwork<INode, IEdge> getGraph();
+	public MutableNetwork<N, E> getGraph();
 
 	/**
 	 * @return returns the graph label
@@ -54,7 +59,7 @@ public interface IGraph {
 	 *            id of the node
 	 * @return returns an optional which may contain the node or nothing when no node with the given id exists
 	 */
-	public Optional<INode> findNode(String id);
+	public Optional<N> findNode(String id);
 
 	/**
 	 * Find an edge by its id.
@@ -63,5 +68,5 @@ public interface IGraph {
 	 *            id of the edge
 	 * @return returns an optional which may contain the edge or nothing when no edge with the given id exists
 	 */
-	public Optional<IEdge> findEdge(String id);
+	public Optional<E> findEdge(String id);
 }

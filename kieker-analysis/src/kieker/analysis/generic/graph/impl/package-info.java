@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,38 +14,3 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.analysis.generic.graph.impl;
-
-import kieker.analysis.generic.graph.GraphFactory;
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.IGraph;
-import kieker.analysis.generic.graph.INode;
-
-public class NodeImpl extends ElementImpl implements INode {
-
-	private IGraph<INode, IEdge> childGraph = null;
-
-	public NodeImpl(final String id) {
-		super(id);
-	}
-
-	@Override
-	public IGraph<INode, IEdge> getChildGraph() {
-		return this.childGraph;
-	}
-
-	@Override
-	public void removeChildGraph() {
-		this.childGraph = null;
-	}
-
-	@Override
-	public boolean hasChildGraph() {
-		return this.childGraph != null;
-	}
-
-	@Override
-	public void createChildGraph() {
-		this.childGraph = GraphFactory.createGraph(this.getId());
-	}
-
-}

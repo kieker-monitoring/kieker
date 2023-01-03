@@ -18,16 +18,17 @@ package kieker.analysis.generic.graph.clustering;
 import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 /**
- * An implementation of the trimed algorithm. The algorithm is proposed in the paper "A
+ * An implementation of the trimmed algorithm. The algorithm is proposed in the paper "A
  * Sub-Quadratic Exact Medoid Algorithm"
  *
  * @param <T>
  *            the type of the Clustered Elements
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class TrimedAlgorithm<T> {
+public class TrimmedAlgorithm<T> {
+
 	private final double[] lowerBounds;
 
 	private double lowestEnergy = Double.MAX_VALUE;
@@ -35,12 +36,13 @@ public class TrimedAlgorithm<T> {
 
 	private final T[] models;
 
-	private final IDistanceFunction<T> dm;
+	private final IDistanceFunction<T> distanceFunction;
 
-	public TrimedAlgorithm(final T[] models, final IDistanceFunction<T> dm) {
+	
+	public TrimmedAlgorithm(final T[] models, final IDistanceFunction<T> distanceFunction) {
 		this.lowerBounds = new double[models.length];
 		this.models = models;
-		this.dm = dm;
+		this.distanceFunction = distanceFunction;
 	}
 
 	public T calculate() {
@@ -55,7 +57,7 @@ public class TrimedAlgorithm<T> {
 
 				double distanceSum = 0;
 				for (int j = 0; j < this.models.length; j++) {
-					distances[j] = this.dm.calculate(this.models[i], this.models[j]);
+					distances[j] = this.distanceFunction.calculate(this.models[i], this.models[j]);
 					distanceSum += distances[j];
 				}
 

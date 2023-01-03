@@ -17,9 +17,6 @@ package kieker.analysis.generic.graph.clustering;
 
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.generic.graph.IEdge;
@@ -31,16 +28,20 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * This stage calculates the medoid of the clusters using the trimed algorithm.
  *
- * @author Lars Jürgenseng
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
+ * @author Lars Jürgensen
  * @since 2.0.0
  */
 public class MedoidGenerator<N extends INode, E extends IEdge> extends AbstractTransformation<Clustering<MutableNetwork<N, E>>, MutableNetwork<N, E>> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MedoidGenerator.class);
 
-	private final IDistanceFunction<MutableNetwork<N, E>> dm;
+	private final IDistanceFunction<MutableNetwork<N, E>> distanceFunction;
 
-	public MedoidGenerator(final IDistanceFunction<MutableNetwork<N, E>> dm) {
-		this.dm = dm;
+	public MedoidGenerator(final IDistanceFunction<MutableNetwork<N, E>> distanceFunction) {
+		this.distanceFunction = distanceFunction;
 	}
 
 	@Override
@@ -51,16 +52,15 @@ public class MedoidGenerator<N extends INode, E extends IEdge> extends AbstractT
 			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
 			// The trimed algorithm needs at least one element.
 			if (cluster.length == 0) {
-				MedoidGenerator.LOGGER.warn("Empty cluster received");
+				this.logger.warn("Empty cluster received");
 				return;
 			}
 
-			final TrimedAlgorithm<MutableNetwork<N, E>> trimed = new TrimedAlgorithm<>(cluster, this.dm);
+			final TrimmedAlgorithm<MutableNetwork<N, E>> trimed = new TrimmedAlgorithm<>(cluster, this.distanceFunction);
 
 			this.outputPort.send(trimed.calculate());
 		}
-		MedoidGenerator.LOGGER.info("gernerated all mediods of a clustering");
-
+		this.logger.info("gernerated all mediods of a clustering");
 	}
 
 }

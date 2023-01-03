@@ -133,7 +133,7 @@ public class GraphEditDistance<N extends INode, E extends IEdge> implements IDis
 	}
 
 	/**
-	 * calculates the insertion cost of a node including the insertion cost of the ingoing edges
+	 * calculates the insertion cost of a node including the insertion cost of the ingoing edges.
 	 */
 	private double nodeInsertionCost(final MutableNetwork<N, E> model, final N node) {
 		double distance = this.costFunction.computeNodeInsertionCost(node);

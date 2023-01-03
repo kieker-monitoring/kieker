@@ -34,7 +34,7 @@ import kieker.analysis.generic.graph.mtree.MTree.ResultItem;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
@@ -149,7 +149,7 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 	/**
 	 * Updates the reachablity distances of all unvisited neighbors around one centermodel and and
-	 * puts it in the priorityQueue (if it isn't already in it)
+	 * puts it in the priorityQueue (if it isn't already in it).
 	 *
 	 * @param neighbors
 	 *            All neighbors of the center model

@@ -15,16 +15,15 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
-import com.google.common.graph.MutableNetwork;
-
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.events.EntryCallEvent;
-import kieker.analysis.behavior.model.Edge;
+import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.generic.CountingFilter;
 import kieker.analysis.generic.DynamicEventDispatcher;
 import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
+import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.flow.IFlowRecord;
@@ -42,7 +41,7 @@ import teetime.framework.OutputPort;
  */
 public class ModelGenerationCompositeStage extends CompositeStage {
 
-	private final OutputPort<MutableNetwork<INode, Edge>> modelOutputPort;
+	private final OutputPort<IGraph<INode, UserBehaviorEdge>> modelOutputPort;
 
 	private final InputPort<Object> inputPort;
 
@@ -89,7 +88,7 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 		this.modelOutputPort = this.createOutputPort(sessionToModel.getOutputPort());
 	}
 
-	public OutputPort<MutableNetwork<INode, Edge>> getModelOutputPort() {
+	public OutputPort<IGraph<INode, UserBehaviorEdge>> getModelOutputPort() {
 		return this.modelOutputPort;
 	}
 
