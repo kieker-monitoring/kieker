@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ import kieker.common.configuration.Configuration;
  * @author Nils Christian Ehmke, Jan Waller
  *
  * @since 1.6
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 

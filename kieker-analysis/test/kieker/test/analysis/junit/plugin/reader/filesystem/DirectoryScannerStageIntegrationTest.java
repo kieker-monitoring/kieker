@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;

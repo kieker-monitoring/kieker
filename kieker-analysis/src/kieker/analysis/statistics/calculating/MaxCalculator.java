@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -34,20 +33,21 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  * @since 1.14
  *
  */
-public class MaxCalculator<T> implements ICalculator<T> {
+public class MaxCalculator<T> extends AbstractCalculator<T> {
 
 	private final Function<T, Long> valueAccessor;
 
-	public MaxCalculator(final Function<T, Long> valueAccessor) {
+	public MaxCalculator(final String propertyName, final Function<T, Long> valueAccessor) {
+		super(propertyName);
 		this.valueAccessor = valueAccessor;
 	}
 
 	@Override
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Optional<Long> oldMax = Optional.ofNullable((Long) statistic.getProperties().get(EPropertyType.MAX));
-		if (!oldMax.isPresent() || (value > oldMax.get())) {
-			statistic.getProperties().put(EPropertyType.MAX, value);
+		final Optional<Long> oldMax = Optional.ofNullable((Long) statistic.getProperties().get(this.getPropertyName()));
+		if (!oldMax.isPresent() || value > oldMax.get()) {
+			statistic.getProperties().put(this.getPropertyName(), value);
 		}
 	}
 

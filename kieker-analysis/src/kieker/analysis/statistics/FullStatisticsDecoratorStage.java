@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
+import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.statistics.calculating.CountCalculator;
 import kieker.analysis.statistics.calculating.MaxCalculator;
 import kieker.analysis.statistics.calculating.MeanCalculator;
 import kieker.analysis.statistics.calculating.MedianCalculator;
 import kieker.analysis.statistics.calculating.MinCalculator;
 import kieker.analysis.statistics.calculating.TotalCalculator;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 import teetime.framework.CompositeStage;
@@ -48,16 +48,23 @@ public class FullStatisticsDecoratorStage<T> extends CompositeStage {
 	private final StatisticsDecoratorStage<T> countStatistics;
 	private final StatisticsDecoratorStage<T> medianStatistics;
 
-	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final Function<T, Long> valueAccessor,
+	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final String property, final Function<T, Long> valueAccessor,
 			final Function<T, EObject> objectAccesor) {
 
-		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new CountCalculator<>(), objectAccesor);
-		final StatisticsDecoratorStage<T> totalStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new TotalCalculator<>(valueAccessor),
+		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, new CountCalculator<>(PropertyConstants.CALLS), objectAccesor);
+		final StatisticsDecoratorStage<T> totalStatistics = new StatisticsDecoratorStage<>(statisticsModel,
+				new TotalCalculator<>(PropertyConstants.TOTAL_RESPONSE_TIME, valueAccessor),
 				objectAccesor);
-		final StatisticsDecoratorStage<T> minStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new MinCalculator<>(valueAccessor), objectAccesor);
-		final StatisticsDecoratorStage<T> maxStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new MaxCalculator<>(valueAccessor), objectAccesor);
-		final StatisticsDecoratorStage<T> averageStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new MeanCalculator<>(), objectAccesor);
-		this.medianStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new MedianCalculator<>(valueAccessor), objectAccesor);
+		final StatisticsDecoratorStage<T> minStatistics = new StatisticsDecoratorStage<>(statisticsModel,
+				new MinCalculator<>(PropertyConstants.MIN_REPSONSE_TIME, valueAccessor),
+				objectAccesor);
+		final StatisticsDecoratorStage<T> maxStatistics = new StatisticsDecoratorStage<>(statisticsModel,
+				new MaxCalculator<>(PropertyConstants.MAX_REPSONSE_TIME, valueAccessor),
+				objectAccesor);
+		final StatisticsDecoratorStage<T> averageStatistics = new StatisticsDecoratorStage<>(statisticsModel,
+				new MeanCalculator<>(PropertyConstants.MEAN_REPSONSE_TIME, PropertyConstants.TOTAL_RESPONSE_TIME, PropertyConstants.CALLS), objectAccesor);
+		this.medianStatistics = new StatisticsDecoratorStage<>(statisticsModel, new MedianCalculator<>(PropertyConstants.MEDIAN_REPSONSE_TIME, valueAccessor),
+				objectAccesor);
 
 		super.connectPorts(this.countStatistics.getOutputPort(), totalStatistics.getInputPort());
 		super.connectPorts(totalStatistics.getOutputPort(), minStatistics.getInputPort());

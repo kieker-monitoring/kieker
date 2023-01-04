@@ -20,10 +20,8 @@ import kieker.model.analysismodel.execution.ExecutionPackage;
 
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
-import kieker.model.analysismodel.sources.SourcesPackage;
-
-import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
-
+import kieker.model.analysismodel.source.SourcePackage;
+import kieker.model.analysismodel.source.impl.SourcePackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -122,8 +120,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
-		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
+		SourcePackageImpl theSourcePackage = (SourcePackageImpl)(registeredPackage instanceof SourcePackageImpl ? registeredPackage : SourcePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theAnalysismodelPackage.createPackageContents();
@@ -133,7 +131,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		theDeploymentPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
-		theSourcesPackage.createPackageContents();
+		theSourcePackage.createPackageContents();
 
 		// Initialize created meta-data
 		theAnalysismodelPackage.initializePackageContents();
@@ -143,7 +141,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		theDeploymentPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
-		theSourcesPackage.initializePackageContents();
+		theSourcePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theAnalysismodelPackage.freeze();
@@ -236,7 +234,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
 		ExecutionPackage theExecutionPackage = (ExecutionPackage)EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
 		TracePackage theTracePackage = (TracePackage)EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
-		SourcesPackage theSourcesPackage = (SourcesPackage)EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
+		SourcePackage theSourcePackage = (SourcePackage)EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theStatisticsPackage);
@@ -245,7 +243,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		getESubpackages().add(theDeploymentPackage);
 		getESubpackages().add(theExecutionPackage);
 		getESubpackages().add(theTracePackage);
-		getESubpackages().add(theSourcesPackage);
+		getESubpackages().add(theSourcePackage);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -23,6 +23,7 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent
 import kieker.common.record.flow.IObjectRecord
 import kieker.common.record.flow.ICallObjectRecord
 import kieker.common.record.flow.IInterfaceRecord
+import kieker.common.record.flow.trace.operation.IPayloadCharacterization
 
 @author 'Jan Waller' @since '1.6'
 entity AfterOperationFailedObjectEvent extends AfterOperationFailedEvent : IObjectRecord
@@ -38,3 +39,6 @@ entity CallOperationObjectEvent extends CallOperationEvent : ICallObjectRecord
 
 @author 'Florian Fittkau' @since '1.10'
 entity BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent : IInterfaceRecord
+
+@author 'Reiner Jung' @since "2.0.0"
+event EntryLevelBeforeOperationObjectEvent extends BeforeOperationObjectEvent : IPayloadCharacterization

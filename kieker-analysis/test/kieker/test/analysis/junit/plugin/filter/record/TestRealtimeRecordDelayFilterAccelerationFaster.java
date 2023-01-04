@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ package kieker.test.analysis.junit.plugin.filter.record;
  * @author Andre van Hoorn
  *
  * @since 1.7
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestRealtimeRecordDelayFilterAccelerationFaster extends AbstractTestRealtimeRecordDelayFilter {
 
 	// Note for the following array that by considering the double speed, the actual array is

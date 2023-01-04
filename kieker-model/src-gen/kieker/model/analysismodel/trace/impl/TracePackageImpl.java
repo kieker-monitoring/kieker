@@ -18,10 +18,8 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
-import kieker.model.analysismodel.sources.SourcesPackage;
-
-import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
-
+import kieker.model.analysismodel.source.SourcePackage;
+import kieker.model.analysismodel.source.impl.SourcePackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -123,8 +121,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
-		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
+		SourcePackageImpl theSourcePackage = (SourcePackageImpl)(registeredPackage instanceof SourcePackageImpl ? registeredPackage : SourcePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theTracePackage.createPackageContents();
@@ -134,7 +132,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		theAssemblyPackage.createPackageContents();
 		theDeploymentPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
-		theSourcesPackage.createPackageContents();
+		theSourcePackage.createPackageContents();
 
 		// Initialize created meta-data
 		theTracePackage.initializePackageContents();
@@ -144,7 +142,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		theAssemblyPackage.initializePackageContents();
 		theDeploymentPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
-		theSourcesPackage.initializePackageContents();
+		theSourcePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theTracePackage.freeze();

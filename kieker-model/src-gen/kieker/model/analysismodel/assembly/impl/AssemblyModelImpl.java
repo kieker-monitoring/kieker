@@ -27,22 +27,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyModelImpl#getAssemblyComponents <em>Assembly Components</em>}</li>
+ *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyModelImpl#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements AssemblyModel {
 	/**
-	 * The cached value of the '{@link #getAssemblyComponents() <em>Assembly Components</em>}' map.
+	 * The cached value of the '{@link #getComponents() <em>Components</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssemblyComponents()
+	 * @see #getComponents()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, AssemblyComponent> assemblyComponents;
-
+	protected EMap<String, AssemblyComponent> components;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,11 +67,11 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	 * @generated
 	 */
 	@Override
-	public EMap<String, AssemblyComponent> getAssemblyComponents() {
-		if (assemblyComponents == null) {
-			assemblyComponents = new EcoreEMap<String,AssemblyComponent>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY, EStringToAssemblyComponentMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS);
+	public EMap<String, AssemblyComponent> getComponents() {
+		if (components == null) {
+			components = new EcoreEMap<String,AssemblyComponent>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY, EStringToAssemblyComponentMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS);
 		}
-		return assemblyComponents;
+		return components;
 	}
 
 	/**
@@ -83,8 +82,8 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
-				return ((InternalEList<?>)getAssemblyComponents()).basicRemove(otherEnd, msgs);
+			case AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS:
+				return ((InternalEList<?>)getComponents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,9 +96,9 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
-				if (coreType) return getAssemblyComponents();
-				else return getAssemblyComponents().map();
+			case AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS:
+				if (coreType) return getComponents();
+				else return getComponents().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -112,8 +111,8 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
-				((EStructuralFeature.Setting)getAssemblyComponents()).set(newValue);
+			case AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS:
+				((EStructuralFeature.Setting)getComponents()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -127,8 +126,8 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
-				getAssemblyComponents().clear();
+			case AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS:
+				getComponents().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -142,8 +141,8 @@ public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements A
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
-				return assemblyComponents != null && !assemblyComponents.isEmpty();
+			case AssemblyPackage.ASSEMBLY_MODEL__COMPONENTS:
+				return components != null && !components.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

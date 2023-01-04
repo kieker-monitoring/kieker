@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import java.nio.file.Paths;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.trace.InvalidEventRecordTraceCounter;
-import kieker.analysis.trace.ValidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.InvalidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.ValidEventRecordTraceCounter;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.model.repository.SystemModelRepository;
@@ -61,10 +61,10 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 		final TraceAnalysisToolNewMain tool = new TraceAnalysisToolNewMain();
 		final int result = tool.run("Trace Analysis Tool", "trace-analysis", args, new TraceAnalysisParameters());
 
-		if (tool.parameterConfiguration.isPrintSystemModel()) {
+		if (tool.settings.isPrintSystemModel()) {
 			final Path systemModelPath;
 			try {
-				systemModelPath = Paths.get(tool.parameterConfiguration.getOutputDir().getCanonicalPath(), "system-entities.html");
+				systemModelPath = Paths.get(tool.settings.getOutputDir().getCanonicalPath(), "system-entities.html");
 
 				try {
 					tool.getSystemRepository().saveSystemToHTMLFile(systemModelPath);
@@ -101,7 +101,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	@Override
 	protected TraceAnalysisConfiguration createTeetimeConfiguration() throws ConfigurationException {
-		this.teetimeConfiguration = new TraceAnalysisConfiguration(this.parameterConfiguration, this.systemRepository);
+		this.teetimeConfiguration = new TraceAnalysisConfiguration(this.settings, this.systemRepository);
 		return this.teetimeConfiguration;
 	}
 
@@ -117,7 +117,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		for (final File inputFile : this.parameterConfiguration.getInputDirs()) {
+		for (final File inputFile : this.settings.getInputDirs()) {
 			if (!inputFile.isDirectory()) {
 				return false;
 			}

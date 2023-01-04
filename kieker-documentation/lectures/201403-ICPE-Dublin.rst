@@ -164,24 +164,23 @@ Quick start
 3. Explain console output and tail -f on monitoring log
 4. Access JPetStore http://localhost:8080/jpetstore/ and click around
 5. Create and show plots
-   ::
-      
-      jetty-hightide-jpetstore <master>\* $ mkdir plots
-      
-      jetty-hightide-jpetstore <master>\* $ ../../../bin/trace-analysis.sh
-      -i
-      /tmp/kieker-20140319-150803890-UTC-avh-ThinkPad-RSS-KIEKER-EXAMPLE-JAVAEE/
-      -o plots/ --plot-Deployment-Component-Dependency-Graph --plot-Assembl
-      
-      y-Component-Dependency-Graph
-      --plot-Deployment-Operation-Dependency-Graph responseTimes
-      --plot-Assembly-Operation-Dependency-Graph responseTimes
-      --print-System-Model
-      
-      jetty-hightide-jpetstore <master>\* $
-      ../../../bin/dotPic-fileConverter.sh plots/ pdf
-      
-      jetty-hightide-jpetstore <master>\* $ acroread plots/*.pdf&
+
+   jetty-hightide-jpetstore <master>\* $ mkdir plots
+
+   jetty-hightide-jpetstore <master>\* $ ../../../bin/trace-analysis.sh
+   -i
+   /tmp/kieker-20140319-150803890-UTC-avh-ThinkPad-RSS-KIEKER-EXAMPLE-JAVAEE/
+   -o plots/ --plot-Deployment-Component-Dependency-Graph --plot-Assembl
+
+   y-Component-Dependency-Graph
+   --plot-Deployment-Operation-Dependency-Graph responseTimes
+   --plot-Assembly-Operation-Dependency-Graph responseTimes
+   --print-System-Model
+
+   jetty-hightide-jpetstore <master>\* $
+   ../../../bin/dotPic-fileConverter.sh plots/ pdf
+
+   jetty-hightide-jpetstore <master>\* $ acroread plots/*.pdf&
 
  
 

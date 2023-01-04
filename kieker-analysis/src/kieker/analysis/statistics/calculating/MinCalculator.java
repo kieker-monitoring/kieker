@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -34,20 +33,21 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  * @since 1.14
  *
  */
-public class MinCalculator<T> implements ICalculator<T> {
+public class MinCalculator<T> extends AbstractCalculator<T> {
 
 	private final Function<T, Long> valueAccessor;
 
-	public MinCalculator(final Function<T, Long> valueAccessor) {
+	public MinCalculator(final String propertyName, final Function<T, Long> valueAccessor) {
+		super(propertyName);
 		this.valueAccessor = valueAccessor;
 	}
 
 	@Override
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Optional<Long> oldMin = Optional.ofNullable((Long) statistic.getProperties().get(EPropertyType.MIN));
-		if (!oldMin.isPresent() || (value < oldMin.get())) {
-			statistic.getProperties().put(EPropertyType.MIN, value);
+		final Optional<Long> oldMin = Optional.ofNullable((Long) statistic.getProperties().get(this.getPropertyName()));
+		if (!oldMin.isPresent() || value < oldMin.get()) {
+			statistic.getProperties().put(this.getPropertyName(), value);
 		}
 	}
 

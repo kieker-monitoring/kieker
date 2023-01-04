@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,10 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * @author Teerat Pitakrat
  *
  * @since 1.13
+ * @deprecated 2.0.0
  */
+// TODO influxDB API has changed
+@Deprecated
 public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a data class
 
 	public static final String CONFIG_PROPERTY_DB_URL = "databaseURL";
@@ -106,7 +109,13 @@ public class InfluxDBWriter extends AbstractMonitoringWriter { // NOPMD is not a
 		}
 		final String influxDBVersion = pong.getVersion();
 		final String[] splitVersion = influxDBVersion.split("\\.");
-		this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+
+		try {
+			this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		} catch (final NumberFormatException ex) {
+			this.influxDBMajorVersion = 0;
+			LOGGER.error("InfluxDB major version number is not a number, but {}", splitVersion[0]);
+		}
 		LOGGER.info("Version: {}", influxDBVersion);
 		LOGGER.info("Response time: {}", pong.getResponseTime());
 

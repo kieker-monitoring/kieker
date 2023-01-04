@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.file.DirectoryReaderStage;
-import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.file.DirectoryReaderStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -53,6 +53,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 * @param configuration
 	 *            configuration for the enclosed filters
 	 */
+	@Deprecated
 	public LogsReaderCompositeStage(final Configuration configuration) {
 		final String[] directoryNames = configuration.getStringArrayProperty(LOG_DIRECTORIES, ":");
 		final List<File> directories = new ArrayList<>(directoryNames.length);

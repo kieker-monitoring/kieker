@@ -2,7 +2,6 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
@@ -41,7 +40,7 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<EPropertyType, Object> properties;
+	protected EMap<String, Object> properties;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,9 +67,9 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public EMap<EPropertyType, Object> getProperties() {
+	public EMap<String, Object> getProperties() {
 		if (properties == null) {
-			properties = new EcoreEMap<EPropertyType,Object>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this, StatisticsPackage.STATISTIC_RECORD__PROPERTIES);
+			properties = new EcoreEMap<String,Object>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this, StatisticsPackage.STATISTIC_RECORD__PROPERTIES);
 		}
 		return properties;
 	}

@@ -201,21 +201,19 @@ Log to Filesystem and use TraceAnalysis
    3. enable/disable
 
 6. Create and show plots
-   ::
-      
-      jetty-hightide-jpetstore <master>\* $ mkdir plots
-      
-      jetty-hightide-jpetstore <master>\* $ ../../../bin/trace-analysis.sh
-      -i /tmp/kieker-<path-to-log>/ -o plots/
-      --plot-Deployment-Component-Dependency-Graph --plot-Assembl
-      
-      y-Component-Dependency-Graph
-      --plot-Deployment-Operation-Dependency-Graph responseTimes
-      --plot-Assembly-Operation-Dependency-Graph responseTimes
-      --print-System-Model
-      
-      jetty-hightide-jpetstore <master>\* $
-      ../../../bin/dotPic-fileConverter.sh plots/ pdf
-      
-      jetty-hightide-jpetstore <master>\* $ acroread plots/*.pdf&
 
+   jetty-hightide-jpetstore <master>\* $ mkdir plots
+
+   jetty-hightide-jpetstore <master>\* $ ../../../bin/trace-analysis.sh
+   -i /tmp/kieker-<path-to-log>/ -o plots/
+   --plot-Deployment-Component-Dependency-Graph --plot-Assembl
+
+   y-Component-Dependency-Graph
+   --plot-Deployment-Operation-Dependency-Graph responseTimes
+   --plot-Assembly-Operation-Dependency-Graph responseTimes
+   --print-System-Model
+
+   jetty-hightide-jpetstore <master>\* $
+   ../../../bin/dotPic-fileConverter.sh plots/ pdf
+
+   jetty-hightide-jpetstore <master>\* $ acroread plots/*.pdf&

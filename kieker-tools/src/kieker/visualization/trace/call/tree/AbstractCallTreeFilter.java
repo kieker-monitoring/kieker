@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.common.util.signature.Signature;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.AbstractMessage;

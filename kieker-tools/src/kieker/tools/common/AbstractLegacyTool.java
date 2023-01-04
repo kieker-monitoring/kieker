@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
 	/** configuration specified as parameters. */
-	protected T parameterConfiguration;
+	protected T settings;
 	/** configuration provided as kieker configuration file. */
 	protected kieker.common.configuration.Configuration kiekerConfiguration;
 
@@ -81,7 +81,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 * @return returns exit code
 	 */
 	public int run(final String title, final String label, final String[] args, final T configuration) {
-		this.parameterConfiguration = configuration;
+		this.settings = configuration;
 		this.logger.debug(title);
 
 		final JCommander commander = new JCommander(configuration);

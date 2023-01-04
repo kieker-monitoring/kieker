@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.tt.writeRead.TestDataRepository;
-import kieker.analysis.tt.writeRead.TestProbe;
+import kieker.analysis.util.TestDataRepositoryFactory;
+import kieker.analysis.util.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -49,7 +49,7 @@ import kieker.test.tools.junit.writeRead.TestAnalysis;
 public class BasicExplorVizExportWriterTest {
 
 	private static final String PORT = "10555";
-	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
+	private static final TestDataRepositoryFactory TEST_DATA_REPOSITORY = new TestDataRepositoryFactory();
 	private static final int WHOLE_TEST_TIMEOUT = 10000;
 	private static final int CONNECTION_TIMEOUT_IN_MS = BasicExplorVizExportWriterTest.WHOLE_TEST_TIMEOUT - 2000;
 	private static final int UNLIMITED_TIMEOUT = 0;

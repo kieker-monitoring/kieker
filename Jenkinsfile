@@ -183,16 +183,14 @@ pipeline {
       }
       parallel {
         stage('Push to Stable') {
-          agent {
-             label 'build-node8'
-          }
+          agent any
           steps {
             sshagent(credentials: ['kieker-key']) {
               sh('''
                     #!/usr/bin/env bash
                     set +x
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                    git push -v git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
                  ''')
             }
           }
@@ -228,6 +226,39 @@ pipeline {
               deleteDir()
             }
           }
+        }
+      }
+    }
+    
+    stage('RC Specific Stage') {
+      when {
+        beforeAgent true
+        branch '*-RC'
+      }
+      
+      agent {
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+        }
+      }
+
+      steps {
+            unstash 'jarArtifacts'
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactupload', 
+                usernameVariable: 'kiekerMavenUser', 
+                passwordVariable: 'kiekerMavenPassword'
+              )
+            ]) {
+              sh './gradlew publish'
+            }
+      }
+      
+      post {
+        cleanup {
+          deleteDir()
         }
       }
     }

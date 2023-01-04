@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.tools.collector;
 
-import kieker.analysis.sink.DataSinkStage;
-import kieker.analysis.source.ISourceCompositeStage;
+import kieker.analysis.generic.sink.DataSink;
+import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.source.SourceStageFactory;
 
@@ -32,7 +32,7 @@ import teetime.framework.Configuration;
  */
 public class CollectorConfiguration extends Configuration {
 
-	private final DataSinkStage consumer;
+	private final DataSink consumer;
 	private final ISourceCompositeStage sourceStage;
 
 	/**
@@ -47,12 +47,12 @@ public class CollectorConfiguration extends Configuration {
 			throws ConfigurationException {
 		this.sourceStage = SourceStageFactory.createSourceCompositeStage(configuration);
 
-		this.consumer = new DataSinkStage(configuration);
+		this.consumer = new DataSink(configuration);
 
 		this.connectPorts(this.sourceStage.getOutputPort(), this.consumer.getInputPort());
 	}
 
-	public DataSinkStage getCounter() {
+	public DataSink getCounter() {
 		return this.consumer;
 	}
 

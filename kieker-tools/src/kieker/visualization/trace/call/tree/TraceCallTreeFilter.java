@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package kieker.visualization.trace.call.tree;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-import kieker.analysis.trace.AbstractMessageTraceProcessingFilter;
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
 import kieker.model.repository.AbstractRepository;
 import kieker.model.repository.AllocationComponentOperationPairFactory;
 import kieker.model.repository.SystemModelRepository;

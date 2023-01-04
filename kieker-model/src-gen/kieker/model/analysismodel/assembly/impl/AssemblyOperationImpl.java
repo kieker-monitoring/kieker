@@ -109,7 +109,7 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public AssemblyComponent getAssemblyComponent() {
+	public AssemblyComponent getComponent() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
 			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
@@ -188,8 +188,8 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT:
-				return getAssemblyComponent();
+			case AssemblyPackage.ASSEMBLY_OPERATION___GET_COMPONENT:
+				return getComponent();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

@@ -31,11 +31,11 @@ import kieker.tools.common.ParameterEvaluationUtils;
  * @author Reiner Jung
  * @since 1.16
  */
-public final class ReplayerMain extends AbstractService<PiplineConfiguration, Settings> {
+public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Settings> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReplayerMain.class);
 
-	private PiplineConfiguration configuration;
+	private TeetimeConfiguration configuration;
 	private final Settings parameter = new Settings();
 
 	/**
@@ -76,8 +76,8 @@ public final class ReplayerMain extends AbstractService<PiplineConfiguration, Se
 	}
 
 	@Override
-	protected PiplineConfiguration createTeetimeConfiguration() {
-		this.configuration = new PiplineConfiguration(this.parameter);
+	protected TeetimeConfiguration createTeetimeConfiguration() {
+		this.configuration = new TeetimeConfiguration(this.parameter);
 		return this.configuration;
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.statistics.calculating;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -31,17 +29,17 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  *
  * @since 1.14
  */
-public class CountCalculator<T> implements ICalculator<T> {
+public class CountCalculator<T> extends AbstractCalculator<T> {
 
-	public CountCalculator() {
-		// Create Calculator
+	public CountCalculator(final String propertyName) {
+		super(propertyName);
 	}
 
 	@Override
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
-		final Long oldCount = (Long) statistic.getProperties().get(EPropertyType.COUNT);
+		final Long oldCount = (Long) statistic.getProperties().get(this.getPropertyName());
 		final long newCount = oldCount != null ? oldCount + 1 : 1; // NOCS (declarative)
-		statistic.getProperties().put(EPropertyType.COUNT, newCount);
+		statistic.getProperties().put(this.getPropertyName(), newCount);
 	}
 
 }

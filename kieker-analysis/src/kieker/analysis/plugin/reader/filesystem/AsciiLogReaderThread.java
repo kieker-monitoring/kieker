@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.generic.source.file.MappingException;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysis.tt.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.registry.reader.ReaderRegistry;

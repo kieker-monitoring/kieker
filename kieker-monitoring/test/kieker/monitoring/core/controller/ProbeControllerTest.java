@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,7 +134,7 @@ public class ProbeControllerTest {
 		final Map<String, List<String>> result = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNull("There should be no patterns", result);
 
-		final String[] values = new String[] { "a", "b", "c" };
+		final String[] values = { "a", "b", "c" };
 		this.controller.addPatternParameter(CLASSNAME, WHITELIST, Arrays.asList(values));
 		final Map<String, List<String>> result2 = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNotNull("Should contain patterns", result2);
@@ -150,7 +150,7 @@ public class ProbeControllerTest {
 	 */
 	@Test
 	public void testDeletePatternParameter() {
-		final String[] values = new String[] { "a", "b", "c" };
+		final String[] values = { "a", "b", "c" };
 		this.controller.addPatternParameter(CLASSNAME, WHITELIST, Arrays.asList(values));
 		this.controller.deletePatternParameter(CLASSNAME, WHITELIST);
 
@@ -163,7 +163,7 @@ public class ProbeControllerTest {
 	 */
 	@Test
 	public void testClearPatternParameters() {
-		final String[] values = new String[] { "a", "b", "c" };
+		final String[] values = { "a", "b", "c" };
 		this.controller.addPatternParameter(CLASSNAME, WHITELIST, Arrays.asList(values));
 		this.controller.clearPatternParameters(CLASSNAME);
 
@@ -176,13 +176,13 @@ public class ProbeControllerTest {
 	 */
 	@Test
 	public void testAddPatternParameter() {
-		final String[] whitelistValues = new String[] { "a", "b", "c" };
+		final String[] whitelistValues = { "a", "b", "c" };
 		this.controller.addPatternParameter(CLASSNAME, WHITELIST, Arrays.asList(whitelistValues));
 		final Map<String, List<String>> resultW = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNotNull("Should contain patterns", resultW);
 		Assert.assertEquals("Should contain a string", WHITELIST, resultW.keySet().toArray()[0]);
 
-		final String[] blacklistValues = new String[] { "d", "e", "f" };
+		final String[] blacklistValues = { "d", "e", "f" };
 		this.controller.addPatternParameter(CLASSNAME, BLACKLIST, Arrays.asList(blacklistValues));
 		final Map<String, List<String>> resultB = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNotNull("Should contain patterns", resultB);
