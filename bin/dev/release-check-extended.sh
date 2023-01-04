@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export BASE_DIR=$(cd "$(dirname "$0")"; pwd)
+
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
@@ -129,8 +131,7 @@ function check_bin_archive {
 	    cd ${ARCHDIR}
 	done
 
-	
-	EXAMPLE_RUN_SCRIPT_SH="runAllexamples.sh"
+	EXAMPLE_RUN_SCRIPT_SH="${BASE_DIR}/run-all-examples.sh"
 	information "Running all examples"
 	if ! (cd examples && $EXAMPLE_RUN_SCRIPT_SH); then
 		error "Examples where not successful"
