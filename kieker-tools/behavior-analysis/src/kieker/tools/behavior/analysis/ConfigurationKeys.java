@@ -15,14 +15,14 @@
  ***************************************************************************/
 package kieker.tools.behavior.analysis;
 
-public class ConfigurationKeys {
+public final class ConfigurationKeys {
 
 	private static final String PREFIX = "kieker.tools.behavior.";
 
 	public static final String PARAMETER_WEIGHTING = PREFIX + "parameterWeighting";
 
 	/**
-	 * Service Behavior Analysis
+	 * Service Behavior Analysis.
 	 */
 	public static final String MAX_MODEL_AMOUNT = ConfigurationKeys.PREFIX + "maxModelAmount";
 
@@ -63,5 +63,7 @@ public class ConfigurationKeys {
 	public static final String SIGNATURE_ACCEPTANCE_MATCHER_MODE = PREFIX + "signatureAcceptancePatternMode";
 
 	public static final String USER_SESSION_TIMEOUT = PREFIX + "usesSessionTimeout";
+
+	private ConfigurationKeys() {}
 
 }

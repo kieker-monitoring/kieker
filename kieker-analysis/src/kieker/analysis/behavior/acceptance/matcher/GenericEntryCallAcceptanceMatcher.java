@@ -47,9 +47,11 @@ public class GenericEntryCallAcceptanceMatcher implements IEntryCallAcceptanceMa
 	@Override
 	public boolean match(final EntryCallEvent call) {
 		if (this.mode == EAcceptanceMode.INVERSE) {
-			return this.inverseMatch(call.getClassSignature(), this.classPatterns) && this.inverseMatch(call.getOperationSignature(), this.operationPatterns);
+			return this.inverseMatch(call.getClassSignature(), this.classPatterns)
+					&& this.inverseMatch(call.getOperationSignature(), this.operationPatterns);
 		} else {
-			return this.match(call.getClassSignature(), this.classPatterns) && this.match(call.getOperationSignature(), this.operationPatterns);
+			return this.match(call.getClassSignature(), this.classPatterns)
+					&& this.match(call.getOperationSignature(), this.operationPatterns);
 		}
 	}
 

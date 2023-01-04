@@ -18,24 +18,31 @@ package kieker.analysis.generic.sink.graph.graphml;
 
 import org.graphdrawing.graphml.GraphmlType;
 
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphMLTransformationStage extends AbstractTransformation<IGraph, GraphmlType> {
+public class GraphMLTransformationStage<N extends INode, E extends IEdge> extends AbstractTransformation<IGraph<N, E>, GraphmlType> {
 
 	public GraphMLTransformationStage() {
 		super();
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
-		final GraphMLTransformer graphMLTransformer = new GraphMLTransformer(graph);
+	protected void execute(final IGraph<N, E> graph) {
+		final GraphMLTransformer<N, E> graphMLTransformer = new GraphMLTransformer<>(graph);
 		final GraphmlType graphmlType = graphMLTransformer.transform();
 
 		this.getOutputPort().send(graphmlType);

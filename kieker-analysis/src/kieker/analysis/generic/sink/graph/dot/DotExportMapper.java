@@ -37,11 +37,16 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
  *
  * To create a {@link DotExportMapper} use the {@link DotExportMapper.Builder}.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DotExportMapper {
+public class DotExportMapper<N extends INode, E extends IEdge> {
 
 	//
 	// BETTER Even if EnumMaps are very efficient in terms of lookup, etc. they require
@@ -50,82 +55,42 @@ public class DotExportMapper {
 	// way would be to use a List of Pairs of constant size.
 	//
 	// PMD: No concurrent access intended for the following attributes
-	protected final Map<DotGraphAttribute, Function<MutableNetwork<INode, IEdge>, String>> graphAttributes = new EnumMap<>(
+	protected final Map<DotGraphAttribute, Function<MutableNetwork<N, E>, String>> graphAttributes = new EnumMap<>(
 			DotGraphAttribute.class); // NOPMD (see above)
-	protected final Map<DotNodeAttribute, Function<MutableNetwork<INode, IEdge>, String>> defaultNodeAttributes = new EnumMap<>(
+	protected final Map<DotNodeAttribute, Function<MutableNetwork<N, E>, String>> defaultNodeAttributes = new EnumMap<>(
 			DotNodeAttribute.class); // NOPMD (see above)
-	protected final Map<DotEdgeAttribute, Function<MutableNetwork<INode, IEdge>, String>> defaultEdgeAttributes = new EnumMap<>(
+	protected final Map<DotEdgeAttribute, Function<MutableNetwork<N, E>, String>> defaultEdgeAttributes = new EnumMap<>(
 			DotEdgeAttribute.class); // NOPMD (see above)
-	protected final Map<DotNodeAttribute, Function<INode, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
-	protected final Map<DotEdgeAttribute, Function<IEdge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
-	protected final Map<DotClusterAttribute, Function<INode, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
+	protected final Map<DotNodeAttribute, Function<N, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	protected final Map<DotEdgeAttribute, Function<E, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
+	protected final Map<DotClusterAttribute, Function<N, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
 
 	protected DotExportMapper() {
 		// Create an empty export configuration
 	}
 
-	public Set<Map.Entry<DotGraphAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getGraphAttributes() {
+	public Set<Map.Entry<DotGraphAttribute, Function<MutableNetwork<N, E>, String>>> getGraphAttributes() {
 		return Collections.unmodifiableSet(this.graphAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotNodeAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getDefaultNodeAttributes() {
+	public Set<Map.Entry<DotNodeAttribute, Function<MutableNetwork<N, E>, String>>> getDefaultNodeAttributes() {
 		return Collections.unmodifiableSet(this.defaultNodeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotEdgeAttribute, Function<MutableNetwork<INode, IEdge>, String>>> getDefaultEdgeAttributes() {
+	public Set<Map.Entry<DotEdgeAttribute, Function<MutableNetwork<N, E>, String>>> getDefaultEdgeAttributes() {
 		return Collections.unmodifiableSet(this.defaultEdgeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotNodeAttribute, Function<INode, String>>> getNodeAttributes() {
+	public Set<Map.Entry<DotNodeAttribute, Function<N, String>>> getNodeAttributes() {
 		return Collections.unmodifiableSet(this.nodeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotEdgeAttribute, Function<IEdge, String>>> getEdgeAttributes() {
+	public Set<Map.Entry<DotEdgeAttribute, Function<E, String>>> getEdgeAttributes() {
 		return Collections.unmodifiableSet(this.edgeAttributes.entrySet());
 	}
 
-	public Set<Map.Entry<DotClusterAttribute, Function<INode, String>>> getClusterAttributes() {
+	public Set<Map.Entry<DotClusterAttribute, Function<N, String>>> getClusterAttributes() {
 		return Collections.unmodifiableSet(this.clusterAttributes.entrySet());
 	}
 
-	/**
-	 * @since 1.14
-	 */
-	public static class Builder {
-
-		private final DotExportMapper configuration = new DotExportMapper();
-
-		public Builder() {
-			// create a new builder
-		}
-
-		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
-			this.configuration.graphAttributes.put(attribute, function);
-		}
-
-		public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
-			this.configuration.defaultNodeAttributes.put(attribute, function);
-		}
-
-		public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<MutableNetwork<INode, IEdge>, String> function) {
-			this.configuration.defaultEdgeAttributes.put(attribute, function);
-		}
-
-		public void addNodeAttribute(final DotNodeAttribute attribute, final Function<INode, String> function) {
-			this.configuration.nodeAttributes.put(attribute, function);
-		}
-
-		public void addEdgeAttribute(final DotEdgeAttribute attribute, final Function<IEdge, String> function) {
-			this.configuration.edgeAttributes.put(attribute, function);
-		}
-
-		public void addClusterAttribute(final DotClusterAttribute attribute, final Function<INode, String> function) {
-			this.configuration.clusterAttributes.put(attribute, function);
-		}
-
-		public DotExportMapper build() {
-			return this.configuration;
-		}
-
-	}
 }

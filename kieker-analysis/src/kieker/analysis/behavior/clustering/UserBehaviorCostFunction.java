@@ -28,9 +28,10 @@ import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.BasicCostFunction;
 
 /**
+ * Special cost function for user behavior.
+ *
  * @author Reiner Jung
  * @since 2.0.0
- *
  */
 public class UserBehaviorCostFunction extends BasicCostFunction<INode, UserBehaviorEdge> {
 

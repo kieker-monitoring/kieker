@@ -61,10 +61,10 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 		final TraceAnalysisToolNewMain tool = new TraceAnalysisToolNewMain();
 		final int result = tool.run("Trace Analysis Tool", "trace-analysis", args, new TraceAnalysisParameters());
 
-		if (tool.parameterConfiguration.isPrintSystemModel()) {
+		if (tool.settings.isPrintSystemModel()) {
 			final Path systemModelPath;
 			try {
-				systemModelPath = Paths.get(tool.parameterConfiguration.getOutputDir().getCanonicalPath(), "system-entities.html");
+				systemModelPath = Paths.get(tool.settings.getOutputDir().getCanonicalPath(), "system-entities.html");
 
 				try {
 					tool.getSystemRepository().saveSystemToHTMLFile(systemModelPath);
@@ -101,7 +101,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	@Override
 	protected TraceAnalysisConfiguration createTeetimeConfiguration() throws ConfigurationException {
-		this.teetimeConfiguration = new TraceAnalysisConfiguration(this.parameterConfiguration, this.systemRepository);
+		this.teetimeConfiguration = new TraceAnalysisConfiguration(this.settings, this.systemRepository);
 		return this.teetimeConfiguration;
 	}
 
@@ -117,7 +117,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		for (final File inputFile : this.parameterConfiguration.getInputDirs()) {
+		for (final File inputFile : this.settings.getInputDirs()) {
 			if (!inputFile.isDirectory()) {
 				return false;
 			}

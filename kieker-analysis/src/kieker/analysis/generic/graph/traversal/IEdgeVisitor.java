@@ -19,14 +19,20 @@ package kieker.analysis.generic.graph.traversal;
 import kieker.analysis.generic.graph.IEdge;
 
 /**
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface IEdgeVisitor {
+public interface IEdgeVisitor<E extends IEdge> {
+
 	/**
+	 * @param edge
+	 *            edge to be visited
 	 * @since 1.14
 	 */
-	public void visitEdge(IEdge edge);
+	public void visitEdge(E edge);
 
 }
