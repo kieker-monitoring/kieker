@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.generic.graph.traversal;
-
-import kieker.analysis.generic.graph.INode;
+package kieker.analysis.behavior.clustering;
 
 /**
- * @author Sören Henning
+ * Naive weighting for parameter. Essentially, it ignores them.
  *
- * @since 1.14
+ * @author Reiner Jung
+ * @since 2.0.0
  */
-public interface IVertexVisitor {
-	/**
-	 * @since 1.14
-	 */
-	public void visitVertex(INode vertex);
+public class NaiveParameterWeighting implements IParameterWeighting {
+
+	public NaiveParameterWeighting() {
+		// default constructor
+	}
+
+	@Override
+	public double getInsertCost(final String[] parameterNames) {
+		return 1;
+	}
+
+	@Override
+	public double getDuplicateCost(final String[] parameterNames) {
+		return 1;
+	}
 
 }

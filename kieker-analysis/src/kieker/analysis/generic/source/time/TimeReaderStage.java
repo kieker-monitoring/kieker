@@ -39,15 +39,14 @@ import teetime.framework.OutputPort;
  *
  * @since 1.8
  */
-public class TimeReaderStage extends AbstractProducerStage<Object> {
+public class TimeReaderStage extends AbstractProducerStage<Long> {
 
-	private final OutputPort<Long> timestampsOutputPort = this.createOutputPort(Long.class);
 	private final OutputPort<TimestampRecord> timestampsRecordOutputPort = this.createOutputPort(TimestampRecord.class);
 
 	private final long delay;
 
 	private final TimeUnit timeunit = TimeUnit.NANOSECONDS;
-	private final long numberOfImpulses;
+	private long numberOfImpulses;
 	private final boolean infinite;
 
 	public TimeReaderStage(final long delay, final Long numberOfImpulses) {
@@ -61,9 +60,10 @@ public class TimeReaderStage extends AbstractProducerStage<Object> {
 	protected void execute() throws Exception {
 		while (this.repeatEvent()) {
 			final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
-			this.timestampsOutputPort.send(timestamp);
+			this.outputPort.send(timestamp);
 			this.timestampsRecordOutputPort.send(new TimestampRecord(timestamp));
 			Thread.sleep(this.delay / 1000 / 1000);
+			this.numberOfImpulses--;
 		}
 		this.workCompleted();
 	}
@@ -74,6 +74,10 @@ public class TimeReaderStage extends AbstractProducerStage<Object> {
 		} else {
 			return this.numberOfImpulses > 0;
 		}
+	}
+
+	public OutputPort<TimestampRecord> getTimestampsRecordOutputPort() {
+		return this.timestampsRecordOutputPort;
 	}
 
 }

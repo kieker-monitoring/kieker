@@ -1,0 +1,26 @@
+LogsReaderCompositeStage (*)
+
+ModelGenerationCompositeStage
++ DynamicEventDispatcher (*)
++ CreateEntryLevelEventStage (*)
++ UserSessionGeneratorCompositeStage +
+  + EntryCallSequenceStage +
+  + SessionAcceptanceFilter +
+  + TraceOperationCleanupFilter +
+  + UserSessionOperationCleanupStage +
++ UserSessionToModelConverter +
+
+ClusteringCompositeStage +
++ BehaviorModelToOpticsDataConverter + (but does not do much, only boxes a model in optics data)
++ OpticsStage + make optics calculation
++ MTreeGenerator + 
++ DataCollector
++ ExtractDBScanClusters
+
+TimeReaderStage
+
+ClusteringSink
+
+NaiveMediodGenerator
+
+ClusterMedoidSink

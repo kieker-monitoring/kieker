@@ -20,3 +20,12 @@ entity BeforeOperationEvent extends AbstractOperationEvent
 @author 'Andre van Hoorn, Holger Knoche, Jan Waller' @since '1.5'
 entity CallOperationEvent extends AbstractOperationEvent : ICallRecord
 
+@author 'Reiner Jung' @since "2.0.0"
+template IPayloadCharacterization {
+	string[] parameters
+	string[] values
+	int requestType
+}
+
+@author 'Reiner Jung' @since "2.0.0"
+event EntryLevelBeforeOperationEvent extends BeforeOperationEvent : IPayloadCharacterization
