@@ -36,7 +36,7 @@ import teetime.framework.test.StageTester;
  */
 public class CountingFilterTest extends AbstractKiekerTest {
 
-	private CountingFilter countingFilter;
+	private CountingFilter<Object> countingFilter;
 	private List<Object> testElements;
 
 	/**
@@ -51,7 +51,7 @@ public class CountingFilterTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.countingFilter = new CountingFilter();
+		this.countingFilter = new CountingFilter<>(false, 0);
 		this.testElements = new ArrayList<>();
 	}
 

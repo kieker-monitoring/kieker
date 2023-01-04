@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.generic.graph.flattening;
 
 import com.google.common.graph.MutableNetwork;
@@ -23,29 +22,34 @@ import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.traversal.AbstractGraphTraverser;
 import kieker.analysis.generic.graph.traversal.FlatGraphTraverser;
 import kieker.analysis.generic.graph.traversal.IEdgeVisitor;
-import kieker.analysis.generic.graph.traversal.IVertexVisitor;
+import kieker.analysis.generic.graph.traversal.INodeVisitor;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TopLevelFlattener implements IGraphFlattener, IVertexVisitor, IEdgeVisitor {
+public class TopLevelFlattener<N extends INode, E extends IEdge> implements IGraphFlattener<N, E>, INodeVisitor<N>, IEdgeVisitor<E> {
 
-	private final AbstractGraphTraverser traverser = new FlatGraphTraverser(this, this);
+	private final AbstractGraphTraverser<N, E> traverser = new FlatGraphTraverser<>(this, this);
 
 	public TopLevelFlattener() {
 		// create flattener
 	}
 
 	@Override
-	public void flatten(final MutableNetwork<INode, IEdge> graph) {
+	public void flatten(final MutableNetwork<N, E> graph) {
 		this.traverser.traverse(graph);
 	}
 
 	@Override
-	public void visitVertex(final INode vertex) {
-		vertex.removeChildGraph();
+	public void visitNode(final INode node) {
+		node.removeChildGraph();
 	}
 
 	@Override

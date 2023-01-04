@@ -42,7 +42,6 @@ public class ReadOnlyConfiguration extends Configuration {
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized Object setProperty(final String key, final String value) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
@@ -58,37 +57,31 @@ public class ReadOnlyConfiguration extends Configuration {
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void clear() {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void load(final InputStream inStream) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void load(final Reader reader) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void loadFromXML(final InputStream in) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void putAll(final Map<? extends Object, ? extends Object> t) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized Object remove(final Object key) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}

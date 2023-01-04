@@ -143,9 +143,13 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 			} else {
 				final long loggingTimestamp = deserializer.getLong();
 				final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(classname);
-				final IMonitoringRecord event = recordFactory.create(deserializer);
-				event.setLoggingTimestamp(loggingTimestamp);
-				outputPort.send(event);
+				if (recordFactory != null) {
+					final IMonitoringRecord event = recordFactory.create(deserializer);
+					event.setLoggingTimestamp(loggingTimestamp);
+					outputPort.send(event);
+				} else {
+					LOGGER.error("Record type {} not supported", classname);
+				}
 				this.charBuffer.clear();
 			}
 		} else {
