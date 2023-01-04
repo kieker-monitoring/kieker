@@ -349,21 +349,21 @@ def parsePmdReport(File reportFile) {
 }
 
 def checkSubprojects = [
-	project(':kieker-common'),
-	project(':kieker-monitoring'),
-	project(':kieker-model'),
-	project(':kieker-analysis'),
-	project(':kieker-tools'),
-	project(':kieker-tools:behavior-analysis'),
-	project(':kieker-tools:collector'),
-	project(':kieker-tools:convert-logging-timestamp'),
-	project(':kieker-tools:log-replayer'),
-	project(':kieker-tools:opad'),
-	project(':kieker-tools:resource-monitor'),
-	project(':kieker-tools:trace-analysis'),
-	project(':kieker-tools:trace-analysis-gui'),
-	project(':kieker-extension-kafka'),
-	project(':kieker-extension-cassandra')
+  project(':kieker-common'),
+  project(':kieker-monitoring'),
+  project(':kieker-model'),
+  project(':kieker-analysis'),
+  project(':kieker-tools'),
+  project(':kieker-tools:behavior-analysis'),
+  project(':kieker-tools:collector'),
+  project(':kieker-tools:convert-logging-timestamp'),
+  project(':kieker-tools:log-replayer'),
+  project(':kieker-tools:opad'),
+  project(':kieker-tools:resource-monitor'),
+  project(':kieker-tools:trace-analysis'),
+  project(':kieker-tools:trace-analysis-gui'),
+  project(':kieker-extension-kafka'),
+  project(':kieker-extension-cassandra')
 ]
 
 checkSubprojects.each { project ->
@@ -746,13 +746,13 @@ def binaryContent = project.copySpec {
 }
 
 def tools = [
-	'behavior-analysis',
-	'collector',
-	'convert-logging-timestamp',
-	'log-replayer',
-	'resource-monitor',
-	'trace-analysis',
-	'trace-analysis-gui'
+  'behavior-analysis',
+  'collector',
+  'convert-logging-timestamp',
+  'log-replayer',
+  'resource-monitor',
+  'trace-analysis',
+  'trace-analysis-gui'
 ]
 
 /** collect tools for binary distribution. */
@@ -922,8 +922,8 @@ distribute.mustRunAfter enableRTests
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
-	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-	sign configurations.archives
+  required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+  sign configurations.archives
 }
 
 artifacts {
