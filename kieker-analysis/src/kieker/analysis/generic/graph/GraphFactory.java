@@ -35,12 +35,12 @@ public final class GraphFactory {
 		// do not instantiate, is a factory
 	}
 
-	public static IGraph createGraph(final String id, final MutableNetwork<INode, IEdge> graph) {
-		return new GraphImpl(id, graph);
+	public static <N extends INode, E extends IEdge> IGraph<N, E> createGraph(final String id, final MutableNetwork<N, E> graph) {
+		return new GraphImpl<>(id, graph);
 	}
 
-	public static IGraph createGraph(final String name) {
-		final MutableNetwork<INode, IEdge> graph = NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
+	public static <N extends INode, E extends IEdge> IGraph<N, E> createGraph(final String name) {
+		final MutableNetwork<N, E> graph = NetworkBuilder.directed().allowsParallelEdges(true).allowsSelfLoops(true).build();
 		return GraphFactory.createGraph(name, graph);
 	}
 

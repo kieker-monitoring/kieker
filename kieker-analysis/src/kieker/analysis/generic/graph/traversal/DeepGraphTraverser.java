@@ -24,37 +24,42 @@ import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DeepGraphTraverser extends AbstractGraphTraverser {
+public class DeepGraphTraverser<N extends INode, E extends IEdge> extends AbstractGraphTraverser<N, E> {
 
 	public DeepGraphTraverser() {
 		super();
 	}
 
-	public DeepGraphTraverser(final List<IVertexVisitor> vertexVisitors, final List<IEdgeVisitor> edgeVisitors) {
-		super(vertexVisitors, edgeVisitors);
+	public DeepGraphTraverser(final List<INodeVisitor<N>> nodeVisitors, final List<IEdgeVisitor<E>> edgeVisitors) {
+		super(nodeVisitors, edgeVisitors);
 	}
 
-	public DeepGraphTraverser(final IVertexVisitor vertexVisitor, final IEdgeVisitor edgeVisitor) {
-		super(vertexVisitor, edgeVisitor);
+	public DeepGraphTraverser(final INodeVisitor<N> nodeVisitor, final IEdgeVisitor<E> edgeVisitor) {
+		super(nodeVisitor, edgeVisitor);
 	}
 
 	@Override
-	public void traverse(final MutableNetwork<INode, IEdge> graph) {
-		for (final INode vertex : graph.nodes()) {
-			for (final IVertexVisitor visitor : this.vertexVisitors) {
-				visitor.visitVertex(vertex);
+	public void traverse(final MutableNetwork<N, E> graph) {
+		for (final N node : graph.nodes()) {
+			for (final INodeVisitor<N> visitor : this.nodeVisitors) {
+				visitor.visitNode(node);
 			}
-			if (vertex.getChildGraph() != null) {
-				this.traverse(vertex.getChildGraph().getGraph());
+			if (node.getChildGraph() != null) {
+				this.traverse(node.getChildGraph().getGraph());
 			}
 		}
 
-		for (final IEdge edge : graph.edges()) {
-			for (final IEdgeVisitor visitor : this.edgeVisitors) {
+		for (final E edge : graph.edges()) {
+			for (final IEdgeVisitor<E> visitor : this.edgeVisitors) {
 				visitor.visitEdge(edge);
 			}
 		}

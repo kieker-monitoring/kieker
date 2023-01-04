@@ -26,21 +26,26 @@ import kieker.analysis.generic.graph.INode;
 /**
  * Graph with label.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class GraphImpl implements IGraph {
+public class GraphImpl<N extends INode, E extends IEdge> implements IGraph<N, E> {
 
-	private final MutableNetwork<INode, IEdge> graph;
+	private final MutableNetwork<N, E> graph;
 	private String label;
 
-	public GraphImpl(final String label, final MutableNetwork<INode, IEdge> graph) {
+	public GraphImpl(final String label, final MutableNetwork<N, E> graph) {
 		this.label = label;
 		this.graph = graph;
 	}
 
 	@Override
-	public MutableNetwork<INode, IEdge> getGraph() {
+	public MutableNetwork<N, E> getGraph() {
 		return this.graph;
 	}
 
@@ -55,12 +60,12 @@ public class GraphImpl implements IGraph {
 	}
 
 	@Override
-	public Optional<INode> findNode(final String id) {
+	public Optional<N> findNode(final String id) {
 		return this.graph.nodes().stream().filter(node -> id.equals(node.getId())).findFirst();
 	}
 
 	@Override
-	public Optional<IEdge> findEdge(final String id) {
+	public Optional<E> findEdge(final String id) {
 		return this.graph.edges().stream().filter(edge -> id.equals(edge.getId())).findFirst();
 	}
 }

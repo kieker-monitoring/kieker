@@ -28,23 +28,28 @@ import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.sink.graph.AbstractTransformer;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blueprints.Graph> {
+public class BlueprintsTransformer<N extends INode, E extends IEdge> extends AbstractTransformer<com.tinkerpop.blueprints.Graph, N, E> {
 
 	private static final String LABEL_PROPERTY = "label";
 
 	private final com.tinkerpop.blueprints.Graph transformedGraph = new TinkerGraph();
 	private final Map<INode, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
 
-	public BlueprintsTransformer(final IGraph graph) {
+	public BlueprintsTransformer(final IGraph<N, E> graph) {
 		super(graph);
 	}
 
 	@Override
-	protected void transformVertex(final INode vertex) {
+	protected void transformVertex(final N vertex) {
 		final com.tinkerpop.blueprints.Vertex mappedVertex = this.transformedGraph.addVertex(vertex.getId());
 		this.mappedVertices.put(vertex, mappedVertex);
 		for (final String propertyKey : vertex.getPropertyKeys()) {
@@ -54,8 +59,8 @@ public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blu
 	}
 
 	@Override
-	protected void transformEdge(final IEdge edge) {
-		final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+	protected void transformEdge(final E edge) {
+		final EndpointPair<N> pair = this.graph.getGraph().incidentNodes(edge);
 		final com.tinkerpop.blueprints.Vertex mappedInVertex = this.mappedVertices.get(pair.target());
 		final com.tinkerpop.blueprints.Vertex mappedOutVertex = this.mappedVertices.get(pair.source());
 		String label = edge.getProperty(LABEL_PROPERTY);

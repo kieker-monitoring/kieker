@@ -26,19 +26,24 @@ import teetime.stage.basic.AbstractFilter;
 /**
  * @author Sören Henning
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @since 1.14
  */
-public class GraphFlattenerStage extends AbstractFilter<MutableNetwork<INode, IEdge>> {
+public class GraphFlattenerStage<N extends INode, E extends IEdge> extends AbstractFilter<MutableNetwork<N, E>> {
 
-	private final IGraphFlattener flattener;
+	private final IGraphFlattener<N, E> flattener;
 
-	public GraphFlattenerStage(final IGraphFlattener flattener) {
+	public GraphFlattenerStage(final IGraphFlattener<N, E> flattener) {
 		super();
 		this.flattener = flattener;
 	}
 
 	@Override
-	protected void execute(final MutableNetwork<INode, IEdge> graph) {
+	protected void execute(final MutableNetwork<N, E> graph) {
 		this.flattener.flatten(graph);
 		this.getOutputPort().send(graph);
 	}
