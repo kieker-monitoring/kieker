@@ -26,7 +26,7 @@ author = 'Various'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '1.16'
+release = '2.0.0-SNAPSHOT'
 
 
 # -- General configuration ---------------------------------------------------
