@@ -19,7 +19,6 @@ public final class RootNode<T> extends AbstractNode<T> {
 			super.removeData(data, distance);
 		} catch (final NodeUnderCapacityException e) {
 			// Promote the only child to root
-			@SuppressWarnings("unchecked")
 			final AbstractNode<T> theChild = (AbstractNode<T>) this.children.values().iterator().next();
 			final AbstractNode<T> newRoot;
 			if (theChild instanceof InternalNode<?>) {

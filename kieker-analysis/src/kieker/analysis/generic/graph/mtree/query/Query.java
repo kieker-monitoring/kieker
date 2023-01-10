@@ -37,7 +37,7 @@ public final class Query<T> implements Iterable<ResultItem<T>> {
 
 	@Override
 	public Iterator<ResultItem<T>> iterator() {
-		return new ResultsIterator<T>(this.mtree, this);
+		return new ResultsIterator<T>(this);
 	}
 
 	public T getData() {
@@ -50,5 +50,9 @@ public final class Query<T> implements Iterable<ResultItem<T>> {
 
 	public double getRange() {
 		return this.range;
+	}
+
+	public MTree<T> getMTree() {
+		return this.mtree;
 	}
 }

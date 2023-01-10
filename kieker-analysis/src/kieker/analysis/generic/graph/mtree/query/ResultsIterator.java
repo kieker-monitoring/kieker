@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 
-import kieker.analysis.generic.graph.mtree.MTree;
 import kieker.analysis.generic.graph.mtree.nodes.AbstractNode;
 import kieker.analysis.generic.graph.mtree.nodes.Entry;
 import kieker.analysis.generic.graph.mtree.nodes.IndexItem;
@@ -17,21 +16,19 @@ public final class ResultsIterator<T> implements Iterator<ResultItem<T>> {
 	private double nextPendingMinDistance;
 	private final PriorityQueue<ItemWithDistances<Entry<T>>> nearestQueue = new PriorityQueue<>();
 	private int yieldedCount;
-	private MTree<T> mtree;
 	private Query<T> query;
 
-	public ResultsIterator(final MTree<T> mtree, final Query<T> query) {
-		this.mtree = mtree;
+	public ResultsIterator(final Query<T> query) {
 		this.query = query;
-		if (this.mtree.getRoot() == null) {
+		if (this.query.getMTree().getRoot() == null) {
 			this.finished = true;
 			return;
 		}
 
-		final double distance = this.mtree.getDistanceFunction().calculate(this.query.getData(), this.mtree.getRoot().getData());
-		final double minDistance = Math.max(distance - this.mtree.getRoot().getRadius(), 0.0);
+		final double distance = this.query.getMTree().getDistanceFunction().calculate(this.query.getData(), this.query.getMTree().getRoot().getData());
+		final double minDistance = Math.max(distance - this.query.getMTree().getRoot().getRadius(), 0.0);
 
-		this.pendingQueue.add(new ItemWithDistances<>(this.mtree.getRoot(), distance, minDistance));
+		this.pendingQueue.add(new ItemWithDistances<>(this.query.getMTree().getRoot(), distance, minDistance));
 		this.nextPendingMinDistance = minDistance;
 	}
 
@@ -89,7 +86,7 @@ public final class ResultsIterator<T> implements Iterator<ResultItem<T>> {
 
 			for (final IndexItem<T> child : node.getChildren().values()) {
 				if ((Math.abs(pending.distance - child.getDistanceToParent()) - child.getRadius()) <= this.query.getRange()) {
-					final double childDistance = this.mtree.getDistanceFunction().calculate(this.query.getData(), child.getData());
+					final double childDistance = this.query.getMTree().getDistanceFunction().calculate(this.query.getData(), child.getData());
 					final double childMinDistance = Math.max(childDistance - child.getRadius(), 0.0);
 					if (childMinDistance <= this.query.getRange()) {
 						if (child instanceof Entry) {
