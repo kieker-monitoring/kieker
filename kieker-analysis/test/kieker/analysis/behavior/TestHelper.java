@@ -21,6 +21,7 @@ import com.google.common.graph.MutableNetwork;
 import com.google.common.graph.NetworkBuilder;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.BasicCostFunction;
@@ -116,7 +117,7 @@ public final class TestHelper {
 		return edge;
 	}
 
-	public static MTree<OpticsData<INode, IEdge>> generateMTree(final List<OpticsData<INode, IEdge>> models) {
+	public static MTree<OpticsData<INode, IEdge>> generateMTree(final List<OpticsData<INode, IEdge>> models) throws InternalErrorException {
 
 		// final GraphEditDistance ged = new GraphEditDistance();
 		final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(1, 1);

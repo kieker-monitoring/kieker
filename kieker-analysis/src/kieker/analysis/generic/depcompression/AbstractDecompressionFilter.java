@@ -28,7 +28,9 @@ public abstract class AbstractDecompressionFilter {
 	/**
 	 * Initialize pass through "decompression" with parameter to adhere Kieker configuration system.
 	 */
-	public AbstractDecompressionFilter() {}
+	public AbstractDecompressionFilter() {
+		// empty constructor
+	}
 
 	/**
 	 * Create an input stream with decompression support and use the normal input stream as source.

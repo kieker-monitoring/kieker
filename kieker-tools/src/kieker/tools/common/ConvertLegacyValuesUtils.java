@@ -25,12 +25,12 @@ import java.util.List;
  *
  * @since 1.15
  */
-public final class ConvertLegacyValues {
+public final class ConvertLegacyValuesUtils {
 
 	/**
 	 * Do not instantiate utility class.
 	 */
-	private ConvertLegacyValues() {
+	private ConvertLegacyValuesUtils() {
 		// nothing to do here
 	}
 

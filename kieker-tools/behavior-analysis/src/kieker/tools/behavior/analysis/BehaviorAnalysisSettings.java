@@ -21,10 +21,18 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.FileConverter;
+import com.beust.jcommander.converters.PathConverter;
 
+import kieker.analysis.behavior.acceptance.matcher.AcceptanceModeConverter;
 import kieker.analysis.behavior.acceptance.matcher.EAcceptanceMode;
 import kieker.analysis.behavior.clustering.IParameterWeighting;
+import kieker.analysis.behavior.clustering.NaiveParameterWeighting;
+import kieker.analysis.behavior.clustering.ParameterWeightingConverter;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
+import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorConverter;
+import kieker.tools.settings.ParentPathValueValidator;
+import kieker.tools.settings.Setting;
 
 /**
  * All settings of the behavior analysis.
@@ -37,32 +45,50 @@ public final class BehaviorAnalysisSettings {
 	@Parameter(names = { "-c", "--configuration" }, required = true, description = "Configuration file")
 	private File configurationFile;
 
+	@Setting(converter = PathConverter.class, validators = ParentPathValueValidator.class)
 	private Path clusterOutputPath;
+	@Setting(converter = PathConverter.class, validators = ParentPathValueValidator.class)
 	private Path medoidOutputPath;
 
 	private List<Pattern> classSignatureAcceptancePatterns;
 	private List<Pattern> operationSignatureAcceptancePatterns;
+
+	@Setting(converter = AcceptanceModeConverter.class)
 	private EAcceptanceMode acceptanceMatcherMode;
+	@Setting(converter = TraceSignatureProcessorConverter.class)
 	private ITraceSignatureProcessor traceSignatureProcessor;
 
+	@Setting
 	private double clusteringDistance;
 
+	@Setting
 	private int minPts;
 
+	@Setting
 	private int maxAmount;
 
+	@Setting
 	private Long userSessionTimeout;
 
+	@Setting
 	private double nodeInsertCost;
+
+	@Setting
 	private double edgeInsertCost;
+
+	@Setting
 	private double eventGroupInsertCost;
 
-	private IParameterWeighting weighting;
+	@Setting(converter = ParameterWeightingConverter.class)
+	private IParameterWeighting parameterWeighting = new NaiveParameterWeighting();
 
+	@Setting(variableArity = true, converter = FileConverter.class, required = true)
 	private List<File> directories;
 
+	@Setting
 	private int dataBufferSize;
 
+	@Setting
 	private boolean verbose;
 
 	public BehaviorAnalysisSettings() {
@@ -81,44 +107,20 @@ public final class BehaviorAnalysisSettings {
 		return this.clusterOutputPath;
 	}
 
-	public void setClusterOutputPath(final Path clusterOutputPath) {
-		this.clusterOutputPath = clusterOutputPath;
-	}
-
 	public Path getMedoidOutputPath() {
 		return this.medoidOutputPath;
-	}
-
-	public void setMedoidOutputPath(final Path medoidOutputPath) {
-		this.medoidOutputPath = medoidOutputPath;
-	}
-
-	public void setTraceSignatureProcessor(final ITraceSignatureProcessor traceSignatureProcessor) {
-		this.traceSignatureProcessor = traceSignatureProcessor;
 	}
 
 	public ITraceSignatureProcessor getTraceSignatureProcessor() {
 		return this.traceSignatureProcessor;
 	}
 
-	public void setClusteringDistance(final double clusteringDistance) {
-		this.clusteringDistance = clusteringDistance;
-	}
-
 	public double getClusteringDistance() {
 		return this.clusteringDistance;
 	}
 
-	public void setMinPts(final int minPts) {
-		this.minPts = minPts;
-	}
-
 	public int getMinPts() {
 		return this.minPts;
-	}
-
-	public void setMaxAmount(final int maxAmount) {
-		this.maxAmount = maxAmount;
 	}
 
 	public int getMaxAmount() {
@@ -181,36 +183,24 @@ public final class BehaviorAnalysisSettings {
 		this.eventGroupInsertCost = eventGroupInsertCost;
 	}
 
-	public IParameterWeighting getWeighting() {
-		return this.weighting;
+	public IParameterWeighting getParameterWeighting() {
+		return this.parameterWeighting;
 	}
 
-	public void setWeighting(final IParameterWeighting weighting) {
-		this.weighting = weighting;
+	public void setParameterWeighting(final IParameterWeighting parameterWeighting) {
+		this.parameterWeighting = parameterWeighting;
 	}
 
 	public List<File> getDirectories() {
 		return this.directories;
 	}
 
-	public void setDirectories(final List<File> directories) {
-		this.directories = directories;
-	}
-
 	public int getDataBufferSize() {
 		return this.dataBufferSize;
 	}
 
-	public void setDataBufferSize(final int dataBufferSize) {
-		this.dataBufferSize = dataBufferSize;
-	}
-
 	public boolean isVerbose() {
 		return this.verbose;
-	}
-
-	public void setVerbose(final boolean verbose) {
-		this.verbose = verbose;
 	}
 
 }

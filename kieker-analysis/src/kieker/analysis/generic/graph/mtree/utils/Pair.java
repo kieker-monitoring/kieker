@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.mtree.utils;
 
+import kieker.analysis.exception.InternalErrorException;
+
 /**
  * A pair of objects of the same type.
  *
@@ -39,7 +41,9 @@ public class Pair<T> {
 	/**
 	 * Creates a pair of {@code null} objects.
 	 */
-	public Pair() {}
+	public Pair() {
+		// no empty
+	}
 
 	/**
 	 * Creates a pair with the objects specified in the arguments.
@@ -62,18 +66,18 @@ public class Pair<T> {
 	 *            The index of the object to be accessed.
 	 * @return The {@link #first} object if {@code index} is {@code 0}; the
 	 *         {@link #second} object if {@code index} is {@code 1}.
-	 * @throws IllegalArgumentException
+	 * @throws InteranlErrorException
 	 *             If {@code index} is neither {@code 0}
 	 *             or {@code 1}.
 	 */
-	public T get(final int index) throws IllegalArgumentException {
+	public T get(final int index) throws InternalErrorException {
 		switch (index) {
 		case 0:
 			return this.first;
 		case 1:
 			return this.second;
 		default:
-			throw new IllegalArgumentException();
+			throw new InternalErrorException();
 		}
 	}
 

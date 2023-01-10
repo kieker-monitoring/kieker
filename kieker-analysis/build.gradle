@@ -24,6 +24,8 @@ dependencies {
 
 	api 'de.cau.cs.se.teetime:teetime:3.1.0'
 
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 

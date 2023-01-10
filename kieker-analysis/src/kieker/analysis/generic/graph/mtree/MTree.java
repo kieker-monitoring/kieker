@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.mtree.ISplitFunction.SplitResult;
 
 /**
@@ -108,19 +109,17 @@ public class MTree<T> {
 			throw new IllegalArgumentException();
 		}
 
-		final ISplitFunction<T> localSplitFunction;
 		if (existingSplitFunction == null) {
-			localSplitFunction = new ComposedSplitFunction<>(
-					new PromotionFunctions.RandomPromotion<T>(),
-					new PartitionFunctions.BalancedPartition<T>());
+			this.splitFunction = new ComposedSplitFunction<>(
+					new RandomPromotionFunction<T>(),
+					new BalancedPartitionFunction<T>());
 		} else {
-			localSplitFunction = existingSplitFunction;
+			this.splitFunction = existingSplitFunction;
 		}
 
 		this.minNodeCapacity = minNodeCapacity;
 		this.maxNodeCapacity = maxNodeCapacity;
 		this.distanceFunction = distanceFunction;
-		this.splitFunction = localSplitFunction;
 		this.root = null;
 	}
 
@@ -133,20 +132,22 @@ public class MTree<T> {
 	 *
 	 * @param data
 	 *            The data object to index.
+	 * @throws InternalErrorException
+	 *             on internal error
 	 */
-	public void add(final T data) {
+	public void add(final T data) throws InternalErrorException {
 		if (this.root == null) {
 			this.root = new RootLeafNode(data);
 			try {
 				this.root.addData(data, 0);
-			} catch (final SplitNodeReplacement e) {
-				throw new RuntimeException("Should never happen!");
+			} catch (final SplitNodeReplacementException e) {
+				throw new InternalErrorException("Should never happen!", e);
 			}
 		} else {
 			double distance = this.distanceFunction.calculate(data, this.root.getData());
 			try {
 				this.root.addData(data, distance);
-			} catch (final SplitNodeReplacement e) {
+			} catch (final SplitNodeReplacementException e) {
 				final AbstractNode newRoot = new RootNode(data);
 				this.root = newRoot;
 				for (final Object newNode2 : e.newNodes) {
@@ -165,8 +166,10 @@ public class MTree<T> {
 	 * @param data
 	 *            The data object to be removed.
 	 * @return {@code true} if and only if the object was found.
+	 * @throws InternalErrorException
+	 *             on internal error
 	 */
-	public boolean remove(final T data) {
+	public boolean remove(final T data) throws InternalErrorException {
 		if (this.root == null) {
 			return false;
 		}
@@ -174,14 +177,14 @@ public class MTree<T> {
 		final double distanceToRoot = this.distanceFunction.calculate(data, this.root.getData());
 		try {
 			this.root.removeData(data, distanceToRoot);
-		} catch (final RootNodeReplacement e) {
+		} catch (final RootNodeReplacementException e) {
 			@SuppressWarnings("unchecked")
 			final AbstractNode newRoot = (AbstractNode) e.newRoot;
 			this.root = newRoot;
-		} catch (final DataNotFound e) {
+		} catch (final DataNotFoundException e) {
 			return false;
-		} catch (final NodeUnderCapacity e) {
-			throw new RuntimeException("Should have never happened", e);
+		} catch (final NodeUnderCapacityException e) {
+			throw new InternalErrorException("Should have never happened", e);
 		}
 		return true;
 	}
@@ -306,7 +309,7 @@ public class MTree<T> {
 			this.leafness = leafness;
 		}
 
-		private final void addData(final T data, final double distance) throws SplitNodeReplacement {
+		private final void addData(final T data, final double distance) throws SplitNodeReplacementException, InternalErrorException {
 			this.doAddData(data, distance);
 			this.checkMaxCapacity();
 		}
@@ -337,17 +340,17 @@ public class MTree<T> {
 			return childHeight + 1;
 		}
 
-		protected void doAddData(final T data, final double distance) {
+		protected void doAddData(final T data, final double distance) throws InternalErrorException {
 			this.leafness.doAddData(data, distance);
 		}
 
-		protected void doRemoveData(final T data, final double distance) throws DataNotFound {
+		protected void doRemoveData(final T data, final double distance) throws DataNotFoundException, NodeUnderCapacityException, InternalErrorException {
 			this.leafness.doRemoveData(data, distance);
 		}
 
-		private final void checkMaxCapacity() throws SplitNodeReplacement {
+		private final void checkMaxCapacity() throws SplitNodeReplacementException, InternalErrorException {
 			if (this.children.size() > MTree.this.maxNodeCapacity) {
-				final IDistanceFunction<? super T> cachedDistanceFunction = DistanceFunctions.cached(MTree.this.distanceFunction);
+				final IDistanceFunction<? super T> cachedDistanceFunction = DistanceFunctionFactory.cached(MTree.this.distanceFunction);
 				final SplitResult<T> splitResult = MTree.this.splitFunction.process(this.children.keySet(), cachedDistanceFunction);
 
 				AbstractNode newNode0 = null;
@@ -372,7 +375,7 @@ public class MTree<T> {
 				}
 				assert this.children.isEmpty();
 
-				throw new SplitNodeReplacement(newNode0, newNode1);
+				throw new SplitNodeReplacementException(newNode0, newNode1);
 			}
 
 		}
@@ -381,18 +384,19 @@ public class MTree<T> {
 			return this.leafness.newSplitNodeReplacement(data);
 		}
 
-		protected void addChild(final IndexItem child, final double distance) {
+		protected void addChild(final IndexItem child, final double distance) throws InternalErrorException {
 			this.leafness.addChild(child, distance);
 		}
 
-		void removeData(final T data, final double distance) throws RootNodeReplacement, NodeUnderCapacity, DataNotFound {
+		void removeData(final T data, final double distance)
+				throws RootNodeReplacementException, NodeUnderCapacityException, DataNotFoundException, InternalErrorException {
 			this.doRemoveData(data, distance);
 			if (this.children.size() < this.getMinCapacity()) {
-				throw new NodeUnderCapacity();
+				throw new NodeUnderCapacityException();
 			}
 		}
 
-		protected int getMinCapacity() {
+		protected int getMinCapacity() throws InternalErrorException {
 			return this.rootness.getMinCapacity();
 		}
 
@@ -440,11 +444,11 @@ public class MTree<T> {
 	}
 
 	private interface ILeafness<DATA> {
-		void doAddData(DATA data, double distance);
+		void doAddData(DATA data, double distance) throws InternalErrorException;
 
-		void addChild(MTree<DATA>.IndexItem child, double distance);
+		void addChild(MTree<DATA>.IndexItem child, double distance) throws InternalErrorException;
 
-		void doRemoveData(DATA data, double distance) throws DataNotFound;
+		void doRemoveData(DATA data, double distance) throws DataNotFoundException, NodeUnderCapacityException, InternalErrorException;
 
 		MTree<DATA>.AbstractNode newSplitNodeReplacement(DATA data);
 
@@ -452,7 +456,7 @@ public class MTree<T> {
 	}
 
 	private interface IRootness {
-		int getMinCapacity();
+		int getMinCapacity() throws InternalErrorException;
 
 		void checkDistanceToParent();
 
@@ -466,8 +470,8 @@ public class MTree<T> {
 		}
 
 		@Override
-		public int getMinCapacity() {
-			throw new RuntimeException("Should not be called!");
+		public int getMinCapacity() throws InternalErrorException {
+			throw new InternalErrorException("Should not be called!");
 		}
 
 		@Override
@@ -533,9 +537,9 @@ public class MTree<T> {
 		}
 
 		@Override
-		public void doRemoveData(final T data, final double distance) throws DataNotFound {
+		public void doRemoveData(final T data, final double distance) throws DataNotFoundException {
 			if (this.thisNode.children.remove(data) == null) {
-				throw new DataNotFound();
+				throw new DataNotFoundException();
 			}
 		}
 
@@ -552,7 +556,7 @@ public class MTree<T> {
 		}
 
 		@Override
-		public void doAddData(final T data, final double distance) {
+		public void doAddData(final T data, final double distance) throws InternalErrorException {
 			final class CandidateChild {
 				private final AbstractNode node;
 				private final double distance;
@@ -602,7 +606,7 @@ public class MTree<T> {
 			try {
 				child.addData(data, chosen.distance);
 				this.thisNode.updateRadius(child);
-			} catch (final SplitNodeReplacement e) {
+			} catch (final SplitNodeReplacementException e) {
 				// Replace current child with new nodes
 				final IndexItem itemIndex = this.thisNode.children.remove(child.getData());
 				assert itemIndex != null;
@@ -617,7 +621,7 @@ public class MTree<T> {
 		}
 
 		@Override
-		public void addChild(final IndexItem inputNewChild, final double inputDistance) {
+		public void addChild(final IndexItem inputNewChild, final double inputDistance) throws InternalErrorException {
 			double distance = inputDistance;
 			@SuppressWarnings("unchecked")
 			AbstractNode newChild = (AbstractNode) inputNewChild;
@@ -661,7 +665,7 @@ public class MTree<T> {
 
 					try {
 						existingChild.checkMaxCapacity();
-					} catch (final SplitNodeReplacement e) {
+					} catch (final SplitNodeReplacementException e) {
 						final IndexItem indexItem = this.thisNode.children.remove(existingChild.getData());
 						assert indexItem != null;
 
@@ -686,7 +690,8 @@ public class MTree<T> {
 		}
 
 		@Override
-		public void doRemoveData(final T data, final double distance) throws DataNotFound {
+		public void doRemoveData(final T data, final double distance) throws DataNotFoundException,
+				NodeUnderCapacityException, InternalErrorException {
 			for (final IndexItem childItem : this.thisNode.children.values()) {
 				@SuppressWarnings("unchecked")
 				final AbstractNode child = (AbstractNode) childItem;
@@ -697,23 +702,23 @@ public class MTree<T> {
 							child.removeData(data, distanceToChild);
 							this.thisNode.updateRadius(child);
 							return;
-						} catch (final DataNotFound e) {
+						} catch (final DataNotFoundException e) {
 							// If DataNotFound was thrown, then the data was not found in the child
-						} catch (final NodeUnderCapacity e) {
+						} catch (final NodeUnderCapacityException e) {
 							final AbstractNode expandedChild = this.balanceChildren(child);
 							this.thisNode.updateRadius(expandedChild);
 							return;
-						} catch (final RootNodeReplacement e) {
-							throw new RuntimeException("Should never happen!");
+						} catch (final RootNodeReplacementException e) {
+							throw new InternalErrorException("Should never happen!");
 						}
 					}
 				}
 			}
 
-			throw new DataNotFound();
+			throw new DataNotFoundException();
 		}
 
-		private AbstractNode balanceChildren(final AbstractNode theChild) {
+		private AbstractNode balanceChildren(final AbstractNode theChild) throws InternalErrorException {
 			// Tries to find anotherChild which can donate a grand-child to theChild.
 
 			AbstractNode nearestDonor = null;
@@ -788,12 +793,12 @@ public class MTree<T> {
 		}
 
 		@Override
-		void removeData(final T data, final double distance) throws RootNodeReplacement, DataNotFound {
+		void removeData(final T data, final double distance) throws RootNodeReplacementException, DataNotFoundException, InternalErrorException {
 			try {
 				super.removeData(data, distance);
-			} catch (final NodeUnderCapacity e) {
+			} catch (final NodeUnderCapacityException e) {
 				assert this.children.isEmpty();
-				throw new RootNodeReplacement(null);
+				throw new RootNodeReplacementException(null);
 			}
 		}
 
@@ -815,10 +820,11 @@ public class MTree<T> {
 		}
 
 		@Override
-		void removeData(final T data, final double distance) throws RootNodeReplacement, NodeUnderCapacity, DataNotFound {
+		void removeData(final T data, final double distance)
+				throws RootNodeReplacementException, NodeUnderCapacityException, DataNotFoundException, InternalErrorException {
 			try {
 				super.removeData(data, distance);
-			} catch (final NodeUnderCapacity e) {
+			} catch (final NodeUnderCapacityException e) {
 				// Promote the only child to root
 				@SuppressWarnings("unchecked")
 				final AbstractNode theChild = (AbstractNode) this.children.values().iterator().next();
@@ -836,7 +842,7 @@ public class MTree<T> {
 				}
 				theChild.children.clear();
 
-				throw new RootNodeReplacement(newRoot);
+				throw new RootNodeReplacementException(newRoot);
 			}
 		}
 
@@ -886,6 +892,7 @@ public class MTree<T> {
 
 		private ResultItem(final T data, final double distance) {
 			this.data = data;
+			System.err.println("ResultItem data " + data + " " + distance);
 			this.distance = distance;
 		}
 
@@ -899,34 +906,34 @@ public class MTree<T> {
 	}
 
 	// Exception classes
-	private static final class SplitNodeReplacement extends Exception {
+	private static final class SplitNodeReplacementException extends Exception {
 		// A subclass of Throwable cannot be generic. :-(
 		// So, we have newNodes declared as Object[] instead of Node[].
 		private final Object[] newNodes;
 
-		private SplitNodeReplacement(final Object... newNodes) {
+		private SplitNodeReplacementException(final Object... newNodes) {
 			this.newNodes = newNodes;
 		}
 	}
 
-	private static final class RootNodeReplacement extends Exception {
+	private static final class RootNodeReplacementException extends Exception {
 		// A subclass of Throwable cannot be generic. :-(
 		// So, we have newRoot declared as Object instead of Node.
 		private final Object newRoot;
 
-		private RootNodeReplacement(final Object newRoot) {
+		private RootNodeReplacementException(final Object newRoot) {
 			this.newRoot = newRoot;
 		}
 	}
 
-	private static final class NodeUnderCapacity extends Exception {
-		public NodeUnderCapacity() {
+	private static final class NodeUnderCapacityException extends Exception {
+		public NodeUnderCapacityException() {
 			// default constructor
 		}
 	}
 
-	private static final class DataNotFound extends Exception {
-		public DataNotFound() {
+	private static final class DataNotFoundException extends Exception {
+		public DataNotFoundException() {
 			// default constructor
 		}
 	}

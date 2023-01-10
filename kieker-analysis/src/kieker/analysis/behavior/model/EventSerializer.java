@@ -26,7 +26,7 @@ import kieker.analysis.behavior.events.EntryCallEvent;
 
 /**
  * A serializer, which serializes an PayloadAwareEntryCallEvent by printing the operation signature,
- * the parameters and the values
+ * the parameters and the values.
  *
  * @author Lars Jürgensen
  * @since 2.0.0

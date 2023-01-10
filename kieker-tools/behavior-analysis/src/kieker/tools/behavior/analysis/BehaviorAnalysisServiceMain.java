@@ -19,25 +19,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 
-import kieker.analysis.behavior.acceptance.matcher.EAcceptanceMode;
-import kieker.analysis.behavior.clustering.IParameterWeighting;
-import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.AbstractService;
 import kieker.tools.common.ParameterEvaluationUtils;
-import kieker.tools.source.LogsReaderCompositeStage;
+import kieker.tools.settings.ConfigurationParser;
 
 /**
- *
+ * Main class for behavior analysis.
+ * 
  * @author Lars Jürgensen
- *
+ * @author Reiner Jung
+ * @since 2.0.0
  */
 public final class BehaviorAnalysisServiceMain
 		extends AbstractService<BehaviorAnalysisConfiguration, BehaviorAnalysisSettings> {
@@ -73,23 +72,15 @@ public final class BehaviorAnalysisServiceMain
 	@Override
 	protected boolean checkConfiguration(final kieker.common.configuration.Configuration configuration,
 			final JCommander commander) {
-		final String userSessionTimeout = configuration.getStringProperty(ConfigurationKeys.USER_SESSION_TIMEOUT, null);
-		if (userSessionTimeout == null) {
-			this.settings.setUserSessionTimeout(null);
-		} else {
-			this.settings.setUserSessionTimeout(Long.parseLong(userSessionTimeout));
-		}
+		final ConfigurationParser parser = new ConfigurationParser(ConfigurationKeys.PREFIX, this.settings);
 
-		final String clusterOutputFile = configuration.getStringProperty(ConfigurationKeys.CLUSTER_OUTPUT_FILE);
-		if (clusterOutputFile != null) {
-			this.settings.setClusterOutputPath(Paths.get(clusterOutputFile));
+		try {
+			parser.parse(configuration);
+		} catch (ParameterException e) {
+			this.logger.error(e.getLocalizedMessage());
+			return false;
 		}
-
-		final String medoidsOutputFile = configuration.getStringProperty(ConfigurationKeys.MEDOIDS_OUTPUT_FILE);
-		if (medoidsOutputFile != null) {
-			this.settings.setMedoidOutputPath(Paths.get(medoidsOutputFile));
-		}
-
+			
 		/** For SessionAcceptanceFilter. */
 		this.settings.setClassSignatureAcceptancePatterns(
 				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
@@ -97,36 +88,11 @@ public final class BehaviorAnalysisServiceMain
 		this.settings.setOperationSignatureAcceptancePatterns(
 				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
 						"operation signature patterns", commander));
-		this.settings.setAcceptanceMatcherMode(
-				configuration.getEnumProperty(ConfigurationKeys.SIGNATURE_ACCEPTANCE_MATCHER_MODE, EAcceptanceMode.class, EAcceptanceMode.NORMAL));
 
-		/** For TraceSignatureProcessor. */
-		this.settings.setTraceSignatureProcessor(ParameterEvaluationUtils.createFromConfiguration(
-				ITraceSignatureProcessor.class, configuration, ConfigurationKeys.TRACE_SIGNATURE_PROCESSOR,
-				"No signature cleanup rewriter specified."));
-
-		this.settings.setClusteringDistance(configuration.getDoubleProperty(ConfigurationKeys.EPSILON, 10));
-
-		this.settings.setMinPts(configuration.getIntProperty(ConfigurationKeys.MIN_PTS, 20));
-
-		this.settings.setMaxAmount(configuration.getIntProperty(ConfigurationKeys.MAX_MODEL_AMOUNT, -1));
-
-		this.settings.setNodeInsertCost(configuration.getDoubleProperty(ConfigurationKeys.NODE_INSERTION_COST, 10));
-		this.settings.setEdgeInsertCost(configuration.getDoubleProperty(ConfigurationKeys.EDGE_INSERTION_COST, 5));
-		this.settings.setEventGroupInsertCost(configuration.getDoubleProperty(ConfigurationKeys.EVENT_GROUP_INSERTION_COST, 4));
-
-		this.settings.setWeighting(ParameterEvaluationUtils.createFromConfiguration(IParameterWeighting.class, configuration,
-				ConfigurationKeys.PARAMETER_WEIGHTING, "missing parameter weighting function."));
-
-		final String[] directoryNames = configuration.getStringArrayProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, ":");
-		this.settings.setDirectories(new ArrayList<>(directoryNames.length));
-
-		for (final String name : directoryNames) {
-			final File directory = new File(name);
-			if (ParameterEvaluationUtils.checkDirectory(directory, "log file", commander)) {
-				this.settings.getDirectories().add(directory);
-			} else {
-				this.logger.error("Log directory {} cannot be read or does not exist.", name);
+		for (final File directory : this.settings.getDirectories()) {
+			this.logger.debug("Reading from log {}", directory.getAbsolutePath().toString());
+			if (!ParameterEvaluationUtils.checkDirectory(directory, "log file", commander)) {
+				this.logger.error("Log directory {} cannot be read or does not exist.", directory.getAbsolutePath().toString());
 			}
 		}
 		if (this.settings.getDirectories().size() == 0) {
@@ -134,11 +100,12 @@ public final class BehaviorAnalysisServiceMain
 			return false;
 		}
 
-		this.settings
-				.setDataBufferSize(configuration.getIntProperty(LogsReaderCompositeStage.DATA_BUFFER_SIZE, 8192));
-		this.settings.setVerbose(configuration.getBooleanProperty(LogsReaderCompositeStage.VERBOSE, false));
-
 		if (this.settings.getTraceSignatureProcessor() == null) {
+			return false;
+		}
+
+		if (this.settings.getClusterOutputPath() == null && this.settings.getMedoidOutputPath() == null) {
+			this.logger.error("You need to specify at least a cluster or a medoid output path.");
 			return false;
 		}
 

@@ -96,21 +96,26 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 		int resultAmount = 0;
 		OpticsData<N, E> last = null;
-
-		final Query o = this.getMtree().getNearest(model, this.getMaxDistance(), this.getMinPTs());
-
-		for (final ResultItem element : this.getMtree()
-				.getNearest(model, this.getMaxDistance(), this.getMinPTs())) {
+		
+		System.err.printf("updateCoreDistance %s\n", model);
+		
+		MTree<OpticsData<N, E>>.Query v = this.getMtree()
+				.getNearest(model, this.getMaxDistance(), this.getMinPTs());
+		
+		System.err.println("completed query");		
+		
+		for (final ResultItem element : v) {
+			System.err.println(">>> Element " + element);
 			resultAmount++;
 			last = (OpticsData<N, E>) element.getData(); // TODO eliminate necessity of cast
 		}
 
+		System.err.println("Last is " + last);
+		
 		if (resultAmount < this.getMinPTs()) {
 			model.setCoreDistance(OpticsData.UNDEFINED);
 		} else {
-
 			model.setCoreDistance(model.distanceTo(last));
-
 		}
 
 	}
@@ -196,20 +201,22 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 		model1.setVisited(true);
 		model1.setReachabilityDistance(OpticsData.UNDEFINED);
+		System.err.printf("expandClusterOrder for model1 %s\n",  model1 != null?"present":"null"); // NOCS
 		this.updateCoreDistance(model1);
 		this.resultList.add(model1);
 
 		if (model1.getCoreDistance() != OpticsData.UNDEFINED) {
+			System.err.printf("code distance is %f\n", model1.getCoreDistance());
 			final PriorityQueue<OpticsData<N, E>> seeds = new PriorityQueue<>(5, this.reachComparator);
-
+			System.err.println("update");
 			this.update(neighbors1, model1, seeds);
-
+			System.err.println("before loop");
 			while (!seeds.isEmpty()) {
 
 				final OpticsData<N, E> model2 = seeds.poll();
 				// TODO better naming
 				final List<OpticsData<N, E>> neighbors2 = this.getNeighbors(model2);
-
+				System.err.printf("expandClusterOrder for model2 %s\n", model2 != null?"present":"NULL"); // NOCS
 				this.updateCoreDistance(model2);
 
 				model2.setVisited(true);

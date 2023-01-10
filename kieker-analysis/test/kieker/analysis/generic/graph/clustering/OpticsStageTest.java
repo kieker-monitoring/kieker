@@ -27,6 +27,7 @@ import org.junit.Test;
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.behavior.TestHelper;
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
@@ -46,7 +47,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 	private List<OpticsData<INode, IEdge>> models;
 
 	@Before
-	public void setup() {
+	public void setup() throws InternalErrorException {
 		final List<MutableNetwork<INode, IEdge>> behaviorModels = new ArrayList<>();
 
 		behaviorModels.add(TestHelper.createBehaviorModelA());

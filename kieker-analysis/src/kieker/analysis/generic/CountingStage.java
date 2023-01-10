@@ -26,11 +26,14 @@ import teetime.framework.OutputPort;
  * unchanged objects to the output. The value of the counter can be retrieved by connected to the respective output port using a
  * corresponding method.
  *
+ * @param <T>
+ *            record type
+ *
  * @author Jan Waller, Nils Christian Ehmke, Lars Bluemke
  *
  * @since 1.4
  */
-public final class CountingFilter<T> extends AbstractConsumerStage<T> {
+public final class CountingStage<T> extends AbstractConsumerStage<T> {
 
 	private final OutputPort<T> relayedEventsOutputPort = this.createOutputPort();
 	private final OutputPort<Long> countOutputPort = this.createOutputPort();
@@ -42,15 +45,27 @@ public final class CountingFilter<T> extends AbstractConsumerStage<T> {
 
 	/**
 	 * Creates a new instance of this class and sets the time stamp of initialization.
+	 *
+	 * @param echo
+	 *            if true, print out number of counted record to console log (INFO)
+	 * @param modulo
+	 *            print out count info to log only every n-event
 	 */
-	public CountingFilter(final boolean echo, final int modulo) {
+	public CountingStage(final boolean echo, final int modulo) {
 		this(echo, modulo, "");
 	}
 
 	/**
 	 * Creates a new instance of this class and sets the time stamp of initialization.
+	 *
+	 * @param echo
+	 *            if true, print out number of counted record to console log (INFO)
+	 * @param modulo
+	 *            print out count info to log only every n-event
+	 * @param label
+	 *            label added as prefix to the number in the log
 	 */
-	public CountingFilter(final boolean echo, final int modulo, final String label) {
+	public CountingStage(final boolean echo, final int modulo, final String label) {
 		this.echo = echo;
 		this.modulo = modulo;
 		this.label = label;

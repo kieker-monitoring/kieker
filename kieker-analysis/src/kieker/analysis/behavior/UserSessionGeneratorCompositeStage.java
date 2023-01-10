@@ -45,7 +45,7 @@ public class UserSessionGeneratorCompositeStage extends CompositeStage {
 	 *            matcher to check on entry calls to filter out requests that do not belong to the behavior, e.g., loading images
 	 * @param traceSignatureProcessor
 	 *            cleanup rewriter
-	 * @param usesSessionExpirationTime
+	 * @param userSessionTimeout
 	 *            defines after how many nano seconds a session is considered to be timed out
 	 */
 	public UserSessionGeneratorCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher,

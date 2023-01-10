@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.mtree;
 
-import kieker.analysis.generic.graph.mtree.DistanceFunctions.IEuclideanCoordinate;
+import kieker.analysis.generic.graph.mtree.DistanceFunctionFactory.IEuclideanCoordinate;
 
 /**
  *

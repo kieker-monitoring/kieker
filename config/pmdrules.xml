@@ -25,6 +25,7 @@
 		<exclude name="CommentSize" />
 		<exclude name="ConfusingTernary" />
 		<exclude name="CyclomaticComplexity" />
+		<exclude name="DataClass"/>
 		<exclude name="DataflowAnomalyAnalysis" />
 		<exclude name="DoNotCallSystemExit" />
 		<exclude name="DoNotUseThreads" />
@@ -85,7 +86,7 @@
 	        <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
 	        <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
 	        <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory)" />
+	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory|Keys)" />
 	    </properties>
     </rule>
 </ruleset>

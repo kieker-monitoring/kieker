@@ -42,7 +42,7 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.common.ConvertLegacyValues;
+import kieker.tools.common.ConvertLegacyValuesUtils;
 import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
@@ -1046,7 +1046,7 @@ public class PerformAnalysis {
 	private FSReader createReader() {
 		final Configuration conf = new Configuration(null);
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS,
-				Configuration.toProperty(ConvertLegacyValues.fileListToStringArray(this.parameters.getInputDirs())));
+				Configuration.toProperty(ConvertLegacyValuesUtils.fileListToStringArray(this.parameters.getInputDirs())));
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
 		return new FSReader(conf, this.analysisController);
 	}

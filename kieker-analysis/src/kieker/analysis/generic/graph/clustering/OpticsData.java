@@ -29,7 +29,7 @@ import kieker.analysis.generic.graph.mtree.IDistanceFunction;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
