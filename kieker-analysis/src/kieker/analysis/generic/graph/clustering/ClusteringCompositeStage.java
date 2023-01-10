@@ -45,11 +45,11 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 	private final InputPort<Long> timerInputPort;
 	private final OutputPort<Clustering<MutableNetwork<N, E>>> outputPort;
 
-	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final int maxAmount,
+	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final Integer maxAmount,
 			final OPTICSDataGED<N, E> distanceFunction) {
 
 		final DataCollectorStage<OpticsData<N, E>> dataCollectorStage;
-		if (maxAmount != -1) {
+		if (maxAmount != null) {
 			dataCollectorStage = new DataCollectorStage<>(maxAmount);
 		} else {
 			dataCollectorStage = new DataCollectorStage<>();

@@ -23,8 +23,8 @@ import java.util.PriorityQueue;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
-import kieker.analysis.generic.graph.mtree.MTree.Query;
-import kieker.analysis.generic.graph.mtree.MTree.ResultItem;
+import kieker.analysis.generic.graph.mtree.query.Query;
+import kieker.analysis.generic.graph.mtree.query.ResultItem;
 
 /**
  * An implementation of the OPTICS algorithm. A detailed explanation of the algorithm can be found
@@ -96,22 +96,22 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 		int resultAmount = 0;
 		OpticsData<N, E> last = null;
-		
+
 		System.err.printf("updateCoreDistance %s\n", model);
-		
-		MTree<OpticsData<N, E>>.Query v = this.getMtree()
+
+		final Query<OpticsData<N, E>> v = this.getMtree()
 				.getNearest(model, this.getMaxDistance(), this.getMinPTs());
-		
-		System.err.println("completed query");		
-		
-		for (final ResultItem element : v) {
+
+		System.err.println("completed query");
+
+		for (final ResultItem<OpticsData<N, E>> element : v) {
 			System.err.println(">>> Element " + element);
 			resultAmount++;
-			last = (OpticsData<N, E>) element.getData(); // TODO eliminate necessity of cast
+			last = element.getData(); // TODO eliminate necessity of cast
 		}
 
 		System.err.println("Last is " + last);
-		
+
 		if (resultAmount < this.getMinPTs()) {
 			model.setCoreDistance(OpticsData.UNDEFINED);
 		} else {
@@ -121,11 +121,11 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	}
 
 	private List<OpticsData<N, E>> getNeighbors(final OpticsData<N, E> model) {
-		final MTree<OpticsData<N, E>>.Query query = this.mtree.getNearestByRange(model, this.maxDistance);
+		final Query<OpticsData<N, E>> query = this.mtree.getNearestByRange(model, this.maxDistance);
 		final List<OpticsData<N, E>> neighbors = new ArrayList<>();
 
-		for (final ResultItem element : query) {
-			neighbors.add((OpticsData<N, E>) element.getData()); // TODO eliminate necessity of cast
+		for (final ResultItem<OpticsData<N, E>> element : query) {
+			neighbors.add(element.getData());
 		}
 
 		return neighbors;
@@ -139,13 +139,9 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 *         important for the evaluation.
 	 */
 	public List<OpticsData<N, E>> calculate() {
-
 		for (final OpticsData<N, E> model : this.models) {
-
 			if (!model.isVisited()) {
-
 				this.expandClusterOrder(model);
-
 			}
 		}
 
@@ -201,7 +197,7 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 		model1.setVisited(true);
 		model1.setReachabilityDistance(OpticsData.UNDEFINED);
-		System.err.printf("expandClusterOrder for model1 %s\n",  model1 != null?"present":"null"); // NOCS
+		System.err.printf("expandClusterOrder for model1 %s\n", model1 != null ? "present" : "null"); // NOCS
 		this.updateCoreDistance(model1);
 		this.resultList.add(model1);
 
@@ -216,7 +212,7 @@ public class OPTICS<N extends INode, E extends IEdge> {
 				final OpticsData<N, E> model2 = seeds.poll();
 				// TODO better naming
 				final List<OpticsData<N, E>> neighbors2 = this.getNeighbors(model2);
-				System.err.printf("expandClusterOrder for model2 %s\n", model2 != null?"present":"NULL"); // NOCS
+				System.err.printf("expandClusterOrder for model2 %s\n", model2 != null ? "present" : "NULL"); // NOCS
 				this.updateCoreDistance(model2);
 
 				model2.setVisited(true);

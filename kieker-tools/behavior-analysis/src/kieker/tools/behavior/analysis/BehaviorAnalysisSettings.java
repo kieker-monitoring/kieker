@@ -65,7 +65,7 @@ public final class BehaviorAnalysisSettings {
 	private int minPts;
 
 	@Setting
-	private int maxAmount;
+	private Integer maxAmount;
 
 	@Setting
 	private Long userSessionTimeout;
@@ -123,7 +123,7 @@ public final class BehaviorAnalysisSettings {
 		return this.minPts;
 	}
 
-	public int getMaxAmount() {
+	public Integer getMaxAmount() {
 		return this.maxAmount;
 	}
 
