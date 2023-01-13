@@ -50,7 +50,7 @@ class MTreeClass extends MTree<Data> {
 	MTreeClass() {
 		super(2, DistanceFunctionFactory.EUCLIDEAN,
 				new ComposedSplitFunction<>(
-						NON_RANDOM_PROMOTION,
+						MTreeClass.NON_RANDOM_PROMOTION,
 						new BalancedPartitionFunction<Data>()));
 	}
 
@@ -67,8 +67,9 @@ class MTreeClass extends MTree<Data> {
 		return result;
 	}
 
+	@Override
 	public IDistanceFunction<? super Data> getDistanceFunction() {
-		return this.getDistanceFunction();
+		return super.getDistanceFunction();
 	}
 };
 

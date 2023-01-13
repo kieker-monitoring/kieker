@@ -24,8 +24,8 @@ import kieker.analysis.generic.graph.mtree.IRootness;
  */
 public class RootNodeTrait<T> extends AbstractNodeTrait<T> implements IRootness {
 
-	public RootNodeTrait() {
-		// default constructor
+	public RootNodeTrait(final AbstractNode<T> thisNode) {
+		super(thisNode);
 	}
 
 	@Override

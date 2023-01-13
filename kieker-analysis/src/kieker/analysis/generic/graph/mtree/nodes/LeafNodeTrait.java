@@ -23,8 +23,8 @@ import kieker.analysis.generic.graph.mtree.ILeafness;
  */
 public class LeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafness<T> {
 
-	public LeafNodeTrait() {
-		// default constructor
+	public LeafNodeTrait(final AbstractNode<T> thisNode) {
+		super(thisNode);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class LeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafness<
 
 	@Override
 	public AbstractNode<T> newSplitNodeReplacement(final T data) {
-		return new LeafNode<T>(this.thisNode.getMTree(), data);
+		return NodeFactory.createLeafNode(this.thisNode.getMTree(), data);
 	}
 
 	@Override

@@ -23,8 +23,8 @@ import kieker.analysis.generic.graph.mtree.MTree;
  */
 public final class RootLeafNode<T> extends AbstractNode<T> {
 
-	public RootLeafNode(final MTree<T> mtree, final T data) {
-		super(mtree, data, new RootNodeTrait<T>(), new LeafNodeTrait<T>());
+	protected RootLeafNode(final MTree<T> mtree, final T data) {
+		super(mtree, data);
 	}
 
 	@Override

@@ -28,8 +28,8 @@ import kieker.analysis.generic.graph.mtree.utils.Pair;
  */
 public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafness<T> {
 
-	public NonLeafNodeTrait() {
-		// nothing to be done
+	public NonLeafNodeTrait(final AbstractNode<T> thisNode) {
+		super(thisNode);
 	}
 
 	@Override
@@ -68,26 +68,27 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 		final CandidateChild chosen = nearestDistance.node != null ? nearestDistance : minRadiusIncreaseNeeded; // NOCS
 
 		final AbstractNode<T> child = chosen.node;
-		
+
 		child.addData(data, chosen.distance);
 		if (child.isMaxCapacityExceeded()) {
-			Pair<AbstractNode<T>> newNodes = child.splitNodes();
+			final Pair<AbstractNode<T>> newNodes = child.splitNodes();
 			// Replace current child with new nodes
 			final IndexItem<T> itemIndex = this.thisNode.getChildren().remove(child.getData());
 			assert itemIndex != null;
 
-			computeDistances2(newNodes.getFirst());
-			computeDistances2(newNodes.getSecond());
-		} else
+			this.computeDistances2(newNodes.getFirst());
+			this.computeDistances2(newNodes.getSecond());
+		} else {
 			this.thisNode.updateRadius(child);
-		
+		}
+
 	}
 
-	private void computeDistances2(AbstractNode<T> node) throws InternalErrorException {
+	private void computeDistances2(final AbstractNode<T> node) throws InternalErrorException {
 		final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(), node.getData());
 		this.thisNode.addChild(node, newDistance);
 	}
-	
+
 	@Override
 	public void addChild(final IndexItem<T> inputNewChildNode, final double inputDistance) throws InternalErrorException {
 		double distance = inputDistance;
@@ -112,13 +113,13 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 				newChildNode.getChildren().clear();
 
 				if (existingChild.isMaxCapacityExceeded()) {
-					Pair<AbstractNode<T>> newNodes = existingChild.splitNodes();
-					
+					final Pair<AbstractNode<T>> newNodes = existingChild.splitNodes();
+
 					final IndexItem<T> indexItem = this.thisNode.getChildren().remove(existingChild.getData());
 					assert indexItem != null;
 
-					computeDistances(newNodes.getFirst(), newChildren);
-					computeDistances(newNodes.getSecond(), newChildren);
+					this.computeDistances(newNodes.getFirst(), newChildren);
+					this.computeDistances(newNodes.getSecond(), newChildren);
 				}
 			} else {
 				this.thisNode.getChildren().put(newChildNode.getData(), newChildNode);
@@ -126,16 +127,16 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 			}
 		}
 	}
-	
-	private void computeDistances(AbstractNode<T> node, Deque<ChildWithDistance> newChildren) {
+
+	private void computeDistances(final AbstractNode<T> node, final Deque<ChildWithDistance> newChildren) {
 		final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(),
-					node.getData());
+				node.getData());
 		newChildren.addFirst(new ChildWithDistance(node, newDistance));
 	}
 
 	@Override
 	public AbstractNode<T> newSplitNodeReplacement(final T data) {
-		return new InternalNode<T>(this.thisNode.getMTree(), data);
+		return NodeFactory.createInternalNode(this.thisNode.getMTree(), data);
 	}
 
 	@Override
@@ -145,13 +146,14 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 			if (Math.abs(distance - child.getDistanceToParent()) <= child.radius) {
 				final double distanceToChild = this.thisNode.getMTree().getDistanceFunction().calculate(data, child.getData());
 				if (distanceToChild <= child.radius) {
-					boolean dataRemoved = child.removeData(data, distanceToChild);
+					final boolean dataRemoved = child.removeData(data, distanceToChild);
 					if (dataRemoved) {
 						if (child.isNodeUnderCapacity()) {
 							final AbstractNode<T> expandedChild = this.balanceChildren(child);
-							this.thisNode.updateRadius(expandedChild);						
-						} else
+							this.thisNode.updateRadius(expandedChild);
+						} else {
 							this.thisNode.updateRadius(child);
+						}
 						return true;
 					}
 				}
@@ -225,7 +227,7 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 	public void checkChildClass(final IndexItem<T> child) {
 		assert (child instanceof InternalNode) || (child instanceof LeafNode);
 	}
-	
+
 	final class ChildWithDistance {
 		private final AbstractNode<T> child;
 		private final double distance;

@@ -18,15 +18,15 @@ package kieker.analysis.generic.graph.mtree.nodes;
 import kieker.analysis.generic.graph.mtree.MTree;
 
 /**
- * @author Eduardo R. D'Avila
+ * @author Eduardo R. D'AvilaR>
  * @since 2.0.0
  */
 public final class RootNode<T> extends AbstractNode<T> {
 
-	public RootNode(final MTree<T> mtree, final T data) {
-		super(mtree, data, new RootNodeTrait<T>(), new NonLeafNodeTrait<T>());
+	protected RootNode(final MTree<T> mtree, final T data) {
+		super(mtree, data);
 	}
-	
+
 	@Override
 	protected int getMinCapacity() {
 		return 2;

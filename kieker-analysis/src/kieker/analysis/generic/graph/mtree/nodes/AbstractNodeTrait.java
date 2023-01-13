@@ -20,5 +20,11 @@ package kieker.analysis.generic.graph.mtree.nodes;
  * @since 2.0.0
  */
 public abstract class AbstractNodeTrait<T> {
+
 	protected AbstractNode<T> thisNode;
+
+	public AbstractNodeTrait(final AbstractNode<T> thisNode) {
+		this.thisNode = thisNode;
+	}
+
 }

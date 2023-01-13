@@ -23,8 +23,8 @@ import kieker.analysis.generic.graph.mtree.IRootness;
  */
 public class NonRootNodeTrait<T> extends AbstractNodeTrait<T> implements IRootness {
 
-	public NonRootNodeTrait() {
-		super();
+	public NonRootNodeTrait(final AbstractNode<T> thisNode) {
+		super(thisNode);
 	}
 
 	@Override

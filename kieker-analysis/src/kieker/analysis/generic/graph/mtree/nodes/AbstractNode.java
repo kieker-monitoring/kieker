@@ -34,20 +34,13 @@ import kieker.analysis.generic.graph.mtree.utils.Pair;
  */
 public abstract class AbstractNode<T> extends IndexItem<T> {
 
-	private Map<T, IndexItem<T>> children = new HashMap<>();
+	private final Map<T, IndexItem<T>> children = new HashMap<>();
 	protected IRootness rootness;
 	protected ILeafness<T> leafness;
 	private final MTree<T> mtree;
 
-	public <R extends AbstractNodeTrait<T> & IRootness, L extends AbstractNodeTrait<T> & ILeafness<T>> AbstractNode(final MTree<T> mtree, final T data,
-			final R rootness, final L leafness) {
+	protected AbstractNode(final MTree<T> mtree, final T data) {
 		super(data);
-
-		rootness.thisNode = this;
-		this.rootness = rootness;
-
-		leafness.thisNode = this;
-		this.leafness = leafness;
 
 		this.mtree = mtree;
 	}
@@ -97,20 +90,21 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 	public final boolean isMaxCapacityExceeded() throws InternalErrorException {
 		return (this.children.size() > this.mtree.getMaxNodeCapacity());
 	}
-	
+
 	public final Pair<AbstractNode<T>> splitNodes() throws InternalErrorException {
 		final IDistanceFunction<? super T> cachedDistanceFunction = DistanceFunctionFactory.cached(this.mtree.getDistanceFunction());
 		final SplitResult<T> splitResult = this.mtree.getSplitFunction().process(this.children.keySet(), cachedDistanceFunction);
 
-		AbstractNode<T> newNode0 = createNewNode(splitResult, cachedDistanceFunction, 0);
-		AbstractNode<T> newNode1 = createNewNode(splitResult, cachedDistanceFunction, 1);
-		
+		final AbstractNode<T> newNode0 = this.createNewNode(splitResult, cachedDistanceFunction, 0);
+		final AbstractNode<T> newNode1 = this.createNewNode(splitResult, cachedDistanceFunction, 1);
+
 		assert this.children.isEmpty();
 
 		return new Pair<>(newNode0, newNode1);
 	}
-	
-	private AbstractNode<T> createNewNode(SplitResult<T> splitResult, IDistanceFunction<? super T> distanceFunction, int resultIndex) throws InternalErrorException {
+
+	private AbstractNode<T> createNewNode(final SplitResult<T> splitResult, final IDistanceFunction<? super T> distanceFunction, final int resultIndex)
+			throws InternalErrorException {
 		final T promotedData = splitResult.getPromoted().get(resultIndex);
 		final Set<T> partition = splitResult.getPartitions().get(resultIndex);
 
@@ -121,7 +115,7 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 			final double distance = distanceFunction.calculate(promotedData, data);
 			newNode.addChild(child, distance);
 		}
-		
+
 		return newNode;
 	}
 
@@ -137,7 +131,7 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 			throws InternalErrorException {
 		return this.doRemoveData(data, distance);
 	}
-	
+
 	public boolean isNodeUnderCapacity() throws InternalErrorException {
 		return this.children.size() < this.getMinCapacity();
 	}
