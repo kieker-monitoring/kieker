@@ -19,7 +19,9 @@ package kieker.analysis.architecture.trace.graph;
 import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.architecture.trace.traversal.TraceTraverser;
 import kieker.analysis.generic.graph.GraphFactory;
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
 import kieker.model.analysismodel.trace.Trace;
 
 /**
@@ -37,8 +39,8 @@ public class TraceToGraphTransformer {
 		// Create a transformer
 	}
 
-	public IGraph transform(final Trace trace) {
-		final IGraph graph = GraphFactory.createGraph("trace-" + trace.getTraceID());
+	public IGraph<INode, IEdge> transform(final Trace trace) {
+		final IGraph<INode, IEdge> graph = GraphFactory.createGraph("trace-" + trace.getTraceID());
 		final IOperationCallVisitor visitor = new GraphTransformerVisitor(graph);
 		this.traceTraverser.traverse(trace, visitor);
 		return graph;

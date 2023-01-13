@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.generic.sink.graph.dot;
 
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mapping.DirectPropertyMapper;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotEdgeAttribute;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
@@ -28,7 +30,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
  *
  * @since 1.14
  */
-public class SimpleDotExportConfiguration extends DotExportMapper {
+public class SimpleDotExportConfiguration<N extends INode, E extends IEdge> extends DotExportMapper<N,E> {
 
 	public SimpleDotExportConfiguration() {
 		super();

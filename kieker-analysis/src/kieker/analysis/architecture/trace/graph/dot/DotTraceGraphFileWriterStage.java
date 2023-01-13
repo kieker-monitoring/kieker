@@ -31,7 +31,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
  *
  * @since 1.14
  */
-public class DotTraceGraphFileWriterStage extends DotFileWriterStage { // NOPMD (class serves only as constructor)
+public class DotTraceGraphFileWriterStage extends DotFileWriterStage<INode, IEdge> { // NOPMD (class serves only as constructor)
 
 	public DotTraceGraphFileWriterStage(final Path outputDirectory, final DotExportMapper<INode, IEdge> exportConfiguration) {
 		super(outputDirectory, exportConfiguration);

@@ -74,7 +74,7 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 			final MTree<OpticsData<N, E>> mtree = this.mTreeInputQueue.poll();
 			final List<OpticsData<N, E>> models = this.modelsInputQueue.poll();
 
-			final OPTICS optics = new OPTICS(mtree, this.epsilon, this.minPTs, models);
+			final OPTICS<N,E> optics = new OPTICS<>(mtree, this.epsilon, this.minPTs, models);
 
 			final List<OpticsData<N, E>> result = optics.calculate();
 

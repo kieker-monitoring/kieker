@@ -28,6 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.InternalErrorException;
+import kieker.analysis.generic.graph.mtree.query.Query;
+import kieker.analysis.generic.graph.mtree.query.ResultItem;
 import kieker.analysis.generic.graph.mtree.utils.MTreeUtils;
 import kieker.analysis.generic.graph.mtree.utils.Pair;
 
@@ -65,8 +67,8 @@ class MTreeClass extends MTree<Data> {
 		return result;
 	}
 
-	IDistanceFunction<? super Data> getDistanceFunction() {
-		return this.distanceFunction;
+	public IDistanceFunction<? super Data> getDistanceFunction() {
+		return this.getDistanceFunction();
 	}
 };
 
@@ -229,8 +231,8 @@ public class MTreeTest {
 			final int expectedData,
 			final double expectedDistance,
 			final boolean expectedHasNext,
-			final MTree<Integer>.ResultItem ri,
-			final Iterator<MTree<Integer>.ResultItem> i) {
+			final ResultItem<Integer> ri,
+			final Iterator<ResultItem<Integer>> i) {
 		Assert.assertEquals(expectedData, ri.getData().intValue());
 		Assert.assertEquals(expectedDistance, ri.getDistance(), 0.0);
 		Assert.assertEquals(expectedHasNext, i.hasNext());
@@ -260,12 +262,12 @@ public class MTreeTest {
 		mt.add(3);
 		mt.add(4);
 
-		final MTree<Integer>.Query query = mt.getNearest(0);
+		final Query<Integer> query = mt.getNearest(0);
 
 		// The first iterator
-		final Iterator<MTree<Integer>.ResultItem> i1 = query.iterator();
+		final Iterator<ResultItem<Integer>> i1 = query.iterator();
 		Assert.assertTrue(i1.hasNext());
-		MTree<Integer>.ResultItem ri1 = i1.next();
+		ResultItem<Integer> ri1 = i1.next();
 		/*
 		 * 1 2 3 4 e
 		 * i1: *
@@ -290,9 +292,9 @@ public class MTreeTest {
 		this.assertIterator(3, 3, true, ri1, i1);
 
 		// Begin another iteration
-		final Iterator<MTree<Integer>.ResultItem> i2 = query.iterator();
+		final Iterator<ResultItem<Integer>> i2 = query.iterator();
 		Assert.assertTrue(i2.hasNext());
-		MTree<Integer>.ResultItem ri2 = i2.next();
+		ResultItem<Integer> ri2 = i2.next();
 		/*
 		 * 1 2 3 4 e
 		 * i1: *
@@ -369,18 +371,18 @@ public class MTreeTest {
 	}
 
 	private void checkNearestByRange(final Data queryData, final double radius) {
-		final List<MTreeClass.ResultItem> results = new ArrayList<>();
+		final List<ResultItem<Data>> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
-		final MTreeClass.Query query = this.mtree.getNearestByRange(queryData, radius);
+		final Query<Data> query = this.mtree.getNearestByRange(queryData, radius);
 
-		for (final MTreeClass.ResultItem ri : query) {
+		for (final ResultItem<Data> ri : query) {
 			results.add(ri);
 			strippedResults.add(ri.getData());
 		}
 
 		double previousDistance = 0;
 
-		for (final MTreeClass.ResultItem result : results) {
+		for (final ResultItem<Data> result : results) {
 			// Check if increasing distance
 			Assert.assertTrue(previousDistance <= result.getDistance());
 			previousDistance = result.getDistance();
@@ -404,11 +406,11 @@ public class MTreeTest {
 	}
 
 	private void checkNearestByLimit(final Data queryData, final int limit) {
-		final List<MTreeClass.ResultItem> results = new ArrayList<>();
+		final List<ResultItem<Data>> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
-		final MTreeClass.Query query = this.mtree.getNearestByLimit(queryData, limit);
+		final Query<Data> query = this.mtree.getNearestByLimit(queryData, limit);
 
-		for (final MTreeClass.ResultItem ri : query) {
+		for (final ResultItem<Data> ri : query) {
 			results.add(ri);
 			strippedResults.add(ri.getData());
 		}
@@ -422,7 +424,7 @@ public class MTreeTest {
 
 		double farthest = 0.0;
 		double previousDistance = 0.0;
-		for (final MTreeClass.ResultItem ri : results) {
+		for (final ResultItem<Data> ri : results) {
 			// Check if increasing distance
 			Assert.assertTrue(previousDistance <= ri.getDistance());
 			previousDistance = ri.getDistance();

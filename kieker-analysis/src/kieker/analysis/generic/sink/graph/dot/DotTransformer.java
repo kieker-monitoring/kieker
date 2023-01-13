@@ -45,7 +45,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
 public class DotTransformer<N extends INode, E extends IEdge> extends DotElementTransformer<N, E> {
 
 	public DotTransformer(final IGraph<N, E> graph, final Writer writer) {
-		this(graph, writer, new SimpleDotExportConfiguration());
+		this(graph, writer, new SimpleDotExportConfiguration<>());
 	}
 
 	public DotTransformer(final IGraph<N, E> graph, final Writer writer, final DotExportMapper<N, E> configuration) {

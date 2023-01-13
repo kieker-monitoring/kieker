@@ -1,43 +1,32 @@
+/***************************************************************************
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.generic.graph.mtree.nodes;
 
-import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.mtree.MTree;
-import kieker.analysis.generic.graph.mtree.exceptions.DataNotFoundException;
-import kieker.analysis.generic.graph.mtree.exceptions.NodeUnderCapacityException;
-import kieker.analysis.generic.graph.mtree.exceptions.RootNodeReplacementException;
 
+/**
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 public final class RootNode<T> extends AbstractNode<T> {
 
 	public RootNode(final MTree<T> mtree, final T data) {
 		super(mtree, data, new RootNodeTrait<T>(), new NonLeafNodeTrait<T>());
 	}
-
-	@Override
-	public void removeData(final T data, final double distance)
-			throws RootNodeReplacementException, NodeUnderCapacityException, DataNotFoundException, InternalErrorException {
-		try {
-			super.removeData(data, distance);
-		} catch (final NodeUnderCapacityException e) {
-			// Promote the only child to root
-			final AbstractNode<T> theChild = (AbstractNode<T>) this.children.values().iterator().next();
-			final AbstractNode<T> newRoot;
-			if (theChild instanceof InternalNode<?>) {
-				newRoot = new RootNode<T>(this.getMTree(), theChild.getData());
-			} else {
-				assert theChild instanceof LeafNode<?>;
-				newRoot = new RootLeafNode<T>(this.getMTree(), theChild.getData());
-			}
-
-			for (final IndexItem<T> grandchild : theChild.children.values()) {
-				final double newDistance = this.getMTree().getDistanceFunction().calculate(newRoot.getData(), grandchild.getData());
-				newRoot.addChild(grandchild, newDistance);
-			}
-			theChild.children.clear();
-
-			throw new RootNodeReplacementException(newRoot);
-		}
-	}
-
+	
 	@Override
 	protected int getMinCapacity() {
 		return 2;
@@ -45,6 +34,6 @@ public final class RootNode<T> extends AbstractNode<T> {
 
 	@Override
 	public void checkMinCapacity() {
-		assert this.children.size() >= 2;
+		assert this.getChildren().size() >= 2;
 	}
 }

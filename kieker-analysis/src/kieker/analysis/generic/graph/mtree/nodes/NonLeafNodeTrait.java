@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.generic.graph.mtree.nodes;
 
 import java.util.ArrayDeque;
@@ -5,11 +20,12 @@ import java.util.Deque;
 
 import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.mtree.ILeafness;
-import kieker.analysis.generic.graph.mtree.exceptions.DataNotFoundException;
-import kieker.analysis.generic.graph.mtree.exceptions.NodeUnderCapacityException;
-import kieker.analysis.generic.graph.mtree.exceptions.RootNodeReplacementException;
-import kieker.analysis.generic.graph.mtree.exceptions.SplitNodeReplacementException;
+import kieker.analysis.generic.graph.mtree.utils.Pair;
 
+/**
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafness<T> {
 
 	public NonLeafNodeTrait() {
@@ -29,24 +45,12 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 				this.distance = distance;
 				this.metric = metric;
 			}
-
-			public AbstractNode<T> getNode() {
-				return this.node;
-			}
-
-			public double getDistance() {
-				return this.distance;
-			}
-
-			public double getMetric() {
-				return this.metric;
-			}
 		}
 
 		CandidateChild minRadiusIncreaseNeeded = new CandidateChild(null, -1.0, Double.POSITIVE_INFINITY);
 		CandidateChild nearestDistance = new CandidateChild(null, -1.0, Double.POSITIVE_INFINITY);
 
-		for (final IndexItem<T> item : this.thisNode.children.values()) {
+		for (final IndexItem<T> item : this.thisNode.getChildren().values()) {
 			final AbstractNode<T> child = (AbstractNode<T>) item;
 			final double childDistance = this.thisNode.getMTree().getDistanceFunction().calculate(child.getData(), data);
 			if (childDistance > child.radius) {
@@ -64,83 +68,69 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 		final CandidateChild chosen = nearestDistance.node != null ? nearestDistance : minRadiusIncreaseNeeded; // NOCS
 
 		final AbstractNode<T> child = chosen.node;
-		try {
-			child.addData(data, chosen.distance);
-			this.thisNode.updateRadius(child);
-		} catch (final SplitNodeReplacementException e) {
+		
+		child.addData(data, chosen.distance);
+		if (child.isMaxCapacityExceeded()) {
+			Pair<AbstractNode<T>> newNodes = child.splitNodes();
 			// Replace current child with new nodes
-			final IndexItem<T> itemIndex = this.thisNode.children.remove(child.getData());
+			final IndexItem<T> itemIndex = this.thisNode.getChildren().remove(child.getData());
 			assert itemIndex != null;
 
-			for (final Object newNode : e.getNewNodes()) {
-				@SuppressWarnings("unchecked")
-				final AbstractNode<T> newChild = (AbstractNode<T>) newNode;
-				final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(), newChild.getData());
-				this.thisNode.addChild(newChild, newDistance);
-			}
-		}
+			computeDistances2(newNodes.getFirst());
+			computeDistances2(newNodes.getSecond());
+		} else
+			this.thisNode.updateRadius(child);
+		
 	}
 
+	private void computeDistances2(AbstractNode<T> node) throws InternalErrorException {
+		final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(), node.getData());
+		this.thisNode.addChild(node, newDistance);
+	}
+	
 	@Override
-	public void addChild(final IndexItem<T> inputNewChild, final double inputDistance) throws InternalErrorException {
+	public void addChild(final IndexItem<T> inputNewChildNode, final double inputDistance) throws InternalErrorException {
 		double distance = inputDistance;
-		AbstractNode<T> newChild = (AbstractNode<T>) inputNewChild;
-
-		final class ChildWithDistance {
-			private final AbstractNode<T> child;
-			private final double distance;
-
-			private ChildWithDistance(final AbstractNode<T> child, final double distance) {
-				this.child = child;
-				this.distance = distance;
-			}
-
-			public AbstractNode<T> getChild() {
-				return this.child;
-			}
-
-			public double getDistance() {
-				return this.distance;
-			}
-		}
+		AbstractNode<T> newChildNode = (AbstractNode<T>) inputNewChildNode;
 
 		final Deque<ChildWithDistance> newChildren = new ArrayDeque<>();
-		newChildren.addFirst(new ChildWithDistance(newChild, distance));
+		newChildren.addFirst(new ChildWithDistance(newChildNode, distance));
 
 		while (!newChildren.isEmpty()) {
 			final ChildWithDistance cwd = newChildren.removeFirst();
 
-			newChild = cwd.child;
+			newChildNode = cwd.child;
 			distance = cwd.distance;
-			if (this.thisNode.children.containsKey(newChild.getData())) {
-				final AbstractNode<T> existingChild = (AbstractNode<T>) this.thisNode.children.get(newChild.getData());
-				assert existingChild.getData().equals(newChild.getData());
+			if (this.thisNode.getChildren().containsKey(newChildNode.getData())) {
+				final AbstractNode<T> existingChild = (AbstractNode<T>) this.thisNode.getChildren().get(newChildNode.getData());
+				assert existingChild.getData().equals(newChildNode.getData());
 
 				// Transfer the _children_ of the newChild to the existingChild
-				for (final IndexItem<T> grandchild : newChild.children.values()) {
+				for (final IndexItem<T> grandchild : newChildNode.getChildren().values()) {
 					existingChild.addChild(grandchild, grandchild.getDistanceToParent());
 				}
-				newChild.children.clear();
+				newChildNode.getChildren().clear();
 
-				try {
-					existingChild.checkMaxCapacity();
-				} catch (final SplitNodeReplacementException e) {
-					final IndexItem<T> indexItem = this.thisNode.children.remove(existingChild.getData());
+				if (existingChild.isMaxCapacityExceeded()) {
+					Pair<AbstractNode<T>> newNodes = existingChild.splitNodes();
+					
+					final IndexItem<T> indexItem = this.thisNode.getChildren().remove(existingChild.getData());
 					assert indexItem != null;
 
-					for (final Object newNode2 : e.getNewNodes()) {
-						@SuppressWarnings("unchecked")
-						final AbstractNode<T> newNode = (AbstractNode<T>) newNode2;
-						final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(),
-								newNode.getData());
-						newChildren.addFirst(new ChildWithDistance(newNode, newDistance));
-					}
+					computeDistances(newNodes.getFirst(), newChildren);
+					computeDistances(newNodes.getSecond(), newChildren);
 				}
 			} else {
-				this.thisNode.children.put(newChild.getData(), newChild);
-				this.thisNode.updateMetrics(newChild, distance);
+				this.thisNode.getChildren().put(newChildNode.getData(), newChildNode);
+				this.thisNode.updateMetrics(newChildNode, distance);
 			}
 		}
+	}
+	
+	private void computeDistances(AbstractNode<T> node, Deque<ChildWithDistance> newChildren) {
+		final double newDistance = this.thisNode.getMTree().getDistanceFunction().calculate(this.thisNode.getData(),
+					node.getData());
+		newChildren.addFirst(new ChildWithDistance(node, newDistance));
 	}
 
 	@Override
@@ -149,31 +139,26 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 	}
 
 	@Override
-	public void doRemoveData(final T data, final double distance) throws DataNotFoundException,
-			NodeUnderCapacityException, InternalErrorException {
-		for (final IndexItem<T> childItem : this.thisNode.children.values()) {
+	public boolean doRemoveData(final T data, final double distance) throws InternalErrorException {
+		for (final IndexItem<T> childItem : this.thisNode.getChildren().values()) {
 			final AbstractNode<T> child = (AbstractNode<T>) childItem;
 			if (Math.abs(distance - child.getDistanceToParent()) <= child.radius) {
 				final double distanceToChild = this.thisNode.getMTree().getDistanceFunction().calculate(data, child.getData());
 				if (distanceToChild <= child.radius) {
-					try {
-						child.removeData(data, distanceToChild);
-						this.thisNode.updateRadius(child);
-						return;
-					} catch (final DataNotFoundException e) {
-						// If DataNotFound was thrown, then the data was not found in the child
-					} catch (final NodeUnderCapacityException e) {
-						final AbstractNode<T> expandedChild = this.balanceChildren(child);
-						this.thisNode.updateRadius(expandedChild);
-						return;
-					} catch (final RootNodeReplacementException e) {
-						throw new InternalErrorException("Should never happen!");
+					boolean dataRemoved = child.removeData(data, distanceToChild);
+					if (dataRemoved) {
+						if (child.isNodeUnderCapacity()) {
+							final AbstractNode<T> expandedChild = this.balanceChildren(child);
+							this.thisNode.updateRadius(expandedChild);						
+						} else
+							this.thisNode.updateRadius(child);
+						return true;
 					}
 				}
 			}
 		}
 
-		throw new DataNotFoundException();
+		return false;
 	}
 
 	private AbstractNode<T> balanceChildren(final AbstractNode<T> theChild) throws InternalErrorException {
@@ -185,14 +170,14 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 		AbstractNode<T> nearestMergeCandidate = null;
 		double distanceNearestMergeCandidate = Double.POSITIVE_INFINITY;
 
-		for (final IndexItem<T> child : this.thisNode.children.values()) {
+		for (final IndexItem<T> child : this.thisNode.getChildren().values()) {
 			final AbstractNode<T> anotherChild = (AbstractNode<T>) child;
 			if (anotherChild == theChild) {
 				continue;
 			}
 
 			final double distance = this.thisNode.getMTree().getDistanceFunction().calculate(theChild.getData(), anotherChild.getData());
-			if (anotherChild.children.size() > anotherChild.getMinCapacity()) {
+			if (anotherChild.getChildren().size() > anotherChild.getMinCapacity()) {
 				if (distance < distanceNearestDonor) {
 					distanceNearestDonor = distance;
 					nearestDonor = anotherChild;
@@ -207,13 +192,13 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 
 		if (nearestDonor == null) {
 			// Merge
-			for (final IndexItem<T> grandchild : theChild.children.values()) {
+			for (final IndexItem<T> grandchild : theChild.getChildren().values()) {
 				final double distance = this.thisNode.getMTree().getDistanceFunction().calculate(grandchild.getData(),
 						nearestMergeCandidate.getData());
 				nearestMergeCandidate.addChild(grandchild, distance);
 			}
 
-			final IndexItem<T> removed = this.thisNode.children.remove(theChild.getData());
+			final IndexItem<T> removed = this.thisNode.getChildren().remove(theChild.getData());
 			assert removed != null;
 			return nearestMergeCandidate;
 		} else {
@@ -221,7 +206,7 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 			// Look for the nearest grandchild
 			IndexItem<T> nearestGrandchild = null;
 			double nearestGrandchildDistance = Double.POSITIVE_INFINITY;
-			for (final IndexItem<T> grandchild : nearestDonor.children.values()) {
+			for (final IndexItem<T> grandchild : nearestDonor.getChildren().values()) {
 				final double distance = this.thisNode.getMTree().getDistanceFunction().calculate(grandchild.getData(), theChild.getData());
 				if (distance < nearestGrandchildDistance) {
 					nearestGrandchildDistance = distance;
@@ -229,7 +214,7 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 				}
 			}
 
-			final IndexItem<T> indexItem = nearestDonor.children.remove(nearestGrandchild.getData());
+			final IndexItem<T> indexItem = nearestDonor.getChildren().remove(nearestGrandchild.getData());
 			assert indexItem != null;
 			theChild.addChild(nearestGrandchild, nearestGrandchildDistance);
 			return theChild;
@@ -239,5 +224,15 @@ public class NonLeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafne
 	@Override
 	public void checkChildClass(final IndexItem<T> child) {
 		assert (child instanceof InternalNode) || (child instanceof LeafNode);
+	}
+	
+	final class ChildWithDistance {
+		private final AbstractNode<T> child;
+		private final double distance;
+
+		private ChildWithDistance(final AbstractNode<T> child, final double distance) {
+			this.child = child;
+			this.distance = distance;
+		}
 	}
 }

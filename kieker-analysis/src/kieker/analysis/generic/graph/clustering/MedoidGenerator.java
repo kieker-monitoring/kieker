@@ -49,6 +49,7 @@ public class MedoidGenerator<N extends INode, E extends IEdge> extends AbstractT
 
 		for (final Set<MutableNetwork<N, E>> clusterSet : clustering.getClusters()) {
 
+			@SuppressWarnings("unchecked")
 			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
 			// The trimed algorithm needs at least one element.
 			if (cluster.length == 0) {

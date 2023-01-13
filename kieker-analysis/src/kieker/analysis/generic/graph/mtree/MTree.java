@@ -16,14 +16,14 @@
 package kieker.analysis.generic.graph.mtree;
 
 import kieker.analysis.exception.InternalErrorException;
-import kieker.analysis.generic.graph.mtree.exceptions.DataNotFoundException;
-import kieker.analysis.generic.graph.mtree.exceptions.NodeUnderCapacityException;
-import kieker.analysis.generic.graph.mtree.exceptions.RootNodeReplacementException;
-import kieker.analysis.generic.graph.mtree.exceptions.SplitNodeReplacementException;
 import kieker.analysis.generic.graph.mtree.nodes.AbstractNode;
+import kieker.analysis.generic.graph.mtree.nodes.IndexItem;
+import kieker.analysis.generic.graph.mtree.nodes.InternalNode;
+import kieker.analysis.generic.graph.mtree.nodes.LeafNode;
 import kieker.analysis.generic.graph.mtree.nodes.RootLeafNode;
 import kieker.analysis.generic.graph.mtree.nodes.RootNode;
 import kieker.analysis.generic.graph.mtree.query.Query;
+import kieker.analysis.generic.graph.mtree.utils.Pair;
 
 /**
  * The main class that implements the M-Tree.
@@ -33,7 +33,8 @@ import kieker.analysis.generic.graph.mtree.query.Query;
  *            this type are stored in HashMaps and HashSets, so their
  *            {@code hashCode()} and {@code equals()} methods must be consistent.
  *
- * @author Eduardo R. D'Avila
+ * @author Eduardo R. D'Avila -- initial contribution
+ * @author Reiner Jung
  * @since 2.0.0
  */
 public class MTree<T> {
@@ -44,11 +45,11 @@ public class MTree<T> {
 	 */
 	public static final int DEFAULT_MIN_NODE_CAPACITY = 50;
 
-	protected int minNodeCapacity;
-	protected int maxNodeCapacity;
-	protected IDistanceFunction<? super T> distanceFunction;
-	protected ISplitFunction<T> splitFunction;
-	protected AbstractNode<T> root;
+	private int minNodeCapacity;
+	private int maxNodeCapacity;
+	private IDistanceFunction<? super T> distanceFunction;
+	private ISplitFunction<T> splitFunction;
+	private AbstractNode<T> root;
 
 	/**
 	 * Constructs an M-Tree with the specified distance function.
@@ -118,6 +119,7 @@ public class MTree<T> {
 		this.minNodeCapacity = minNodeCapacity;
 		this.maxNodeCapacity = maxNodeCapacity;
 		this.distanceFunction = distanceFunction;
+		
 		this.root = null;
 	}
 
@@ -136,28 +138,19 @@ public class MTree<T> {
 	public void add(final T data) throws InternalErrorException {
 		if (this.root == null) {
 			this.root = new RootLeafNode<T>(this, data);
-			try {
-				this.root.addData(data, 0);
-			} catch (final SplitNodeReplacementException e) {
-				throw new InternalErrorException("Should never happen!", e);
-			}
+			this.root.addData(data, 0);
+			if (this.root.isMaxCapacityExceeded())
+				throw new InternalErrorException("Node capacity exceeded when adding initial root node.");
 		} else {
 			double distance = this.distanceFunction.calculate(data, this.root.getData());
-			try {
-				this.root.addData(data, distance);
-			} catch (final SplitNodeReplacementException e) {
-				final AbstractNode<T> newRoot = new RootNode<T>(this, data);
-				this.root = newRoot;
-				for (final Object element : e.getNewNodes()) {
-					@SuppressWarnings("unchecked")
-					final AbstractNode<T> newNode = (AbstractNode<T>) element;
-					distance = this.distanceFunction.calculate(this.root.getData(), newNode.getData());
-					this.root.addChild(newNode, distance);
-				}
+			this.root.addData(data, distance);
+			if (this.root.isMaxCapacityExceeded()) {
+				Pair<AbstractNode<T>> newNodes = this.root.splitNodes();
+				createNewRootAfterSplit(newNodes, data);
 			}
 		}
 	}
-
+	
 	/**
 	 * Removes a data object from the M-Tree.
 	 *
@@ -173,20 +166,21 @@ public class MTree<T> {
 		}
 
 		final double distanceToRoot = this.distanceFunction.calculate(data, this.root.getData());
-		try {
-			this.root.removeData(data, distanceToRoot);
-		} catch (final RootNodeReplacementException e) {
-			@SuppressWarnings("unchecked")
-			final AbstractNode<T> newRoot = (AbstractNode<T>) e.getNewRoot();
-			this.root = newRoot;
-		} catch (final DataNotFoundException e) {
+		
+		if (this.root.removeData(data, distanceToRoot)) {
+			if (this.root.isNodeUnderCapacity()) {
+				if (this.root.getChildren().values().size() > 0)
+					this.root = this.createNewRootAfterRemove(this.root);
+				else
+					this.root = null;
+			}
+			return true;
+		} else {
 			return false;
-		} catch (final NodeUnderCapacityException e) {
-			throw new InternalErrorException("Should have never happened", e);
 		}
-		return true;
 	}
-
+	
+	
 	/**
 	 * Performs a nearest-neighbors query on the M-Tree, constrained by distance.
 	 *
@@ -242,13 +236,7 @@ public class MTree<T> {
 	public Query<T> getNearest(final T queryData) {
 		return new Query<T>(this, queryData, Double.POSITIVE_INFINITY, Integer.MAX_VALUE);
 	}
-
-	protected void check() {
-		if (this.root != null) {
-			this.root.check();
-		}
-	}
-
+	
 	public int getMaxNodeCapacity() {
 		return this.maxNodeCapacity;
 	}
@@ -267,6 +255,45 @@ public class MTree<T> {
 
 	public AbstractNode<T> getRoot() {
 		return this.root;
+	}
+	
+
+	protected void check() {
+		if (this.root != null) {
+			this.root.check();
+		}
+	}
+
+	private AbstractNode<T> createNewRootAfterRemove(AbstractNode<T> oldRoot) throws InternalErrorException {
+		// Promote the only child to root
+		final AbstractNode<T> theChild = (AbstractNode<T>) oldRoot.getChildren().values().iterator().next();
+		final AbstractNode<T> newRoot;
+		if (theChild instanceof InternalNode<?>) {
+			newRoot = new RootNode<T>(this, theChild.getData());
+		} else {
+			assert theChild instanceof LeafNode<?>;
+			newRoot = new RootLeafNode<T>(this, theChild.getData());
+		}
+
+		for (final IndexItem<T> grandchild : theChild.getChildren().values()) {
+			final double newDistance = this.distanceFunction.calculate(newRoot.getData(), grandchild.getData());
+			newRoot.addChild(grandchild, newDistance);
+		}
+		theChild.getChildren().clear();
+		
+		return newRoot;
+	}
+	
+	private void createNewRootAfterSplit(Pair<AbstractNode<T>> nodes, T data) throws InternalErrorException {
+		this.root = new RootNode<T>(this, data);
+		computeDistances(nodes.getFirst());
+		computeDistances(nodes.getSecond());
+	}
+	
+	
+	private void computeDistances(AbstractNode<T> node) throws InternalErrorException {
+		double distance = this.distanceFunction.calculate(this.root.getData(), node.getData());
+		this.root.addChild(node, distance);
 	}
 
 }

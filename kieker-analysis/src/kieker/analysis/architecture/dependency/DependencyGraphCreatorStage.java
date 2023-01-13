@@ -17,8 +17,9 @@
 package kieker.analysis.architecture.dependency;
 
 import kieker.analysis.architecture.repository.ModelRepository;
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
-
+import kieker.analysis.generic.graph.INode;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
@@ -29,7 +30,7 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @since 1.14
  */
-public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<ModelRepository, IGraph> {
+public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfiguration> extends AbstractTransformation<ModelRepository, IGraph<INode, IEdge>> {
 
 	private final IDependencyGraphBuilder graphBuilder;
 
@@ -39,7 +40,7 @@ public class DependencyGraphCreatorStage<T extends IDependencyGraphBuilderConfig
 
 	@Override
 	protected void execute(final ModelRepository repository) {
-		final IGraph graph = this.graphBuilder.build(repository);
+		final IGraph<INode, IEdge> graph = this.graphBuilder.build(repository);
 		this.outputPort.send(graph);
 	}
 

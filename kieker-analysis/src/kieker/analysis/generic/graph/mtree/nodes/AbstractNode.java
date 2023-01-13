@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.generic.graph.mtree.nodes;
 
 import java.util.HashMap;
@@ -11,14 +26,15 @@ import kieker.analysis.generic.graph.mtree.ILeafness;
 import kieker.analysis.generic.graph.mtree.IRootness;
 import kieker.analysis.generic.graph.mtree.ISplitFunction.SplitResult;
 import kieker.analysis.generic.graph.mtree.MTree;
-import kieker.analysis.generic.graph.mtree.exceptions.DataNotFoundException;
-import kieker.analysis.generic.graph.mtree.exceptions.NodeUnderCapacityException;
-import kieker.analysis.generic.graph.mtree.exceptions.RootNodeReplacementException;
-import kieker.analysis.generic.graph.mtree.exceptions.SplitNodeReplacementException;
+import kieker.analysis.generic.graph.mtree.utils.Pair;
 
+/**
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
 public abstract class AbstractNode<T> extends IndexItem<T> {
 
-	protected Map<T, IndexItem<T>> children = new HashMap<>();
+	private Map<T, IndexItem<T>> children = new HashMap<>();
 	protected IRootness rootness;
 	protected ILeafness<T> leafness;
 	private final MTree<T> mtree;
@@ -40,16 +56,15 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 		return this.children;
 	}
 
-	public final void addData(final T data, final double distance) throws SplitNodeReplacementException, InternalErrorException {
+	public final void addData(final T data, final double distance) throws InternalErrorException {
 		this.doAddData(data, distance);
-		this.checkMaxCapacity();
 	}
 
 	@Override
 	public int check() {
 		super.check();
 		this.checkMinCapacity();
-		this.checkMaxCapacity2();
+		this.checkMaxCapacity();
 
 		int childHeight = -1;
 		for (final Map.Entry<T, IndexItem<T>> e : this.children.entrySet()) {
@@ -75,40 +90,39 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 		this.leafness.doAddData(data, distance);
 	}
 
-	protected void doRemoveData(final T data, final double distance) throws DataNotFoundException, NodeUnderCapacityException, InternalErrorException {
-		this.leafness.doRemoveData(data, distance);
+	protected boolean doRemoveData(final T data, final double distance) throws InternalErrorException {
+		return this.leafness.doRemoveData(data, distance);
 	}
 
-	final void checkMaxCapacity() throws SplitNodeReplacementException, InternalErrorException {
-		if (this.children.size() > this.mtree.getMaxNodeCapacity()) {
-			final IDistanceFunction<? super T> cachedDistanceFunction = DistanceFunctionFactory.cached(this.mtree.getDistanceFunction());
-			final SplitResult<T> splitResult = this.mtree.getSplitFunction().process(this.children.keySet(), cachedDistanceFunction);
+	public final boolean isMaxCapacityExceeded() throws InternalErrorException {
+		return (this.children.size() > this.mtree.getMaxNodeCapacity());
+	}
+	
+	public final Pair<AbstractNode<T>> splitNodes() throws InternalErrorException {
+		final IDistanceFunction<? super T> cachedDistanceFunction = DistanceFunctionFactory.cached(this.mtree.getDistanceFunction());
+		final SplitResult<T> splitResult = this.mtree.getSplitFunction().process(this.children.keySet(), cachedDistanceFunction);
 
-			AbstractNode<T> newNode0 = null;
-			AbstractNode<T> newNode1 = null;
-			for (int i = 0; i < 2; ++i) {
-				final T promotedData = splitResult.getPromoted().get(i);
-				final Set<T> partition = splitResult.getPartitions().get(i);
+		AbstractNode<T> newNode0 = createNewNode(splitResult, cachedDistanceFunction, 0);
+		AbstractNode<T> newNode1 = createNewNode(splitResult, cachedDistanceFunction, 1);
+		
+		assert this.children.isEmpty();
 
-				final AbstractNode<T> newNode = this.newSplitNodeReplacement(promotedData);
-				for (final T data : partition) {
-					final IndexItem<T> child = this.children.get(data);
-					this.children.remove(data);
-					final double distance = cachedDistanceFunction.calculate(promotedData, data);
-					newNode.addChild(child, distance);
-				}
+		return new Pair<>(newNode0, newNode1);
+	}
+	
+	private AbstractNode<T> createNewNode(SplitResult<T> splitResult, IDistanceFunction<? super T> distanceFunction, int resultIndex) throws InternalErrorException {
+		final T promotedData = splitResult.getPromoted().get(resultIndex);
+		final Set<T> partition = splitResult.getPartitions().get(resultIndex);
 
-				if (i == 0) {
-					newNode0 = newNode;
-				} else {
-					newNode1 = newNode;
-				}
-			}
-			assert this.children.isEmpty();
-
-			throw new SplitNodeReplacementException(newNode0, newNode1);
+		final AbstractNode<T> newNode = this.newSplitNodeReplacement(promotedData);
+		for (final T data : partition) {
+			final IndexItem<T> child = this.children.get(data);
+			this.children.remove(data);
+			final double distance = distanceFunction.calculate(promotedData, data);
+			newNode.addChild(child, distance);
 		}
-
+		
+		return newNode;
 	}
 
 	protected AbstractNode<T> newSplitNodeReplacement(final T data) {
@@ -119,12 +133,13 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 		this.leafness.addChild(child, distance);
 	}
 
-	public void removeData(final T data, final double distance)
-			throws RootNodeReplacementException, NodeUnderCapacityException, DataNotFoundException, InternalErrorException {
-		this.doRemoveData(data, distance);
-		if (this.children.size() < this.getMinCapacity()) {
-			throw new NodeUnderCapacityException();
-		}
+	public boolean removeData(final T data, final double distance)
+			throws InternalErrorException {
+		return this.doRemoveData(data, distance);
+	}
+	
+	public boolean isNodeUnderCapacity() throws InternalErrorException {
+		return this.children.size() < this.getMinCapacity();
 	}
 
 	protected int getMinCapacity() throws InternalErrorException {
@@ -144,7 +159,7 @@ public abstract class AbstractNode<T> extends IndexItem<T> {
 		this.rootness.checkMinCapacity();
 	}
 
-	private void checkMaxCapacity2() {
+	private void checkMaxCapacity() {
 		assert this.children.size() <= this.mtree.getMaxNodeCapacity();
 	}
 
