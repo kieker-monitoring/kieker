@@ -25,10 +25,12 @@ import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.BasicCostFunction;
+import kieker.analysis.generic.graph.clustering.GraphEditDistance;
+import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 import kieker.analysis.generic.graph.clustering.OpticsData;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
 import kieker.analysis.generic.graph.impl.EdgeImpl;
 import kieker.analysis.generic.graph.impl.NodeImpl;
+import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 import kieker.analysis.generic.graph.mtree.MTree;
 
 /**
@@ -117,13 +119,14 @@ public final class TestHelper {
 		return edge;
 	}
 
-	public static MTree<OpticsData<INode, IEdge>> generateMTree(final List<OpticsData<INode, IEdge>> models) throws InternalErrorException {
+	public static MTree<OpticsData<MutableNetwork<INode, IEdge>>> generateMTree(final List<OpticsData<MutableNetwork<INode, IEdge>>> models) throws InternalErrorException {
 
 		// final GraphEditDistance ged = new GraphEditDistance();
 		final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(1, 1);
-		final MTree<OpticsData<INode, IEdge>> mtree = new MTree<>(20, 40, new OPTICSDataGED<>(costFunction), null);
+		IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(costFunction);
+		final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mtree = new MTree<>(20, 40, new OPTICSDataGED<MutableNetwork<INode,IEdge>>(distanceFunction), null);
 
-		for (final OpticsData<INode, IEdge> model : models) {
+		for (final OpticsData<MutableNetwork<INode, IEdge>> model : models) {
 			mtree.add(model);
 		}
 

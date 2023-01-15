@@ -19,7 +19,6 @@ import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
@@ -41,21 +40,21 @@ import teetime.framework.OutputPort;
  */
 public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends CompositeStage {
 
-	private final InputPort<OpticsData<N, E>> inputPort;
+	private final InputPort<OpticsData<MutableNetwork<N, E>>> inputPort;
 	private final InputPort<Long> timerInputPort;
 	private final OutputPort<Clustering<MutableNetwork<N, E>>> outputPort;
 
 	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final Integer maxAmount,
-			final OPTICSDataGED<N, E> distanceFunction) {
+			final OPTICSDataGED<MutableNetwork<N, E>> distanceFunction) {
 
-		final DataCollectorStage<OpticsData<N, E>> dataCollectorStage;
+		final DataCollectorStage<OpticsData<MutableNetwork<N, E>>> dataCollectorStage;
 		if (maxAmount != null) {
 			dataCollectorStage = new DataCollectorStage<>(maxAmount);
 		} else {
 			dataCollectorStage = new DataCollectorStage<>();
 		}
 
-		final MTreeGeneratorStage<OpticsData<N, E>> mTreeGeneratorStage = new MTreeGeneratorStage<>(distanceFunction);
+		final MTreeGeneratorStage<OpticsData<MutableNetwork<N, E>>> mTreeGeneratorStage = new MTreeGeneratorStage<>(distanceFunction);
 
 		final OpticsStage<N, E> opticsStage = new OpticsStage<>(clusteringDistance, minPts);
 
@@ -74,7 +73,7 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 		this.outputPort = clustering.getOutputPort();
 	}
 
-	public InputPort<OpticsData<N, E>> getInputPort() {
+	public InputPort<OpticsData<MutableNetwork<N, E>>> getInputPort() {
 		return this.inputPort;
 	}
 

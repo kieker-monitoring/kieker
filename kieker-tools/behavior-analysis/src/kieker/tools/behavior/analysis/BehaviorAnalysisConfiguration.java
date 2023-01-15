@@ -30,8 +30,7 @@ import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
 import kieker.analysis.generic.graph.clustering.NaiveMediodGenerator;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
-import kieker.analysis.generic.source.time.TimeReaderStage;
+import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 import kieker.analysis.util.stage.trigger.TerminationStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.source.LogsReaderCompositeStage;
@@ -61,7 +60,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
 				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
 
-		final OPTICSDataGED<INode, UserBehaviorEdge> distanceFunction = new OPTICSDataGED<>(costFunction);
+		GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<INode, UserBehaviorEdge>(costFunction);
+		
+		final OPTICSDataGED<MutableNetwork<INode, UserBehaviorEdge>> distanceFunction = new OPTICSDataGED<>(gedDistanceFunction);
 
 		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation = new BehaviorModelToOpticsDataTransformation<>(
 				distanceFunction);
