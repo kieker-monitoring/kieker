@@ -130,7 +130,7 @@ function check_bin_archive {
 	done
 
 	
-	EXAMPLE_RUN_SCRIPT_SH="runAllexamples.sh"
+	EXAMPLE_RUN_SCRIPT_SH="runAllExamples.sh"
 	information "Running all examples"
 	if ! (cd examples && $EXAMPLE_RUN_SCRIPT_SH); then
 		error "Examples where not successful"

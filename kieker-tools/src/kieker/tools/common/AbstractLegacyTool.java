@@ -16,6 +16,7 @@
 package kieker.tools.common;
 
 import java.io.File;
+import java.lang.invoke.WrongMethodTypeException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	public static final int USAGE_EXIT_CODE = 4;
 
 	/** logger for all tools. */
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD logging must not be static, confuses user
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName()); // NOPMD logging must not be static, confuses user
 
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
@@ -104,7 +105,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 				this.logger.error("Configuration Error"); // NOPMD
 				return CONFIGURATION_ERROR;
 			}
-		} catch (final ParameterException e) {
+		} catch (final WrongMethodTypeException | ParameterException e) {
 			this.logger.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 			return PARAMETER_ERROR;

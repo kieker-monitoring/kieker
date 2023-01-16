@@ -16,31 +16,35 @@
 package kieker.analysis.architecture.recovery.events;
 
 /**
- * Represent one operation event.
+ * Abstract event type for operation and storage events.
  *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
-public class OperationEvent extends AbstractElementEvent {
+public abstract class AbstractElementEvent {
 
-	private final String operationSignature;
+	private final String hostname;
+	private final String componentSignature;
 
-	public OperationEvent(final String hostname, final String componentSignature, final String operationSignature) {
-		super(hostname, componentSignature);
-		this.operationSignature = operationSignature;
+	public AbstractElementEvent(final String hostname, final String componentSignature) {
+		this.hostname = hostname;
+		this.componentSignature = componentSignature;
 	}
 
-	public String getOperationSignature() {
-		return this.operationSignature;
+	public String getHostname() {
+		return this.hostname;
+	}
+
+	public String getComponentSignature() {
+		return this.componentSignature;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof OperationEvent) {
 			final OperationEvent operation = (OperationEvent) obj;
-			return this.compare(this.getComponentSignature(), operation.getComponentSignature())
-					&& this.compare(this.operationSignature, operation.getOperationSignature())
-					&& this.compare(this.getHostname(), operation.getHostname());
+			return this.compare(this.componentSignature, operation.getComponentSignature())
+					&& this.compare(this.hostname, operation.getHostname());
 		} else {
 			return super.equals(obj);
 		}
@@ -63,6 +67,6 @@ public class OperationEvent extends AbstractElementEvent {
 
 	@Override
 	public String toString() {
-		return String.format("%s>%s:%s", this.getHostname(), this.getComponentSignature(), this.operationSignature);
+		return String.format("%s>%s", this.hostname, this.componentSignature);
 	}
 }

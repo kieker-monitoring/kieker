@@ -87,7 +87,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 
 	@Override
 	protected void onTerminating() {
-		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		this.logger.debug("Terminating {}",  // NOPMD
+				TraceEventRecords2ExecutionAndMessageTraceStage.class.getCanonicalName());
 		super.onTerminating();
 	}
 

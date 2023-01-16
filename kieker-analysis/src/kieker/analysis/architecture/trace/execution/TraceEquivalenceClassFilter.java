@@ -35,7 +35,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.2
  */
-public class TraceEquivalenceClassFilter extends AbstractTraceProcessingStage<ExecutionTrace> {
+public class TraceEquivalenceClassFilter extends AbstractTraceProcessingStage<ExecutionTrace> { // NOPMD not a data class
 
 	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
