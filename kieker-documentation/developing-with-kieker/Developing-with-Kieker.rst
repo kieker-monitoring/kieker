@@ -41,6 +41,7 @@ source code.
 
     * :ref:`developing-with-kieker-java-architecture-monitoring-controller-api`
     * :ref:`developing-with-kieker-java-architecture-log-file-reader`
+    * :ref:`developing-with-kieker-java-kieker-graph-api`
 
   * Python
   * C, C++, Fortran and similar languages

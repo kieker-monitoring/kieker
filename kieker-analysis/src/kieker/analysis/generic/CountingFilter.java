@@ -30,17 +30,31 @@ import teetime.framework.OutputPort;
  *
  * @since 1.4
  */
-public final class CountingFilter extends AbstractConsumerStage<Object> {
+public final class CountingFilter<T> extends AbstractConsumerStage<T> {
 
-	private final OutputPort<Object> relayedEventsOutputPort = this.createOutputPort();
+	private final OutputPort<T> relayedEventsOutputPort = this.createOutputPort();
 	private final OutputPort<Long> countOutputPort = this.createOutputPort();
 
 	private final AtomicLong counter = new AtomicLong();
+	private final boolean echo;
+	private final int modulo;
+	private final String label;
 
 	/**
 	 * Creates a new instance of this class and sets the time stamp of initialization.
 	 */
-	public CountingFilter() {}
+	public CountingFilter(final boolean echo, final int modulo) {
+		this(echo, modulo, "");
+	}
+
+	/**
+	 * Creates a new instance of this class and sets the time stamp of initialization.
+	 */
+	public CountingFilter(final boolean echo, final int modulo, final String label) {
+		this.echo = echo;
+		this.modulo = modulo;
+		this.label = label;
+	}
 
 	/**
 	 * Returns the number of objects received until now.
@@ -58,11 +72,22 @@ public final class CountingFilter extends AbstractConsumerStage<Object> {
 	 *            The next event.
 	 */
 	@Override
-	protected void execute(final Object event) {
+	protected void execute(final T event) {
 		final Long count = this.counter.incrementAndGet();
+		if (this.echo && count % this.modulo == 0) {
+			this.logger.info("Processed {} events: {}", this.label, count);
+		}
 
 		this.relayedEventsOutputPort.send(event);
 		this.countOutputPort.send(count);
+	}
+
+	public OutputPort<Long> getCountOutputPort() {
+		return this.countOutputPort;
+	}
+
+	public OutputPort<T> getRelayedEventsOutputPort() {
+		return this.relayedEventsOutputPort;
 	}
 
 }

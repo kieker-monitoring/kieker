@@ -129,7 +129,15 @@ function check_bin_archive {
 	    cd ${ARCHDIR}
 	done
 
-	# TODO: test examples ...
+	
+	EXAMPLE_RUN_SCRIPT_SH="runAllexamples.sh"
+	information "Running all examples"
+	if ! (cd examples && $EXAMPLE_RUN_SCRIPT_SH); then
+		error "Examples where not successful"
+		exit 1
+	else
+		information "Ok"
+	fi
 }
 
 ##

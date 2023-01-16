@@ -33,17 +33,22 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotGraphAttribute;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DotTransformer extends DotElementTransformer {
+public class DotTransformer<N extends INode, E extends IEdge> extends DotElementTransformer<N, E> {
 
-	public DotTransformer(final IGraph graph, final Writer writer) {
+	public DotTransformer(final IGraph<N, E> graph, final Writer writer) {
 		this(graph, writer, new SimpleDotExportConfiguration());
 	}
 
-	public DotTransformer(final IGraph graph, final Writer writer, final DotExportMapper configuration) {
+	public DotTransformer(final IGraph<N, E> graph, final Writer writer, final DotExportMapper<N, E> configuration) {
 		super(graph, new DotGraphWriter(writer), configuration);
 	}
 
@@ -52,18 +57,18 @@ public class DotTransformer extends DotElementTransformer {
 		try {
 			this.dotGraphWriter.start(this.graph.getLabel());
 
-			for (final Entry<DotGraphAttribute, Function<MutableNetwork<INode, IEdge>, String>> attribute : this.configuration.getGraphAttributes()) {
+			for (final Entry<DotGraphAttribute, Function<MutableNetwork<N, E>, String>> attribute : this.configuration.getGraphAttributes()) {
 				this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(this.graph.getGraph()));
 			}
 
 			final Map<String, String> defaultNodeAttributes = new HashMap<>(); // NOPMD (no concurrent access intended)
-			for (final Entry<DotNodeAttribute, Function<MutableNetwork<INode, IEdge>, String>> attribute : this.configuration.getDefaultNodeAttributes()) {
+			for (final Entry<DotNodeAttribute, Function<MutableNetwork<N, E>, String>> attribute : this.configuration.getDefaultNodeAttributes()) {
 				defaultNodeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph.getGraph()));
 			}
 			this.dotGraphWriter.addDefaultNodeAttributes(defaultNodeAttributes);
 
 			final Map<String, String> defaultEdgeAttributes = new HashMap<>(); // NOPMD (no concurrent access intended)
-			for (final Entry<DotEdgeAttribute, Function<MutableNetwork<INode, IEdge>, String>> attribute : this.configuration.getDefaultEdgeAttributes()) {
+			for (final Entry<DotEdgeAttribute, Function<MutableNetwork<N, E>, String>> attribute : this.configuration.getDefaultEdgeAttributes()) {
 				defaultEdgeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph.getGraph()));
 			}
 			this.dotGraphWriter.addDefaultEdgeAttributes(defaultEdgeAttributes);
