@@ -22,7 +22,7 @@ import kieker.analysis.generic.graph.INode;
 
 public class NodeImpl extends ElementImpl implements INode {
 
-	private IGraph<INode, IEdge> childGraph = null;
+	private IGraph<INode, IEdge> childGraph = null; // NOPMD documents that childGraph is null
 
 	public NodeImpl(final String id) {
 		super(id);
@@ -35,7 +35,7 @@ public class NodeImpl extends ElementImpl implements INode {
 
 	@Override
 	public void removeChildGraph() {
-		this.childGraph = null;
+		this.childGraph = null; // NOPMD assigning null necessary
 	}
 
 	@Override
