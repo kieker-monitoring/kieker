@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-export BASE_DIR=$(cd "$(dirname "$0")"; pwd)
+BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
 # include common variables and functions
-source "$(dirname $0)/release-check-common.sh"
+source "${BIN_DIR}/release-check-common.sh"
 
 # 50=Java 1.6
 # 51=Java 1.7
@@ -131,7 +131,7 @@ function check_bin_archive {
 	    cd ${ARCHDIR}
 	done
 
-	EXAMPLE_RUN_SCRIPT_SH="${BASE_DIR}/run-all-examples.sh"
+	EXAMPLE_RUN_SCRIPT_SH="${BIN_DIR}/../../kieker-examples/runAllExamples.sh"
 	information "Running all examples"
 	if ! (cd examples && $EXAMPLE_RUN_SCRIPT_SH); then
 		error "Examples where not successful"
