@@ -184,6 +184,6 @@ else
   error "The content of both binary archives is NOT identical."
   exit 1
 fi
-rm -rf "${DIR}"
+#rm -rf "${DIR}"
 
 # end
