@@ -147,6 +147,7 @@ pipeline {
           }
           post {
             cleanup {
+	      sh "rm -rf build/tmp.*"
               deleteDir()
             }
           }
