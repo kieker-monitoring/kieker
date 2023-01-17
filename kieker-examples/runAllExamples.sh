@@ -8,4 +8,6 @@ for example in $(find . -name "executeExample.sh"); do
 	cd $(dirname "$example")
 	./executeExample.sh
 	cd $start
-done 
+done
+
+# end
