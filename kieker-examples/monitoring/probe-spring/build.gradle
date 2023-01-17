@@ -37,6 +37,8 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/commons-logging/commons-logging
 	runtimeOnly 'commons-logging:commons-logging:1.2'
+
+        implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
 
 distTar.enabled=false
