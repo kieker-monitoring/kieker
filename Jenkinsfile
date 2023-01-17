@@ -147,8 +147,7 @@ pipeline {
           }
           post {
             cleanup {
-              // seems not to work properly
-              // deleteDir()
+              deleteDir()
             }
           }
         }
