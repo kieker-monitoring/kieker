@@ -147,7 +147,6 @@ pipeline {
           }
           post {
             cleanup {
-	      sh "rm -rf build/tmp.*"
               // seems not to work properly
               // deleteDir()
             }
