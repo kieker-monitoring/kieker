@@ -16,18 +16,19 @@
 package kieker.examples.analysis.traceanalysis;
 
 import java.util.concurrent.TimeUnit;
-import kieker.analysis.stage.flow.EventRecordTraceReconstructionStage;
-import kieker.analysis.stage.general.ListCollectionFilter;
-import kieker.analysis.stage.DynamicEventDispatcher;
-import kieker.analysis.stage.IEventMatcher;
-import kieker.analysis.stage.ImplementsEventMatcher;
+
+import kieker.analysis.architecture.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
+import kieker.analysis.architecture.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.architecture.trace.flow.EventRecordTraceReconstructionStage;
+import kieker.analysis.architecture.trace.reconstruction.TraceReconstructionStage;
+import kieker.analysis.generic.DynamicEventDispatcher;
+import kieker.analysis.generic.IEventMatcher;
+import kieker.analysis.generic.ImplementsEventMatcher;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.tools.source.LogsReaderCompositeStage;
-import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
-import kieker.analysis.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
-import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
+import kieker.analysis.util.debug.ListCollectionFilter;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.AbstractTrace;
 import teetime.framework.Configuration;
@@ -94,7 +95,7 @@ public class TeeTimeConfiguration extends Configuration {
 		int maxNumberOfEntries = 10000;
 		// output
 		ListCollectionFilter<AbstractTrace> listCollectionStage = new ListCollectionFilter<AbstractTrace>(maxNumberOfEntries, 
-				kieker.analysis.stage.general.ListCollectionFilter.ListFullBehavior.DROP_OLDEST);	
+				ListCollectionFilter.ListFullBehavior.DROP_OLDEST);	
 		
 		PrintOutputStage printOutputStage = new PrintOutputStage();
 		
