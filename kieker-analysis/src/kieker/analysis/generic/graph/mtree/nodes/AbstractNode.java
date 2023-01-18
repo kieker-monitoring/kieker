@@ -29,14 +29,19 @@ import kieker.analysis.generic.graph.mtree.MTree;
 import kieker.analysis.generic.graph.mtree.utils.Pair;
 
 /**
+ * @param <T>
+ *            data element type
+ *
  * @author Eduardo R. D'Avila
+ *
  * @since 2.0.0
  */
 public abstract class AbstractNode<T> extends IndexItem<T> {
 
-	private final Map<T, IndexItem<T>> children = new HashMap<>();
 	protected IRootness rootness;
 	protected ILeafness<T> leafness;
+
+	private final Map<T, IndexItem<T>> children = new HashMap<>();
 	private final MTree<T> mtree;
 
 	protected AbstractNode(final MTree<T> mtree, final T data) {

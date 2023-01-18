@@ -19,4 +19,3 @@
  *
  */
 package kieker.analysis.architecture.trace.execution;
-

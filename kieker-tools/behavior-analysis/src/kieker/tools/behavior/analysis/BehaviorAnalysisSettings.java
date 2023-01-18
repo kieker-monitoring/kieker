@@ -40,7 +40,7 @@ import kieker.tools.settings.Setting;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public final class BehaviorAnalysisSettings {
+public final class BehaviorAnalysisSettings { // NOPMD configuration class needs many fields
 
 	@Parameter(names = { "-c", "--configuration" }, required = true, description = "Configuration file")
 	private File configurationFile;

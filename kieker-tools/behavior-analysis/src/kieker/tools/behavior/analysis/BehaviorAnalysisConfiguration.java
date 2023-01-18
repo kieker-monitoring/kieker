@@ -60,8 +60,8 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
 				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
 
-		GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<INode, UserBehaviorEdge>(costFunction);
-		
+		final GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<>(costFunction);
+
 		final OPTICSDataGED<MutableNetwork<INode, UserBehaviorEdge>> distanceFunction = new OPTICSDataGED<>(gedDistanceFunction);
 
 		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation = new BehaviorModelToOpticsDataTransformation<>(
@@ -71,9 +71,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		// TODO needed to use this during online runtime.
-		//final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
-		TerminationStage<Long> timerStage = new TerminationStage<>(0L);
-		
+		// final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
+		final TerminationStage<Long> timerStage = new TerminationStage<>(0L);
+
 		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
 
 		this.connectPorts(modelGeneration.getModelOutputPort(), behaviorModelToOpticsDataTransformation.getInputPort());

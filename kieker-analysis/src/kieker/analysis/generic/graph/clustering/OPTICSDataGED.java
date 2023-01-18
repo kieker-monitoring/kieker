@@ -24,7 +24,7 @@ public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
 	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
-	
+
 	@Override
 	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
 		return this.distanceFunction.calculate(model1.getData(), model2.getData());

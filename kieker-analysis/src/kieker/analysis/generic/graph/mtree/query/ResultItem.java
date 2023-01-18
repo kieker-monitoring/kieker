@@ -18,7 +18,8 @@ package kieker.analysis.generic.graph.mtree.query;
 /**
  * The type of the results for nearest-neighbor queries.
  *
- * @param <T> data type of the result item
+ * @param <T>
+ *            data type of the result item
  * 
  * @author Eduardo R. D'Avila
  * @since 2.0.0

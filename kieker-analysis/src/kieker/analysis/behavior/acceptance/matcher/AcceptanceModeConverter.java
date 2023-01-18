@@ -16,6 +16,7 @@
 package kieker.analysis.behavior.acceptance.matcher;
 
 import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.ParameterException;
 
 /**
  * Command line and parameter file converter for @{link {@link EAcceptanceMode} enumeration.
@@ -36,6 +37,6 @@ public class AcceptanceModeConverter implements IStringConverter<EAcceptanceMode
 				return value;
 			}
 		}
-		return null;
+		throw new ParameterException(String.format("Unsupported accecptance mode %s", arg0));
 	}
 }

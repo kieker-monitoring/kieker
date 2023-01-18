@@ -22,6 +22,7 @@ import java.util.function.Function;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
+
 import teetime.framework.AbstractConsumerStage;
 
 /**
@@ -33,31 +34,36 @@ import teetime.framework.AbstractConsumerStage;
  * In addition, this stage can be configured by a {@link DotExportMapper}, which specifies
  * how attributes (for graphs, vertices and edges) are mapped to the dot graph.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DotWriterStage<N extends INode, E extends IEdge> extends AbstractConsumerStage<IGraph<N,E>> {
+public class DotWriterStage<N extends INode, E extends IEdge> extends AbstractConsumerStage<IGraph<N, E>> {
 
-	protected final Function<IGraph<N,E>, Writer> writerMapper;
+	protected final Function<IGraph<N, E>, Writer> writerMapper;
 
-	protected final DotExportMapper<N,E> exportConfiguration;
+	protected final DotExportMapper<N, E> exportConfiguration;
 
-	public DotWriterStage(final Function<IGraph<N,E>, Writer> writerMapper) {
+	public DotWriterStage(final Function<IGraph<N, E>, Writer> writerMapper) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = new SimpleDotExportConfiguration<>();
 	}
 
-	public DotWriterStage(final Function<IGraph<N,E>, Writer> writerMapper, final DotExportMapper<N,E> exportConfiguration) {
+	public DotWriterStage(final Function<IGraph<N, E>, Writer> writerMapper, final DotExportMapper<N, E> exportConfiguration) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = exportConfiguration;
 	}
 
 	@Override
-	protected final void execute(final IGraph<N,E> graph) {
-		final DotTransformer<N,E> dotExporter = new DotTransformer<>(graph, this.writerMapper.apply(graph), this.exportConfiguration);
+	protected final void execute(final IGraph<N, E> graph) {
+		final DotTransformer<N, E> dotExporter = new DotTransformer<>(graph, this.writerMapper.apply(graph), this.exportConfiguration);
 		dotExporter.transform();
 	}
 

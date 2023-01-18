@@ -23,7 +23,11 @@ import kieker.analysis.generic.graph.mtree.MTree;
  * @since 2.0.0
  *
  */
-public class NodeFactory {
+public final class NodeFactory {
+
+	private NodeFactory() {
+		// factory class
+	}
 
 	public static <R> RootNode<R> createRootNode(final MTree<R> mtree, final R data) {
 		final RootNode<R> node = new RootNode<R>(mtree, data);

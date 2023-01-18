@@ -24,8 +24,9 @@ import kieker.analysis.generic.graph.mtree.nodes.Entry;
 import kieker.analysis.generic.graph.mtree.nodes.IndexItem;
 
 /**
- * @param<T> data type for result items
- * 
+ * @param <T>
+ *            data type for result items
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

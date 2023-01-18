@@ -33,7 +33,7 @@ import kieker.tools.settings.ConfigurationParser;
 
 /**
  * Main class for behavior analysis.
- * 
+ *
  * @author Lars Jürgensen
  * @author Reiner Jung
  * @since 2.0.0
@@ -60,7 +60,7 @@ public final class BehaviorAnalysisServiceMain
 	 *            command line arguments.
 	 */
 	public static void main(final String[] args) {
-		java.lang.System.exit(new BehaviorAnalysisServiceMain().run("Service Behavior Analysis",
+		System.exit(new BehaviorAnalysisServiceMain().run("Service Behavior Analysis",
 				"service-behavior-analysis", args, new BehaviorAnalysisSettings()));
 	}
 
@@ -76,11 +76,11 @@ public final class BehaviorAnalysisServiceMain
 
 		try {
 			parser.parse(configuration);
-		} catch (ParameterException e) {
+		} catch (final ParameterException e) {
 			this.logger.error(e.getLocalizedMessage());
 			return false;
 		}
-			
+
 		/** For SessionAcceptanceFilter. */
 		this.settings.setClassSignatureAcceptancePatterns(
 				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
@@ -104,7 +104,7 @@ public final class BehaviorAnalysisServiceMain
 			return false;
 		}
 
-		if (this.settings.getClusterOutputPath() == null && this.settings.getMedoidOutputPath() == null) {
+		if ((this.settings.getClusterOutputPath() == null) && (this.settings.getMedoidOutputPath() == null)) {
 			this.logger.error("You need to specify at least a cluster or a medoid output path.");
 			return false;
 		}
@@ -126,7 +126,7 @@ public final class BehaviorAnalysisServiceMain
 		try (final BufferedReader reader = Files.newBufferedReader(signatureAcceptanceMatcherFile.toPath())) {
 			reader.lines().forEach(line -> patterns.add(Pattern.compile(line.trim())));
 		} catch (final IOException e) {
-
+			this.logger.error(String.format("Error reading signature patterns from %s", signatureAcceptanceMatcherFile.toString()));
 		}
 		return patterns;
 	}
@@ -137,6 +137,8 @@ public final class BehaviorAnalysisServiceMain
 	}
 
 	@Override
-	protected void shutdownService() {}
+	protected void shutdownService() {
+		// no special shutdown operations necessary
+	}
 
 }

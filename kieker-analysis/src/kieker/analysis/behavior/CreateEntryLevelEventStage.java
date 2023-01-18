@@ -37,6 +37,7 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 
 	private final Map<Long, TraceMetadata> registeredTraces = new HashMap<>();
 	private final Map<Long, BeforeOperationEvent> registeredBeforeOperationEvents = new HashMap<>();
+	private final Map<Long, Integer> traceStackDepth = new HashMap<>();
 
 	private final boolean waitForCompleteTrace;
 
@@ -50,45 +51,72 @@ public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowReco
 			this.registerTraceMetadata((TraceMetadata) element);
 		} else {
 			if (this.waitForCompleteTrace) {
-				if (element instanceof BeforeOperationEvent) {
-					final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
-					if (beforeOperationEvent.getOrderIndex() == 0) {
-						if (this.containsTrace(beforeOperationEvent.getTraceId())) {
-							this.registerBeforeOperationEvent(beforeOperationEvent);
-						} else {
-							this.logger.error("Received BeforeOperationEvent for unknown trace {}", beforeOperationEvent.getTraceId());
-						}
-					}
-				} else if (element instanceof AfterOperationEvent) {
-					final AfterOperationEvent afterOperationEvent = (AfterOperationEvent) element;
-					if (afterOperationEvent.getOrderIndex() == 0) {
-						if (this.containsTrace(afterOperationEvent.getTraceId())) {
-							this.createEntryCallEvent(afterOperationEvent);
-							this.registeredBeforeOperationEvents.remove(afterOperationEvent.getTraceId());
-							this.registeredTraces.remove(afterOperationEvent.getTraceId());
-						} else {
-							this.logger.error("Received AfterOperationEvent for unknown trace {}", afterOperationEvent.getTraceId());
-						}
-					}
+				this.processCompleteTrace(element);
+			} else {
+				this.processBeforeOperationOnlyTrace(element);
+			}
+		}
+	}
+
+	private void processCompleteTrace(final IFlowRecord element) {
+		if (element instanceof BeforeOperationEvent) {
+			final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
+			final long traceId = beforeOperationEvent.getTraceId();
+			if (beforeOperationEvent.getOrderIndex() == 0) {
+				if (this.containsTrace(traceId)) {
+					final Integer value = this.traceStackDepth.get(traceId);
+					this.traceStackDepth.put(beforeOperationEvent.getTraceId(), value + 1);
+					this.registerBeforeOperationEvent(beforeOperationEvent);
+				} else {
+					this.logger.error("Received BeforeOperationEvent for unknown trace {}", traceId);
 				}
 			} else {
-				if (element instanceof BeforeOperationEvent) {
-					final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
-					if (beforeOperationEvent.getOrderIndex() == 0) {
-						if (this.containsTrace(beforeOperationEvent.getTraceId())) {
-							this.outputPort.send(this.createEntryCallEvent(beforeOperationEvent));
-							this.registeredTraces.remove(beforeOperationEvent.getTraceId());
-						} else {
-							this.logger.error("Received BeforeOperationEvent for unknown trace {}", beforeOperationEvent.getTraceId());
-						}
-					}
+				if (this.containsTrace(traceId)) {
+					final Integer value = this.traceStackDepth.get(traceId);
+					this.traceStackDepth.put(beforeOperationEvent.getTraceId(), value + 1);
+				} else {
+					this.logger.error("Received BeforeOperationEvent for unknown trace {}", traceId);
+				}
+			}
+		} else if (element instanceof AfterOperationEvent) {
+			final AfterOperationEvent afterOperationEvent = (AfterOperationEvent) element;
+			final long traceId = afterOperationEvent.getTraceId();
+			if (this.containsTrace(traceId)) {
+				if (this.checkDepth(afterOperationEvent)) {
+					this.createEntryCallEvent(afterOperationEvent);
+					this.registeredBeforeOperationEvents.remove(traceId);
+					this.registeredTraces.remove(traceId);
+					this.traceStackDepth.remove(traceId);
+				}
+			} else {
+				this.logger.error("Received AfterOperationEvent for unknown trace {}", traceId);
+			}
+		}
+	}
+
+	private void processBeforeOperationOnlyTrace(final IFlowRecord element) {
+		if (element instanceof BeforeOperationEvent) {
+			final BeforeOperationEvent beforeOperationEvent = (BeforeOperationEvent) element;
+			if (beforeOperationEvent.getOrderIndex() == 0) {
+				final long traceId = beforeOperationEvent.getTraceId();
+				if (this.containsTrace(traceId)) {
+					this.outputPort.send(this.createEntryCallEvent(beforeOperationEvent));
+					this.registeredTraces.remove(traceId);
+				} else {
+					this.logger.error("Received BeforeOperationEvent for unknown trace {}", traceId);
 				}
 			}
 		}
 	}
 
+	private boolean checkDepth(final AfterOperationEvent afterOperationEvent) {
+		final Integer value = this.traceStackDepth.get(afterOperationEvent.getTraceId());
+		return (((value * 2) - 1) == afterOperationEvent.getOrderIndex());
+	}
+
 	private void registerTraceMetadata(final TraceMetadata traceMetadata) {
 		this.registeredTraces.put(traceMetadata.getTraceId(), traceMetadata);
+		this.traceStackDepth.put(traceMetadata.getTraceId(), 0);
 	}
 
 	public boolean containsTrace(final Long traceId) {

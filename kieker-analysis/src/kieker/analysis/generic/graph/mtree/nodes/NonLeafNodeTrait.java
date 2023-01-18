@@ -23,6 +23,9 @@ import kieker.analysis.generic.graph.mtree.ILeafness;
 import kieker.analysis.generic.graph.mtree.utils.Pair;
 
 /**
+ * @param <T>
+ *            data element type
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

@@ -76,7 +76,7 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 			final MTree<OpticsData<MutableNetwork<N, E>>> mtree = this.mTreeInputQueue.poll();
 			final List<OpticsData<MutableNetwork<N, E>>> models = this.modelsInputQueue.poll();
 
-			final OPTICS<N,E> optics = new OPTICS<>(mtree, this.epsilon, this.minPTs, models);
+			final OPTICS<N, E> optics = new OPTICS<>(mtree, this.epsilon, this.minPTs, models);
 
 			final List<OpticsData<MutableNetwork<N, E>>> result = optics.calculate();
 

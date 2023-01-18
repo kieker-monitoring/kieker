@@ -36,7 +36,8 @@ import kieker.analysis.generic.graph.mtree.MTree;
  * resources allocated were only the necessary to identify the <i>n</i>
  * first results.
  * 
- * @param <T> data type of the values in the query result
+ * @param <T>
+ *            data type of the values in the query result
  *
  * @author Eduardo R. D'Avila
  * @since 2.0.0

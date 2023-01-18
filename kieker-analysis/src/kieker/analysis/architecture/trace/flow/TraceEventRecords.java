@@ -27,9 +27,9 @@ import kieker.common.record.flow.trace.TraceMetadata;
  * @since 1.5
  */
 public final class TraceEventRecords {
-	
+
 	private static final int PRIME = 31;
-	
+
 	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
 

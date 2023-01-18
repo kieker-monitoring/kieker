@@ -19,6 +19,9 @@ import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.mtree.IRootness;
 
 /**
+ * @param <T>
+ *            data element type
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

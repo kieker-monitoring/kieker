@@ -68,8 +68,8 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 
 		this.models = new ArrayList<>();
 
-		IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(new BasicCostFunction<>(1, 1));
-				
+		final IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(new BasicCostFunction<>(1, 1));
+
 		final OPTICSDataGED<MutableNetwork<INode, IEdge>> opticsGed = new OPTICSDataGED<>(distanceFunction);
 
 		for (final MutableNetwork<INode, IEdge> model : behaviorModels) {
@@ -100,7 +100,8 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		}
 	}
 
-	public static List<OpticsData<MutableNetwork<INode, IEdge>>> runClusterStage(final List<OpticsData<MutableNetwork<INode, IEdge>>> models, final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mTree) {
+	public static List<OpticsData<MutableNetwork<INode, IEdge>>> runClusterStage(final List<OpticsData<MutableNetwork<INode, IEdge>>> models,
+			final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mTree) {
 		// prepare input
 		final List<List<OpticsData<MutableNetwork<INode, IEdge>>>> modelsInputList = new ArrayList<>();
 		modelsInputList.add(models);

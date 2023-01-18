@@ -119,12 +119,13 @@ public final class TestHelper {
 		return edge;
 	}
 
-	public static MTree<OpticsData<MutableNetwork<INode, IEdge>>> generateMTree(final List<OpticsData<MutableNetwork<INode, IEdge>>> models) throws InternalErrorException {
+	public static MTree<OpticsData<MutableNetwork<INode, IEdge>>> generateMTree(final List<OpticsData<MutableNetwork<INode, IEdge>>> models)
+			throws InternalErrorException {
 
 		// final GraphEditDistance ged = new GraphEditDistance();
 		final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(1, 1);
-		IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(costFunction);
-		final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mtree = new MTree<>(20, 40, new OPTICSDataGED<MutableNetwork<INode,IEdge>>(distanceFunction), null);
+		final IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(costFunction);
+		final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mtree = new MTree<>(20, 40, new OPTICSDataGED<MutableNetwork<INode, IEdge>>(distanceFunction), null);
 
 		for (final OpticsData<MutableNetwork<INode, IEdge>> model : models) {
 			mtree.add(model);

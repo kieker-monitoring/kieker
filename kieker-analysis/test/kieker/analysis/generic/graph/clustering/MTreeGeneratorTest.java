@@ -31,6 +31,7 @@ import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
 import kieker.analysis.generic.graph.mtree.query.ResultItem;
+
 import teetime.framework.test.StageTester;
 
 /**

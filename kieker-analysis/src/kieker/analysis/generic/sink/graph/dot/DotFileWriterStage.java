@@ -28,19 +28,24 @@ import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mapping.SimpleFileNameMapper;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DotFileWriterStage<N extends INode, E extends IEdge> extends DotWriterStage<N,E> {
+public class DotFileWriterStage<N extends INode, E extends IEdge> extends DotWriterStage<N, E> {
 
 	private static final String DOT_EXTENSION = "dot";
 
-	public DotFileWriterStage(final Function<IGraph<N,E>, Path> fileNameMapper) {
+	public DotFileWriterStage(final Function<IGraph<N, E>, Path> fileNameMapper) {
 		this(fileNameMapper, new SimpleDotExportConfiguration<>());
 	}
 
-	public DotFileWriterStage(final Function<IGraph<N,E>, Path> fileNameMapper, final DotExportMapper<N,E> exportConfiguration) {
+	public DotFileWriterStage(final Function<IGraph<N, E>, Path> fileNameMapper, final DotExportMapper<N, E> exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
 				return Files.newBufferedWriter(fileName, StandardCharsets.UTF_8);
@@ -54,8 +59,8 @@ public class DotFileWriterStage<N extends INode, E extends IEdge> extends DotWri
 		this(outputDirectory, new SimpleDotExportConfiguration<>());
 	}
 
-	public DotFileWriterStage(final Path outputDirectory, final DotExportMapper<N,E> exportConfiguration) {
-		this(new SimpleFileNameMapper<>(outputDirectory, DOT_EXTENSION), exportConfiguration);
+	public DotFileWriterStage(final Path outputDirectory, final DotExportMapper<N, E> exportConfiguration) {
+		this(new SimpleFileNameMapper<>(outputDirectory, DotFileWriterStage.DOT_EXTENSION), exportConfiguration);
 	}
 
 }

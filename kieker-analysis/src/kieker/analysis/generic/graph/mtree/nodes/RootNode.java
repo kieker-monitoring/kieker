@@ -18,6 +18,9 @@ package kieker.analysis.generic.graph.mtree.nodes;
 import kieker.analysis.generic.graph.mtree.MTree;
 
 /**
+ * @param <T>
+ *            data element type
+ *
  * @author Eduardo R. D'AvilaR>
  * @since 2.0.0
  */

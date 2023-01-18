@@ -36,9 +36,10 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends IEdge> extends AbstractTransformation<IGraph<N, E>, OpticsData<MutableNetwork<N, E>>> {
+public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends IEdge>
+		extends AbstractTransformation<IGraph<N, E>, OpticsData<MutableNetwork<N, E>>> {
 
-	private final OPTICSDataGED<MutableNetwork<N,E>> opticsGed;
+	private final OPTICSDataGED<MutableNetwork<N, E>> opticsGed;
 
 	public BehaviorModelToOpticsDataTransformation(final OPTICSDataGED<MutableNetwork<N, E>> opticsGed) {
 		this.opticsGed = opticsGed;
@@ -46,7 +47,7 @@ public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends 
 
 	@Override
 	protected void execute(final IGraph<N, E> model) throws Exception {
-		OpticsData<MutableNetwork<N, E>> opticsData = new OpticsData<MutableNetwork<N,E>>(model.getGraph(), (OPTICSDataGED<MutableNetwork<N, E>>) this.opticsGed);
+		final OpticsData<MutableNetwork<N, E>> opticsData = new OpticsData<MutableNetwork<N, E>>(model.getGraph(), this.opticsGed);
 		this.outputPort.send(opticsData);
 		this.logger.debug("Converted BehaviorModel to OpticsData");
 	}
