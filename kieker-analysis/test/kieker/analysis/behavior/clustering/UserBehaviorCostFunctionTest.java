@@ -31,34 +31,21 @@ import kieker.analysis.generic.graph.impl.NodeImpl;
 public class UserBehaviorCostFunctionTest {
 
 	private static final double NODE_COST = 1.0;
-	private static final double EDGE_COST = 2.0;
-	private static final double EDGE_GROUP_COST = 3.0;
+	private static final double EDGE_COST = 1.5;
+	private static final double EVENT_GROUP_COST = 1.3;
 	private static final double PARAMETER_WEIGHT = 0.5;
-	
-	UserBehaviorCostFunction userBehaviorCostFunction;
-	BasicCostFunction<INode, IEdge> basicCostFunction;
-	
-	@Before
-	public void setUp() {
-		userBehaviorCostFunction = new UserBehaviorCostFunction(NODE_COST, EDGE_COST, EDGE_GROUP_COST, new IParameterWeighting() {
-			
-			@Override
-			public double getInsertCost(String[] parameterNames) {
-				return PARAMETER_WEIGHT;
-			}
-			
-			@Override
-			public double getDuplicateCost(String[] parameterNames) {
-				return 1;
-			}
-		});
-		basicCostFunction = new BasicCostFunction<>(NODE_COST, EDGE_COST);
+
+	private final BasicCostFunction<INode, UserBehaviorEdge> costFunction;
+
+	public UserBehaviorCostFunctionTest() {
+		this.costFunction = new UserBehaviorCostFunction(UserBehaviorCostFunctionTest.NODE_COST,
+				UserBehaviorCostFunctionTest.EDGE_COST, UserBehaviorCostFunctionTest.EVENT_GROUP_COST, new NaiveParameterWeighting());
 	}
 
 	@Test
-	public void testComputeEdgeInsertionCostUserBehaviorEdge() {	
+	public void testComputeEdgeInsertionCostUserBehaviorEdge() {
 		UserBehaviorEdge edge = new UserBehaviorEdge("simple");
-		assertEquals("Wrong edge cost", EDGE_COST, userBehaviorCostFunction.computeEdgeInsertionCost(edge), 0.0);
+		assertEquals("Wrong edge cost", EDGE_COST, costFunction.computeEdgeInsertionCost(edge), 0.0);
 	}
 
 	@Test
@@ -69,12 +56,12 @@ public class UserBehaviorCostFunctionTest {
 		UserBehaviorEdge edge2 = new UserBehaviorEdge("simple2");
 		EntryCallEvent event2 = new EntryCallEvent(0, 0, "op2", "class", "session1", "host", null, null, 0);
 		edge2.addEvent(event2);
-		
+
 		UserBehaviorEdge edge3 = new UserBehaviorEdge("simple3");
 		String[] params = { "a" };
 		String[] values = { "b" };
 		EntryCallEvent event3 = new EntryCallEvent(0, 0, "op2", "class", "session1", "host", params,  values , 0);
-		edge3.addEvent(event3);		
+		edge3.addEvent(event3);
 		assertEquals("Wrong annotation distance", EDGE_GROUP_COST*2+PARAMETER_WEIGHT*2, userBehaviorCostFunction.edgeAnnotationDistance(edge1, edge3), 0.0);
 	}
 
@@ -88,21 +75,46 @@ public class UserBehaviorCostFunctionTest {
 	public void testComputeEdgeInsertionCostE() {
 		IEdge edge = new EdgeImpl("id");
 		assertEquals("Wrong edge cost", EDGE_COST, basicCostFunction.computeEdgeInsertionCost(edge), 0.0);
+
+
+	@Test
+	public void testComputeNodeInsertionCost() {
+		final INode node = new NodeImpl("node");
+		assertEquals(UserBehaviorCostFunctionTest.NODE_COST, this.costFunction.computeNodeInsertionCost(node), 0.0);
+	}
+
+	@Test
+	public void testComputeEdgeInsertionCost() {
+		final UserBehaviorEdge edge = new UserBehaviorEdge("test");
+		assertEquals(UserBehaviorCostFunctionTest.EDGE_COST, this.costFunction.computeEdgeInsertionCost(edge), 0.0);
 	}
 
 	@Test
 	public void testNodeAnnotationDistance() {
-		NodeImpl node1 = new NodeImpl("id1");
-		NodeImpl node2 = new NodeImpl("id2");
-		assertEquals("Wrong node annotation distance", 0.0, basicCostFunction.nodeAnnotationDistance(node1, node2), 0.0);
+		final INode node1 = new NodeImpl("node1");
+		final INode node2 = new NodeImpl("node2");
+		assertEquals(0.0, this.costFunction.nodeAnnotationDistance(node1, node2), 0.0);
 	}
 
 	@Test
 	public void testEdgeAnnotationDistance() {
-		IEdge edge1 = new EdgeImpl("simple1");
-		IEdge edge2 = new EdgeImpl("simple2");
+		final UserBehaviorEdge edge1 = new UserBehaviorEdge("edge1");
+		final UserBehaviorEdge edge2 = new UserBehaviorEdge("edge2");
+		assertEquals(0.0, this.costFunction.edgeAnnotationDistance(edge1, edge2), 0.0);
+	}
 
-		assertEquals("Wrong annotation distance", 0.0, basicCostFunction.edgeAnnotationDistance(edge1, edge2), 0.0);
+	@Test
+	public void testEdgeAnnotationDistanceWithSameEdgeButDifferentEventsGroup() {
+		final UserBehaviorEdge edge1 = new UserBehaviorEdge("edge1");
+		final UserBehaviorEdge edge2 = new UserBehaviorEdge("edge1");
+
+		final EventGroup eventGroup1 = new EventGroup(new String[] { "p1", "p2" });
+		edge1.getEventGroups().add(eventGroup1);
+
+		final EventGroup eventGroup2 = new EventGroup(new String[] { "p1", "p3" });
+		edge2.getEventGroups().add(eventGroup2);
+
+		Assert.assertEquals(UserBehaviorCostFunctionTest.EVENT_GROUP_COST * 2, this.costFunction.edgeAnnotationDistance(edge1, edge2), 0.0);
 	}
 
 }

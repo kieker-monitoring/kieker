@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.behavior.model.UserSession;
 import kieker.common.record.session.ISessionEvent;
 import kieker.common.record.session.SessionEndEvent;
 import kieker.common.record.session.SessionStartEvent;

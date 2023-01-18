@@ -17,8 +17,8 @@ package kieker.analysis.behavior;
 
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.acceptance.matcher.SessionAcceptanceFilter;
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.behavior.model.UserSession;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorFilter;
 import kieker.common.record.session.ISessionEvent;
