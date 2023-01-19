@@ -27,9 +27,9 @@ import org.junit.Test;
 import com.google.common.graph.EndpointPair;
 import com.google.common.graph.MutableNetwork;
 
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
+import kieker.analysis.behavior.model.UserSession;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 

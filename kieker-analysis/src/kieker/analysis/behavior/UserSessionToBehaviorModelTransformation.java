@@ -21,9 +21,9 @@ import java.util.Optional;
 import com.google.common.graph.MutableNetwork;
 import com.google.common.graph.NetworkBuilder;
 
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
+import kieker.analysis.behavior.model.UserSession;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.impl.GraphImpl;

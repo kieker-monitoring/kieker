@@ -27,12 +27,12 @@ import java.util.Random;
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
-public final class Utils {
+public final class MTreeUtils {
 
 	/**
 	 * Don't let anyone instantiate this class.
 	 */
-	private Utils() {}
+	private MTreeUtils() {}
 
 	/**
 	 * Identifies the minimum and maximum elements from an iterable, according

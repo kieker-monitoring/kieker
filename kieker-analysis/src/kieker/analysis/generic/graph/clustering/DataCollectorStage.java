@@ -18,9 +18,6 @@ package kieker.analysis.generic.graph.clustering;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
@@ -36,8 +33,6 @@ import teetime.framework.OutputPort;
  * @since 2.0.0
  */
 public class DataCollectorStage<T> extends AbstractStage {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(DataCollectorStage.class);
 
 	private final InputPort<T> dataInputPort = this.createInputPort();
 	private final InputPort<Long> timeTriggerInputPort = this.createInputPort();
@@ -70,13 +65,13 @@ public class DataCollectorStage<T> extends AbstractStage {
 
 		// if new object received
 		if (newData != null) {
-			DataCollectorStage.LOGGER.debug("Received a behavior model!");
+			this.logger.debug("Received a behavior model!");
 			this.dataList.add(newData);
 
 			// if maximum amount of objects is reached
 			if (this.stopAfterAmount) {
 				if (this.dataList.size() >= this.maxAmount) {
-					DataCollectorStage.LOGGER.debug("Reached model amount maximum, sending models..");
+					this.logger.debug("Reached model amount maximum, sending models..");
 					this.opticsOutputPort.send(this.dataList);
 					this.mTreeOutputPort.send(this.dataList);
 					this.dataList = new ArrayList<>();
@@ -87,15 +82,16 @@ public class DataCollectorStage<T> extends AbstractStage {
 		// if time trigger event occured
 		final Long triggerTime = this.timeTriggerInputPort.receive();
 		if (triggerTime != null) {
-			DataCollectorStage.LOGGER.debug("Sending models...");
+			this.logger.debug("Sending models...");
 			this.opticsOutputPort.send(this.dataList);
 			this.mTreeOutputPort.send(this.dataList);
+			this.dataList = new ArrayList<>();
 		}
 	}
 
 	@Override
 	protected void onTerminating() {
-		DataCollectorStage.LOGGER.debug("Sending models...");
+		this.logger.debug("Sending models...");
 		this.opticsOutputPort.send(this.dataList);
 		this.mTreeOutputPort.send(this.dataList);
 		super.onTerminating();

@@ -65,7 +65,8 @@ class DotElementTransformer<N extends INode, E extends IEdge> extends AbstractTr
 	protected void transformVertex(final N vertex) {
 		try {
 			if (vertex.hasChildGraph()) {
-				final MutableNetwork<N, E> childGraph = vertex.getChildGraph().getGraph();
+				@SuppressWarnings("unchecked")
+				final MutableNetwork<N, E> childGraph = (MutableNetwork<N, E>) vertex.getChildGraph().getGraph();
 
 				this.dotGraphWriter.addClusterStart(vertex.getId());
 

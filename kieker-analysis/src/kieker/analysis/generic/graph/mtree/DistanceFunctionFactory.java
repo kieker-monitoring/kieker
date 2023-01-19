@@ -26,17 +26,17 @@ import java.util.Map;
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */
-public final class DistanceFunctions {
+public final class DistanceFunctionFactory {
 
 	/**
 	 * A {@linkplain IDistanceFunction distance function} object that calculates
 	 * the distance between two {@linkplain IEuclideanCoordinate euclidean
 	 * coordinates}.
 	 */
-	public static final IDistanceFunction<IEuclideanCoordinate> EUCLIDEAN = new IDistanceFunction<DistanceFunctions.IEuclideanCoordinate>() {
+	public static final IDistanceFunction<IEuclideanCoordinate> EUCLIDEAN = new IDistanceFunction<DistanceFunctionFactory.IEuclideanCoordinate>() {
 		@Override
 		public double calculate(final IEuclideanCoordinate coord1, final IEuclideanCoordinate coord2) {
-			return DistanceFunctions.euclidean(coord1, coord2);
+			return DistanceFunctionFactory.euclidean(coord1, coord2);
 		}
 	};
 
@@ -68,7 +68,7 @@ public final class DistanceFunctions {
 
 			final IntegerListEuclideanCoordinate coord1 = new IntegerListEuclideanCoordinate(data1);
 			final IntegerListEuclideanCoordinate coord2 = new IntegerListEuclideanCoordinate(data2);
-			return DistanceFunctions.euclidean(coord1, coord2);
+			return DistanceFunctionFactory.euclidean(coord1, coord2);
 		}
 	};
 
@@ -100,14 +100,14 @@ public final class DistanceFunctions {
 
 			final DoubleListEuclideanCoordinate coord1 = new DoubleListEuclideanCoordinate(data1);
 			final DoubleListEuclideanCoordinate coord2 = new DoubleListEuclideanCoordinate(data2);
-			return DistanceFunctions.euclidean(coord1, coord2);
+			return DistanceFunctionFactory.euclidean(coord1, coord2);
 		}
 	};
 
 	/**
 	 * Don't let anyone instantiate this class.
 	 */
-	private DistanceFunctions() {}
+	private DistanceFunctionFactory() {}
 
 	/**
 	 * Creates a cached version of a {@linkplain IDistanceFunction distance

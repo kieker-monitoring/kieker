@@ -17,52 +17,60 @@ package kieker.tools.behavior.analysis;
 
 public final class ConfigurationKeys {
 
-	private static final String PREFIX = "kieker.tools.behavior.";
+	public static final String PREFIX = "kieker.tools.behavior";
 
-	public static final String PARAMETER_WEIGHTING = PREFIX + "parameterWeighting";
+	private static final String FULL_PREFIX = PREFIX + ".";
+
+	public static final String PARAMETER_WEIGHTING = FULL_PREFIX + "parameterWeighting";
 
 	/**
 	 * Service Behavior Analysis.
 	 */
-	public static final String MAX_MODEL_AMOUNT = ConfigurationKeys.PREFIX + "maxModelAmount";
+	public static final String MAX_MODEL_AMOUNT = ConfigurationKeys.FULL_PREFIX + "maxModelAmount";
 
-	public static final String CLUSTER_OUTPUT_FILE = ConfigurationKeys.PREFIX + "clusterOutputFile";
+	public static final String CLUSTER_OUTPUT_FILE = ConfigurationKeys.FULL_PREFIX + "clusterOutputFile";
 
-	public static final String CLUSTER_OUTPUT_URL = ConfigurationKeys.PREFIX + "clusterOutputUrl";
+	public static final String CLUSTER_OUTPUT_URL = ConfigurationKeys.FULL_PREFIX + "clusterOutputUrl";
 
-	public static final String MEDOIDS_OUTPUT_FILE = ConfigurationKeys.PREFIX + "medoidsOutputPath";
+	public static final String MEDOIDS_OUTPUT_FILE = ConfigurationKeys.FULL_PREFIX + "medoidsOutputPath";
 
 	/**
 	 * Optics Clustering.
 	 */
 
-	public static final String EPSILON = ConfigurationKeys.PREFIX + "epsilon";
+	public static final String EPSILON = ConfigurationKeys.FULL_PREFIX + "epsilon";
 
-	public static final String MIN_PTS = ConfigurationKeys.PREFIX + "minPts";
+	public static final String MIN_PTS = ConfigurationKeys.FULL_PREFIX + "minPts";
 
 	/**
 	 * Graph Edit Distance.
 	 */
 
-	public static final String NODE_INSERTION_COST = ConfigurationKeys.PREFIX + "nodeInsertionCost";
+	public static final String NODE_INSERTION_COST = ConfigurationKeys.FULL_PREFIX + "nodeInsertionCost";
 
-	public static final String EDGE_INSERTION_COST = ConfigurationKeys.PREFIX + "edgeInsertionCost";
+	public static final String EDGE_INSERTION_COST = ConfigurationKeys.FULL_PREFIX + "edgeInsertionCost";
 
-	public static final String EVENT_GROUP_INSERTION_COST = ConfigurationKeys.PREFIX + "eventGroupInsertionCost";
+	public static final String EVENT_GROUP_INSERTION_COST = ConfigurationKeys.FULL_PREFIX + "eventGroupInsertionCost";
 
 	/**
 	 *
 	 */
 
-	public static final String TRACE_SIGNATURE_PROCESSOR = PREFIX + "traceSignatureProcessor";
+	public static final String TRACE_SIGNATURE_PROCESSOR = FULL_PREFIX + "traceSignatureProcessor";
 
-	public static final String CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE = PREFIX + "classSignatureAcceptancePatternFile";
+	public static final String CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE = FULL_PREFIX + "classSignatureAcceptancePatternFile";
 
-	public static final String OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE = PREFIX + "operationSignatureAcceptancePatternFile";
+	public static final String OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE = FULL_PREFIX + "operationSignatureAcceptancePatternFile";
 
-	public static final String SIGNATURE_ACCEPTANCE_MATCHER_MODE = PREFIX + "signatureAcceptancePatternMode";
+	public static final String SIGNATURE_ACCEPTANCE_MATCHER_MODE = FULL_PREFIX + "signatureAcceptancePatternMode";
 
-	public static final String USER_SESSION_TIMEOUT = PREFIX + "usesSessionTimeout";
+	public static final String USER_SESSION_TIMEOUT = FULL_PREFIX + "usesSessionTimeout";
+
+	public static final String VERBOSE = FULL_PREFIX + "verbose";
+
+	public static final String DATA_BUFFER_SIZE = FULL_PREFIX + "buffer";
+
+	public static final String LOG_DIRECTORIES = FULL_PREFIX + "directories";
 
 	private ConfigurationKeys() {}
 

@@ -30,8 +30,8 @@ import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
 import kieker.analysis.generic.graph.clustering.NaiveMediodGenerator;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
-import kieker.analysis.generic.source.time.TimeReaderStage;
+import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
+import kieker.analysis.util.stage.trigger.TerminationStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.source.LogsReaderCompositeStage;
 
@@ -50,7 +50,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 			throws ConfigurationException {
 
 		final UserBehaviorCostFunction costFunction = new UserBehaviorCostFunction(settings.getNodeInsertCost(), settings.getEdgeInsertCost(),
-				settings.getEventGroupInsertCost(), settings.getWeighting());
+				settings.getEventGroupInsertCost(), settings.getParameterWeighting());
 
 		final LogsReaderCompositeStage reader = new LogsReaderCompositeStage(settings.getDirectories(), settings.isVerbose(), settings.getDataBufferSize());
 
@@ -60,7 +60,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
 				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
 
-		final OPTICSDataGED<INode, UserBehaviorEdge> distanceFunction = new OPTICSDataGED<>(costFunction);
+		final GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<>(costFunction);
+
+		final OPTICSDataGED<MutableNetwork<INode, UserBehaviorEdge>> distanceFunction = new OPTICSDataGED<>(gedDistanceFunction);
 
 		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation = new BehaviorModelToOpticsDataTransformation<>(
 				distanceFunction);
@@ -68,8 +70,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 				settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
-		// Replace this for file based operation with an end of execution trigger.
-		final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
+		// TODO needed to use this during online runtime.
+		// final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
+		final TerminationStage<Long> timerStage = new TerminationStage<>(0L);
 
 		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
 

@@ -38,7 +38,6 @@ public class TrimmedAlgorithm<T> {
 
 	private final IDistanceFunction<T> distanceFunction;
 
-	
 	public TrimmedAlgorithm(final T[] models, final IDistanceFunction<T> distanceFunction) {
 		this.lowerBounds = new double[models.length];
 		this.models = models;

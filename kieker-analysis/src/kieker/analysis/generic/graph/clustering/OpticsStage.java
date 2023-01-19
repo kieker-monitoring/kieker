@@ -19,6 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
@@ -40,13 +42,13 @@ import teetime.framework.OutputPort;
  */
 public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage {
 
-	private final OutputPort<List<OpticsData<N, E>>> outputPort = this.createOutputPort();
+	private final OutputPort<List<OpticsData<MutableNetwork<N, E>>>> outputPort = this.createOutputPort();
 
-	private final InputPort<MTree<OpticsData<N, E>>> mTreeInputPort = this.createInputPort();
-	private final InputPort<List<OpticsData<N, E>>> modelsInputPort = this.createInputPort();
+	private final InputPort<MTree<OpticsData<MutableNetwork<N, E>>>> mTreeInputPort = this.createInputPort();
+	private final InputPort<List<OpticsData<MutableNetwork<N, E>>>> modelsInputPort = this.createInputPort();
 
-	private final Queue<MTree<OpticsData<N, E>>> mTreeInputQueue = new LinkedList<>();
-	private final Queue<List<OpticsData<N, E>>> modelsInputQueue = new LinkedList<>();
+	private final Queue<MTree<OpticsData<MutableNetwork<N, E>>>> mTreeInputQueue = new LinkedList<>();
+	private final Queue<List<OpticsData<MutableNetwork<N, E>>>> modelsInputQueue = new LinkedList<>();
 
 	private final double epsilon;
 	private final int minPTs;
@@ -58,8 +60,8 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 
 	@Override
 	protected void execute() throws Exception {
-		final MTree<OpticsData<N, E>> newMTree = this.mTreeInputPort.receive();
-		final List<OpticsData<N, E>> newModels = this.modelsInputPort.receive();
+		final MTree<OpticsData<MutableNetwork<N, E>>> newMTree = this.mTreeInputPort.receive();
+		final List<OpticsData<MutableNetwork<N, E>>> newModels = this.modelsInputPort.receive();
 
 		if (newMTree != null) {
 			this.mTreeInputQueue.add(newMTree);
@@ -71,12 +73,12 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 		// We need the list of all objects and the MTree with all objects for the algorithm
 		if (!this.mTreeInputQueue.isEmpty() && !this.modelsInputQueue.isEmpty()) {
 			this.logger.debug("received models and mtrees, begins to calculate optics result");
-			final MTree<OpticsData<N, E>> mtree = this.mTreeInputQueue.poll();
-			final List<OpticsData<N, E>> models = this.modelsInputQueue.poll();
+			final MTree<OpticsData<MutableNetwork<N, E>>> mtree = this.mTreeInputQueue.poll();
+			final List<OpticsData<MutableNetwork<N, E>>> models = this.modelsInputQueue.poll();
 
-			final OPTICS optics = new OPTICS(mtree, this.epsilon, this.minPTs, models);
+			final OPTICS<N, E> optics = new OPTICS<>(mtree, this.epsilon, this.minPTs, models);
 
-			final List<OpticsData<N, E>> result = optics.calculate();
+			final List<OpticsData<MutableNetwork<N, E>>> result = optics.calculate();
 
 			this.logger.info("send optics result");
 
@@ -85,15 +87,15 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 
 	}
 
-	public OutputPort<List<OpticsData<N, E>>> getOutputPort() {
+	public OutputPort<List<OpticsData<MutableNetwork<N, E>>>> getOutputPort() {
 		return this.outputPort;
 	}
 
-	public InputPort<MTree<OpticsData<N, E>>> getMTreeInputPort() {
+	public InputPort<MTree<OpticsData<MutableNetwork<N, E>>>> getMTreeInputPort() {
 		return this.mTreeInputPort;
 	}
 
-	public InputPort<List<OpticsData<N, E>>> getModelsInputPort() {
+	public InputPort<List<OpticsData<MutableNetwork<N, E>>>> getModelsInputPort() {
 		return this.modelsInputPort;
 	}
 

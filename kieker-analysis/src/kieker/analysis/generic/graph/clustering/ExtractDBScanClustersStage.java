@@ -39,7 +39,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @since 2.0.0
  */
 public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
-		extends AbstractTransformation<List<OpticsData<N, E>>, Clustering<MutableNetwork<N, E>>> {
+		extends AbstractTransformation<List<OpticsData<MutableNetwork<N, E>>>, Clustering<MutableNetwork<N, E>>> {
 
 	private final double clusteringDistance;
 
@@ -48,10 +48,10 @@ public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 	}
 
 	@Override
-	protected void execute(final List<OpticsData<N, E>> opticsResults) throws Exception {
+	protected void execute(final List<OpticsData<MutableNetwork<N, E>>> opticsResults) throws Exception {
 
 		this.logger.debug("received optics result");
-		for (final OpticsData<N, E> model : opticsResults) {
+		for (final OpticsData<MutableNetwork<N, E>> model : opticsResults) {
 			this.logger.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
 					+ Double.toString(model.getCoreDistance()));
 		}
@@ -59,7 +59,7 @@ public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 
 		Set<MutableNetwork<N, E>> currentCluster = clustering.getNoise();
 
-		for (final OpticsData<N, E> model : opticsResults) {
+		for (final OpticsData<MutableNetwork<N, E>> model : opticsResults) {
 			if (model.getReachabilityDistance() == OpticsData.UNDEFINED
 					|| model.getReachabilityDistance() > this.clusteringDistance) {
 				if (model.getCoreDistance() <= this.clusteringDistance

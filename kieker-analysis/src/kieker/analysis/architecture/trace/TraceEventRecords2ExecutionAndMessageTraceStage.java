@@ -87,7 +87,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 
 	@Override
 	protected void onTerminating() {
-		this.logger.debug("Terminating {}",  // NOPMD
+		this.logger.debug("Terminating {}", // NOPMD
 				TraceEventRecords2ExecutionAndMessageTraceStage.class.getCanonicalName());
 		super.onTerminating();
 	}
@@ -109,7 +109,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
 			if (event.getOrderIndex() != expectedOrderIndex) {
 				this.logger.error("Found event with wrong orderIndex. Found: {} expected: {}", event.getOrderIndex(),
-						(expectedOrderIndex - 1));
+						expectedOrderIndex - 1);
 				continue; // simply ignore wrong event
 			}
 			if (event.getTraceId() != traceId) {
@@ -117,39 +117,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 						traceId);
 				continue; // simply ignore wrong event
 			}
-			try { // handle all cases (more specific classes must be handled before less
-					// specific ones)
-					// Before Events
-				if (BeforeConstructorEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleBeforeConstructorEvent((BeforeConstructorEvent) event);
-				} else if (BeforeOperationEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
-					// After Events
-				} else if (AfterConstructorFailedEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleAfterConstructorFailedEvent((AfterConstructorFailedEvent) event);
-				} else if (AfterOperationFailedEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
-				} else if (AfterConstructorEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
-				} else if (AfterOperationEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
-					// CallOperation Events
-				} else if (CallConstructorEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleCallConstructorEvent((CallConstructorEvent) event);
-				} else if (CallOperationEvent.class.isAssignableFrom(event.getClass())) {
-					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
-					// SplitEvent
-				} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
-					this.logger.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
-				} else {
-					this.logger.warn("Events of type '{}' are currently not handled and ignored.",
-							event.getClass().getName());
-				}
-			} catch (final InvalidTraceException ex) {
-				this.logger.error("Failed to reconstruct trace.", ex);
-				this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
-				return;
-			}
+
+			this.handleEvent(traceEventRecordHandler, event, executionTrace);
 		}
 		try {
 			traceEventRecordHandler.finish();
@@ -162,6 +131,43 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 																							// because this makes the
 																							// output verbose (#584)
 			this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
+		}
+	}
+
+	private void handleEvent(final TraceEventRecordHandler traceEventRecordHandler, // NOPMD cyclomatic complexity
+			final AbstractTraceEvent event, final ExecutionTrace executionTrace) {
+		try { // handle all cases (more specific classes must be handled before less
+				// specific ones)
+				// Before Events
+			if (BeforeConstructorEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleBeforeConstructorEvent((BeforeConstructorEvent) event);
+			} else if (BeforeOperationEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
+				// After Events
+			} else if (AfterConstructorFailedEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleAfterConstructorFailedEvent((AfterConstructorFailedEvent) event);
+			} else if (AfterOperationFailedEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
+			} else if (AfterConstructorEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
+			} else if (AfterOperationEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
+				// CallOperation Events
+			} else if (CallConstructorEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleCallConstructorEvent((CallConstructorEvent) event);
+			} else if (CallOperationEvent.class.isAssignableFrom(event.getClass())) {
+				traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
+				// SplitEvent
+			} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
+				this.logger.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
+			} else {
+				this.logger.warn("Events of type '{}' are currently not handled and ignored.",
+						event.getClass().getName());
+			}
+		} catch (final InvalidTraceException ex) {
+			this.logger.error("Failed to reconstruct trace.", ex);
+			this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
+			return;
 		}
 	}
 
@@ -195,7 +201,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 
 		private int orderindex;
 		private final boolean ignoreAssumedCalls;
-		private final Logger logger;
+		private final Logger logger; // NOPMD
 
 		public TraceEventRecordHandler(final Logger logger, final TraceMetadata trace,
 				final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
@@ -352,8 +358,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent,
 				final AbstractTraceEvent prevEvent, final Class<? extends CallOperationEvent> callClass) {
-			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass())
-					&& (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
+			if (prevEvent != null && callClass.isAssignableFrom(prevEvent.getClass())
+					&& prevEvent.getOrderIndex() == beforeOperationEvent.getOrderIndex() - 1) {
 				if (this.callsReferencedOperationOf((CallOperationEvent) prevEvent, beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
@@ -393,7 +399,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 			// Obtain the matching before-operation event from the stack
 			final AbstractTraceEvent potentialBeforeEvent = this.peekEvent();
 			// The element at the top of the stack needs to be a before-operation event...
-			if ((potentialBeforeEvent == null) || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
+			if (potentialBeforeEvent == null || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
 				throw new InvalidTraceException("Didn't find corresponding " + beforeClass.getName() + " for "
 						+ afterOperationEvent.getClass().getName() + " " + afterOperationEvent.toString() + " (found: "
 						+ potentialBeforeEvent + ").");
@@ -408,7 +414,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 			final AbstractTraceEvent prevEvent = this.peekEvent();
 			// A definite call occurs if either the stack is empty (entry into the trace) or
 			// if a matching call event is found
-			final boolean definiteCall = (prevEvent == null)
+			final boolean definiteCall = prevEvent == null
 					|| this.isPrevEventMatchingCall(beforeOperationEvent, prevEvent, callClass);
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.eventStack.isEmpty()) {

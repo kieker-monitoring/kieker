@@ -30,6 +30,7 @@ import com.google.common.graph.MutableNetwork;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
+import kieker.analysis.generic.graph.mtree.query.ResultItem;
 
 import teetime.framework.test.StageTester;
 
@@ -90,7 +91,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 
 		final List<MTree<MutableNetwork<INode, IEdge>>> solutions = this.startAndGetSolutions(input);
 
-		final Iterator<MTree<MutableNetwork<INode, IEdge>>.ResultItem> iter = solutions.get(0).getNearest(this.model1).iterator();
+		final Iterator<ResultItem<MutableNetwork<INode, IEdge>>> iter = solutions.get(0).getNearest(this.model1).iterator();
 
 		MatcherAssert.assertThat(iter.hasNext(), Matchers.is(false));
 		MatcherAssert.assertThat(solutions.size(), Matchers.is(1));
@@ -104,7 +105,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 		input.add(list);
 		final List<MTree<MutableNetwork<INode, IEdge>>> solutions = this.startAndGetSolutions(input);
 
-		final Iterator<MTree<MutableNetwork<INode, IEdge>>.ResultItem> iter = solutions.get(0).getNearest(this.model1).iterator();
+		final Iterator<ResultItem<MutableNetwork<INode, IEdge>>> iter = solutions.get(0).getNearest(this.model1).iterator();
 
 		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));
 		MatcherAssert.assertThat(iter.hasNext(), Matchers.is(false));
@@ -124,7 +125,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 		input.add(list);
 		final List<MTree<MutableNetwork<INode, IEdge>>> solutions = this.startAndGetSolutions(input);
 
-		Iterator<MTree<MutableNetwork<INode, IEdge>>.ResultItem> iter = solutions.get(0).getNearest(this.model1).iterator();
+		Iterator<ResultItem<MutableNetwork<INode, IEdge>>> iter = solutions.get(0).getNearest(this.model1).iterator();
 
 		// System.out.println(this.mockGED.calculate(iter.next().data, this.model1));
 		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));

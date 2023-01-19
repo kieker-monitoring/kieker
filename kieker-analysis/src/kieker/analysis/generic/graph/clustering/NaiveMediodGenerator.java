@@ -49,6 +49,7 @@ public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends Abst
 
 		for (final Set<MutableNetwork<N, E>> clusterSet : clustering.getClusters()) {
 
+			@SuppressWarnings("unchecked")
 			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
 			if (cluster.length == 0) {
 				this.logger.warn("Empty cluster received");

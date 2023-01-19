@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
@@ -36,7 +35,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.14
  */
-public class StaticModelsAssemblerStage extends CompositeStage {
+public class StaticModelsAssemblerStage extends CompositeStage { // NOPMD not a data class
 
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;

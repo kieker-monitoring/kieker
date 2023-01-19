@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.mtree;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,8 +27,11 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.exception.InternalErrorException;
+import kieker.analysis.generic.graph.mtree.query.Query;
+import kieker.analysis.generic.graph.mtree.query.ResultItem;
+import kieker.analysis.generic.graph.mtree.utils.MTreeUtils;
 import kieker.analysis.generic.graph.mtree.utils.Pair;
-import kieker.analysis.generic.graph.mtree.utils.Utils;
 
 /**
  *
@@ -39,32 +43,33 @@ class MTreeClass extends MTree<Data> {
 	private static final IPromotionFunction<Data> NON_RANDOM_PROMOTION = new IPromotionFunction<Data>() {
 		@Override
 		public Pair<Data> process(final Set<Data> dataSet, final IDistanceFunction<? super Data> distanceFunction) {
-			return Utils.minMax(dataSet);
+			return MTreeUtils.minMax(dataSet);
 		}
 	};
 
 	MTreeClass() {
-		super(2, DistanceFunctions.EUCLIDEAN,
+		super(2, DistanceFunctionFactory.EUCLIDEAN,
 				new ComposedSplitFunction<>(
-						NON_RANDOM_PROMOTION,
-						new PartitionFunctions.BalancedPartition<Data>()));
+						MTreeClass.NON_RANDOM_PROMOTION,
+						new BalancedPartitionFunction<Data>()));
 	}
 
 	@Override
-	public void add(final Data data) {
+	public void add(final Data data) throws InternalErrorException {
 		super.add(data);
 		this.check();
 	}
 
 	@Override
-	public boolean remove(final Data data) {
+	public boolean remove(final Data data) throws InternalErrorException {
 		final boolean result = super.remove(data);
 		this.check();
 		return result;
 	}
 
-	IDistanceFunction<? super Data> getDistanceFunction() {
-		return this.distanceFunction;
+	@Override
+	public IDistanceFunction<? super Data> getDistanceFunction() {
+		return super.getDistanceFunction();
 	}
 };
 
@@ -84,112 +89,112 @@ public class MTreeTest {
 	}
 
 	@Test
-	public void test01() {
+	public void test01() throws InternalErrorException, IOException {
 		this.testFunction("f01");
 	}
 
 	@Test
-	public void test02() {
+	public void test02() throws InternalErrorException, IOException {
 		this.testFunction("f02");
 	}
 
 	@Test
-	public void test03() {
+	public void test03() throws InternalErrorException, IOException {
 		this.testFunction("f03");
 	}
 
 	@Test
-	public void test04() {
+	public void test04() throws InternalErrorException, IOException {
 		this.testFunction("f04");
 	}
 
 	@Test
-	public void test05() {
+	public void test05() throws InternalErrorException, IOException {
 		this.testFunction("f05");
 	}
 
 	@Test
-	public void test06() {
+	public void test06() throws InternalErrorException, IOException {
 		this.testFunction("f06");
 	}
 
 	@Test
-	public void test07() {
+	public void test07() throws InternalErrorException, IOException {
 		this.testFunction("f07");
 	}
 
 	@Test
-	public void test08() {
+	public void test08() throws InternalErrorException, IOException {
 		this.testFunction("f08");
 	}
 
 	@Test
-	public void test09() {
+	public void test09() throws InternalErrorException, IOException {
 		this.testFunction("f09");
 	}
 
 	@Test
-	public void test10() {
+	public void test10() throws InternalErrorException, IOException {
 		this.testFunction("f10");
 	}
 
 	@Test
-	public void test11() {
+	public void test11() throws InternalErrorException, IOException {
 		this.testFunction("f11");
 	}
 
 	@Test
-	public void test12() {
+	public void test12() throws InternalErrorException, IOException {
 		this.testFunction("f12");
 	}
 
 	@Test
-	public void test13() {
+	public void test13() throws InternalErrorException, IOException {
 		this.testFunction("f13");
 	}
 
 	@Test
-	public void test14() {
+	public void test14() throws InternalErrorException, IOException {
 		this.testFunction("f14");
 	}
 
 	@Test
-	public void test15() {
+	public void test15() throws InternalErrorException, IOException {
 		this.testFunction("f15");
 	}
 
 	@Test
-	public void test16() {
+	public void test16() throws InternalErrorException, IOException {
 		this.testFunction("f16");
 	}
 
 	@Test
-	public void test17() {
+	public void test17() throws InternalErrorException, IOException {
 		this.testFunction("f17");
 	}
 
 	@Test
-	public void test18() {
+	public void test18() throws InternalErrorException, IOException {
 		this.testFunction("f18");
 	}
 
 	@Test
-	public void test19() {
+	public void test19() throws InternalErrorException, IOException {
 		this.testFunction("f19");
 	}
 
 	@Test
-	public void test20() {
+	public void test20() throws InternalErrorException, IOException {
 		this.testFunction("f20");
 	}
 
 	@Test
-	public void testLots() {
+	public void testLots() throws InternalErrorException, IOException {
 		this.testFunction("fLots");
 	}
 
 	@Test
-	public void testRemoveNonExisting() {
+	public void testRemoveNonExisting() throws InternalErrorException {
 		// Empty
 		assert !this.mtree.remove(new Data(99, 77));
 
@@ -214,12 +219,12 @@ public class MTreeTest {
 	}
 
 	@Test
-	public void testGeneratedCase01() {
+	public void testGeneratedCase01() throws InternalErrorException, IOException {
 		this.testFunction("fG01");
 	}
 
 	@Test
-	public void testGeneratedCase02() {
+	public void testGeneratedCase02() throws InternalErrorException, IOException {
 		this.testFunction("fG02");
 	}
 
@@ -227,8 +232,8 @@ public class MTreeTest {
 			final int expectedData,
 			final double expectedDistance,
 			final boolean expectedHasNext,
-			final MTree<Integer>.ResultItem ri,
-			final Iterator<MTree<Integer>.ResultItem> i) {
+			final ResultItem<Integer> ri,
+			final Iterator<ResultItem<Integer>> i) {
 		Assert.assertEquals(expectedData, ri.getData().intValue());
 		Assert.assertEquals(expectedDistance, ri.getDistance(), 0.0);
 		Assert.assertEquals(expectedHasNext, i.hasNext());
@@ -243,7 +248,7 @@ public class MTreeTest {
 	}
 
 	@Test
-	public void testIterators() {
+	public void testIterators() throws InternalErrorException {
 		final MTree<Integer> mt = new MTree<>(
 				new IDistanceFunction<Integer>() {
 					@Override
@@ -258,12 +263,12 @@ public class MTreeTest {
 		mt.add(3);
 		mt.add(4);
 
-		final MTree<Integer>.Query query = mt.getNearest(0);
+		final Query<Integer> query = mt.getNearest(0);
 
 		// The first iterator
-		final Iterator<MTree<Integer>.ResultItem> i1 = query.iterator();
+		final Iterator<ResultItem<Integer>> i1 = query.iterator();
 		Assert.assertTrue(i1.hasNext());
-		MTree<Integer>.ResultItem ri1 = i1.next();
+		ResultItem<Integer> ri1 = i1.next();
 		/*
 		 * 1 2 3 4 e
 		 * i1: *
@@ -288,9 +293,9 @@ public class MTreeTest {
 		this.assertIterator(3, 3, true, ri1, i1);
 
 		// Begin another iteration
-		final Iterator<MTree<Integer>.ResultItem> i2 = query.iterator();
+		final Iterator<ResultItem<Integer>> i2 = query.iterator();
 		Assert.assertTrue(i2.hasNext());
-		MTree<Integer>.ResultItem ri2 = i2.next();
+		ResultItem<Integer> ri2 = i2.next();
 		/*
 		 * 1 2 3 4 e
 		 * i1: *
@@ -340,12 +345,12 @@ public class MTreeTest {
 		this.assertIterator(4, 4, false, ri2, i2);
 	}
 
-	private void testFunction(final String fixtureName) {
+	private void testFunction(final String fixtureName) throws InternalErrorException, IOException {
 		final Fixture fixture = Fixture.load(fixtureName);
 		this.testFixture(fixture);
 	}
 
-	private void testFixture(final Fixture fixture) {
+	private void testFixture(final Fixture fixture) throws InternalErrorException {
 		for (final Fixture.Action action : fixture.getActions()) {
 			switch (action.getCmd()) {
 			case 'A':
@@ -358,7 +363,7 @@ public class MTreeTest {
 				assert removed;
 				break;
 			default:
-				throw new RuntimeException(action.getData().toString());
+				throw new InternalErrorException(action.getData().toString());
 			}
 
 			this.checkNearestByRange(action.getQueryData(), action.getRadius());
@@ -367,18 +372,18 @@ public class MTreeTest {
 	}
 
 	private void checkNearestByRange(final Data queryData, final double radius) {
-		final List<MTreeClass.ResultItem> results = new ArrayList<>();
+		final List<ResultItem<Data>> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
-		final MTreeClass.Query query = this.mtree.getNearestByRange(queryData, radius);
+		final Query<Data> query = this.mtree.getNearestByRange(queryData, radius);
 
-		for (final MTreeClass.ResultItem ri : query) {
+		for (final ResultItem<Data> ri : query) {
 			results.add(ri);
 			strippedResults.add(ri.getData());
 		}
 
 		double previousDistance = 0;
 
-		for (final MTreeClass.ResultItem result : results) {
+		for (final ResultItem<Data> result : results) {
 			// Check if increasing distance
 			Assert.assertTrue(previousDistance <= result.getDistance());
 			previousDistance = result.getDistance();
@@ -402,11 +407,11 @@ public class MTreeTest {
 	}
 
 	private void checkNearestByLimit(final Data queryData, final int limit) {
-		final List<MTreeClass.ResultItem> results = new ArrayList<>();
+		final List<ResultItem<Data>> results = new ArrayList<>();
 		final Set<Data> strippedResults = new HashSet<>();
-		final MTreeClass.Query query = this.mtree.getNearestByLimit(queryData, limit);
+		final Query<Data> query = this.mtree.getNearestByLimit(queryData, limit);
 
-		for (final MTreeClass.ResultItem ri : query) {
+		for (final ResultItem<Data> ri : query) {
 			results.add(ri);
 			strippedResults.add(ri.getData());
 		}
@@ -420,7 +425,7 @@ public class MTreeTest {
 
 		double farthest = 0.0;
 		double previousDistance = 0.0;
-		for (final MTreeClass.ResultItem ri : results) {
+		for (final ResultItem<Data> ri : results) {
 			// Check if increasing distance
 			Assert.assertTrue(previousDistance <= ri.getDistance());
 			previousDistance = ri.getDistance();

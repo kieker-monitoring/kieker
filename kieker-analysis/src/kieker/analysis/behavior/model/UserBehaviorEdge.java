@@ -27,7 +27,7 @@ import kieker.analysis.generic.graph.impl.EdgeImpl;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class UserBehaviorEdge extends EdgeImpl {
+public final class UserBehaviorEdge extends EdgeImpl {
 
 	private final List<EventGroup> eventGroups = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class UserBehaviorEdge extends EdgeImpl {
 	 * @param event
 	 *            the event which should be added to the edge
 	 */
-	public void addEvent(final EntryCallEvent event) {
+	public final void addEvent(final EntryCallEvent event) {
 		boolean success = false;
 		for (final EventGroup eventGroup : this.eventGroups) {
 			if (eventGroup.hasSameParameters(event)) {

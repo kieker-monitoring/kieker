@@ -17,8 +17,8 @@ package kieker.analysis.behavior;
 
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.acceptance.matcher.SessionAcceptanceFilter;
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.behavior.model.UserSession;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorFilter;
 import kieker.common.record.session.ISessionEvent;
@@ -45,7 +45,7 @@ public class UserSessionGeneratorCompositeStage extends CompositeStage {
 	 *            matcher to check on entry calls to filter out requests that do not belong to the behavior, e.g., loading images
 	 * @param traceSignatureProcessor
 	 *            cleanup rewriter
-	 * @param usesSessionExpirationTime
+	 * @param userSessionTimeout
 	 *            defines after how many nano seconds a session is considered to be timed out
 	 */
 	public UserSessionGeneratorCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher,

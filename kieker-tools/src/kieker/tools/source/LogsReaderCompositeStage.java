@@ -52,6 +52,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 *
 	 * @param configuration
 	 *            configuration for the enclosed filters
+	 * @deprecated
 	 */
 	@Deprecated
 	public LogsReaderCompositeStage(final Configuration configuration) {
@@ -82,8 +83,10 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	 *            buffer size of the data file reader (null == use default setting)
 	 */
 	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
+		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
+
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}
@@ -103,7 +106,8 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		directories.add(directory);
 
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize); // NOCS inline conditional
+		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
+		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}

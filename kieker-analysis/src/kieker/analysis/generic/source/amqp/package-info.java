@@ -22,4 +22,3 @@
  * @since 1.15
  */
 package kieker.analysis.generic.source.amqp;
-

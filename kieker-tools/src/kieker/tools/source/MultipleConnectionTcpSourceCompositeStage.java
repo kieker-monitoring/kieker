@@ -65,6 +65,7 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 	 *            configuration parameters
 	 * @throws ConfigurationException
 	 *             on configuration errors during instantiation
+	 * @deprecated
 	 */
 	@Deprecated
 	public MultipleConnectionTcpSourceCompositeStage(final Configuration configuration) throws ConfigurationException {
@@ -74,9 +75,8 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_CAPACITY);
 		final String rewriterClassName = configuration.getStringProperty(MultipleConnectionTcpSourceCompositeStage.REWRITER,
 				NoneTraceMetadataRewriter.class.getName());
-		final Class<?>[] classes = null;
 		final ITraceMetadataRewriter rewriter = InstantiationFactory.getInstance(configuration).create(ITraceMetadataRewriter.class,
-				rewriterClassName, classes);
+				rewriterClassName, null);
 		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
 	}
 

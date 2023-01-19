@@ -16,6 +16,7 @@
 
 package kieker.analysis.architecture.dependency;
 
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.util.FullyQualifiedNamesFactory;
@@ -47,14 +48,14 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 
-		final IGraph contextSubgraph = this.addChildGraphIfAbsent(contextVertex);
+		final IGraph<INode, IEdge> contextSubgraph = this.addChildGraphIfAbsent(contextVertex);
 		contextSubgraph.setLabel(context.getName());
 		final INode componentVertex = this.addVertexIfAbsent(contextSubgraph, FullyQualifiedNamesFactory.createFullyQualifiedName(component));
 		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getAssemblyComponent().getComponentType().getName());
 		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());
 
-		final IGraph componentSubgraph = this.addChildGraphIfAbsent(componentVertex);
+		final IGraph<INode, IEdge> componentSubgraph = this.addChildGraphIfAbsent(componentVertex);
 		componentSubgraph.setLabel(component.getAssemblyComponent().getComponentType().getName());
 		final INode operationVertex = this.addVertexIfAbsent(componentSubgraph, FullyQualifiedNamesFactory.createFullyQualifiedName(operation));
 		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYED_OPERATION);

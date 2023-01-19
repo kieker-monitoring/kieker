@@ -16,8 +16,9 @@
 package kieker.analysis.generic.graph.mtree;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,12 +44,10 @@ final class Fixture {
 		return FIXTURE_DIRECTORY + fixtureName + ".txt";
 	}
 
-	static Fixture load(final String fixtureName) {
+	static Fixture load(final String fixtureName) throws IOException {
 		final String fixtureFileName = Fixture.path(fixtureName);
-		BufferedReader fixtureFile = null;
-		try {
-			fixtureFile = new BufferedReader(new FileReader(fixtureFileName));
 
+		try (BufferedReader fixtureFile = Files.newBufferedReader(Paths.get(fixtureFileName))) {
 			final int dimensions = Integer.parseInt(fixtureFile.readLine());
 
 			final int count = Integer.parseInt(fixtureFile.readLine());
@@ -71,14 +70,6 @@ final class Fixture {
 			}
 
 			return fixture;
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				fixtureFile.close();
-			} catch (final IOException e) {
-				throw new RuntimeException(e);
-			}
 		}
 	}
 

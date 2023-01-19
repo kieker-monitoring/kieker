@@ -23,7 +23,7 @@ package kieker.analysis.generic.graph;
  */
 public interface INode extends IElement {
 
-	public IGraph getChildGraph();
+	public <N extends INode, E extends IEdge> IGraph<N, E> getChildGraph();
 
 	public void removeChildGraph();
 

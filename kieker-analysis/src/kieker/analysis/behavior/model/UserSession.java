@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.behavior.data;
+package kieker.analysis.behavior.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -213,6 +213,45 @@ public final class UserSession {
 
 	public String getHost() {
 		return this.host;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this.getClass().equals(obj.getClass())) {
+			if (this == obj) {
+				return true;
+			} else {
+				final UserSession otherSession = (UserSession) obj;
+				return this.compareString(this.host, otherSession.host)
+						&& this.compareString(this.sessionId, otherSession.sessionId)
+						&& this.compareEvents(this.events, otherSession.events);
+			}
+		} else {
+			return false;
+		}
+	}
+
+	private boolean compareEvents(final List<EntryCallEvent> left, final List<EntryCallEvent> right) {
+		if (left.size() == right.size()) {
+			for (int i = 0; i < left.size(); i++) {
+				if (!left.get(i).equals(right.get(i))) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean compareString(final String left, final String right) {
+		if ((left == null) && (right == null)) {
+			return true;
+		} else if (left != null) {
+			return left.equals(right);
+		} else {
+			return false;
+		}
 	}
 
 }
