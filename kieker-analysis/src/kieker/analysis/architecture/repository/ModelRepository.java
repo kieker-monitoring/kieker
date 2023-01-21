@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.architecture.repository;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -29,9 +29,9 @@ public class ModelRepository {
 
 	private final String name;
 
-	private final Map<EClass, EObject> models = new HashMap<>();
+	private final Map<EClass, EObject> models = new ConcurrentHashMap<>();
 
-	private final Map<EClass, ModelDescriptor> descriptors = new HashMap<>();
+	private final Map<EClass, ModelDescriptor> descriptors = new ConcurrentHashMap<>();
 
 	/**
 	 * Create a new model repository with the given name.

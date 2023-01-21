@@ -19,27 +19,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
-
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * The algorithm extracts clusters, which are equivalent to DBScan clusters from the OPTICS plot.
  * The algorithm was proposed in the optics paper.
  *
- * @param <N>
- *            node class type
- * @param <E>
- *            edge class type
+ * @param <T> optics data type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
-		extends AbstractTransformation<List<OpticsData<MutableNetwork<N, E>>>, Clustering<MutableNetwork<N, E>>> {
+public class ExtractDBScanClustersStage<T>
+		extends AbstractTransformation<List<OpticsData<T>>, Clustering<T>> {
 
 	private final double clusteringDistance;
 
@@ -48,23 +40,23 @@ public class ExtractDBScanClustersStage<N extends INode, E extends IEdge>
 	}
 
 	@Override
-	protected void execute(final List<OpticsData<MutableNetwork<N, E>>> opticsResults) throws Exception {
+	protected void execute(final List<OpticsData<T>> opticsResults) throws Exception {
 
 		this.logger.debug("received optics result");
-		for (final OpticsData<MutableNetwork<N, E>> model : opticsResults) {
+		for (final OpticsData<T> model : opticsResults) {
 			this.logger.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
 					+ Double.toString(model.getCoreDistance()));
 		}
-		final Clustering<MutableNetwork<N, E>> clustering = new Clustering<>();
+		final Clustering<T> clustering = new Clustering<>();
 
-		Set<MutableNetwork<N, E>> currentCluster = clustering.getNoise();
+		Set<T> currentCluster = clustering.getNoise();
 
-		for (final OpticsData<MutableNetwork<N, E>> model : opticsResults) {
+		for (final OpticsData<T> model : opticsResults) {
 			if (model.getReachabilityDistance() == OpticsData.UNDEFINED
 					|| model.getReachabilityDistance() > this.clusteringDistance) {
 				if (model.getCoreDistance() <= this.clusteringDistance
 						&& model.getCoreDistance() != OpticsData.UNDEFINED) {
-					final Set<MutableNetwork<N, E>> newCluster = new HashSet<>();
+					final Set<T> newCluster = new HashSet<>();
 					clustering.addCluster(newCluster);
 					newCluster.add(model.getData());
 					currentCluster = newCluster;

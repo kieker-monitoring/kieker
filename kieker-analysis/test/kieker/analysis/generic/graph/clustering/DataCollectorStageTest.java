@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,26 +26,23 @@ import teetime.framework.test.StageTester;
 
 public class DataCollectorStageTest { // NOCS tests do not need constructors
 
-	@Before
-	public void setUp() throws Exception {}
-
 	@Test
-	public void testEventsNoLimits() {
-		final DataCollectorStage<Integer> dataCollectorStage = new DataCollectorStage<>();
-		StageTester.test(dataCollectorStage).and().send(1, 2, 3, 4, 5).to(dataCollectorStage.getDataInputPort()).start();
+	public void testEventsNoLimits() { // NOPMD has MatcherAssert
+		final DataCollectorStage<Integer> stage = new DataCollectorStage<>();
+		StageTester.test(stage).and().send(1, 2, 3, 4, 5).to(stage.getDataInputPort()).start();
 		final List<Integer> list = new ArrayList<>();
 		list.add(1);
 		list.add(2);
 		list.add(3);
 		list.add(4);
 		list.add(5);
-		MatcherAssert.assertThat(dataCollectorStage.getOpticsOutputPort(), StageTester.produces(list));
+		MatcherAssert.assertThat(stage.getOpticsOutputPort(), StageTester.produces(list));
 	}
 
 	@Test
-	public void testEventsWithSizeLimit() {
-		final DataCollectorStage<Integer> dataCollectorStage = new DataCollectorStage<>(2);
-		StageTester.test(dataCollectorStage).and().send(1, 2, 3, 4, 5).to(dataCollectorStage.getDataInputPort()).start();
+	public void testEventsWithSizeLimit() {  // NOPMD has MatcherAssert
+		final DataCollectorStage<Integer> stage = new DataCollectorStage<>(2);
+		StageTester.test(stage).and().send(1, 2, 3, 4, 5).to(stage.getDataInputPort()).start();
 		final List<Integer> list1 = new ArrayList<>();
 		final List<Integer> list2 = new ArrayList<>();
 		final List<Integer> list3 = new ArrayList<>();
@@ -55,17 +51,17 @@ public class DataCollectorStageTest { // NOCS tests do not need constructors
 		list2.add(3);
 		list2.add(4);
 		list3.add(5);
-		MatcherAssert.assertThat(dataCollectorStage.getOpticsOutputPort(), StageTester.produces(list1, list2, list3));
+		MatcherAssert.assertThat(stage.getOpticsOutputPort(), StageTester.produces(list1, list2, list3));
 	}
 
 	// TODO currently stages with multiple input ports cannot be checked under specific conditions, as the
 	// sequence of events to multiple input ports cannot be guaranteed causing race conditions during tests.
 	@Ignore
 	@Test
-	public void testEventsTimeLimit() {
-		final DataCollectorStage<Integer> dataCollectorStage = new DataCollectorStage<>();
-		StageTester.test(dataCollectorStage).and().send(0L).to(dataCollectorStage.getTimeTriggerInputPort())
-			.and().send(1, 2, 3, 4, 5).to(dataCollectorStage.getDataInputPort()).start();
+	public void testEventsTimeLimit() {  // NOPMD has MatcherAssert
+		final DataCollectorStage<Integer> stage = new DataCollectorStage<>();
+		StageTester.test(stage).and().send(0L).to(stage.getTimeTriggerInputPort())
+			.and().send(1, 2, 3, 4, 5).to(stage.getDataInputPort()).start();
 		final List<Integer> list1 = new ArrayList<>();
 		final List<Integer> list2 = new ArrayList<>();
 		list1.add(1);
@@ -73,7 +69,7 @@ public class DataCollectorStageTest { // NOCS tests do not need constructors
 		list2.add(3);
 		list2.add(4);
 		list2.add(5);
-		MatcherAssert.assertThat(dataCollectorStage.getOpticsOutputPort(), StageTester.produces(list1, list2));
+		MatcherAssert.assertThat(stage.getOpticsOutputPort(), StageTester.produces(list1, list2));
 	}
 
 }

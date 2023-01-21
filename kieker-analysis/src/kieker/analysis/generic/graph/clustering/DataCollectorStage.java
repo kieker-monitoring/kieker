@@ -42,8 +42,8 @@ public class DataCollectorStage<T> extends AbstractStage {
 
 	private List<T> dataList = new ArrayList<>();
 
-	private boolean stopAfterAmount = false;
-	private int maxAmount = 0;
+	private boolean stopAfterAmount = false; // NOPMD documentation
+	private int maxAmount = 0; // NOPMD documentation
 
 	/**
 	 * Collect behavior models and send them based on an external time trigger to the mtree

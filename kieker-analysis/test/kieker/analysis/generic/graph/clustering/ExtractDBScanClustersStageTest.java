@@ -15,31 +15,33 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-
-import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 import teetime.framework.test.StageTester;
 
-public class MTreeGeneratorStageTest { // NOCS tests do not need constructors
+public class ExtractDBScanClustersStageTest {
+
+	private static final double CLUSTER_DISTANCE = 1.0;
 
 	@Test
-	public void testMTreeGeneratorStage() {
-		final List<Integer> list = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 10, 12, 15 });
-		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<Integer>() {
+	public void test() { // NOPMD
+		final ExtractDBScanClustersStage<Integer> stage = new ExtractDBScanClustersStage<>(CLUSTER_DISTANCE);
+		final List<OpticsData<Integer>> cluster = createCluster();
+		final Clustering<Integer> output = createOutput();
+		StageTester.test(stage).and().send(cluster, null).to(stage.getInputPort()).start();
+		
+		MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(output));
+	}
 
-			@Override
-			public double calculate(final Integer data1, final Integer data2) {
-				return Math.abs((double) data1 - data2);
-			}
+	private List<OpticsData<Integer>> createCluster() {
+		return null;
+	}
 
-		};
-
-		final MTreeGeneratorStage<Integer> stage = new MTreeGeneratorStage<>(distanceFunction);
-		StageTester.test(stage).and().send(list, list).to(stage.getInputPort()).start();
+	private Clustering<Integer> createOutput() {
+		return null;
 	}
 
 }

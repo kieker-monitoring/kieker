@@ -51,8 +51,6 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	protected ExecutionModel executionModel;
 	protected StatisticsModel statisticsModel;
 
-	public AbstractDependencyGraphBuilder() {}
-
 	@Override
 	public IGraph<INode, IEdge> build(final ModelRepository repository) {
 		this.graph = GraphFactory.createGraph(repository.getName());

@@ -32,7 +32,7 @@ public class TrimmedAlgorithm<T> {
 	private final double[] lowerBounds;
 
 	private double lowestEnergy = Double.MAX_VALUE;
-	private T bestCandidate = null;
+	private T bestCandidate = null;  // NOPMD documentation
 
 	private final T[] models;
 

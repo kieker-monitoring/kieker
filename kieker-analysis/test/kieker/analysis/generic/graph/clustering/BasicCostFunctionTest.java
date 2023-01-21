@@ -16,7 +16,6 @@
 package kieker.analysis.generic.graph.clustering;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.generic.graph.IEdge;
@@ -35,9 +34,6 @@ public class BasicCostFunctionTest { // NOCS tests do not need constructors
 	private static final double EDGE_COST = 1.5;
 
 	private final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(BasicCostFunctionTest.NODE_COST, BasicCostFunctionTest.EDGE_COST);
-
-	@Before
-	public void setUp() throws Exception {}
 
 	@Test
 	public void testComputeNodeInsertionCost() {

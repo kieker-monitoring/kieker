@@ -89,7 +89,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -109,7 +109,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -147,7 +147,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -165,7 +165,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -196,7 +196,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -245,7 +245,7 @@ public class DotExportDependencyGraphFactory {
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyConstants.PACKAGE_NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append("\\n")
+		return new StringBuilder().append(this.createType(type)).append(System.lineSeparator())
 				.append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
@@ -253,7 +253,7 @@ public class DotExportDependencyGraphFactory {
 		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
+		return new StringBuilder().append(this.createType(type)).append(System.lineSeparator()).append(name);
 	}
 
 	private StringBuilder createStatisticsFromVertex(final INode vertex) {
@@ -273,7 +273,7 @@ public class DotExportDependencyGraphFactory {
 		return new StringBuilder()
 				.append("min: ").append(minResponseTime).append(' ').append(timeUnit).append(", ")
 				.append("max: ").append(maxResponseTime).append(' ').append(timeUnit).append(", ")
-				.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\\n")
+				.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(',').append(System.lineSeparator())
 				.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ")
 				.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
 	}
