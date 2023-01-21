@@ -15,15 +15,18 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import kieker.analysis.generic.graph.IEdge;
+import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.mtree.MTree;
 
 public class OPTICSTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		final MTree mtree;
+		final OPTICS<INode, IEdge> optics = new OPTICS<>(mtree, MAX_DISTANCE, MIN_PTs, models);
 	}
 
 }
