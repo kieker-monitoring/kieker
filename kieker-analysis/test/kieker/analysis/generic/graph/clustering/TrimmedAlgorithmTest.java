@@ -15,15 +15,29 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Test;
+
+import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 public class TrimmedAlgorithmTest {
 
+	// 2 is the best candidate, while 3 has the same distance, it comes later so the first best candidate is selected
+	private static final Object BEST_CANDIDATE = 2;
+
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testCalculation() {
+		final Integer[] models = { 1, 2, 3, 5 };
+		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<Integer>() {
+
+			@Override
+			public double calculate(final Integer data1, final Integer data2) {
+				return Math.abs(data1 - data2);
+			}
+
+		};
+		final TrimmedAlgorithm<Integer> algorithm = new TrimmedAlgorithm<>(models, distanceFunction);
+		Assert.assertEquals(BEST_CANDIDATE, algorithm.calculate());
 	}
 
 }
