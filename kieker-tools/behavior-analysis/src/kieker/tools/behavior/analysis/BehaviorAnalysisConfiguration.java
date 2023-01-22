@@ -83,7 +83,8 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		this.connectPorts(clusteringCompositeStage.getOutputPort(), distributor.getInputPort());
 
 		if (settings.getClusterOutputPath() != null) {
-			final ClusteringFileSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusteringFileSink<>(settings.getClusterOutputPath());
+			final ClusteringFileSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusteringFileSink<>(settings.getClusterOutputPath(),
+					new EntryCallEventSerializer());
 			this.connectPorts(distributor.getNewOutputPort(), sink.getInputPort());
 		}
 

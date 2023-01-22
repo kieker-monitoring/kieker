@@ -51,11 +51,13 @@ public class ClusteringFileSink<T> extends AbstractConsumerStage<Clustering<T>> 
 	 */
 	public ClusteringFileSink(final Path path, final StdSerializer<?>... serializers) {
 		this.objectMapper = new ObjectMapper();
-		final SimpleModule module = new SimpleModule();
-		for (final StdSerializer<?> serializer : serializers) {
-			module.addSerializer(serializer);
+		if (serializers != null) {
+			final SimpleModule module = new SimpleModule();
+			for (final StdSerializer<?> serializer : serializers) {
+				module.addSerializer(serializer);
+			}
+			this.objectMapper.registerModule(module);
 		}
-		this.objectMapper.registerModule(module);
 		this.path = path;
 	}
 
