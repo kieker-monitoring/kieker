@@ -23,11 +23,11 @@ import org.junit.Test;
 
 import teetime.framework.test.StageTester;
 
-public class MedoidGeneratorTest {
+public class NaiveMedoidGeneratorTest {
 
 	@Test
 	public void test() {
-		final MedoidGenerator<Integer> generator = new MedoidGenerator<>(ClusteringHelper.integerDistanceFunction());
+		final NaiveMedoidGenerator<Integer> generator = new NaiveMedoidGenerator<>(ClusteringHelper.integerDistanceFunction());
 		final Clustering<Integer> input = this.createClustering();
 		StageTester.test(generator).send(input).to(generator.getInputPort()).start();
 
@@ -50,4 +50,5 @@ public class MedoidGeneratorTest {
 		}
 		return result;
 	}
+
 }

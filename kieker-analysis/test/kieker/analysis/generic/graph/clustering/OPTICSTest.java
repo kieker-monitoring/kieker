@@ -15,18 +15,33 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
 
 public class OPTICSTest {
 
+	private static final double MAX_DISTANCE = 2.0;
+	private static final int MIN_PT_S = 1;
+
 	@Test
 	public void test() {
-		final MTree mtree;
-		final OPTICS<INode, IEdge> optics = new OPTICS<>(mtree, MAX_DISTANCE, MIN_PTs, models);
+		final MTree<OpticsData<Integer>> mtree = new MTree<OpticsData<Integer>>(ClusteringHelper.opticsIntegerDistanceFunction(),
+				ClusteringHelper.opticsIntegerSplitFunction());
+		final List<OpticsData<Integer>> models = new ArrayList<>();
+		final OPTICSDataGED<Integer> ged = new OPTICSDataGED<>(ClusteringHelper.integerDistanceFunction());
+		for (final int value : new int[] { 1, 2, 2, 3, 3, 4, 5 }) {
+			models.add(new OpticsData<Integer>(value, ged));
+		}
+
+		final OPTICS<Integer> optics = new OPTICS<>(mtree, MAX_DISTANCE, MIN_PT_S, models);
+		final List<OpticsData<Integer>> results = optics.calculate();
+
+		Assert.assertEquals(7, results.size());
 	}
 
 }

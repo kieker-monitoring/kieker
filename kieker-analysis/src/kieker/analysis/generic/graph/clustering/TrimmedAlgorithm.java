@@ -56,7 +56,7 @@ public class TrimmedAlgorithm<T> {
 				final double[] distances = new double[this.models.length];
 
 				double distanceSum = 0;
-				for (int j = 0; j < this.models.length; j++) {
+				for (int j = 0; j < this.models.length; j++) { // NOPMD no arrays to be copied
 					distances[j] = this.distanceFunction.calculate(this.models[i], this.models[j]);
 					distanceSum += distances[j];
 				}

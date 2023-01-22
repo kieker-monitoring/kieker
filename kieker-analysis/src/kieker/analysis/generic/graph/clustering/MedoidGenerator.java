@@ -17,47 +17,43 @@ package kieker.analysis.generic.graph.clustering;
 
 import java.util.Set;
 
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * This stage calculates the medoid of the clusters using the trimed algorithm.
+ * This stage calculates the medoid of the clusters using the trimmed algorithm.
+ * A medoid is a representative object of a cluster where the medoid has the least
+ * difference to all other objects in the cluster.
  *
- * @param <N>
- *            node type
- * @param <E>
- *            edge type
+ * @param <T>
+ *            data type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class MedoidGenerator<N extends INode, E extends IEdge> extends AbstractTransformation<Clustering<MutableNetwork<N, E>>, MutableNetwork<N, E>> {
+public class MedoidGenerator<T> extends AbstractTransformation<Clustering<T>, T> {
 
-	private final IDistanceFunction<MutableNetwork<N, E>> distanceFunction;
+	private final IDistanceFunction<T> distanceFunction;
 
-	public MedoidGenerator(final IDistanceFunction<MutableNetwork<N, E>> distanceFunction) {
+	public MedoidGenerator(final IDistanceFunction<T> distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
 
 	@Override
-	protected void execute(final Clustering<MutableNetwork<N, E>> clustering) throws Exception {
+	protected void execute(final Clustering<T> clustering) throws Exception {
 
-		for (final Set<MutableNetwork<N, E>> clusterSet : clustering.getClusters()) {
+		for (final Set<T> clusterSet : clustering.getClusters()) {
 
 			@SuppressWarnings("unchecked")
-			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
-			// The trimed algorithm needs at least one element.
+			final T[] cluster = (T[]) clusterSet.toArray(); // NOPMD
+			// The trimmed algorithm needs at least one element.
 			if (cluster.length == 0) {
 				this.logger.warn("Empty cluster received");
 				return;
 			}
 
-			final TrimmedAlgorithm<MutableNetwork<N, E>> trimed = new TrimmedAlgorithm<>(cluster, this.distanceFunction);
+			final TrimmedAlgorithm<T> trimed = new TrimmedAlgorithm<>(cluster, this.distanceFunction);
 
 			this.outputPort.send(trimed.calculate());
 		}

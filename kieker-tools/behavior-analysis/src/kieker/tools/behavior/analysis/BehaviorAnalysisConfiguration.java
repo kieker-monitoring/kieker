@@ -29,7 +29,7 @@ import kieker.analysis.generic.graph.clustering.Clustering;
 import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
-import kieker.analysis.generic.graph.clustering.NaiveMediodGenerator;
+import kieker.analysis.generic.graph.clustering.NaiveMedoidGenerator;
 import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 import kieker.analysis.util.stage.trigger.TerminationStage;
 import kieker.common.exception.ConfigurationException;
@@ -89,7 +89,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		if (settings.getMedoidOutputPath() != null) {
 			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
-			final NaiveMediodGenerator<INode, UserBehaviorEdge> medoid = new NaiveMediodGenerator<>(graphEditDistance);
+			final NaiveMedoidGenerator<INode, UserBehaviorEdge> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
 			final ClusterMedoidSink<INode, UserBehaviorEdge> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());

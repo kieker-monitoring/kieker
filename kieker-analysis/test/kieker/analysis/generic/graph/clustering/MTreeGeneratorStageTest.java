@@ -29,15 +29,7 @@ public class MTreeGeneratorStageTest { // NOCS tests do not need constructors
 	@Test
 	public void testMTreeGeneratorStage() {
 		final List<Integer> list = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 10, 12, 15 });
-		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<Integer>() {
-
-			@Override
-			public double calculate(final Integer data1, final Integer data2) {
-				return Math.abs((double) data1 - data2);
-			}
-
-		};
-
+		final IDistanceFunction<Integer> distanceFunction = ClusteringHelper.integerDistanceFunction();
 		final MTreeGeneratorStage<Integer> stage = new MTreeGeneratorStage<>(distanceFunction);
 		StageTester.test(stage).and().send(list, list).to(stage.getInputPort()).start();
 	}
