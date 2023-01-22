@@ -25,7 +25,7 @@ import kieker.analysis.behavior.clustering.UserBehaviorCostFunction;
 import kieker.analysis.behavior.model.EntryCallEventSerializer;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.ClusterMedoidSink;
+import kieker.analysis.generic.graph.clustering.ClusterMedoidFilesSink;
 import kieker.analysis.generic.graph.clustering.Clustering;
 import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
@@ -92,7 +92,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
 			final NaiveMedoidGenerator<MutableNetwork<INode, UserBehaviorEdge>> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
-			final ClusterMedoidSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath(),
+			final ClusterMedoidFilesSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidFilesSink<>(settings.getMedoidOutputPath(),
 					new EntryCallEventSerializer());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());

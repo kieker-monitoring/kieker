@@ -37,7 +37,7 @@ import teetime.framework.AbstractConsumerStage;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class ClusterMedoidSink<T> extends AbstractConsumerStage<T> {
+public class ClusterMedoidFilesSink<T> extends AbstractConsumerStage<T> {
 
 	private final ObjectMapper objectMapper;
 
@@ -51,7 +51,7 @@ public class ClusterMedoidSink<T> extends AbstractConsumerStage<T> {
 	 * @param path
 	 *            path fragment used for each medoid
 	 */
-	public ClusterMedoidSink(final Path path, final StdSerializer<?>... serializers) {
+	public ClusterMedoidFilesSink(final Path path, final StdSerializer<?>... serializers) {
 		this.objectMapper = new ObjectMapper();
 		if (serializers != null) {
 			final SimpleModule module = new SimpleModule();
@@ -66,7 +66,7 @@ public class ClusterMedoidSink<T> extends AbstractConsumerStage<T> {
 	@Override
 	protected void execute(final T model) throws Exception {
 		// the name of the JSON objects contains the number of the cluster
-		final Path numberedFilename = Paths.get(this.path.toString() + "_cluster_" + this.clusterNumber);
+		final Path numberedFilename = Paths.get(this.path.toString() + "_medoid_" + this.clusterNumber);
 		this.clusterNumber++;
 
 		this.logger.info("Write cluster medoid to " + numberedFilename);
