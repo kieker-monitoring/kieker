@@ -31,17 +31,13 @@ import kieker.analysis.behavior.events.EntryCallEvent;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class EventSerializer extends StdSerializer<EntryCallEvent> {
+public class EntryCallEventSerializer extends StdSerializer<EntryCallEvent> {
 
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = -1964014516300428956L;
 
-	public EventSerializer() {
-		this(null);
-	}
-
-	public EventSerializer(final Class<EntryCallEvent> t) {
-		super(t);
+	public EntryCallEventSerializer() {
+		super(EntryCallEvent.class);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import kieker.analysis.behavior.acceptance.matcher.GenericEntryCallAcceptanceMat
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.clustering.BehaviorModelToOpticsDataTransformation;
 import kieker.analysis.behavior.clustering.UserBehaviorCostFunction;
+import kieker.analysis.behavior.model.EntryCallEventSerializer;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.ClusterMedoidSink;
@@ -89,8 +90,8 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		if (settings.getMedoidOutputPath() != null) {
 			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
-			final NaiveMedoidGenerator<INode, UserBehaviorEdge> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
-			final ClusterMedoidSink<INode, UserBehaviorEdge> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath());
+			final NaiveMedoidGenerator<MutableNetwork<INode, UserBehaviorEdge>> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
+			final ClusterMedoidSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath(), new EntryCallEventSerializer());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());
 			this.connectPorts(medoid.getOutputPort(), sink.getInputPort());

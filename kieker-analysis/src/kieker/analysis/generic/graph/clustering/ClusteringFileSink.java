@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
-import kieker.analysis.behavior.model.EventSerializer;
+import kieker.analysis.behavior.model.EntryCallEventSerializer;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 
@@ -70,7 +70,7 @@ public class ClusteringFileSink<N extends INode, E extends IEdge> extends Abstra
 			// TODO add the ability to change serializer
 			// this custom serializer just prints the values array of an event
 			final SimpleModule module = new SimpleModule();
-			module.addSerializer(EntryCallEvent.class, new EventSerializer());
+			module.addSerializer(EntryCallEvent.class, new EntryCallEventSerializer());
 			this.objectMapper.registerModule(module);
 
 			this.objectMapper.writeValue(bw, clustering);
