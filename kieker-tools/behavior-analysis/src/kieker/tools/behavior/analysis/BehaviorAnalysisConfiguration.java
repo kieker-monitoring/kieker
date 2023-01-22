@@ -83,7 +83,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		this.connectPorts(clusteringCompositeStage.getOutputPort(), distributor.getInputPort());
 
 		if (settings.getClusterOutputPath() != null) {
-			final ClusteringFileSink<INode, UserBehaviorEdge> sink = new ClusteringFileSink<>(settings.getClusterOutputPath());
+			final ClusteringFileSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusteringFileSink<>(settings.getClusterOutputPath());
 			this.connectPorts(distributor.getNewOutputPort(), sink.getInputPort());
 		}
 
@@ -91,7 +91,8 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
 			final NaiveMedoidGenerator<MutableNetwork<INode, UserBehaviorEdge>> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
-			final ClusterMedoidSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath(), new EntryCallEventSerializer());
+			final ClusterMedoidSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath(),
+					new EntryCallEventSerializer());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());
 			this.connectPorts(medoid.getOutputPort(), sink.getInputPort());
