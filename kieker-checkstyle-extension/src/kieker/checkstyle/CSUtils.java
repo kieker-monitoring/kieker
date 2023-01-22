@@ -37,11 +37,11 @@ import com.puppycrawl.tools.checkstyle.utils.JavadocUtil.JavadocTagType;
  *
  * @since 1.7
  */
-public final class CSUtility {
+public final class CSUtils {
 
 	private static final String SINCE_TAG_NAME = "since";
 
-	private CSUtility() {
+	private CSUtils() {
 		// private default constructor
 	}
 
@@ -69,7 +69,7 @@ public final class CSUtility {
 
 			// Run through the tags and find the potential since tag
 			for (final JavadocTag tag : tags.getValidTags()) {
-				if (CSUtility.SINCE_TAG_NAME.equals(tag.getTagName())) {
+				if (CSUtils.SINCE_TAG_NAME.equals(tag.getTagName())) {
 					return true;
 				}
 			}

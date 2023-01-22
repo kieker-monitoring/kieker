@@ -49,8 +49,8 @@ public class NotAllowedSinceTagCheck extends AbstractCheck {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (CSUtility.sinceTagAvailable(this, ast)
-				&& ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
+		if (CSUtils.sinceTagAvailable(this, ast)
+				&& ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtils.parentIsInterface(ast)))) {
 			this.log(ast.getLineNo(), "@since tag not allowed");
 		}
 	}

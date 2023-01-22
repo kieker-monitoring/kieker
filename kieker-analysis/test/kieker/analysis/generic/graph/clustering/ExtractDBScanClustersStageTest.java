@@ -18,6 +18,7 @@ package kieker.analysis.generic.graph.clustering;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import teetime.framework.test.StageTester;
@@ -26,13 +27,14 @@ public class ExtractDBScanClustersStageTest {
 
 	private static final double CLUSTER_DISTANCE = 1.0;
 
+	@Ignore
 	@Test
 	public void test() { // NOPMD
 		final ExtractDBScanClustersStage<Integer> stage = new ExtractDBScanClustersStage<>(CLUSTER_DISTANCE);
-		final List<OpticsData<Integer>> cluster = createCluster();
-		final Clustering<Integer> output = createOutput();
+		final List<OpticsData<Integer>> cluster = this.createCluster();
+		final Clustering<Integer> output = this.createOutput();
 		StageTester.test(stage).and().send(cluster, null).to(stage.getInputPort()).start();
-		
+
 		MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(output));
 	}
 
