@@ -454,10 +454,11 @@
 			value="-1, 0, 1, 2"/> <property name="ignoreHashCodeMethod" value="false"/> 
 			</module> ! -->
 
-		<!-- Checks that classes (except abtract one) define a ctor and don't rely 
+		<!-- Checks that classes (except abstract one) define a ctor and don't rely 
 			on the default one. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->
-		<module name="MissingCtor" />
+		<!-- deactivated, as it requires test classes to have a constructor. Also this topic is better handled by PMD -->
+		<!-- <module name="MissingCtor" /> -->
 
 		<!-- Checks that switch statement has "default" clause. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->

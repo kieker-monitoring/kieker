@@ -42,7 +42,6 @@ import teetime.framework.test.StageTester;
 public class MTreeGeneratorTest { // NOCS constructor
 
 	private MTreeGeneratorStage<MutableNetwork<INode, IEdge>> mtreeGenerator;
-	private GraphEditDistance<INode, IEdge> mockGED;
 
 	private MutableNetwork<INode, IEdge> model1;
 	private MutableNetwork<INode, IEdge> model2;
@@ -50,41 +49,41 @@ public class MTreeGeneratorTest { // NOCS constructor
 	private MutableNetwork<INode, IEdge> model4;
 
 	@Before
-	public void setup() {
-		this.mockGED = Mockito.mock(GraphEditDistance.class);
+	public void setUp() {
+		final GraphEditDistance<INode, IEdge> mockGED = Mockito.mock(GraphEditDistance.class);
 
-		this.mtreeGenerator = new MTreeGeneratorStage<>(this.mockGED);
+		this.mtreeGenerator = new MTreeGeneratorStage<>(mockGED);
 
 		this.model1 = Mockito.mock(MutableNetwork.class);
 		this.model2 = Mockito.mock(MutableNetwork.class);
 		this.model3 = Mockito.mock(MutableNetwork.class);
 		this.model4 = Mockito.mock(MutableNetwork.class);
 
-		Mockito.when(this.mockGED.calculate(this.model1, this.model1)).thenReturn(0.0);
-		Mockito.when(this.mockGED.calculate(this.model2, this.model2)).thenReturn(0.0);
-		Mockito.when(this.mockGED.calculate(this.model3, this.model3)).thenReturn(0.0);
-		Mockito.when(this.mockGED.calculate(this.model4, this.model4)).thenReturn(0.0);
+		Mockito.when(mockGED.calculate(this.model1, this.model1)).thenReturn(0.0);
+		Mockito.when(mockGED.calculate(this.model2, this.model2)).thenReturn(0.0);
+		Mockito.when(mockGED.calculate(this.model3, this.model3)).thenReturn(0.0);
+		Mockito.when(mockGED.calculate(this.model4, this.model4)).thenReturn(0.0);
 
-		Mockito.when(this.mockGED.calculate(this.model1, this.model2)).thenReturn(1.0);
-		Mockito.when(this.mockGED.calculate(this.model1, this.model3)).thenReturn(11.0);
-		Mockito.when(this.mockGED.calculate(this.model1, this.model4)).thenReturn(12.0);
+		Mockito.when(mockGED.calculate(this.model1, this.model2)).thenReturn(1.0);
+		Mockito.when(mockGED.calculate(this.model1, this.model3)).thenReturn(11.0);
+		Mockito.when(mockGED.calculate(this.model1, this.model4)).thenReturn(12.0);
 
-		Mockito.when(this.mockGED.calculate(this.model2, this.model1)).thenReturn(1.0);
-		Mockito.when(this.mockGED.calculate(this.model2, this.model3)).thenReturn(10.0);
-		Mockito.when(this.mockGED.calculate(this.model2, this.model4)).thenReturn(11.0);
+		Mockito.when(mockGED.calculate(this.model2, this.model1)).thenReturn(1.0);
+		Mockito.when(mockGED.calculate(this.model2, this.model3)).thenReturn(10.0);
+		Mockito.when(mockGED.calculate(this.model2, this.model4)).thenReturn(11.0);
 
-		Mockito.when(this.mockGED.calculate(this.model3, this.model1)).thenReturn(11.0);
-		Mockito.when(this.mockGED.calculate(this.model3, this.model2)).thenReturn(10.0);
-		Mockito.when(this.mockGED.calculate(this.model3, this.model4)).thenReturn(1.0);
+		Mockito.when(mockGED.calculate(this.model3, this.model1)).thenReturn(11.0);
+		Mockito.when(mockGED.calculate(this.model3, this.model2)).thenReturn(10.0);
+		Mockito.when(mockGED.calculate(this.model3, this.model4)).thenReturn(1.0);
 
-		Mockito.when(this.mockGED.calculate(this.model4, this.model1)).thenReturn(12.0);
-		Mockito.when(this.mockGED.calculate(this.model4, this.model2)).thenReturn(11.0);
-		Mockito.when(this.mockGED.calculate(this.model4, this.model3)).thenReturn(1.0);
+		Mockito.when(mockGED.calculate(this.model4, this.model1)).thenReturn(12.0);
+		Mockito.when(mockGED.calculate(this.model4, this.model2)).thenReturn(11.0);
+		Mockito.when(mockGED.calculate(this.model4, this.model3)).thenReturn(1.0);
 
 	}
 
 	@Test
-	public void emptyTest() {
+	public void emptyTest() { // NOPMD uses MAtcherAssert
 		final List<MutableNetwork<INode, IEdge>> list = new ArrayList<>();
 		final List<List<MutableNetwork<INode, IEdge>>> input = new ArrayList<>();
 		input.add(list);
@@ -98,7 +97,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 	}
 
 	@Test
-	public void oneElementTest() {
+	public void oneElementTest() { // NOPMD uses MAtcherAssert
 		final List<MutableNetwork<INode, IEdge>> list = new ArrayList<>();
 		list.add(this.model1);
 		final List<List<MutableNetwork<INode, IEdge>>> input = new ArrayList<>();
@@ -114,7 +113,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 	}
 
 	@Test
-	public void fourElementTest() {
+	public void fourElementTest() { // NOPMD uses MAtcherAssert
 		final List<MutableNetwork<INode, IEdge>> list = new ArrayList<>();
 		list.add(this.model1);
 		list.add(this.model2);
@@ -127,7 +126,7 @@ public class MTreeGeneratorTest { // NOCS constructor
 
 		Iterator<ResultItem<MutableNetwork<INode, IEdge>>> iter = solutions.get(0).getNearest(this.model1).iterator();
 
-		// System.out.println(this.mockGED.calculate(iter.next().data, this.model1));
+		// System.out.println(mockGED.calculate(iter.next().data, this.model1));
 		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model1));
 		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model2));
 		MatcherAssert.assertThat(iter.next().getData(), Matchers.is(this.model3));

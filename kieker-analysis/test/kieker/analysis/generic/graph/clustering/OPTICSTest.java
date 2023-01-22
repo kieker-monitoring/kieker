@@ -15,23 +15,33 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.generic.graph.mtree.IDistanceFunction;
+import kieker.analysis.generic.graph.mtree.MTree;
 
-import teetime.framework.test.StageTester;
+public class OPTICSTest {
 
-public class MTreeGeneratorStageTest { // NOCS tests do not need constructors
+	private static final double MAX_DISTANCE = 2.0;
+	private static final int MIN_PT_S = 1;
 
 	@Test
-	public void testMTreeGeneratorStage() {
-		final List<Integer> list = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 10, 12, 15 });
-		final IDistanceFunction<Integer> distanceFunction = ClusteringHelper.integerDistanceFunction();
-		final MTreeGeneratorStage<Integer> stage = new MTreeGeneratorStage<>(distanceFunction);
-		StageTester.test(stage).and().send(list, list).to(stage.getInputPort()).start();
+	public void test() {
+		final MTree<OpticsData<Integer>> mtree = new MTree<OpticsData<Integer>>(ClusteringHelper.opticsIntegerDistanceFunction(),
+				ClusteringHelper.opticsIntegerSplitFunction());
+		final List<OpticsData<Integer>> models = new ArrayList<>();
+		final OPTICSDataGED<Integer> ged = new OPTICSDataGED<>(ClusteringHelper.integerDistanceFunction());
+		for (final int value : new int[] { 1, 2, 2, 3, 3, 4, 5 }) {
+			models.add(new OpticsData<Integer>(value, ged));
+		}
+
+		final OPTICS<Integer> optics = new OPTICS<>(mtree, MAX_DISTANCE, MIN_PT_S, models);
+		final List<OpticsData<Integer>> results = optics.calculate();
+
+		Assert.assertEquals(7, results.size());
 	}
 
 }

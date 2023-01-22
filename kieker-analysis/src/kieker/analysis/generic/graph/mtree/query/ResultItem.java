@@ -37,7 +37,6 @@ public final class ResultItem<T> {
 
 	public ResultItem(final T data, final double distance) {
 		this.data = data;
-		System.err.println("ResultItem data " + data + " " + distance);
 		this.distance = distance;
 	}
 

@@ -58,7 +58,7 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 
 		final OpticsStage<N, E> opticsStage = new OpticsStage<>(clusteringDistance, minPts);
 
-		final ExtractDBScanClustersStage<N, E> clustering = new ExtractDBScanClustersStage<>(clusteringDistance);
+		final ExtractDBScanClustersStage<MutableNetwork<N, E>> clustering = new ExtractDBScanClustersStage<>(clusteringDistance);
 
 		this.timerInputPort = dataCollectorStage.getTimeTriggerInputPort();
 

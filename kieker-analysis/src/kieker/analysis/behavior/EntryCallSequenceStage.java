@@ -80,7 +80,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 			if (userSession == null) {
 				userSession = new UserSession(event.getHostname(), event.getSessionId());
 				this.sessions.put(userSessionId, userSession);
-				// TODO this should trigger a warning, as the session should be create by a session event
+				this.logger.warn("Received an entry call event with an unknown session id {}", event.getSessionId());
 			}
 			userSession.add(event, true);
 		}
@@ -89,19 +89,27 @@ public final class EntryCallSequenceStage extends AbstractStage {
 	private void processSessionEvent(final ISessionEvent sessionEvent) {
 		if (sessionEvent != null) {
 			if (sessionEvent instanceof SessionStartEvent) {
-				this.sessions.put(UserSession.createUserSessionId(sessionEvent),
-						new UserSession(sessionEvent.getHostname(), sessionEvent.getSessionId()));
+				processSessionStartEvent((SessionStartEvent) sessionEvent);
 			}
 			if (sessionEvent instanceof SessionEndEvent) {
-				final UserSession session = this.sessions.get(UserSession.createUserSessionId(sessionEvent));
-				if (session != null) {
-					this.userSessionOutputPort.send(session);
-					this.sessions.remove(sessionEvent.getSessionId());
-				}
+				processSessionEndEvent((SessionEndEvent) sessionEvent);
 			}
 		}
 	}
 
+	private void processSessionStartEvent(final SessionStartEvent sessionEvent) {
+		this.sessions.put(UserSession.createUserSessionId(sessionEvent),
+				new UserSession(sessionEvent.getHostname(), sessionEvent.getSessionId()));	
+	}
+
+	private void processSessionEndEvent(final SessionEndEvent sessionEvent) {
+		final UserSession session = this.sessions.get(UserSession.createUserSessionId(sessionEvent));
+		if (session != null) {
+			this.userSessionOutputPort.send(session);
+			this.sessions.remove(sessionEvent.getSessionId());
+		}	
+	}
+	
 	/**
 	 * removes all expired sessions from the filter and sends them to
 	 * tBehaviorModelPreperationOutputPort.

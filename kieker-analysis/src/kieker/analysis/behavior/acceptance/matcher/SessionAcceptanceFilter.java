@@ -49,7 +49,7 @@ public class SessionAcceptanceFilter extends AbstractConsumerStage<UserSession> 
 			final EntryCallEvent call = session.getEvents().get(i);
 			if (!this.matcher.match(call)) {
 				session.getEvents().remove(i);
-				i--; // NOCS
+				i--; // NOCS NOPMD
 			}
 		}
 		if (session.getEvents().size() > 0) {

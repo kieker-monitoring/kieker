@@ -12,60 +12,58 @@
 	<!-- exclude userguide examples -->
 	<exclude-pattern>.*/examples/userguide/.*</exclude-pattern>
 
-	<!-- We'll use the following rulesets -->
-	<rule ref="rulesets/internal/all-java.xml">
-		<exclude name="AvoidCatchingNPE" />
-		<exclude name="AvoidDuplicateLiterals" />
-		<exclude name="AvoidInstantiatingObjectsInLoops" />
-		<exclude name="AvoidLiteralsInIfCondition" />
-		<exclude name="AvoidThrowingNullPointerException" />
-		<exclude name="AvoidUsingVolatile" />
-		<exclude name="BeanMembersShouldSerialize" />
-		<exclude name="CallSuperInConstructor" />
-		<exclude name="CommentSize" />
-		<exclude name="ConfusingTernary" />
-		<exclude name="CyclomaticComplexity" />
-		<exclude name="DataClass"/>
-		<exclude name="DataflowAnomalyAnalysis" />
-		<exclude name="DoNotCallSystemExit" />
-		<exclude name="DoNotUseThreads" />
-		<exclude name="ExcessiveImports" />
-		<exclude name="ExcessiveMethodLength" />
-		<exclude name="ExcessiveParameterList" />
-		<exclude name="GodClass" />
+	<rule ref="category/java/bestpractices.xml">
+		<exclude name="ArrayIsStoredDirectly"/>
 		<exclude name="JUnitAssertionsShouldIncludeMessage" />
-		<exclude name="LawOfDemeter" />
-		<exclude name="LongVariable" />
-		<exclude name="LoosePackageCoupling" />
-		<exclude name="NPathComplexity" />
-		<exclude name="OnlyOneReturn" />
-		<exclude name="PackageCase" />
-		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException 
-			and its name reflects its purpose -->
-		<exclude name="SimplifyStartsWith" />
-		<exclude name="ShortClassName" />
-		<exclude name="ShortVariable" />
-		<exclude name="SignatureDeclareThrowsException" />
-		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily 
-			synchronized -->
-		<exclude name="UseStringBufferForStringAppends" />
-		<exclude name="TooManyMethods" />
-		<exclude name="UnnecessaryConstructor" />
-		<exclude name="UnnecessaryModifier" />
-		<exclude name="UseObjectForClearerAPI" />
-		<exclude name="UseProperClassLoader" />
-		<exclude name="UseUnderscoresInNumericLiterals" />
-		<exclude name="UselessParentheses" />
-		<exclude name="UselessQualifiedThis"/>
 		<exclude name="UseVarargs" />
 	</rule>
 
+	<rule ref="category/java/codestyle.xml">
+    	<exclude name="AtLeastOneConstructor" />
+    	<exclude name="AvoidFinalLocalVariable"/>
+		<exclude name="CallSuperInConstructor" />
+		<exclude name="ConfusingTernary" />
+		<exclude name="LongVariable" />
+		<exclude name="OnlyOneReturn" />
+		<exclude name="PackageCase" />
+		<exclude name="ShortClassName" />
+		<exclude name="ShortVariable" />
+		<exclude name="UnnecessaryConstructor" />
+		<exclude name="UnnecessaryModifier" />
+		<exclude name="UselessParentheses" />
+		<exclude name="UselessQualifiedThis"/>
+		<exclude name="UseUnderscoresInNumericLiterals" />
+	</rule>
+
+	<rule ref="category/java/codestyle.xml/ClassNamingConventions">
+	    <properties>
+	        <property name="classPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="abstractClassPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
+	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory|Keys)" />
+	    </properties>
+    </rule>
+
 	<rule ref="category/java/design.xml">
+		<exclude name="AvoidThrowingNullPointerException" />
 		<exclude name="DataClass"/>
-		<exclude name="LawOfDemeter"/>
 		<exclude name="ExcessiveImports"/>
-		<exclude name="TooManyFields"/>
+		<exclude name="ExcessiveMethodLength" />
+		<exclude name="ExcessiveParameterList" />
+		<exclude name="GodClass" />
+		<exclude name="LawOfDemeter"/>
 		<exclude name="LoosePackageCoupling" />
+		<exclude name="ModifiedCyclomaticComplexity" />
+		<exclude name="NPathComplexity" />
+		<exclude name="SignatureDeclareThrowsException" />
+		<exclude name="TooManyFields"/>
+		<exclude name="UseObjectForClearerAPI" />
+	</rule>
+
+	<rule ref="category/java/documentation.xml">
+		<exclude name="CommentSize" />
 	</rule>
 
 	<rule ref="category/java/documentation.xml/CommentRequired">
@@ -79,14 +77,31 @@
 		</properties>
 	</rule>
 	
-	<rule ref="category/java/codestyle.xml/ClassNamingConventions">
-	    <properties>
-	        <property name="classPattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="abstractClassPattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="interfacePattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="enumPattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="annotationPattern" value="[A-Z][a-zA-Z0-9]*" />
-	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory|Keys)" />
-	    </properties>
-    </rule>
+	<rule ref="category/java/errorprone.xml">
+		<exclude name="AvoidCatchingNPE" />
+		<exclude name="AvoidLiteralsInIfCondition" />
+		<exclude name="BeanMembersShouldSerialize" />
+		<exclude name="DataflowAnomalyAnalysis" />
+		<exclude name="DoNotCallSystemExit" />
+		<exclude name="UseProperClassLoader" />
+	</rule>
+	
+	<rule ref="category/java/multithreading.xml">
+		<exclude name="AvoidUsingVolatile" />
+		<exclude name="DoNotUseThreads" />
+	</rule>
+	
+	<rule ref="category/java/performance.xml">
+		<exclude name="AvoidInstantiatingObjectsInLoops" />	
+		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException 
+			and its name reflects its purpose -->
+		<exclude name="SimplifyStartsWith" />
+		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily 
+			synchronized -->
+		<exclude name="UseStringBufferForStringAppends" />
+	</rule>
+	
+	<rule ref="category/java/security.xml">
+	</rule>
+	
 </ruleset>

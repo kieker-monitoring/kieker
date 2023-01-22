@@ -47,7 +47,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 	private List<OpticsData<MutableNetwork<INode, IEdge>>> models;
 
 	@Before
-	public void setup() throws InternalErrorException {
+	public void setUp() throws InternalErrorException {
 		final List<MutableNetwork<INode, IEdge>> behaviorModels = new ArrayList<>();
 
 		behaviorModels.add(TestHelper.createBehaviorModelA());
@@ -80,7 +80,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 	}
 
 	@Test
-	public void test() {
+	public void test() {  // NOPMD uses MAtcherAssert
 
 		final List<OpticsData<MutableNetwork<INode, IEdge>>> opticsPlot = OpticsStageTest.runClusterStage(this.models, this.mTree);
 		// check, that no models are lost
@@ -127,7 +127,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		inputList.add(models);
 
 		// clustering distance = 0 => only identical objects should be in a cluster
-		final ExtractDBScanClustersStage<INode, IEdge> extraction = new ExtractDBScanClustersStage<>(0);
+		final ExtractDBScanClustersStage<MutableNetwork<INode, IEdge>> extraction = new ExtractDBScanClustersStage<>(0);
 
 		final List<Clustering<MutableNetwork<INode, IEdge>>> solutions = new ArrayList<>();
 

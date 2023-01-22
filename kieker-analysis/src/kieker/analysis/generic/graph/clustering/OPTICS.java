@@ -20,10 +20,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.MTree;
 import kieker.analysis.generic.graph.mtree.query.Query;
 import kieker.analysis.generic.graph.mtree.query.ResultItem;
@@ -32,30 +28,28 @@ import kieker.analysis.generic.graph.mtree.query.ResultItem;
  * An implementation of the OPTICS algorithm. A detailed explanation of the algorithm can be found
  * in the paper "OPTICS: ordering points to identify the clustering structure".
  *
- * @param <N>
- *            node type
- * @param <E>
- *            edge type
+ * @param <T>
+ *            model type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class OPTICS<N extends INode, E extends IEdge> {
+public class OPTICS<T> {
 	// This comparator, checks from which model the reachability distance is bigger.
 	// It is used, to keep the priority queue in order
-	private final Comparator<OpticsData<MutableNetwork<N, E>>> reachComparator = new Comparator<OpticsData<MutableNetwork<N, E>>>() {
+	private final Comparator<OpticsData<T>> reachComparator = new Comparator<OpticsData<T>>() {
 
 		@Override
-		public int compare(final OpticsData<MutableNetwork<N, E>> model1, final OpticsData<MutableNetwork<N, E>> model2) {
+		public int compare(final OpticsData<T> model1, final OpticsData<T> model2) {
 			return (int) (model1.getReachabilityDistance() - model2.getReachabilityDistance());
 		}
 	};
 
 	private final int minPTs;
 	private final double maxDistance;
-	private final MTree<OpticsData<MutableNetwork<N, E>>> mtree;
-	private final List<OpticsData<MutableNetwork<N, E>>> models;
-	private final List<OpticsData<MutableNetwork<N, E>>> resultList = new ArrayList<>();
+	private final MTree<OpticsData<T>> mtree;
+	private final List<OpticsData<T>> models;
+	private final List<OpticsData<T>> resultList = new ArrayList<>();
 
 	/**
 	 *
@@ -69,15 +63,15 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 *            A list of all models to be clustered. They have to be the same as the models in
 	 *            the M-Tree
 	 */
-	public OPTICS(final MTree<OpticsData<MutableNetwork<N, E>>> mtree, final double maxDistance, final int minPTs,
-			final List<OpticsData<MutableNetwork<N, E>>> models) {
+	public OPTICS(final MTree<OpticsData<T>> mtree, final double maxDistance, final int minPTs,
+			final List<OpticsData<T>> models) {
 		this.mtree = mtree;
 		this.maxDistance = maxDistance;
 		this.minPTs = minPTs;
 		this.models = models;
 	}
 
-	private double reachabilityDistance(final OpticsData<MutableNetwork<N, E>> model1, final OpticsData<MutableNetwork<N, E>> model2) {
+	private double reachabilityDistance(final OpticsData<T> model1, final OpticsData<T> model2) {
 		final double coreDistance = model1.getCoreDistance();
 		if (coreDistance == OpticsData.UNDEFINED) {
 			return OpticsData.UNDEFINED;
@@ -94,25 +88,18 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 * @param model
 	 *            The model, of which the core distance should be updated.
 	 */
-	private void updateCoreDistance(final OpticsData<MutableNetwork<N, E>> model) {
+	private void updateCoreDistance(final OpticsData<T> model) {
 
 		int resultAmount = 0;
-		OpticsData<MutableNetwork<N, E>> last = null;
+		OpticsData<T> last = null;
 
-		System.err.printf("updateCoreDistance %s\n", model);
-
-		final Query<OpticsData<MutableNetwork<N, E>>> v = this.getMtree()
+		final Query<OpticsData<T>> v = this.getMtree()
 				.getNearest(model, this.getMaxDistance(), this.getMinPTs());
 
-		System.err.println("completed query");
-
-		for (final ResultItem<OpticsData<MutableNetwork<N, E>>> element : v) {
-			System.err.println(">>> Element " + element);
+		for (final ResultItem<OpticsData<T>> element : v) {
 			resultAmount++;
-			last = element.getData(); // TODO eliminate necessity of cast
+			last = element.getData();
 		}
-
-		System.err.println("Last is " + last);
 
 		if (resultAmount < this.getMinPTs()) {
 			model.setCoreDistance(OpticsData.UNDEFINED);
@@ -122,11 +109,11 @@ public class OPTICS<N extends INode, E extends IEdge> {
 
 	}
 
-	private List<OpticsData<MutableNetwork<N, E>>> getNeighbors(final OpticsData<MutableNetwork<N, E>> model) {
-		final Query<OpticsData<MutableNetwork<N, E>>> query = this.mtree.getNearestByRange(model, this.maxDistance);
-		final List<OpticsData<MutableNetwork<N, E>>> neighbors = new ArrayList<>();
+	private List<OpticsData<T>> getNeighbors(final OpticsData<T> model) {
+		final Query<OpticsData<T>> query = this.mtree.getNearestByRange(model, this.maxDistance);
+		final List<OpticsData<T>> neighbors = new ArrayList<>();
 
-		for (final ResultItem<OpticsData<MutableNetwork<N, E>>> element : query) {
+		for (final ResultItem<OpticsData<T>> element : query) {
 			neighbors.add(element.getData());
 		}
 
@@ -140,8 +127,8 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 * @return An ordered list of the behavior models. The reachability distances of the models are
 	 *         important for the evaluation.
 	 */
-	public List<OpticsData<MutableNetwork<N, E>>> calculate() {
-		for (final OpticsData<MutableNetwork<N, E>> model : this.models) {
+	public List<OpticsData<T>> calculate() {
+		for (final OpticsData<T> model : this.models) {
 			if (!model.isVisited()) {
 				this.expandClusterOrder(model);
 			}
@@ -161,10 +148,10 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 * @param seeds
 	 *            The current Priority Queue
 	 */
-	private void update(final List<OpticsData<MutableNetwork<N, E>>> neighbors, final OpticsData<MutableNetwork<N, E>> centerModel,
-			final PriorityQueue<OpticsData<MutableNetwork<N, E>>> seeds) {
+	private void update(final List<OpticsData<T>> neighbors, final OpticsData<T> centerModel,
+			final PriorityQueue<OpticsData<T>> seeds) {
 
-		for (final OpticsData<MutableNetwork<N, E>> model : neighbors) {
+		for (final OpticsData<T> model : neighbors) {
 			if (!model.isVisited()) {
 
 				final double newReachDistance = this.reachabilityDistance(centerModel, model);
@@ -194,27 +181,22 @@ public class OPTICS<N extends INode, E extends IEdge> {
 	 * @param model1
 	 *            An unvisited behavior model.
 	 */
-	private void expandClusterOrder(final OpticsData<MutableNetwork<N, E>> model1) {
-		final List<OpticsData<MutableNetwork<N, E>>> neighbors1 = this.getNeighbors(model1);
+	private void expandClusterOrder(final OpticsData<T> model1) {
+		final List<OpticsData<T>> neighbors1 = this.getNeighbors(model1);
 
 		model1.setVisited(true);
 		model1.setReachabilityDistance(OpticsData.UNDEFINED);
-		System.err.printf("expandClusterOrder for model1 %s\n", model1 != null ? "present" : "null"); // NOCS
 		this.updateCoreDistance(model1);
 		this.resultList.add(model1);
 
 		if (model1.getCoreDistance() != OpticsData.UNDEFINED) {
-			System.err.printf("code distance is %f\n", model1.getCoreDistance());
-			final PriorityQueue<OpticsData<MutableNetwork<N, E>>> seeds = new PriorityQueue<>(5, this.reachComparator);
-			System.err.println("update");
+			final PriorityQueue<OpticsData<T>> seeds = new PriorityQueue<>(5, this.reachComparator);
 			this.update(neighbors1, model1, seeds);
-			System.err.println("before loop");
 			while (!seeds.isEmpty()) {
 
-				final OpticsData<MutableNetwork<N, E>> model2 = seeds.poll();
+				final OpticsData<T> model2 = seeds.poll();
 				// TODO better naming
-				final List<OpticsData<MutableNetwork<N, E>>> neighbors2 = this.getNeighbors(model2);
-				System.err.printf("expandClusterOrder for model2 %s\n", model2 != null ? "present" : "NULL"); // NOCS
+				final List<OpticsData<T>> neighbors2 = this.getNeighbors(model2);
 				this.updateCoreDistance(model2);
 
 				model2.setVisited(true);
@@ -235,7 +217,7 @@ public class OPTICS<N extends INode, E extends IEdge> {
 		return this.maxDistance;
 	}
 
-	public MTree<OpticsData<MutableNetwork<N, E>>> getMtree() {
+	public MTree<OpticsData<T>> getMtree() {
 		return this.mtree;
 	}
 

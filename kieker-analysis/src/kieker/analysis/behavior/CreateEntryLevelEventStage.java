@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.behavior;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.common.record.flow.IFlowRecord;
@@ -35,9 +35,9 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class CreateEntryLevelEventStage extends AbstractTransformation<IFlowRecord, EntryCallEvent> {
 
-	private final Map<Long, TraceMetadata> registeredTraces = new HashMap<>();
-	private final Map<Long, BeforeOperationEvent> registeredBeforeOperationEvents = new HashMap<>();
-	private final Map<Long, Integer> traceStackDepth = new HashMap<>();
+	private final Map<Long, TraceMetadata> registeredTraces = new ConcurrentHashMap<>();
+	private final Map<Long, BeforeOperationEvent> registeredBeforeOperationEvents = new ConcurrentHashMap<>();
+	private final Map<Long, Integer> traceStackDepth = new ConcurrentHashMap<>();
 
 	private final boolean waitForCompleteTrace;
 

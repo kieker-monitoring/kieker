@@ -28,11 +28,11 @@ import java.util.Map;
  */
 public final class JPetStoreParameterWeighting implements IParameterWeighting {
 
+	private static final double DEFAULT_INSERTION_COST = 1;
+	private static final double DEFAULT_DUPLICATION_COST = 0.1;
+
 	private final Map<String, Double> insertionCost;
 	private final Map<String, Double> duplicationCost;
-
-	private final double defaultInsertionCost = 1;
-	private final double defaultDuplicationCost = 0.1;
 
 	public JPetStoreParameterWeighting() {
 		this.insertionCost = new HashMap<>();
@@ -68,7 +68,7 @@ public final class JPetStoreParameterWeighting implements IParameterWeighting {
 				return match;
 			}
 		}
-		return this.defaultInsertionCost;
+		return this.DEFAULT_INSERTION_COST;
 
 	}
 
@@ -81,7 +81,7 @@ public final class JPetStoreParameterWeighting implements IParameterWeighting {
 				return match;
 			}
 		}
-		return this.defaultDuplicationCost;
+		return this.DEFAULT_DUPLICATION_COST;
 
 	}
 

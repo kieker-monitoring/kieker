@@ -216,6 +216,15 @@ public final class UserSession {
 	}
 
 	@Override
+	public int hashCode() {
+		int eventHash = this.events.hashCode();
+		for (final EntryCallEvent event : this.events) {
+			eventHash += event.hashCode();
+		}
+		return super.hashCode() + this.host.hashCode() + this.sessionId.hashCode() + (int) this.getEntryTime() + (int) this.getExitTime() + eventHash;
+	}
+	
+	@Override
 	public boolean equals(final Object obj) {
 		if (this.getClass().equals(obj.getClass())) {
 			if (this == obj) {

@@ -17,46 +17,42 @@ package kieker.analysis.generic.graph.clustering;
 
 import java.util.Set;
 
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
  * The naive medoid algorithm, where all pairwise distances are calculated.
+ * A medoid is a representative object of a cluster where the medoid has the least
+ * difference to all other objects in the cluster.
  *
- * @param <N>
- *            node type
- * @param <E>
- *            edge type
+ * @param <T>
+ *            data type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class NaiveMediodGenerator<N extends INode, E extends IEdge> extends AbstractTransformation<Clustering<MutableNetwork<N, E>>, MutableNetwork<N, E>> {
+public class NaiveMedoidGenerator<T> extends AbstractTransformation<Clustering<T>, T> {
 
-	private final IDistanceFunction<MutableNetwork<N, E>> distanceFunction;
+	private final IDistanceFunction<T> distanceFunction;
 
-	public NaiveMediodGenerator(final IDistanceFunction<MutableNetwork<N, E>> distanceFunction) {
+	public NaiveMedoidGenerator(final IDistanceFunction<T> distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
 
 	@Override
-	protected void execute(final Clustering<MutableNetwork<N, E>> clustering) throws Exception {
+	protected void execute(final Clustering<T> clustering) throws Exception {
 
-		for (final Set<MutableNetwork<N, E>> clusterSet : clustering.getClusters()) {
+		for (final Set<T> clusterSet : clustering.getClusters()) {
 
 			@SuppressWarnings("unchecked")
-			final MutableNetwork<N, E>[] cluster = clusterSet.toArray(new MutableNetwork[clusterSet.size()]);
+			final T[] cluster = (T[]) clusterSet.toArray(); // NOPMD
 			if (cluster.length == 0) {
 				this.logger.warn("Empty cluster received");
 				return;
 			}
 
-			MutableNetwork<N, E> medoid = cluster[0];
+			T medoid = cluster[0];
 			double minDistanceSum = Double.MAX_VALUE;
 
 			for (int i = 0; i < cluster.length; i++) {

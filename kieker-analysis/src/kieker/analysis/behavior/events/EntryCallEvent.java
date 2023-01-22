@@ -37,7 +37,7 @@ public class EntryCallEvent {
 
 	public EntryCallEvent(final long entryTime, final long exitTime, final String operationSignature, final String classSignature,
 			final String sessionId, final String hostname,
-			final String[] parameters, final String[] values, final int requestType) {
+			final String[] parameters, final String[] values, final int requestType) { // NOPMD array stored directly
 		this.entryTime = entryTime;
 		this.exitTime = exitTime;
 		this.operationSignature = operationSignature;
@@ -82,11 +82,11 @@ public class EntryCallEvent {
 	}
 
 	public String[] getParameters() {
-		return this.parameters;
+		return this.parameters; // NOPMD exposing array
 	}
 
 	public String[] getValues() {
-		return this.values;
+		return this.values; // NOPMD exposing array
 	}
 
 	public int getRequestType() {
@@ -108,6 +108,11 @@ public class EntryCallEvent {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return (int) (super.hashCode() + this.classSignature.hashCode() + this.entryTime + this.exitTime + hostname.hashCode() + sessionId.hashCode());
 	}
 
 	private boolean compareArray(final String[] left, final String[] right) {
