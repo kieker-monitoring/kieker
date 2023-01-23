@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.tools.settings;
 
-import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +25,15 @@ import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.converters.BooleanConverter;
 import com.beust.jcommander.converters.FloatConverter;
+import com.beust.jcommander.converters.IParameterSplitter;
 import com.beust.jcommander.converters.IntegerConverter;
 import com.beust.jcommander.converters.NoConverter;
 
 import kieker.common.configuration.Configuration;
+import kieker.tools.settings.converters.CharConverter;
+import kieker.tools.settings.converters.DoubleConverter;
+import kieker.tools.settings.converters.LongConverter;
+import kieker.tools.settings.converters.ShortConverter;
 
 /**
  * Parse configuration settings and fill them into a settings object.
@@ -41,16 +46,35 @@ public class ConfigurationParser {
 	private final Object settings;
 	private final String prefix;
 
+	/**
+	 * Setup configuration parser for the given settings object and with a configuration parameter name prefix.
+	 *
+	 * @param prefix
+	 *            prefix used for all parameters relevant for this tool. In case no prefix should be used, pass an empty string or null.
+	 * @param settings
+	 */
 	public ConfigurationParser(final String prefix, final Object settings) {
 		this.settings = settings;
-		this.prefix = prefix + ".";
+		if (prefix == null) {
+			this.prefix = "";
+		} else if (prefix.isEmpty()) {
+			this.prefix = "";
+		} else {
+			this.prefix = prefix + ".";
+		}
 	}
 
 	public void parse(final Configuration configuration) throws ParameterException {
 		for (final Field field : this.settings.getClass().getDeclaredFields()) {
 			final Setting annotation = field.getAnnotation(Setting.class);
 			if (annotation != null) {
-				final String value = configuration.getStringProperty(this.prefix + field.getName());
+				final String propertyPrefix;
+				if (annotation.classMapping().equals(NoClassMapping.class)) {
+					propertyPrefix = this.prefix;
+				} else {
+					propertyPrefix = annotation.classMapping().getCanonicalName() + ".";
+				}
+				final String value = configuration.getStringProperty(propertyPrefix + field.getName());
 				if (!"".equals(value)) {
 					if (annotation.variableArity()) {
 						this.processList(field, annotation, value);
@@ -80,14 +104,21 @@ public class ConfigurationParser {
 	}
 
 	private void processList(final Field field, final Setting annotation, final String value) {
-		final String[] values = value.split(File.pathSeparator);
-		final List<Object> result = new ArrayList<>();
-		for (final String part : values) {
-			final Object object = this.processValue(field.getType(), field.getName(), annotation, part);
-			this.validateValue(field.getName(), annotation.validators(), result);
-			result.add(object);
+		try {
+			final IParameterSplitter splitter = annotation.splitter().getDeclaredConstructor().newInstance();
+
+			final List<Object> result = new ArrayList<>();
+			for (final String part : splitter.split(value)) {
+				final Object object = this.processValue(field.getType(), field.getName(), annotation, part);
+				this.validateValue(field.getName(), annotation.validators(), result);
+				result.add(object);
+			}
+			this.setValue(field, result);
+		} catch (final InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			throw new ParameterException(
+					String.format("Internal error. Cannot split '%s' with %s: %s", value, annotation.splitter().getCanonicalName(), e.getLocalizedMessage()));
 		}
-		this.setValue(field, result);
 	}
 
 	private Object processValue(final Class<?> clazz, final String name, final Setting annotation, final String value) throws ParameterException { // NOPMD

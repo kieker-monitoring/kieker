@@ -31,8 +31,8 @@ import kieker.analysis.behavior.clustering.NaiveParameterWeighting;
 import kieker.analysis.behavior.clustering.ParameterWeightingConverter;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorConverter;
-import kieker.tools.settings.ParentPathValueValidator;
 import kieker.tools.settings.Setting;
+import kieker.tools.settings.validators.ParentPathValueValidator;
 
 /**
  * All settings of the behavior analysis.
@@ -43,7 +43,7 @@ import kieker.tools.settings.Setting;
 public final class BehaviorAnalysisSettings { // NOPMD configuration class needs many fields
 
 	@Parameter(names = { "-c", "--configuration" }, required = true, description = "Configuration file")
-	private File configurationFile;
+	private Path configurationPath;
 
 	@Setting(converter = PathConverter.class, validators = ParentPathValueValidator.class)
 	private Path clusterOutputPath;
@@ -95,12 +95,12 @@ public final class BehaviorAnalysisSettings { // NOPMD configuration class needs
 		// default constructor
 	}
 
-	public final File getConfigurationFile() {
-		return this.configurationFile;
+	public final Path getConfigurationPath() {
+		return this.configurationPath;
 	}
 
-	public final void setConfigurationFile(final File configurationFile) {
-		this.configurationFile = configurationFile;
+	public final void setConfigurationPath(final Path configurationPath) {
+		this.configurationPath = configurationPath;
 	}
 
 	public Path getClusterOutputPath() {

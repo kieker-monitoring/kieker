@@ -15,23 +15,12 @@
  ***************************************************************************/
 package kieker.tools.settings;
 
-import com.beust.jcommander.converters.BaseConverter;
-
 /**
- * Convert string to short value.
+ * Marker class in case no class mapping is used for settings.
  *
  * @author Reiner Jung
- * @since 2.0.0
+ *
  */
-public class ShortConverter extends BaseConverter<Short> {
-
-	public ShortConverter(final String arg0) {
-		super(arg0);
-	}
-
-	@Override
-	public Short convert(final String arg0) {
-		return Short.parseShort(arg0);
-	}
+public class NoClassMapping {
 
 }

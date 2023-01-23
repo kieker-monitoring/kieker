@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.tools.log.replayer;
 
-import java.io.File;
+import java.nio.file.Path;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +88,7 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 	}
 
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null;
 	}
 

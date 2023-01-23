@@ -15,11 +15,11 @@
  ***************************************************************************/
 package kieker.tools.collector;
 
-import java.io.File;
+import java.nio.file.Path;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.FileConverter;
+import com.beust.jcommander.converters.PathConverter;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
@@ -38,8 +38,8 @@ import kieker.tools.common.ParameterEvaluationUtils;
 public final class CollectorMain extends AbstractService<CollectorConfiguration, CollectorMain> {
 
 	@Parameter(names = { "-c",
-		"--configuration" }, required = true, description = "Configuration file.", converter = FileConverter.class)
-	private File configurationFile;
+		"--configuration" }, required = true, description = "Configuration file.", converter = PathConverter.class)
+	private Path configurationPath;
 
 	/**
 	 * This is a simple main class which does not need to be instantiated.
@@ -66,12 +66,12 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return ParameterEvaluationUtils.isFileReadable(this.configurationFile, "Configuration File", commander);
+		return ParameterEvaluationUtils.isFileReadable(this.configurationPath.toFile(), "Configuration File", commander);
 	}
 
 	@Override
-	protected File getConfigurationFile() {
-		return this.configurationFile;
+	protected Path getConfigurationPath() {
+		return this.configurationPath;
 	}
 
 	@Override

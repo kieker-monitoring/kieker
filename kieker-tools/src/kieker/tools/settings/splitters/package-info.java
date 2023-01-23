@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,25 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
-
-import com.beust.jcommander.converters.BaseConverter;
-
-/**
- * Convert string to long value.
- *
- * @author Reiner Jung
- * @since 2.0.0
- */
-public class DoubleConverter extends BaseConverter<Double> {
-
-	public DoubleConverter(final String arg0) {
-		super(arg0);
-	}
-
-	@Override
-	public Double convert(final String arg0) {
-		return Double.parseDouble(arg0);
-	}
-
-}
+package kieker.tools.settings.splitters;

@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
+package kieker.tools.settings.splitters;
 
-import com.beust.jcommander.converters.BaseConverter;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import com.beust.jcommander.converters.IParameterSplitter;
 
 /**
- * Convert string to long value.
+ * Split a parameter value using the path separator symbol. This varies based on the operating system.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class LongConverter extends BaseConverter<Long> {
-
-	public LongConverter(final String arg0) {
-		super(arg0);
-	}
+public class PathParameterSplitter implements IParameterSplitter {
 
 	@Override
-	public Long convert(final String arg0) {
-		return Long.parseLong(arg0);
+	public List<String> split(final String value) {
+		return Arrays.asList(value.split(File.pathSeparator));
 	}
 
 }

@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -65,8 +66,8 @@ public final class BehaviorAnalysisServiceMain
 	}
 
 	@Override
-	protected File getConfigurationFile() {
-		return this.settings.getConfigurationFile();
+	protected Path getConfigurationPath() {
+		return this.settings.getConfigurationPath();
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public final class BehaviorAnalysisServiceMain
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return ParameterEvaluationUtils.isFileReadable(this.getConfigurationFile(), "configuration file", commander);
+		return ParameterEvaluationUtils.isFileReadable(this.getConfigurationPath().toFile(), "configuration file", commander);
 	}
 
 	@Override

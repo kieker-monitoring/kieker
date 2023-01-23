@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
+package kieker.tools.settings.converters;
 
 import com.beust.jcommander.converters.BaseConverter;
 
@@ -23,19 +23,15 @@ import com.beust.jcommander.converters.BaseConverter;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class CharConverter extends BaseConverter<Character> {
+public class ShortConverter extends BaseConverter<Short> {
 
-	public CharConverter(final String arg0) {
+	public ShortConverter(final String arg0) {
 		super(arg0);
 	}
 
 	@Override
-	public Character convert(final String arg0) {
-		if (arg0.length() > 0) {
-			return arg0.charAt(0);
-		} else {
-			return null;
-		}
+	public Short convert(final String arg0) {
+		return Short.parseShort(arg0);
 	}
 
 }
