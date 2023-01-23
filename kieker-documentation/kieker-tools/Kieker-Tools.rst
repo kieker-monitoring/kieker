@@ -24,6 +24,7 @@ or use the tool specific ``_OPTS`` variable, e.g.,
 Furthermore, you can use both variables to pass additional JVM
 parameters and options to a tool.
 
+-  :ref:`behavior-analysis`
 -  :ref:`kieker-tools-webgui` (deprecated)
 -  :ref:`kieker-tools-trace-analysis-tool`
 -  :ref:`kieker-tools-trace-analysis-gui` (deprecated)
