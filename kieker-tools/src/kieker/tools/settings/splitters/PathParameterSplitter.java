@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
+package kieker.tools.settings.splitters;
 
-import com.beust.jcommander.converters.BaseConverter;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import com.beust.jcommander.converters.IParameterSplitter;
 
 /**
- * Convert string to short value.
+ * Split a parameter value using the path separator symbol. This varies based on the operating system.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class CharConverter extends BaseConverter<Character> {
-
-	public CharConverter(final String arg0) {
-		super(arg0);
-	}
+public class PathParameterSplitter implements IParameterSplitter {
 
 	@Override
-	public Character convert(final String arg0) {
-		if (arg0.length() > 0) {
-			return arg0.charAt(0);
-		} else {
-			return null;
-		}
+	public List<String> split(final String value) {
+		return Arrays.asList(value.split(File.pathSeparator));
 	}
 
 }

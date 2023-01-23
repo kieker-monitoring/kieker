@@ -21,7 +21,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 import com.beust.jcommander.converters.IntegerConverter;
 
-import kieker.tools.common.DateConverter;
+import kieker.tools.settings.converters.DateConverter;
 
 /**
  * @author Reiner Jung

@@ -83,7 +83,7 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 
 		this.logger.debug("Done");
 
-		return SUCCESS_EXIT_CODE;
+		return AbstractLegacyTool.SUCCESS_EXIT_CODE;
 	}
 
 	/**

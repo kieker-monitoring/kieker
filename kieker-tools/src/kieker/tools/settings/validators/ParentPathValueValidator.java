@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
+package kieker.tools.settings.validators;
 
 import java.nio.file.Path;
 
@@ -21,20 +21,17 @@ import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
 
 /**
- * Evaluate whether the parent directory exists and the path is writable.
+ * Evaluate whether the parent directory of a given path exists.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class WritePathValueValidator implements IValueValidator<Path> { // NOPMD, NOCS
+public class ParentPathValueValidator implements IValueValidator<Path> { // NOPMD, NOCS
 
 	@Override
 	public void validate(final String name, final Path path) throws ParameterException {
 		if (!path.toAbsolutePath().getParent().toFile().exists()) {
 			throw new ParameterException(String.format("Path %s does not exist", path.toAbsolutePath().getParent()));
-		}
-		if (!path.toAbsolutePath().toFile().canWrite()) {
-			throw new ParameterException(String.format("File %s cannot be written", path.toAbsolutePath()));
 		}
 	}
 

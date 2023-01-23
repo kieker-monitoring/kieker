@@ -13,30 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.settings;
+package kieker.tools.settings.validators;
 
 import java.io.File;
-import java.nio.file.Path;
+import java.io.IOException;
 
 import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
 
-/**
- * Evaluate whether the path exists and the file is readable.
- *
- * @author Reiner Jung
- * @since 2.0.0
- */
-public class ReadPathValueValidator implements IValueValidator<Path> { // NOPMD, NOCS
+public class DirectoryReadValidator implements IValueValidator<File> {
 
 	@Override
-	public void validate(final String name, final Path path) throws ParameterException {
-		final File file = path.toAbsolutePath().toFile();
-		if (!file.exists()) {
-			throw new ParameterException(String.format("Path %s does not exist", path.toAbsolutePath()));
+	public void validate(final String name, final File value) throws ParameterException {
+		if (value == null) {
+			throw new ParameterException(String.format("%s path not specified.", name));
 		}
-		if (!file.canRead()) {
-			throw new ParameterException(String.format("File %s cannot be read", path.toAbsolutePath()));
+		try {
+			if (!value.exists()) {
+				throw new ParameterException(String.format("%s path %s does not exist.", name,
+						value.getCanonicalPath()));
+			}
+			if (!value.isDirectory()) {
+				throw new ParameterException(String.format("%s path %s is not a directory.", name,
+						value.getCanonicalPath()));
+			}
+		} catch (final IOException e) {
+			throw new ParameterException(String.format("%s path %s cannot be checked. Cause: %s", name, value,
+					e.getLocalizedMessage()));
 		}
 	}
 

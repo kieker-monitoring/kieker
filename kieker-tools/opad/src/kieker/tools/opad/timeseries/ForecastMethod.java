@@ -159,7 +159,7 @@ public enum ForecastMethod {
 			}
 			long newStartTime = ts.getStartTime();
 			newStartTime += (ts.size() - x) * ts.getDeltaTimeUnit().toMillis(ts.getDeltaTime());
-			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
+			final ITimeSeries<Double> tsLastX = new TimeSeries<>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
 					ts.getCapacity());
 			tsLastX.appendAll(b);
 			return tsLastX;

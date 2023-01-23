@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -40,6 +41,14 @@ import kieker.tools.settings.ConfigurationParser;
  */
 public final class BehaviorAnalysisServiceMain
 		extends AbstractService<BehaviorAnalysisConfiguration, BehaviorAnalysisSettings> {
+
+	private static final String PREFIX = "kieker.tools.behavior";
+
+	private static final String FULL_PREFIX = PREFIX + ".";
+
+	private static final String CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE = FULL_PREFIX + "classSignatureAcceptancePatternFile";
+
+	private static final String OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE = FULL_PREFIX + "operationSignatureAcceptancePatternFile";
 
 	/**
 	 * Default constructor.
@@ -65,14 +74,14 @@ public final class BehaviorAnalysisServiceMain
 	}
 
 	@Override
-	protected File getConfigurationFile() {
-		return this.settings.getConfigurationFile();
+	protected Path getConfigurationPath() {
+		return this.settings.getConfigurationPath();
 	}
 
 	@Override
 	protected boolean checkConfiguration(final kieker.common.configuration.Configuration configuration,
 			final JCommander commander) {
-		final ConfigurationParser parser = new ConfigurationParser(ConfigurationKeys.PREFIX, this.settings);
+		final ConfigurationParser parser = new ConfigurationParser(BehaviorAnalysisServiceMain.PREFIX, this.settings);
 
 		try {
 			parser.parse(configuration);
@@ -83,18 +92,12 @@ public final class BehaviorAnalysisServiceMain
 
 		/** For SessionAcceptanceFilter. */
 		this.settings.setClassSignatureAcceptancePatterns(
-				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
+				this.readSignatures(configuration.getStringProperty(BehaviorAnalysisServiceMain.CLASS_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
 						"class signature patterns", commander));
 		this.settings.setOperationSignatureAcceptancePatterns(
-				this.readSignatures(configuration.getStringProperty(ConfigurationKeys.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
+				this.readSignatures(configuration.getStringProperty(BehaviorAnalysisServiceMain.OPERATION_SIGNATURE_ACCEPTANCE_MATCHER_FILE),
 						"operation signature patterns", commander));
 
-		for (final File directory : this.settings.getDirectories()) {
-			this.logger.debug("Reading from log {}", directory.getAbsolutePath().toString());
-			if (!ParameterEvaluationUtils.checkDirectory(directory, "log file", commander)) {
-				this.logger.error("Log directory {} cannot be read or does not exist.", directory.getAbsolutePath().toString());
-			}
-		}
 		if (this.settings.getDirectories().size() == 0) {
 			this.logger.error("No log files found.");
 			return false;
@@ -133,7 +136,7 @@ public final class BehaviorAnalysisServiceMain
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return ParameterEvaluationUtils.isFileReadable(this.getConfigurationFile(), "configuration file", commander);
+		return ParameterEvaluationUtils.isFileReadable(this.getConfigurationPath().toFile(), "configuration file", commander);
 	}
 
 	@Override

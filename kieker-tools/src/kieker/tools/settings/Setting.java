@@ -21,6 +21,8 @@ import java.lang.annotation.Target;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.IValueValidator;
+import com.beust.jcommander.converters.CommaParameterSplitter;
+import com.beust.jcommander.converters.IParameterSplitter;
 import com.beust.jcommander.converters.NoConverter;
 import com.beust.jcommander.validators.NoValueValidator;
 
@@ -46,8 +48,12 @@ public @interface Setting {
 	 */
 	boolean required() default false;
 
+	Class<?> classMapping() default NoClassMapping.class;
+
 	/**
 	 * Validate the value for this parameter.
 	 */
 	Class<? extends IValueValidator>[] validators() default NoValueValidator.class;
+
+	Class<? extends IParameterSplitter> splitter() default CommaParameterSplitter.class;
 }

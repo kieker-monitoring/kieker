@@ -21,6 +21,7 @@ source code.
 
   * :ref:`developing-with-kieker-java-writing-tools-and-services`
   * :ref:`developing-with-kieker-java-writing-ui-and-web-tools`
+  * :ref:`developing-with-kieker-java-process-configuration-file-options`
 
 * How to write new
 

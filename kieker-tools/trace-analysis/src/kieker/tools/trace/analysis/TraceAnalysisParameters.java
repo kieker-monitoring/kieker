@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import com.beust.jcommander.Parameter;
 
 import kieker.analysis.generic.time.TimestampFilter;
-import kieker.tools.common.DateConverter;
+import kieker.tools.settings.converters.DateConverter;
 
 /**
  * @author Reiner Jung
