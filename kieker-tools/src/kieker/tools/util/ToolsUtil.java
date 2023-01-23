@@ -57,9 +57,7 @@ public final class ToolsUtil {
 			} else {
 				LOGGER.warn("Could not load verbose/debug logger");
 			}
-		} catch (final SecurityException ex) {
-			LOGGER.warn("Could not load verbose/debug logger", ex);
-		} catch (final IOException ex) {
+		} catch (final SecurityException | IOException ex) {
 			LOGGER.warn("Could not load verbose/debug logger", ex);
 		}
 	}

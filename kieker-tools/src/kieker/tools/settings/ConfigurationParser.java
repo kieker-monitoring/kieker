@@ -117,7 +117,7 @@ public class ConfigurationParser {
 		} catch (final InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			throw new ParameterException(
-					String.format("Internal error. Cannot split '%s' with %s: %s", value, annotation.splitter().getCanonicalName(), e.getLocalizedMessage()));
+					String.format("Internal error. Cannot split '%s' with %s: %s", value, annotation.splitter().getCanonicalName(), e.getLocalizedMessage()), e);
 		}
 	}
 
