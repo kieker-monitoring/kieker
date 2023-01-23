@@ -32,6 +32,7 @@ import kieker.analysis.behavior.clustering.ParameterWeightingConverter;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
 import kieker.analysis.behavior.signature.processor.TraceSignatureProcessorConverter;
 import kieker.tools.settings.Setting;
+import kieker.tools.settings.validators.DirectoryReadValidator;
 import kieker.tools.settings.validators.ParentPathValueValidator;
 
 /**
@@ -82,7 +83,7 @@ public final class BehaviorAnalysisSettings { // NOPMD configuration class needs
 	@Setting(converter = ParameterWeightingConverter.class)
 	private IParameterWeighting parameterWeighting = new NaiveParameterWeighting();
 
-	@Setting(variableArity = true, converter = FileConverter.class, required = true)
+	@Setting(variableArity = true, converter = FileConverter.class, required = true, validators = DirectoryReadValidator.class)
 	private List<File> directories;
 
 	@Setting
