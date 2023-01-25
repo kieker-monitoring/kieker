@@ -30,7 +30,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.8
  */
-public class AnalysisThroughputStage extends AbstractStage {
+public class AnalysisThroughputStage extends AbstractStage { // NOPMD not a data class
 
 	private final InputPort<IMonitoringRecord> recordsInputPort = this.createInputPort();
 	private final InputPort<Long> timestampsInputPort = this.createInputPort();
@@ -58,7 +58,7 @@ public class AnalysisThroughputStage extends AbstractStage {
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
 			final long duration = timestampInNs - this.lastTimestampInNs;
-			this.throughputOutputPort.send(((double) this.numPassedElements) / duration);
+			this.throughputOutputPort.send((double) this.numPassedElements / duration);
 			this.numPassedElements = 0;
 			this.resetTimestamp(timestampInNs);
 		}

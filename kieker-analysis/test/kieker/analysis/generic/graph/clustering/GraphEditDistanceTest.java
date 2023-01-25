@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2017 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ import kieker.analysis.generic.graph.INode;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class GraphEditDistanceTest { // NOCS constructor
+public class GraphEditDistanceTest { // NOCS NOPMD constructor
 
 	private final GraphEditDistance<INode, IEdge> ged = new GraphEditDistance<>(new BasicCostFunction<>(1, 1));
 
 	@Test
-	public void distanceToIdenticalModelIsZeroTest() {
+	public void distanceToIdenticalModelIsZeroTest() {  // NOPMD has MatcherAssert
 		MutableNetwork<INode, IEdge> model1 = TestHelper.createBehaviorModelA();
 		MutableNetwork<INode, IEdge> model2 = TestHelper.createBehaviorModelA();
 

@@ -61,6 +61,7 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 	 *            configuration for the service
 	 * @throws ConfigurationException
 	 *             on configuration errors
+	 * @deprecated
 	 */
 	@Deprecated
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {

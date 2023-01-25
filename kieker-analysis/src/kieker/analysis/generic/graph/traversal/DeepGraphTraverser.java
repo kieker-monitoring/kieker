@@ -47,6 +47,7 @@ public class DeepGraphTraverser<N extends INode, E extends IEdge> extends Abstra
 		super(nodeVisitor, edgeVisitor);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void traverse(final MutableNetwork<N, E> graph) {
 		for (final N node : graph.nodes()) {
@@ -54,7 +55,7 @@ public class DeepGraphTraverser<N extends INode, E extends IEdge> extends Abstra
 				visitor.visitNode(node);
 			}
 			if (node.getChildGraph() != null) {
-				this.traverse(node.getChildGraph().getGraph());
+				this.traverse((MutableNetwork<N, E>) node.getChildGraph().getGraph());
 			}
 		}
 

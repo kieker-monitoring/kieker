@@ -106,7 +106,7 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 	}
 
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null;
 	}
 
@@ -127,6 +127,6 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	@Override
 	protected void shutdownService() {
-
+		// nothing special to do here
 	}
 }

@@ -45,16 +45,14 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 
 	private static final String ENTRY_VERTEX_IDENTIFIER = "entry";
 
-	protected IGraph graph;
+	protected IGraph<INode, IEdge> graph;
 	protected ResponseTimeDecorator responseTimeDecorator;
 
 	protected ExecutionModel executionModel;
 	protected StatisticsModel statisticsModel;
 
-	public AbstractDependencyGraphBuilder() {}
-
 	@Override
-	public IGraph build(final ModelRepository repository) {
+	public IGraph<INode, IEdge> build(final ModelRepository repository) {
 		this.graph = GraphFactory.createGraph(repository.getName());
 
 		this.executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
@@ -106,14 +104,14 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 		return edge;
 	}
 
-	protected IGraph addChildGraphIfAbsent(final INode node) {
+	protected IGraph<INode, IEdge> addChildGraphIfAbsent(final INode node) {
 		if (!node.hasChildGraph()) {
 			node.createChildGraph();
 		}
 		return node.getChildGraph();
 	}
 
-	protected INode addVertexIfAbsent(final IGraph checkGraph, final String id) {
+	protected INode addVertexIfAbsent(final IGraph<INode, IEdge> checkGraph, final String id) {
 		final Optional<INode> nodeOptional = checkGraph.findNode(id);
 		if (nodeOptional.isPresent()) {
 			return nodeOptional.get();

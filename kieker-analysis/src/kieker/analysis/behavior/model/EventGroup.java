@@ -34,13 +34,13 @@ public class EventGroup {
 	private final String[] parameters;
 	private final List<EntryCallEvent> events;
 
-	public EventGroup(final String[] parameters) {
+	public EventGroup(final String[] parameters) { // NOPMD using string array
 		this.parameters = parameters;
 		this.events = new ArrayList<>();
 	}
 
 	public String[] getParameters() {
-		return this.parameters;
+		return this.parameters; // NOPMD exposing stirng array
 	}
 
 	public List<EntryCallEvent> getEvents() {

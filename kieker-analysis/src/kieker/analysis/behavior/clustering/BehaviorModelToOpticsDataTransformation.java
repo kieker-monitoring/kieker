@@ -15,11 +15,13 @@
  ***************************************************************************/
 package kieker.analysis.behavior.clustering;
 
+import com.google.common.graph.MutableNetwork;
+
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 import kieker.analysis.generic.graph.clustering.OpticsData;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -34,17 +36,19 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends IEdge> extends AbstractTransformation<IGraph<N, E>, OpticsData<N, E>> {
+public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends IEdge>
+		extends AbstractTransformation<IGraph<N, E>, OpticsData<MutableNetwork<N, E>>> {
 
-	private final OPTICSDataGED<N, E> opticsGed;
+	private final OPTICSDataGED<MutableNetwork<N, E>> opticsGed;
 
-	public BehaviorModelToOpticsDataTransformation(final OPTICSDataGED<N, E> opticsGed) {
+	public BehaviorModelToOpticsDataTransformation(final OPTICSDataGED<MutableNetwork<N, E>> opticsGed) {
 		this.opticsGed = opticsGed;
 	}
 
 	@Override
 	protected void execute(final IGraph<N, E> model) throws Exception {
-		this.outputPort.send(new OpticsData<>(model.getGraph(), this.opticsGed));
+		final OpticsData<MutableNetwork<N, E>> opticsData = new OpticsData<MutableNetwork<N, E>>(model.getGraph(), this.opticsGed);
+		this.outputPort.send(opticsData);
 		this.logger.debug("Converted BehaviorModel to OpticsData");
 	}
 

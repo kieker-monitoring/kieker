@@ -29,7 +29,7 @@ import kieker.model.analysismodel.trace.OperationCall;
  *
  * @since 1.14
  */
-public class TraceBasedExecutionModelAssembler extends AbstractSourceModelAssembler implements ITraceBasedExecutionModelAssembler {
+public class TraceBasedExecutionModelAssembler extends AbstractModelAssembler implements ITraceBasedExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 

@@ -19,7 +19,8 @@ import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 /**
  * An implementation of the trimmed algorithm. The algorithm is proposed in the paper "A
- * Sub-Quadratic Exact Medoid Algorithm"
+ * Sub-Quadratic Exact Medoid Algorithm". It seems to try to find the model which has the
+ * smallest distance to all other models.
  *
  * @param <T>
  *            the type of the Clustered Elements
@@ -32,23 +33,22 @@ public class TrimmedAlgorithm<T> {
 	private final double[] lowerBounds;
 
 	private double lowestEnergy = Double.MAX_VALUE;
-	private T bestCandidate = null;
+	private T bestCandidate = null; // NOPMD documentation
 
 	private final T[] models;
 
 	private final IDistanceFunction<T> distanceFunction;
 
-	
 	public TrimmedAlgorithm(final T[] models, final IDistanceFunction<T> distanceFunction) {
+		if (models.length == 0) {
+			throw new IllegalArgumentException("Amount of models has to be larger than 0.");
+		}
 		this.lowerBounds = new double[models.length];
 		this.models = models;
 		this.distanceFunction = distanceFunction;
 	}
 
 	public T calculate() {
-		if (this.models.length == 0) {
-			throw new IllegalArgumentException("Amount of models has to be larger than 0.");
-		}
 		this.bestCandidate = this.models[0];
 		for (int i = 0; i < this.models.length; i++) {
 			if (this.lowerBounds[i] < this.lowestEnergy) {
@@ -56,7 +56,7 @@ public class TrimmedAlgorithm<T> {
 				final double[] distances = new double[this.models.length];
 
 				double distanceSum = 0;
-				for (int j = 0; j < this.models.length; j++) {
+				for (int j = 0; j < this.models.length; j++) { // NOPMD no arrays to be copied
 					distances[j] = this.distanceFunction.calculate(this.models[i], this.models[j]);
 					distanceSum += distances[j];
 				}

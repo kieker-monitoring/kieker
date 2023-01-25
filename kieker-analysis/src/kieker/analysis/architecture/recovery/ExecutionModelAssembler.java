@@ -29,7 +29,7 @@ import kieker.model.analysismodel.source.SourceModel;
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler extends AbstractSourceModelAssembler implements IExecutionModelAssembler {
+public class ExecutionModelAssembler extends AbstractModelAssembler implements IOperationCallModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 

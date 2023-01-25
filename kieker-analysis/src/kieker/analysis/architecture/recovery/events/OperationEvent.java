@@ -21,24 +21,13 @@ package kieker.analysis.architecture.recovery.events;
  * @author Reiner Jung
  * @since 1.15
  */
-public class OperationEvent {
+public class OperationEvent extends AbstractElementEvent {
 
-	private final String componentSignature;
 	private final String operationSignature;
-	private final String hostname;
 
 	public OperationEvent(final String hostname, final String componentSignature, final String operationSignature) {
-		this.hostname = hostname;
-		this.componentSignature = componentSignature;
+		super(hostname, componentSignature);
 		this.operationSignature = operationSignature;
-	}
-
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	public String getComponentSignature() {
-		return this.componentSignature;
 	}
 
 	public String getOperationSignature() {
@@ -49,16 +38,16 @@ public class OperationEvent {
 	public boolean equals(final Object obj) {
 		if (obj instanceof OperationEvent) {
 			final OperationEvent operation = (OperationEvent) obj;
-			return this.compare(this.componentSignature, operation.getComponentSignature())
+			return this.compare(this.getComponentSignature(), operation.getComponentSignature())
 					&& this.compare(this.operationSignature, operation.getOperationSignature())
-					&& this.compare(this.hostname, operation.getHostname());
+					&& this.compare(this.getHostname(), operation.getHostname());
 		} else {
 			return super.equals(obj);
 		}
 	}
 
 	private boolean compare(final String a, final String b) {
-		if ((a == null) && (b == null)) {
+		if (a == null && b == null) {
 			return true;
 		} else if (a != null) {
 			return a.equals(b);
@@ -74,6 +63,6 @@ public class OperationEvent {
 
 	@Override
 	public String toString() {
-		return String.format("%s:%s@%s", this.componentSignature, this.operationSignature, this.hostname);
+		return String.format("%s>%s:%s", this.getHostname(), this.getComponentSignature(), this.operationSignature);
 	}
 }

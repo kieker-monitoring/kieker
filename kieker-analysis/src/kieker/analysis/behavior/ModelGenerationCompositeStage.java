@@ -19,7 +19,7 @@ import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.behavior.signature.processor.ITraceSignatureProcessor;
-import kieker.analysis.generic.CountingFilter;
+import kieker.analysis.generic.CountingStage;
 import kieker.analysis.generic.DynamicEventDispatcher;
 import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
@@ -72,7 +72,7 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 
 		eventDispatcher.registerOutput(flowRecordMatcher);
 
-		final CountingFilter<EntryCallEvent> callCounter = new CountingFilter<>(true, 10, "entry");
+		final CountingStage<EntryCallEvent> callCounter = new CountingStage<>(true, 10, "entry");
 
 		this.connectPorts(flowRecordMatcher.getOutputPort(), createEntryLevelEventStage.getInputPort());
 		this.connectPorts(createEntryLevelEventStage.getOutputPort(), callCounter.getInputPort());

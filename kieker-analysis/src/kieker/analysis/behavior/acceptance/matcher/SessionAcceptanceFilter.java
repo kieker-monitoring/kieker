@@ -15,8 +15,8 @@
  ***************************************************************************/
 package kieker.analysis.behavior.acceptance.matcher;
 
-import kieker.analysis.behavior.data.UserSession;
 import kieker.analysis.behavior.events.EntryCallEvent;
+import kieker.analysis.behavior.model.UserSession;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
@@ -49,7 +49,7 @@ public class SessionAcceptanceFilter extends AbstractConsumerStage<UserSession> 
 			final EntryCallEvent call = session.getEvents().get(i);
 			if (!this.matcher.match(call)) {
 				session.getEvents().remove(i);
-				i--; // NOCS
+				i--; // NOCS NOPMD
 			}
 		}
 		if (session.getEvents().size() > 0) {

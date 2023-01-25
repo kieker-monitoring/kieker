@@ -27,9 +27,10 @@ import org.junit.Test;
 import com.google.common.graph.MutableNetwork;
 
 import kieker.analysis.behavior.TestHelper;
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
+import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 import kieker.analysis.generic.graph.mtree.MTree;
 
 import teetime.framework.test.StageTester;
@@ -42,11 +43,11 @@ import teetime.framework.test.StageTester;
  */
 public class OpticsStageTest { // NOCS test class does not need a constructor
 
-	private MTree<OpticsData<INode, IEdge>> mTree;
-	private List<OpticsData<INode, IEdge>> models;
+	private MTree<OpticsData<MutableNetwork<INode, IEdge>>> mTree;
+	private List<OpticsData<MutableNetwork<INode, IEdge>>> models;
 
 	@Before
-	public void setup() {
+	public void setUp() throws InternalErrorException {
 		final List<MutableNetwork<INode, IEdge>> behaviorModels = new ArrayList<>();
 
 		behaviorModels.add(TestHelper.createBehaviorModelA());
@@ -67,7 +68,9 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 
 		this.models = new ArrayList<>();
 
-		final OPTICSDataGED<INode, IEdge> opticsGed = new OPTICSDataGED<>(new BasicCostFunction<>(1, 1));
+		final IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(new BasicCostFunction<>(1, 1));
+
+		final OPTICSDataGED<MutableNetwork<INode, IEdge>> opticsGed = new OPTICSDataGED<>(distanceFunction);
 
 		for (final MutableNetwork<INode, IEdge> model : behaviorModels) {
 			this.models.add(new OpticsData<>(model, opticsGed));
@@ -77,9 +80,9 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 	}
 
 	@Test
-	public void test() {
+	public void test() {  // NOPMD uses MAtcherAssert
 
-		final List<OpticsData<INode, IEdge>> opticsPlot = OpticsStageTest.runClusterStage(this.models, this.mTree);
+		final List<OpticsData<MutableNetwork<INode, IEdge>>> opticsPlot = OpticsStageTest.runClusterStage(this.models, this.mTree);
 		// check, that no models are lost
 		MatcherAssert.assertThat(opticsPlot.size(), Matchers.is(12));
 
@@ -97,19 +100,20 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		}
 	}
 
-	public static List<OpticsData<INode, IEdge>> runClusterStage(final List<OpticsData<INode, IEdge>> models, final MTree<OpticsData<INode, IEdge>> mTree) {
+	public static List<OpticsData<MutableNetwork<INode, IEdge>>> runClusterStage(final List<OpticsData<MutableNetwork<INode, IEdge>>> models,
+			final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mTree) {
 		// prepare input
-		final List<List<OpticsData<INode, IEdge>>> modelsInputList = new ArrayList<>();
+		final List<List<OpticsData<MutableNetwork<INode, IEdge>>>> modelsInputList = new ArrayList<>();
 		modelsInputList.add(models);
 
 		// prepare input
-		final List<MTree<OpticsData<INode, IEdge>>> mTreeInputList = new ArrayList<>();
+		final List<MTree<OpticsData<MutableNetwork<INode, IEdge>>>> mTreeInputList = new ArrayList<>();
 		mTreeInputList.add(mTree);
 
 		// these are the clustering arguments
 		final OpticsStage<INode, IEdge> optics = new OpticsStage<>(0, 4);
 
-		final List<List<OpticsData<INode, IEdge>>> solutions = new ArrayList<>();
+		final List<List<OpticsData<MutableNetwork<INode, IEdge>>>> solutions = new ArrayList<>();
 
 		StageTester.test(optics).and().send(modelsInputList).to(optics.getModelsInputPort()).and().send(mTreeInputList)
 				.to(optics.getMTreeInputPort()).and().receive(solutions).from(optics.getOutputPort()).start();
@@ -117,13 +121,13 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		return solutions.get(0);
 	}
 
-	public static Clustering<MutableNetwork<INode, IEdge>> runExtractionStage(final List<OpticsData<INode, IEdge>> models) {
+	public static Clustering<MutableNetwork<INode, IEdge>> runExtractionStage(final List<OpticsData<MutableNetwork<INode, IEdge>>> models) {
 		// prepare input
-		final List<List<OpticsData<INode, IEdge>>> inputList = new ArrayList<>();
+		final List<List<OpticsData<MutableNetwork<INode, IEdge>>>> inputList = new ArrayList<>();
 		inputList.add(models);
 
 		// clustering distance = 0 => only identical objects should be in a cluster
-		final ExtractDBScanClustersStage<INode, IEdge> extraction = new ExtractDBScanClustersStage<>(0);
+		final ExtractDBScanClustersStage<MutableNetwork<INode, IEdge>> extraction = new ExtractDBScanClustersStage<>(0);
 
 		final List<Clustering<MutableNetwork<INode, IEdge>>> solutions = new ArrayList<>();
 

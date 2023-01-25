@@ -22,16 +22,17 @@ import kieker.analysis.behavior.acceptance.matcher.GenericEntryCallAcceptanceMat
 import kieker.analysis.behavior.acceptance.matcher.IEntryCallAcceptanceMatcher;
 import kieker.analysis.behavior.clustering.BehaviorModelToOpticsDataTransformation;
 import kieker.analysis.behavior.clustering.UserBehaviorCostFunction;
+import kieker.analysis.behavior.model.EntryCallEventSerializer;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.ClusterMedoidSink;
+import kieker.analysis.generic.graph.clustering.ClusterMedoidFilesSink;
 import kieker.analysis.generic.graph.clustering.Clustering;
 import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
 import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
-import kieker.analysis.generic.graph.clustering.NaiveMediodGenerator;
-import kieker.analysis.generic.graph.clustering.OpticsData.OPTICSDataGED;
-import kieker.analysis.generic.source.time.TimeReaderStage;
+import kieker.analysis.generic.graph.clustering.NaiveMedoidGenerator;
+import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
+import kieker.analysis.util.stage.trigger.TerminationStage;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.source.LogsReaderCompositeStage;
 
@@ -50,7 +51,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 			throws ConfigurationException {
 
 		final UserBehaviorCostFunction costFunction = new UserBehaviorCostFunction(settings.getNodeInsertCost(), settings.getEdgeInsertCost(),
-				settings.getEventGroupInsertCost(), settings.getWeighting());
+				settings.getEventGroupInsertCost(), settings.getParameterWeighting());
 
 		final LogsReaderCompositeStage reader = new LogsReaderCompositeStage(settings.getDirectories(), settings.isVerbose(), settings.getDataBufferSize());
 
@@ -60,7 +61,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
 				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
 
-		final OPTICSDataGED<INode, UserBehaviorEdge> distanceFunction = new OPTICSDataGED<>(costFunction);
+		final GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<>(costFunction);
+
+		final OPTICSDataGED<MutableNetwork<INode, UserBehaviorEdge>> distanceFunction = new OPTICSDataGED<>(gedDistanceFunction);
 
 		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation = new BehaviorModelToOpticsDataTransformation<>(
 				distanceFunction);
@@ -68,8 +71,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 				settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
-		// Replace this for file based operation with an end of execution trigger.
-		final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
+		// TODO needed to use this during online runtime.
+		// final TimeReaderStage timerStage = new TimeReaderStage(1L, 1L);
+		final TerminationStage<Long> timerStage = new TerminationStage<>(0L);
 
 		this.connectPorts(reader.getOutputPort(), modelGeneration.getInputPort());
 
@@ -79,15 +83,17 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 		this.connectPorts(clusteringCompositeStage.getOutputPort(), distributor.getInputPort());
 
 		if (settings.getClusterOutputPath() != null) {
-			final ClusteringFileSink<INode, UserBehaviorEdge> sink = new ClusteringFileSink<>(settings.getClusterOutputPath());
+			final ClusteringFileSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusteringFileSink<>(settings.getClusterOutputPath(),
+					new EntryCallEventSerializer());
 			this.connectPorts(distributor.getNewOutputPort(), sink.getInputPort());
 		}
 
 		if (settings.getMedoidOutputPath() != null) {
 			final GraphEditDistance<INode, UserBehaviorEdge> graphEditDistance = new GraphEditDistance<>(costFunction);
 
-			final NaiveMediodGenerator<INode, UserBehaviorEdge> medoid = new NaiveMediodGenerator<>(graphEditDistance);
-			final ClusterMedoidSink<INode, UserBehaviorEdge> sink = new ClusterMedoidSink<>(settings.getMedoidOutputPath());
+			final NaiveMedoidGenerator<MutableNetwork<INode, UserBehaviorEdge>> medoid = new NaiveMedoidGenerator<>(graphEditDistance);
+			final ClusterMedoidFilesSink<MutableNetwork<INode, UserBehaviorEdge>> sink = new ClusterMedoidFilesSink<>(settings.getMedoidOutputPath(),
+					new EntryCallEventSerializer());
 
 			this.connectPorts(distributor.getNewOutputPort(), medoid.getInputPort());
 			this.connectPorts(medoid.getOutputPort(), sink.getInputPort());

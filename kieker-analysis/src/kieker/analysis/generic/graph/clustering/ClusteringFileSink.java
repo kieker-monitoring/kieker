@@ -23,12 +23,7 @@ import java.nio.file.Path;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.behavior.events.EntryCallEvent;
-import kieker.analysis.behavior.model.EventSerializer;
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import teetime.framework.AbstractConsumerStage;
 
@@ -36,15 +31,13 @@ import teetime.framework.AbstractConsumerStage;
  * A sink stage, which returns all clusters and all noise objects. All elements of the clusters are
  * part of the JSON result.
  *
- * @param <N>
- *            node type
- * @param <E>
- *            edge type
+ * @param <T>
+ *            cluster element type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class ClusteringFileSink<N extends INode, E extends IEdge> extends AbstractConsumerStage<Clustering<MutableNetwork<N, E>>> {
+public class ClusteringFileSink<T> extends AbstractConsumerStage<Clustering<T>> {
 
 	private final ObjectMapper objectMapper;
 
@@ -56,23 +49,23 @@ public class ClusteringFileSink<N extends INode, E extends IEdge> extends Abstra
 	 * @param path
 	 *            path
 	 */
-	public ClusteringFileSink(final Path path) {
+	public ClusteringFileSink(final Path path, final StdSerializer<?>... serializers) {
 		this.objectMapper = new ObjectMapper();
+		if (serializers != null) {
+			final SimpleModule module = new SimpleModule();
+			for (final StdSerializer<?> serializer : serializers) {
+				module.addSerializer(serializer);
+			}
+			this.objectMapper.registerModule(module);
+		}
 		this.path = path;
 	}
 
 	@Override
-	protected void execute(final Clustering<MutableNetwork<N, E>> clustering) throws IOException {
+	protected void execute(final Clustering<T> clustering) throws IOException {
 		this.logger.info("Write models to {}", this.path.toString());
 		try (final BufferedWriter bw = Files.newBufferedWriter(this.path)) {
 			this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-			// TODO add the ability to change serializer
-			// this custom serializer just prints the values array of an event
-			final SimpleModule module = new SimpleModule();
-			module.addSerializer(EntryCallEvent.class, new EventSerializer());
-			this.objectMapper.registerModule(module);
-
 			this.objectMapper.writeValue(bw, clustering);
 		} catch (final IOException e) {
 			this.logger.error("Writing to {} failed", this.path.toString());

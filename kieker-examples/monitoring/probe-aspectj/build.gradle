@@ -12,11 +12,8 @@ dependencies {
         implementation 'ch.qos.logback:logback-classic:1.1.7'
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
-	
-	// This might be replaced by implementation "net.kieker-monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
-	implementation fileTree('lib') {
-		include "kieker-${kiekerVersion}-aspectj.jar"
-	}
+
+        implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
 
 distTar.enabled=false

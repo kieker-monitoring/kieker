@@ -56,7 +56,8 @@ public class MTreeGeneratorStage<T> extends AbstractTransformation<List<T>, MTre
 			this.logger.debug("Created MTree");
 
 			this.outputPort.send(mtree);
-
+		} else {
+			this.logger.warn("Received empty model list. Cannot create mtree.");
 		}
 	}
 

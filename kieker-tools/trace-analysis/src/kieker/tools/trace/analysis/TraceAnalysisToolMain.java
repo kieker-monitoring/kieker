@@ -17,6 +17,7 @@ package kieker.tools.trace.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -28,8 +29,8 @@ import com.beust.jcommander.JCommander;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.common.AbstractLegacyTool;
-import kieker.tools.common.DateConverter;
 import kieker.tools.common.ParameterEvaluationUtils;
+import kieker.tools.settings.converters.DateConverter;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
@@ -91,16 +92,16 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 
 		if (new PerformAnalysis(this.logger, this.settings).dispatchTasks()) {
 			this.logger.info("Analysis complete. See 'kieker.log' for details.");
-			return SUCCESS_EXIT_CODE;
+			return AbstractLegacyTool.SUCCESS_EXIT_CODE;
 		} else {
 			this.logger.error("Analysis incomplete. See 'kieker.log' for details.");
-			return RUNTIME_ERROR;
+			return AbstractLegacyTool.RUNTIME_ERROR;
 		}
 	}
 
 	/** support for external configuration file. */
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null; // Trace analysis does not support configuration files yet
 	}
 

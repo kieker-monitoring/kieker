@@ -15,7 +15,8 @@
  ***************************************************************************/
 package kieker.tools.common;
 
-import java.io.File;
+import java.lang.invoke.WrongMethodTypeException;
+import java.nio.file.Path;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	public static final int USAGE_EXIT_CODE = 4;
 
 	/** logger for all tools. */
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD logging must not be static, confuses user
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName()); // NOPMD logging must not be static, confuses user
 
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
@@ -90,28 +91,28 @@ public abstract class AbstractLegacyTool<T extends Object> {
 			if (this.checkParameters(commander)) {
 				if (this.help) {
 					commander.usage();
-					return USAGE_EXIT_CODE;
+					return AbstractLegacyTool.USAGE_EXIT_CODE;
 				} else {
 					this.kiekerConfiguration = this.readConfiguration();
 
 					if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
 						return this.execute(commander, label);
 					} else {
-						return CONFIGURATION_ERROR;
+						return AbstractLegacyTool.CONFIGURATION_ERROR;
 					}
 				}
 			} else {
 				this.logger.error("Configuration Error"); // NOPMD
-				return CONFIGURATION_ERROR;
+				return AbstractLegacyTool.CONFIGURATION_ERROR;
 			}
-		} catch (final ParameterException e) {
+		} catch (final WrongMethodTypeException | ParameterException e) {
 			this.logger.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
-			return PARAMETER_ERROR;
+			return AbstractLegacyTool.PARAMETER_ERROR;
 		} catch (final ConfigurationException e) {
 			this.logger.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
-			return CONFIGURATION_ERROR;
+			return AbstractLegacyTool.CONFIGURATION_ERROR;
 		}
 	}
 
@@ -135,8 +136,8 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 * @return returns a complete Kieker configuration
 	 */
 	protected kieker.common.configuration.Configuration readConfiguration() {
-		if (this.getConfigurationFile() != null) { // NOPMD
-			return ConfigurationFactory.createConfigurationFromFile(this.getConfigurationFile().getAbsolutePath()); // NOPMD
+		if (this.getConfigurationPath() != null) { // NOPMD
+			return ConfigurationFactory.createConfigurationFromFile(this.getConfigurationPath()); // NOPMD
 		} else {
 			return null;
 		}
@@ -147,7 +148,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 *
 	 * @return returns a file handle in case a configuration file is used, else null
 	 */
-	protected abstract File getConfigurationFile();
+	protected abstract Path getConfigurationPath();
 
 	/**
 	 * Check a given configuration for validity.
