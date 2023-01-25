@@ -69,7 +69,7 @@ public final class TraceAnalysisExampleMain extends AbstractService<TeeTimeConfi
 	}
 
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null;
 	}
 	
