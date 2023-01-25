@@ -16,6 +16,7 @@
 package kieker.examples.analysis.traceanalysis;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import com.beust.jcommander.JCommander;
 
@@ -69,7 +70,7 @@ public final class TraceAnalysisExampleMain extends AbstractService<TeeTimeConfi
 	}
 
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null;
 	}
 	
