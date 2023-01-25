@@ -16,6 +16,7 @@
 package kieker.examples.analysis.traceanalysis;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import com.beust.jcommander.JCommander;
 
