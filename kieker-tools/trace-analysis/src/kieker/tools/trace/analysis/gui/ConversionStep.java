@@ -273,8 +273,8 @@ public class ConversionStep extends AbstractStep {
 
 	@Override
 	public void loadDefaultConfiguration() {
-		this.graphvizDirectoryField.setText(this.currentPath);
-		this.pic2plotDirectoryField.setText(this.currentPath);
+		checkForDefaultLinuxLocations();
+
 		this.outputFormatField.setSelectedIndex(0);
 
 		this.graphvizDirectoryField.setEnabled(false);
@@ -282,6 +282,28 @@ public class ConversionStep extends AbstractStep {
 		this.graphvizDirectoryChooseButton.setEnabled(false);
 		this.pic2plotDirectoryChooseButton.setEnabled(false);
 		this.outputFormatField.setEnabled(false);
+	}
+
+	private void checkForDefaultLinuxLocations() {
+		File potentialGraphvizFile = new File("/usr/bin/dot");
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()) {
+			graphvizDirectoryField.setText(potentialGraphvizFile.getParent());
+			graphvizDirectoryLabel.setText("<html>Graphviz Directoy:<br>(Candidate has been auto-detected)</html>");
+			graphvizDirectoryField.repaint();
+		} else {
+			this.graphvizDirectoryField.setText(this.currentPath);
+		}
+		File potentialPic2plotFile = new File("/usr/bin/pic2plot");
+		if (potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			pic2plotDirectoryField.setText(potentialPic2plotFile.getParent());
+			pic2plotDirectoryLabel.setText("<html>Pic2Plot Directoy:<br>(Candidate has been auto-detected)</html>");
+		} else {
+			this.pic2plotDirectoryField.setText(this.currentPath);
+		}
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute() &&
+				potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			performStep.setSelected(true);
+		}
 	}
 
 	@Override
