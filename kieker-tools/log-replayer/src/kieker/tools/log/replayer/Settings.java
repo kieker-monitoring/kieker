@@ -16,6 +16,7 @@
 package kieker.tools.log.replayer;
 
 import java.io.File;
+import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
@@ -31,16 +32,12 @@ import kieker.tools.settings.converters.DateConverter;
 public class Settings { // NOCS, NOPMD does not need a constructor
 
 	@Parameter(names = { "-i",
-		"--input" }, required = true, description = "Input data directory.", converter = FileConverter.class)
-	private File dataLocation;
-
-	@Parameter(names = { "-p",
-		"--port" }, required = true, description = "Output port.", converter = IntegerConverter.class)
-	private Integer outputPort;
-
-	@Parameter(names = { "-h",
-		"--host" }, required = true, description = "Name or IP address of the host where the data is send to.")
-	private String hostname;
+		"--input" }, required = true, variableArity = true, description = "Input data directory.", converter = FileConverter.class)
+	private List<File> dataLocation;
+	
+	@Parameter(names = { "-kiekerMonitoringProperties",
+		"--kiekerMonitoringProperties" }, required = true, variableArity = true, description = "Kieker monitoring configuration file (typically kieker.monitoring.properties)", converter = FileConverter.class)
+	private File kiekerMonitoringProperties;
 
 	@Parameter(names = { "-n",
 		"--no-delay" }, required = false, description = "Read and send events as fast as possible.")
@@ -72,16 +69,12 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 			converter = DateConverter.class)
 	private Long ignoreAfterDate;
 
-	public final File getDataLocation() {
+	public final List<File> getDataLocation() {
 		return this.dataLocation;
 	}
 
-	public final Integer getOutputPort() {
-		return this.outputPort;
-	}
-
-	public final String getHostname() {
-		return this.hostname;
+	public File getKiekerMonitoringProperties() {
+		return kiekerMonitoringProperties;
 	}
 
 	public final boolean isNoDelay() {
