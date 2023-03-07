@@ -36,7 +36,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 	private List<File> dataLocation;
 	
 	@Parameter(names = { "-kiekerMonitoringProperties",
-		"--kiekerMonitoringProperties" }, required = true, variableArity = true, description = "Kieker monitoring configuration file (typically kieker.monitoring.properties)", converter = FileConverter.class)
+		"--kiekerMonitoringProperties" }, required = false, variableArity = true, description = "Kieker monitoring configuration file (typically kieker.monitoring.properties)", converter = FileConverter.class)
 	private File kiekerMonitoringProperties;
 
 	@Parameter(names = { "-n",
