@@ -24,6 +24,11 @@ dependencies {
 	testImplementation project(':kieker-tools').sourceSets.test.output
 
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+	
+	implementation 'io.opentelemetry:opentelemetry-api:1.23.1'
+    implementation 'io.opentelemetry:opentelemetry-sdk:1.23.1'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.23.1'
+    implementation 'io.opentelemetry:opentelemetry-semconv:1.23.1-alpha'
 }
 
 task uploadArchives {

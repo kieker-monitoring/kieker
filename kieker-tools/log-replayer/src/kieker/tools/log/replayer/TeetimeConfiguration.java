@@ -77,7 +77,7 @@ public class TeetimeConfiguration extends Configuration {
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
+		AbstractConsumerStage<IMonitoringRecord> consumer = new OpenTelemetryStage();
 		this.connectPorts(counter.getOutputPort(), consumer.getInputPort());
 	}
 
