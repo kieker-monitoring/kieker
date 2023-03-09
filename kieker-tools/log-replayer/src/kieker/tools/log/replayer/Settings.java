@@ -49,8 +49,8 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		"--delay" }, required = false, description = "Delay factor. Default is 1 = realtime, 2 = twice the speed/half of the delay.")
 	private Long delayFactor;
 
-	@Parameter(names = { "-c",
-		"--count" }, required = false, description = "Show count of events sent. Display count every n-th event.")
+	@Parameter(names = { "-s",
+		"--showEventCounts" }, required = false, description = "Show count of events sent. Display count every n-th event.")
 	private Long showRecordCount;
 
 	@Parameter(names = { "-V",

@@ -73,7 +73,7 @@ public class TeetimeConfiguration extends Configuration {
 		
 		kieker.common.configuration.Configuration configuration;
 		if (parameter.getKiekerMonitoringProperties() != null) {
-			configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties().toPath());
+			configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
