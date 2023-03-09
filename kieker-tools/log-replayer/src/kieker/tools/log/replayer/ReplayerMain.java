@@ -78,15 +78,14 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 
 	@Override
 	protected TeetimeConfiguration createTeetimeConfiguration() {
-		this.configuration = new TeetimeConfiguration(this.parameter);
-		return this.configuration;
+		return new TeetimeConfiguration(this.parameter);
 	}
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) {
 		boolean worked = true;
-		for (File file : parameter.getDataLocation()) {
-			ParameterEvaluationUtils.checkDirectory(file, "Output Kieker directory",
+		for (final File file : this.parameter.getDataLocation()) {
+			worked &= ParameterEvaluationUtils.checkDirectory(file, "Output Kieker directory",
 					commander);
 		}
 		return worked;
@@ -94,7 +93,7 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 
 	@Override
 	protected Path getConfigurationPath() {
-		return null;
+		return this.parameter.getKiekerMonitoringProperties();
 	}
 
 	@Override

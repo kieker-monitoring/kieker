@@ -67,21 +67,21 @@ public class TeetimeConfiguration extends Configuration {
 			this.connectPorts(outputPort, delayStage.getInputPort());
 			outputPort = delayStage.getOutputPort();
 		}
-		
-		counter = new Counter<>();
-		this.connectPorts(outputPort, counter.getInputPort());
-		
-		kieker.common.configuration.Configuration configuration;
+
+		this.counter = new Counter<>();
+		this.connectPorts(outputPort, this.counter.getInputPort());
+
+		final kieker.common.configuration.Configuration configuration;
 		if (parameter.getKiekerMonitoringProperties() != null) {
 			configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
-		this.connectPorts(counter.getOutputPort(), consumer.getInputPort());
+		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
+		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
 	}
 
 	public Counter<IMonitoringRecord> getCounter() {
-		return counter;
+		return this.counter;
 	}
 }
