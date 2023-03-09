@@ -50,7 +50,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 	private Long delayFactor;
 
 	@Parameter(names = { "-s",
-		"--showEventCounts" }, required = false, description = "Show count of events sent. Display count every n-th event.")
+		"--show-event-count" }, required = false, description = "Show count of events sent. Display count every n-th event.")
 	private Long showRecordCount;
 
 	@Parameter(names = { "-V",
