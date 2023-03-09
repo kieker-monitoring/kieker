@@ -16,11 +16,13 @@
 package kieker.tools.log.replayer;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 import com.beust.jcommander.converters.IntegerConverter;
+import com.beust.jcommander.converters.PathConverter;
 
 import kieker.tools.settings.converters.DateConverter;
 
@@ -35,9 +37,9 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		"--input" }, required = true, variableArity = true, description = "Input data directory.", converter = FileConverter.class)
 	private List<File> dataLocation;
 	
-	@Parameter(names = { "-kiekerMonitoringProperties",
-		"--kiekerMonitoringProperties" }, required = false, variableArity = true, description = "Kieker monitoring configuration file (typically kieker.monitoring.properties)", converter = FileConverter.class)
-	private File kiekerMonitoringProperties;
+	@Parameter(names = { "-c",
+		"--configuration" }, required = false, description = "Configuration file.", converter = PathConverter.class)
+	private Path configurationPath;
 
 	@Parameter(names = { "-n",
 		"--no-delay" }, required = false, description = "Read and send events as fast as possible.")
@@ -73,8 +75,8 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		return this.dataLocation;
 	}
 
-	public File getKiekerMonitoringProperties() {
-		return kiekerMonitoringProperties;
+	public Path getKiekerMonitoringProperties() {
+		return configurationPath;
 	}
 
 	public final boolean isNoDelay() {
