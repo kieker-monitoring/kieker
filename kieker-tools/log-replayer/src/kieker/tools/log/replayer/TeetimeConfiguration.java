@@ -22,6 +22,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
 import kieker.tools.source.LogsReaderCompositeStage;
 
+import net.kieker.opentelemetry.OpenTelemetryStage;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.framework.OutputPort;
@@ -77,7 +78,7 @@ public class TeetimeConfiguration extends Configuration {
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		AbstractConsumerStage<IMonitoringRecord> consumer = new OpenTelemetryStage();
+		AbstractConsumerStage<IMonitoringRecord> consumer = new OpenTelemetryStage("http://127.0.0.1:4317");
 		this.connectPorts(counter.getOutputPort(), consumer.getInputPort());
 	}
 
