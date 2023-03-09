@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
-import com.beust.jcommander.converters.IntegerConverter;
 import com.beust.jcommander.converters.PathConverter;
 
 import kieker.tools.settings.converters.DateConverter;
@@ -36,7 +35,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 	@Parameter(names = { "-i",
 		"--input" }, required = true, variableArity = true, description = "Input data directory.", converter = FileConverter.class)
 	private List<File> dataLocation;
-	
+
 	@Parameter(names = { "-c",
 		"--configuration" }, required = false, description = "Configuration file.", converter = PathConverter.class)
 	private Path configurationPath;
@@ -76,7 +75,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 	}
 
 	public Path getKiekerMonitoringProperties() {
-		return configurationPath;
+		return this.configurationPath;
 	}
 
 	public final boolean isNoDelay() {
