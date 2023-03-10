@@ -282,7 +282,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
 		final ComponentDependencyGraphAllocationFilter graphFilter = new ComponentDependencyGraphAllocationFilter(systemRepository,
-				TimeUnit.MILLISECONDS);
+				TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -293,7 +293,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private void createPlotAssemblyComponentDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final List<String> decoratorList, final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -303,7 +303,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	private void createPlotContainerDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
-		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.NANOSECONDS);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
@@ -314,7 +314,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -326,7 +326,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
