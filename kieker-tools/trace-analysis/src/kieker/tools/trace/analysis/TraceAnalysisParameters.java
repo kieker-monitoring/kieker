@@ -31,6 +31,7 @@ import com.beust.jcommander.Parameter;
 
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.tools.common.DateConverter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 
 /**
  * @author Reiner Jung
@@ -211,10 +212,12 @@ public class TraceAnalysisParameters {
 	}
 
 	public List<String> getPlotDeploymentComponentDependencyGraph() {
+		checkDecorators(plotDeploymentComponentDependencyGraph);
 		return this.plotDeploymentComponentDependencyGraph;
 	}
 
 	public List<String> getPlotAssemblyComponentDependencyGraph() {
+		checkDecorators(plotAssemblyComponentDependencyGraph);
 		return this.plotAssemblyComponentDependencyGraph;
 	}
 
@@ -223,11 +226,25 @@ public class TraceAnalysisParameters {
 	}
 
 	public List<String> getPlotDeploymentOperationDependencyGraph() {
+		checkDecorators(plotDeploymentOperationDependencyGraph);
 		return this.plotDeploymentOperationDependencyGraph;
 	}
 
 	public List<String> getPlotAssemblyOperationDependencyGraph() {
+		checkDecorators(plotAssemblyOperationDependencyGraph);
 		return this.plotAssemblyOperationDependencyGraph;
+	}
+	
+	private void checkDecorators(List<String> decorators) {
+		for (String element : decorators) {
+			if (!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(element) &&
+				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(element) &&
+				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(element) &&
+				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(element) &&
+				!StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(element)) {
+				throw new RuntimeException("Definition of decorators should specify responseTimes-ns, -us, -ms or -s");
+			}
+		}
 	}
 
 	public boolean isPlotAggregatedDeploymentCallTree() {
