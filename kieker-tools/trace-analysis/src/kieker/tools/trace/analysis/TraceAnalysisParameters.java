@@ -236,14 +236,16 @@ public class TraceAnalysisParameters {
 	}
 	
 	private void checkDecorators(List<String> decorators) {
-		for (String element : decorators) {
-			if (!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(element) &&
-				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(element) &&
-				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(element) &&
-				!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(element) &&
-				!StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(element)) {
-				throw new RuntimeException("Definition of decorators should specify responseTimes-ns, -us, -ms or -s");
-			}
+		if (decorators != null) {
+			for (String element : decorators) {
+				if (!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(element) &&
+					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(element) &&
+					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(element) &&
+					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(element) &&
+					!StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(element)) {
+					throw new RuntimeException("Definition of decorators should specify responseTimes-ns, -us, -ms or -s");
+				}
+			}		
 		}
 	}
 
