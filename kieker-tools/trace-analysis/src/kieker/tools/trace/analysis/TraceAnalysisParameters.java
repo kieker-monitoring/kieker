@@ -31,7 +31,6 @@ import com.beust.jcommander.Parameter;
 
 import kieker.analysis.generic.time.TimestampFilter;
 import kieker.tools.settings.converters.DateConverter;
-import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 
 /**
  * @author Reiner Jung
@@ -64,20 +63,22 @@ public class TraceAnalysisParameters {
 	@Parameter(names = { "--plot-Assembly-Sequence-Diagrams" }, description = "Generate and store assembly-level sequence diagrams (.pic)")
 	private boolean plotAssemblySequenceDiagrams;
 
-	@Parameter(names = { "--plot-Deployment-Component-Dependency-Graph" }, description = "Generate and store a deployment-level component dependency graph (.dot)")
+	@Parameter(names = { "--plot-Deployment-Component-Dependency-Graph" }, validateWith = DecoratorValidator.class,
+			description = "Generate and store a deployment-level component dependency graph (.dot)")
 	private List<String> plotDeploymentComponentDependencyGraph;
 
-	@Parameter(names = { "--plot-Assembly-Component-Dependency-Graph" }, description = "Generate and store an assembly-level component dependency graph (.dot)")
+	@Parameter(names = { "--plot-Assembly-Component-Dependency-Graph" }, validateWith = DecoratorValidator.class,
+			description = "Generate and store an assembly-level component dependency graph (.dot)")
 	private List<String> plotAssemblyComponentDependencyGraph;
 
 	@Parameter(names = { "--plot-Container-Dependency-Graph" }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
 
-	@Parameter(names = { "--plot-Deployment-Operation-Dependency-Graph" }, variableArity = true,
+	@Parameter(names = { "--plot-Deployment-Operation-Dependency-Graph" }, variableArity = true, validateWith = DecoratorValidator.class,
 			description = "Generate and store a deployment-level operation dependency graph (.dot)")
 	private List<String> plotDeploymentOperationDependencyGraph;
 
-	@Parameter(names = { "--plot-Assembly-Operation-Dependency-Graph" }, variableArity = true,
+	@Parameter(names = { "--plot-Assembly-Operation-Dependency-Graph" }, variableArity = true, validateWith = DecoratorValidator.class,
 			description = "Generate and store an assembly-level operation dependency graph (.dot)")
 	private List<String> plotAssemblyOperationDependencyGraph;
 
@@ -212,12 +213,10 @@ public class TraceAnalysisParameters {
 	}
 
 	public List<String> getPlotDeploymentComponentDependencyGraph() {
-		checkDecorators(plotDeploymentComponentDependencyGraph);
 		return this.plotDeploymentComponentDependencyGraph;
 	}
 
 	public List<String> getPlotAssemblyComponentDependencyGraph() {
-		checkDecorators(plotAssemblyComponentDependencyGraph);
 		return this.plotAssemblyComponentDependencyGraph;
 	}
 
@@ -226,27 +225,11 @@ public class TraceAnalysisParameters {
 	}
 
 	public List<String> getPlotDeploymentOperationDependencyGraph() {
-		checkDecorators(plotDeploymentOperationDependencyGraph);
 		return this.plotDeploymentOperationDependencyGraph;
 	}
 
 	public List<String> getPlotAssemblyOperationDependencyGraph() {
-		checkDecorators(plotAssemblyOperationDependencyGraph);
 		return this.plotAssemblyOperationDependencyGraph;
-	}
-	
-	private void checkDecorators(List<String> decorators) {
-		if (decorators != null) {
-			for (String element : decorators) {
-				if (!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(element) &&
-					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(element) &&
-					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(element) &&
-					!VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(element) &&
-					!StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(element)) {
-					throw new RuntimeException("Definition of decorators should specify responseTimes-ns, -us, -ms or -s");
-				}
-			}		
-		}
 	}
 
 	public boolean isPlotAggregatedDeploymentCallTree() {
