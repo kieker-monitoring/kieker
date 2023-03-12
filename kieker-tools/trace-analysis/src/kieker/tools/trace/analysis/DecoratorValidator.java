@@ -36,7 +36,7 @@ public class DecoratorValidator implements IParameterValidator {
 				&& !VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(value)
 				&& !VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(value)
 				&& !StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(value)) {
-			throw new ParameterException(String.format("Parameter %s requires on of the following decorators: responseTimes-ns, -us, -ms or -s"));
+			throw new ParameterException(String.format("Parameter %s requires on of the following decorators: responseTimes-ns, -us, -ms or -s", name));
 		}
 	}
 
