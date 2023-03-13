@@ -63,20 +63,22 @@ public class TraceAnalysisParameters {
 	@Parameter(names = { "--plot-Assembly-Sequence-Diagrams" }, description = "Generate and store assembly-level sequence diagrams (.pic)")
 	private boolean plotAssemblySequenceDiagrams;
 
-	@Parameter(names = { "--plot-Deployment-Component-Dependency-Graph" }, description = "Generate and store a deployment-level component dependency graph (.dot)")
+	@Parameter(names = { "--plot-Deployment-Component-Dependency-Graph" }, validateWith = DecoratorValidator.class,
+			description = "Generate and store a deployment-level component dependency graph (.dot)")
 	private List<String> plotDeploymentComponentDependencyGraph;
 
-	@Parameter(names = { "--plot-Assembly-Component-Dependency-Graph" }, description = "Generate and store an assembly-level component dependency graph (.dot)")
+	@Parameter(names = { "--plot-Assembly-Component-Dependency-Graph" }, validateWith = DecoratorValidator.class,
+			description = "Generate and store an assembly-level component dependency graph (.dot)")
 	private List<String> plotAssemblyComponentDependencyGraph;
 
 	@Parameter(names = { "--plot-Container-Dependency-Graph" }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
 
-	@Parameter(names = { "--plot-Deployment-Operation-Dependency-Graph" }, variableArity = true,
+	@Parameter(names = { "--plot-Deployment-Operation-Dependency-Graph" }, variableArity = true, validateWith = DecoratorValidator.class,
 			description = "Generate and store a deployment-level operation dependency graph (.dot)")
 	private List<String> plotDeploymentOperationDependencyGraph;
 
-	@Parameter(names = { "--plot-Assembly-Operation-Dependency-Graph" }, variableArity = true,
+	@Parameter(names = { "--plot-Assembly-Operation-Dependency-Graph" }, variableArity = true, validateWith = DecoratorValidator.class,
 			description = "Generate and store an assembly-level operation dependency graph (.dot)")
 	private List<String> plotAssemblyOperationDependencyGraph;
 
