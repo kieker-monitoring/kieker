@@ -38,6 +38,9 @@ public class AdjustTimeStage extends AbstractConsumerStage<IMonitoringRecord> {
 
 	/**
 	 * Create an instance of the timestamp rewriter stage.
+	 *
+	 * @param timeAdjusters
+	 *            sequence of {@link ITimeAdjuster}s to correct timestamps in event types.
 	 */
 	public AdjustTimeStage(final ITimeAdjuster... timeAdjusters) {
 		this.timeAdjusters = timeAdjusters;
