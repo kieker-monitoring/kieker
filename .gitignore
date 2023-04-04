@@ -1,6 +1,8 @@
 # do not ignore the whole ".settings" folder.
 # For example, save actions should be used by all contributors (see org.eclipse.jdt.ui.prefs).
 # And the formatter (see **/.settings/org.eclipse.jdt.core.prefs)
+wrapper/**
+kieker-documentation/_build/**
 **/daemon/**
 **/caches/**
 **/\?/**
@@ -27,6 +29,7 @@ plugin.xml
 /kieker-examples/userguide/ch2--bookstore-application/.gradle
 kieker-examples/monitoring/probe-aspectj/kieker.log
 kieker-examples/monitoring/probe-spring/kieker.log
+kieker-examples/analysis/trace-analysis/kieker.log
 /kieker-tools/*.log
 /kieker-tools/activemq-data
 /kieker-analysis/*.log

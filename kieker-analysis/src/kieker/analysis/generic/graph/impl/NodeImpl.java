@@ -16,25 +16,26 @@
 package kieker.analysis.generic.graph.impl;
 
 import kieker.analysis.generic.graph.GraphFactory;
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 
 public class NodeImpl extends ElementImpl implements INode {
 
-	private IGraph childGraph = null;
+	private IGraph<INode, IEdge> childGraph = null; // NOPMD documents that childGraph is null
 
 	public NodeImpl(final String id) {
 		super(id);
 	}
 
 	@Override
-	public IGraph getChildGraph() {
+	public IGraph<INode, IEdge> getChildGraph() {
 		return this.childGraph;
 	}
 
 	@Override
 	public void removeChildGraph() {
-		this.childGraph = null;
+		this.childGraph = null; // NOPMD assigning null necessary
 	}
 
 	@Override

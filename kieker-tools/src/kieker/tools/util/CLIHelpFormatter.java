@@ -28,12 +28,12 @@ import org.apache.commons.cli.Options;
 /**
  * Slightly changes default output of Common CLI's {@link HelpFormatter} starting the descriptions in a new line rather then
  * indented in a column right to the longest option and adding an empty line between options.
- * 
+ *
  * The class has been implemented by copying in the {@link #renderOptions(StringBuffer, int, Options, int, int)} original
  * implementation and then modifying it step by step; hence, it includes third-party code from Apache's Commons CLI, licensed under Apache License, Version 2.0.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.7
  */
 public class CLIHelpFormatter extends HelpFormatter {
@@ -54,7 +54,7 @@ public class CLIHelpFormatter extends HelpFormatter {
 
 		StringBuilder optBuf;
 
-		final List<Option> optList = new ArrayList<Option>(options.getOptions());
+		final List<Option> optList = new ArrayList<>(options.getOptions());
 		Collections.sort(optList, this.getOptionComparator());
 
 		for (final Iterator<Option> i = optList.iterator(); i.hasNext();) {

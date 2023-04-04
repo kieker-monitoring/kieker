@@ -51,7 +51,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBoundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<Integer>(3);
+		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<>(3);
 		bounded.add(1);
 		bounded.add(2);
 		bounded.add(3);
@@ -75,7 +75,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUnboundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
+		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<>(-1);
 		int i = 0;
 		while (i < 100) {
 			unbounded.add(i);

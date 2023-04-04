@@ -120,8 +120,8 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 
 		this.analysisController = new AnalysisController();
 		recordConverter = new RecordConverter(new Configuration(), this.analysisController);
-		this.simpleListReader = new ListReader<OperationExecutionRecord>(new Configuration(), this.analysisController);
-		this.listCollectionfilter = new ListCollectionFilter<NamedDoubleRecord>(new Configuration(), this.analysisController);
+		this.simpleListReader = new ListReader<>(new Configuration(), this.analysisController);
+		this.listCollectionfilter = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, recordConverter, RecordConverter.INPUT_PORT_NAME_OER);
 		this.analysisController.connect(recordConverter, RecordConverter.OUTPUT_PORT_NAME_NDR, this.listCollectionfilter, ListCollectionFilter.INPUT_PORT_NAME);

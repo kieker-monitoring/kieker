@@ -56,7 +56,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 			eventTypes = TraceEventRecords.class) },
 		configuration = {
 			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-			                defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
 					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION) })
 public class TraceAggregationFilter extends AbstractFilterPlugin {

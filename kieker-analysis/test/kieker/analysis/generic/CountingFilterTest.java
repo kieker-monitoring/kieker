@@ -28,7 +28,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * This test is for the class {@link CountingFilter}.
+ * This test is for the class {@link CountingStage}.
  *
  * @author Nils Christian Ehmke, Jan Waller, Lars Bluemke
  *
@@ -36,7 +36,7 @@ import teetime.framework.test.StageTester;
  */
 public class CountingFilterTest extends AbstractKiekerTest {
 
-	private CountingFilter countingFilter;
+	private CountingStage<Object> countingFilter;
 	private List<Object> testElements;
 
 	/**
@@ -51,7 +51,7 @@ public class CountingFilterTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.countingFilter = new CountingFilter();
+		this.countingFilter = new CountingStage<>(false, 0);
 		this.testElements = new ArrayList<>();
 	}
 

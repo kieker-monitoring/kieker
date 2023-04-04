@@ -24,4 +24,3 @@
  *
  */
 package kieker.analysis.architecture.trace.graph.dot;
-

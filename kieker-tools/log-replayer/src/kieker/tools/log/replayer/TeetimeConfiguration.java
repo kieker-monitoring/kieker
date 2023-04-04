@@ -15,14 +15,18 @@
  ***************************************************************************/
 package kieker.tools.log.replayer;
 
+import kieker.analysis.generic.sink.DataSink;
 import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.log.replayer.stages.DataSendStage;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
 import kieker.tools.source.LogsReaderCompositeStage;
 
+import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.framework.OutputPort;
+import teetime.stage.Counter;
 
 /**
  * Configuration for the log replayer.
@@ -32,7 +36,7 @@ import teetime.framework.OutputPort;
  */
 public class TeetimeConfiguration extends Configuration {
 
-	private final DataSendStage consumer;
+	private final Counter<IMonitoringRecord> counter;
 
 	/**
 	 * Construct the replayer configuration.
@@ -52,7 +56,7 @@ public class TeetimeConfiguration extends Configuration {
 			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();
 		}
 
-		if (parameter.isTimeRelative()) {
+		if (parameter.isTimeRewrite()) {
 			final RewriteTime rewriteTime = new RewriteTime();
 			this.connectPorts(outputPort, rewriteTime.getInputPort());
 			outputPort = rewriteTime.getOutputPort();
@@ -65,16 +69,23 @@ public class TeetimeConfiguration extends Configuration {
 			outputPort = delayStage.getOutputPort();
 		}
 
-		this.consumer = new DataSendStage(parameter.getHostname(), parameter.getOutputPort());
-		this.connectPorts(outputPort, this.consumer.getInputPort());
+		this.counter = new Counter<>();
+		this.connectPorts(outputPort, this.counter.getInputPort());
+
+		final kieker.common.configuration.Configuration configuration;
+		if (parameter.getKiekerMonitoringProperties() != null) {
+			configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
+		} else {
+			configuration = ConfigurationFactory.createDefaultConfiguration();
+		}
+		
+		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, parameter.isTimeRewrite());
+		
+		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
+		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
 	}
 
-	public DataSendStage getCounter() {
-		return this.consumer;
+	public Counter<IMonitoringRecord> getCounter() {
+		return this.counter;
 	}
-
-	public boolean isOutputConnected() {
-		return this.consumer.isOutputConnected();
-	}
-
 }

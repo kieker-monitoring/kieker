@@ -42,7 +42,7 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.common.ConvertLegacyValues;
+import kieker.tools.common.ConvertLegacyValuesUtils;
 import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
@@ -261,13 +261,13 @@ public class PerformAnalysis {
 
 			if (successfulExecution && this.parameters.isPrintDeploymentEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
-						pathPrefix + StringConstants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
+						pathPrefix + StringConstants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + PerformAnalysis.TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
 			if (successfulExecution && this.parameters.isPrintAssemblyEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
-						pathPrefix + StringConstants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
+						pathPrefix + StringConstants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + PerformAnalysis.TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -661,7 +661,7 @@ public class PerformAnalysis {
 				VisualizationConstants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
 		componentPrintInvalidTraceConfig.setProperty(
 				InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + StringConstants.INVALID_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.INVALID_TRACES_FN_PREFIX + PerformAnalysis.TXT_SUFFIX).getCanonicalPath());
 
 		final InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig,
 				this.analysisController);
@@ -697,7 +697,7 @@ public class PerformAnalysis {
 		componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTEXECTRACE_COMPONENT_NAME);
 		componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + StringConstants.EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.EXECUTION_TRACES_FN_PREFIX + PerformAnalysis.TXT_SUFFIX).getCanonicalPath());
 
 		final ExecutionTraceWriterFilter componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig,
 				this.analysisController);
@@ -732,7 +732,7 @@ public class PerformAnalysis {
 		componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTMSGTRACE_COMPONENT_NAME);
 		componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + StringConstants.MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.MESSAGE_TRACES_FN_PREFIX + PerformAnalysis.TXT_SUFFIX).getCanonicalPath());
 
 		final MessageTraceWriterFilter componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig,
 				this.analysisController);
@@ -1046,7 +1046,7 @@ public class PerformAnalysis {
 	private FSReader createReader() {
 		final Configuration conf = new Configuration(null);
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS,
-				Configuration.toProperty(ConvertLegacyValues.fileListToStringArray(this.parameters.getInputDirs())));
+				Configuration.toProperty(ConvertLegacyValuesUtils.fileListToStringArray(this.parameters.getInputDirs())));
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
 		return new FSReader(conf, this.analysisController);
 	}
@@ -1102,6 +1102,8 @@ public class PerformAnalysis {
 					} catch (final NumberFormatException exc) {
 						this.logger.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr);
 					}
+				} else if ("none".equals(currentDecoratorStr)) { // NOCS, NOPMD on "none" nothing should be done.
+					// do nothing
 				} else {
 					this.logger.warn("Unknown decoration name '{}'.", currentDecoratorStr);
 					return;
@@ -1339,7 +1341,7 @@ public class PerformAnalysis {
 			final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
 		boolean retVal = true;
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
-		try (PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, ENCODING)) {
+		try (PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, PerformAnalysis.ENCODING)) {
 			int numClasses = 0;
 			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD
 																										// (UseConcurrentHashMap)

@@ -16,12 +16,14 @@
 package kieker.tools.log.replayer;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
-import com.beust.jcommander.converters.IntegerConverter;
+import com.beust.jcommander.converters.PathConverter;
 
-import kieker.tools.common.DateConverter;
+import kieker.tools.settings.converters.DateConverter;
 
 /**
  * @author Reiner Jung
@@ -31,16 +33,12 @@ import kieker.tools.common.DateConverter;
 public class Settings { // NOCS, NOPMD does not need a constructor
 
 	@Parameter(names = { "-i",
-		"--input" }, required = true, description = "Input data directory.", converter = FileConverter.class)
-	private File dataLocation;
+		"--input" }, required = true, variableArity = true, description = "Input data directory.", converter = FileConverter.class)
+	private List<File> dataLocation;
 
-	@Parameter(names = { "-p",
-		"--port" }, required = true, description = "Output port.", converter = IntegerConverter.class)
-	private Integer outputPort;
-
-	@Parameter(names = { "-h",
-		"--host" }, required = true, description = "Name or IP address of the host where the data is send to.")
-	private String hostname;
+	@Parameter(names = { "-c",
+		"--configuration" }, required = false, description = "Configuration file.", converter = PathConverter.class)
+	private Path configurationPath;
 
 	@Parameter(names = { "-n",
 		"--no-delay" }, required = false, description = "Read and send events as fast as possible.")
@@ -50,8 +48,8 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		"--delay" }, required = false, description = "Delay factor. Default is 1 = realtime, 2 = twice the speed/half of the delay.")
 	private Long delayFactor;
 
-	@Parameter(names = { "-c",
-		"--count" }, required = false, description = "Show count of events sent. Display count every n-th event.")
+	@Parameter(names = { "-s",
+		"--show-event-count" }, required = false, description = "Show count of events sent. Display count every n-th event.")
 	private Long showRecordCount;
 
 	@Parameter(names = { "-V",
@@ -60,7 +58,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 
 	@Parameter(names = { "-r",
 		"--time-rewrite" }, required = false, description = "Set event timestamps relative to present time.")
-	private boolean timeRelative; // NOPMD pmd thinks this is not used, but this is not the case.
+	private boolean timeRewrite; // NOPMD pmd thinks this is not used, but this is not the case.
 
 	@Parameter(names = { "-bd", "--ignore-records-before-date" }, required = false,
 			description = "Records logged before this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss",
@@ -72,16 +70,12 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 			converter = DateConverter.class)
 	private Long ignoreAfterDate;
 
-	public final File getDataLocation() {
+	public final List<File> getDataLocation() {
 		return this.dataLocation;
 	}
 
-	public final Integer getOutputPort() {
-		return this.outputPort;
-	}
-
-	public final String getHostname() {
-		return this.hostname;
+	public Path getKiekerMonitoringProperties() {
+		return this.configurationPath;
 	}
 
 	public final boolean isNoDelay() {
@@ -96,8 +90,8 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		return this.showRecordCount;
 	}
 
-	public boolean isTimeRelative() {
-		return this.timeRelative;
+	public boolean isTimeRewrite() {
+		return this.timeRewrite;
 	}
 
 	public Long getIgnoreBeforeDate() {

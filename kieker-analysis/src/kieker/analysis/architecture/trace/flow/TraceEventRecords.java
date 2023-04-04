@@ -27,6 +27,9 @@ import kieker.common.record.flow.trace.TraceMetadata;
  * @since 1.5
  */
 public final class TraceEventRecords {
+
+	private static final int PRIME = 31;
+
 	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
 
@@ -45,7 +48,7 @@ public final class TraceEventRecords {
 		// throw new NullPointerException("trace is null");
 		// }
 		if (null == traceEvents) {
-			throw new NullPointerException("traceEvents is null");
+			throw new NullPointerException("traceEvents is null"); // NOPMD must throw NPE here
 		}
 		this.trace = trace;
 		this.traceEvents = traceEvents;
@@ -94,10 +97,9 @@ public final class TraceEventRecords {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.trace == null) ? 0 : this.trace.hashCode()); // NOCS (?:)
-		result = (prime * result) + Arrays.hashCode(this.traceEvents);
+		result = (PRIME * result) + ((this.trace == null) ? 0 : this.trace.hashCode()); // NOCS (?:)
+		result = (PRIME * result) + Arrays.hashCode(this.traceEvents);
 		return result;
 	}
 

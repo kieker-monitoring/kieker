@@ -16,6 +16,8 @@
 
 package kieker.common.record.factory;
 
+import java.lang.reflect.InvocationTargetException;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.classpath.ClassForNameResolver;
 
@@ -52,12 +54,9 @@ public class RecordFactoryResolver {
 
 		try {
 			final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
-			return recordFactoryClass.newInstance();
-		} catch (final ClassNotFoundException e) {
-			return null;
-		} catch (final InstantiationException e) {
-			return null;
-		} catch (final IllegalAccessException e) {
+			return recordFactoryClass.getDeclaredConstructor().newInstance();
+		} catch (final ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException
+				| InstantiationException | IllegalAccessException e) {
 			return null;
 		}
 	}

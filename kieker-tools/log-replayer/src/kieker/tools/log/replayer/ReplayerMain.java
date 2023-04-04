@@ -16,6 +16,7 @@
 package kieker.tools.log.replayer;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,26 +71,29 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 	public int run(final String title, final String label, final String[] args) {
 		final int result = super.run(title, label, args, this.parameter);
 		if (this.configuration != null) {
-			ReplayerMain.LOGGER.info("Records send {}", this.configuration.getCounter().getCount());
+			ReplayerMain.LOGGER.info("Records send {}", this.configuration.getCounter().getNumElementsPassed());
 		}
 		return result;
 	}
 
 	@Override
 	protected TeetimeConfiguration createTeetimeConfiguration() {
-		this.configuration = new TeetimeConfiguration(this.parameter);
-		return this.configuration;
+		return new TeetimeConfiguration(this.parameter);
 	}
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) {
-		return ParameterEvaluationUtils.checkDirectory(this.parameter.getDataLocation(), "Output Kieker directory",
-				commander);
+		boolean worked = true;
+		for (final File file : this.parameter.getDataLocation()) {
+			worked &= ParameterEvaluationUtils.checkDirectory(file, "Output Kieker directory",
+					commander);
+		}
+		return worked;
 	}
 
 	@Override
-	protected File getConfigurationFile() {
-		return null;
+	protected Path getConfigurationPath() {
+		return this.parameter.getKiekerMonitoringProperties();
 	}
 
 	@Override

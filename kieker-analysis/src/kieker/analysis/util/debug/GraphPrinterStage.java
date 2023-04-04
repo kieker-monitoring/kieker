@@ -29,11 +29,16 @@ import teetime.framework.AbstractConsumerStage;
 /**
  * This stage prints {@link Graph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
+public class GraphPrinterStage<N extends INode, E extends IEdge> extends AbstractConsumerStage<IGraph<N, E>> {
 
 	private final PrintStream printStream;
 
@@ -47,21 +52,21 @@ public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
 	}
 
 	@Override
-	protected void execute(final IGraph graph) {
+	protected void execute(final IGraph<N, E> graph) {
 		this.printGraph(graph, "");
 	}
 
-	private void printGraph(final IGraph graph, final String offset) {
+	private void printGraph(final IGraph<N, E> graph, final String offset) {
 		this.printStream.printf("%sGraph %s Vertices:\n", graph.getLabel(), offset);
-		for (final INode node : graph.getGraph().nodes()) {
+		for (final N node : graph.getGraph().nodes()) {
 			this.printStream.printf("%s%s\n", offset, node.getId());
 			if (node.getChildGraph() != null) {
 				this.printGraph(node.getChildGraph(), "   " + offset);
 			}
 		}
 		this.printStream.printf("%sEdges:\n", offset);
-		for (final IEdge edge : graph.getGraph().edges()) {
-			final EndpointPair<INode> nodePair = graph.getGraph().incidentNodes(edge);
+		for (final E edge : graph.getGraph().edges()) {
+			final EndpointPair<N> nodePair = graph.getGraph().incidentNodes(edge);
 			final String sourceLabel;
 			final String targetLabel;
 			if (graph.getGraph().isDirected()) {

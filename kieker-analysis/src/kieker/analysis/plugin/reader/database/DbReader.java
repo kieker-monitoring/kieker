@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -91,7 +92,7 @@ public class DbReader extends AbstractReaderPlugin {
 		try {
 			Class.forName(this.driverClassname).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
+			throw new InternalErrorException("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 	}
 
