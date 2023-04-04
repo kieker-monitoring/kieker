@@ -16,6 +16,7 @@
 package kieker.tools.log.replayer.stages.time.adjuster;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.BranchingRecord;
 
 /**
  *
@@ -26,8 +27,10 @@ public class BranchingRecordTimeAdjuster implements ITimeAdjuster {
 
 	@Override
 	public void apply(final IMonitoringRecord record, final long timeDelta) {
-		// TODO Auto-generated method stub
-
+		if (record instanceof BranchingRecord) {
+			final BranchingRecord branchingRecord = (BranchingRecord) record;
+			branchingRecord.setTimestamp(branchingRecord.getTimestamp() + timeDelta);
+		}
 	}
 
 }

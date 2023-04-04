@@ -23,7 +23,7 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.16.0
  * 
  * @since 1.8
  */

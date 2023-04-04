@@ -19,7 +19,7 @@ package kieker.common.record.remotecontrol;
 /**
  * @author Generic Kieker
  * 
- * @since 1.15
+ * @since 1.10
  */
 public interface IRemoteParameterControlEvent extends IRemoteControlEvent {
 	public String getName();

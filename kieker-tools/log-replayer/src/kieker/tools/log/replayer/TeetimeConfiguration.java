@@ -20,6 +20,10 @@ import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
+import kieker.tools.log.replayer.stages.TimeAdjustStage;
+import kieker.tools.log.replayer.stages.time.adjuster.BranchingRecordTimeAdjuster;
+import kieker.tools.log.replayer.stages.time.adjuster.FlowEventTimeAdjuster;
+import kieker.tools.log.replayer.stages.time.adjuster.OperationExecutionRecordTimeAdjuster;
 import kieker.tools.source.LogsReaderCompositeStage;
 
 import teetime.framework.AbstractConsumerStage;
@@ -56,7 +60,8 @@ public class TeetimeConfiguration extends Configuration {
 		}
 
 		if (parameter.isTimeRelative()) {
-			final RewriteTime rewriteTime = new RewriteTime();
+			final TimeAdjustStage rewriteTime = new TimeAdjustStage(new FlowEventTimeAdjuster(), new OperationExecutionRecordTimeAdjuster(),
+					new BranchingRecordTimeAdjuster());
 			this.connectPorts(outputPort, rewriteTime.getInputPort());
 			outputPort = rewriteTime.getOutputPort();
 		}
@@ -77,6 +82,9 @@ public class TeetimeConfiguration extends Configuration {
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
+
+		configuration.setProperty("kieker.monitoring.setLoggingTimestamp", false);
+
 		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
 		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
 	}

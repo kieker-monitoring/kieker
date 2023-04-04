@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages;
+package kieker.tools.log.replayer.stages.time.adjuster;
 
 import kieker.common.record.IMonitoringRecord;
 
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public interface ITimeAdjuster {
 
-	void apply(IMonitoringRecord record);
+	/**
+	 * Modify time values in a specific {@link MonitoringRecord} type.
+	 *
+	 * @param record
+	 *            record
+	 * @param timeDelta
+	 *            time delta to be added
+	 */
+	void apply(IMonitoringRecord record, long timeDelta);
 }

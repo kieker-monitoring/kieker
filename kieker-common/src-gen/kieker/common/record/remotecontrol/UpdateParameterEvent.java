@@ -26,7 +26,7 @@ import kieker.common.record.remotecontrol.IRemoteParameterControlEvent;
 
 /**
  * @author Marc Adolf
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.16.0
  * 
  * @since 1.14
  */

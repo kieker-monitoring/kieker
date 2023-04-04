@@ -27,7 +27,7 @@ import kieker.common.record.session.ISessionEvent;
 
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 1.16.0
  * 
  * @since 2.0.0
  */
