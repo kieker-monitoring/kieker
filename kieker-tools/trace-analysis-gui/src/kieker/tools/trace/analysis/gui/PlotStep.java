@@ -43,6 +43,8 @@ import kieker.tools.trace.analysis.gui.util.SelectionBindingItemListener;
  */
 public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
+	private static final String HTML_END_TAG = "</html>";
+
 	private static final long serialVersionUID = 1L;
 
 	private static final String PROPERTY_KEY_IDENTIFIER = PlotStep.class.getSimpleName();
@@ -83,23 +85,23 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			+ "the same node are illustrated as one node.";
 
 	private static final String DEPLOYMENT_SEQUENCE_DIAGRAM_TOOLTIP = "<html>The sequence diagram models the collaboration of objects based on a time sequence.<br>"
-			+ DEPLOYMENT_LEVEL_SEQUENCE_TOOLTIP + "</html>";
+			+ DEPLOYMENT_LEVEL_SEQUENCE_TOOLTIP + HTML_END_TAG;
 	private static final String ASSEMBLY_SEQUENCE_DIAGRAM_TOOLTIP = "<html>The sequence diagram models the collaboration of objects based on a time sequence.<br>"
-			+ ASSEMBLY_LEVEL_SEQUENCE_TOOLTIP + "</html>";
+			+ ASSEMBLY_LEVEL_SEQUENCE_TOOLTIP + HTML_END_TAG;
 	private static final String DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_TOOLTIP = "<html>A directed graph representing dependencies of objects towards each other."
-			+ "<br>" + DEPLOYMENT_LEVEL_COMPONENT_TOOLTIP + "</html>";
+			+ "<br>" + DEPLOYMENT_LEVEL_COMPONENT_TOOLTIP + HTML_END_TAG;
 	private static final String ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_TOOLTIP = "<html>A directed graph representing dependencies of objects towards each other.<br>"
-			+ ASSEMBLY_LEVEL_COMPONENT_TOOLTIP + "</html>";
+			+ ASSEMBLY_LEVEL_COMPONENT_TOOLTIP + HTML_END_TAG;
 	private static final String PLOT_CONTAINER_DEPENDENCY_GRAPH_TOOLTIP = "A directed graph representing the execution container dependency "
 			+ "for the used monitoring data.";
 	private static final String DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_TOOLTIP = "<html>A directed graph representing dependencies between the operations of objects "
-			+ "towards each other.<br>" + DEPLOYMENT_LEVEL_COMPONENT_TOOLTIP + "</html>";
+			+ "towards each other.<br>" + DEPLOYMENT_LEVEL_COMPONENT_TOOLTIP + HTML_END_TAG;
 	private static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_TOOLTIP = "<html>A directed graph representing dependencies between the operations of objects "
-			+ "towards each other.<br>" + ASSEMBLY_LEVEL_COMPONENT_TOOLTIP + "</html>";
+			+ "towards each other.<br>" + ASSEMBLY_LEVEL_COMPONENT_TOOLTIP + HTML_END_TAG;
 	private static final String AGGREGATED_DEPLOYMENT_CALL_TREE_TOOLTIP = "<html>A call tree with aggregated method calls on each edge.<br>"
-			+ DEPLOYMENT_LEVEL_CALL_TREE_TOOLTIP + "</html>";
+			+ DEPLOYMENT_LEVEL_CALL_TREE_TOOLTIP + HTML_END_TAG;
 	private static final String AGGREGATED_ASSEMBLY_CALL_TREE_TOOLTIP = "<html>A call tree with aggregated method calls on each edge.<br>"
-			+ ASSEMBLY_LEVEL_CALL_TREE_TOOLTIP + "</html>";
+			+ ASSEMBLY_LEVEL_CALL_TREE_TOOLTIP + HTML_END_TAG;
 	private static final String CALL_TREES_TOOLTIP = "<html>A call tree which shows the order of method calls (no aggregated calls). ";
 	private static final String RESPONSE_TIMES_TOOLTIP = "<html>Respone times (min | avg | max | total) of each component will be added to the illusatrated graph."
 			+ "<br>Time unit depends on made selection.</html>";
@@ -368,44 +370,14 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
-				switch (this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
-				case 0: // ns
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
-					break;
-				case 1: // us
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
-					break;
-				case 2: // ms
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
-					break;
-				case 3: // s
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
-					break;
-				default:
-					// default not required nevertheless added because of PMD
-				}
+				addSelectIndex(parameters, this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
 		if (this.assemblyComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
-				switch (this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
-				case 0: // ns
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
-					break;
-				case 1: // us
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
-					break;
-				case 2: // ms
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
-					break;
-				case 3: // s
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
-					break;
-				default:
-					// default not required nevertheless added because of PMD
-				}
+				addSelectIndex(parameters, this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
@@ -416,44 +388,14 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
-				switch (this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
-				case 0: // ns
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
-					break;
-				case 1: // us
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
-					break;
-				case 2: // ms
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
-					break;
-				case 3: // s
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
-					break;
-				default:
-					// default not required nevertheless added because of PMD
-				}
+				addSelectIndex(parameters, this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
 		if (this.assemblyOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
-				switch (this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
-				case 0: // ns
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
-					break;
-				case 1: // us
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
-					break;
-				case 2: // ms
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
-					break;
-				case 3: // s
-					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
-					break;
-				default:
-					// default not required nevertheless added because of PMD
-				}
+				addSelectIndex(parameters, this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 		if (this.aggregatedDeploymentCallTree.isSelected()) {
@@ -468,6 +410,25 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTCALLTREES);
 		}
 
+	}
+
+	private void addSelectIndex(final Collection<String> parameters, final int selectedIndex) {
+		switch (selectedIndex) {
+		case 0: // ns
+			parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+			break;
+		case 1: // us
+			parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
+			break;
+		case 2: // ms
+			parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+			break;
+		case 3: // s
+			parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
+			break;
+		default:
+			// default not required nevertheless added because of PMD
+		}
 	}
 
 	@Override
