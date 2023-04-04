@@ -20,8 +20,8 @@ import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.tools.log.replayer.stages.ReplayControlStage;
 import kieker.tools.log.replayer.stages.AdjustTimeStage;
+import kieker.tools.log.replayer.stages.ReplayControlStage;
 import kieker.tools.log.replayer.stages.time.adjuster.BranchingRecordTimeAdjuster;
 import kieker.tools.log.replayer.stages.time.adjuster.FlowEventTimeAdjuster;
 import kieker.tools.log.replayer.stages.time.adjuster.OperationExecutionRecordTimeAdjuster;
@@ -83,7 +83,7 @@ public class TeetimeConfiguration extends Configuration {
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		
+
 		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, parameter.isTimeRelative());
 
 		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
