@@ -24,7 +24,7 @@ import kieker.common.record.flow.IOperationRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.16.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
