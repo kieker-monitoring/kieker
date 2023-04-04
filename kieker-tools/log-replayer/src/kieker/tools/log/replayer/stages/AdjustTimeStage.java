@@ -24,13 +24,13 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Rewrite time stamps in records.
+ * Adjust time stamps in records.
  *
  * @author Reiner Jung
  * @since 2.0.0
  *
  */
-public class TimeAdjustStage extends AbstractConsumerStage<IMonitoringRecord> {
+public class AdjustTimeStage extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 	private Long timeDelta;
@@ -39,7 +39,7 @@ public class TimeAdjustStage extends AbstractConsumerStage<IMonitoringRecord> {
 	/**
 	 * Create an instance of the timestamp rewriter stage.
 	 */
-	public TimeAdjustStage(final ITimeAdjuster... timeAdjusters) {
+	public AdjustTimeStage(final ITimeAdjuster... timeAdjusters) {
 		this.timeAdjusters = timeAdjusters;
 	}
 
