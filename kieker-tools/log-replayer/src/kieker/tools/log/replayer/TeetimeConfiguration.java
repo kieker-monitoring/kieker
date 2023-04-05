@@ -20,7 +20,11 @@ import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.log.replayer.stages.AdjustTimeStage;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
+import kieker.tools.log.replayer.stages.time.adjuster.BranchingRecordTimeAdjuster;
+import kieker.tools.log.replayer.stages.time.adjuster.FlowEventTimeAdjuster;
+import kieker.tools.log.replayer.stages.time.adjuster.OperationExecutionRecordTimeAdjuster;
 import kieker.tools.source.LogsReaderCompositeStage;
 
 import teetime.framework.AbstractConsumerStage;
@@ -56,8 +60,9 @@ public class TeetimeConfiguration extends Configuration {
 			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();
 		}
 
-		if (parameter.isTimeRewrite()) {
-			final RewriteTime rewriteTime = new RewriteTime();
+		if (parameter.isTimeRelative()) {
+			final AdjustTimeStage rewriteTime = new AdjustTimeStage(new FlowEventTimeAdjuster(), new OperationExecutionRecordTimeAdjuster(),
+					new BranchingRecordTimeAdjuster());
 			this.connectPorts(outputPort, rewriteTime.getInputPort());
 			outputPort = rewriteTime.getOutputPort();
 		}
@@ -78,9 +83,9 @@ public class TeetimeConfiguration extends Configuration {
 		} else {
 			configuration = ConfigurationFactory.createDefaultConfiguration();
 		}
-		
-		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, parameter.isTimeRewrite());
-		
+
+		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, parameter.isTimeRelative());
+
 		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
 		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
 	}
