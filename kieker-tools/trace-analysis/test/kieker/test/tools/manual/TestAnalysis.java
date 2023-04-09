@@ -68,10 +68,7 @@ public final class TestAnalysis {
 			try {
 				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));
 
-			} catch (final IOException ex) {
-				TestAnalysis.LOGGER.error("Failed to load {}", TestAnalysis.KAX_FILENAME, ex);
-				return;
-			} catch (final AnalysisConfigurationException ex) {
+			} catch (final IOException | AnalysisConfigurationException ex) {
 				TestAnalysis.LOGGER.error("Failed to load {}", TestAnalysis.KAX_FILENAME, ex);
 				return;
 			}
@@ -227,9 +224,7 @@ public final class TestAnalysis {
 		}
 		try {
 			analysisController.saveToFile(new File(TestAnalysis.KAX_FILENAME));
-		} catch (final IOException ex) {
-			TestAnalysis.LOGGER.error("Failed to save configuration to {}", TestAnalysis.KAX_FILENAME, ex);
-		} catch (final AnalysisConfigurationException ex) {
+		} catch (final IOException | AnalysisConfigurationException ex) {
 			TestAnalysis.LOGGER.error("Failed to save configuration to {}", TestAnalysis.KAX_FILENAME, ex);
 		}
 	}

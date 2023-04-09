@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 0.91
  */
@@ -85,8 +85,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	private final String operationSignature;
 	private final String sessionId;
 	private final long traceId;
-	private final long tin;
-	private final long tout;
+	private long tin;
+	private long tout;
 	private final String hostname;
 	private final int eoi;
 	private final int ess;
@@ -263,11 +263,17 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		return this.tin;
 	}
 	
+	public final void setTin(long tin) {
+		this.tin = tin;
+	}
 	
 	public final long getTout() {
 		return this.tout;
 	}
 	
+	public final void setTout(long tout) {
+		this.tout = tout;
+	}
 	
 	public final String getHostname() {
 		return this.hostname;

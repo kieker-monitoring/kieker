@@ -13,8 +13,8 @@ entity OperationExecutionRecord {
 	string operationSignature = NO_OPERATION_SIGNATURE
 	string sessionId = NO_SESSION_ID
 	long traceId = NO_TRACE_ID
-	long tin = NO_TIMESTAMP
-	long tout = NO_TIMESTAMP
+	changeable long tin = NO_TIMESTAMP
+	changeable long tout = NO_TIMESTAMP
 	string hostname = NO_HOSTNAME
 	int eoi = NO_EOI_ESS
 	int ess = NO_EOI_ESS
@@ -23,7 +23,7 @@ entity OperationExecutionRecord {
 @author 'Andre van Hoorn, Jan Waller'
 @since '1.2'
 entity BranchingRecord {
-	long timestamp = 0
+	changeable long timestamp = 0
 	int branchID = 0
-	int branchingOutcome = 0	
+	int branchingOutcome = 0
 }

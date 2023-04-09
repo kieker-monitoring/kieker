@@ -222,15 +222,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File dotFile : dotFiles) {
-				try {
-					final Process p = Runtime.getRuntime().exec(
-							new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
-								dotFile.getAbsolutePath(), });
-					p.waitFor();
-				} catch (final IOException | InterruptedException e) {
-					LOGGER.warn("An exception occurred", e);
-				}
+				convertDotFile(dotFile);
 			}
 
 			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
@@ -238,36 +230,52 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File picFile : picFiles) {
-				OutputStream writer = null;
-				try {
-					final Process p = Runtime.getRuntime().exec(
-							new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
-								picFile.getAbsolutePath(), });
-					final InputStream s = p.getInputStream();
-					writer = Files.newOutputStream(Paths.get(picFile.getAbsolutePath() + "."
-							+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH)));
-					int r;
-					final byte[] buffer = new byte[10 * 1024];
-					while ((r = s.read(buffer)) != -1) { // NOPMD
-						writer.write(buffer, 0, r);
-					}
-					writer.close();
-					s.close();
-					p.waitFor();
-				} catch (final IOException | InterruptedException e) {
-					LOGGER.warn("An exception occurred", e);
-				} finally {
-					if (null != writer) {
-						try {
-							writer.close();
-						} catch (final IOException e) {
-							LOGGER.warn("An exception occurred", e);
-						}
-					}
-				}
+				convertFile(picFile);
 			}
 
+		}
+	}
+
+	private void convertDotFile(final File dotFile) {
+		try {
+			final Process p = Runtime.getRuntime().exec(
+					new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
+						"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+						dotFile.getAbsolutePath(), });
+			p.waitFor();
+		} catch (final IOException | InterruptedException e) {
+			LOGGER.warn("An exception occurred", e);
+		}
+	}
+
+	private void convertFile(final File picFile) {
+		OutputStream writer = null;
+		try {
+			final Process p = Runtime.getRuntime().exec(
+					new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
+						"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+						picFile.getAbsolutePath(), });
+			final InputStream s = p.getInputStream();
+			writer = Files.newOutputStream(Paths.get(picFile.getAbsolutePath() + "."
+					+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH)));
+			int r;
+			final byte[] buffer = new byte[10 * 1024];
+			while ((r = s.read(buffer)) != -1) { // NOPMD
+				writer.write(buffer, 0, r);
+			}
+			writer.close();
+			s.close();
+			p.waitFor();
+		} catch (final IOException | InterruptedException e) {
+			LOGGER.warn("An exception occurred", e);
+		} finally {
+			if (null != writer) {
+				try {
+					writer.close();
+				} catch (final IOException e) {
+					LOGGER.warn("An exception occurred", e);
+				}
+			}
 		}
 	}
 

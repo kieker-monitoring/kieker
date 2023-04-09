@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.remotecontrol;
+package kieker.tools.log.replayer.stages.time.adjuster;
 
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.IEventRecord;
 
 /**
- * @author Generic Kieker
- * 
+ *
+ * @author Reiner Jung
  * @since 2.0.0
  */
-public interface IRemoteParameterControlEvent extends IRemoteControlEvent {
-	public String getName();
-	
-	public String[] getValues();
-	
+public class FlowEventTimeAdjuster implements ITimeAdjuster {
+
+	@Override
+	public void apply(final IMonitoringRecord record, final long timeDelta) {
+		if (record instanceof IEventRecord) {
+			final IEventRecord event = (IEventRecord) record;
+			event.setTimestamp(event.getTimestamp() + timeDelta);
+		}
+	}
+
 }
