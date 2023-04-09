@@ -222,7 +222,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File dotFile : dotFiles) {
-				convertDotFile(dotFile);
+				this.convertDotFile(dotFile);
 			}
 
 			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
@@ -230,7 +230,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File picFile : picFiles) {
-				convertFile(picFile);
+				this.convertFile(picFile);
 			}
 
 		}
@@ -281,7 +281,7 @@ public class ConversionStep extends AbstractStep {
 
 	@Override
 	public void loadDefaultConfiguration() {
-		checkForDefaultLinuxLocations();
+		this.checkForDefaultLinuxLocations();
 
 		this.outputFormatField.setSelectedIndex(0);
 
@@ -293,24 +293,24 @@ public class ConversionStep extends AbstractStep {
 	}
 
 	private void checkForDefaultLinuxLocations() {
-		File potentialGraphvizFile = new File("/usr/bin/dot");
+		final File potentialGraphvizFile = new File("/usr/bin/dot");
 		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()) {
-			graphvizDirectoryField.setText(potentialGraphvizFile.getParent());
-			graphvizDirectoryLabel.setText("<html>Graphviz Directoy:<br>(Candidate has been auto-detected)</html>");
-			graphvizDirectoryField.repaint();
+			this.graphvizDirectoryField.setText(potentialGraphvizFile.getParent());
+			this.graphvizDirectoryLabel.setText("<html>Graphviz Directoy:<br>(Candidate has been auto-detected)</html>");
+			this.graphvizDirectoryField.repaint();
 		} else {
 			this.graphvizDirectoryField.setText(this.currentPath);
 		}
-		File potentialPic2plotFile = new File("/usr/bin/pic2plot");
+		final File potentialPic2plotFile = new File("/usr/bin/pic2plot");
 		if (potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
-			pic2plotDirectoryField.setText(potentialPic2plotFile.getParent());
-			pic2plotDirectoryLabel.setText("<html>Pic2Plot Directoy:<br>(Candidate has been auto-detected)</html>");
+			this.pic2plotDirectoryField.setText(potentialPic2plotFile.getParent());
+			this.pic2plotDirectoryLabel.setText("<html>Pic2Plot Directoy:<br>(Candidate has been auto-detected)</html>");
 		} else {
 			this.pic2plotDirectoryField.setText(this.currentPath);
 		}
-		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute() &&
-				potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
-			performStep.setSelected(true);
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()
+				&& potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			this.performStep.setSelected(true);
 		}
 	}
 
