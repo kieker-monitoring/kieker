@@ -222,7 +222,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File dotFile : dotFiles) {
-				convertDotFile(dotFile);
+				this.convertDotFile(dotFile);
 			}
 
 			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
@@ -230,7 +230,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File picFile : picFiles) {
-				convertFile(picFile);
+				this.convertFile(picFile);
 			}
 
 		}
@@ -281,8 +281,8 @@ public class ConversionStep extends AbstractStep {
 
 	@Override
 	public void loadDefaultConfiguration() {
-		this.graphvizDirectoryField.setText(this.currentPath);
-		this.pic2plotDirectoryField.setText(this.currentPath);
+		this.checkForDefaultLinuxLocations();
+
 		this.outputFormatField.setSelectedIndex(0);
 
 		this.graphvizDirectoryField.setEnabled(false);
@@ -290,6 +290,28 @@ public class ConversionStep extends AbstractStep {
 		this.graphvizDirectoryChooseButton.setEnabled(false);
 		this.pic2plotDirectoryChooseButton.setEnabled(false);
 		this.outputFormatField.setEnabled(false);
+	}
+
+	private void checkForDefaultLinuxLocations() {
+		final File potentialGraphvizFile = new File("/usr/bin/dot");
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()) {
+			this.graphvizDirectoryField.setText(potentialGraphvizFile.getParent());
+			this.graphvizDirectoryLabel.setText("<html>Graphviz Directoy:<br>(Candidate has been auto-detected)</html>");
+			this.graphvizDirectoryField.repaint();
+		} else {
+			this.graphvizDirectoryField.setText(this.currentPath);
+		}
+		final File potentialPic2plotFile = new File("/usr/bin/pic2plot");
+		if (potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			this.pic2plotDirectoryField.setText(potentialPic2plotFile.getParent());
+			this.pic2plotDirectoryLabel.setText("<html>Pic2Plot Directoy:<br>(Candidate has been auto-detected)</html>");
+		} else {
+			this.pic2plotDirectoryField.setText(this.currentPath);
+		}
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()
+				&& potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			this.performStep.setSelected(true);
+		}
 	}
 
 	@Override

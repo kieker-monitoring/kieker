@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.IPayloadCharacterization;
 
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 2.0.0
  */
