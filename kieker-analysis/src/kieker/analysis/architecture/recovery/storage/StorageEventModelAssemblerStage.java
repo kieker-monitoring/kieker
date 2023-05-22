@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2022 OceanDSL (https://oceandsl.uni-kiel.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,4 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.dataflow;
+package kieker.analysis.architecture.recovery.storage;
+
+import kieker.analysis.architecture.recovery.events.StorageEvent;
+
+import teetime.stage.basic.AbstractFilter;
+
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
+public class StorageEventModelAssemblerStage extends AbstractFilter<StorageEvent> {
+
+	private final IStorageEventAssembler assembler;
+
+	public StorageEventModelAssemblerStage(final IStorageEventAssembler assembler) {
+		this.assembler = assembler;
+	}
+
+	@Override
+	protected void execute(final StorageEvent event) {
+		this.assembler.addStorage(event);
+		this.outputPort.send(event);
+	}
+}

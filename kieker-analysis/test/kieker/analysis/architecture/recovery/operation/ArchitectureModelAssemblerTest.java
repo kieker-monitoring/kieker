@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.operation;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,9 +49,12 @@ public class ArchitectureModelAssemblerTest {
 	private static final String EXAMPLE_CLASS_SIGNATURE_2 = "org.package.SecondClass";
 	private static final String TEST_SOURCE = "test-source";
 
-	private final OperationEvent beforeOperationEvent1 = new OperationEvent(EXAMPLE_HOSTNAME, EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
-	private final OperationEvent beforeOperationEvent2 = new OperationEvent(EXAMPLE_HOSTNAME, EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-	private final OperationEvent beforeOperationEvent3 = new OperationEvent(EXAMPLE_HOSTNAME, EXAMPLE_CLASS_SIGNATURE_2, EXAMPLE_OPERATION_SIGNATURE_3);
+	private final OperationEvent beforeOperationEvent1 = new OperationEvent(ArchitectureModelAssemblerTest.EXAMPLE_HOSTNAME,
+			ArchitectureModelAssemblerTest.EXAMPLE_CLASS_SIGNATURE_1, ArchitectureModelAssemblerTest.EXAMPLE_OPERATION_SIGNATURE_1);
+	private final OperationEvent beforeOperationEvent2 = new OperationEvent(ArchitectureModelAssemblerTest.EXAMPLE_HOSTNAME,
+			ArchitectureModelAssemblerTest.EXAMPLE_CLASS_SIGNATURE_1, ArchitectureModelAssemblerTest.EXAMPLE_OPERATION_SIGNATURE_2);
+	private final OperationEvent beforeOperationEvent3 = new OperationEvent(ArchitectureModelAssemblerTest.EXAMPLE_HOSTNAME,
+			ArchitectureModelAssemblerTest.EXAMPLE_CLASS_SIGNATURE_2, ArchitectureModelAssemblerTest.EXAMPLE_OPERATION_SIGNATURE_3);
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
@@ -60,13 +63,15 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.architecture.recovery.TypeModelAssembler#addOperation(kieker.analysis.architecture.recovery.events.OperationEvent)}.
+	 * Test method for
+	 * {@link kieker.analysis.architecture.recovery.operation.OperationTypeModelAssembler#addOperation(kieker.analysis.architecture.recovery.events.OperationEvent)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
 		final SourceModel sourcesModel = SourceFactory.eINSTANCE.createSourceModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, sourcesModel, TEST_SOURCE, new JavaComponentSignatureExtractor(),
+		final OperationTypeModelAssembler typeModelAssembler = new OperationTypeModelAssembler(typeModel, sourcesModel, ArchitectureModelAssemblerTest.TEST_SOURCE,
+				new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addOperation(this.beforeOperationEvent1);
@@ -74,7 +79,8 @@ public class ArchitectureModelAssemblerTest {
 		typeModelAssembler.addOperation(this.beforeOperationEvent3);
 
 		final List<String> actualList = typeModel.getComponentTypes().values().stream().map(c -> c.getSignature()).collect(Collectors.toList());
-		final List<String> expectedList = Arrays.asList(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_CLASS_SIGNATURE_2);
+		final List<String> expectedList = Arrays.asList(ArchitectureModelAssemblerTest.EXAMPLE_CLASS_SIGNATURE_1,
+				ArchitectureModelAssemblerTest.EXAMPLE_CLASS_SIGNATURE_2);
 		Collections.sort(actualList);
 		Collections.sort(expectedList);
 

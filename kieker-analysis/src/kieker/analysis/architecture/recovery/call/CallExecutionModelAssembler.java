@@ -14,8 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.call;
 
+import kieker.analysis.architecture.recovery.AbstractModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -29,13 +30,13 @@ import kieker.model.analysismodel.source.SourceModel;
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler extends AbstractModelAssembler implements IOperationCallModelAssembler {
+public class CallExecutionModelAssembler extends AbstractModelAssembler implements IOperationCallModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
+	public CallExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.executionModel = executionModel;
 	}

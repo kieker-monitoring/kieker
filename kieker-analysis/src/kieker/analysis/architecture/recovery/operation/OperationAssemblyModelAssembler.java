@@ -14,8 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.operation;
 
+import kieker.analysis.architecture.recovery.AbstractModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
@@ -31,14 +32,14 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class AssemblyModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
+public class OperationAssemblyModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;
 
-	public AssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+	public OperationAssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.typeModel = typeModel;
 		this.assemblyModel = assemblyModel;

@@ -16,6 +16,9 @@
 package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
+import kieker.analysis.architecture.recovery.operation.OperationAssemblyModelAssembler;
+import kieker.analysis.architecture.recovery.operation.OperationDeploymentModelAssembler;
+import kieker.analysis.architecture.recovery.operation.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.signature.SignatureExtractor;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentModel;
@@ -70,14 +73,14 @@ public class StaticModelsAssemblerStage extends CompositeStage { // NOPMD not a 
 		this.sourceModel = sourceModel;
 
 		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(
-				new TypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
+				new OperationTypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
 						signatureExtractor.getComponentSignatureExtractor(),
 						signatureExtractor.getOperationSignatureExtractor()));
 		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(
-				new AssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
+				new OperationAssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
 						sourceLabel));
 		final OperationEventModelAssemblerStage deploymentModelAssembler = new OperationEventModelAssemblerStage(
-				new DeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
+				new OperationDeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
 						sourceLabel));
 
 		this.inputPort = typeModelAssembler.getInputPort();

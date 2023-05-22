@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,4 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.controlflow;
+
+package kieker.analysis.architecture.recovery.call;
+
+import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+
+import teetime.stage.basic.AbstractFilter;
+
+/**
+ * @author Reiner Jung
+ * @since 1.15
+ */
+public class CallModelAssemblerStage extends AbstractFilter<OperationCallDurationEvent> {
+
+	private final IOperationCallModelAssembler assembler;
+
+	public CallModelAssemblerStage(final IOperationCallModelAssembler assembler) {
+		this.assembler = assembler;
+	}
+
+	@Override
+	protected void execute(final OperationCallDurationEvent operationCall) {
+		this.assembler.addOperationCall(operationCall);
+		this.outputPort.send(operationCall);
+	}
+
+}

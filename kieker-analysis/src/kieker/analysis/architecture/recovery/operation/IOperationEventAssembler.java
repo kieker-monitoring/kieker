@@ -13,31 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.operation;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
-import kieker.analysis.architecture.recovery.operation.IOperationEventAssembler;
-
-import teetime.stage.basic.AbstractFilter;
 
 /**
- * Generic model assembler stage for all models.
+ * OperationEvent assembler interface.
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class OperationEventModelAssemblerStage extends AbstractFilter<OperationEvent> {
+public interface IOperationEventAssembler {
 
-	private final IOperationEventAssembler assembler;
-
-	public OperationEventModelAssemblerStage(final IOperationEventAssembler assembler) {
-		this.assembler = assembler;
-	}
-
-	@Override
-	protected void execute(final OperationEvent event) {
-		this.assembler.addOperation(event);
-		this.outputPort.send(event);
-	}
-
+	public abstract void addOperation(final OperationEvent event);
 }

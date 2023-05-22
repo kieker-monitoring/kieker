@@ -19,12 +19,12 @@ package kieker.analysis.util.debug.hotspotdetection;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
 
-import kieker.analysis.architecture.recovery.AssemblyModelAssembler;
-import kieker.analysis.architecture.recovery.DeploymentModelAssembler;
 import kieker.analysis.architecture.recovery.OperationAndCallGeneratorStage;
 import kieker.analysis.architecture.recovery.OperationEventModelAssemblerStage;
-import kieker.analysis.architecture.recovery.TypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
+import kieker.analysis.architecture.recovery.operation.OperationAssemblyModelAssembler;
+import kieker.analysis.architecture.recovery.operation.OperationDeploymentModelAssembler;
+import kieker.analysis.architecture.recovery.operation.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.signature.JavaComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor;
 import kieker.analysis.architecture.trace.flow.FlowTraceEventMatcher;
@@ -79,11 +79,11 @@ public class HotspotDetectionConfiguration extends Configuration {
 		final OperationAndCallGeneratorStage operationAndCallGeneratorStage = new OperationAndCallGeneratorStage(true);
 
 		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(
-				new TypeModelAssembler(typeModel, sourceModel, DYNAMIC_SOURCE,
+				new OperationTypeModelAssembler(typeModel, sourceModel, DYNAMIC_SOURCE,
 						new JavaComponentSignatureExtractor(), new JavaOperationSignatureExtractor()));
-		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(new AssemblyModelAssembler(typeModel,
+		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(new OperationAssemblyModelAssembler(typeModel,
 				assemblyModel, sourceModel, DYNAMIC_SOURCE));
-		final OperationEventModelAssemblerStage deploymentModelAssemblerStage = new OperationEventModelAssemblerStage(new DeploymentModelAssembler(assemblyModel,
+		final OperationEventModelAssemblerStage deploymentModelAssemblerStage = new OperationEventModelAssemblerStage(new OperationDeploymentModelAssembler(assemblyModel,
 				deploymentModel, sourceModel, DYNAMIC_SOURCE));
 
 		final ControlledEventReleaseStage<OperationEvent, IFlowRecord> flowRecordMerger = new ControlledEventReleaseStage<>(new FlowTraceEventMatcher());

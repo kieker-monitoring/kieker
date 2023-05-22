@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2022 OceanDSL (https://oceandsl.uni-kiel.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.architecture.recovery.storage;
 
-package kieker.analysis.architecture.recovery;
-
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-
-import teetime.stage.basic.AbstractFilter;
+import kieker.model.analysismodel.type.StorageType;
 
 /**
+ * Signature extractor interface for storage references.
+ *
  * @author Reiner Jung
- * @since 1.15
+ * @since 1.3.0
  */
-public class OperationCallModelAssemblerStage extends AbstractFilter<OperationCallDurationEvent> {
+public interface IStorageSignatureExtractor {
 
-	private final IOperationCallModelAssembler assembler;
-
-	public OperationCallModelAssemblerStage(final IOperationCallModelAssembler assembler) {
-		this.assembler = assembler;
-	}
-
-	@Override
-	protected void execute(final OperationCallDurationEvent operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
-	}
+    /**
+     * Extract information from the signature to set all other parameter of a storage type.
+     *
+     * @param storageType
+     *            the storage type to be modified
+     */
+    void extract(StorageType storageType);
 
 }
