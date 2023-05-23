@@ -26,9 +26,9 @@ dependencies {
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
-	implementation 'ch.qos.logback:logback-classic:1.1.7'
+	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation 'org.apache.groovy:groovy-all:4.0.12'
 
 	// TODO jgraphx is no longer maintained
 	implementation resolveLibrary('jgraphx-*.jar')

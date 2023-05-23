@@ -78,7 +78,7 @@ public class JavaOperationSignatureExtractorTest {
 	 * {@link kieker.analysis.architecture.recovery.signature.JavaOperationSignatureExtractor#extract(kieker.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithoutModifiersWithParameRETURN_TYPEters() { // NOPMD (assert is placed in separate method)
+	public void testExtractWithoutModifiersWithParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
 		final List<String> parameterTypes = Arrays.asList("FirstParameterType", "SecondParameterType");
 
