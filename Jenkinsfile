@@ -31,7 +31,7 @@ pipeline {
     stage('Default Docker Stages') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           alwaysPull false
           args env.DOCKER_ARGS
         }
