@@ -10,11 +10,24 @@ buildscript {
 plugins {
 	id 'java'
 	id 'java-library'
-	id "com.github.hauner.jarTest"
 }
 
 // TODO Why must this be applied, while others get included via plugins?
 apply plugin: "io.freefair.aspectj.post-compile-weaving"
+
+// The following lines are necessay to create a test jar
+project.configurations {
+    testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+    from project.sourceSets.test.output
+    archiveClassifier = 'test'
+}
+
+project.artifacts {
+    testArchives project.jarTest
+}
 
 repositories {
 	mavenCentral()

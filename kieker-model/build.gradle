@@ -1,7 +1,20 @@
 plugins {
-	id 'com.github.hauner.jarTest'
 	id 'java'
 	id 'java-library'
+}
+
+// The following lines are necessay to create a test jar
+project.configurations {
+    testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+    from project.sourceSets.test.output
+    archiveClassifier = 'test'
+}
+
+project.artifacts {
+    testArchives project.jarTest
 }
 
 sourceCompatibility = 1.8
