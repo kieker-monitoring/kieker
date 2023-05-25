@@ -15,7 +15,7 @@ the instrumentation of the application, and the actual monitoring.
    detail, the quick start example uses manual instrumentation.
 
 The first step is to copy the **Kieker** jar-file
-task ':emfJar' property 'archiveFileName' to the lib/ directory of the example directory.
+kieker-1.15.1-emf.jar to the lib/ directory of the example directory.
 The file is located in the ``kieker-2.0.0-SNAPSHOT/build/libs/`` directory of the
 extracted **Kieker** archive (see download instructions). In the example
 directory for this section, this file is already included, as
@@ -138,9 +138,9 @@ i.e. ``examples/userguide/ch2-manual-instrumentation/``.
 .. code:: shell
 	
 	javac src/kieker/examples/userguide/ch2bookstore/manual/∗.java \
-		-classpath lib/task ':emfJar' property 'archiveFileName' -d build/
+		-classpath lib/kieker-1.15.1-emf.jar -d build/
 	
-	java -classpath build/:lib/task ':emfJar' property 'archiveFileName' \
+	java -classpath build/:lib/kieker-1.15.1-emf.jar \
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Under Windows it is necessary to separate the classpath elements by a
@@ -151,9 +151,9 @@ for the Windows PowerShell. Also input each command on one line
 .. code:: shell
 	
 	javac src\kieker\examples\userguide\ch2bookstore\manual\∗.java
-		-classpath lib\task ':emfJar' property 'archiveFileName' -d build\
+		-classpath lib\kieker-1.15.1-emf.jar -d build\
 	
-	java -classpath build\;lib\task ':emfJar' property 'archiveFileName'
+	java -classpath build\;lib\kieker-1.15.1-emf.jar
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 If everything worked correctly, a new directory for the monitoring data

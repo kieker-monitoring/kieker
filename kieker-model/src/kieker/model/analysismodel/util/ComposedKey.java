@@ -48,11 +48,11 @@ public final class ComposedKey<F, S> {
 			return false;
 		}
 		final ComposedKey<?, ?> p = (ComposedKey<?, ?>) o;
-		return equalOrBothNull(p.first, this.first) && equalOrBothNull(p.second, this.second);
+		return ComposedKey.equalOrBothNull(p.first, this.first) && ComposedKey.equalOrBothNull(p.second, this.second);
 	}
-	
-	public static boolean equalOrBothNull(Object a, Object b) {
-	    return a == b || (a != null && a.equals(b));
+
+	public static boolean equalOrBothNull(final Object a, final Object b) {
+		return (a == b) || ((a != null) && a.equals(b)); // NOPMD CompareObjectsWithEquals
 	}
 
 	@Override
