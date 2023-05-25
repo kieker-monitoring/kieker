@@ -77,7 +77,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 	 *            Used time unit
 	 */
 	private void initForecastWithTimeUnit(final TimeUnit tu) {
-		this.ts = new TimeSeries<Double>(this.startTime, TimeUnit.MILLISECONDS, this.deltaTime, tu);
+		this.ts = new TimeSeries<>(this.startTime, TimeUnit.MILLISECONDS, this.deltaTime, tu);
 
 		this.steps = 1;
 		this.mean = Double.valueOf(2.0);

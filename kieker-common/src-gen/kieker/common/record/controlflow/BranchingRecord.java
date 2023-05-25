@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.2
  */
@@ -55,7 +55,7 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	private static final long serialVersionUID = 3957750090047819946L;
 	
 	/** property declarations. */
-	private final long timestamp;
+	private long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;
 	
@@ -171,6 +171,9 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 		return this.timestamp;
 	}
 	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public final int getBranchID() {
 		return this.branchID;

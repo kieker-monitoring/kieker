@@ -51,6 +51,20 @@ public class CassandraDb {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDb.class);
 
+	private static final String DB_TEXT = "text";
+
+	private static final String DB_INT = "int";
+
+	private static final String DB_BIGINT = "bigint";
+
+	private static final String DB_FLOAT = "float";
+
+	private static final String DB_DOUBLE = "double";
+
+	private static final String DB_BOOLEAN = "boolean";
+
+	private static final String DB_VARCHAR = "varchar";
+	
 	private final List<InetSocketAddress> contactPoints;
 	private final String keyspace;
 	private final String tablePrefix;
@@ -192,8 +206,8 @@ public class CassandraDb {
 	private void initializeDatabaseTypeMapping() {
 		final Class<?>[] primitiveTypes = { String.class, int.class, Integer.class, long.class, Long.class, float.class, Float.class, double.class,
 			Double.class, boolean.class, Boolean.class, char.class, Character.class };
-		final String[] databaseTypes = { "text", "int", "int", "bigint", "bigint", "float", "float", "double", "double", "int", "int", "boolean", "boolean",
-			"varchar", "varchar" };
+		final String[] databaseTypes = { DB_TEXT, DB_INT, DB_INT, DB_BIGINT, DB_BIGINT, DB_FLOAT, DB_FLOAT, DB_DOUBLE, DB_DOUBLE, DB_INT, DB_INT, DB_BOOLEAN, DB_BOOLEAN,
+			DB_VARCHAR, DB_VARCHAR };
 		for (int i = 0; i < primitiveTypes.length; i++) {
 			this.databaseTypeMap.put(primitiveTypes[i], databaseTypes[i]);
 		}

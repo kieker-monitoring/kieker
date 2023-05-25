@@ -35,9 +35,9 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class GraphTransformerVisitor implements IOperationCallVisitor {
 
-	private final IGraph graph;
+	private final IGraph<INode, IEdge> graph;
 
-	public GraphTransformerVisitor(final IGraph graph) {
+	public GraphTransformerVisitor(final IGraph<INode, IEdge> graph) {
 		super();
 		this.graph = graph;
 	}

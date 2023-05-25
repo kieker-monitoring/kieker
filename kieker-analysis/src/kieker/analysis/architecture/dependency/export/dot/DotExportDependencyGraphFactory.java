@@ -22,8 +22,10 @@ import kieker.analysis.architecture.dependency.IVertexTypeMapper;
 import kieker.analysis.architecture.dependency.PropertyConstants;
 import kieker.analysis.architecture.dependency.VertexType;
 import kieker.analysis.architecture.recovery.signature.NameBuilder;
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IElement;
 import kieker.analysis.generic.graph.INode;
+import kieker.analysis.generic.sink.graph.dot.DotExportBuilder;
 import kieker.analysis.generic.sink.graph.dot.DotExportMapper;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotClusterAttribute;
 import kieker.analysis.generic.sink.graph.dot.attributes.DotEdgeAttribute;
@@ -57,8 +59,8 @@ public class DotExportDependencyGraphFactory {
 		this.vertexTypeMapper = vertexTypeMapper;
 	}
 
-	private DotExportMapper.Builder createBaseBuilder() {
-		final DotExportMapper.Builder builder = new DotExportMapper.Builder();
+	private DotExportBuilder<INode, IEdge> createBaseBuilder() {
+		final DotExportBuilder<INode, IEdge> builder = new DotExportBuilder<>();
 
 		builder.addGraphAttribute(DotGraphAttribute.RANKDIR, g -> "LR");
 		builder.addDefaultEdgeAttribute(DotEdgeAttribute.STYLE, g -> "solid");
@@ -77,8 +79,46 @@ public class DotExportDependencyGraphFactory {
 		return builder;
 	}
 
-	public DotExportMapper createForTypeLevelOperationDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
+	public DotExportMapper<INode, IEdge> createForTypeLevelOperationDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
+
+		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
+
+		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
+			if (type == VertexType.ENTRY) {
+				return ENTRY_LABEL;
+			} else {
+				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append(System.lineSeparator())
+						.append(this.createStatisticsFromVertex(v)).toString();
+			}
+		});
+
+		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createComponentLabelFromVertex(v).toString());
+
+		return builder.build();
+	}
+
+	public DotExportMapper<INode, IEdge> createForTypeLevelComponentDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
+
+		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
+
+		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
+			if (type == VertexType.ENTRY) {
+				return ENTRY_LABEL;
+			} else {
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
+						.append(this.createStatisticsFromVertex(v)).toString();
+			}
+		});
+
+		return builder.build();
+	}
+
+	public DotExportMapper<INode, IEdge> createForAssemblyLevelOperationDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
@@ -97,8 +137,8 @@ public class DotExportDependencyGraphFactory {
 		return builder.build();
 	}
 
-	public DotExportMapper createForTypeLevelComponentDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
+	public DotExportMapper<INode, IEdge> createForAssemblyLevelComponentDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
@@ -107,7 +147,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -115,8 +155,8 @@ public class DotExportDependencyGraphFactory {
 		return builder.build();
 	}
 
-	public DotExportMapper createForAssemblyLevelOperationDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
+	public DotExportMapper<INode, IEdge> createForDeploymentLevelOperationDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
@@ -125,45 +165,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n")
-						.append(this.createStatisticsFromVertex(v)).toString();
-			}
-		});
-
-		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createComponentLabelFromVertex(v).toString());
-
-		return builder.build();
-	}
-
-	public DotExportMapper createForAssemblyLevelComponentDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
-
-		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
-
-		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
-			if (type == VertexType.ENTRY) {
-				return ENTRY_LABEL;
-			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
-						.append(this.createStatisticsFromVertex(v)).toString();
-			}
-		});
-
-		return builder.build();
-	}
-
-	public DotExportMapper createForDeploymentLevelOperationDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
-
-		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
-
-		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
-			if (type == VertexType.ENTRY) {
-				return ENTRY_LABEL;
-			} else {
-				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -184,8 +186,8 @@ public class DotExportDependencyGraphFactory {
 		return builder.build();
 	}
 
-	public DotExportMapper createForDeploymentLevelComponentDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
+	public DotExportMapper<INode, IEdge> createForDeploymentLevelComponentDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
@@ -194,7 +196,7 @@ public class DotExportDependencyGraphFactory {
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
-				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n")
+				return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append(System.lineSeparator())
 						.append(this.createStatisticsFromVertex(v)).toString();
 			}
 		});
@@ -204,8 +206,8 @@ public class DotExportDependencyGraphFactory {
 		return builder.build();
 	}
 
-	public DotExportMapper createForDeploymentLevelContextDependencyGraph() {
-		final DotExportMapper.Builder builder = this.createBaseBuilder();
+	public DotExportMapper<INode, IEdge> createForDeploymentLevelContextDependencyGraph() {
+		final DotExportBuilder<INode, IEdge> builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box3d");
 
@@ -243,7 +245,7 @@ public class DotExportDependencyGraphFactory {
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyConstants.PACKAGE_NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append("\\n")
+		return new StringBuilder().append(this.createType(type)).append(System.lineSeparator())
 				.append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
@@ -251,7 +253,7 @@ public class DotExportDependencyGraphFactory {
 		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
+		return new StringBuilder().append(this.createType(type)).append(System.lineSeparator()).append(name);
 	}
 
 	private StringBuilder createStatisticsFromVertex(final INode vertex) {
@@ -271,7 +273,7 @@ public class DotExportDependencyGraphFactory {
 		return new StringBuilder()
 				.append("min: ").append(minResponseTime).append(' ').append(timeUnit).append(", ")
 				.append("max: ").append(maxResponseTime).append(' ').append(timeUnit).append(", ")
-				.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\\n")
+				.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(',').append(System.lineSeparator())
 				.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ")
 				.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
 	}

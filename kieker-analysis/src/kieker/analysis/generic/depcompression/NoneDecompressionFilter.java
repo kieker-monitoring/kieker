@@ -33,7 +33,9 @@ public class NoneDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create dummy decompression filter.
 	 */
-	public NoneDecompressionFilter() {}
+	public NoneDecompressionFilter() {
+		// empty constructor
+	}
 
 	/*
 	 * (non-Javadoc)

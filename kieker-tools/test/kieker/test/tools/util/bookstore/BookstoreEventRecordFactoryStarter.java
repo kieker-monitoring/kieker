@@ -57,7 +57,7 @@ public final class BookstoreEventRecordFactoryStarter {
 		final String hostname = "srv0";
 		long traceId = 688434;
 
-		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> allRecords = new ArrayList<>();
 
 		final TraceEventRecords validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId,
 				hostname);

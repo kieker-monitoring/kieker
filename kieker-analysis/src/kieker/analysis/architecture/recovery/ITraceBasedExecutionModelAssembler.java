@@ -18,13 +18,12 @@ package kieker.analysis.architecture.recovery;
 import kieker.model.analysismodel.trace.OperationCall;
 
 /**
+ *
  * @author Reiner Jung
- *
  * @since 1.15
- *
  */
 public interface ITraceBasedExecutionModelAssembler {
 
-	void addOperationCall(final OperationCall operationCall);
+	void addOperationCall(OperationCall operationCall);
 
 }

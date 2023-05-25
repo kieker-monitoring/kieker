@@ -52,12 +52,12 @@ public class TimeSeriesTestNoState extends AbstractKiekerTest {
 	@Test
 	public void testAppendAll() {
 		final Double[] values = { 600.9, 400.2, 223.9 };
-		final List<Double> expectedValues = new ArrayList<Double>(values.length);
+		final List<Double> expectedValues = new ArrayList<>(values.length);
 		for (final Double curVal : values) {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(TimeSeriesTestNoState.STARTTIME, TimeUnit.MILLISECONDS, TimeSeriesTestNoState.DELTATIMEMILIS);
+		final TimeSeries<Double> ts = new TimeSeries<>(TimeSeriesTestNoState.STARTTIME, TimeUnit.MILLISECONDS, TimeSeriesTestNoState.DELTATIMEMILIS);
 		ts.appendAll(values);
 
 		final List<Double> tsValues = ts.getValues();

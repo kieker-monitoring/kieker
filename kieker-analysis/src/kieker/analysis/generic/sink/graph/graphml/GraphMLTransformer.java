@@ -39,24 +39,29 @@ import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.sink.graph.AbstractTransformer;
 
 /**
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
+public class GraphMLTransformer<N extends INode, E extends IEdge> extends AbstractTransformer<GraphmlType, N, E> {
 
 	private final GraphType graphType;
 	private final Set<String> nodeKeys = new HashSet<>();
 	private final Set<String> edgeKeys = new HashSet<>();
 
-	public GraphMLTransformer(final IGraph graph) {
+	public GraphMLTransformer(final IGraph<N, E> graph) {
 		super(graph);
 		this.graphType = new GraphType();
 		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
 		this.graphType.setId(graph.getLabel());
 	}
 
-	public GraphMLTransformer(final MutableNetwork<INode, IEdge> graph, final String label) {
+	public GraphMLTransformer(final MutableNetwork<N, E> graph, final String label) {
 		super(graph, label);
 		this.graphType = new GraphType();
 		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
@@ -77,8 +82,8 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 		}
 
 		if (vertex.hasChildGraph()) {
-			final IGraph childGraph = vertex.getChildGraph();
-			final GraphMLTransformer graphmlTypeTransformer = new GraphMLTransformer(childGraph);
+			final IGraph<N, E> childGraph = vertex.getChildGraph();
+			final GraphMLTransformer<N, E> graphmlTypeTransformer = new GraphMLTransformer<>(childGraph);
 			final GraphmlType childGraphmlType = graphmlTypeTransformer.transform();
 			for (final Object childGraphType : childGraphmlType.getGraphOrData()) {
 				if (childGraphType instanceof GraphType) {
@@ -104,10 +109,10 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	}
 
 	@Override
-	protected void transformEdge(final IEdge edge) {
+	protected void transformEdge(final E edge) {
 		final EdgeType edgeType = new EdgeType();
 		edgeType.setId(edge.getId().toString());
-		final EndpointPair<INode> pair = this.graph.getGraph().incidentNodes(edge);
+		final EndpointPair<N> pair = this.graph.getGraph().incidentNodes(edge);
 		edgeType.setSource(pair.source().getId());
 		edgeType.setTarget(pair.target().getId());
 		final List<DataType> data = edgeType.getData();

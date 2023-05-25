@@ -25,6 +25,9 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 
+import kieker.common.configuration.Configuration;
+import kieker.common.util.classpath.InstantiationFactory;
+
 /**
  * Collection of command line parameter evaluation functions.
  *
@@ -138,4 +141,32 @@ public final class ParameterEvaluationUtils {
 		}
 
 	}
+
+	/**
+	 * Instantiate on object from a property.
+	 *
+	 * @param <T>
+	 *            class type of the object to be instantiated
+	 *
+	 * @param clazz
+	 *            class object for the object to be instantiated
+	 * @param configuration
+	 *            configuration object containing the class name
+	 * @param key
+	 *            key of the entry that should contain the a class name
+	 * @param errorMessage
+	 *            error message in case the object cannot be instantiated
+	 * @return returns either an object conforming to the object class or null if the initialization in incomplete
+	 */
+	public static <T> T createFromConfiguration(final Class<T> clazz, final Configuration configuration, final String key,
+			final String errorMessage) {
+		final String className = configuration.getStringProperty(key);
+		if (className.isEmpty()) {
+			ParameterEvaluationUtils.LOGGER.error("Initialization incomplete: {}", errorMessage);
+			return null;
+		} else {
+			return InstantiationFactory.getInstance(configuration).create(clazz, className, null);
+		}
+	}
+
 }

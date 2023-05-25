@@ -57,7 +57,7 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
-		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
+		final List<Double> allHistory = new ArrayList<>(history.getValues());
 		final Double[] histValuesNotNull = MeanForecasterJava.removeNullValues(allHistory);
 		final double mean = StatUtils.mean(ArrayUtils.toPrimitive(histValuesNotNull));
 		final Double[] forecastValues = new Double[numForecastSteps];
@@ -74,7 +74,7 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 	 * @return List/Array with no NullValues
 	 */
 	public static Double[] removeNullValues(final List<Double> allHistory) {
-		final List<Double> newList = new ArrayList<Double>();
+		final List<Double> newList = new ArrayList<>();
 
 		for (final Object obj : allHistory) {
 			if ((null != obj) && (obj instanceof Double) && !Double.isNaN((Double) obj)) {

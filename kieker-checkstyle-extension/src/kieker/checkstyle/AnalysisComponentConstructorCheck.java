@@ -72,7 +72,7 @@ public class AnalysisComponentConstructorCheck extends AbstractCheck {
 	public void visitToken(final DetailAST ast) {
 		// Check whether we are interested in the class (whether it is an
 		// analysis component or not)
-		if (!(this.ignoreAbstractClasses && CSUtility.isAbstract(ast))
+		if (!(this.ignoreAbstractClasses && CSUtils.isAbstract(ast))
 				&& AnalysisComponentConstructorCheck.isAnalysisComponent(ast)) {
 			// Now check the constructors
 			DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);

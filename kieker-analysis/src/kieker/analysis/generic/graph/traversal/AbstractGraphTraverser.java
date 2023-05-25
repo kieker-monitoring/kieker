@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.generic.graph.traversal;
 
 import java.util.ArrayList;
@@ -27,53 +26,58 @@ import kieker.analysis.generic.graph.INode;
 /**
  * @author Sören Henning
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @since 1.14
  */
-public abstract class AbstractGraphTraverser {
+public abstract class AbstractGraphTraverser<N extends INode, E extends IEdge> {
 
-	protected List<IVertexVisitor> vertexVisitors;
-	protected List<IEdgeVisitor> edgeVisitors;
+	protected List<INodeVisitor<N>> nodeVisitors;
+	protected List<IEdgeVisitor<E>> edgeVisitors;
 
 	public AbstractGraphTraverser() {
-		this.vertexVisitors = new ArrayList<>();
+		this.nodeVisitors = new ArrayList<>();
 		this.edgeVisitors = new ArrayList<>();
 	}
 
-	public AbstractGraphTraverser(final IVertexVisitor vertexVisitor, final IEdgeVisitor edgeVisitor) {
+	public AbstractGraphTraverser(final INodeVisitor<N> nodeVisitor, final IEdgeVisitor<E> edgeVisitor) {
 		this();
-		this.vertexVisitors.add(vertexVisitor);
+		this.nodeVisitors.add(nodeVisitor);
 		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public AbstractGraphTraverser(final List<IVertexVisitor> vertexVisitors, final List<IEdgeVisitor> edgeVisitors) {
-		this.vertexVisitors = vertexVisitors;
+	public AbstractGraphTraverser(final List<INodeVisitor<N>> nodeVisitors, final List<IEdgeVisitor<E>> edgeVisitors) {
+		this.nodeVisitors = nodeVisitors;
 		this.edgeVisitors = edgeVisitors;
 	}
 
-	public List<IVertexVisitor> getVertexVisitors() {
-		return this.vertexVisitors;
+	public List<INodeVisitor<N>> getNodeVisitors() {
+		return this.nodeVisitors;
 	}
 
-	public void setVertexVisitors(final List<IVertexVisitor> vertexVisitors) {
-		this.vertexVisitors = vertexVisitors;
+	public void setNodeVisitors(final List<INodeVisitor<N>> nodeVisitors) {
+		this.nodeVisitors = nodeVisitors;
 	}
 
-	public void addVertexVisitor(final IVertexVisitor vertexVisitor) {
-		this.vertexVisitors.add(vertexVisitor);
+	public void addNodeVisitor(final INodeVisitor<N> nodeVisitor) {
+		this.nodeVisitors.add(nodeVisitor);
 	}
 
-	public List<IEdgeVisitor> getEdgeVisitors() {
+	public List<IEdgeVisitor<E>> getEdgeVisitors() {
 		return this.edgeVisitors;
 	}
 
-	public void setEdgeVisitors(final List<IEdgeVisitor> edgeVisitors) {
+	public void setEdgeVisitors(final List<IEdgeVisitor<E>> edgeVisitors) {
 		this.edgeVisitors = edgeVisitors;
 	}
 
-	public void addEdgeVisitor(final IEdgeVisitor edgeVisitor) {
+	public void addEdgeVisitor(final IEdgeVisitor<E> edgeVisitor) {
 		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public abstract void traverse(final MutableNetwork<INode, IEdge> graph);
+	public abstract void traverse(final MutableNetwork<N, E> graph);
 
 }

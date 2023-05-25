@@ -19,17 +19,24 @@ package kieker.analysis.generic.graph.mapping;
 import java.nio.file.Path;
 import java.util.function.Function;
 
+import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
+import kieker.analysis.generic.graph.INode;
 
 /**
  * This function maps a graph to a file name with a specific pattern.
  * Pattern is defined as: output directory + graph name + file extension
  *
+ * @param <N>
+ *            node type
+ * @param <E>
+ *            edge type
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class SimpleFileNameMapper implements Function<IGraph, Path> {
+public class SimpleFileNameMapper<N extends INode, E extends IEdge> implements Function<IGraph<N, E>, Path> {
 
 	private final Path outputDirectory;
 	private final String fileExtension;
@@ -48,7 +55,7 @@ public class SimpleFileNameMapper implements Function<IGraph, Path> {
 	}
 
 	@Override
-	public Path apply(final IGraph graph) {
+	public Path apply(final IGraph<N, E> graph) {
 		return this.outputDirectory.resolve(String.format("%s.%s", graph.getLabel(), this.fileExtension));
 	}
 

@@ -49,14 +49,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final String FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE = "Failed to instantiate new monitoring record of type ";
 	private static final long serialVersionUID = 1L;
 
-	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>>
-	    CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
-	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]>
-	    CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
+	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 
 	// added by chw; differs only in the key type: from integer to string
-	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>>
-            CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>(); // NOCS
+	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>(); // NOCS
 
 	private volatile long loggingTimestamp = -1;
 
@@ -351,6 +348,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to access the value types.
+	 * @throws InvocationTargetException
 	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
 		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
@@ -360,10 +358,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					final Field typesField = clazz.getDeclaredField("TYPES");
 					types = (Class<?>[]) typesField.get(null);
 				} else {
-					types = clazz.newInstance().getValueTypes();
+					types = clazz.getDeclaredConstructor().newInstance().getValueTypes();
 				}
 				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
-			} catch (final SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InstantiationException ex) {
+			} catch (final SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InstantiationException
+					| InvocationTargetException | NoSuchMethodException ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
 		}
