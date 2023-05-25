@@ -16,7 +16,7 @@
 package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.recovery.events.CallEvent;
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.DeployedOperationCallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
@@ -33,7 +33,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Reiner Jung
  * @since 1.15
  */
-public class CallEvent2OperationCallStage extends AbstractTransformation<CallEvent, OperationCallDurationEvent> {
+public class CallEvent2OperationCallStage extends AbstractTransformation<CallEvent, DeployedOperationCallEvent> {
 
 	private final DeploymentModel deploymentModel;
 
@@ -46,7 +46,7 @@ public class CallEvent2OperationCallStage extends AbstractTransformation<CallEve
 		final Tuple<DeployedOperation, DeployedOperation> operationCall = ExecutionFactory.eINSTANCE.createTuple();
 		operationCall.setFirst(this.findDeployedOperation(element.getCaller()));
 		operationCall.setSecond(this.findDeployedOperation(element.getCallee()));
-		this.outputPort.send(new OperationCallDurationEvent(operationCall, element.getDuration()));
+		this.outputPort.send(new DeployedOperationCallEvent(operationCall, element.getDuration()));
 	}
 
 	private DeployedOperation findDeployedOperation(final OperationEvent operationEvent) {

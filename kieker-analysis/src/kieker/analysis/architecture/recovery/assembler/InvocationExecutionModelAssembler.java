@@ -14,9 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.DeployedOperationCallEvent;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
 import kieker.model.analysismodel.execution.Invocation;
@@ -29,19 +29,19 @@ import kieker.model.analysismodel.source.SourceModel;
  *
  * @since 1.14
  */
-public class ExecutionModelAssembler extends AbstractModelAssembler implements IOperationCallModelAssembler {
+public class InvocationExecutionModelAssembler extends AbstractModelAssembler<DeployedOperationCallEvent> {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
 	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
+	public InvocationExecutionModelAssembler(final ExecutionModel executionModel, final SourceModel sourceModel, final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.executionModel = executionModel;
 	}
 
 	@Override
-	public void addOperationCall(final OperationCallDurationEvent operationCall) {
+	public void assemble(final DeployedOperationCallEvent operationCall) {
 		if (!this.executionModel.getInvocations().containsKey(operationCall.getOperationCall())) {
 			final Invocation invocation = this.factory.createInvocation();
 			invocation.setCaller(operationCall.getOperationCall().getFirst());

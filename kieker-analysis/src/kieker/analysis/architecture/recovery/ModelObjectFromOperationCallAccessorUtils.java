@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+import kieker.analysis.architecture.recovery.events.DeployedOperationCallEvent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
 import kieker.model.analysismodel.execution.ExecutionModel;
@@ -36,7 +36,7 @@ import kieker.model.analysismodel.trace.OperationCall;
  */
 public final class ModelObjectFromOperationCallAccessorUtils {
 
-	public static final Function<OperationCallDurationEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
+	public static final Function<DeployedOperationCallEvent, EObject> DEPLOYED_OPERATION = c -> c.getOperationCall().getSecond();
 
 	public static final Function<OperationCall, EObject> DEPLOYED_COMPONENT = c -> c.getOperation().getComponent();
 
@@ -78,7 +78,7 @@ public final class ModelObjectFromOperationCallAccessorUtils {
 	 *            the execution model to be used.
 	 * @return an aggregated invocation
 	 */
-	public static final Function<OperationCallDurationEvent, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
+	public static final Function<DeployedOperationCallEvent, EObject> findAggregatedInvocation4OperationTuple(final ExecutionModel executionModel) {
 		return operationCall -> {
 			return executionModel.getInvocations().get(operationCall.getOperationCall());
 		};

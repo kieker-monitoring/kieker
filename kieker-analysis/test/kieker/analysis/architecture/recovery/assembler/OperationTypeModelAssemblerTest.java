@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
@@ -35,7 +35,7 @@ import kieker.model.analysismodel.type.TypeModel;
  * @author Reiner Jung
  * @since 1.15
  */
-public class TypeModelAssemblerTest { // NOCS test do not need constructors
+public class OperationTypeModelAssemblerTest { // NOCS test do not need constructors
 
 	private static final String LABEL = "FIRST";
 	private static final String COMPONENT_TYPE_SIGNATURE = "component.name";
@@ -54,23 +54,17 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.architecture.recovery.TypeModelAssembler#addOperation(kieker.common.record.flow.IOperationRecord)}.
-	 */
-	@Test
-	public void testAddRecordIOperationRecord() {
-
-	}
-
-	/**
-	 * Test method for {@link kieker.analysis.architecture.recovery.TypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysis.architecture.recovery.assembler.OperationTypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddRecordStringString() {
 		final IComponentSignatureExtractor componentSignatureExtractor = new JavaComponentSignatureExtractor();
 		final IOperationSignatureExtractor operationSignatureExtractor = new JavaOperationSignatureExtractor();
-		final TypeModelAssembler assembler = new TypeModelAssembler(this.typeModel, this.sourceModel, LABEL, componentSignatureExtractor,
+		final OperationTypeModelAssembler assembler = new OperationTypeModelAssembler(this.typeModel, this.sourceModel, OperationTypeModelAssemblerTest.LABEL,
+				componentSignatureExtractor,
 				operationSignatureExtractor);
-		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
 
 		// check type model
 
@@ -79,11 +73,13 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 
 		final EList<String> list = this.sourceModel.getSources().get(type);
 		Assert.assertEquals("Number of labels must be 1", 1, list.size());
-		Assert.assertEquals("Label is not " + LABEL, LABEL, list.get(0));
+		Assert.assertEquals("Label is not " + OperationTypeModelAssemblerTest.LABEL, OperationTypeModelAssemblerTest.LABEL, list.get(0));
 
 		// Extend model
-		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
-		assembler.addOperation(new OperationEvent(HOSTNAME, COMPONENT_TYPE_SIGNATURE, OPERATION_TYPE_SIGNATURE));
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
 
 		// check type model
 
@@ -92,7 +88,7 @@ public class TypeModelAssemblerTest { // NOCS test do not need constructors
 
 		final EList<String> list2 = this.sourceModel.getSources().get(type2);
 		Assert.assertEquals("Number of labels must be 1", 1, list2.size());
-		Assert.assertEquals("Label is not " + LABEL, LABEL, list2.get(0));
+		Assert.assertEquals("Label is not " + OperationTypeModelAssemblerTest.LABEL, OperationTypeModelAssemblerTest.LABEL, list2.get(0));
 	}
 
 }

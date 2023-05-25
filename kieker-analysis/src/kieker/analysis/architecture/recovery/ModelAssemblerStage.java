@@ -16,26 +16,30 @@
 
 package kieker.analysis.architecture.recovery;
 
-import kieker.model.analysismodel.trace.OperationCall;
+import kieker.analysis.architecture.recovery.assembler.AbstractModelAssembler;
 
 import teetime.stage.basic.AbstractFilter;
 
 /**
- * @author Sören Henning
+ * Generic model assembler stage to run model assemblers.
  *
- * @since 1.14
+ * @param <T>
+ *            event type as input and output of these assembler stages
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
  */
-public class TraceBasedExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
+public class ModelAssemblerStage<T> extends AbstractFilter<T> {
 
-	private final ITraceBasedExecutionModelAssembler assembler;
+	private final AbstractModelAssembler<T> assembler;
 
-	public TraceBasedExecutionModelAssemblerStage(final ITraceBasedExecutionModelAssembler assembler) {
+	public ModelAssemblerStage(final AbstractModelAssembler<T> assembler) {
 		this.assembler = assembler;
 	}
 
 	@Override
-	protected void execute(final OperationCall operationCall) {
-		this.assembler.addOperationCall(operationCall);
+	protected void execute(final T operationCall) {
+		this.assembler.assemble(operationCall);
 		this.outputPort.send(operationCall);
 	}
 

@@ -32,12 +32,12 @@ import teetime.stage.basic.AbstractTransformation;
  * @since 1.14
  *
  */
-public class OperationCallExtractorStage extends AbstractTransformation<Trace, OperationCall> {
+public class CallExtractorStage extends AbstractTransformation<Trace, OperationCall> {
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 	private final Extractor extractor = new Extractor();
 
-	public OperationCallExtractorStage() {
+	public CallExtractorStage() {
 		super();
 	}
 
@@ -57,7 +57,7 @@ public class OperationCallExtractorStage extends AbstractTransformation<Trace, O
 
 		@Override
 		public void visit(final OperationCall operationCall) {
-			OperationCallExtractorStage.this.outputPort.send(operationCall);
+			CallExtractorStage.this.outputPort.send(operationCall);
 		}
 
 	}

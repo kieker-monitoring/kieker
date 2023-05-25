@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
@@ -31,21 +31,21 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class AssemblyModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
+public class OperationAssemblyModelAssembler extends AbstractModelAssembler<OperationEvent> {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;
 
-	public AssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+	public OperationAssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.typeModel = typeModel;
 		this.assemblyModel = assemblyModel;
 	}
 
 	@Override
-	public void addOperation(final OperationEvent event) {
+	public void assemble(final OperationEvent event) {
 		final String componentSignature = event.getComponentSignature();
 		final String operationSignature = event.getOperationSignature();
 

@@ -36,6 +36,14 @@ import kieker.model.analysismodel.type.TypeFactory;
  */
 public class JavaOperationSignatureExtractorTest {
 
+	private static final String RETURN_TYPE = "ReturnType";
+	private static final String METHOD_NAME = "methodName";
+	private static final String RETURN_TYPE_VOID = "void";
+	private static final String RETURN_TYPE_FULLY_QUALIFIED = "org.organi.sation.SimpleClass";
+	private static final String PUBLIC = "public";
+	private static final String STATIC = "static";
+	private static final String FINAL = "final";
+
 	private JavaOperationSignatureExtractor signatureExtractor;
 
 	public JavaOperationSignatureExtractorTest() {
@@ -59,11 +67,10 @@ public class JavaOperationSignatureExtractorTest {
 	@Test
 	public void testExtractWithoutModifiersAndParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
-		final String returnType = "void";
-		final String name = "methodName";
+
 		final List<String> parameterTypes = Collections.emptyList();
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, JavaOperationSignatureExtractorTest.RETURN_TYPE_VOID, JavaOperationSignatureExtractorTest.METHOD_NAME, parameterTypes);
 	}
 
 	/**
@@ -73,11 +80,9 @@ public class JavaOperationSignatureExtractorTest {
 	@Test
 	public void testExtractWithoutModifiersWithParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
-		final String returnType = "void";
-		final String name = "methodName";
 		final List<String> parameterTypes = Arrays.asList("FirstParameterType", "SecondParameterType");
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, JavaOperationSignatureExtractorTest.RETURN_TYPE_VOID, JavaOperationSignatureExtractorTest.METHOD_NAME, parameterTypes);
 	}
 
 	/**
@@ -87,11 +92,9 @@ public class JavaOperationSignatureExtractorTest {
 	@Test
 	public void testExtractWithoutModifiersWithFullQualifiedParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
-		final String returnType = "ReturnType";
-		final String name = "methodName";
 		final List<String> parameterTypes = Arrays.asList("org.organisation.package.FirstParameterType", "com.compancy.pack.age.SecondParameterType");
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, JavaOperationSignatureExtractorTest.RETURN_TYPE, JavaOperationSignatureExtractorTest.METHOD_NAME, parameterTypes);
 	}
 
 	/**
@@ -100,12 +103,11 @@ public class JavaOperationSignatureExtractorTest {
 	 */
 	@Test
 	public void testExtractWithMultipleModifiersWithoutParameters() { // NOPMD (assert is placed in separate method)
-		final List<String> modifiers = Arrays.asList("public", "static", "final");
-		final String returnType = "ReturnType";
-		final String name = "methodName";
+		final List<String> modifiers = Arrays.asList(JavaOperationSignatureExtractorTest.PUBLIC, JavaOperationSignatureExtractorTest.STATIC,
+				JavaOperationSignatureExtractorTest.FINAL);
 		final List<String> parameterTypes = Collections.emptyList();
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, JavaOperationSignatureExtractorTest.RETURN_TYPE, JavaOperationSignatureExtractorTest.METHOD_NAME, parameterTypes);
 	}
 
 	/**
@@ -114,12 +116,11 @@ public class JavaOperationSignatureExtractorTest {
 	 */
 	@Test
 	public void testExtractFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)
-		final List<String> modifiers = Arrays.asList("public");
-		final String returnType = "org.organi.sation.SimpleClass";
-		final String name = "methodName";
+		final List<String> modifiers = Arrays.asList(JavaOperationSignatureExtractorTest.PUBLIC);
 		final List<String> parameterTypes = Collections.emptyList();
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, JavaOperationSignatureExtractorTest.RETURN_TYPE_FULLY_QUALIFIED, JavaOperationSignatureExtractorTest.METHOD_NAME,
+				parameterTypes);
 	}
 
 	/**
@@ -128,12 +129,11 @@ public class JavaOperationSignatureExtractorTest {
 	 */
 	@Test
 	public void testExtractNestedFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)
-		final List<String> modifiers = Arrays.asList("public");
+		final List<String> modifiers = Arrays.asList(JavaOperationSignatureExtractorTest.PUBLIC);
 		final String returnType = "org.organi.sation.OuterClass$InnerClass";
-		final String name = "methodName";
 		final List<String> parameterTypes = Collections.emptyList();
 
-		this.testExtraction(modifiers, returnType, name, parameterTypes);
+		this.testExtraction(modifiers, returnType, JavaOperationSignatureExtractorTest.METHOD_NAME, parameterTypes);
 	}
 
 	private void testExtraction(final List<String> modifiers, final String returnType, final String name, final List<String> parameters) { // NOPMD (assert for other

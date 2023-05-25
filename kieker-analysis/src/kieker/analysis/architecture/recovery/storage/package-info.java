@@ -13,18 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
-
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-
-/**
- * @author Reiner Jung
- *
- * @since 1.15
- *
- */
-public interface IOperationCallModelAssembler {
-
-	void addOperationCall(OperationCallDurationEvent operationCall);
-
-}
+package kieker.analysis.architecture.recovery.storage;
