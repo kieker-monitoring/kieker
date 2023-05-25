@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2022 OceanDSL (https://oceandsl.uni-kiel.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
-import kieker.analysis.architecture.recovery.events.OperationEvent;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * OperationEvent assembler interface.
  *
  * @author Reiner Jung
- * @since 2.0.0
+ * @since 1.3.0
  */
-public interface IOperationEventAssembler {
+class ExecutionModelDataflowAssemblerStageTest {
 
-	public abstract void addOperation(final OperationEvent event);
+	@Test
+	void test() {
+		Assertions.fail("Not yet implemented");
+	}
+
 }

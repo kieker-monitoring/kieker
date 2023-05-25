@@ -13,17 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
 
-import kieker.model.analysismodel.trace.OperationCall;
+package kieker.common.record.factory;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- *
- * @author Reiner Jung
- * @since 1.15
+ * This annotation specifies the record factory to use for instantiating the annotated record class.
+ * 
+ * @author Holger Knoche
+ * @since 2.0
  */
-public interface ITraceBasedExecutionModelAssembler {
-
-	void addOperationCall(OperationCall operationCall);
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RecordFactory {
+    
+    /**
+     * The record factory class to use for instantiating the annotated record class.
+     * @return see above
+     */
+    Class<? extends IRecordFactory<?>> value();
 
 }

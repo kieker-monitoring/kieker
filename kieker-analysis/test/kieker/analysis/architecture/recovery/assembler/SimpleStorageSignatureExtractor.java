@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,4 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.dataflow;
+package kieker.analysis.architecture.recovery.assembler;
+
+import kieker.analysis.architecture.recovery.storage.IStorageSignatureExtractor;
+import kieker.model.analysismodel.type.StorageType;
+
+/**
+ * Dummy signature extractor for storage signatures.
+ *
+ * @author Reiner Jung
+ * @since 1.3.0
+ */
+public class SimpleStorageSignatureExtractor implements IStorageSignatureExtractor {
+
+	/**
+	 * Dummy function used in tests to support the {@link IStorageSignatureExtractor} interface.
+	 */
+	@Override
+	public void extract(final StorageType storageType) {
+		// nothing to be done here, as this is used testing {@link StorageTypeModelAssembler}
+	}
+
+}

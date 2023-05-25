@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
@@ -30,7 +30,7 @@ import kieker.model.analysismodel.type.TypeModel;
  *
  * @since 1.14
  */
-public class TypeModelAssembler extends AbstractModelAssembler implements IOperationEventAssembler {
+public class OperationTypeModelAssembler extends AbstractModelAssembler<OperationEvent> {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 	private final IComponentSignatureExtractor componentSignatureExtractor;
@@ -38,7 +38,7 @@ public class TypeModelAssembler extends AbstractModelAssembler implements IOpera
 
 	private final TypeModel typeModel;
 
-	public TypeModelAssembler(final TypeModel typeModel, final SourceModel sourceModel, final String sourceLabel,
+	public OperationTypeModelAssembler(final TypeModel typeModel, final SourceModel sourceModel, final String sourceLabel,
 			final IComponentSignatureExtractor componentSignatureExtractor,
 			final IOperationSignatureExtractor operationSignatureExtractor) {
 		super(sourceModel, sourceLabel);
@@ -49,7 +49,7 @@ public class TypeModelAssembler extends AbstractModelAssembler implements IOpera
 	}
 
 	@Override
-	public void addOperation(final OperationEvent event) {
+	public void assemble(final OperationEvent event) {
 		final String componentSignature = event.getComponentSignature();
 		final String operationSignature = event.getOperationSignature();
 

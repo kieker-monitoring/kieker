@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.ExecutionFactory;
@@ -29,7 +29,7 @@ import kieker.model.analysismodel.trace.OperationCall;
  *
  * @since 1.14
  */
-public class TraceBasedExecutionModelAssembler extends AbstractModelAssembler implements ITraceBasedExecutionModelAssembler {
+public class TraceBasedExecutionModelAssembler extends AbstractModelAssembler<OperationCall> {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
@@ -41,7 +41,7 @@ public class TraceBasedExecutionModelAssembler extends AbstractModelAssembler im
 	}
 
 	@Override
-	public void addOperationCall(final OperationCall operationCall) {
+	public void assemble(final OperationCall operationCall) {
 		// Check if operationCall is an entry operation call. If so than source is null
 		final DeployedOperation caller = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
 		final DeployedOperation callee = operationCall.getOperation();
