@@ -13,18 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.call;
 
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
+package kieker.analysis.architecture.recovery;
+
+import kieker.analysis.architecture.recovery.assembler.AbstractModelAssembler;
+
+import teetime.stage.basic.AbstractFilter;
 
 /**
+ * Generic model assembler stage to run model assemblers.
+ *
+ * @param <T>
+ *            event type as input and output of these assembler stages
+ *
  * @author Reiner Jung
- *
- * @since 1.15
- *
+ * @since 2.0.0
  */
-public interface IOperationCallModelAssembler {
+public class ModelAssemblerStage<T> extends AbstractFilter<T> {
 
-	void addOperationCall(OperationCallDurationEvent operationCall);
+	private final AbstractModelAssembler<T> assembler;
+
+	public ModelAssemblerStage(final AbstractModelAssembler<T> assembler) {
+		this.assembler = assembler;
+	}
+
+	@Override
+	protected void execute(final T operationCall) {
+		this.assembler.assemble(operationCall);
+		this.outputPort.send(operationCall);
+	}
 
 }

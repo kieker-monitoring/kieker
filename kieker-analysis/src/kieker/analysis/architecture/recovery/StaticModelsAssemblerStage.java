@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery;
 
+import kieker.analysis.architecture.recovery.assembler.OperationAssemblyModelAssembler;
+import kieker.analysis.architecture.recovery.assembler.OperationDeploymentModelAssembler;
+import kieker.analysis.architecture.recovery.assembler.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
-import kieker.analysis.architecture.recovery.operation.OperationAssemblyModelAssembler;
-import kieker.analysis.architecture.recovery.operation.OperationDeploymentModelAssembler;
-import kieker.analysis.architecture.recovery.operation.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.signature.SignatureExtractor;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.deployment.DeploymentModel;
@@ -72,14 +72,14 @@ public class StaticModelsAssemblerStage extends CompositeStage { // NOPMD not a 
 		this.deploymentModel = deploymentModel;
 		this.sourceModel = sourceModel;
 
-		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(
+		final ModelAssemblerStage<OperationEvent> typeModelAssembler = new ModelAssemblerStage<>(
 				new OperationTypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
 						signatureExtractor.getComponentSignatureExtractor(),
 						signatureExtractor.getOperationSignatureExtractor()));
-		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(
+		final ModelAssemblerStage<OperationEvent> assemblyModelAssembler = new ModelAssemblerStage<>(
 				new OperationAssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
 						sourceLabel));
-		final OperationEventModelAssemblerStage deploymentModelAssembler = new OperationEventModelAssemblerStage(
+		final ModelAssemblerStage<OperationEvent> deploymentModelAssembler = new ModelAssemblerStage<>(
 				new OperationDeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
 						sourceLabel));
 

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.storage;
+package kieker.analysis.architecture.recovery.assembler;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import kieker.analysis.architecture.recovery.assembler.StorageTypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 import kieker.model.analysismodel.source.SourceFactory;
 import kieker.model.analysismodel.source.SourceModel;
@@ -51,7 +52,7 @@ class StorageTypeModelAssemblerTest {
 				StorageTypeModelAssemblerTest.STORAGE_SIGNATURE,
 				StorageTypeModelAssemblerTest.STORAGE_TYPE);
 
-		assembler.addStorage(storageEvent);
+		assembler.assemble(storageEvent);
 
 		Assertions.assertEquals(1, typeModel.getComponentTypes().size());
 		final ComponentType type = typeModel.getComponentTypes().get(StorageTypeModelAssemblerTest.COMPONENT_SIGNATUE);

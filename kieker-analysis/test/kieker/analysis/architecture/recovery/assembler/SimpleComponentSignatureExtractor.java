@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.storage;
+package kieker.analysis.architecture.recovery.assembler;
 
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
 import kieker.model.analysismodel.type.ComponentType;

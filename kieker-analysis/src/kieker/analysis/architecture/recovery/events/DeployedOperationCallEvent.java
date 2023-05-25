@@ -13,29 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.architecture.recovery.events;
 
-package kieker.analysis.architecture.recovery.call;
+import java.time.Duration;
 
-import kieker.analysis.architecture.recovery.events.OperationCallDurationEvent;
-
-import teetime.stage.basic.AbstractFilter;
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.Tuple;
 
 /**
+ * Contains a tuple of DeployedOperation for the execution model and a duration value.
+ *
  * @author Reiner Jung
  * @since 1.15
  */
-public class CallModelAssemblerStage extends AbstractFilter<OperationCallDurationEvent> {
+public class DeployedOperationCallEvent {
 
-	private final IOperationCallModelAssembler assembler;
+	private final Tuple<DeployedOperation, DeployedOperation> operationCall;
+	private final Duration duration;
 
-	public CallModelAssemblerStage(final IOperationCallModelAssembler assembler) {
-		this.assembler = assembler;
+	public DeployedOperationCallEvent(final Tuple<DeployedOperation, DeployedOperation> operationCall, final Duration duration) {
+		this.operationCall = operationCall;
+		this.duration = duration;
 	}
 
-	@Override
-	protected void execute(final OperationCallDurationEvent operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
+	public Tuple<DeployedOperation, DeployedOperation> getOperationCall() {
+		return this.operationCall;
+	}
+
+	public Duration getDuration() {
+		return this.duration;
 	}
 
 }

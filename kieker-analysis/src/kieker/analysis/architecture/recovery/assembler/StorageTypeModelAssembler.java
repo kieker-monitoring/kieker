@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.storage;
+package kieker.analysis.architecture.recovery.assembler;
 
-import kieker.analysis.architecture.recovery.AbstractModelAssembler;
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
+import kieker.analysis.architecture.recovery.storage.IStorageSignatureExtractor;
 import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.StorageType;
@@ -28,9 +28,9 @@ import kieker.model.analysismodel.type.TypeModel;
  * Create storage elements in the type model.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
-public class StorageTypeModelAssembler extends AbstractModelAssembler implements IStorageEventAssembler {
+public class StorageTypeModelAssembler extends AbstractModelAssembler<StorageEvent> {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 	private final IComponentSignatureExtractor componentSignatureExtractor;
@@ -48,7 +48,7 @@ public class StorageTypeModelAssembler extends AbstractModelAssembler implements
 	}
 
 	@Override
-	public void addStorage(final StorageEvent event) {
+	public void assemble(final StorageEvent event) {
 		final String componentSignature = event.getComponentSignature();
 		final String operationSignature = event.getStorageSignature();
 

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.storage;
+package kieker.analysis.architecture.recovery.assembler;
 
-import kieker.analysis.architecture.recovery.AbstractModelAssembler;
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 import kieker.model.analysismodel.assembly.AssemblyModel;
 import kieker.model.analysismodel.assembly.AssemblyStorage;
@@ -33,7 +32,7 @@ import kieker.model.analysismodel.source.SourceModel;
  *
  * @since 2.0.0
  */
-public class StorageDeploymentModelAssembler extends AbstractModelAssembler implements IStorageEventAssembler {
+public class StorageDeploymentModelAssembler extends AbstractModelAssembler<StorageEvent> {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
@@ -48,7 +47,7 @@ public class StorageDeploymentModelAssembler extends AbstractModelAssembler impl
 	}
 
 	@Override
-	public void addStorage(final StorageEvent event) {
+	public void assemble(final StorageEvent event) {
 		final DeployedComponent deployedComponent = this.deployedComponentSetUp(event);
 		this.addStorage(deployedComponent, event);
 	}

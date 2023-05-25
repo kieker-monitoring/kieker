@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.storage;
+package kieker.analysis.architecture.recovery;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
+import kieker.analysis.architecture.recovery.assembler.AbstractModelAssembler;
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 
 import teetime.framework.test.StageTester;
@@ -25,9 +26,9 @@ import teetime.framework.test.StageTester;
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
-class StorageEventModelAssemblerStageTest {
+class ModelAssemblerStageTest {
 
 	private static final String HOST_NAME = "host";
 	private static final String COMPONENT_NAME = "component";
@@ -36,17 +37,17 @@ class StorageEventModelAssemblerStageTest {
 
 	@Test
 	void test() {
-		final StorageEventModelAssemblerStage stage = new StorageEventModelAssemblerStage(new IStorageEventAssembler() {
+		final ModelAssemblerStage<StorageEvent> stage = new ModelAssemblerStage<>(new AbstractModelAssembler<StorageEvent>(null, "label") {
 
 			@Override
-			public void addStorage(final StorageEvent event) {
+			public void assemble(final StorageEvent event) {
 				// nothing to be done here
 			}
 		});
 
-		final StorageEvent storageEvent = new StorageEvent(StorageEventModelAssemblerStageTest.HOST_NAME,
-				StorageEventModelAssemblerStageTest.COMPONENT_NAME, StorageEventModelAssemblerStageTest.STORAGE_NAME,
-				StorageEventModelAssemblerStageTest.STORAGE_TYPE);
+		final StorageEvent storageEvent = new StorageEvent(ModelAssemblerStageTest.HOST_NAME,
+				ModelAssemblerStageTest.COMPONENT_NAME, ModelAssemblerStageTest.STORAGE_NAME,
+				ModelAssemblerStageTest.STORAGE_TYPE);
 
 		StageTester.test(stage).and().send(storageEvent, storageEvent).to(stage.getInputPort()).start();
 

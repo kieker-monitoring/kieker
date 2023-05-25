@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery.operation;
+package kieker.analysis.architecture.recovery.assembler;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.architecture.recovery.assembler.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
 import kieker.analysis.architecture.recovery.signature.IOperationSignatureExtractor;
@@ -54,7 +55,7 @@ public class OperationTypeModelAssemblerTest { // NOCS test do not need construc
 	}
 
 	/**
-	 * Test method for {@link kieker.analysis.architecture.recovery.operation.OperationTypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysis.architecture.recovery.assembler.OperationTypeModelAssembler#addEvent(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddRecordStringString() {
@@ -63,7 +64,7 @@ public class OperationTypeModelAssemblerTest { // NOCS test do not need construc
 		final OperationTypeModelAssembler assembler = new OperationTypeModelAssembler(this.typeModel, this.sourceModel, OperationTypeModelAssemblerTest.LABEL,
 				componentSignatureExtractor,
 				operationSignatureExtractor);
-		assembler.addOperation(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
 				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
 
 		// check type model
@@ -76,9 +77,9 @@ public class OperationTypeModelAssemblerTest { // NOCS test do not need construc
 		Assert.assertEquals("Label is not " + OperationTypeModelAssemblerTest.LABEL, OperationTypeModelAssemblerTest.LABEL, list.get(0));
 
 		// Extend model
-		assembler.addOperation(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
 				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
-		assembler.addOperation(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
+		assembler.assemble(new OperationEvent(OperationTypeModelAssemblerTest.HOSTNAME, OperationTypeModelAssemblerTest.COMPONENT_TYPE_SIGNATURE,
 				OperationTypeModelAssemblerTest.OPERATION_TYPE_SIGNATURE));
 
 		// check type model

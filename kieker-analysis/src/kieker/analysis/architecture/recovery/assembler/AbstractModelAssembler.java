@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.architecture.recovery;
+package kieker.analysis.architecture.recovery.assembler;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -23,12 +23,13 @@ import org.eclipse.emf.ecore.EObject;
 import kieker.model.analysismodel.source.SourceModel;
 
 /**
- * Helper functions for SourceModel.
+ * The {@link AbstractModelAssembler} provides standard functionality for all assemblers regarding
+ * tagging elements of a model.
  *
  * @author Reiner Jung
  * @since 1.15
  */
-public abstract class AbstractModelAssembler { // NOPMD should be abstract to avoid misuse as standalone assembler
+public abstract class AbstractModelAssembler<T> {
 
 	private final SourceModel sourceModel;
 	private final String sourceLabel;
@@ -37,6 +38,14 @@ public abstract class AbstractModelAssembler { // NOPMD should be abstract to av
 		this.sourceModel = sourceModel;
 		this.sourceLabel = sourceLabel;
 	}
+
+	/**
+	 * Process an event of type T and add corresponding model elements to the model.
+	 *
+	 * @param event
+	 *            input event
+	 */
+	public abstract void assemble(T event);
 
 	public void updateSourceModel(final EObject object) {
 		final EMap<EObject, EList<String>> sources = this.sourceModel.getSources();

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.architecture.recovery.call;
+package kieker.analysis.architecture.recovery;
 
 import kieker.analysis.architecture.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.architecture.trace.traversal.TraceTraverser;
