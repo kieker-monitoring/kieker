@@ -222,15 +222,7 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File dotFile : dotFiles) {
-				try {
-					final Process p = Runtime.getRuntime().exec(
-							new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
-								dotFile.getAbsolutePath(), });
-					p.waitFor();
-				} catch (final IOException | InterruptedException e) {
-					LOGGER.warn("An exception occurred", e);
-				}
+				this.convertDotFile(dotFile);
 			}
 
 			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
@@ -238,43 +230,59 @@ public class ConversionStep extends AbstractStep {
 				return;
 			}
 			for (final File picFile : picFiles) {
-				OutputStream writer = null;
-				try {
-					final Process p = Runtime.getRuntime().exec(
-							new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
-								picFile.getAbsolutePath(), });
-					final InputStream s = p.getInputStream();
-					writer = Files.newOutputStream(Paths.get(picFile.getAbsolutePath() + "."
-							+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH)));
-					int r;
-					final byte[] buffer = new byte[10 * 1024];
-					while ((r = s.read(buffer)) != -1) { // NOPMD
-						writer.write(buffer, 0, r);
-					}
-					writer.close();
-					s.close();
-					p.waitFor();
-				} catch (final IOException | InterruptedException e) {
-					LOGGER.warn("An exception occurred", e);
-				} finally {
-					if (null != writer) {
-						try {
-							writer.close();
-						} catch (final IOException e) {
-							LOGGER.warn("An exception occurred", e);
-						}
-					}
-				}
+				this.convertFile(picFile);
 			}
 
 		}
 	}
 
+	private void convertDotFile(final File dotFile) {
+		try {
+			final Process p = Runtime.getRuntime().exec(
+					new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
+						"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+						dotFile.getAbsolutePath(), });
+			p.waitFor();
+		} catch (final IOException | InterruptedException e) {
+			LOGGER.warn("An exception occurred", e);
+		}
+	}
+
+	private void convertFile(final File picFile) {
+		OutputStream writer = null;
+		try {
+			final Process p = Runtime.getRuntime().exec(
+					new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
+						"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+						picFile.getAbsolutePath(), });
+			final InputStream s = p.getInputStream();
+			writer = Files.newOutputStream(Paths.get(picFile.getAbsolutePath() + "."
+					+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH)));
+			int r;
+			final byte[] buffer = new byte[10 * 1024];
+			while ((r = s.read(buffer)) != -1) { // NOPMD
+				writer.write(buffer, 0, r);
+			}
+			writer.close();
+			s.close();
+			p.waitFor();
+		} catch (final IOException | InterruptedException e) {
+			LOGGER.warn("An exception occurred", e);
+		} finally {
+			if (null != writer) {
+				try {
+					writer.close();
+				} catch (final IOException e) {
+					LOGGER.warn("An exception occurred", e);
+				}
+			}
+		}
+	}
+
 	@Override
 	public void loadDefaultConfiguration() {
-		this.graphvizDirectoryField.setText(this.currentPath);
-		this.pic2plotDirectoryField.setText(this.currentPath);
+		this.checkForDefaultLinuxLocations();
+
 		this.outputFormatField.setSelectedIndex(0);
 
 		this.graphvizDirectoryField.setEnabled(false);
@@ -282,6 +290,28 @@ public class ConversionStep extends AbstractStep {
 		this.graphvizDirectoryChooseButton.setEnabled(false);
 		this.pic2plotDirectoryChooseButton.setEnabled(false);
 		this.outputFormatField.setEnabled(false);
+	}
+
+	private void checkForDefaultLinuxLocations() {
+		final File potentialGraphvizFile = new File("/usr/bin/dot");
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()) {
+			this.graphvizDirectoryField.setText(potentialGraphvizFile.getParent());
+			this.graphvizDirectoryLabel.setText("<html>Graphviz Directoy:<br>(Candidate has been auto-detected)</html>");
+			this.graphvizDirectoryField.repaint();
+		} else {
+			this.graphvizDirectoryField.setText(this.currentPath);
+		}
+		final File potentialPic2plotFile = new File("/usr/bin/pic2plot");
+		if (potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			this.pic2plotDirectoryField.setText(potentialPic2plotFile.getParent());
+			this.pic2plotDirectoryLabel.setText("<html>Pic2Plot Directoy:<br>(Candidate has been auto-detected)</html>");
+		} else {
+			this.pic2plotDirectoryField.setText(this.currentPath);
+		}
+		if (potentialGraphvizFile.exists() && potentialGraphvizFile.canExecute()
+				&& potentialPic2plotFile.exists() && potentialPic2plotFile.canExecute()) {
+			this.performStep.setSelected(true);
+		}
 	}
 
 	@Override

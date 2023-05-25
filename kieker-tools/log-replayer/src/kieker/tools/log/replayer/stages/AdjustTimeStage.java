@@ -13,33 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer;
+package kieker.tools.log.replayer.stages;
 
 import java.util.Date;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.IEventRecord;
+import kieker.tools.log.replayer.stages.time.adjuster.ITimeAdjuster;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Rewrite time stamps in records.
+ * Adjust time stamps in records.
  *
  * @author Reiner Jung
- * @since 1.16
+ * @since 2.0.0
  *
  */
-public class RewriteTime extends AbstractConsumerStage<IMonitoringRecord> {
+public class AdjustTimeStage extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 	private Long timeDelta;
+	private final ITimeAdjuster[] timeAdjusters;
 
 	/**
 	 * Create an instance of the timestamp rewriter stage.
+	 *
+	 * @param timeAdjusters
+	 *            sequence of {@link ITimeAdjuster}s to correct timestamps in event types.
 	 */
-	public RewriteTime() {
-		// nothing to do
+	public AdjustTimeStage(final ITimeAdjuster... timeAdjusters) {
+		this.timeAdjusters = timeAdjusters;
 	}
 
 	@Override
@@ -48,11 +52,9 @@ public class RewriteTime extends AbstractConsumerStage<IMonitoringRecord> {
 			this.timeDelta = new Date().getTime() - element.getLoggingTimestamp();
 		}
 		element.setLoggingTimestamp(element.getLoggingTimestamp() + this.timeDelta);
-		if (element instanceof IEventRecord) {
-			final IEventRecord event = (IEventRecord) element;
-			event.setTimestamp(event.getTimestamp() + this.timeDelta);
+		for (final ITimeAdjuster timeAdjuster : this.timeAdjusters) {
+			timeAdjuster.apply(element, this.timeDelta);
 		}
-
 		this.outputPort.send(element);
 	}
 
