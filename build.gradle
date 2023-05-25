@@ -143,9 +143,9 @@ subprojects {
   jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
-      xml.enabled = false
-      csv.enabled = false
-      html.enabled = true
+      xml.required = false
+      csv.required = false
+      html.required = true
     }
   }
 
@@ -219,8 +219,8 @@ subprojects {
 
   tasks.withType(Pmd) {
     reports {
-      xml.enabled = true
-      html.enabled = true
+      xml.required = true
+      html.required = true
     }
     // the following line of code adds our custom PMD rules as jar file to the classpath
     //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
@@ -228,8 +228,8 @@ subprojects {
 
   tasks.withType(Checkstyle) {
     reports {
-      xml.enabled true
-      html.enabled true
+      xml.required = true
+      html.required = true
       html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
     }
   }

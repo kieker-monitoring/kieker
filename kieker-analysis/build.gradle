@@ -8,16 +8,16 @@ targetCompatibility = 1.8
 
 // The following lines are necessay to create a test jar
 project.configurations {
-    testArchives.extendsFrom (testCompile)
+	testArchives.extendsFrom (testCompile)
 }
 
 project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
-    from project.sourceSets.test.output
-    archiveClassifier = 'test'
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
 }
 
 project.artifacts {
-    testArchives project.jarTest
+	testArchives project.jarTest
 }
 
 dependencies {
