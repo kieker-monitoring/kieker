@@ -17,7 +17,7 @@ package kieker.analysis.architecture.recovery.assembler;
 
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 import kieker.analysis.architecture.recovery.signature.IComponentSignatureExtractor;
-import kieker.analysis.architecture.recovery.storage.IStorageSignatureExtractor;
+import kieker.analysis.architecture.recovery.signature.IStorageSignatureExtractor;
 import kieker.model.analysismodel.source.SourceModel;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.StorageType;
