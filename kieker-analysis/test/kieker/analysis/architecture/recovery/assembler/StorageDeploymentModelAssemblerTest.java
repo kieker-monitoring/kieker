@@ -18,9 +18,6 @@ package kieker.analysis.architecture.recovery.assembler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import kieker.analysis.architecture.recovery.assembler.StorageAssemblyModelAssembler;
-import kieker.analysis.architecture.recovery.assembler.StorageDeploymentModelAssembler;
-import kieker.analysis.architecture.recovery.assembler.StorageTypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.StorageEvent;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;

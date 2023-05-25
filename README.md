@@ -60,15 +60,15 @@ Moreover, you have to set up a `logback.xml` file for configuration and add its 
 <configuration>
 <!-- log to console -->
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-	<encoder>
-	<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-	</encoder>
+  <encoder>
+  <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+  </encoder>
 </appender>
 <!-- for logging to files see: https://logback.qos.ch/manual/appenders.html -->
 
 <!-- standard log level is "warn" -->
 <root level="warn">
-	<appender-ref ref="STDOUT" />
+  <appender-ref ref="STDOUT" />
 </root>
 <!-- set log level for TCP writer down to "info" -->
 <logger name="kieker.monitoring.writer.tcp" level="INFO" />
