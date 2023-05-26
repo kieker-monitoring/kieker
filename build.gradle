@@ -645,75 +645,75 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
 task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
     description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
 ) {
-	// default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
+  // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
   archiveClassifier = 'emf'
-	configure allArtifacts
-	configure licence
-	configure aopxml
+  configure allArtifacts
+  configure licence
+  configure aopxml
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-	from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
-	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
-	from('lib') {
-		include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
-	}
+  from('lib') {
+    include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
+    include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
+    include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
+  }
 
-	manifest = project.manifest {
-		from sharedManifest
-	}
+  manifest = project.manifest {
+    from sharedManifest
+  }
 }
 
 /** Kieker jar with aspectJ tooling. */
 task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
     description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
 ) {
-	// default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveClassifier = 'aspectj'
-	configure allArtifacts
-	configure licence
-	configure aopxml
+  // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
+  archiveClassifier = 'aspectj'
+  configure allArtifacts
+  configure licence
+  configure aopxml
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-	from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
+  from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
-	from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
-	from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
 
-	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
-	manifest = project.manifest {
-		from sharedManifest
-		attributes(
-				"Can-Redefine-Classes": 'true',
-				"Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
-		)
-		attributes(
-				"Specification-Title": "AspectJ Weaver Classes",
-				"Specification-Version": aspectjVersion,
-				"Specification-Vendor": "aspectj.org",
-				"Implementation-Title": "org.aspectj.weaver",
-				"Implementation-Version": aspectjVersion,
-				"Implementation-Vendor": "aspectj.org",
-				"Can-Redefine-Classes": "true",
-				"Premain-Class": "org.aspectj.weaver.loadtime.Agent",
-				"org/aspectj/weaver/" // The section name
-		)
-	}
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": 'true',
+        "Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
+    )
+    attributes(
+        "Specification-Title": "AspectJ Weaver Classes",
+        "Specification-Version": aspectjVersion,
+        "Specification-Vendor": "aspectj.org",
+        "Implementation-Title": "org.aspectj.weaver",
+        "Implementation-Version": aspectjVersion,
+        "Implementation-Vendor": "aspectj.org",
+        "Can-Redefine-Classes": "true",
+        "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
+        "org/aspectj/weaver/" // The section name
+    )
+  }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier = 'sources'
-	from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
+  archiveClassifier = 'sources'
+  from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
 }
 
 task javadocJar(type: Jar, dependsOn: apidoc) {
-	archiveClassifier = 'javadoc'
-	from apidoc.destinationDir
+  archiveClassifier = 'javadoc'
+  from apidoc.destinationDir
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
@@ -816,14 +816,14 @@ def exampleJavaEEContent = project.copySpec {
 
 /** binary distribution in zip format. */
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-	archiveClassifier = 'binaries'
-	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+  archiveClassifier = 'binaries'
+  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-	archiveClassifier = 'binaries'
-	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+  archiveClassifier = 'binaries'
+  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'
@@ -869,15 +869,15 @@ def sourceContent = project.copySpec {
 }
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
-	description = 'Distributes source archive.'
-	archiveClassifier = 'sources'
-	with sourceContent
+  description = 'Distributes source archive.'
+  archiveClassifier = 'sources'
+  with sourceContent
 }
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
-	description = 'Distributes source archive.'
-	archiveClassifier = 'sources'
-	with sourceContent
+  description = 'Distributes source archive.'
+  archiveClassifier = 'sources'
+  with sourceContent
 
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'

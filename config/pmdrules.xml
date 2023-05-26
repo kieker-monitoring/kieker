@@ -14,7 +14,7 @@
 
 	<rule ref="category/java/bestpractices.xml">
 		<exclude name="ArrayIsStoredDirectly"/>
-		<exclude name="UnitTestsShouldIncludeAssert" /> <!--  check does not work with JUnit5 checks -->
+		<exclude name="JUnitTestsShouldIncludeAssert" /> <!--  check does not work with JUnit5 checks -->
 		<exclude name="JUnitAssertionsShouldIncludeMessage" />
 		<exclude name="UseVarargs" />
 	</rule>
