@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.timer;
+package kieker.monitoring.timer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,8 +22,6 @@ import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.timer.ITimeSource;
-import kieker.monitoring.timer.SystemNanoTimer;
 
 /**
  * This class is a JUnit test for the {@link SystemNanoTimer}, testing the timer with different configurations.
@@ -32,12 +30,12 @@ import kieker.monitoring.timer.SystemNanoTimer;
  *
  * @since 1.5
  */
-public final class TestSystemNanoTimer extends AbstractTestTimeSource {
+public final class SystemNanoTimerTest extends AbstractTimeSourceTest {
 
 	/**
 	 * Default constructor.
 	 */
-	public TestSystemNanoTimer() {
+	public SystemNanoTimerTest() {
 		// empty default constructor
 	}
 
@@ -57,7 +55,7 @@ public final class TestSystemNanoTimer extends AbstractTestTimeSource {
 	@Test
 	public void testNanoseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, "0");
+		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, TimeUnit.NANOSECONDS.name());
 		final ITimeSource ts = new SystemNanoTimer(configuration);
 		super.testTime(ts, TimeUnit.NANOSECONDS);
 	}
@@ -68,7 +66,7 @@ public final class TestSystemNanoTimer extends AbstractTestTimeSource {
 	@Test
 	public void testMicroseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, "1");
+		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, TimeUnit.MICROSECONDS.name());
 		final ITimeSource ts = new SystemNanoTimer(configuration);
 		super.testTime(ts, TimeUnit.MICROSECONDS);
 	}
@@ -79,7 +77,7 @@ public final class TestSystemNanoTimer extends AbstractTestTimeSource {
 	@Test
 	public void testMilliseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, "2");
+		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, TimeUnit.MILLISECONDS.name());
 		final ITimeSource ts = new SystemNanoTimer(configuration);
 		super.testTime(ts, TimeUnit.MILLISECONDS);
 	}
@@ -90,7 +88,7 @@ public final class TestSystemNanoTimer extends AbstractTestTimeSource {
 	@Test
 	public void testSeconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, "3");
+		configuration.setProperty(SystemNanoTimer.CONFIG_UNIT, TimeUnit.SECONDS.name());
 		final ITimeSource ts = new SystemNanoTimer(configuration);
 		super.testTime(ts, TimeUnit.SECONDS);
 	}
