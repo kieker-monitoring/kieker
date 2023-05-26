@@ -26,6 +26,8 @@ import kieker.model.analysismodel.source.SourceModel;
  * The {@link AbstractModelAssembler} provides standard functionality for all assemblers regarding
  * tagging elements of a model.
  *
+ * @param <T> Imput event type
+ *
  * @author Reiner Jung
  * @since 1.15
  */
