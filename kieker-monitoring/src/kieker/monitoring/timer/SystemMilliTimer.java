@@ -20,9 +20,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kieker.common.configuration.Configuration;
 
 /**
@@ -37,8 +34,6 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";
 	/** The name of the configuration for the time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemMilliTimer.class.getName() + ".unit";
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(SystemMilliTimer.class);
 
 	private final long offset;
 	private final TimeUnit timeunit;
@@ -56,25 +51,7 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		} else {
 			this.offset = configuration.getLongProperty(CONFIG_OFFSET);
 		}
-		final int timeunitval = configuration.getIntProperty(CONFIG_UNIT);
-		switch (timeunitval) {
-		case 0:
-			this.timeunit = TimeUnit.NANOSECONDS;
-			break;
-		case 1:
-			this.timeunit = TimeUnit.MICROSECONDS;
-			break;
-		case 2:
-			this.timeunit = TimeUnit.MILLISECONDS;
-			break;
-		case 3:
-			this.timeunit = TimeUnit.SECONDS;
-			break;
-		default:
-			LOGGER.warn("Failed to determine value of {} (0, 1, 2, or 3 expected). Setting to 0=nanoseconds", CONFIG_UNIT);
-			this.timeunit = TimeUnit.NANOSECONDS;
-			break;
-		}
+		this.timeunit = configuration.getEnumProperty(CONFIG_UNIT, TimeUnit.class, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
