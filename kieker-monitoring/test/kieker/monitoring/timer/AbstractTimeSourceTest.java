@@ -14,13 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.timer;
+package kieker.monitoring.timer;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-
-import kieker.monitoring.timer.ITimeSource;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -29,7 +27,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  *
  * @since 1.5
  */
-public abstract class AbstractTestTimeSource extends AbstractKiekerTest { // NOPMD (no abstract methods)
+public abstract class AbstractTimeSourceTest extends AbstractKiekerTest { // NOPMD (no abstract methods)
 
 	public final void testTime(final ITimeSource timesource, final TimeUnit timeunit) { // NOPMD (only used by other tests)
 		final long before = System.currentTimeMillis();
