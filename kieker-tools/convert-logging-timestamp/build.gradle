@@ -20,7 +20,7 @@ dependencies {
 
 	// TODO this can be removed when all tools have been ported to jcommander
 	// https://mvnrepository.com/artifact/commons-cli/commons-cli
-	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+	implementation 'commons-cli:commons-cli:1.4'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')

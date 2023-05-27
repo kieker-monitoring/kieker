@@ -16,7 +16,7 @@ dependencies {
 	implementation project(":kieker-tools")
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	// https://mvnrepository.com/artifact/commons-cli/commons-cli
-	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+	implementation 'commons-cli:commons-cli:1.4'
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 	testImplementation project(':kieker-monitoring').sourceSets.test.output

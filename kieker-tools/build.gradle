@@ -32,9 +32,6 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 	implementation 'org.apache.groovy:groovy-all:4.0.12'
 
-	// TODO jgraphx is no longer maintained
-	// implementation resolveLibrary('jgraphx-*.jar')
-
 	// https://mvnrepository.com/artifact/com.github.yannrichet/Rsession
 	implementation 'com.github.yannrichet:Rsession:1.8.3'
 
