@@ -65,8 +65,8 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 		final ISampler[] samplers = this.createSamplers();
 		for (final ISampler sampler : samplers) {
 			this.monitoringController.schedulePeriodicSampler(sampler,
-					TimeUnit.SECONDS.convert(this.settings.initialDelay, this.settings.initialDelayUnit), this.settings.interval,
-					this.settings.intervalUnit);
+					TimeUnit.SECONDS.convert(this.settings.getInitialDelay(), this.settings.getInitialDelayUnit()), this.settings.getInterval(),
+					this.settings.getIntervalUnit());
 		}
 	}
 
@@ -74,16 +74,17 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(2048);
 		final String lineSeparator = System.getProperty("line.separator");
-		sb.append("Resource Monitoring Configuration:").append(lineSeparator).append("\tSampling interval = ").append(this.settings.interval).append(lineSeparator)
-				.append("\tSampling interval unit = ").append(this.settings.intervalUnit).append(lineSeparator).append("\tInitial delay = ")
-				.append(this.settings.initialDelay)
-				.append(lineSeparator).append("\tInitial delay unit = ").append(this.settings.initialDelayUnit).append(lineSeparator);
-		if (this.settings.duration < 0) {
+		sb.append("Resource Monitoring Configuration:").append(lineSeparator).append("\tSampling interval = ").append(this.settings.getInterval())
+				.append(lineSeparator)
+				.append("\tSampling interval unit = ").append(this.settings.getIntervalUnit()).append(lineSeparator).append("\tInitial delay = ")
+				.append(this.settings.getInitialDelay())
+				.append(lineSeparator).append("\tInitial delay unit = ").append(this.settings.getInitialDelayUnit()).append(lineSeparator);
+		if (this.settings.getDuration() < 0) {
 			sb.append("\tDuration = INFINITE").append(lineSeparator);
 		} else {
-			sb.append("\tDuration = ").append(this.settings.duration);
+			sb.append("\tDuration = ").append(this.settings.getDuration());
 			sb.append(lineSeparator).append("\tDuration unit = ");
-			sb.append(this.settings.durationUnit).append(lineSeparator);
+			sb.append(this.settings.getDurationUnit()).append(lineSeparator);
 		}
 		return sb.toString();
 	}
@@ -102,8 +103,8 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 		});
 
 		final Configuration controllerConfiguration;
-		if (this.settings.monitoringConfiguration != null) {
-			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.settings.monitoringConfiguration);
+		if (this.settings.getMonitoringConfiguration() != null) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.settings.getMonitoringConfiguration());
 		} else {
 			controllerConfiguration = ConfigurationFactory.createSingletonConfiguration();
 		}
@@ -112,7 +113,7 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 		this.initSensors();
 		LOGGER.info("Monitoring started");
 
-		if (this.settings.duration >= 0) {
+		if (this.settings.getDuration() >= 0) {
 			final Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				@Override
@@ -120,8 +121,8 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 					cdl.countDown();
 					timer.cancel();
 				}
-			}, TimeUnit.MILLISECONDS.convert(this.settings.duration, this.settings.durationUnit));
-			LOGGER.info("Waiting for {} {} timeout...", this.settings.duration, this.settings.durationUnit);
+			}, TimeUnit.MILLISECONDS.convert(this.settings.getDuration(), this.settings.getDurationUnit()));
+			LOGGER.info("Waiting for {} {} timeout...", this.settings.getDuration(), this.settings.getDurationUnit());
 		}
 
 		try {

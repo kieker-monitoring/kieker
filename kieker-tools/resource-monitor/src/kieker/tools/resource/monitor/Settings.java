@@ -28,25 +28,53 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings {
 
-	@Parameter(names = { "--interval" }, required = false, description = "Sampling interval")
-	volatile long interval = 15;
+	@Parameter(names = "--interval", required = false, description = "Sampling interval")
+	private volatile long interval = 15;
 
 	@Parameter(names = { "-u", "--interval-unit" }, required = false, description = "Sampling interval time unit (default: SECONDS)")
-	volatile TimeUnit intervalUnit = TimeUnit.SECONDS;
+	private volatile TimeUnit intervalUnit = TimeUnit.SECONDS;
 
-	@Parameter(names = { "--initial-delay" }, required = false, description = "Initial delay")
-	volatile long initialDelay;
+	@Parameter(names = "--initial-delay", required = false, description = "Initial delay")
+	private volatile long initialDelay;
 
-	@Parameter(names = { "--initial-delay-unit" }, required = false, description = "Initial delay time unit (default: SECONDS)")
-	volatile TimeUnit initialDelayUnit = TimeUnit.SECONDS;
+	@Parameter(names = "--initial-delay-unit", required = false, description = "Initial delay time unit (default: SECONDS)")
+	private volatile TimeUnit initialDelayUnit = TimeUnit.SECONDS;
 
-	@Parameter(names = { "--duration" }, required = false, description = "Monitoring duration")
-	volatile long duration = -1;
+	@Parameter(names = { "-D", "--duration" }, required = false, description = "Monitoring duration")
+	private volatile long duration = -1;
 
-	@Parameter(names = { "--duration-unit" }, required = false, description = "Monitoring duration time unit (default: MINUTES)")
-	volatile TimeUnit durationUnit = TimeUnit.MINUTES;
+	@Parameter(names = "--duration-unit", required = false, description = "Monitoring duration time unit (default: MINUTES)")
+	private volatile TimeUnit durationUnit = TimeUnit.MINUTES;
 
 	@Parameter(names = { "-c", "--monitoring-configuration" }, required = false, converter = PathConverter.class,
 			description = "Configuration to use for the Kieker monitoring instance")
-	volatile Path monitoringConfiguration;
+	private volatile Path monitoringConfiguration;
+
+	public long getInterval() {
+		return this.interval;
+	}
+
+	public TimeUnit getIntervalUnit() {
+		return this.intervalUnit;
+	}
+
+	public long getInitialDelay() {
+		return this.initialDelay;
+	}
+
+	public TimeUnit getInitialDelayUnit() {
+		return this.initialDelayUnit;
+	}
+
+	public long getDuration() {
+		return this.duration;
+	}
+
+	public TimeUnit getDurationUnit() {
+		return this.durationUnit;
+	}
+
+	public Path getMonitoringConfiguration() {
+		return this.monitoringConfiguration;
+	}
 }
