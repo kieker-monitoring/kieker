@@ -15,8 +15,6 @@ sourceSets.main.resources.srcDirs = [ '../resources' ]
 dependencies {
 	implementation project(":kieker-tools")
 	implementation "com.beust:jcommander:${jcommanderVersion}"
-	// https://mvnrepository.com/artifact/commons-cli/commons-cli
-	implementation 'commons-cli:commons-cli:1.4'
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 	testImplementation project(':kieker-monitoring').sourceSets.test.output
