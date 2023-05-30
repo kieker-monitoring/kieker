@@ -26,8 +26,8 @@ import kieker.model.analysismodel.execution.EDirection;
  */
 public class DataflowEvent {
 
-    private final AbstractElementEvent source;
-    private final AbstractElementEvent target;
+    private final GenericElementEvent source;
+    private final GenericElementEvent target;
     private final EDirection direction;
     private final Duration duration;
 
@@ -43,7 +43,7 @@ public class DataflowEvent {
      * @param duration
      *            duration of the dataflow (is zero in static analysis)
      */
-    public DataflowEvent(final AbstractElementEvent source, final AbstractElementEvent target,
+    public DataflowEvent(final GenericElementEvent source, final GenericElementEvent target,
             final EDirection direction, final Duration duration) {
         this.source = source;
         this.target = target;
@@ -51,11 +51,11 @@ public class DataflowEvent {
         this.duration = duration;
     }
 
-    public AbstractElementEvent getSource() {
+    public GenericElementEvent getSource() {
         return this.source;
     }
 
-    public AbstractElementEvent getTarget() {
+    public GenericElementEvent getTarget() {
         return this.target;
     }
 

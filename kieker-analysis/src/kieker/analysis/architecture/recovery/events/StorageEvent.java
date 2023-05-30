@@ -19,7 +19,7 @@ package kieker.analysis.architecture.recovery.events;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class StorageEvent extends AbstractElementEvent {
+public class StorageEvent extends GenericElementEvent {
 
 	private final String storageSignature;
 	private final String storageType;
@@ -52,7 +52,7 @@ public class StorageEvent extends AbstractElementEvent {
 	}
 
 	private boolean compare(final String a, final String b) {
-		if (a == null && b == null) {
+		if ((a == null) && (b == null)) {
 			return true;
 		} else if (a != null) {
 			return a.equals(b);
@@ -63,7 +63,7 @@ public class StorageEvent extends AbstractElementEvent {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return super.hashCode() ^ this.storageSignature.hashCode() ^ this.storageType.hashCode();
 	}
 
 	@Override

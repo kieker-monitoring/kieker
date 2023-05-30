@@ -17,19 +17,19 @@ package kieker.analysis.architecture.adaptation;
 
 import kieker.analysis.architecture.adaptation.data.Alarms;
 import kieker.analysis.architecture.adaptation.data.IErrorMessages;
-import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
+import kieker.analysis.architecture.adaptation.events.BasicTcpControlEvent;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Receives {@link AbstractTcpControlEvent control events}, processes them and in case of error
+ * Receives {@link BasicTcpControlEvent control events}, processes them and in case of error
  * sends the error message to an error sink.
  *
  * @author Marc Adolf
  * @since 1.15
  */
-public class ProbeControlStage extends AbstractConsumerStage<AbstractTcpControlEvent> {
+public class ProbeControlStage extends AbstractConsumerStage<BasicTcpControlEvent> {
 	private final IProbeController probeController;
 	private final OutputPort<IErrorMessages> outputPort = this.createOutputPort();
 
@@ -44,7 +44,7 @@ public class ProbeControlStage extends AbstractConsumerStage<AbstractTcpControlE
 	}
 
 	@Override
-	protected void execute(final AbstractTcpControlEvent event) {
+	protected void execute(final BasicTcpControlEvent event) {
 		try {
 			this.probeController.controlProbe(event);
 		} catch (final RemoteControlFailedException e) {

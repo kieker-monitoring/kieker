@@ -40,7 +40,9 @@ import kieker.model.system.model.Operation;
  * @author Reiner Jung -- ported
  *
  * @since 1.1
+ * @deprecated 2.0.0 should be removed in future releases
  */
+@Deprecated
 public class SystemModelRepository extends AbstractRepository { // NOPMD
 
 	public static final Execution ROOT_EXECUTION = new Execution(OperationRepository.ROOT_OPERATION,
@@ -179,7 +181,7 @@ public class SystemModelRepository extends AbstractRepository { // NOPMD
 	 */
 	public void saveSystemToHTMLFile(final Path outputFile) throws IOException, // NOPMD
 			FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE), true, ENCODING);
+		final PrintStream ps = new PrintStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE), true, SystemModelRepository.ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n"
 				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"

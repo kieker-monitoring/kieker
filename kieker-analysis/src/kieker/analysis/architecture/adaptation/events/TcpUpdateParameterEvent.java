@@ -24,7 +24,7 @@ import java.util.Map;
  * @author Marc Adolf
  * @since 1.15
  */
-public class TcpUpdateParameterEvent extends AbstractTcpControlEvent implements IParameterEvent {
+public class TcpUpdateParameterEvent extends BasicTcpControlEvent implements IParameterEvent {
 
 	private final Map<String, List<String>> parameters;
 

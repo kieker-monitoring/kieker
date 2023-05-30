@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.tools.logging.timestamp.converter;
 
-package kieker.analysis.architecture.recovery.signature;
+import java.util.List;
 
-import kieker.model.analysismodel.type.ComponentType;
+import com.beust.jcommander.Parameter;
 
-/**
- * A {@link IComponentNameBuilder} can be used to create the component name from a package name and a component name.
- *
- * @author Sören Henning
- *
- * @since 1.14
- */
-public interface IComponentNameBuilder {
+import kieker.tools.common.AbstractSettings;
 
-	/**
-	 * @since 1.14
-	 */
-	public String build(String packageName, String name);
+public class Settings extends AbstractSettings {
 
-	/**
-	 * @since 1.14
-	 */
-	public default String build(final ComponentType componentType) {
-		return this.build(componentType.getPackage(), componentType.getName());
+	@Parameter(names = { "-t", "--timestamps" }, required = true, variableArity = true,
+			description = "List of timestamps (UTC timezone) to convert, e.g., timestamp1 ... timestampN")
+	private List<Long> timestamps;
+
+	public List<Long> getTimestamps() {
+		return this.timestamps;
 	}
-
 }

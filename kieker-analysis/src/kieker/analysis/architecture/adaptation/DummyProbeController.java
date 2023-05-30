@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
+import kieker.analysis.architecture.adaptation.events.BasicTcpControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationParameterControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpDeactivationControlEvent;
@@ -67,7 +67,7 @@ public class DummyProbeController implements IProbeController {
 	 *             if the connection can not be established within a set timeout.
 	 */
 	@Override
-	public void controlProbe(final AbstractTcpControlEvent event) throws RemoteControlFailedException {
+	public void controlProbe(final BasicTcpControlEvent event) throws RemoteControlFailedException {
 		DummyProbeController.LOGGER.debug("control probe host=[{}] ip=[{}] port=[{}]", event.getServiceComponent(),
 				event.getIp(), event.getPort());
 

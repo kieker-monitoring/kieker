@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.adaptation;
 
-import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
+import kieker.analysis.architecture.adaptation.events.BasicTcpControlEvent;
 
 /**
  * @author Reiner Jung
@@ -31,6 +31,6 @@ public interface IProbeController {
 	 * @throws RemoteControlFailedException
 	 *             on errors to control the probe
 	 */
-	void controlProbe(AbstractTcpControlEvent event) throws RemoteControlFailedException;
+	void controlProbe(BasicTcpControlEvent event) throws RemoteControlFailedException;
 
 }

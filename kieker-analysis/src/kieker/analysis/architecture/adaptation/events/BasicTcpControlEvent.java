@@ -21,7 +21,7 @@ package kieker.analysis.architecture.adaptation.events;
  * @author Marc Adolf
  * @since 1.15
  */
-public abstract class AbstractTcpControlEvent {
+public class BasicTcpControlEvent {
 
 	private String ip;
 	private int port;
@@ -45,7 +45,7 @@ public abstract class AbstractTcpControlEvent {
 	 * @param triggerTimestamp
 	 *            original trigger timestamp
 	 */
-	public AbstractTcpControlEvent(final String ip, final int port, final String serviceComponent, final String pattern,
+	public BasicTcpControlEvent(final String ip, final int port, final String serviceComponent, final String pattern,
 			final long triggerTimestamp) {
 		this(pattern, triggerTimestamp);
 		this.ip = ip;
@@ -61,7 +61,7 @@ public abstract class AbstractTcpControlEvent {
 	 * @param triggerTimestamp
 	 *            original trigger timestamp
 	 */
-	public AbstractTcpControlEvent(final String operationSignature, final long triggerTimestamp) {
+	public BasicTcpControlEvent(final String operationSignature, final long triggerTimestamp) {
 		this.operationSignature = operationSignature;
 		this.triggerTimestamp = triggerTimestamp;
 	}

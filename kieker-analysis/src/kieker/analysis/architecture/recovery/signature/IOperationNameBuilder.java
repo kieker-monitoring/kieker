@@ -33,7 +33,7 @@ public interface IOperationNameBuilder {
 	/**
 	 * @since 1.14
 	 */
-	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes);
+	public String build(Collection<String> modifiers, String returnType, String name, Collection<String> parameterTypes);
 
 	/**
 	 * @since 1.14

@@ -66,7 +66,7 @@ public class OperationPresentInModelEventReleaseControlStage extends AbstractFil
 	}
 
 	private void sendEvent() {
-		if (this.events.size() > 0) {
+		if (!this.events.isEmpty()) {
 			final AbstractOperationEvent event = this.events.get(0);
 			if (this.operationExists(event)) {
 				this.outputPort.send(event);
