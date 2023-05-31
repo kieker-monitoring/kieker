@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.architecture.repository;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,6 +37,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.exception.ConfigurationException;
+import kieker.model.analysismodel.assembly.AssemblyFactory;
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+import kieker.model.analysismodel.deployment.DeploymentFactory;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.source.SourceFactory;
+import kieker.model.analysismodel.source.SourcePackage;
+import kieker.model.analysismodel.statistics.StatisticsFactory;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.type.TypeFactory;
+import kieker.model.analysismodel.type.TypePackage;
 
 /**
  * Create, load and store architecture and utility models.
@@ -43,20 +56,69 @@ import kieker.common.exception.ConfigurationException;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public final class ArchitectureModelFactory {
+public final class ArchitectureModelRepositoryFactory {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureModelFactory.class);
+	/** Standard type model file name. */
+	public static final String TYPE_MODEL_NAME = "type-model.xmi";
 
-	private ArchitectureModelFactory() {
+	/** Standard assembly model file name. */
+	public static final String ASSEMBLY_MODEL_NAME = "assembly-model.xmi";
+
+	/** Standard deployment model file name. */
+	public static final String DEPLOYMENT_MODEL_NAME = "deployment-model.xmi";
+
+	/** Standard execution model file name. */
+	public static final String EXECUTION_MODEL_NAME = "execution-model.xmi";
+
+	/** Standard statistics model file name. */
+	public static final String STATISTICS_MODEL_NAME = "statistics-model.xmi";
+
+	/** Standard source model file name. */
+	public static final String SOURCE_MODEL_NAME = "source-model.xmi";
+
+	/** Model descriptor for the type model. */
+	public static final ModelDescriptor TYPE_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.TYPE_MODEL_NAME, TypePackage.Literals.TYPE_MODEL, TypeFactory.eINSTANCE);
+	/** Model descriptor for the assembly model. */
+	public static final ModelDescriptor ASSEMBLY_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.ASSEMBLY_MODEL_NAME, AssemblyPackage.Literals.ASSEMBLY_MODEL,
+			AssemblyFactory.eINSTANCE);
+	/** Model descriptor for the deployment model. */
+	public static final ModelDescriptor DEPLOYMENT_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.DEPLOYMENT_MODEL_NAME, DeploymentPackage.Literals.DEPLOYMENT_MODEL,
+			DeploymentFactory.eINSTANCE);
+	/** Model descriptor for the execution model. */
+	public static final ModelDescriptor EXECUTION_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.EXECUTION_MODEL_NAME, ExecutionPackage.Literals.EXECUTION_MODEL,
+			ExecutionFactory.eINSTANCE);
+	/** Model descriptor for the statistics model. (optional) */
+	public static final ModelDescriptor STATISTICS_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.STATISTICS_MODEL_NAME, StatisticsPackage.Literals.STATISTICS_MODEL,
+			StatisticsFactory.eINSTANCE, false);
+	/** Model descriptor for the source model. (optional) */
+	public static final ModelDescriptor SOURCE_MODEL_DESCRIPTOR = new ModelDescriptor(
+			ArchitectureModelRepositoryFactory.SOURCE_MODEL_NAME, SourcePackage.Literals.SOURCE_MODEL,
+			SourceFactory.eINSTANCE, false);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureModelRepositoryFactory.class);
+
+	private ArchitectureModelRepositoryFactory() {
 		// factory class
 	}
 
+	/**
+	 * Create an empty repository for architecture models.
+	 *
+	 * @param repositoryName
+	 *            name of the repository
+	 * @return a new instance of an empty repository
+	 */
 	public static ModelRepository createEmptyModelRepository(final String repositoryName) {
 		return new ModelRepository(repositoryName);
 	}
 
 	/**
-	 * Create an empty model repository.
+	 * Create a model repository with a set of empty models.
 	 *
 	 * @param repositoryName
 	 *            name of the repository
@@ -65,7 +127,7 @@ public final class ArchitectureModelFactory {
 	 * @return returns on success an model repository with a set of empty models
 	 */
 	public static ModelRepository createModelRepository(final String repositoryName, final ModelDescriptor... descriptors) {
-		final ModelRepository repository = ArchitectureModelFactory.createEmptyModelRepository(repositoryName);
+		final ModelRepository repository = ArchitectureModelRepositoryFactory.createEmptyModelRepository(repositoryName);
 		for (final ModelDescriptor descriptor : descriptors) {
 			repository.register(descriptor, descriptor.getFactory().create(descriptor.getRootClass()));
 		}
@@ -99,7 +161,7 @@ public final class ArchitectureModelFactory {
 		}
 
 		for (final ModelDescriptor descriptor : descriptors) {
-			ArchitectureModelFactory.readModel(resourceSet, repository, descriptor, inputDirectory);
+			ArchitectureModelRepositoryFactory.readModel(resourceSet, repository, descriptor, inputDirectory);
 		}
 
 		return repository;
@@ -107,16 +169,16 @@ public final class ArchitectureModelFactory {
 
 	private static <T extends EObject> void readModel(final ResourceSet resourceSet, final ModelRepository repository,
 			final ModelDescriptor descriptor, final Path path) throws ConfigurationException {
-		LOGGER.info("Loading model {}", descriptor.getFilename());
-		final File modelFile = ArchitectureModelFactory.createReadModelFileHandle(path, descriptor.getFilename());
+		ArchitectureModelRepositoryFactory.LOGGER.debug("Loading model {}", descriptor.getFilename());
+		final File modelFile = ArchitectureModelRepositoryFactory.createReadModelFileHandle(path, descriptor.getFilename());
 		if (modelFile.exists()) {
 			final Resource resource = resourceSet.getResource(URI.createFileURI(modelFile.getAbsolutePath()), true);
 			for (final Diagnostic error : resource.getErrors()) {
-				LOGGER.error("Error loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Error loading '{}' of {}:{}  {}", descriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
 			for (final Diagnostic error : resource.getWarnings()) {
-				LOGGER.error("Warning loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Warning loading '{}' of {}:{}  {}", descriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
 			repository.register(descriptor, resource.getContents().get(0));
@@ -124,11 +186,13 @@ public final class ArchitectureModelFactory {
 			while (iterator.hasNext()) {
 				iterator.next().eCrossReferences();
 			}
-		} else {
-			LOGGER.error("Error reading model file {}. File does not exist.",
+		} else if (descriptor.isRequired()) {
+			ArchitectureModelRepositoryFactory.LOGGER.error("Error reading model file {}. File does not exist.",
 					modelFile.getAbsoluteFile());
 			throw new ConfigurationException(
 					String.format("Error reading model file %s. File does not exist.", modelFile.getAbsoluteFile()));
+		} else {
+			ArchitectureModelRepositoryFactory.LOGGER.info("Model file {} not present", modelFile.getAbsolutePath());
 		}
 	}
 
@@ -155,6 +219,7 @@ public final class ArchitectureModelFactory {
 
 		// store models
 		final ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.setResourceFactoryRegistry(registry);
 
 		final EPackage.Registry packageRegistry = resourceSet.getPackageRegistry();
 		for (final EClass rootClass : repository.getModels().keySet()) {
@@ -167,17 +232,37 @@ public final class ArchitectureModelFactory {
 			Files.createDirectory(outputDirectory);
 		}
 
+		ArchitectureModelRepositoryFactory.writeEclipseProject(outputDirectory, repository.getName());
+
 		for (final EClass rootClass : repository.getModels().keySet()) {
 			final ModelDescriptor descriptor = repository.getModelDescriptor(rootClass);
-			ArchitectureModelFactory.writeModel(resourceSet, outputDirectory, descriptor.getFilename(), repository.getModel(rootClass));
+			ArchitectureModelRepositoryFactory.writeModel(resourceSet, outputDirectory, descriptor.getFilename(), repository.getModel(rootClass));
+		}
+	}
+
+	private static void writeEclipseProject(final Path outputDirectory, final String name) throws IOException {
+		final Path projectPath = outputDirectory.resolve(".project");
+		try (BufferedWriter writer = Files.newBufferedWriter(projectPath)) {
+			writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+			writer.write("<projectDescription>\n");
+			writer.write(String.format("    <name>%s</name>\n", name));
+			writer.write("    <comment></comment>\n");
+			writer.write("    <projects>\n");
+			writer.write("    </projects>\n");
+			writer.write("    <buildSpec>\n");
+			writer.write("    </buildSpec>\n");
+			writer.write("    <natures>\n");
+			writer.write("    </natures>\n");
+			writer.write("</projectDescription>\n");
+			writer.close();
 		}
 	}
 
 	private static <T extends EObject> void writeModel(final ResourceSet resourceSet, final Path outputDirectory,
 			final String filename, final T model) {
-		LOGGER.info("Saving model {}", filename);
+		ArchitectureModelRepositoryFactory.LOGGER.debug("Saving model {}", filename);
 
-		final File modelFile = ArchitectureModelFactory.createWriteModelFileHandle(outputDirectory, filename);
+		final File modelFile = ArchitectureModelRepositoryFactory.createWriteModelFileHandle(outputDirectory, filename);
 
 		final Resource resource = resourceSet.createResource(URI.createFileURI(modelFile.getAbsolutePath()));
 		resource.getContents().add(model);
@@ -185,7 +270,7 @@ public final class ArchitectureModelFactory {
 		try {
 			resource.save(Collections.EMPTY_MAP);
 		} catch (final IOException e) {
-			LOGGER.error("Cannot write {} model to storage. Cause: {}",
+			ArchitectureModelRepositoryFactory.LOGGER.error("Cannot write {} model to storage. Cause: {}",
 					modelFile.getAbsoluteFile(), e.getLocalizedMessage());
 		}
 	}

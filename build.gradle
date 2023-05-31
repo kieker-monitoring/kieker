@@ -531,11 +531,6 @@ def resolveRelativeToParent(String directory, String file) {
   return rootProject.file(directory + '/' + file)
 }
 
-def resolveLibrary(String library) {
-  def libraryDir = rootProject.file(dirLib)
-  return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
-}
-
 def today() {
   def date = new Date()
   def formattedDate = date.format('yyyy-MM-dd')
