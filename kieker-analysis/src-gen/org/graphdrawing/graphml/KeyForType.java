@@ -5,19 +5,20 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for key.for.type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
+ * Java class for key.for.type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * 
  * <pre>
  * &lt;simpleType name="key.for.type">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
@@ -38,39 +39,33 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum KeyForType {
 
-    @XmlEnumValue("all")
-    ALL("all"),
-    @XmlEnumValue("graphml")
-    GRAPHML("graphml"),
-    @XmlEnumValue("graph")
-    GRAPH("graph"),
-    @XmlEnumValue("node")
-    NODE("node"),
-    @XmlEnumValue("edge")
-    EDGE("edge"),
-    @XmlEnumValue("hyperedge")
-    HYPEREDGE("hyperedge"),
-    @XmlEnumValue("port")
-    PORT("port"),
-    @XmlEnumValue("endpoint")
-    ENDPOINT("endpoint");
-    private final String value;
+	@XmlEnumValue("all")
+	ALL("all"), @XmlEnumValue("graphml")
+	GRAPHML("graphml"), @XmlEnumValue("graph")
+	GRAPH("graph"), @XmlEnumValue("node")
+	NODE("node"), @XmlEnumValue("edge")
+	EDGE("edge"), @XmlEnumValue("hyperedge")
+	HYPEREDGE("hyperedge"), @XmlEnumValue("port")
+	PORT("port"), @XmlEnumValue("endpoint")
+	ENDPOINT("endpoint");
 
-    KeyForType(String v) {
-        value = v;
-    }
+	private final String value;
 
-    public String value() {
-        return value;
-    }
+	KeyForType(String v) {
+		value = v;
+	}
 
-    public static KeyForType fromValue(String v) {
-        for (KeyForType c: KeyForType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+	public String value() {
+		return value;
+	}
+
+	public static KeyForType fromValue(String v) {
+		for (KeyForType c : KeyForType.values()) {
+			if (c.value.equals(v)) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException(v);
+	}
 
 }

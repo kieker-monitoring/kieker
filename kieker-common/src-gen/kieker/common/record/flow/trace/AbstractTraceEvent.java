@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,18 @@ import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {			
 	
+		
 	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	private static final long serialVersionUID = 3123204150489927280L;
 	
-		
 	/** property declarations. */
 	private long traceId;
 	private final int orderIndex;
@@ -127,4 +127,22 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		return this.orderIndex;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractTraceEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ public enum ForecastMethod {
 			}
 			long newStartTime = ts.getStartTime();
 			newStartTime += (ts.size() - x) * ts.getDeltaTimeUnit().toMillis(ts.getDeltaTime());
-			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
+			final ITimeSeries<Double> tsLastX = new TimeSeries<>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
 					ts.getCapacity());
 			tsLastX.appendAll(b);
 			return tsLastX;

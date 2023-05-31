@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package kieker.common.util.map;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * @author Nils Christian Ehmke
  *
@@ -30,7 +28,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @param <V>
  *            The type of the values.
  */
-@SuppressFBWarnings(value = "EQ_DOESNT_OVERRIDE_EQUALS") // inherit equals to follow Map's definition of equality 
 public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	private static final long serialVersionUID = 1L;

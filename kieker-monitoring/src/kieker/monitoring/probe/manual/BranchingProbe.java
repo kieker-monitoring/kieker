@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public final class BranchingProbe implements IMonitoringProbe {
 
 	private BranchingProbe() {}
 
-	public static final void monitorBranch(final int branchID, final int branchingOutcome) {
+	public static void monitorBranch(final int branchID, final int branchingOutcome) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}

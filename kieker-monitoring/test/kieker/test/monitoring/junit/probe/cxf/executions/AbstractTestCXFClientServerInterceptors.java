@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -109,10 +109,10 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private MonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.META_DATA, "false");
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
-		config.setProperty(ConfigurationKeys.HOST_NAME, hostname);
+		config.setProperty(ConfigurationConstants.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
 

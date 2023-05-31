@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
@@ -37,14 +37,14 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		long.class, // TimestampRecord.timestamp
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -6797766837645151845L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -91,7 +91,7 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -143,4 +143,16 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		return this.timestamp;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "TimestampRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		return result;
+	}
 }

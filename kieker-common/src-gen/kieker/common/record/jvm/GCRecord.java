@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -47,12 +47,8 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionTimeMS
 	};
 	
-	/** default constants. */
-	public static final String GC_NAME = "";
-	private static final long serialVersionUID = -314644197119857213L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -60,6 +56,10 @@ public class GCRecord extends AbstractJVMRecord  {
 		"collectionCount",
 		"collectionTimeMS",
 	};
+	
+	/** default constants. */
+	public static final String GC_NAME = "";
+	private static final long serialVersionUID = -314644197119857213L;
 	
 	/** property declarations. */
 	private final String gcName;
@@ -129,7 +129,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -211,4 +211,31 @@ public class GCRecord extends AbstractJVMRecord  {
 		return this.collectionTimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "GCRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "gcName = ";
+		result += this.getGcName() + ", ";
+		
+		result += "collectionCount = ";
+		result += this.getCollectionCount() + ", ";
+		
+		result += "collectionTimeMS = ";
+		result += this.getCollectionTimeMS() + ", ";
+		
+		return result;
+	}
 }

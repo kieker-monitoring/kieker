@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.tools.opad.record;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,14 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.10
  */
 public final class NamedDoubleRecordFactory implements IRecordFactory<NamedDoubleRecord> {
-	
-	
+
 	@Override
 	public NamedDoubleRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NamedDoubleRecord(deserializer);
 	}
-	
-	
+
+	@Override
+	public String[] getValueNames() {
+		return NamedDoubleRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NamedDoubleRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NamedDoubleRecord.SIZE;
 	}

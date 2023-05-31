@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.tools.opad.record;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,14 +25,22 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.10
  */
 public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {
-	
-	
+
 	@Override
 	public NamedTSPoint create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NamedTSPoint(deserializer);
 	}
-	
-	
+
+	@Override
+	public String[] getValueNames() {
+		return NamedTSPoint.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NamedTSPoint.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NamedTSPoint.SIZE;
 	}

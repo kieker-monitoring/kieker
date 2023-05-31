@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,15 +27,17 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;
 
 /**
- * Counts and reports the number of incoming valid/invalid {@link TraceEventRecords}.
+ * Counts and reports the number of incoming valid/invalid
+ * {@link TraceEventRecords}.
  *
  * @author Andre van Hoorn
  *
  * @since 1.7
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Counts and reports the number of incoming valid/invalid event record traces", configuration = {
-	@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true")
-})
+	@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true") })
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving valid record traces. */
@@ -43,7 +45,10 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	/** This is the name of the input port receiving invalid record traces. */
 	public static final String INPUT_PORT_NAME_INVALID = "invalidEventRecordTraces";
 
-	/** This is the name of the configuration determining whether to log invalid traces or not. */
+	/**
+	 * This is the name of the configuration determining whether to log invalid
+	 * traces or not.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_LOG_INVALID = "logInvalidTraces";
 
 	private static final long TRACE_ID_IF_NONE = -1;
@@ -61,14 +66,16 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_LOG_INVALID);
+		this.logInvalidTraces = configuration
+				.getBooleanProperty(EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = super.getCurrentConfiguration();
 
-		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));
+		config.setProperty(EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
+				Boolean.toString(this.logInvalidTraces));
 
 		return config;
 	}
@@ -79,7 +86,8 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 * @param validTrace
 	 *            The next trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_VALID, eventTypes = { TraceEventRecords.class }, description = "Receives valid event record traces")
+	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_VALID, eventTypes = TraceEventRecords.class,
+			description = "Receives valid event record traces")
 	public void inputValidTrace(final TraceEventRecords validTrace) {
 		super.reportSuccess(validTrace.getTraceMetadata().getTraceId());
 	}
@@ -90,7 +98,8 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 * @param invalidTrace
 	 *            The next trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_INVALID, eventTypes = { TraceEventRecords.class }, description = "Receives invalid event record traces")
+	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_INVALID, eventTypes = TraceEventRecords.class,
+			description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
 			this.logger.error("Invalid trace: {}", invalidTrace);
@@ -104,7 +113,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 			if ((events != null) && (events.length > 0)) {
 				super.reportError(events[0].getTraceId());
 			} else {
-				super.reportError(TRACE_ID_IF_NONE); // we can't do any better
+				super.reportError(EventRecordTraceCounter.TRACE_ID_IF_NONE); // we can't do any better
 			}
 		}
 	}

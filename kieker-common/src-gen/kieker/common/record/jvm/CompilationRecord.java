@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -45,18 +45,18 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		long.class, // CompilationRecord.totalCompilationTimeMS
 	};
 	
-	/** default constants. */
-	public static final String JIT_COMPILER_NAME = "";
-	private static final long serialVersionUID = 3634137431488075031L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
 		"jitCompilerName",
 		"totalCompilationTimeMS",
 	};
+	
+	/** default constants. */
+	public static final String JIT_COMPILER_NAME = "";
+	private static final long serialVersionUID = 3634137431488075031L;
 	
 	/** property declarations. */
 	private final String jitCompilerName;
@@ -120,7 +120,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -193,4 +193,28 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		return this.totalCompilationTimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CompilationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "jitCompilerName = ";
+		result += this.getJitCompilerName() + ", ";
+		
+		result += "totalCompilationTimeMS = ";
+		result += this.getTotalCompilationTimeMS() + ", ";
+		
+		return result;
+	}
 }

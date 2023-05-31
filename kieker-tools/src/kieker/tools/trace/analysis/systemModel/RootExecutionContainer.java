@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Specific subtype for the root execution container.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class RootExecutionContainer extends ExecutionContainer {
 
 	/**

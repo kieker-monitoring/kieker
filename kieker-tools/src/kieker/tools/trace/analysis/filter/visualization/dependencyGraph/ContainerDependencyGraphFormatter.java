@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
@@ -27,7 +26,9 @@ import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
 
 	private static final String DEFAULT_FILE_NAME = VisualizationConstants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;

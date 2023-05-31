@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 0.95a
  */
@@ -36,11 +36,11 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	public static final Class<?>[] TYPES = {
 	};
 	
-	private static final long serialVersionUID = -177095911417362302L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 	};
+	
+	private static final long serialVersionUID = -177095911417362302L;
 	
 	
 	/**
@@ -80,7 +80,7 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -124,4 +124,14 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 		return code;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "EmptyRecord: ";
+		
+		return result;
+	}
 }

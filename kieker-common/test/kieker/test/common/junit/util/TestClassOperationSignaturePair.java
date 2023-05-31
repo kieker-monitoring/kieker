@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,8 +76,8 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 
 		// Obtain operation signature string based on class name and signature and compare with expected string.
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
-		final String expectedOpSignatureString =
-				modifiers[0] + " " + modifiers[1] + " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
+		final String expectedOpSignatureString = modifiers[0] + " " + modifiers[1] + " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", "
+				+ paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 
 		// Now split expectedOpSignatureString and compare class name and signature

@@ -1,29 +1,28 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.collector.CollectorMain'
 
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
-	
-	compile project(":kieker-common")
-	compile project(":kieker-analysis")
-	compile project(":kieker-tools")
-	
-	compile "com.beust:jcommander:1.60"
-	
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
+	implementation project(":kieker-common")
+	implementation project(":kieker-analysis")
+	implementation project(":kieker-tools")
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 }
 
-clover {
-	report {
-		html=true
-	}
-	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
+task uploadArchives {
+	println 'collector skipped'
 }

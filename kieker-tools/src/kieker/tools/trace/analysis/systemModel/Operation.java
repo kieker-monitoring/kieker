@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,15 @@ import kieker.common.util.signature.Signature;
 import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
- * This class represents an operation within the trace analysis tool. It consists of the component type and a signature.
- * 
+ * This class represents an operation within the trace analysis tool. It
+ * consists of the component type and a signature.
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class Operation {
 
 	/** The ID for the root operation. */
@@ -37,7 +40,7 @@ public class Operation {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this operation.
 	 * @param componentType
@@ -53,7 +56,7 @@ public class Operation {
 
 	/**
 	 * Delivers the ID of the operation.
-	 * 
+	 *
 	 * @return The ID.
 	 */
 	public final int getId() {
@@ -62,7 +65,7 @@ public class Operation {
 
 	/**
 	 * Delivers the component type of the operation.
-	 * 
+	 *
 	 * @return The component type.
 	 */
 	public final ComponentType getComponentType() {
@@ -71,7 +74,7 @@ public class Operation {
 
 	/**
 	 * Delivers the signature of the operation.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public final Signature getSignature() {
@@ -80,7 +83,7 @@ public class Operation {
 
 	/**
 	 * Two Operation objects are equal if their ids are equal.
-	 * 
+	 *
 	 * @param obj
 	 *            The object to be compared for equality with this
 	 * @return true if the two objects are equal.

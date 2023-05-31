@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import kieker.common.record.flow.IFlowRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
@@ -53,6 +53,16 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public static final int NO_PARENT_ORDER_INDEX = -1;
 	public static final String NO_SESSION_ID = "<no-session-id>";
 	public static final String NO_HOSTNAME = "<default-host>";
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"traceId",
+		"threadId",
+		"sessionId",
+		"hostname",
+		"parentTraceId",
+		"parentOrderId",
+	};
+	
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
@@ -62,16 +72,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
 	public static final int NEXT_ORDER_ID = 0;
 	private static final long serialVersionUID = 2517933148667588979L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"traceId",
-		"threadId",
-		"sessionId",
-		"hostname",
-		"parentTraceId",
-		"parentOrderId",
-	};
 	
 	/** property declarations. */
 	private long traceId;
@@ -150,7 +150,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -259,4 +259,31 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		return this.nextOrderId++;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "TraceMetadata: ";
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+		
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "parentTraceId = ";
+		result += this.getParentTraceId() + ", ";
+		
+		result += "parentOrderId = ";
+		result += this.getParentOrderId() + ", ";
+		
+		return result;
+	}
 }

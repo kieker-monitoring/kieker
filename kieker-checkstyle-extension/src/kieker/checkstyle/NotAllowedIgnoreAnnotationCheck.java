@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package kieker.checkstyle;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.AnnotationUtility;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 /**
  * This is an additional checkstyle check which makes sure that JUnit tests do
@@ -53,20 +53,20 @@ public class NotAllowedIgnoreAnnotationCheck extends AbstractCheck {
 	}
 
 	private boolean hasTestAnnotation(final DetailAST ast) {
-		return AnnotationUtility.containsAnnotation(ast, "Test");
+		return AnnotationUtil.containsAnnotation(ast, "Test");
 	}
 
 	private boolean hasIgnoreAnnotation(final DetailAST ast) {
-		return AnnotationUtility.containsAnnotation(ast, "Ignore");
+		return AnnotationUtil.containsAnnotation(ast, "Ignore");
 	}
 
 	@Override
 	public int[] getAcceptableTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 
 	@Override
 	public int[] getRequiredTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,16 @@ import kieker.common.configuration.Configuration;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
- * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} or {@link kieker.analysis.repository.AbstractRepository}. This is the base class for all other analysis
+ * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} or {@link kieker.analysis.repository.AbstractRepository}.
+ * This is the base class for all other analysis
  * components within Kieker, like repositories or plugins. It should therefore <b>only</b> be used by the Kieker components itself as a base.
  *
  * @author Nils Christian Ehmke
  *
  * @since 1.7
+ * @deprecated 1.15 can be removed when all tools have been migrated to TeeTime
  */
+@Deprecated
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/** The name of the property for the name. This should normally only be used by Kieker. */
@@ -67,7 +70,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * @throws NullPointerException
 	 *             If configuration or projectContext null
 	 */
-	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) throws NullPointerException {
+	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
 		if (null == projectContext) {
 			throw new NullPointerException("Missing projectContext");
 		}

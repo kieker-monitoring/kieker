@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.traceReconstruction;
 
 import java.util.Comparator;
@@ -25,6 +24,7 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.architecture.trace.execution.ExecutionEventProcessingException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -33,7 +33,6 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;
-import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.trace.analysis.systemModel.Execution;
 import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.InvalidExecutionTrace;
@@ -45,13 +44,16 @@ import kieker.tools.util.LoggingTimestampConverter;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces", outputPorts = {
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = {
-		ExecutionTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
-		InvalidExecutionTrace.class })
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces",
+			eventTypes = MessageTrace.class),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces",
+			eventTypes = ExecutionTrace.class),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
+			eventTypes = InvalidExecutionTrace.class)
 }, repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -108,8 +110,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
 			final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
 
-			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering of the keys, we take the traceId as a second ordering
-			// key.
+			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering
+			// of the keys, we take the traceId as a second ordering key.
 			if (t1LowestTin != t2LowestTin) {
 				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
 			}
@@ -189,7 +191,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * @param execution
 	 *            The next execution.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTIONS, description = "Receives the executions to be processed", eventTypes = { Execution.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTIONS, description = "Receives the executions to be processed",
+			eventTypes = Execution.class)
 	public void inputExecutions(final Execution execution) {
 		synchronized (this) {
 			if (this.terminated || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
@@ -204,7 +207,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!", executionTrace);
+					this.logger.error(
+							"Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!",
+							executionTrace);
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
@@ -214,7 +219,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					this.logger.error("Equal entry existed in timeoutMap already:{}", executionTrace);
+					this.logger.error("Equal entry existed in timeoutMap already: {}", executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
@@ -234,21 +239,22 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 *            The execution trace to transform.
 	 *
 	 * @throws ExecutionEventProcessingException
-	 *             if the passed execution trace is
-	 *             invalid and this filter is configured to fail on the occurrence of invalid
-	 *             traces.
+	 *             if the passed execution trace is invalid and this filter is
+	 *             configured to fail on the occurrence of invalid traces.
 	 */
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
 		try {
-			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
-			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+			// If the polled trace is invalid, the following method toMessageTrace(..)
+			// throws an exception
+			final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0] execution and thus complete a trace
+			// Transformation successful and the trace is for itself valid. However, this
+			// trace may actually contain the [0,0] execution and thus complete a trace
 			// that has timed out before and has thus been considered an invalid trace.
-			if (!this.invalidTraces.contains(mt.getTraceId())) {
+			if (!this.invalidTraces.contains(messageTrace.getTraceId())) {
 				// Not completing part of an invalid trace
-				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
+				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTrace);
 				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
@@ -260,8 +266,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		} catch (final InvalidTraceException ex) {
 			// Transformation failed (i.e., trace invalid)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
-			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId + "). \n"
-					+ "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
+			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId
+					+ "). \n" + "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
 			if (!this.invalidTraces.contains(curTraceId)) {
 				// only once per traceID (otherwise, we would report all
 				// trace fragments)
@@ -324,7 +330,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					this.logger.info("Terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.logger.info("Terminate called with error an flag set or a trace processing"
+							+ " occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
@@ -339,11 +346,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			super.printStatusMessage();
 			if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin))).append(",")
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
+						.append(',')
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+						.append(')').toString();
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
+						.append(',')
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
+						.append(')').toString();
 				LOGGER.debug("First timestamp: {}", minTinStr);
 				LOGGER.debug("Last timestamp: {}", maxToutStr);
 			}

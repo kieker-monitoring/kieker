@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,21 @@ import kieker.tools.opad.record.StorableDetectionResult;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Thomas Duellmann
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class ExtendedStorableDetectionResult extends StorableDetectionResult  {			
+public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-			 + TYPE_SIZE_DOUBLE; // ExtendedStorableDetectionResult.anomalyThreshold
-	
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
+			+ TYPE_SIZE_DOUBLE; // ExtendedStorableDetectionResult.anomalyThreshold
+
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
 		double.class, // StorableDetectionResult.value
@@ -46,11 +45,9 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // StorableDetectionResult.score
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
-	
-	private static final long serialVersionUID = 3489846495430494003L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"value",
 		"timestamp",
@@ -58,10 +55,12 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		"score",
 		"anomalyThreshold",
 	};
-	
+
+	private static final long serialVersionUID = 3489846495430494003L;
+
 	/** property declarations. */
 	private final double anomalyThreshold;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -78,31 +77,28 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @param anomalyThreshold
 	 *            anomalyThreshold
 	 */
-	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score, final double anomalyThreshold) {
+	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score,
+			final double anomalyThreshold) {
 		super(applicationName, value, timestamp, forecast, score);
 		this.anomalyThreshold = anomalyThreshold;
 	}
 
-
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public ExtendedStorableDetectionResult(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.anomalyThreshold = deserializer.getDouble();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putDouble(this.getValue());
 		serializer.putLong(this.getTimestamp());
@@ -110,7 +106,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		serializer.putDouble(this.getScore());
 		serializer.putDouble(this.getAnomalyThreshold());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,15 +114,15 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,7 +131,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +145,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -173,9 +168,10 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,17 +179,17 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public int hashCode() {
 		int code = 0;
 		code += this.getApplicationName().hashCode();
-		code += ((int)this.getValue());
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getForecast());
-		code += ((int)this.getScore());
-		code += ((int)this.getAnomalyThreshold());
-		
+		code += ((int) this.getValue());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getForecast());
+		code += ((int) this.getScore());
+		code += ((int) this.getAnomalyThreshold());
+
 		return code;
 	}
-	
+
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;
 	}
-	
+
 }

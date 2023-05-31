@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import kieker.common.record.flow.ICallObjectRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.6
  */
@@ -54,13 +54,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	public static final int CALLEE_OBJECT_ID = 0;
-	private static final long serialVersionUID = -5117801163059454889L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -71,6 +66,11 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		"objectId",
 		"calleeObjectId",
 	};
+	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	public static final int CALLEE_OBJECT_ID = 0;
+	private static final long serialVersionUID = -5117801163059454889L;
 	
 	/** property declarations. */
 	private final int objectId;
@@ -146,7 +146,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -240,4 +240,40 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		return this.calleeObjectId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CallOperationObjectEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "calleeOperationSignature = ";
+		result += this.getCalleeOperationSignature() + ", ";
+		
+		result += "calleeClassSignature = ";
+		result += this.getCalleeClassSignature() + ", ";
+		
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+		
+		result += "calleeObjectId = ";
+		result += this.getCalleeObjectId() + ", ";
+		
+		return result;
+	}
 }

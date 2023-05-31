@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test makes sure that the "global configuration" of an analysis instance works.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestGlobalConfiguration extends AbstractKiekerTest {
 
 	/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@ package kieker.analysis.plugin.reader.newio;
 
 /**
  * Enumeration for outcomes of event handlers and other operations.
+ *
  * @author Holger Knoche
  * @since 1.13
+ * @deprecated since 1.15.1 old plugin api
  */
 public enum Outcome {
 	/**

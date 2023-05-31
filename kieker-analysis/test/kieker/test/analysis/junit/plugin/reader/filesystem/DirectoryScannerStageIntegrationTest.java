@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.file.DirectoryScannerStage;
 
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
@@ -52,7 +52,7 @@ public class DirectoryScannerStageIntegrationTest {
 	private static final String KIEKER_MAP_NAME = "kieker.map";
 	private static final String KIEKER_LOG_NAME = "kieker-xy.dat";
 
-	private File[] directories;
+	private List<File> directories;
 	private final List<File> results = new ArrayList<>();
 
 	/** Create test. */
@@ -61,7 +61,8 @@ public class DirectoryScannerStageIntegrationTest {
 	}
 
 	/**
-	 * @throws java.io.IOException on errors
+	 * @throws java.io.IOException
+	 *             on errors
 	 */
 	@Before
 	public void setUp() throws IOException {
@@ -69,9 +70,9 @@ public class DirectoryScannerStageIntegrationTest {
 		final Path treeA = Files.createTempDirectory(rootTempDirHandle.toPath(), "tree-A");
 		final Path treeB = Files.createTempDirectory(rootTempDirHandle.toPath(), "tree-B");
 
-		this.directories = new File[2];
-		this.directories[0] = treeA.toFile();
-		this.directories[1] = treeB.toFile();
+		this.directories = new ArrayList<>();
+		this.directories.add(treeA.toFile());
+		this.directories.add(treeB.toFile());
 
 		// tree A
 		this.createKiekerDirectory(treeA.resolve("sub1"));
@@ -92,7 +93,8 @@ public class DirectoryScannerStageIntegrationTest {
 	}
 
 	/**
-	 * @throws java.io.IOException on errors
+	 * @throws java.io.IOException
+	 *             on errors
 	 */
 	@After
 	public void tearDown() throws IOException {
@@ -123,7 +125,7 @@ public class DirectoryScannerStageIntegrationTest {
 	 */
 	@Test
 	public void testEmptyArrayOfDirectories() {
-		final DirectoryScannerStage producer = new DirectoryScannerStage(null);
+		final DirectoryScannerStage producer = new DirectoryScannerStage((List<File>) null);
 		StageTester.test(producer).start();
 
 		Assert.assertThat(producer.getOutputPort(), StageTester.producesNothing());

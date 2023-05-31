@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -43,15 +43,15 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		long.class, // UptimeRecord.uptimeMS
 	};
 	
-	private static final long serialVersionUID = 5233115844046765277L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
 		"uptimeMS",
 	};
+	
+	private static final long serialVersionUID = 5233115844046765277L;
 	
 	/** property declarations. */
 	private final long uptimeMS;
@@ -109,7 +109,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -173,4 +173,25 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		return this.uptimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "UptimeRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "uptimeMS = ";
+		result += this.getUptimeMS() + ", ";
+		
+		return result;
+	}
 }

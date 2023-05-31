@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
@@ -41,14 +41,14 @@ public class SplitEvent extends AbstractTraceEvent  {
 		int.class, // ITraceRecord.orderIndex
 	};
 	
-	private static final long serialVersionUID = 757022930650044358L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 	};
+	
+	private static final long serialVersionUID = 757022930650044358L;
 	
 	
 	/**
@@ -99,7 +99,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -155,4 +155,22 @@ public class SplitEvent extends AbstractTraceEvent  {
 		return code;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "SplitEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		return result;
+	}
 }

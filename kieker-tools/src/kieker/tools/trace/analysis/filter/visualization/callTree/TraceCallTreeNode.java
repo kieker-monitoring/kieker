@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,18 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
 
 /**
  * This class represents a single node within the trace call tree.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The identifier of this node.
 	 * @param entity

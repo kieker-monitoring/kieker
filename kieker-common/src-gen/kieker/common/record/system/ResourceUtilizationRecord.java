@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.3
  */
@@ -43,20 +43,20 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"resourceName",
+		"utilization",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
 	private static final long serialVersionUID = 193790554451565711L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"resourceName",
-		"utilization",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -121,7 +121,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -200,4 +200,25 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.utilization;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ResourceUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "resourceName = ";
+		result += this.getResourceName() + ", ";
+		
+		result += "utilization = ";
+		result += this.getUtilization() + ", ";
+		
+		return result;
+	}
 }

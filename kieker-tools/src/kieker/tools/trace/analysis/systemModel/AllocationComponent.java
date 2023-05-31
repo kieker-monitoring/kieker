@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,21 @@
 package kieker.tools.trace.analysis.systemModel;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class AllocationComponent implements ISystemModelElement {
 
 	private final int id;
 	private final AssemblyComponent assemblyComponent;
 	private final ExecutionContainer executionContainer;
 
-	public AllocationComponent(final int id, final AssemblyComponent assemblyComponent, final ExecutionContainer executionContainer) {
+	public AllocationComponent(final int id, final AssemblyComponent assemblyComponent,
+			final ExecutionContainer executionContainer) {
 		this.id = id;
 		this.assemblyComponent = assemblyComponent;
 		this.executionContainer = executionContainer;

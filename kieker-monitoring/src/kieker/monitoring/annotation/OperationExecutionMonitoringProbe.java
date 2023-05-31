@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation represents a runtime probe for methods and constructors.
- * 
+ *
  * @author Matthias Rohr, Thilo Focke, Jan Waller
- * 
+ *
  * @since before 0.9
  */
 @Retention(RetentionPolicy.RUNTIME)

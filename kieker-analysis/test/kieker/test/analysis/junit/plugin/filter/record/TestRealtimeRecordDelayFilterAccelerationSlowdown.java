@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 package kieker.test.analysis.junit.plugin.filter.record;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.7
+ * @deprecated since 1.15 can be remove with old pipe-and-filter infrastructure
  */
+@Deprecated
 public class TestRealtimeRecordDelayFilterAccelerationSlowdown extends AbstractTestRealtimeRecordDelayFilter {
 
 	// Note for the following array that by considering a slow down by 50%, the actual array is
@@ -29,8 +31,7 @@ public class TestRealtimeRecordDelayFilterAccelerationSlowdown extends AbstractT
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 2L, 6L, 7L, 9L };
 
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
-	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
-	{
+	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS = {
 		2L, // i.e., in interval (0,5(
 		0L, // i.e., in interval (5,10(
 		2L, // i.e., in interval (10,15(

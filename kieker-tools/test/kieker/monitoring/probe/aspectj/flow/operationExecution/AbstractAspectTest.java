@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.writer.filesystem.FileWriter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * An integration test for AspectJ-based probes.
  *
@@ -56,7 +54,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
 	// why is this test deactivated?
 	// @Test
-	@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
+	// @SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
 		final File workingDirectory = new File(resource.toURI());
@@ -75,6 +73,12 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 		Assert.assertThat(records, Matchers.hasSize(16 - 1));
 	}
 
+	/**
+	 * Some logging class.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class AspectjMonitoringToAsciiFileLog {
 
 		private static final String JAVA_COMMAND = "java"; // C:/Program Files/Java/jre7/bin/
@@ -125,6 +129,12 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
 	}
 
+	/**
+	 * Filter to filter out directories containing META-INF.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class NonMetaInfDirectoryFilter implements FileFilter { // NOCS (no ctor)
 		@Override
 		public boolean accept(final File pathname) {

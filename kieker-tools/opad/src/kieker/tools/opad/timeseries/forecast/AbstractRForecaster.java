@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,7 +278,8 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * This default implementation checks whether the length of the time series is greater or equal to {@value #MIN_TS_SIZE_DEFAULT}.
 	 * This method can be overridden by any forecaster if more specific requirements are needed.
 	 *
-	 * @param timeSeries time series
+	 * @param timeSeries
+	 *            time series
 	 *
 	 * @return returns true when requirements are met
 	 */

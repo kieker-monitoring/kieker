@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,9 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
@@ -72,9 +74,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
-				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
-		return destination;
+		return AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
+				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null
 	}
 }
 

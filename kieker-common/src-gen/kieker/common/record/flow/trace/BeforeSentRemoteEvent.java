@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Felix Eichhorst
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.14
  */
@@ -43,20 +43,20 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		String.class, // BeforeSentRemoteEvent.technology
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"technology",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	public static final String TECHNOLOGY = "<default-technology>";
 	private static final long serialVersionUID = 1817999525650163947L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"traceId",
-		"orderIndex",
-		"technology",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -121,7 +121,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -200,4 +200,25 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		return this.technology;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeSentRemoteEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "technology = ";
+		result += this.getTechnology() + ", ";
+		
+		return result;
+	}
 }

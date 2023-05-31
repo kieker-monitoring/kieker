@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rewriter.ITraceMetadataRewriter;
-import kieker.analysis.source.rewriter.NoneTraceMetadataRewriter;
-import kieker.analysis.source.tcp.MultipleConnectionTcpSourceStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rewriter.ITraceMetadataRewriter;
+import kieker.analysis.generic.source.rewriter.NoneTraceMetadataRewriter;
+import kieker.analysis.generic.source.tcp.MultipleConnectionTcpSourceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
@@ -59,13 +59,15 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 	private final MultipleConnectionTcpSourceStage reader;
 
 	/**
-	 * Create a composite reader stage.
+	 * Create a composite reader stage for TCP connections.
 	 *
 	 * @param configuration
 	 *            configuration parameters
 	 * @throws ConfigurationException
 	 *             on configuration errors during instantiation
+	 * @deprecated
 	 */
+	@Deprecated
 	public MultipleConnectionTcpSourceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final int inputPort = configuration.getIntProperty(MultipleConnectionTcpSourceCompositeStage.SOURCE_PORT,
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_SOURCE_PORT);
@@ -73,9 +75,23 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_CAPACITY);
 		final String rewriterClassName = configuration.getStringProperty(MultipleConnectionTcpSourceCompositeStage.REWRITER,
 				NoneTraceMetadataRewriter.class.getName());
-		final Class<?>[] classes = null;
 		final ITraceMetadataRewriter rewriter = InstantiationFactory.getInstance(configuration).create(ITraceMetadataRewriter.class,
-				rewriterClassName, classes);
+				rewriterClassName, null);
+		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
+	}
+
+	/**
+	 * Create a composite reader stage for TCP connections
+	 * .
+	 *
+	 * @param inputPort
+	 *            the input port to listen to
+	 * @param capacity
+	 *            internal ready buffer size, the buffer size must be at least as big as the largest incoming event
+	 * @param rewriter
+	 *            trace record metadata rewriter, (necessary when multiple sources send traces).
+	 */
+	public MultipleConnectionTcpSourceCompositeStage(final int inputPort, final int capacity, final ITraceMetadataRewriter rewriter) {
 		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
 	}
 

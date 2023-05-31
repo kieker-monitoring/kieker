@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
@@ -25,14 +24,16 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * Abstract superclass for all dependency-graph formatters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The graph type this formatter is for
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractGraphFormatter<G> {
 
 	/** The string used in the node labels for execution containers. */
@@ -46,6 +47,10 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
+	public AbstractDependencyGraphFormatter() {
+		// default constructor
+	}
+
 	@Override
 	protected String formatGraph(final G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
 		return this.formatDependencyGraph(graph, includeWeights, useShortLabels, plotLoops);
@@ -53,7 +58,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Outputs the default graph header to the given builder.
-	 * 
+	 *
 	 * @param builder
 	 *            The builder to use
 	 */
@@ -63,7 +68,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Outputs the default graph footer to the given builder.
-	 * 
+	 *
 	 * @param builder
 	 *            The builder to use
 	 */
@@ -73,7 +78,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual container ID for an execution container.
-	 * 
+	 *
 	 * @param container
 	 *            The container to create the ID for
 	 * @return The created ID
@@ -84,7 +89,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual container ID for an allocation component.
-	 * 
+	 *
 	 * @param component
 	 *            The allocation component to create the ID for
 	 * @return The created ID
@@ -95,7 +100,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual container ID for an assembly component.
-	 * 
+	 *
 	 * @param component
 	 *            The assembly component to create the ID for
 	 * @return The created ID
@@ -106,7 +111,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual node ID for an operation.
-	 * 
+	 *
 	 * @param operation
 	 *            The operation to create the ID for
 	 * @return The created ID
@@ -117,7 +122,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual node ID from a given numeric node ID.
-	 * 
+	 *
 	 * @param nodeId
 	 *            The numeric node ID
 	 * @return The created ID
@@ -128,7 +133,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to create a textual node ID for a given node.
-	 * 
+	 *
 	 * @param node
 	 *            The node to create the ID for
 	 * @return The created ID
@@ -139,7 +144,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * Utility function to determine the fill color to use for a given node.
-	 * 
+	 *
 	 * @param node
 	 *            The node to determine the color for
 	 * @return The color name to use for the given node
@@ -154,7 +159,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 
 	/**
 	 * The inheriting classes should implement this method to encapsulate the concrete graph formatting.
-	 * 
+	 *
 	 * @param graph
 	 *            The input graph to format
 	 * @param includeWeights
@@ -163,7 +168,7 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 	 *            Determines whether to use short labels or not.
 	 * @param plotLoops
 	 *            Determines whether to plot loops or not.
-	 * 
+	 *
 	 * @return
 	 *         A textual specification of the input graph
 	 */

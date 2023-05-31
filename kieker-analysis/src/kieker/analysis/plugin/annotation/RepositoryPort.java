@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,33 +28,35 @@ import kieker.analysis.repository.AbstractRepository;
  * This annotation can be used to describe the repository ports of a plugin. It can only be used <b>within</b> other annotations. It allows to specify the name of
  * the
  * repository port and the corresponding repository type. There is also a field for a human-readable description available.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 @Inherited
+@Deprecated
 public @interface RepositoryPort {
 
 	/**
 	 * The human-readable description of this port.
-	 * 
+	 *
 	 * @return The description for this port.
 	 */
 	String description() default "Repository Port";
 
 	/**
 	 * The name which is used to identify this port. It should be unique within the class.
-	 * 
+	 *
 	 * @return The name of this port.
 	 */
 	String name();
 
 	/**
 	 * The event types which are used for this port. If this is empty, everything can be sent through the port.
-	 * 
+	 *
 	 * @return The event types for this class.
 	 */
 	Class<? extends AbstractRepository> repositoryType() default AbstractRepository.class;

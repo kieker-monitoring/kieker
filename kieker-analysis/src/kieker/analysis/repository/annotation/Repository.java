@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,11 @@ import kieker.analysis.plugin.annotation.Property;
 
 /**
  * This type annotation can be used to mark repositories.
- * 
+ *
  * @author Nils Christian Ehmke, Andre van Hoorn
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -49,28 +50,28 @@ public @interface Repository {
 
 	/**
 	 * The human-readable description of this repository type.
-	 * 
+	 *
 	 * @return The description for this repository type.
 	 */
 	String description() default "";
 
 	/**
 	 * This field can contain an additional text to give an impression of the needed dependencies.
-	 * 
+	 *
 	 * @return The dependencies for the current repository as a human-readable description.
 	 */
 	String dependencies() default "";
 
 	/**
 	 * The name which is used to identify this repository type.
-	 * 
+	 *
 	 * @return The name of this repository type.
 	 */
 	String name() default NO_NAME;
 
 	/**
 	 * The list of possible properties for this repository.
-	 * 
+	 *
 	 * @return A list of properties.
 	 */
 	Property[] configuration() default {};

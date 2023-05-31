@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -49,10 +49,8 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
 	
-	private static final long serialVersionUID = -9176980438135391329L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -61,6 +59,8 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		"peakThreadCount",
 		"totalStartedThreadCount",
 	};
+	
+	private static final long serialVersionUID = -9176980438135391329L;
 	
 	/** property declarations. */
 	private final long threadCount;
@@ -136,7 +136,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -227,4 +227,34 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		return this.totalStartedThreadCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ThreadsStatusRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "threadCount = ";
+		result += this.getThreadCount() + ", ";
+		
+		result += "daemonThreadCount = ";
+		result += this.getDaemonThreadCount() + ", ";
+		
+		result += "peakThreadCount = ";
+		result += this.getPeakThreadCount() + ", ";
+		
+		result += "totalStartedThreadCount = ";
+		result += this.getTotalStartedThreadCount() + ", ";
+		
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.14
  */
@@ -50,6 +50,15 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		String.class, // IExceptionRecord.cause
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"classSignature",
+		"traceId",
+		"orderIndex",
+		"cause",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -57,15 +66,6 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	public static final int ORDER_INDEX = -1;
 	public static final String CAUSE = "";
 	private static final long serialVersionUID = 979011205753098958L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"classSignature",
-		"traceId",
-		"orderIndex",
-		"cause",
-	};
 	
 	/** property declarations. */
 	private long timestamp;
@@ -136,7 +136,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -230,4 +230,28 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		return this.cause;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DatabaseFailedEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "cause = ";
+		result += this.getCause() + ", ";
+		
+		return result;
+	}
 }

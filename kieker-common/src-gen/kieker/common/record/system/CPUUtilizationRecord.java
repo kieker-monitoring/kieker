@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.3
  */
@@ -55,6 +55,20 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"cpuID",
+		"user",
+		"system",
+		"wait",
+		"nice",
+		"irq",
+		"totalUtilization",
+		"idle",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -67,20 +81,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
 	private static final long serialVersionUID = -7851990890838902217L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"cpuID",
-		"user",
-		"system",
-		"wait",
-		"nice",
-		"irq",
-		"totalUtilization",
-		"idle",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -181,7 +181,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -314,4 +314,43 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.idle;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CPUUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "cpuID = ";
+		result += this.getCpuID() + ", ";
+		
+		result += "user = ";
+		result += this.getUser() + ", ";
+		
+		result += "system = ";
+		result += this.getSystem() + ", ";
+		
+		result += "wait = ";
+		result += this.getWait() + ", ";
+		
+		result += "nice = ";
+		result += this.getNice() + ", ";
+		
+		result += "irq = ";
+		result += this.getIrq() + ", ";
+		
+		result += "totalUtilization = ";
+		result += this.getTotalUtilization() + ", ";
+		
+		result += "idle = ";
+		result += this.getIdle() + ", ";
+		
+		return result;
+	}
 }

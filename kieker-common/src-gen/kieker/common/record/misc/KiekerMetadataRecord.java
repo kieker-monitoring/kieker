@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.7
  */
@@ -56,6 +56,18 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"version",
+		"controllerName",
+		"hostname",
+		"experimentId",
+		"debugMode",
+		"timeOffset",
+		"timeUnit",
+		"numberOfRecords",
+	};
+	
 	/** default constants. */
 	public static final String VERSION = kieker.common.util.Version.getVERSION();
 	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
@@ -66,18 +78,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	public static final String TIME_UNIT = NO_TIMEUNIT;
 	public static final long NUMBER_OF_RECORDS = 0L;
 	private static final long serialVersionUID = 8241152536143822747L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"version",
-		"controllerName",
-		"hostname",
-		"experimentId",
-		"debugMode",
-		"timeOffset",
-		"timeUnit",
-		"numberOfRecords",
-	};
 	
 	/** property declarations. */
 	private final String version;
@@ -166,7 +166,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -281,4 +281,37 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 		return this.numberOfRecords;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "KiekerMetadataRecord: ";
+		result += "version = ";
+		result += this.getVersion() + ", ";
+		
+		result += "controllerName = ";
+		result += this.getControllerName() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "experimentId = ";
+		result += this.getExperimentId() + ", ";
+		
+		result += "debugMode = ";
+		result += this.isDebugMode() + ", ";
+		
+		result += "timeOffset = ";
+		result += this.getTimeOffset() + ", ";
+		
+		result += "timeUnit = ";
+		result += this.getTimeUnit() + ", ";
+		
+		result += "numberOfRecords = ";
+		result += this.getNumberOfRecords() + ", ";
+		
+		return result;
+	}
 }

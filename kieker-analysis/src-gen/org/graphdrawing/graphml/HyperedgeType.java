@@ -5,7 +5,6 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import java.util.ArrayList;
@@ -20,15 +19,16 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
  * 
- *       Complex type for the <hyperedge> element.
- *     
+ * Complex type for the <hyperedge> element.
  * 
- * <p>Java class for hyperedge.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for hyperedge.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="hyperedge.type">
@@ -53,124 +53,125 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "hyperedge.type", propOrder = {
-    "desc",
-    "dataOrEndpoint",
-    "graph"
+	"desc",
+	"dataOrEndpoint",
+	"graph"
 })
 public class HyperedgeType {
 
-    protected String desc;
-    @XmlElements({
-        @XmlElement(name = "data", type = DataType.class),
-        @XmlElement(name = "endpoint", type = EndpointType.class)
-    })
-    protected List<Object> dataOrEndpoint;
-    protected GraphType graph;
-    @XmlAttribute(name = "id")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String id;
+	protected String desc;
+	@XmlElements({
+		@XmlElement(name = "data", type = DataType.class),
+		@XmlElement(name = "endpoint", type = EndpointType.class)
+	})
+	protected List<Object> dataOrEndpoint;
+	protected GraphType graph;
+	@XmlAttribute(name = "id")
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NMTOKEN")
+	protected String id;
 
-    /**
-     * Gets the value of the desc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDesc() {
-        return desc;
-    }
+	/**
+	 * Gets the value of the desc property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getDesc() {
+		return desc;
+	}
 
-    /**
-     * Sets the value of the desc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDesc(String value) {
-        this.desc = value;
-    }
+	/**
+	 * Sets the value of the desc property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setDesc(String value) {
+		this.desc = value;
+	}
 
-    /**
-     * Gets the value of the dataOrEndpoint property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dataOrEndpoint property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDataOrEndpoint().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link DataType }
-     * {@link EndpointType }
-     * 
-     * 
-     */
-    public List<Object> getDataOrEndpoint() {
-        if (dataOrEndpoint == null) {
-            dataOrEndpoint = new ArrayList<Object>();
-        }
-        return this.dataOrEndpoint;
-    }
+	/**
+	 * Gets the value of the dataOrEndpoint property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the dataOrEndpoint property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getDataOrEndpoint().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link DataType }
+	 * {@link EndpointType }
+	 * 
+	 * 
+	 */
+	public List<Object> getDataOrEndpoint() {
+		if (dataOrEndpoint == null) {
+			dataOrEndpoint = new ArrayList<Object>();
+		}
+		return this.dataOrEndpoint;
+	}
 
-    /**
-     * Gets the value of the graph property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link GraphType }
-     *     
-     */
-    public GraphType getGraph() {
-        return graph;
-    }
+	/**
+	 * Gets the value of the graph property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link GraphType }
+	 * 
+	 */
+	public GraphType getGraph() {
+		return graph;
+	}
 
-    /**
-     * Sets the value of the graph property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GraphType }
-     *     
-     */
-    public void setGraph(GraphType value) {
-        this.graph = value;
-    }
+	/**
+	 * Sets the value of the graph property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link GraphType }
+	 * 
+	 */
+	public void setGraph(GraphType value) {
+		this.graph = value;
+	}
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+	/**
+	 * Gets the value of the id property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+	/**
+	 * Sets the value of the id property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setId(String value) {
+		this.id = value;
+	}
 
 }

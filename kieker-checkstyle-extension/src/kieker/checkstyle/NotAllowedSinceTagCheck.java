@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ public class NotAllowedSinceTagCheck extends AbstractCheck {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (CSUtility.sinceTagAvailable(this, ast)
-				&& ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
+		if (CSUtils.sinceTagAvailable(this, ast)
+				&& ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtils.parentIsInterface(ast)))) {
 			this.log(ast.getLineNo(), "@since tag not allowed");
 		}
 	}

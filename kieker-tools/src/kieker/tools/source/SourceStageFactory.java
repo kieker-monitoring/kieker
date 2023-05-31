@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,20 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.util.classpath.InstantiationFactory;
 import kieker.tools.common.CommonConfigurationKeys;
 
 /**
+ * Factory to create a source stage depending on the configuration object.
+ *
  * @author Reiner Jung
  *
- * @since 0.0.3
+ * @since 1.15
  */
-public final class SourceStageFactory {
+public final class SourceStageFactory { // NOPMD is a factory
 
 	private SourceStageFactory() {
 		// private constructor for factory
@@ -36,7 +38,7 @@ public final class SourceStageFactory {
 	 * Create a source stage based on the given configuration.
 	 *
 	 * @param configuration
-	 *            iobserve configuration
+	 *            configuration
 	 * @return instantiated reader composite stage
 	 * @throws ConfigurationException
 	 *             on error

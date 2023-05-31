@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
 
 /**
  * @author Marc Adolf
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.14
  */
@@ -38,14 +38,14 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		String.class, // IRemoteControlEvent.pattern
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"pattern",
+	};
+	
 	/** default constants. */
 	public static final String PATTERN = "";
 	private static final long serialVersionUID = 6888923121890229913L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"pattern",
-	};
 	
 	/** property declarations. */
 	private final String pattern;
@@ -92,7 +92,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -144,4 +144,16 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		return this.pattern;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ActivationEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		return result;
+	}
 }

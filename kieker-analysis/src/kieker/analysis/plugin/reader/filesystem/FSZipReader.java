@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,18 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.generic.source.file.MappingException;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.registry.reader.ReaderRegistry;
@@ -42,7 +43,9 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Jan Waller
  *
  * @since 1.7
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 public final class FSZipReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSZipReader.class);
 
@@ -85,7 +88,7 @@ public final class FSZipReader implements Runnable {
 	public final void run() {
 		ZipInputStream zipInputStream = null;
 		try {
-			zipInputStream = new ZipInputStream(new FileInputStream(this.zipFile));
+			zipInputStream = new ZipInputStream(Files.newInputStream(this.zipFile.toPath(), StandardOpenOption.READ));
 			ZipEntry zipEntry;
 			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals(FSUtil.MAP_FILENAME)) { // NOCS NOPMD
 				// do nothing, just skip to the map file if present
@@ -115,7 +118,7 @@ public final class FSZipReader implements Runnable {
 		BufferedReader reader = null;
 		DataInputStream input = null;
 		try {
-			zipInputStream = new ZipInputStream(new FileInputStream(this.zipFile));
+			zipInputStream = new ZipInputStream(Files.newInputStream(this.zipFile.toPath(), StandardOpenOption.READ));
 			reader = new BufferedReader(new InputStreamReader(zipInputStream, FSUtil.ENCODING));
 			input = new DataInputStream(new BufferedInputStream(zipInputStream, 1024 * 1024));
 			ZipEntry zipEntry;

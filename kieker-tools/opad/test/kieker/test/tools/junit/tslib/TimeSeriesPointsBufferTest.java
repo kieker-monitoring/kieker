@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBoundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<Integer>(3);
+		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<>(3);
 		bounded.add(1);
 		bounded.add(2);
 		bounded.add(3);
@@ -75,7 +75,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUnboundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
+		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<>(-1);
 		int i = 0;
 		while (i < 100) {
 			unbounded.add(i);

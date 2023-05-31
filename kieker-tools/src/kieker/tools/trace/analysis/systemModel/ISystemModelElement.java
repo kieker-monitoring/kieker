@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,20 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * Abstract supertype for all entities in the system model.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public interface ISystemModelElement {
 
 	/**
 	 * Returns a textual identifier for this object (e.g., its name).
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public String getIdentifier();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
  * @since 1.1
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
-	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT =
-			new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AssemblyRepository.ROOT_ASSEMBLY_COMPONENT,
-					ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER);
+	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT = new AllocationComponent(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+			AssemblyRepository.ROOT_ASSEMBLY_COMPONENT,
+			ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER);
 
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)

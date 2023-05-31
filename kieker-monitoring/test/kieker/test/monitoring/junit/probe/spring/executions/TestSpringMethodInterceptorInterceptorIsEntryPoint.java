@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package kieker.test.monitoring.junit.probe.spring.executions;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestSpringMethodInterceptorInterceptorIsEntryPoint extends AbstractTestSpringMethodInterceptor {

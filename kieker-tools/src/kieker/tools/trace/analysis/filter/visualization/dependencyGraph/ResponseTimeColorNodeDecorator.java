@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.concurrent.TimeUnit;
@@ -23,11 +22,13 @@ import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 
 /**
  * Decorator to set the color of graph nodes depending on graph nodes execution time.
- * 
+ *
  * @author Henry Grow
- * 
+ *
  * @since 1.9
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ResponseTimeColorNodeDecorator extends AbstractNodeDecorator {
 
 	private static final TimeUnit DISPLAY_TIMEUNIT = TimeUnit.MILLISECONDS;
@@ -38,7 +39,7 @@ public class ResponseTimeColorNodeDecorator extends AbstractNodeDecorator {
 
 	/**
 	 * Creates a new response time decorator.
-	 * 
+	 *
 	 * @param threshold
 	 *            The threshold for the execution time to color the graph nodes
 	 */

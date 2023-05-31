@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,45 +19,43 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Tom Frotscher
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class NamedDoubleRecord extends AbstractMonitoringRecord  {			
+public class NamedDoubleRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // NamedDoubleRecord.applicationName
-			 + TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
-			 + TYPE_SIZE_DOUBLE; // NamedDoubleRecord.responseTime
-	
+			+ TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
+			+ TYPE_SIZE_DOUBLE; // NamedDoubleRecord.responseTime
+
 	public static final Class<?>[] TYPES = {
 		String.class, // NamedDoubleRecord.applicationName
 		long.class, // NamedDoubleRecord.timestamp
 		double.class, // NamedDoubleRecord.responseTime
 	};
-	
-	/** default constants. */
-	public static final String APPLICATION_NAME = "";
-	private static final long serialVersionUID = 3508131536785781597L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"timestamp",
 		"responseTime",
 	};
-	
+
+	/** default constants. */
+	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = 3508131536785781597L;
+
 	/** property declarations. */
 	private final String applicationName;
 	private final long timestamp;
 	private final double responseTime;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -69,37 +67,33 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	 *            responseTime
 	 */
 	public NamedDoubleRecord(final String applicationName, final long timestamp, final double responseTime) {
-		this.applicationName = applicationName == null?"":applicationName;
+		this.applicationName = applicationName == null ? "" : applicationName;
 		this.timestamp = timestamp;
 		this.responseTime = responseTime;
 	}
 
-
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public NamedDoubleRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.applicationName = deserializer.getString();
 		this.timestamp = deserializer.getLong();
 		this.responseTime = deserializer.getDouble();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putLong(this.getTimestamp());
 		serializer.putDouble(this.getResponseTime());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -107,15 +101,15 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +118,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -139,7 +132,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -153,9 +146,10 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,24 +157,22 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	public int hashCode() {
 		int code = 0;
 		code += this.getApplicationName().hashCode();
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getResponseTime());
-		
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getResponseTime());
+
 		return code;
 	}
-	
+
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-	
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final double getResponseTime() {
 		return this.responseTime;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package kieker.tools.trace.analysis.repository;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,9 +34,9 @@ import kieker.common.configuration.Configuration;
 
 /**
  * Implementation of a description repository which stores descriptions for names.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 @Repository(name = "Description repository",
@@ -58,12 +59,12 @@ public class DescriptionRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new description repository using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context for this plugin.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 */
@@ -73,7 +74,7 @@ public class DescriptionRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new description repository using the given data.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param descriptionData
@@ -97,7 +98,7 @@ public class DescriptionRepository extends AbstractRepository {
 
 	/**
 	 * Returns the description map (node id -> description) contained in this repository.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Map<String, String> getDescriptionMap() {
@@ -119,13 +120,13 @@ public class DescriptionRepository extends AbstractRepository {
 
 	/**
 	 * Initializes a new description repository from the given file.
-	 * 
+	 *
 	 * @param fileName
 	 *            The name of the file to use.
 	 * @param projectContext
 	 *            The project context to use.
 	 * @return The initialized description repository
-	 * 
+	 *
 	 * @throws IOException
 	 *             If an I/O error occurs
 	 */
@@ -138,8 +139,8 @@ public class DescriptionRepository extends AbstractRepository {
 	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), ENCODING));
-			final ConcurrentMap<String, String> descriptionMap = new ConcurrentHashMap<String, String>();
+			reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(fileName)), ENCODING));
+			final ConcurrentMap<String, String> descriptionMap = new ConcurrentHashMap<>();
 
 			while (true) {
 				final String currentLine = reader.readLine();
@@ -166,9 +167,9 @@ public class DescriptionRepository extends AbstractRepository {
 
 	/**
 	 * This class groups the data required for a {@link DescriptionRepository}.
-	 * 
+	 *
 	 * @author Holger Knoche
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public static class DescriptionRepositoryData {
@@ -177,7 +178,7 @@ public class DescriptionRepository extends AbstractRepository {
 
 		/**
 		 * Creates a new data object using the given description map.
-		 * 
+		 *
 		 * @param descriptionMap
 		 *            The description map (node id, see {@link kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()} ->
 		 *            description) to use

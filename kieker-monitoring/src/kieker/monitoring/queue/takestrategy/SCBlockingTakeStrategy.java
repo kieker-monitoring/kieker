@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * This take strategy blocks if the queue is empty.
  * <br>
@@ -33,10 +31,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public final class SCBlockingTakeStrategy implements TakeStrategy {
 
-	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
+	// @SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public volatile int storeFence = 0; // NOCS // NOPMD (necessary for synchronization)
 
-	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
+	private final AtomicReference<Thread> t = new AtomicReference<>(null);
 
 	public SCBlockingTakeStrategy() {
 		super();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.common.util.signature.Signature;
@@ -29,8 +28,14 @@ import kieker.tools.trace.analysis.systemModel.Operation;
  *            The type of graph this formatter is for
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractOperationDependencyGraphFormatter<T extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
+
+	public AbstractOperationDependencyGraphFormatter() {
+		// default constructor
+	}
 
 	private String createOperationSignature(final Operation operation) {
 		final StringBuilder builder = new StringBuilder();

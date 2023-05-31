@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,18 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
+import kieker.analysis.util.TestDataRepositoryFactory;
+import kieker.analysis.util.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * A warning by the reader should show up that this mode is not supported for binary files.
@@ -47,7 +47,7 @@ import kieker.test.tools.junit.writeRead.TestProbe;
  */
 public class AsciiUnknownTypeTest {
 
-	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
+	private static final TestDataRepositoryFactory TEST_DATA_REPOSITORY = new TestDataRepositoryFactory();
 	private static final int TIMEOUT_IN_MS = 0;
 
 	@Rule
@@ -84,7 +84,7 @@ public class AsciiUnknownTypeTest {
 	private List<IMonitoringRecord> testUnknownRecordTypes(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());

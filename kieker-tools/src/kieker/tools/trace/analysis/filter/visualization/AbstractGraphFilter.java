@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPo
 
 /**
  * Abstract superclass for all graph filters.
- * 
+ *
  * @param <G>
  *            The graph that is processed by this filter
  * @param <V>
@@ -45,11 +45,13 @@ import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPo
  *            The edge type of the graph
  * @param <O>
  *            The type of the graph's elements origins
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 moved to teetime
  */
+@Deprecated
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractFilterPlugin implements IGraphOutputtingFilter<G> {
@@ -61,11 +63,11 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	private final Configuration configuration;
 
-	private final List<IGraphProducingFilter<?>> producers = new ArrayList<IGraphProducingFilter<?>>();
+	private final List<IGraphProducingFilter<?>> producers = new ArrayList<>();
 
 	/**
 	 * Creates a new filter with the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The filter configuration to use
 	 * @param projectContext
@@ -78,8 +80,8 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	}
 
 	@Override
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) throws
-			AnalysisConfigurationException {
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName)
+			throws AnalysisConfigurationException {
 		final Set<AbstractPlugin> predecessors = connectedPlugin.getIncomingPlugins(true);
 		predecessors.add(connectedPlugin);
 
@@ -121,13 +123,13 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	/**
 	 * Processes the given graph.
-	 * 
+	 *
 	 * @param graph
 	 *            The graph to process
 	 */
 	@InputPort(name = INPUT_PORT_NAME_GRAPH,
 			description = "Graphs to process",
-			eventTypes = { AbstractGraph.class })
+			eventTypes = AbstractGraph.class)
 	public void processGraph(final G graph) {
 		final G processedGraph = this.performConcreteGraphProcessing(graph);
 		this.deliver(this.getGraphOutputPortName(), processedGraph);
@@ -143,7 +145,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	/**
 	 * Returns the name of the port this filter accepts graphs on.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public String getGraphInputPortName() {
@@ -152,7 +154,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	/**
 	 * This method encapsulates the concrete graph processing performed by the concrete filters.
-	 * 
+	 *
 	 * @param graph
 	 *            The graph to process
 	 * @return The processed graph, which may be the same as the input graph

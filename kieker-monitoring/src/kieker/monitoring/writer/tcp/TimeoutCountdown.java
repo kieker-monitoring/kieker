@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Countdown class for connection timeouts.
- * 
+ *
  * @author Christian Wulf
  *
  * @since 1.14
@@ -29,7 +29,7 @@ class TimeoutCountdown {
 	private long currentTimeoutInNs;
 
 	/**
-	 * @param initialTimeoutInNs	
+	 * @param initialTimeoutInNs
 	 */
 	public TimeoutCountdown(final long initialTimeoutInNs) {
 		this.currentTimeoutInNs = initialTimeoutInNs;
@@ -37,7 +37,7 @@ class TimeoutCountdown {
 
 	/**
 	 * Subtracts the given amount from the timeout.
-	 * 
+	 *
 	 * @param amountInNs
 	 *            The amount to subtract in nanoseconds
 	 */

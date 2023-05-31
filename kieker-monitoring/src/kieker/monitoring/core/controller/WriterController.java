@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.BypassQueueBehavior;
@@ -36,8 +36,6 @@ import kieker.monitoring.queue.behavior.DoNotInsertBehavior;
 import kieker.monitoring.queue.behavior.InsertBehavior;
 import kieker.monitoring.queue.behavior.TerminateOnFailedInsertBehavior;
 import kieker.monitoring.queue.putstrategy.PutStrategy;
-import kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy;
-import kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy;
 import kieker.monitoring.queue.takestrategy.TakeStrategy;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.MonitoringWriterThread;
@@ -62,6 +60,12 @@ public final class WriterController extends AbstractController implements IWrite
 	public static final String RECORD_QUEUE_INSERT_BEHAVIOR = "RecordQueueInsertBehavior";
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
+
+	/** The fully qualified name of the put strategy */
+	public static final String QUEUE_PUT_STRATEGY = "QueuePutStrategy";
+
+	/** The fully qualified name of the take strategy */
+	public static final String QUEUE_TAKE_STRATEGY = "QueueTakeStrategy";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WriterController.class);
 	/** Monitoring Writer. */
@@ -97,21 +101,25 @@ public final class WriterController extends AbstractController implements IWrite
 	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
-		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationKeys.META_DATA);
+		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationConstants.META_DATA);
 
-		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
-		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
+		this.queueCapacity = configuration.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE);
+		final String queueFqn = configuration
+				.getStringProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN);
 
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {
-			final PutStrategy putStrategy = new SPBlockingPutStrategy();
-			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
+			final String takeStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_TAKE_STRATEGY,
+					"kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy");
+			final TakeStrategy takeStrategy = newTakeStrategy(takeStrategyFqn);
+			final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY, "kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
+			final PutStrategy putStrategy = newPutStrategy(putStrategyFqn);
 			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 
-		final String writerClassName = configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME);
+		final String writerClassName = configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
 		if (this.monitoringWriter == null) {
@@ -123,10 +131,11 @@ public final class WriterController extends AbstractController implements IWrite
 
 		this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
 
-		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
+		int recordQueueInsertBehavior = configuration
+				.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
 		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
-			LOGGER.warn("Unknown value '{}' for {}{}; using default value 0", recordQueueInsertBehavior, PREFIX,
-					RECORD_QUEUE_INSERT_BEHAVIOR);
+			WriterController.LOGGER.warn("Unknown value '{}' for {}{}; using default value 0",
+					recordQueueInsertBehavior, WriterController.PREFIX, WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
 			recordQueueInsertBehavior = 0;
 		}
 
@@ -190,6 +199,30 @@ public final class WriterController extends AbstractController implements IWrite
 	// this.ringBuffer = this.disruptor.getRingBuffer();
 	// }
 
+	private TakeStrategy newTakeStrategy(final String strategyName) {
+		try {
+			final Class<?> strategyClass = Class.forName(strategyName);
+			final Constructor<? extends TakeStrategy> constructor = (Constructor<? extends TakeStrategy>) strategyClass.getConstructor();
+			return constructor.newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			LOGGER.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private PutStrategy newPutStrategy(final String strategyName) {
+		try {
+			final Class<?> strategyClass = Class.forName(strategyName);
+			final Constructor<? extends PutStrategy> constructor = (Constructor<? extends PutStrategy>) strategyClass.getConstructor();
+			return constructor.newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			LOGGER.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		}
+	}
+
 	/**
 	 * @param queueFqn
 	 *            the fully qualified queue name
@@ -208,17 +241,9 @@ public final class WriterController extends AbstractController implements IWrite
 			@SuppressWarnings("rawtypes")
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
 			return constructor.newInstance(capacity);
-		} catch (final ClassNotFoundException | InstantiationException e) {
-			LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final NoSuchMethodException | SecurityException e) {
-			LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final IllegalAccessException | IllegalArgumentException e) {
-			LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final InvocationTargetException e) {
-			LOGGER.warn("An exception occurred", e);
+		} catch (final ClassNotFoundException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException
+				| IllegalAccessException | IllegalArgumentException e) {
+			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		}
 	}
@@ -229,8 +254,8 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected final void init() {
-		LOGGER.debug("Initializing Writer Controller");
+	protected void init() {
+		WriterController.LOGGER.debug("Initializing Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.start();
@@ -238,8 +263,8 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected final void cleanup() {
-		LOGGER.debug("Shutting down Writer Controller");
+	protected void cleanup() {
+		WriterController.LOGGER.debug("Shutting down Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.terminate();
@@ -254,12 +279,12 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
 				.append("WriterController:").append("\n\tQueue type: ").append(this.writerQueue.getClass())
 				.append("\n\tQueue capacity: ").append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ").append(this.insertBehavior.toString())
-				.append("\n");
+				.append('\n');
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
@@ -270,10 +295,10 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
-			LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
+			WriterController.LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
 			this.terminate();
 		}
 

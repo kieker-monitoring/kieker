@@ -2,15 +2,15 @@
 
 pipeline {
 
-  environment {
-    DOCKER_ARGS = '--rm -u `id -u`'
-  }
-
   agent none
 
+  environment {
+    DOCKER_ARGS = ''
+  }
+
   options {
-    buildDiscarder logRotator(artifactNumToKeepStr: '10')
-    timeout(time: 1, unit: 'HOURS')
+    buildDiscarder logRotator(artifactNumToKeepStr: '3', artifactDaysToKeepStr: '5', daysToKeepStr: '4', numToKeepStr: '10')
+    timeout(time: 150, unit: 'MINUTES')
     retry(1)
     parallelsAlwaysFailFast()
   }
@@ -20,21 +20,28 @@ pipeline {
   }
 
   stages {
+    stage('Precheck') {
+      when {
+        changeRequest target: 'stable'
+      }
+      steps {
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+      }
+    }
     stage('Default Docker Stages') {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
+          alwaysPull false
           args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
         }
       }
       stages {
-        stage('Precheck') {
-          when {
-            changeRequest target: 'stable'
-          }
+        stage('Initial Cleanup') {
           steps {
-            error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+            // Make sure that no remainders from previous builds interfere.
+            sh 'df'
+            sh './gradlew clean'
           }
         }
 
@@ -42,19 +49,45 @@ pipeline {
           steps {
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
+            sh 'df'
           }
         }
 
+        stage('Static Analysis') {
+          steps {
+            sh './gradlew --parallel -x test check'
+          }
+          post {
+            always {
+              // Report results of static analysis tools
+            
+              recordIssues(
+                enabledForFailure: true,
+                tools: [
+                  java(),
+                  javaDoc(),
+                  checkStyle(
+                    pattern: '**/build/reports/checkstyle/*.xml'
+                  ),
+                  pmdParser(
+                    pattern: '**/build/reports/pmd/*.xml'
+                  ),
+                  //spotBugs(
+                  //  pattern: '**/build/reports/findbugs/*.xml'
+                  //)
+                ]
+              )
+            }
+          }
+        }
+        
         stage('Unit Test') {
           steps {
-            sh './gradlew --parallel test'
-            step([
-                $class              : 'CloverPublisher',
-                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
-                cloverReportFileName: 'clover.xml',
-                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
-                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-            ])
+            sh './gradlew --parallel test jacocoTestReport'
+            jacoco(
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
           }
           post {
             always {
@@ -63,39 +96,11 @@ pipeline {
           }
         }
 
-        stage('Static Analysis') {
-          steps {
-            sh './gradlew check'
-
-            // Report results of static analysis tools
-            checkstyle canComputeNew: false,
-                defaultEncoding: '',
-                healthy: '',
-                pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
-                unHealthy: ''
-
-            findbugs canComputeNew: false,
-                defaultEncoding: '',
-                excludePattern: '',
-                healthy: '',
-                includePattern: '',
-                pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml',
-                unHealthy: ''
-
-            pmd canComputeNew: false,
-                defaultEncoding: '',
-                healthy: '',
-                pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
-                unHealthy: ''
-          }
-        }
-        
         stage('Distribution Build') {
           steps {
-            sh './gradlew build distribute'
+            sh './gradlew -x test build publishToMavenLocal distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
-            stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
           }
         }
       }
@@ -108,12 +113,11 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           steps {
             unstash 'distributions'
-            sh './gradlew checkReleaseArchivesShort'
+            sh 'bin/dev/release-check-short.sh'
           }
           post {
             cleanup {
@@ -127,19 +131,19 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           when {
             beforeAgent true
             anyOf {
               branch 'master';
+              branch '*-RC';
               changeRequest target: 'master'
             }
           }
           steps {
             unstash 'distributions'
-            sh './gradlew checkReleaseArchives'
+            sh 'bin/dev/release-check-extended.sh'
           }
           post {
             cleanup {
@@ -152,19 +156,22 @@ pipeline {
 
     stage('Archive Artifacts') {
       agent {
-        label 'kieker-slave-docker'
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+        }
       }
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        unstash 'userguide'
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
             fingerprint: true,
             onlyIfSuccessful: true
       }
       post {
         cleanup {
           deleteDir()
+          cleanWs()
         }
       }
     }
@@ -176,15 +183,21 @@ pipeline {
       }
       parallel {
         stage('Push to Stable') {
-          agent {
-            label 'kieker-slave-docker'
-          }
+          agent any
           steps {
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            sshagent(credentials: ['kieker-key']) {
+              sh('''
+                    #!/usr/bin/env bash
+                    set +x
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    git push -v git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                 ''')
+            }
           }
           post {
             cleanup {
               deleteDir()
+              cleanWs()
             }
           }
         }
@@ -194,7 +207,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           steps {
@@ -206,7 +218,7 @@ pipeline {
                 passwordVariable: 'kiekerMavenPassword'
               )
             ]) {
-              sh './gradlew uploadArchives'
+              sh './gradlew publish'
             }
           }
           post {
@@ -217,5 +229,49 @@ pipeline {
         }
       }
     }
+    
+    stage('RC Specific Stage') {
+      when {
+        beforeAgent true
+        branch '*-RC'
+      }
+      
+      agent {
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+        }
+      }
+
+      steps {
+            unstash 'jarArtifacts'
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactupload', 
+                usernameVariable: 'kiekerMavenUser', 
+                passwordVariable: 'kiekerMavenPassword'
+              ),
+              string(
+                credentialsId: 'kieker-pgp-passphrase',
+                variable: 'PASSPHRASE'
+              ),
+              file(
+                credentialsId: 'kieker-pgp-key-2', 
+                variable: 'KEY_FILE'),
+              string(
+                credentialsId: 'kieker-key-id',
+                variable: 'KEY_ID')
+              ]) {
+              sh './gradlew signMavenJavaPublication publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
+            }
+      }
+      
+      post {
+        cleanup {
+          deleteDir()
+        }
+      }
+    }
   }
 }
+

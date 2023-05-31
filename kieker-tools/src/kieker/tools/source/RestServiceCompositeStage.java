@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.IAccessHandler;
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rest.RestServiceStage;
+import kieker.analysis.generic.source.IAccessHandler;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rest.RestServiceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
@@ -61,7 +61,9 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 	 *            configuration for the service
 	 * @throws ConfigurationException
 	 *             on configuration errors
+	 * @deprecated
 	 */
+	@Deprecated
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final String hostname = configuration.getStringProperty(RestServiceCompositeStage.SERVICE_HOSTNAME);
 		final int port = configuration.getIntProperty(RestServiceCompositeStage.SERVICE_PORT);
@@ -69,6 +71,20 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 				configuration.getStringProperty(RestServiceCompositeStage.ACCESS_HANDLER), configuration);
 
 		this.serviceStage = new RestServiceStage(hostname, port, accessRestrictionHandler);
+	}
+
+	/**
+	 * Create a source composite stage for rest services.
+	 *
+	 * @param hostname
+	 *            hostname to listen to
+	 * @param port
+	 *            port to listen on
+	 * @param accessHandler
+	 *            controls access to the rest service
+	 */
+	public RestServiceCompositeStage(final String hostname, final int port, final IAccessHandler accessHandler) {
+		this.serviceStage = new RestServiceStage(hostname, port, accessHandler);
 	}
 
 	@Override

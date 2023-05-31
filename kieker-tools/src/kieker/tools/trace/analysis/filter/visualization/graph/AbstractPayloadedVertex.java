@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 /**
  * Abstract superclass for "payloaded" vertices, i.e. vertices with attached objects.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <V>
  *            The type of the graph's vertices
  * @param <E>
@@ -29,7 +28,7 @@ package kieker.tools.trace.analysis.filter.visualization.graph;
  *            The type of the graph's elements origin
  * @param <P>
  *            The type of the payload
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<V, E, O, P>, E extends AbstractEdge<V, E, O>, O, P> extends AbstractVertex<V, E, O> {
@@ -38,7 +37,7 @@ public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<
 
 	/**
 	 * Creates a new vertex with the given origin and payload.
-	 * 
+	 *
 	 * @param origin
 	 *            The vertex' origin
 	 * @param originPolicy
@@ -53,7 +52,7 @@ public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<
 
 	/**
 	 * Returns this vertex' payload.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public P getPayload() {

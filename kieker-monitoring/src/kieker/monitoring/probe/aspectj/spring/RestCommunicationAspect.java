@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * Aspect for transmitting the Kieker traceId and orderIndex from a caller
  * application to a callee application with Spring.
- * 
+ *
  * @author Felix Eichhorst
  *
  * @since 1.14
@@ -57,16 +57,16 @@ public class RestCommunicationAspect {
 	}
 
 	/**
-	 * Pointcut listening to the request creation after the use of RestTemplate
+	 * Pointcut listening to the request creation after the use of RestTemplate.
 	 */
 	@Pointcut("execution(protected * org.springframework.http.client.support.HttpAccessor.createRequest(..))")
-	private void requestCreation() {	// NOPMD (pointcut)
+	private void requestCreation() { // NOPMD (pointcut)
 		// pointcut
 	}
 
-	/** Pointcut listening to the service method on incoming messages */
+	/** Pointcut listening to the service method on incoming messages. */
 	@Pointcut("execution(protected * org.springframework.web.servlet.FrameworkServlet.service(..))")
-	private void frameworkServletService() {	// NOPMD (pointcut)
+	private void frameworkServletService() { // NOPMD (pointcut)
 		// pointcut
 	}
 

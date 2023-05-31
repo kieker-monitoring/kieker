@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (https://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ public class ReadOnlyConfiguration extends Configuration {
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized Object setProperty(final String key, final String value) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
@@ -58,37 +57,31 @@ public class ReadOnlyConfiguration extends Configuration {
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void clear() {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void load(final InputStream inStream) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void load(final Reader reader) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void loadFromXML(final InputStream in) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized void putAll(final Map<? extends Object, ? extends Object> t) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 
 	@Override
-	@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 	public synchronized Object remove(final Object key) {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}

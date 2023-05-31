@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.tools.util.bookstore.filter.sessionReconstruction;
 
 import java.util.List;
@@ -33,10 +32,10 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Utility functions for the test of the {@link SessionReconstructionFilter}.
- * 
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  */
 public class SessionReconstructionTestUtil { // NOPMD (UseSingleton) NOCS (MissingCtorCheck)
 
@@ -46,7 +45,7 @@ public class SessionReconstructionTestUtil { // NOPMD (UseSingleton) NOCS (Missi
 
 	/**
 	 * Creates a new test setup that produces execution trace-based sessions from a list of execution records.
-	 * 
+	 *
 	 * @param records
 	 *            The records to process
 	 * @param maxThinkTime
@@ -60,7 +59,7 @@ public class SessionReconstructionTestUtil { // NOPMD (UseSingleton) NOCS (Missi
 		final AnalysisController analysisController = new AnalysisController();
 
 		// Initialize and register the list reader
-		final ListReader<OperationExecutionRecord> listReader = new ListReader<OperationExecutionRecord>(new Configuration(), analysisController);
+		final ListReader<OperationExecutionRecord> listReader = new ListReader<>(new Configuration(), analysisController);
 		listReader.addAllObjects(records);
 
 		// Initialize and register the system model repository
@@ -91,11 +90,11 @@ public class SessionReconstructionTestUtil { // NOPMD (UseSingleton) NOCS (Missi
 				sessionReconstructionFilter, SessionReconstructionFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
 
 		// Initialize, register and connect the list collection filter
-		final ListCollectionFilter<ExecutionTraceBasedSession> listCollectionFilter = new ListCollectionFilter<ExecutionTraceBasedSession>(new Configuration(),
+		final ListCollectionFilter<ExecutionTraceBasedSession> listCollectionFilter = new ListCollectionFilter<>(new Configuration(),
 				analysisController);
 		analysisController.connect(sessionReconstructionFilter, SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS,
 				listCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
-		return new SessionReconstructionTestSetup<ExecutionTraceBasedSession>(analysisController, listCollectionFilter);
+		return new SessionReconstructionTestSetup<>(analysisController, listCollectionFilter);
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,25 @@ import kieker.analysis.plugin.IPlugin;
 
 /**
  * This is the interface for reader plugins.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public interface IReaderPlugin extends IPlugin {
 
 	/**
 	 * Starts the reader. This method is intended to be a blocking operation,
 	 * i.e., it is assumed that reading has finished before this method returns.
 	 * The method should indicate an error by the return value false.
-	 * 
+	 *
 	 * In asynchronous scenarios, the {@link kieker.analysis.plugin.IPlugin#terminate(boolean)} method can be used
 	 * to initiate the termination of this method.
-	 * 
+	 *
 	 * @return true if reading was successful; false if an error occurred
-	 * 
+	 *
 	 * @since 1.2
 	 */
 	public boolean read();

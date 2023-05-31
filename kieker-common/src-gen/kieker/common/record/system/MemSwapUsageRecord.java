@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.3
  */
@@ -51,6 +51,18 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"memTotal",
+		"memUsed",
+		"memFree",
+		"swapTotal",
+		"swapUsed",
+		"swapFree",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -61,18 +73,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	private static final long serialVersionUID = 638480390439299363L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"memTotal",
-		"memUsed",
-		"memFree",
-		"swapTotal",
-		"swapUsed",
-		"swapFree",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -161,7 +161,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -276,4 +276,37 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 		return this.swapFree;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MemSwapUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "memTotal = ";
+		result += this.getMemTotal() + ", ";
+		
+		result += "memUsed = ";
+		result += this.getMemUsed() + ", ";
+		
+		result += "memFree = ";
+		result += this.getMemFree() + ", ";
+		
+		result += "swapTotal = ";
+		result += this.getSwapTotal() + ", ";
+		
+		result += "swapUsed = ";
+		result += this.getSwapUsed() + ", ";
+		
+		result += "swapFree = ";
+		result += this.getSwapFree() + ", ";
+		
+		return result;
+	}
 }

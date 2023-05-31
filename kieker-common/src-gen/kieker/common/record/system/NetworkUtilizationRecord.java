@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.12
  */
@@ -69,6 +69,27 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"interfaceName",
+		"speed",
+		"txBytesPerSecond",
+		"txCarrierPerSecond",
+		"txCollisionsPerSecond",
+		"txDroppedPerSecond",
+		"txErrorsPerSecond",
+		"txOverrunsPerSecond",
+		"txPacketsPerSecond",
+		"rxBytesPerSecond",
+		"rxDroppedPerSecond",
+		"rxErrorsPerSecond",
+		"rxFramePerSecond",
+		"rxOverrunsPerSecond",
+		"rxPacketsPerSecond",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -88,27 +109,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
 	private static final long serialVersionUID = 7799663712343478641L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"interfaceName",
-		"speed",
-		"txBytesPerSecond",
-		"txCarrierPerSecond",
-		"txCollisionsPerSecond",
-		"txDroppedPerSecond",
-		"txErrorsPerSecond",
-		"txOverrunsPerSecond",
-		"txPacketsPerSecond",
-		"rxBytesPerSecond",
-		"rxDroppedPerSecond",
-		"rxErrorsPerSecond",
-		"rxFramePerSecond",
-		"rxOverrunsPerSecond",
-		"rxPacketsPerSecond",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -251,7 +251,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -447,4 +447,64 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.rxPacketsPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "NetworkUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "interfaceName = ";
+		result += this.getInterfaceName() + ", ";
+		
+		result += "speed = ";
+		result += this.getSpeed() + ", ";
+		
+		result += "txBytesPerSecond = ";
+		result += this.getTxBytesPerSecond() + ", ";
+		
+		result += "txCarrierPerSecond = ";
+		result += this.getTxCarrierPerSecond() + ", ";
+		
+		result += "txCollisionsPerSecond = ";
+		result += this.getTxCollisionsPerSecond() + ", ";
+		
+		result += "txDroppedPerSecond = ";
+		result += this.getTxDroppedPerSecond() + ", ";
+		
+		result += "txErrorsPerSecond = ";
+		result += this.getTxErrorsPerSecond() + ", ";
+		
+		result += "txOverrunsPerSecond = ";
+		result += this.getTxOverrunsPerSecond() + ", ";
+		
+		result += "txPacketsPerSecond = ";
+		result += this.getTxPacketsPerSecond() + ", ";
+		
+		result += "rxBytesPerSecond = ";
+		result += this.getRxBytesPerSecond() + ", ";
+		
+		result += "rxDroppedPerSecond = ";
+		result += this.getRxDroppedPerSecond() + ", ";
+		
+		result += "rxErrorsPerSecond = ";
+		result += this.getRxErrorsPerSecond() + ", ";
+		
+		result += "rxFramePerSecond = ";
+		result += this.getRxFramePerSecond() + ", ";
+		
+		result += "rxOverrunsPerSecond = ";
+		result += this.getRxOverrunsPerSecond() + ", ";
+		
+		result += "rxPacketsPerSecond = ";
+		result += this.getRxPacketsPerSecond() + ", ";
+		
+		return result;
+	}
 }

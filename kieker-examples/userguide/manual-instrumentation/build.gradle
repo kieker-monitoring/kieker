@@ -1,0 +1,36 @@
+plugins {
+	id 'application'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'ch.qos.logback:logback-classic:1.4.7'
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+
+	implementation "net.kieker-monitoring:kieker:${kiekerVersion}:emf"
+}
+
+distTar.enabled=false
+
+// Simplify the JAR's file name
+archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
+version = ''
+
+sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+task runMonitoring(type: JavaExec) {
+	main = 'kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task runAnalysis(type: JavaExec) {
+	main = 'kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [System.getProperty("analysis.directory", ".")]
+}

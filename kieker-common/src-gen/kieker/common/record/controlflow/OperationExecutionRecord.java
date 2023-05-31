@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 0.91
  */
@@ -58,6 +58,18 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"operationSignature",
+		"sessionId",
+		"traceId",
+		"tin",
+		"tout",
+		"hostname",
+		"eoi",
+		"ess",
+	};
+	
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
@@ -69,24 +81,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public static final int ESS = NO_EOI_ESS;
 	private static final long serialVersionUID = -7768272829642950711L;
 	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"operationSignature",
-		"sessionId",
-		"traceId",
-		"tin",
-		"tout",
-		"hostname",
-		"eoi",
-		"ess",
-	};
-	
 	/** property declarations. */
 	private final String operationSignature;
 	private final String sessionId;
 	private final long traceId;
-	private final long tin;
-	private final long tout;
+	private long tin;
+	private long tout;
 	private final String hostname;
 	private final int eoi;
 	private final int ess;
@@ -168,7 +168,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -263,11 +263,17 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		return this.tin;
 	}
 	
+	public final void setTin(long tin) {
+		this.tin = tin;
+	}
 	
 	public final long getTout() {
 		return this.tout;
 	}
 	
+	public final void setTout(long tout) {
+		this.tout = tout;
+	}
 	
 	public final String getHostname() {
 		return this.hostname;
@@ -283,4 +289,37 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		return this.ess;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "OperationExecutionRecord: ";
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "tin = ";
+		result += this.getTin() + ", ";
+		
+		result += "tout = ";
+		result += this.getTout() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "eoi = ";
+		result += this.getEoi() + ", ";
+		
+		result += "ess = ";
+		result += this.getEss() + ", ";
+		
+		return result;
+	}
 }

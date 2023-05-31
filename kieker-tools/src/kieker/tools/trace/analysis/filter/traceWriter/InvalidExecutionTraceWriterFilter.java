@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package kieker.tools.trace.analysis.filter.traceWriter;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -35,7 +36,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A filter allowing to write the incoming InvalidExecutionTraces into a configured file", repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -68,7 +71,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		super(configuration, projectContext);
 
 		this.outputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
+		this.ps = new PrintStream(Files.newOutputStream(Paths.get(this.outputFn)), false, ENCODING);
 	}
 
 	@Override
@@ -99,8 +102,8 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES, description = "Receives the invalid execution traces to be written", eventTypes = {
-		InvalidExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES, description = "Receives the invalid execution traces to be written",
+			eventTypes = InvalidExecutionTrace.class)
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		InvalidExecutionTraceWriterFilter.this.ps.println(et.getInvalidExecutionTraceArtifacts().toString());
 		InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());

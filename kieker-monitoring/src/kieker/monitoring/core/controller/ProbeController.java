@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,19 @@ package kieker.monitoring.core.controller;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -47,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import kieker.common.configuration.Configuration;
 import kieker.common.util.map.BoundedConcurrentHashMap;
 import kieker.common.util.map.BoundedConcurrentHashMap.BoundedCacheBehaviour;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
@@ -83,16 +86,17 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
-		this.enabled = configuration.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED);
+		this.enabled = configuration.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED);
 		if (this.enabled) {
-			this.configFilePathname = configuration.getPathProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE);
+			this.configFilePathname = configuration
+					.getPathProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE);
 			this.configFileUpdate = configuration
-					.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
+					.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
 			this.configFileReadIntervall = configuration
-					.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
-			this.maxCacheSize = configuration.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+					.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+			this.maxCacheSize = configuration.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
 			this.boundedCacheBehaviour = configuration
-					.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+					.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
 			if (this.maxCacheSize >= 0) {
 				// Bounded cache
 				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour;
@@ -107,8 +111,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 					behaviour = BoundedCacheBehaviour.CLEAR_CACHE;
 					break;
 				default:
-					LOGGER.warn("Unexpected value for property '{}'. Using default value 0.",
-							ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+					ProbeController.LOGGER.warn("Unexpected value for property '{}'. Using default value 0.",
+							ConfigurationConstants.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
 
 					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
 					break;
@@ -117,8 +121,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 				if (this.maxCacheSize >= 1) {
 					cacheSize = this.maxCacheSize;
 				} else {
-					LOGGER.warn("Invalid value for property '{}'. Using default value 100.",
-							ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+					ProbeController.LOGGER.warn("Invalid value for property '{}'. Using default value 100.",
+							ConfigurationConstants.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
 
 					cacheSize = 100;
 				}
@@ -151,9 +155,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 						this.configFileReadIntervall, TimeUnit.SECONDS);
 			} else {
 				if ((this.configFileReadIntervall > 0) && (null == scheduler)) {
-					LOGGER.warn(
+					ProbeController.LOGGER.warn(
 							"Failed to enable regular reading of adaptive monitoring config file. '{}' must be > 0!",
-							ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+							ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 				}
 			}
 		}
@@ -161,7 +165,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	@Override
 	protected void cleanup() {
-		LOGGER.debug("Shutting down Probe Controller");
+		ProbeController.LOGGER.debug("Shutting down Probe Controller");
 	}
 
 	@Override
@@ -236,7 +240,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 */
 	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
-			LOGGER.warn("Adapative Monitoring is disabled!");
+			ProbeController.LOGGER.warn("Adapative Monitoring is disabled!");
 			return;
 		}
 
@@ -270,11 +274,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 				// ignore comment
 				break;
 			default:
-				LOGGER.warn("Each line should either start with '+', '-', or '#'. Ignoring: {}", pattern);
+				ProbeController.LOGGER.warn("Each line should either start with '+', '-', or '#'. Ignoring: {}",
+						pattern);
 				break;
 			}
 		} catch (final InvalidPatternException ex) {
-			LOGGER.error("'{}' is not a valid pattern.", pattern.substring(1), ex);
+			ProbeController.LOGGER.error("'{}' is not a valid pattern.", pattern.substring(1), ex);
 		}
 	}
 
@@ -292,7 +297,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	@Override
 	public List<String> getProbePatternList() {
 		if (!this.enabled) {
-			LOGGER.warn("Adapative Monitoring is disabled!");
+			ProbeController.LOGGER.warn("Adapative Monitoring is disabled!");
 			return new ArrayList<>(0);
 		}
 		synchronized (this) {
@@ -314,7 +319,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, List<String>> getParameters(final String pattern) {
+	public Map<String, List<String>> getAllPatternParameters(final String pattern) {
 		synchronized (this) {
 			return this.patternListParameters.get(pattern);
 		}
@@ -325,7 +330,20 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteParameterEntry(final String pattern) {
+	public void deletePatternParameter(final String pattern, final String name) {
+		synchronized (this) {
+			final Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters != null) {
+				parameters.remove(name);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearPatternParameters(final String pattern) {
 		synchronized (this) {
 			this.patternListParameters.remove(pattern);
 		}
@@ -335,19 +353,43 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters) {
+	public void addPatternParameter(final String pattern, final String name, final List<String> values) {
 		synchronized (this) {
-			this.patternListParameters.get(pattern).put(parameterName, parameters);
+			Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters == null) {
+				parameters = new HashMap<>();
+				this.patternListParameters.put(pattern, parameters);
+			}
+			parameters.put(name, values);
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap) {
+	public void addPatternParameterValue(final String pattern, final String name, final String value) {
 		synchronized (this) {
-			this.patternListParameters.put(pattern, parameterMap);
+			Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters == null) {
+				parameters = new HashMap<>();
+				this.patternListParameters.put(pattern, parameters);
+				final List<String> values = new ArrayList<>();
+				values.add(value);
+				parameters.put(name, values);
+			} else {
+				parameters.get(name).add(value);
+			}
+		}
+	}
+
+	@Override
+	public void removePatternParameterValue(final String pattern, final String name, final String value) {
+		synchronized (this) {
+			final Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters != null) {
+				final List<String> values = parameters.get(name);
+				if (values != null) {
+					values.remove(value);
+				}
+			}
 		}
 	}
 
@@ -360,8 +402,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {
-			final ListIterator<PatternEntry> patternListIterator = this.patterns
-					.listIterator(this.patterns.size());
+			final ListIterator<PatternEntry> patternListIterator = this.patterns.listIterator(this.patterns.size());
 			while (patternListIterator.hasPrevious()) {
 				final PatternEntry patternEntry = patternListIterator.previous();
 				if (patternEntry.getPattern().matcher(signature).matches()) {
@@ -379,7 +420,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	private boolean addPattern(final String strPattern, final boolean activated) {
 		if (!this.enabled) {
-			LOGGER.warn("Adapative Monitoring is disabled!");
+			ProbeController.LOGGER.warn("Adapative Monitoring is disabled!");
 			return false;
 		}
 		synchronized (this) {
@@ -389,7 +430,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			try {
 				pattern = PatternParser.parseToPattern(strPattern);
 			} catch (final InvalidPatternException ex) {
-				LOGGER.error("'{}' is not a valid pattern.", strPattern, ex);
+				ProbeController.LOGGER.error("'{}' is not a valid pattern.", strPattern, ex);
 				return false;
 			}
 			this.patterns.add(new PatternEntry(strPattern, pattern, activated));
@@ -403,8 +444,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private void updatePatternFile() { // only called within synchronized
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(this.configFilePathname, false), ENCODING)));
+			pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+					Files.newOutputStream(Paths.get(this.configFilePathname), StandardOpenOption.CREATE),
+					ProbeController.ENCODING)));
 			pw.print("## Adaptive Monitoring Config File: ");
 			pw.println(this.configFilePathname);
 			pw.print("## written on: ");
@@ -417,14 +459,14 @@ public class ProbeController extends AbstractController implements IProbeControl
 				pw.println(string);
 			}
 		} catch (final IOException ex) {
-			LOGGER.error("Updating Adaptive Monitoring config file failed.", ex);
+			ProbeController.LOGGER.error("Updating Adaptive Monitoring config file failed.", ex);
 		} finally {
 			if (pw != null) {
 				pw.close();
 			}
 		}
 		this.configFileReader.lastModifiedTimestamp = System.currentTimeMillis();
-		LOGGER.info("Updating Adaptive Monitoring config file succeeded.");
+		ProbeController.LOGGER.info("Updating Adaptive Monitoring config file succeeded.");
 	}
 
 	/**
@@ -455,12 +497,13 @@ public class ProbeController extends AbstractController implements IProbeControl
 				if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
 					if (lastModified > this.lastModifiedTimestamp) {
 						this.lastModifiedTimestamp = lastModified;
-						reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING));
+						reader = Files.newBufferedReader(file.toPath(), Charset.forName(ProbeController.ENCODING)); // NOPMD allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), false);
 							return;
 						} catch (final IOException ex) {
-							LOGGER.warn("Error reading adaptive monitoring config file: {}", this.configFilePathname, ex);
+							ProbeController.LOGGER.warn("Error reading adaptive monitoring config file: {}",
+									this.configFilePathname, ex);
 						}
 					} else {
 						return; // nothing do this time
@@ -475,7 +518,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 					try {
 						reader.close();
 					} catch (final IOException ex) {
-						LOGGER.error("Failed to close file: {}", this.configFilePathname, ex);
+						ProbeController.LOGGER.error("Failed to close file: {}", this.configFilePathname, ex);
 					}
 				}
 			}
@@ -484,12 +527,15 @@ public class ProbeController extends AbstractController implements IProbeControl
 					final URL configFileAsResource = MonitoringController.class.getClassLoader()
 							.getResource(this.configFilePathname);
 					if (null != configFileAsResource) {
-						reader = new BufferedReader(new InputStreamReader(configFileAsResource.openStream(), ENCODING));
+						reader = new BufferedReader(
+								new InputStreamReader(configFileAsResource.openStream(), Charset.forName(ProbeController.ENCODING))); // NOPMD
+						// allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), true);
 							return;
 						} catch (final IOException ex) {
-							LOGGER.warn("Error reading adaptive monitoring config file: {}", this.configFilePathname, ex);
+							ProbeController.LOGGER.warn("Error reading adaptive monitoring config file: {}",
+									this.configFilePathname, ex);
 						}
 					}
 				} catch (final SecurityException ex) { // NOPMD NOCS
@@ -501,11 +547,11 @@ public class ProbeController extends AbstractController implements IProbeControl
 						try {
 							reader.close();
 						} catch (final IOException ex) {
-							LOGGER.error("Failed to close file: {}", this.configFilePathname, ex);
+							ProbeController.LOGGER.error("Failed to close file: {}", this.configFilePathname, ex);
 						}
 					}
 				}
-				LOGGER.warn("Adaptive monitoring config file not found: {}", this.configFilePathname);
+				ProbeController.LOGGER.warn("Adaptive monitoring config file not found: {}", this.configFilePathname);
 			}
 		}
 

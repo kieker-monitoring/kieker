@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -47,10 +47,8 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
 	
-	private static final long serialVersionUID = -5955568375346711225L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -58,6 +56,8 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		"loadedClassCount",
 		"unloadedClassCount",
 	};
+	
+	private static final long serialVersionUID = -5955568375346711225L;
 	
 	/** property declarations. */
 	private final long totalLoadedClassCount;
@@ -127,7 +127,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -209,4 +209,31 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		return this.unloadedClassCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ClassLoadingRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "totalLoadedClassCount = ";
+		result += this.getTotalLoadedClassCount() + ", ";
+		
+		result += "loadedClassCount = ";
+		result += this.getLoadedClassCount() + ", ";
+		
+		result += "unloadedClassCount = ";
+		result += this.getUnloadedClassCount() + ", ";
+		
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 import java.util.Collections;
@@ -22,12 +21,12 @@ import java.util.Set;
 
 /**
  * Superclass for graph elements, i.e. edges and vertices, in the visualization package.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <O>
  *            The type of the objects which caused the creation of this graph element
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractGraphElement<O> {
@@ -35,11 +34,11 @@ public abstract class AbstractGraphElement<O> {
 	private volatile Color color = Color.BLACK;
 	private volatile String description;
 
-	private final Set<O> origins = new HashSet<O>();
+	private final Set<O> origins = new HashSet<>();
 
 	/**
 	 * This constructor initializes the element based on the given parameters.
-	 * 
+	 *
 	 * @param origin
 	 *            The origin of this element.
 	 * @param originPolicy
@@ -51,7 +50,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Returns this graph element's color.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Color getColor() {
@@ -60,7 +59,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Sets this graph element's color.
-	 * 
+	 *
 	 * @param color
 	 *            The color to set
 	 */
@@ -70,7 +69,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Returns this graph element's description.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public String getDescription() {
@@ -79,7 +78,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Sets this graph element's description.
-	 * 
+	 *
 	 * @param description
 	 *            The description to set
 	 */
@@ -89,7 +88,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Returns the objects which caused the creation of this element.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Set<O> getOrigins() {
@@ -98,7 +97,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Adds a new origin object to this element.
-	 * 
+	 *
 	 * @param origin
 	 *            The origin object
 	 */
@@ -110,7 +109,7 @@ public abstract class AbstractGraphElement<O> {
 
 	/**
 	 * Returns an identifier for this graph element (e.g., a label).
-	 * 
+	 *
 	 * @return An identifier or {@code null} if no identifier can be determined
 	 */
 	public abstract String getIdentifier();

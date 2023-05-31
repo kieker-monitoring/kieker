@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final ByteBuffer recordBuffer;
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
-	/** the serializer to use for the incoming records */
+	/** The serializer to use for the incoming records. */
 	private final IValueSerializer serializer;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {

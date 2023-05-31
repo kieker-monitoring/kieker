@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +54,13 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 	@Test
 	public void testETSPredictor() { // NOPMD assertEqualsWithTolerance is a custom method
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
-		final List<Double> expectedValues = new ArrayList<Double>(values.length);
+		final List<Double> expectedValues = new ArrayList<>(values.length);
 		for (final Double curVal : values) {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS,
+				TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, ETSForecasterTest.CONFIDENCE_LEVEL);

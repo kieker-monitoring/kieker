@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package kieker.tools.trace.analysis.filter.visualization.sequenceDiagram;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -58,7 +58,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A filter allowing to write the incoming data into a sequence diagram", repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -165,27 +167,23 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			LOGGER.debug("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
 					+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (Inline Conditional)
 			LOGGER.debug("Pic files can be converted using the pic2plot tool (package plotutils)");
-			LOGGER.debug("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS (Inline Conditional)
-					+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
+			LOGGER.debug("Example: pic2plot -T svg " + this.outputFnBase + "-" + (numPlots > 0 ? lastSuccessTracesId : "<traceId>") // NOCS (Inline Conditional)
+					+ ".pic > " + this.outputFnBase + "-" + (numPlots > 0 ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 		}
 	}
 
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = {
-				MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,
 					SequenceDiagramFilter.this.sdmode,
 					SequenceDiagramFilter.this.outputFnBase + "-" + ((AbstractTrace) mt).getTraceId() + ".pic", SequenceDiagramFilter.this.shortLabels);
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
-		} catch (final FileNotFoundException ex) {
+		} catch (final IOException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
 			this.logger.error("File not found", ex);
-		} catch (final UnsupportedEncodingException ex) {
-			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			this.logger.error("Encoding not supported", ex);
 		}
 	}
 
@@ -355,18 +353,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *            Determines whether to use short labels or not.
 	 * @param outputFilename
 	 *            The name of the file in which the code will be written.
-	 *
-	 * @throws FileNotFoundException
-	 *             If the given file is somehow invalid.
-	 * @throws UnsupportedEncodingException
-	 *             If the used default encoding is not supported.
+	 * @throws IOException
+	 *             on read error
 	 */
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
-			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);
-		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
-		ps.flush();
-		ps.close();
+			final String outputFilename, final boolean shortLabels) throws IOException {
+		try (OutputStream stream = Files.newOutputStream(Paths.get(outputFilename))) {
+			final PrintStream ps = new PrintStream(stream, false, ENCODING);
+
+			SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
+			ps.flush();
+			ps.close();
+		}
 	}
 
 	@Override

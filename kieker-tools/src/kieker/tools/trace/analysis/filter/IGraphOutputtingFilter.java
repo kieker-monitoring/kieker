@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 
 /**
  * Interface for graph-outputting filters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The type of the output graph
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 has no ressemblence in the teetime port
  */
+@Deprecated
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
@@ -37,9 +39,9 @@ public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * Returns the name of the port this filter uses to emit the graph.
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public String getGraphOutputPortName();

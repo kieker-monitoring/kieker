@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.tools.junit.trace.analysis.filter.visualization.descriptions;
 
 import java.util.ArrayList;
@@ -46,9 +45,9 @@ import kieker.test.tools.util.bookstore.graph.GraphTestSetup;
 
 /**
  * Test suite for the description decorator filter.
- * 
+ *
  * @author Holger Knoche, Nils Christian Ehmke
- * 
+ *
  * @since 1.6
  */
 public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
@@ -78,7 +77,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Initializes the test setup.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the preparation of the analysis failed.
 	 */
@@ -105,7 +104,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 	}
 
 	private static List<OperationExecutionRecord> createExecutionRecords() {
-		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
+		final List<OperationExecutionRecord> records = new ArrayList<>();
 		int eoi = -1;
 		int time = 0;
 
@@ -116,7 +115,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 	}
 
 	private static DescriptionRepository prepareDescriptionRepository(final AnalysisController analysisController) {
-		final ConcurrentMap<String, String> descriptions = new ConcurrentHashMap<String, String>();
+		final ConcurrentMap<String, String> descriptions = new ConcurrentHashMap<>();
 
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_1, DESCRIPTION_1);
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_2, DESCRIPTION_2);
@@ -134,7 +133,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

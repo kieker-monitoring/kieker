@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
@@ -45,19 +45,19 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		int.class, // ConstructionEvent.objectId
 	};
 	
-	/** default constants. */
-	public static final String CLASS_SIGNATURE = "";
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 5435515970872711524L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"classSignature",
 		"objectId",
 	};
+	
+	/** default constants. */
+	public static final String CLASS_SIGNATURE = "";
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = 5435515970872711524L;
 	
 	/** property declarations. */
 	private final String classSignature;
@@ -121,7 +121,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -194,4 +194,28 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		return this.objectId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ConstructionEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+		
+		return result;
+	}
 }

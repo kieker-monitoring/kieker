@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,23 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Tom Frotscher, Thomas Duellmann
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class StorableDetectionResult extends AbstractMonitoringRecord  {			
+public class StorableDetectionResult extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE; // StorableDetectionResult.score
-	
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			+ TYPE_SIZE_DOUBLE; // StorableDetectionResult.score
+
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
 		double.class, // StorableDetectionResult.value
@@ -45,27 +43,27 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		double.class, // StorableDetectionResult.forecast
 		double.class, // StorableDetectionResult.score
 	};
-	
-	/** default constants. */
-	public static final String APPLICATION_NAME = "";
-	private static final long serialVersionUID = -758350040827117227L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"value",
 		"timestamp",
 		"forecast",
 		"score",
 	};
-	
+
+	/** default constants. */
+	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = -758350040827117227L;
+
 	/** property declarations. */
 	private final String applicationName;
 	private final double value;
 	private final long timestamp;
 	private final double forecast;
 	private final double score;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -81,21 +79,18 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	 *            score
 	 */
 	public StorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score) {
-		this.applicationName = applicationName == null?"":applicationName;
+		this.applicationName = applicationName == null ? "" : applicationName;
 		this.value = value;
 		this.timestamp = timestamp;
 		this.forecast = forecast;
 		this.score = score;
 	}
 
-
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public StorableDetectionResult(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.applicationName = deserializer.getString();
@@ -104,20 +99,19 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		this.forecast = deserializer.getDouble();
 		this.score = deserializer.getDouble();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putDouble(this.getValue());
 		serializer.putLong(this.getTimestamp());
 		serializer.putDouble(this.getForecast());
 		serializer.putDouble(this.getScore());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -125,15 +119,15 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -142,7 +136,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,7 +150,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -177,9 +170,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,36 +181,32 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	public int hashCode() {
 		int code = 0;
 		code += this.getApplicationName().hashCode();
-		code += ((int)this.getValue());
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getForecast());
-		code += ((int)this.getScore());
-		
+		code += ((int) this.getValue());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getForecast());
+		code += ((int) this.getScore());
+
 		return code;
 	}
-	
+
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-	
-	
+
 	public final double getValue() {
 		return this.value;
 	}
-	
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final double getForecast() {
 		return this.forecast;
 	}
-	
-	
+
 	public final double getScore() {
 		return this.score;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public final class BookstoreEventRecordFactoryStarter {
 		final String hostname = "srv0";
 		long traceId = 688434;
 
-		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> allRecords = new ArrayList<>();
 
 		final TraceEventRecords validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId,
 				hostname);

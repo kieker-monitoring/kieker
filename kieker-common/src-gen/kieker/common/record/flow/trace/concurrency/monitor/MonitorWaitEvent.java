@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.8
  */
@@ -43,15 +43,15 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	private static final long serialVersionUID = -4024730304031335972L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"lockId",
 	};
+	
+	private static final long serialVersionUID = -4024730304031335972L;
 	
 	
 	/**
@@ -105,7 +105,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -165,4 +165,25 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 		return code;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MonitorWaitEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "lockId = ";
+		result += this.getLockId() + ", ";
+		
+		return result;
+	}
 }

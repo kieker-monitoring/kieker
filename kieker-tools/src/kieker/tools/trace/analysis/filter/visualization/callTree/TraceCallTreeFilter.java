@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package kieker.tools.trace.analysis.filter.visualization.callTree;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import kieker.analysis.IProjectContext;
@@ -42,14 +43,16 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
 /**
  * Plugin providing the creation of calling trees both for individual traces
  * and an aggregated form for multiple traces.<br>
- * 
+ *
  * This class has exactly one input port named "in". The data which is sent to
  * this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
@@ -75,7 +78,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -122,12 +125,12 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
-	public void inputMessageTraces(final MessageTrace mt) {
+			eventTypes = MessageTrace.class)
+	public void inputMessageTraces(final MessageTrace mt) throws IOException {
 		try {
-			final TraceCallTreeNode rootNode =
-					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
-							NoOriginRetentionPolicy.createInstance()); // rootNode
+			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
+					true, mt,
+					NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
 				@Override

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,14 +36,12 @@ import org.slf4j.LoggerFactory;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
-import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.plugin.filter.visualization.IWebVisualizationFilterPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -56,7 +54,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  * @author Nils Christian Ehmke, Jan Waller
  *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
@@ -97,22 +97,15 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 		}
 		// ignore possible outputPorts for IWebVisualizationFilters
-		if (!(this instanceof IWebVisualizationFilterPlugin)) {
-			for (final OutputPort outputPort : annotation.outputPorts()) {
-				if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
-					this.logger.error("Two OutputPorts use the same name: {}", outputPort.name());
-				}
-				Class<?>[] outTypes = outputPort.eventTypes();
-				if (outTypes.length == 0) {
-					outTypes = new Class<?>[] { Object.class };
-				}
-				this.outputPortTypes.put(outputPort, outTypes);
+		for (final OutputPort outputPort : annotation.outputPorts()) {
+			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
+				this.logger.error("Two OutputPorts use the same name: {}", outputPort.name());
 			}
-		} else {
-			// But inform the user about these invalid ports
-			for (final OutputPort outputPort : annotation.outputPorts()) {
-				this.logger.warn("Invalid port for visualization filter detected. Port is ignored: {}", outputPort.name());
+			Class<?>[] outTypes = outputPort.eventTypes();
+			if (outTypes.length == 0) {
+				outTypes = new Class<?>[] { Object.class };
 			}
+			this.outputPortTypes.put(outputPort, outTypes);
 		}
 
 		// Get all input ports.

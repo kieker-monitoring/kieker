@@ -4,13 +4,15 @@ KIEKER_DIR="$1"
 OUTDIR="$2"
 EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
 
+KIEKER_VERSION="2.0.0-SNAPSHOT"
+
 TOOL_DIR=`mktemp -d`
 
-TAR_NAME="${KIEKER_DIR}/tools/trace-analysis-1.14-SNAPSHOT.tar"
+ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-${KIEKER_VERSION}.zip"
 
-( cd ${TOOL_DIR} ; tar -xvpf ${TAR_NAME} )
+( cd ${TOOL_DIR} ; unzip -o ${ZIP_NAME} )
 
-TOOL_NAME=`basename ${TAR_NAME} | sed 's/\.tar$//g'`
+TOOL_NAME=`basename ${ZIP_NAME} | sed 's/\.zip$//g'`
 
 TRACE_ANALYSIS_SH=${TOOL_DIR}/$TOOL_NAME/bin/trace-analysis
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
@@ -28,7 +30,7 @@ if ! test -x "${TRACE_ANALYSIS_SH}"; then
 fi
 
 if ! test -x "${FILE_CONVERTER_SH}"; then
-    echo "${TRACE_ANALYSIS_SH} does not exist or is not executable"
+    echo "${FILE_CONVERTER_SH} does not exist or is not executable"
     exit 1
 fi
 

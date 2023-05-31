@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,20 @@ import java.util.Comparator;
 import kieker.tools.trace.analysis.systemModel.util.TraceStartTimestampComparator;
 
 /**
- * Specialized sub-class for sessions based on message traces (see {@link MessageTrace}).
- * 
+ * Specialized sub-class for sessions based on message traces (see
+ * {@link MessageTrace}).
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 
 	/**
 	 * Creates a new message trace-based session with the given session ID.
-	 * 
+	 *
 	 * @param sessionId
 	 *            The session ID to use
 	 */

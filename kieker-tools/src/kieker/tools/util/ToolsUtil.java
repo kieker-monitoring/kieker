@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,9 +57,7 @@ public final class ToolsUtil {
 			} else {
 				LOGGER.warn("Could not load verbose/debug logger");
 			}
-		} catch (final SecurityException ex) {
-			LOGGER.warn("Could not load verbose/debug logger", ex);
-		} catch (final IOException ex) {
+		} catch (final SecurityException | IOException ex) {
 			LOGGER.warn("Could not load verbose/debug logger", ex);
 		}
 	}

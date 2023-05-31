@@ -1,26 +1,31 @@
-apply plugin: 'application'
-apply plugin: 'eclipse'
-
-dependencies {
-	compile fileTree('lib') {
-		include "*.jar"
-  }
+plugins {
+   id 'application'
 }
 
-eclipse {
-  project {
-    name = 'Kieker Example 5 appendix-Kafka'
-  }
+repositories {
+        mavenCentral() 
+}
+
+dependencies {
+        compile 'ch.qos.logback:logback-classic:1.4.7'
+        compile 'org.slf4j:slf4j-api:1.7.30'
+        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+
+	compile fileTree('lib') {
+		include "*.jar"
+        }
 }
 
 def monitoringConfigurationKafka = 'META-INF/kieker.monitoring.properties'
+
+distTar.enabled=false
 
 // Simplify the JAR's file name
 archivesBaseName = 'KafkaMonitoringAnalysis'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources']
+sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
 def monitoringConfiguration = {
   main = 'kieker.examples.userguide.appendixKafka.BookstoreStarter'

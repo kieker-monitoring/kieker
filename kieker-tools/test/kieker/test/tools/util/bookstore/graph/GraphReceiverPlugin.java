@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 *            The type of the graph.
 	 */
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return this.<T>getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
+		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
@@ -59,10 +59,8 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
 	
-	private static final long serialVersionUID = -9025858519361306011L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -76,6 +74,8 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		"nonHeapInitBytes",
 		"objectPendingFinalizationCount",
 	};
+	
+	private static final long serialVersionUID = -9025858519361306011L;
 	
 	/** property declarations. */
 	private final long heapMaxBytes;
@@ -181,7 +181,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -317,4 +317,49 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		return this.objectPendingFinalizationCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MemoryRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "heapMaxBytes = ";
+		result += this.getHeapMaxBytes() + ", ";
+		
+		result += "heapUsedBytes = ";
+		result += this.getHeapUsedBytes() + ", ";
+		
+		result += "heapCommittedBytes = ";
+		result += this.getHeapCommittedBytes() + ", ";
+		
+		result += "heapInitBytes = ";
+		result += this.getHeapInitBytes() + ", ";
+		
+		result += "nonHeapMaxBytes = ";
+		result += this.getNonHeapMaxBytes() + ", ";
+		
+		result += "nonHeapUsedBytes = ";
+		result += this.getNonHeapUsedBytes() + ", ";
+		
+		result += "nonHeapCommittedBytes = ";
+		result += this.getNonHeapCommittedBytes() + ", ";
+		
+		result += "nonHeapInitBytes = ";
+		result += this.getNonHeapInitBytes() + ", ";
+		
+		result += "objectPendingFinalizationCount = ";
+		result += this.getObjectPendingFinalizationCount() + ", ";
+		
+		return result;
+	}
 }

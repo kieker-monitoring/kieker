@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package kieker.test.monitoring.util;
 
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**
@@ -43,10 +43,10 @@ public final class DummyWriterConfigurationFactory {
 	 */
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "Kieker-Test");
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DummyWriterConfigurationFactory.WRITER_NAME);
+		configuration.setProperty(ConfigurationConstants.CONTROLLER_NAME, "Kieker-Test");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DummyWriterConfigurationFactory.WRITER_NAME);
 		// add ignored values
-		configuration.setProperty(ConfigurationKeys.PREFIX + "test", "true");
+		configuration.setProperty(ConfigurationConstants.PREFIX + "test", "true");
 		configuration.setProperty(DummyWriterConfigurationFactory.WRITER_NAME + ".test", "true");
 		return configuration;
 	}

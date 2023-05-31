@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.common.record.tcp.SingleSocketRecordReader;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.controller.tcp.TcpRecordReader;
 import kieker.monitoring.listener.MonitoringCommandListener;
 
 /**
- * Enables remote control of probes (like (de-)activation) via TCP.
- * Thereby special records are used to pass the messages.
+ * Enables remote control of probes (like (de-)activation) via TCP. Thereby
+ * special records are used to pass the messages.
  *
  * @author Marc Adolf
  * @since 1.14
@@ -35,43 +35,51 @@ import kieker.monitoring.listener.MonitoringCommandListener;
  */
 public class TCPController extends AbstractController implements IRemoteController {
 
-	/**
-	 * The size for the message buffer.
-	 */
-	private static final int BUFFER_SIZE = 65535;
+	/** The default size for the message buffer. */
+	private static final int DEFAULT_BUFFER_SIZE = 65535;
 	/** The log for this component. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPController.class);
+	/** Property name for a custom buffer size. */
+	private static final String BUFFER_SIZE = TCPController.class.getCanonicalName() + ".bufferSize";
+
 	// maybe not necessary
 	private final String domain;
-	private SingleSocketRecordReader tcpReader;
+	private TcpRecordReader tcpReader;
 	private boolean tcpEnabled;
-	private final Thread thread;
+	private Thread readerThread;
 
 	/**
-	 * Creates a new TCPController needs the {@link MonitoringController} to start and connect the TCP receiver.
+	 * Creates a new TCPController needs the {@link MonitoringController} to start
+	 * and connect the TCP receiver.
 	 *
 	 * @param configuration
 	 *            containing all related variables for the TCP settings.
 	 * @param monitoringController
-	 *            the controller which is connected to the TCP receiver and where the commands are send to.
+	 *            the controller which is connected to the TCP receiver and where
+	 *            the commands are send to.
 	 */
 	protected TCPController(final Configuration configuration, final MonitoringController monitoringController) {
 		super(configuration);
 
-		final IRecordReceivedListener listener = new MonitoringCommandListener(monitoringController);
-		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_DOMAIN);
-		try {
-			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
-			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
-			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, listener);
+		final int bufferSize = configuration.getIntProperty(TCPController.BUFFER_SIZE,
+				TCPController.DEFAULT_BUFFER_SIZE);
+		this.domain = configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_DOMAIN);
 
+		final IRecordReceivedListener listener = new MonitoringCommandListener(monitoringController);
+		try {
+			final int port = Integer
+					.parseInt(configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_REMOTE_PORT));
+			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_TCP);
+			this.tcpReader = new TcpRecordReader(port, bufferSize, TCPController.LOGGER, true, listener);
+			TCPController.LOGGER.info("Setup of TCPController listening at {}", port);
+			this.readerThread = new Thread(this.tcpReader);
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;
-			TCPController.LOGGER.error("Could not parse port for the TCPController, deactivating this option. Received string was: {}",
-					configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
+			this.readerThread = null; // NOPMD pmd considers this a code smell, however, necessary to satisfy CS rule
+			TCPController.LOGGER.info(
+					"Could not parse port for the TCPController, deactivating this option. Received string was: {}",
+					configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_REMOTE_PORT));
 		}
-		this.thread = new Thread(this.tcpReader);
-
 	}
 
 	@Override
@@ -82,8 +90,8 @@ public class TCPController extends AbstractController implements IRemoteControll
 	@Override
 	protected void init() {
 		if (this.tcpEnabled) {
-			LOGGER.info("TCP reader for remote commands started");
-			this.thread.start();
+			TCPController.LOGGER.info("TCP reader for remote commands started");
+			this.readerThread.start();
 		}
 
 	}
@@ -91,7 +99,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 	@Override
 	protected void cleanup() {
 		if (this.tcpEnabled) {
-			LOGGER.info("TCP reader for remote commands terminated");
+			TCPController.LOGGER.info("TCP reader for remote commands terminated");
 			this.tcpReader.terminate();
 		}
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class ScheduledSamplerJob implements Runnable {
@@ -34,7 +34,7 @@ public class ScheduledSamplerJob implements Runnable {
 
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            used to log the sampled data (represented as {@link kieker.common.record.IMonitoringRecord}s) via
 	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}.
@@ -48,9 +48,12 @@ public class ScheduledSamplerJob implements Runnable {
 
 	/**
 	 * Throws a {@link RuntimeException} if an error occurred.
+	 *
+	 * @throws RuntimeException
+	 *             when sampling fails.
 	 */
 	@Override
-	public final void run() throws RuntimeException { // NOCS (IllegalThrowsCheck)
+	public final void run() {
 		try {
 			this.sampler.sample(this.monitoringController);
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -60,7 +63,7 @@ public class ScheduledSamplerJob implements Runnable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param future
 	 *            The new future object.
 	 */
@@ -69,7 +72,7 @@ public class ScheduledSamplerJob implements Runnable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the {@link ScheduledFuture} which allows to cancel future
 	 *         executions of this {@link ScheduledSamplerJob}.
 	 */

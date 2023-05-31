@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.concurrent.TimeUnit;
@@ -22,11 +21,13 @@ import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 
 /**
  * Decorator to attach response time data to graph nodes.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.5
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 
 	private final TimeUnit displayTimeunit;
@@ -34,7 +35,8 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 	/**
 	 * Creates a new response time decorator.
 	 *
-	 * @param displayTimeunit The time unit used for displaying time values.
+	 * @param displayTimeunit
+	 *            The time unit used for displaying time values.
 	 */
 	public ResponseTimeNodeDecorator(final TimeUnit displayTimeunit) {
 		this.displayTimeunit = displayTimeunit;

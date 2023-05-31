@@ -1,0 +1,39 @@
+TODO List
+=========
+
+
+
+Chapter 2
+-- done --
+
+Chapter 3 
+-- done --
+
+Chapter 4
+-- done --
+
+Chapter 5
+-- done --
+
+Appendix B
+- already exists in Confluence in a newer version
+- adapt links
+- merge content
+
+Appendix C
+- JMS/Active MQ könnte ein Tutorial werden
+
+Appendix D 
+- Using the AMQP Writer and Reader (Tutorial)
+
+
+Appendix F
+- Kieker default configuration refer to real file on github
+  
+Appendix G
+- Move source code listings to approriate locations in the document
+
+Appendix H
+- Copy console outputs to the appropriate locations in the document.
+- Fix outputs before copying, e.g., AsciiFileWriter does no longer exist.
+

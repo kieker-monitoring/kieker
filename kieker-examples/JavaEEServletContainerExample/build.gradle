@@ -1,4 +1,11 @@
-apply plugin: 'war'
+plugins {
+    id 'war'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral() 
+}
 
 sourceSets {
   main { 
@@ -8,17 +15,21 @@ sourceSets {
   }
 }
 
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 webAppDirName = 'livedemo-source/WebContent'
 
-repositories {
-	mavenCentral() 
-}
-
 dependencies {
-  compile fileTree('livedemo-source/lib') {
+  implementation 'ch.qos.logback:logback-classic:1.1.7'
+  implementation 'org.slf4j:slf4j-api:1.7.30'
+  implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+  
+  implementation 'net.kieker-monitoring:${kiekerVersion}'
+  
+  implementation fileTree('livedemo-source/lib') {
     include '*.jar'
   }
-  compile 'org.slf4j:slf4j-api:1.7.25'
 }
 
 task unwar(type: Copy) {

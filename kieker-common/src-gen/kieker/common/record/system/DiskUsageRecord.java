@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.12
  */
@@ -53,6 +53,19 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"deviceName",
+		"queue",
+		"readBytesPerSecond",
+		"readsPerSecond",
+		"serviceTime",
+		"writeBytesPerSecond",
+		"writesPerSecond",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -64,19 +77,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
 	private static final long serialVersionUID = 2474236414042988334L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"deviceName",
-		"queue",
-		"readBytesPerSecond",
-		"readsPerSecond",
-		"serviceTime",
-		"writeBytesPerSecond",
-		"writesPerSecond",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -171,7 +171,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -295,4 +295,40 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		return this.writesPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DiskUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "deviceName = ";
+		result += this.getDeviceName() + ", ";
+		
+		result += "queue = ";
+		result += this.getQueue() + ", ";
+		
+		result += "readBytesPerSecond = ";
+		result += this.getReadBytesPerSecond() + ", ";
+		
+		result += "readsPerSecond = ";
+		result += this.getReadsPerSecond() + ", ";
+		
+		result += "serviceTime = ";
+		result += this.getServiceTime() + ", ";
+		
+		result += "writeBytesPerSecond = ";
+		result += this.getWriteBytesPerSecond() + ", ";
+		
+		result += "writesPerSecond = ";
+		result += this.getWritesPerSecond() + ", ";
+		
+		return result;
+	}
 }

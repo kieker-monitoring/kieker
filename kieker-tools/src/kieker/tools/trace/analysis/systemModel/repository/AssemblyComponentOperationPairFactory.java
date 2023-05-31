@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package kieker.tools.trace.analysis.systemModel.repository;
 
-
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -32,9 +31,9 @@ import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPa
  * @since 1.1
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
-	public static final AssemblyComponentOperationPair ROOT_PAIR =
-			new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
-					AssemblyRepository.ROOT_ASSEMBLY_COMPONENT);
+	public static final AssemblyComponentOperationPair ROOT_PAIR = new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+			OperationRepository.ROOT_OPERATION,
+			AssemblyRepository.ROOT_ASSEMBLY_COMPONENT);
 
 	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)

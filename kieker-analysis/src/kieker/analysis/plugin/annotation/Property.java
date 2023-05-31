@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,37 +18,39 @@ package kieker.analysis.plugin.annotation;
 
 /**
  * This annotation can be used to describe a single property for a plugin or a repository.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.6
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public @interface Property {
 
 	/**
 	 * The name of the property.
-	 * 
+	 *
 	 * @return The name of the property.
 	 */
 	String name();
 
 	/**
 	 * The default value for the property.
-	 * 
+	 *
 	 * @return The default value for the property.
 	 */
 	String defaultValue();
 
 	/**
 	 * This field can be used for a (short) description of the property's purpose.
-	 * 
+	 *
 	 * @return The description of this property.
 	 */
 	String description() default "";
-	
+
 	/**
 	 * The definition whether a property can be updated while the plugin is used
-	 * 
+	 *
 	 * @return True if updateable on-the-fly, else false
 	 */
 	boolean updateable() default false;

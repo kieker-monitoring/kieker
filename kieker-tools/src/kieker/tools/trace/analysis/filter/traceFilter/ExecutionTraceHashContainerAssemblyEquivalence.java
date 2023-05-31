@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,20 @@ import kieker.tools.trace.analysis.systemModel.Execution;
 import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
+ * @deprecated 1.15 teetime port moved to new location
  */
+@Deprecated
 class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTraceHashContainer {
 
 	private final int hashCodeBuffer;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param t
 	 *            The execution trace to be stored in this container.
 	 */
@@ -53,12 +55,12 @@ class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTr
 
 	/**
 	 * Checks whether the given executions are equal or not.
-	 * 
+	 *
 	 * @param r1
 	 *            The first execution object.
 	 * @param r2
 	 *            The second execution object.
-	 * 
+	 *
 	 * @return true if and only if the executions have the same values.
 	 */
 	private boolean executionsEqual(final Execution r1, final Execution r2) {

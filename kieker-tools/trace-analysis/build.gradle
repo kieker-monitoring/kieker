@@ -1,35 +1,36 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
 
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+	implementation project(":kieker-common")
+	implementation project(":kieker-tools")
 
-	compile project(':kieker-common')
-	compile project(":kieker-tools")
-	compile "com.beust:jcommander:1.60"
-		
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation project(':kieker-analysis').sourceSets.test.output
+	testImplementation project(':kieker-tools').sourceSets.test.output
 }
 
-clover {
-	report {
-		html=true
-	}
-	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
+task uploadArchives {
+	println 'trace-analysis skipped'
 }
 
 task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-  }
+	doLast {
+//		regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+	}
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames

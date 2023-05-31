@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BeforeConstructorObjectInterfaceEventFactory implements IRecordFactory<BeforeConstructorObjectInterfaceEvent> {
 	
-	
+
 	@Override
 	public BeforeConstructorObjectInterfaceEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeConstructorObjectInterfaceEvent(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return BeforeConstructorObjectInterfaceEvent.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeConstructorObjectInterfaceEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeConstructorObjectInterfaceEvent.SIZE;
 	}

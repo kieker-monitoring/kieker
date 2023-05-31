@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,19 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
-import kieker.analysis.plugin.reader.util.FSReaderUtil;
+import kieker.analysis.generic.depcompression.AbstractDecompressionFilter;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.analysis.util.FSReaderUtil;
 import kieker.common.configuration.Configuration;
 import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.classpath.InstantiationFactory;
@@ -44,7 +45,9 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Reiner Jung -- replaced reader code with code compatible with deserializer
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 final class FSDirectoryReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSDirectoryReader.class);
 
@@ -132,7 +135,8 @@ final class FSDirectoryReader implements Runnable {
 						final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(inputFile.getName());
 
 						final Configuration configuration = new Configuration();
-						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
+						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration)
+								.createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
 						this.processBinaryInputFile(inputFile, decompressionFilter);
 					} catch (final IllegalArgumentException ex) {
 						LOGGER.warn("Unknown file extension for file {}", inputFile);
@@ -165,7 +169,7 @@ final class FSDirectoryReader implements Runnable {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
+			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -215,7 +219,7 @@ final class FSDirectoryReader implements Runnable {
 	 */
 	private final void processNormalInputFile(final File inputFile) {
 		try {
-			this.textFileStreamProcessor.processInputChannel(new FileInputStream(inputFile));
+			this.textFileStreamProcessor.processInputChannel(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ));
 			this.terminated = true;
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOGGER.error("Error reading {}", inputFile, ex);
@@ -233,7 +237,7 @@ final class FSDirectoryReader implements Runnable {
 	private final void processBinaryInputFile(final File inputFile, final AbstractDecompressionFilter decompressionFilter) {
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(decompressionFilter.chainInputStream(new FileInputStream(inputFile)));
+			in = new DataInputStream(decompressionFilter.chainInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)));
 			this.binaryFileStreamProcessor.createRecordsFromBinaryFile(in);
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 			LOGGER.error("Error reading {}", inputFile, ex);

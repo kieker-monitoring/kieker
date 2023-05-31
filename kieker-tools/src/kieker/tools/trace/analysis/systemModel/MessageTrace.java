@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
+ * This class is a container for a whole trace of messages (represented as
+ * actual instances of {@link AbstractMessage}).
  *
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class MessageTrace extends AbstractTrace {
 
 	private final List<AbstractMessage> messages;
@@ -60,8 +63,9 @@ public class MessageTrace extends AbstractTrace {
 		super(traceId, sessionId);
 
 		// no need to sort: seq is already sorted - actually
-		// however, the reply message has the same timestamp as its associated call message
-		//		Collections.sort(seq, new MessageComparator());
+		// however, the reply message has the same timestamp as its associated call
+		// message
+		// Collections.sort(seq, new MessageComparator());
 
 		this.messages = seq;
 
@@ -82,7 +86,8 @@ public class MessageTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the message sequence contained in this trace as an (unmodifiable) list.
+	 * Returns the message sequence contained in this trace as an (unmodifiable)
+	 * list.
 	 *
 	 * @return See above
 	 */

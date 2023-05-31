@@ -21,9 +21,9 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getRepository <em>Repository</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getId <em>Id</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getRepository <em>Repository</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,6 +34,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -44,6 +45,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -54,6 +56,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * The cached value of the '{@link #getRepository() <em>Repository</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getRepository()
 	 * @generated
 	 * @ordered
@@ -64,6 +67,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -74,6 +78,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -83,6 +88,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MRepositoryConnector() {
@@ -92,6 +98,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -102,6 +109,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -111,6 +119,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -123,15 +132,17 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIRepository getRepository() {
 		if (repository != null && repository.eIsProxy()) {
-			InternalEObject oldRepository = (InternalEObject)repository;
-			repository = (MIRepository)eResolveProxy(oldRepository);
+			InternalEObject oldRepository = (InternalEObject) repository;
+			repository = (MIRepository) eResolveProxy(oldRepository);
 			if (repository != oldRepository) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY, oldRepository, repository));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY, oldRepository,
+							repository));
 			}
 		}
 		return repository;
@@ -140,6 +151,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public MIRepository basicGetRepository() {
@@ -149,6 +161,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setRepository(MIRepository newRepository) {
@@ -161,6 +174,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getId() {
@@ -170,6 +184,7 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setId(String newId) {
@@ -182,18 +197,20 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
-				return getName();
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
-				if (resolve) return getRepository();
-				return basicGetRepository();
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
-				return getId();
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
+			return getName();
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
+			if (resolve)
+				return getRepository();
+			return basicGetRepository();
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+			return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -201,20 +218,21 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
-				setName((String)newValue);
-				return;
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
-				setRepository((MIRepository)newValue);
-				return;
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
-				setId((String)newValue);
-				return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
+			setName((String) newValue);
+			return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
+			setRepository((MIRepository) newValue);
+			return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+			setId((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -222,20 +240,21 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
-				setRepository((MIRepository)null);
-				return;
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
-				setId(ID_EDEFAULT);
-				return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
+			setRepository((MIRepository) null);
+			return;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+			setId(ID_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -243,17 +262,18 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
-				return repository != null;
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
-				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
+			return repository != null;
+		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -261,11 +281,13 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
@@ -276,4 +298,4 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 		return result.toString();
 	}
 
-} //MRepositoryConnector
+} // MRepositoryConnector

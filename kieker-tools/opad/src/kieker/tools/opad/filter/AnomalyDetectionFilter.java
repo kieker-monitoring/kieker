@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,9 @@ import kieker.tools.opad.record.StorableDetectionResult;
 @Plugin(name = "AnomalyScore Detection Filter", outputPorts = {
 	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
 	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE),
-	@OutputPort(eventTypes = { ExtendedStorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) }, configuration = {
-		@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, defaultValue = "0.5", updateable = true) })
+	@OutputPort(eventTypes = { ExtendedStorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) },
+		configuration = {
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, defaultValue = "0.5", updateable = true) })
 public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_ANOMALY_SCORE = "anomalyscore";

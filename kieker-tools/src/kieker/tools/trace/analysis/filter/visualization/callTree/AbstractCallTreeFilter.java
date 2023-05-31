@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package kieker.tools.trace.analysis.filter.visualization.callTree;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -55,7 +55,9 @@ import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPa
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
@@ -83,7 +85,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
@@ -115,7 +117,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n")
-				.append(assemblyComponentName).append(":");
+				.append(assemblyComponentName).append(':');
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
@@ -292,16 +294,13 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 *            Determines whether to include the execution order indices or not.
 	 * @param shortLabels
 	 *            Determines whether to use short labels or not.
-	 * @throws FileNotFoundException
-	 *             If the given file is somehow invalid.
-	 *
-	 * @throws UnsupportedEncodingException
-	 *             If the default encoding is not supported.
+	 * @throws IOException
+	 *             on io errors
 	 */
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels)
-			throws FileNotFoundException, UnsupportedEncodingException {
-		try (final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING)) {
+			throws IOException {
+		try (final PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn)), false, ENCODING)) {
 			AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
 		}
 	}
@@ -374,17 +373,15 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * @param shortLabels
 	 *            flag for short labels
 	 *
-	 * @throws FileNotFoundException
-	 *             when the file cannot be created
 	 * @throws TraceProcessingException
 	 *             when there is a processing error with the trace
-	 * @throws UnsupportedEncodingException
-	 *             string encoding not supported
+	 * @throws IOException
+	 *             on io errors
 	 */
 	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
 			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
 			final boolean includeWeights, final boolean shortLabels)
-			throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
+			throws TraceProcessingException, IOException {
 		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}

@@ -1,15 +1,13 @@
-apply plugin: 'eclipse'
-
-dependencies {
-	clover 'org.openclover:clover:4.2.0'
-
-	// checkstyleVersion is set in kieker/gradle.properties
-	compile "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+plugins {
+	id 'java'
+	id 'java-library'
 }
 
-clover {
-	report {
-		html=true
-	}
-	
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+dependencies {
+	// checkstyleVersion is set in kieker/gradle.properties
+	implementation "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+	runtimeOnly "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }

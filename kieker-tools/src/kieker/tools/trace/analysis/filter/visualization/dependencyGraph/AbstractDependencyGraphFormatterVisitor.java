@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
@@ -24,13 +23,16 @@ import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
 /**
  * Abstract base class for dependency-graph-formatting visitors. This base class already provides the common
  * algorithm for formatting edges.
- * 
+ *
  * @author Holger Knoche
- * 
- * @param <T> subtype of an ISystemModelElement
- * 
+ *
+ * @param <T>
+ *            subtype of an ISystemModelElement
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
@@ -44,7 +46,7 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 
 	/**
 	 * Creates a new formatter visitor using the given arguments.
-	 * 
+	 *
 	 * @param builder
 	 *            The string builder to send the generated output to
 	 * @param includeWeights

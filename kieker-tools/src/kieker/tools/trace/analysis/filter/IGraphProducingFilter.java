@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -22,26 +21,28 @@ import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPo
 
 /**
  * Interface for graph-producing filters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The type of the produced graph
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public interface IGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends IGraphOutputtingFilter<G> {
 
 	/**
 	 * Requests that the given retention policy is used by this graph producer. Note that the producer may
 	 * choose to use a more liberal, compatible retention policy to satisfy the needs of other graph consumers
 	 * (see {@link kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy#isCompatibleWith(IOriginRetentionPolicy)}).
-	 * 
+	 *
 	 * @param policy
 	 *            The requested policy
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs during the request
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public void requestOriginRetentionPolicy(IOriginRetentionPolicy policy) throws AnalysisConfigurationException;

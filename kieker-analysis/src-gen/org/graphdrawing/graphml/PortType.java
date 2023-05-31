@@ -5,7 +5,6 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import java.util.ArrayList;
@@ -20,15 +19,16 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
  * 
- *       Complex type for the <port> element.
- *     
+ * Complex type for the <port> element.
  * 
- * <p>Java class for port.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for port.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="port.type">
@@ -52,98 +52,99 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "port.type", propOrder = {
-    "desc",
-    "dataOrPort"
+	"desc",
+	"dataOrPort"
 })
 public class PortType {
 
-    protected String desc;
-    @XmlElements({
-        @XmlElement(name = "data", type = DataType.class),
-        @XmlElement(name = "port", type = PortType.class)
-    })
-    protected List<Object> dataOrPort;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    @XmlSchemaType(name = "NMTOKEN")
-    protected String name;
+	protected String desc;
+	@XmlElements({
+		@XmlElement(name = "data", type = DataType.class),
+		@XmlElement(name = "port", type = PortType.class)
+	})
+	protected List<Object> dataOrPort;
+	@XmlAttribute(name = "name", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name = "NMTOKEN")
+	protected String name;
 
-    /**
-     * Gets the value of the desc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDesc() {
-        return desc;
-    }
+	/**
+	 * Gets the value of the desc property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getDesc() {
+		return desc;
+	}
 
-    /**
-     * Sets the value of the desc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDesc(String value) {
-        this.desc = value;
-    }
+	/**
+	 * Sets the value of the desc property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setDesc(String value) {
+		this.desc = value;
+	}
 
-    /**
-     * Gets the value of the dataOrPort property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dataOrPort property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDataOrPort().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link DataType }
-     * {@link PortType }
-     * 
-     * 
-     */
-    public List<Object> getDataOrPort() {
-        if (dataOrPort == null) {
-            dataOrPort = new ArrayList<Object>();
-        }
-        return this.dataOrPort;
-    }
+	/**
+	 * Gets the value of the dataOrPort property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the dataOrPort property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getDataOrPort().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link DataType }
+	 * {@link PortType }
+	 * 
+	 * 
+	 */
+	public List<Object> getDataOrPort() {
+		if (dataOrPort == null) {
+			dataOrPort = new ArrayList<Object>();
+		}
+		return this.dataOrPort;
+	}
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Gets the value of the name property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * Sets the value of the name property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
 }

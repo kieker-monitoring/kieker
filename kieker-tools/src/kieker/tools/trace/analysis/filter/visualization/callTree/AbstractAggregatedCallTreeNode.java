@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,22 +24,24 @@ import kieker.tools.trace.analysis.systemModel.MessageTrace;
 
 /**
  * This is an abstract base for a single node within an aggregated call tree.
- * 
+ *
  * @param <T>
  *            The type of the entity to be stored in this node.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to teetime
  */
+@Deprecated
 public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTreeNode<T> {
 
 	/** For faster lookup of existing children. */
-	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>(); // NOPMD (not synchronized)
+	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<>(); // NOPMD (not synchronized)
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this class.
-	 * 
+	 *
 	 * @param id
 	 *            The identifier of this node.
 	 * @param entity

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 /**
  * (RGB-based) Color implementation for the visualization package.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class Color {
@@ -54,7 +53,7 @@ public class Color {
 
 	/**
 	 * Creates a new color from the given values.
-	 * 
+	 *
 	 * @param red
 	 *            The color's red value
 	 * @param green
@@ -68,7 +67,7 @@ public class Color {
 
 	/**
 	 * Creates a new color with the given RGB value.
-	 * 
+	 *
 	 * @param rgb
 	 *            The RGB value of the new color (see {@link #getRGB()} for more information)
 	 */
@@ -79,7 +78,7 @@ public class Color {
 	/**
 	 * Returns this color's RGB value as an {@code int}. The blue value is stored in (the least
 	 * significant) byte 0, green in byte 1, and red in byte 2.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public int getRGB() {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.13
  */
@@ -48,12 +48,8 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String.class, // IExceptionRecord.cause
 	};
 	
-	/** default constants. */
-	public static final String CAUSE = "";
-	private static final long serialVersionUID = -561668403011752179L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"threadId",
 		"orderIndex",
@@ -61,6 +57,10 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		"classSignature",
 		"cause",
 	};
+	
+	/** default constants. */
+	public static final String CAUSE = "";
+	private static final long serialVersionUID = -561668403011752179L;
 	
 	/** property declarations. */
 	private final String cause;
@@ -124,7 +124,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -196,4 +196,31 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		return this.cause;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AfterFailedThreadBasedEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "cause = ";
+		result += this.getCause() + ", ";
+		
+		return result;
+	}
 }

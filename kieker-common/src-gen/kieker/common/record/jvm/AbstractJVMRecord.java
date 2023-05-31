@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +23,18 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.10
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {			
 	
+		
 	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
 	private static final long serialVersionUID = -961661872949303914L;
 	
-		
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
@@ -129,4 +129,22 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {
 		return this.vmName;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractJVMRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		return result;
+	}
 }

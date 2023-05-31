@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.core.controller;
 
 import java.util.List;
@@ -31,63 +30,63 @@ public interface IProbeController {
 	 *
 	 * @param pattern
 	 *            pattern for the probe
-	 * @return
-	 * 		true on success
+	 * @return true on success
 	 *
 	 * @since 1.6
 	 */
-	public boolean activateProbe(final String pattern);
+	boolean activateProbe(final String pattern);
 
 	/**
 	 * Deactivates a probe.
 	 *
 	 * @param pattern
 	 *            pattern for the probe
-	 * @return
-	 * 		true on success
+	 * @return true on success
 	 *
 	 * @since 1.6
 	 */
-	public boolean deactivateProbe(final String pattern);
+	boolean deactivateProbe(final String pattern);
 
 	/**
 	 * Tests if a probe is active.
 	 *
-	 * This test is ignorant of the fact whether monitoring itself is enabled/disabled/terminated.
+	 * This test is ignorant of the fact whether monitoring itself is
+	 * enabled/disabled/terminated.
 	 *
 	 * @param signature
 	 *            signature of the probe
-	 * @return
-	 * 		true if the probe with this signature is active
+	 * @return true if the probe with this signature is active
 	 *
 	 * @since 1.6
 	 */
-	public boolean isProbeActivated(final String signature);
+	boolean isProbeActivated(final String signature);
 
 	/**
 	 * Overwrites the current list of patterns with a new pattern list.
 	 *
 	 * @param patternList
-	 *            list of strings with patterns where each string starts either with a + or -. The list can be empty (in which case the internal pattern list and the
-	 *            internal cache are cleared) - but not null.
+	 *            list of strings with patterns where each string starts either with
+	 *            a + or -. The list can be empty (in which case the internal
+	 *            pattern list and the internal cache are cleared) - but not null.
 	 *
 	 * @since 1.6
 	 */
-	public void setProbePatternList(final List<String> patternList);
+	void setProbePatternList(final List<String> patternList);
 
 	/**
-	 * Returns the current list of patterns with a prefix indicating whether the pattern is active or not.
+	 * Returns the current list of patterns with a prefix indicating whether the
+	 * pattern is active or not.
 	 *
-	 * @return
-	 * 		list of strings with patterns
-	 *         where each string starts either with a + or -
+	 * @return list of strings with patterns where each string starts either with a
+	 *         + or -
 	 *
 	 * @since 1.6
 	 */
-	public List<String> getProbePatternList();
+	List<String> getProbePatternList();
 
 	/**
-	 * Looks up the parameters for a probe /the pattern of the probe and returns them, may be null.
+	 * Looks up the parameters for a probe /the pattern of the probe and returns
+	 * them, may be null.
 	 *
 	 * @param pattern
 	 *            The pattern of the probe.
@@ -96,10 +95,23 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public Map<String, List<String>> getParameters(final String pattern);
+	Map<String, List<String>> getAllPatternParameters(final String pattern);
 
 	/**
-	 * Deletes all parameters for one entry.
+	 * Deletes a parameter from the given pattern.
+	 *
+	 * @param pattern
+	 *            The parameters to be deleted.
+	 * @param name
+	 *            The name of the parameter.
+	 *
+	 * @since 1.14
+	 *
+	 */
+	void deletePatternParameter(final String pattern, String name);
+
+	/**
+	 * Deletes all parameters from the given pattern.
 	 *
 	 * @param pattern
 	 *            The parameters to be deleted.
@@ -107,33 +119,48 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public void deleteParameterEntry(final String pattern);
+	void clearPatternParameters(final String pattern);
 
 	/**
-	 * Adds or updates a parameter entry for a probe.
+	 * Adds or updates a parameter for the given pattern.
 	 *
 	 * @param pattern
 	 *            The pattern of the probe.
-	 * @param parameterName
+	 * @param name
 	 *            The name of the parameter.
-	 * @param parameters
+	 * @param values
 	 *            a List of entries for this parameter.
 	 *
 	 * @since 1.14
 	 */
-	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters);
+	void addPatternParameter(final String pattern, final String name, final List<String> values);
 
 	/**
-	 * Overwrites all parameters for a given probe/pattern.
+	 * Add one value to a list of parameter values for a pattern.
 	 *
 	 * @param pattern
-	 *            The pattern of the probe.
-	 * @param parameterMap
-	 *            The new parameters.
+	 *            identifying the pattern for the parameter
+	 * @param name
+	 *            name of the parameter
+	 * @param value
+	 *            value to be added to the list of parameter values.
 	 *
-	 * @since 1.14
-	 *
+	 * @since 1.15
 	 */
-	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap);
+	void addPatternParameterValue(final String pattern, final String name, final String value);
+
+	/**
+	 * Remove one value to a list of parameter values for a pattern.
+	 *
+	 * @param pattern
+	 *            identifying the pattern for the parameter
+	 * @param name
+	 *            name of the parameter
+	 * @param value
+	 *            value to be removed from the list of parameter values.
+	 *
+	 * @since 1.15
+	 */
+	void removePatternParameterValue(final String pattern, final String name, final String value);
 
 }

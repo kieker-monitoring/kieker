@@ -1,20 +1,34 @@
-apply plugin: 'application'
-apply plugin: 'eclipse'
+plugins {
+	id 'application'
+	id 'java'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral() 
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
 
 dependencies {
-	compile fileTree('lib') {
-		include "kieker-*.jar"
-		include "opad-*.jar"
-	}
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation "com.beust:jcommander:1.72"
+
+        implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
+        implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
+
+distTar.enabled=false
 
 // Simplify the JAR's file name
 archivesBaseName = 'TraceAnalysis'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.analysis.traceanalysis.TraceAnalysisStarter'
+mainClassName = 'kieker.examples.analysis.traceanalysis.TraceAnalysisExampleMain'
 
 jar {
 	manifest {

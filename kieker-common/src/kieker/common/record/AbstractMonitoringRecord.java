@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -348,6 +348,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to access the value types.
+	 * @throws InvocationTargetException
 	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
 		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
@@ -357,10 +358,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					final Field typesField = clazz.getDeclaredField("TYPES");
 					types = (Class<?>[]) typesField.get(null);
 				} else {
-					types = clazz.newInstance().getValueTypes();
+					types = clazz.getDeclaredConstructor().newInstance().getValueTypes();
 				}
 				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
-			} catch (final SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InstantiationException ex) {
+			} catch (final SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InstantiationException
+					| InvocationTargetException | NoSuchMethodException ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
 		}

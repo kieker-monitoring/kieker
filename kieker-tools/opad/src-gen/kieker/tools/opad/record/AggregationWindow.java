@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,39 +19,37 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Thomas Duellmann
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class AggregationWindow extends AbstractMonitoringRecord  {			
+public class AggregationWindow extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
-			 + TYPE_SIZE_LONG; // AggregationWindow.windowEnd
-	
+			+ TYPE_SIZE_LONG; // AggregationWindow.windowEnd
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart
 		long.class, // AggregationWindow.windowEnd
 	};
-	
-	private static final long serialVersionUID = -6015104562956593414L;
-	
+
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"windowStart",
 		"windowEnd",
 	};
-	
+
+	private static final long serialVersionUID = -6015104562956593414L;
+
 	/** property declarations. */
 	private final long windowStart;
 	private final long windowEnd;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -65,30 +63,26 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		this.windowEnd = windowEnd;
 	}
 
-
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AggregationWindow(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.windowStart = deserializer.getLong();
 		this.windowEnd = deserializer.getLong();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getWindowStart());
 		serializer.putLong(this.getWindowEnd());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -96,15 +90,15 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +107,6 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -128,7 +121,7 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AggregationWindow castedRecord = (AggregationWindow) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -139,28 +132,28 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		if (this.getWindowEnd() != castedRecord.getWindowEnd()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getWindowStart());
-		code += ((int)this.getWindowEnd());
-		
+		code += ((int) this.getWindowStart());
+		code += ((int) this.getWindowEnd());
+
 		return code;
 	}
-	
+
 	public final long getWindowStart() {
 		return this.windowStart;
 	}
-	
-	
+
 	public final long getWindowEnd() {
 		return this.windowEnd;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 	 *            Used time unit
 	 */
 	private void initForecastWithTimeUnit(final TimeUnit tu) {
-		this.ts = new TimeSeries<Double>(this.startTime, TimeUnit.MILLISECONDS, this.deltaTime, tu);
+		this.ts = new TimeSeries<>(this.startTime, TimeUnit.MILLISECONDS, this.deltaTime, tu);
 
 		this.steps = 1;
 		this.mean = Double.valueOf(2.0);

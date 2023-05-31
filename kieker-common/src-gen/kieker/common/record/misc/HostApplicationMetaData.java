@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.13
  */
@@ -43,20 +43,20 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 		String.class, // HostApplicationMetaData.applicationName
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"systemName",
+		"ipAddress",
+		"hostname",
+		"applicationName",
+	};
+	
 	/** default constants. */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOSTNAME = "";
 	public static final String APPLICATION_NAME = "";
 	private static final long serialVersionUID = 5425789809172379297L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"systemName",
-		"ipAddress",
-		"hostname",
-		"applicationName",
-	};
 	
 	/** property declarations. */
 	private final String systemName;
@@ -121,7 +121,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -200,4 +200,25 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 		return this.applicationName;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "HostApplicationMetaData: ";
+		result += "systemName = ";
+		result += this.getSystemName() + ", ";
+		
+		result += "ipAddress = ";
+		result += this.getIpAddress() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "applicationName = ";
+		result += this.getApplicationName() + ", ";
+		
+		return result;
+	}
 }

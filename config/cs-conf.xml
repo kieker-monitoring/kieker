@@ -29,6 +29,14 @@
 		<property name="fileNamePattern" value=".*[/\\]test-gen[/\\].*" />
 	</module>
 
+	<!-- See http://checkstyle.sf.net/config_sizes.html ! -->
+	<!-- Checks for long lines. ! -->
+	<module name="LineLength">
+		<property name="severity" value="info" />
+		<property name="ignorePattern" value="^$" />
+		<property name="max" value="165" />
+	</module>
+
 	<!-- !________________________________________________________________________________________ 
 		! ! D U P L I C A T E S !________________________________________________________________________________________ 
 		! -->
@@ -51,7 +59,7 @@
 	<module name="RegexpHeader">
           <property name="headerFile" value="${config_loc}/java-header.sed"/>
           <property name="fileExtensions" value="java,xtend"/> 
-    </module>
+	</module>
 
 	<!-- Checks the header of a source file against a header file that contains 
 		a regular expression ! -->
@@ -141,29 +149,6 @@
 			<property name="checkFormat" value=".*" />
 			<property name="influenceFormat" value="0" />
 		</module>
-
-		<!-- KIEKER -->
-		<module name="kieker.checkstyle.AnalysisComponentConstructorCheck">
-			<property name="ignoreAbstractClasses" value="true" />
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<module name="kieker.checkstyle.MonitoringRecordFactoryConventionCheck">
-			<property name="ignoreAbstractClasses" value="true" />
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<module name="kieker.checkstyle.MissingSinceTagCheck">
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<module name="kieker.checkstyle.NotAllowedSinceTagCheck">
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<module name="kieker.checkstyle.NoBlockCommentsCheck">
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<module name="kieker.checkstyle.NotAllowedIgnoreAnnotationCheck">
-			<property name="severity" value="error" default="ignore" />
-		</module>
-		<!-- <module name="FileContentsHolder"/> -->  <!-- was removed as of 8.2 -->
 
 		<!-- !________________________________________________________________________________________ 
 			! ! A N N O T A T I O N S !________________________________________________________________________________________ 
@@ -258,7 +243,7 @@
 			<property name="option" value="same" />
 			<property name="tokens"
 				value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE" />
-			<property name="shouldStartLine" value="true" />
+			<!-- property name="shouldStartLine" value="true" /-->
 		</module>
 
 
@@ -448,7 +433,6 @@
                                                             java.util.TreeMap, java.util.Vector" />
 			<property name="legalAbstractClassNames" value="" />
 			<property name="ignoredMethodNames" value="getInitialContext, getEnvironment" />
-			<property name="format" value="XXX" />
 		</module>
 
 		<!-- Checks for assignments in subexpressions, such as in String s = Integer.toString(i 
@@ -470,10 +454,11 @@
 			value="-1, 0, 1, 2"/> <property name="ignoreHashCodeMethod" value="false"/> 
 			</module> ! -->
 
-		<!-- Checks that classes (except abtract one) define a ctor and don't rely 
+		<!-- Checks that classes (except abstract one) define a ctor and don't rely 
 			on the default one. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->
-		<module name="MissingCtor" />
+		<!-- deactivated, as it requires test classes to have a constructor. Also this topic is better handled by PMD -->
+		<!-- <module name="MissingCtor" /> -->
 
 		<!-- Checks that switch statement has "default" clause. ! -->
 		<!-- See http://checkstyle.sf.net/config_coding.html ! -->
@@ -648,16 +633,8 @@
 		<module name="JavadocMethod">
 			<property name="severity" value="info" />
 			<property name="scope" value="protected" />
-			<!-- <property name="excludeScope" value=""/> ! -->
-			<property name="allowUndeclaredRTE" value="false" />
-			<property name="allowThrowsTagsForSubclasses" value="false" />
 			<property name="allowMissingParamTags" value="false" />
-			<property name="allowMissingThrowsTags" value="false" />
 			<property name="allowMissingReturnTag" value="false" />
-			<property name="allowMissingJavadoc" value="false" />
-			<property name="allowMissingPropertyJavadoc" value="true" />
-			<property name="logLoadErrors" value="true" />
-			<property name="suppressLoadErrors" value="false" />
 			<property name="tokens" value="METHOD_DEF, CTOR_DEF" />
 		</module>
 
@@ -1008,14 +985,6 @@
 		<!-- KIEKER off <module name="ExecutableStatementCount"> <property name="severity" 
 			value="info"/> <property name="max" value="30"/> <property name="tokens" 
 			value="CTOR_DEF, METHOD_DEF, INSTANCE_INIT, STATIC_INIT"/> </module> ! -->
-
-		<!-- See http://checkstyle.sf.net/config_sizes.html ! -->
-		<!-- Checks for long lines. ! -->
-		<module name="LineLength">
-			<property name="severity" value="info" />
-			<property name="ignorePattern" value="^$" />
-			<property name="max" value="165" />
-		</module>
 
 		<!-- Checks the number of methods declared in each type. This includes 
 			the number of each scope ! -->

@@ -1,0 +1,28 @@
+apply plugin: 'application'
+
+repositories {
+	mavenCentral() 
+}
+
+dependencies {
+        implementation "ch.qos.logback:logback-classic:1.4.7"
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+}
+
+distTar.enabled=false
+
+// Simplify the JAR's file name
+archivesBaseName = 'BookstoreApplication'
+version = ''
+
+sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+mainClassName = 'kieker.examples.userguide.ch2bookstore.BookstoreStarter'
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}

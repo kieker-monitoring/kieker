@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import kieker.common.record.flow.ICallRecord;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
- * API compatibility: Kieker 1.15.0
+ * API compatibility: Kieker 2.0.0
  * 
  * @since 1.5
  */
@@ -50,13 +50,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	/** default constants. */
-	public static final String CALLEE_OPERATION_SIGNATURE = "";
-	public static final String CALLEE_CLASS_SIGNATURE = "";
-	private static final long serialVersionUID = 2408771186779452968L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -65,6 +60,11 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		"calleeOperationSignature",
 		"calleeClassSignature",
 	};
+	
+	/** default constants. */
+	public static final String CALLEE_OPERATION_SIGNATURE = "";
+	public static final String CALLEE_CLASS_SIGNATURE = "";
+	private static final long serialVersionUID = 2408771186779452968L;
 	
 	/** property declarations. */
 	private final String calleeOperationSignature;
@@ -134,7 +134,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -225,4 +225,34 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return this.calleeClassSignature;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CallOperationEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "calleeOperationSignature = ";
+		result += this.getCalleeOperationSignature() + ", ";
+		
+		result += "calleeClassSignature = ";
+		result += this.getCalleeClassSignature() + ", ";
+		
+		return result;
+	}
 }
