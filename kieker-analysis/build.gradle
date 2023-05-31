@@ -1,11 +1,24 @@
 plugins {
-	id 'com.github.hauner.jarTest'
 	id 'java'
 	id 'java-library'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
 
 dependencies {
 	api project(':kieker-common')
@@ -33,6 +46,7 @@ dependencies {
 	implementation 'org.nanohttpd:nanohttpd:2.3.1'
 	implementation 'com.carrotsearch:hppc:0.9.0'
 
+	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'

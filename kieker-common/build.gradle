@@ -1,13 +1,26 @@
 plugins {
-	id "com.github.hauner.jarTest"
 	id 'java'
+}
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
 }
 
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
-	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-}
+	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"}
 
 
 task replaceHardCodedVersionNames() {

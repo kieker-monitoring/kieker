@@ -1,5 +1,15 @@
-plugins {
-	id "com.github.hauner.jarTest"
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
 }
 
 // Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.

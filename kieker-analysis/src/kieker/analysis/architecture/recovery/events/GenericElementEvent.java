@@ -21,12 +21,12 @@ package kieker.analysis.architecture.recovery.events;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public abstract class AbstractElementEvent {
+public class GenericElementEvent {
 
 	private final String hostname;
 	private final String componentSignature;
 
-	public AbstractElementEvent(final String hostname, final String componentSignature) {
+	public GenericElementEvent(final String hostname, final String componentSignature) {
 		this.hostname = hostname;
 		this.componentSignature = componentSignature;
 	}
@@ -51,7 +51,7 @@ public abstract class AbstractElementEvent {
 	}
 
 	private boolean compare(final String a, final String b) {
-		if (a == null && b == null) {
+		if ((a == null) && (b == null)) {
 			return true;
 		} else if (a != null) {
 			return a.equals(b);
@@ -62,7 +62,7 @@ public abstract class AbstractElementEvent {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return super.hashCode() ^ this.hostname.hashCode() ^ this.componentSignature.hashCode();
 	}
 
 	@Override

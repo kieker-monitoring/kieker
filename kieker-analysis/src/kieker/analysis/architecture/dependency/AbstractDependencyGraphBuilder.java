@@ -43,7 +43,7 @@ import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 public abstract class AbstractDependencyGraphBuilder implements IDependencyGraphBuilder {
 
-	private static final String ENTRY_VERTEX_IDENTIFIER = "entry";
+	public static final String ENTRY_VERTEX_IDENTIFIER = "entry";
 
 	protected IGraph<INode, IEdge> graph;
 	protected ResponseTimeDecorator responseTimeDecorator;
@@ -74,17 +74,17 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	protected abstract INode addVertex(final DeployedOperation deployedOperation);
 
 	protected INode addVertexForEntry() {
-		final Optional<INode> nodeOptional = this.graph.findNode(ENTRY_VERTEX_IDENTIFIER);
+		final Optional<INode> nodeOptional = this.graph.findNode(AbstractDependencyGraphBuilder.ENTRY_VERTEX_IDENTIFIER);
 		final INode vertex;
 		if (nodeOptional.isPresent()) {
 			vertex = nodeOptional.get();
 		} else {
-			vertex = GraphFactory.createNode(ENTRY_VERTEX_IDENTIFIER);
+			vertex = GraphFactory.createNode(AbstractDependencyGraphBuilder.ENTRY_VERTEX_IDENTIFIER);
 			this.graph.getGraph().addNode(vertex);
 		}
 
 		vertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ENTRY);
-		vertex.setProperty(PropertyConstants.NAME, ENTRY_VERTEX_IDENTIFIER);
+		vertex.setProperty(PropertyConstants.NAME, AbstractDependencyGraphBuilder.ENTRY_VERTEX_IDENTIFIER);
 		return vertex;
 	}
 

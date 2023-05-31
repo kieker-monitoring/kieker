@@ -143,9 +143,9 @@ subprojects {
   jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
-      xml.enabled = false
-      csv.enabled = false
-      html.enabled = true
+      xml.required = false
+      csv.required = false
+      html.required = true
     }
   }
 
@@ -219,8 +219,8 @@ subprojects {
 
   tasks.withType(Pmd) {
     reports {
-      xml.enabled = true
-      html.enabled = true
+      xml.required = true
+      html.required = true
     }
     // the following line of code adds our custom PMD rules as jar file to the classpath
     //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
@@ -228,8 +228,8 @@ subprojects {
 
   tasks.withType(Checkstyle) {
     reports {
-      xml.enabled true
-      html.enabled true
+      xml.required = true
+      html.required = true
       html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
     }
   }
@@ -501,12 +501,12 @@ task replaceHardCodedVersionNames() {
     regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
     regexpReplaceInFiles(project.file("kieker-monitoring/test-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
     regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
@@ -640,12 +640,13 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
 task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
     description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
 ) {
-  // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-  classifier = 'emf'
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
+  archiveClassifier = 'emf'
   configure allArtifacts
   configure licence
   configure aopxml
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   from configurations.emfJarConfig.asFileTree.files.collect { zipTree(it) }
   from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
@@ -665,12 +666,13 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
     description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
 ) {
-  // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-  classifier = 'aspectj'
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
+  archiveClassifier = 'aspectj'
   configure allArtifacts
   configure licence
   configure aopxml
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
@@ -700,12 +702,12 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-  classifier = 'sources'
+  archiveClassifier = 'sources'
   from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
 }
 
 task javadocJar(type: Jar, dependsOn: apidoc) {
-  classifier = 'javadoc'
+  archiveClassifier = 'javadoc'
   from apidoc.destinationDir
 }
 
@@ -808,14 +810,34 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-  classifier = 'binaries'
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+  'kieker-examples:buildStandaloneExamples',
+  ':kieker-tools:behavior-analysis:distZip',
+  ':kieker-tools:collector:distZip',
+  ':kieker-tools:convert-logging-timestamp:distZip',
+  ':kieker-tools:log-replayer:distZip',
+  ':kieker-tools:resource-monitor:distZip',
+  ':kieker-tools:trace-analysis:distZip',
+  ':kieker-tools:trace-analysis-gui:distZip',
+  ':kieker-examples:jar',
+  ':kieker-examples:spotlessMisc' ]) {
+  archiveClassifier = 'binaries'
   with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
-  classifier = 'binaries'
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+  'kieker-examples:buildStandaloneExamples',
+  ':kieker-tools:behavior-analysis:distZip',
+  ':kieker-tools:collector:distZip',
+  ':kieker-tools:convert-logging-timestamp:distZip',
+  ':kieker-tools:log-replayer:distZip',
+  ':kieker-tools:resource-monitor:distZip',
+  ':kieker-tools:trace-analysis:distZip',
+  ':kieker-tools:trace-analysis-gui:distZip',
+  ':kieker-examples:jar',
+  ':kieker-examples:spotlessMisc' ]) {
+  archiveClassifier = 'binaries'
   with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
   compression = Compression.GZIP
@@ -861,15 +883,17 @@ def sourceContent = project.copySpec {
   into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+  'kieker-examples:buildStandaloneExamples']) {
   description = 'Distributes source archive.'
-  classifier = 'sources'
+  archiveClassifier = 'sources'
   with sourceContent
 }
 
-task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+  'kieker-examples:buildStandaloneExamples']) {
   description = 'Distributes source archive.'
-  classifier = 'sources'
+  archiveClassifier = 'sources'
   with sourceContent
 
   compression = Compression.GZIP

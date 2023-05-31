@@ -30,7 +30,7 @@ public interface IComponentNameBuilder {
 	/**
 	 * @since 1.14
 	 */
-	public String build(final String packageName, final String name);
+	public String build(String packageName, String name);
 
 	/**
 	 * @since 1.14
