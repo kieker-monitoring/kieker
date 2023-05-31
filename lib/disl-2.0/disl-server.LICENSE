@@ -1,5 +1,6 @@
 The Apache Software License - ASL - v2.0
 Project: http://disl.ow2.org/
+Required by: DiSL probes
 Description: DiSL is a domain-specific language and framework for Java bytecode instrumentation.
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
 

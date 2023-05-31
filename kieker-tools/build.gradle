@@ -19,21 +19,12 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	// TODO this can be removed when all tools have been ported to jcommander
-	// - convert-logging-timestamp
-	// - resource-monitor
-	// https://mvnrepository.com/artifact/commons-cli/commons-cli
-	implementation 'commons-cli:commons-cli:1.4'
-
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 	implementation 'org.apache.groovy:groovy-all:4.0.12'
-
-	// TODO jgraphx is no longer maintained
-	// implementation resolveLibrary('jgraphx-*.jar')
 
 	// https://mvnrepository.com/artifact/com.github.yannrichet/Rsession
 	implementation 'com.github.yannrichet:Rsession:1.8.3'

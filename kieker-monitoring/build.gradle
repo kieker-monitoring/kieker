@@ -168,8 +168,7 @@ task jarIntegrationTest(type: Test) {
 	dependsOn rootProject.aspectJJar
 }
 
-
-
-//compileJava.doLast {
-//    tasks.iajc.execute()
-//}
+def resolveLibrary(String library) {
+def libraryDir = rootProject.file(dirLib)
+return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+}
