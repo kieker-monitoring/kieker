@@ -56,7 +56,7 @@ import kieker.model.analysismodel.type.TypePackage;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public final class ArchitectureModelFactory {
+public final class ArchitectureModelRepositoryFactory {
 
 	/** Standard type model file name. */
 	public static final String TYPE_MODEL_NAME = "type-model.xmi";
@@ -78,31 +78,31 @@ public final class ArchitectureModelFactory {
 
 	/** Model descriptor for the type model. */
 	public static final ModelDescriptor TYPE_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.TYPE_MODEL_NAME, TypePackage.Literals.TYPE_MODEL, TypeFactory.eINSTANCE);
+			ArchitectureModelRepositoryFactory.TYPE_MODEL_NAME, TypePackage.Literals.TYPE_MODEL, TypeFactory.eINSTANCE);
 	/** Model descriptor for the assembly model. */
 	public static final ModelDescriptor ASSEMBLY_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.ASSEMBLY_MODEL_NAME, AssemblyPackage.Literals.ASSEMBLY_MODEL,
+			ArchitectureModelRepositoryFactory.ASSEMBLY_MODEL_NAME, AssemblyPackage.Literals.ASSEMBLY_MODEL,
 			AssemblyFactory.eINSTANCE);
 	/** Model descriptor for the deployment model. */
 	public static final ModelDescriptor DEPLOYMENT_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.DEPLOYMENT_MODEL_NAME, DeploymentPackage.Literals.DEPLOYMENT_MODEL,
+			ArchitectureModelRepositoryFactory.DEPLOYMENT_MODEL_NAME, DeploymentPackage.Literals.DEPLOYMENT_MODEL,
 			DeploymentFactory.eINSTANCE);
 	/** Model descriptor for the execution model. */
 	public static final ModelDescriptor EXECUTION_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.EXECUTION_MODEL_NAME, ExecutionPackage.Literals.EXECUTION_MODEL,
+			ArchitectureModelRepositoryFactory.EXECUTION_MODEL_NAME, ExecutionPackage.Literals.EXECUTION_MODEL,
 			ExecutionFactory.eINSTANCE);
 	/** Model descriptor for the statistics model. (optional) */
 	public static final ModelDescriptor STATISTICS_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.STATISTICS_MODEL_NAME, StatisticsPackage.Literals.STATISTICS_MODEL,
+			ArchitectureModelRepositoryFactory.STATISTICS_MODEL_NAME, StatisticsPackage.Literals.STATISTICS_MODEL,
 			StatisticsFactory.eINSTANCE, false);
 	/** Model descriptor for the source model. (optional) */
 	public static final ModelDescriptor SOURCE_MODEL_DESCRIPTOR = new ModelDescriptor(
-			ArchitectureModelFactory.SOURCE_MODEL_NAME, SourcePackage.Literals.SOURCE_MODEL,
+			ArchitectureModelRepositoryFactory.SOURCE_MODEL_NAME, SourcePackage.Literals.SOURCE_MODEL,
 			SourceFactory.eINSTANCE, false);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureModelFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArchitectureModelRepositoryFactory.class);
 
-	private ArchitectureModelFactory() {
+	private ArchitectureModelRepositoryFactory() {
 		// factory class
 	}
 
@@ -127,7 +127,7 @@ public final class ArchitectureModelFactory {
 	 * @return returns on success an model repository with a set of empty models
 	 */
 	public static ModelRepository createModelRepository(final String repositoryName, final ModelDescriptor... descriptors) {
-		final ModelRepository repository = ArchitectureModelFactory.createEmptyModelRepository(repositoryName);
+		final ModelRepository repository = ArchitectureModelRepositoryFactory.createEmptyModelRepository(repositoryName);
 		for (final ModelDescriptor descriptor : descriptors) {
 			repository.register(descriptor, descriptor.getFactory().create(descriptor.getRootClass()));
 		}
@@ -161,7 +161,7 @@ public final class ArchitectureModelFactory {
 		}
 
 		for (final ModelDescriptor descriptor : descriptors) {
-			ArchitectureModelFactory.readModel(resourceSet, repository, descriptor, inputDirectory);
+			ArchitectureModelRepositoryFactory.readModel(resourceSet, repository, descriptor, inputDirectory);
 		}
 
 		return repository;
@@ -169,16 +169,16 @@ public final class ArchitectureModelFactory {
 
 	private static <T extends EObject> void readModel(final ResourceSet resourceSet, final ModelRepository repository,
 			final ModelDescriptor descriptor, final Path path) throws ConfigurationException {
-		ArchitectureModelFactory.LOGGER.debug("Loading model {}", descriptor.getFilename());
-		final File modelFile = ArchitectureModelFactory.createReadModelFileHandle(path, descriptor.getFilename());
+		ArchitectureModelRepositoryFactory.LOGGER.debug("Loading model {}", descriptor.getFilename());
+		final File modelFile = ArchitectureModelRepositoryFactory.createReadModelFileHandle(path, descriptor.getFilename());
 		if (modelFile.exists()) {
 			final Resource resource = resourceSet.getResource(URI.createFileURI(modelFile.getAbsolutePath()), true);
 			for (final Diagnostic error : resource.getErrors()) {
-				ArchitectureModelFactory.LOGGER.error("Error loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Error loading '{}' of {}:{}  {}", descriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
 			for (final Diagnostic error : resource.getWarnings()) {
-				ArchitectureModelFactory.LOGGER.error("Warning loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Warning loading '{}' of {}:{}  {}", descriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
 			repository.register(descriptor, resource.getContents().get(0));
@@ -187,12 +187,12 @@ public final class ArchitectureModelFactory {
 				iterator.next().eCrossReferences();
 			}
 		} else if (descriptor.isRequired()) {
-			ArchitectureModelFactory.LOGGER.error("Error reading model file {}. File does not exist.",
+			ArchitectureModelRepositoryFactory.LOGGER.error("Error reading model file {}. File does not exist.",
 					modelFile.getAbsoluteFile());
 			throw new ConfigurationException(
 					String.format("Error reading model file %s. File does not exist.", modelFile.getAbsoluteFile()));
 		} else {
-			ArchitectureModelFactory.LOGGER.info("Model file {} not present", modelFile.getAbsolutePath());
+			ArchitectureModelRepositoryFactory.LOGGER.info("Model file {} not present", modelFile.getAbsolutePath());
 		}
 	}
 
@@ -232,11 +232,11 @@ public final class ArchitectureModelFactory {
 			Files.createDirectory(outputDirectory);
 		}
 
-		ArchitectureModelFactory.writeEclipseProject(outputDirectory, repository.getName());
+		ArchitectureModelRepositoryFactory.writeEclipseProject(outputDirectory, repository.getName());
 
 		for (final EClass rootClass : repository.getModels().keySet()) {
 			final ModelDescriptor descriptor = repository.getModelDescriptor(rootClass);
-			ArchitectureModelFactory.writeModel(resourceSet, outputDirectory, descriptor.getFilename(), repository.getModel(rootClass));
+			ArchitectureModelRepositoryFactory.writeModel(resourceSet, outputDirectory, descriptor.getFilename(), repository.getModel(rootClass));
 		}
 	}
 
@@ -260,9 +260,9 @@ public final class ArchitectureModelFactory {
 
 	private static <T extends EObject> void writeModel(final ResourceSet resourceSet, final Path outputDirectory,
 			final String filename, final T model) {
-		ArchitectureModelFactory.LOGGER.debug("Saving model {}", filename);
+		ArchitectureModelRepositoryFactory.LOGGER.debug("Saving model {}", filename);
 
-		final File modelFile = ArchitectureModelFactory.createWriteModelFileHandle(outputDirectory, filename);
+		final File modelFile = ArchitectureModelRepositoryFactory.createWriteModelFileHandle(outputDirectory, filename);
 
 		final Resource resource = resourceSet.createResource(URI.createFileURI(modelFile.getAbsolutePath()));
 		resource.getContents().add(model);
@@ -270,7 +270,7 @@ public final class ArchitectureModelFactory {
 		try {
 			resource.save(Collections.EMPTY_MAP);
 		} catch (final IOException e) {
-			ArchitectureModelFactory.LOGGER.error("Cannot write {} model to storage. Cause: {}",
+			ArchitectureModelRepositoryFactory.LOGGER.error("Cannot write {} model to storage. Cause: {}",
 					modelFile.getAbsoluteFile(), e.getLocalizedMessage());
 		}
 	}
