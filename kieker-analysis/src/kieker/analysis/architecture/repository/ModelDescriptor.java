@@ -29,6 +29,7 @@ public class ModelDescriptor {
 	private final String filename;
 	private final EClass rootClass;
 	private final EFactory factory;
+	private final boolean required;
 
 	/**
 	 * Model descriptor.
@@ -41,9 +42,26 @@ public class ModelDescriptor {
 	 *            factory for the model
 	 */
 	public ModelDescriptor(final String filename, final EClass rootClass, final EFactory factory) {
+		this(filename, rootClass, factory, true);
+	}
+
+	/**
+	 * Model descriptor.
+	 *
+	 * @param filename
+	 *            filename for the model
+	 * @param rootClass
+	 *            root class of the model as EClass instance
+	 * @param factory
+	 *            factory for the model
+	 * @param required
+	 *            true when the model file must exist
+	 */
+	public ModelDescriptor(final String filename, final EClass rootClass, final EFactory factory, final boolean required) {
 		this.filename = filename;
 		this.rootClass = rootClass;
 		this.factory = factory;
+		this.required = required;
 	}
 
 	public String getFilename() {
@@ -56,5 +74,9 @@ public class ModelDescriptor {
 
 	public EFactory getFactory() {
 		return this.factory;
+	}
+
+	public boolean isRequired() {
+		return this.required;
 	}
 }
