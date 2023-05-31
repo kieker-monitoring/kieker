@@ -38,7 +38,7 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
 	implementation 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
-	
+
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project(':kieker-common').sourceSets.test.output
 	// Use JUnit test framework
