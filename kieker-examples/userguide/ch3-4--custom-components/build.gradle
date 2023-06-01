@@ -9,13 +9,13 @@ repositories {
 }
 
 dependencies {
-	compile 'ch.qos.logback:logback-classic:1.4.7'
-	compile 'org.slf4j:slf4j-api:1.7.30'
-	compile 'org.codehaus.groovy:groovy-all:3.0.2'
-	compile "net.kieker-monitoring:kieker:${kiekerVersion}:emf"
-	compile 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
-	compile 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
-	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+        implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation "net.kieker-monitoring:kieker:${kiekerVersion}:emf"
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
 }
 
 distTar.enabled=false
