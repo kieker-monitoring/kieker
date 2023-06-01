@@ -64,7 +64,7 @@ public final class LoggingTimestampConverterTool extends AbstractLegacyTool<Sett
 
 	@Override
 	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public final class LoggingTimestampConverterTool extends AbstractLegacyTool<Sett
 			this.logger.error("No timestamps specified");
 			return false;
 		} else {
-			return false;
+			return true;
 		}
 	}
 
