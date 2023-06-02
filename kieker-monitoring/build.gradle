@@ -177,6 +177,9 @@ jar {
             'DiSL-Classes'   : "kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDiSL"
         )
     }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 configurations {
