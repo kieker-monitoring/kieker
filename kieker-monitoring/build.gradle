@@ -99,6 +99,8 @@ dependencies {
 	implementation 'org.influxdb:influxdb-java:2.22'
 	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	
+	implementation 'ch.usi.dag:disl:1.0-SNAPSHOT'
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
@@ -165,6 +167,16 @@ sourceSets {
 			srcDirs = [ 'integrationTest' ]
 		}
 	}
+}
+
+jar {
+    manifest {
+        attributes(
+            'Built-By'       : System.properties['user.name'],
+            'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'DiSL-Classes'   : "kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDiSL"
+        )
+    }
 }
 
 configurations {
