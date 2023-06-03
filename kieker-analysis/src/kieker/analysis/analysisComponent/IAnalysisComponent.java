@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,28 +20,30 @@ import kieker.common.configuration.Configuration;
 
 /**
  * This is the interface for an analysis component in Kieker.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
+ * @deprecated since 1.15.1
  */
+@Deprecated
 public interface IAnalysisComponent {
 
 	/**
 	 * This method should deliver a {@code Configuration} object containing the current configuration of this instance. In other words: The constructor should be
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
+	 *
 	 * @return A completely filled configuration object.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * This method delivers the current name of this component instance. The name does not have to be unique.
-	 * 
+	 *
 	 * @return The current name of the component instance.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public abstract String getName();

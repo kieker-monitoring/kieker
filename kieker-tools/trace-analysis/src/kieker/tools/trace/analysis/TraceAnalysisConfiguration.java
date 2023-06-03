@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,26 +28,26 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.sink.EquivalenceClassWriter;
-import kieker.analysis.sink.NullStage;
-import kieker.analysis.stage.DynamicEventDispatcher;
-import kieker.analysis.stage.IEventMatcher;
-import kieker.analysis.stage.ImplementsEventMatcher;
-import kieker.analysis.stage.flow.EventRecordTraceReconstructionStage;
-import kieker.analysis.stage.flow.ThreadEvent2TraceEventStage;
-import kieker.analysis.stage.flow.TraceEventRecords;
-import kieker.analysis.stage.select.timestampfilter.TimestampFilter;
-import kieker.analysis.stage.select.traceidfilter.TraceIdFilter;
-import kieker.analysis.trace.InvalidEventRecordTraceCounter;
-import kieker.analysis.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
-import kieker.analysis.trace.ValidEventRecordTraceCounter;
-import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
-import kieker.analysis.trace.execution.TraceEquivalenceClassFilter;
-import kieker.analysis.trace.execution.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
-import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
-import kieker.analysis.trace.sink.ExecutionTraceWriterFilter;
-import kieker.analysis.trace.sink.InvalidExecutionTraceWriterSink;
-import kieker.analysis.trace.sink.MessageTraceWriterFilter;
+import kieker.analysis.architecture.trace.InvalidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
+import kieker.analysis.architecture.trace.TraceIdFilter;
+import kieker.analysis.architecture.trace.ValidEventRecordTraceCounter;
+import kieker.analysis.architecture.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.architecture.trace.execution.TraceEquivalenceClassFilter;
+import kieker.analysis.architecture.trace.execution.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
+import kieker.analysis.architecture.trace.flow.EventRecordTraceReconstructionStage;
+import kieker.analysis.architecture.trace.flow.ThreadEvent2TraceEventStage;
+import kieker.analysis.architecture.trace.flow.TraceEventRecords;
+import kieker.analysis.architecture.trace.reconstruction.TraceReconstructionStage;
+import kieker.analysis.architecture.trace.sink.ExecutionTraceWriterFilter;
+import kieker.analysis.architecture.trace.sink.InvalidExecutionTraceWriterSink;
+import kieker.analysis.architecture.trace.sink.MessageTraceWriterFilter;
+import kieker.analysis.generic.DynamicEventDispatcher;
+import kieker.analysis.generic.IEventMatcher;
+import kieker.analysis.generic.ImplementsEventMatcher;
+import kieker.analysis.generic.sink.EquivalenceClassWriter;
+import kieker.analysis.generic.sink.NullSink;
+import kieker.analysis.generic.time.TimestampFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.repository.SystemModelRepository;
@@ -162,9 +162,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 		this.invalidEventRecordTraceCounter = new InvalidEventRecordTraceCounter(parameters.isIgnoreInvalidTraces());
 
 		/** default sinks. */
-		final NullStage execNullStage = new NullStage(false, 1);
-		final NullStage invalidNullStage = new NullStage(false, 1);
-		final NullStage messageNullStage = new NullStage(false, 1);
+		final NullSink execNullStage = new NullSink(false, 1);
+		final NullSink invalidNullStage = new NullSink(false, 1);
+		final NullSink messageNullStage = new NullSink(false, 1);
 
 		/** Merge traces from different analyses. */
 		final Merger<ExecutionTrace> executionTraceMerger = new Merger<>();
@@ -303,7 +303,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
 		final ComponentDependencyGraphAllocationFilter graphFilter = new ComponentDependencyGraphAllocationFilter(systemRepository,
-				TimeUnit.MILLISECONDS);
+				TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -314,7 +314,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private void createPlotAssemblyComponentDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final List<String> decoratorList, final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -324,7 +324,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	private void createPlotContainerDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
-		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.NANOSECONDS);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
@@ -335,7 +335,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 
@@ -347,7 +347,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
 

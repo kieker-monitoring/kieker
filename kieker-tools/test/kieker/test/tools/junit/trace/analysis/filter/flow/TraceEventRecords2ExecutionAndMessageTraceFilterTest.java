@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest extends Abstra
 
 		// Note that the tins and tout must match those created by BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents
 
-		final long initialTimestamp = 1 * (1000 * 1000);
+		final long initialTimestamp = 1 * 1000 * 1000;
 
 		// Manually create Executions for a trace
 		this.exec0_0__bookstore_searchBook = this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(
@@ -205,7 +205,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest extends Abstra
 		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
 				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
 
-		final long initialTimestamp = 1 * (1000 * 1000);
+		final long initialTimestamp = 1 * 1000 * 1000;
 
 		// Manually create Executions for a trace
 		executionTrace.add(this.exec0_0__bookstore_searchBook);
@@ -240,7 +240,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest extends Abstra
 			expectedExecutionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
 					TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
 
-			final long initialTimestamp = 1 * (1000 * 1000);
+			final long initialTimestamp = 1 * 1000 * 1000;
 
 			// Manually create Executions for a trace
 			expectedExecutionTrace.add(this.exec0_0__bookstore_searchBook);

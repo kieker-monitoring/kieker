@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (https://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ public class Configuration extends Properties {
 	 */
 	public final String getStringProperty(final String key, final String defaultValue) {
 		final String s = super.getProperty(key);
-		return (s == null) ? defaultValue : s.trim(); // NOCS
+		return s == null ? defaultValue : s.trim(); // NOCS
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class Configuration extends Properties {
 		try {
 			return Integer.parseInt(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type int, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -213,7 +213,7 @@ public class Configuration extends Properties {
 		try {
 			return Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type long, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -266,7 +266,37 @@ public class Configuration extends Properties {
 		try {
 			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type double, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a double. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A double with the value of the given property or the default value
+	 */
+	public final <T extends Enum<T>> T getEnumProperty(final String key, final Class<T> enumType, final T defaultValue) {
+		final String propertyValue = this.getPropertyValueInternal(key);
+
+		if (propertyValue == null) {
+			return defaultValue;
+		} else {
+			final T[] results = enumType.getEnumConstants();
+			for (final T value : results) {
+				if (value.name().equalsIgnoreCase(propertyValue)) {
+					return value;
+				}
+			}
+
+			LOGGER.warn("Error parsing configuration property '{}' of type {}, found value '{}', using default value {}",
+					key, enumType.getSimpleName(), propertyValue, defaultValue);
 			return defaultValue;
 		}
 	}
@@ -356,7 +386,7 @@ public class Configuration extends Properties {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);
-			if (i < (values.length - 1)) {
+			if (i < values.length - 1) {
 				sb.append('|');
 			}
 		}
@@ -393,15 +423,15 @@ public class Configuration extends Properties {
 
 		final int numberPathElements = path.size();
 		final Iterator<String> pathIter = path.iterator();
-		for (int i = 0; i < (numberPathElements - 1); i++) {
+		for (int i = 0; i < numberPathElements - 1; i++) {
 			sb.append(pathIter.next()).append('/');
 		}
 		if (pathIter.hasNext()) {
 			sb.append(pathIter.next());
 		}
 		if (endsWithSlash
-				&& (sb.length() != 0) // not if the path is now empty
-				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
+				&& sb.length() != 0 // not if the path is now empty
+				&& (sb.length() != 1 || sb.charAt(0) != '/')) { // not if the path is now '/'
 			sb.append('/');
 		}
 
@@ -420,7 +450,7 @@ public class Configuration extends Properties {
 	private static List<String> generatePath(final String workingPathname) {
 		final String[] components = workingPathname.split("/");
 
-		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
+		final LinkedList<String> path = new LinkedList<>(); // NOCS NOPMD
 
 		// resolve ., .., and //
 		for (final String component : components) {
@@ -510,7 +540,7 @@ public class Configuration extends Properties {
 	 */
 	public void setDefaultConfiguration(final Configuration defaultConfiguration) {
 		Configuration conf = this;
-		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
+		while (conf.defaults != null && conf.defaults instanceof Configuration) {
 			conf = (Configuration) conf.defaults;
 		}
 		if (conf.defaults == null) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.stage.model.data.OperationCallDurationEvent;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.analysis.architecture.dependency.PropertyConstants;
+import kieker.analysis.architecture.recovery.events.DeployedOperationCallEvent;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 /**
@@ -31,10 +31,10 @@ import kieker.model.analysismodel.statistics.StatisticsModel;
  * @since 1.14
  *
  */
-public class FullResponseTimeStatisticsStage extends FullStatisticsDecoratorStage<OperationCallDurationEvent> {
+public class FullResponseTimeStatisticsStage extends FullStatisticsDecoratorStage<DeployedOperationCallEvent> {
 
-	public FullResponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<OperationCallDurationEvent, EObject> objectAccesor) {
-		super(statisticsModel, EPredefinedUnits.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
+	public FullResponseTimeStatisticsStage(final StatisticsModel statisticsModel, final Function<DeployedOperationCallEvent, EObject> objectAccesor) {
+		super(statisticsModel, PropertyConstants.RESPONSE_TIME, c -> c.getDuration().toNanos(), objectAccesor);
 	}
 
 }

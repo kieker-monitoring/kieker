@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	public void visitToken(final DetailAST ast) {
 		// Check whether we are interested in the class (whether it is an analysis
 		// component or not)
-		if (!(this.ignoreAbstractClasses && CSUtility.isAbstract(ast))
+		if (!(this.ignoreAbstractClasses && CSUtils.isAbstract(ast))
 				&& MonitoringRecordFactoryConventionCheck.implementsFactory(ast)) {
 			this.checkConstructors(ast);
 			this.checkFields(ast);

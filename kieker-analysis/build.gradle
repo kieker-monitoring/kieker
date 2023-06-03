@@ -1,11 +1,24 @@
 plugins {
-	id 'com.github.hauner.jarTest'
 	id 'java'
 	id 'java-library'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
 
 dependencies {
 	api project(':kieker-common')
@@ -19,8 +32,11 @@ dependencies {
 	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
-	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
-	api 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT'
+	api 'nz.ac.waikato.cms.weka:weka-stable:3.6.13' // used by behavior analysis
+
+	api 'de.cau.cs.se.teetime:teetime:3.1.0'
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	api 'javax.jms:javax.jms-api:2.0.1'
 	api 'javax.servlet:javax.servlet-api:4.0.1'
@@ -30,7 +46,8 @@ dependencies {
 	api 'org.nanohttpd:nanohttpd:2.3.1'
 	api 'com.carrotsearch:hppc:0.9.0'
 
-	api "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
 	api 'javax.xml.bind:jaxb-api:2.3.1'
 
@@ -38,6 +55,10 @@ dependencies {
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project(':kieker-common').sourceSets.test.output
-	testImplementation 'de.cau.cs.se.teetime:teetime:3.1-SNAPSHOT:test'
+	// Use JUnit test framework
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+
 	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }

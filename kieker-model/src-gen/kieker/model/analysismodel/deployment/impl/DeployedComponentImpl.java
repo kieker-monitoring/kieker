@@ -287,7 +287,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public DeploymentContext getDeploymentContext() {
+	public DeploymentContext getContext() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
 			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
@@ -452,8 +452,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT:
-				return getDeploymentContext();
+			case DeploymentPackage.DEPLOYED_COMPONENT___GET_CONTEXT:
+				return getContext();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

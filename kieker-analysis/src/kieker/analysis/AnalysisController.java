@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -304,8 +304,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		AnalysisController.LOG.info(
-				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', "
-						+ "experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
+				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
 				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(),
 				record.isDebugMode(), record.getTimeOffset(), record.getTimeUnit(), record.getNumberOfRecords());
 	}
@@ -414,17 +413,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
-			throw new AnalysisConfigurationException("The plugin '" + dst.getName() + "' (" + dst.getPluginName()
-					+ ") is a reader and can not be connected to.");
+			throw new AnalysisConfigurationException(createCannotConnectToReader(dst));
 		}
 		// Make sure that the plugins are registered. */
 		if (!(this.filters.contains(src) || this.readers.contains(src))) {
-			throw new AnalysisConfigurationException(
-					"The plugin '" + src.getName() + "' (" + src.getPluginName() + ") is not registered.");
+			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(src));
 		}
 		if (!this.filters.contains(dst)) {
-			throw new AnalysisConfigurationException(
-					"The plugin '" + dst.getName() + "' (" + dst.getPluginName() + ") is not registered.");
+			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(dst));
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connection.
@@ -441,18 +437,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
 		if (repository == null) {
-			throw new AnalysisConfigurationException(
-					"Plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") has unconnected repositories.");
+			throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", plugin.getName(), plugin.getPluginName()));
 		}
 		// Make sure that the plugin is registered.
 		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
-			throw new AnalysisConfigurationException(
-					"The plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") is not registered.");
+			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));
 		}
 		// Make sure that the repository is registered.
 		if (!this.repos.contains(repository)) {
-			throw new AnalysisConfigurationException("The repository '" + repository.getName() + "' ("
-					+ repository.getRepositoryName() + ") is not registered.");
+			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));		
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connections.
@@ -491,26 +484,22 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!reader.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' ("
-							+ reader.getPluginName() + ") has unconnected repositories.");
+					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) has unconnected repositories.", reader.getName(), reader.getPluginName()));
 				}
 				if (!reader.start()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(
-							"Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) failed to initialize.", reader.getName(), reader.getPluginName()));
 				}
 			}
 			for (final AbstractFilterPlugin filter : this.filters) {
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!filter.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' ("
-							+ filter.getPluginName() + ") has unconnected repositories.");
+					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", filter.getName(), filter.getPluginName()));
 				}
 				if (!filter.start()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(
-							"Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
+					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) failed to initialize.", filter.getName(), filter.getPluginName()));
 				}
 			}
 			// Start reading
@@ -804,6 +793,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public boolean tryRegisterComponentName(final String name) {
 		return this.registeredComponentNames.add(name);
+	}
+	
+
+	private String createCannotConnectToReader(final AbstractPlugin plugin) {
+		return String.format("The plugin '%s' (%s) is a reader and can not be connected to.", plugin.getName(), plugin.getPluginName());
+	}
+
+	private String createPluginNotRegisteredMessage(final AbstractPlugin plugin) {
+		return String.format("The plugin '%s' (%s) is not registered.", plugin.getName(), plugin.getPluginName());
 	}
 
 	/**

@@ -2,7 +2,6 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -30,7 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<EPropertyType,Object> {
+public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,Object> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -39,7 +38,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 * @ordered
 	 */
-	protected static final EPropertyType KEY_EDEFAULT = EPropertyType.MIN;
+	protected static final String KEY_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
@@ -49,7 +48,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 * @ordered
 	 */
-	protected EPropertyType key = KEY_EDEFAULT;
+	protected String key = KEY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
@@ -95,7 +94,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EPropertyType getTypedKey() {
+	public String getTypedKey() {
 		return key;
 	}
 
@@ -104,9 +103,9 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedKey(EPropertyType newKey) {
-		EPropertyType oldKey = key;
-		key = newKey == null ? KEY_EDEFAULT : newKey;
+	public void setTypedKey(String newKey) {
+		String oldKey = key;
+		key = newKey;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY, oldKey, key));
 	}
@@ -157,7 +156,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				setTypedKey((EPropertyType)newValue);
+				setTypedKey((String)newValue);
 				return;
 			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
 				setTypedValue(newValue);
@@ -193,7 +192,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				return key != KEY_EDEFAULT;
+				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
 			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 		}
@@ -255,7 +254,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@Override
-	public EPropertyType getKey() {
+	public String getKey() {
 		return getTypedKey();
 	}
 
@@ -265,7 +264,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@Override
-	public void setKey(EPropertyType key) {
+	public void setKey(String key) {
 		setTypedKey(key);
 	}
 
@@ -297,9 +296,9 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<EPropertyType, Object> getEMap() {
+	public EMap<String, Object> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<EPropertyType, Object>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, Object>)container.eGet(eContainmentFeature());
 	}
 
 } //EPropertyTypeToValueImpl

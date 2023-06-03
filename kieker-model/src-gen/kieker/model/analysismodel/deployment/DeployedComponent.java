@@ -145,6 +145,6 @@ public interface DeployedComponent extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	DeploymentContext getDeploymentContext();
+	DeploymentContext getContext();
 
 } // DeployedComponent

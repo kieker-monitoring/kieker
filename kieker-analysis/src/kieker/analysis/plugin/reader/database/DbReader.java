@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -39,7 +40,9 @@ import kieker.common.util.classpath.InstantiationFactory;
  * @author Jan Waller
  *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a database", outputPorts = {
 	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the DBReader")
 }, configuration = {
@@ -89,7 +92,7 @@ public class DbReader extends AbstractReaderPlugin {
 		try {
 			Class.forName(this.driverClassname).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
+			throw new InternalErrorException("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
 	}
 

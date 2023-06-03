@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 
-import kieker.analysis.statistics.calculating.ICalculator;
-import kieker.model.analysismodel.statistics.EPredefinedUnits;
+import kieker.analysis.statistics.calculating.AbstractCalculator;
 import kieker.model.analysismodel.statistics.StatisticsModel;
 
 import teetime.stage.basic.AbstractFilter;
@@ -40,9 +39,9 @@ public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 
 	private final StatisticsDecorator<T> statisticsDecorator;
 
-	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final EPredefinedUnits unit, final ICalculator<T> statisticCalculator,
+	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final AbstractCalculator<T> statisticCalculator,
 			final Function<T, EObject> objectAccesor) {
-		this.statisticsDecorator = new StatisticsDecorator<T>(statisticsModel, unit, statisticCalculator, objectAccesor);
+		this.statisticsDecorator = new StatisticsDecorator<>(statisticsModel, statisticCalculator, objectAccesor);
 	}
 
 	@Override

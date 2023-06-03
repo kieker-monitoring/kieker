@@ -68,6 +68,7 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 			case TypePackage.PROVIDED_INTERFACE_TYPE: return createProvidedInterfaceType();
 			case TypePackage.ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY: return (EObject)createEStringToProvidedInterfaceTypeMapEntry();
 			case TypePackage.REQUIRED_INTERFACE_TYPE: return createRequiredInterfaceType();
+			case TypePackage.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: return (EObject)createInterfaceEStringToOperationTypeMapEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -177,6 +178,16 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 	public RequiredInterfaceType createRequiredInterfaceType() {
 		RequiredInterfaceTypeImpl requiredInterfaceType = new RequiredInterfaceTypeImpl();
 		return requiredInterfaceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, OperationType> createInterfaceEStringToOperationTypeMapEntry() {
+		InterfaceEStringToOperationTypeMapEntryImpl interfaceEStringToOperationTypeMapEntry = new InterfaceEStringToOperationTypeMapEntryImpl();
+		return interfaceEStringToOperationTypeMapEntry;
 	}
 
 	/**

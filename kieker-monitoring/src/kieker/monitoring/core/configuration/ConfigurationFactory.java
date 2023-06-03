@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Enumeration;
@@ -56,7 +57,7 @@ public final class ConfigurationFactory {
 	 * @return the configuration for the singleton controller
 	 */
 	public static Configuration createSingletonConfiguration() {
-		LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
+		ConfigurationFactory.LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(ConfigurationConstants.CONTROLLER_NAME, "KIEKER-SINGLETON");
@@ -64,12 +65,12 @@ public final class ConfigurationFactory {
 		String configurationFile = System.getProperty(ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
-			LOGGER.info("Loading configuration from JVM-specified location: '{}'", configurationFile);
+			ConfigurationFactory.LOGGER.info("Loading configuration from JVM-specified location: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile);
+			ConfigurationFactory.LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
 					defaultConfiguration);
 		}
@@ -92,11 +93,26 @@ public final class ConfigurationFactory {
 	 * returned.
 	 *
 	 * @param configurationFile
-	 *            The file which contains the configuration.
+	 *            The file path as string which contains the configuration.
 	 *
 	 * @return The created Configuration
 	 */
 	public static Configuration createConfigurationFromFile(final String configurationFile) {
+		return ConfigurationFactory.loadConfigurationFromFile(configurationFile,
+				ConfigurationFactory.defaultConfiguration());
+	}
+
+	/**
+	 * Creates a new configuration based on the given properties file with fallback on the default values. If the file
+	 * does not exists, a warning is logged and an empty configuration with fallback on the default configuration is
+	 * returned.
+	 *
+	 * @param configurationFile
+	 *            The file path which contains the configuration.
+	 *
+	 * @return The created Configuration
+	 */
+	public static Configuration createConfigurationFromFile(final Path configurationFile) {
 		return ConfigurationFactory.loadConfigurationFromFile(configurationFile,
 				ConfigurationFactory.defaultConfiguration());
 	}
@@ -123,16 +139,32 @@ public final class ConfigurationFactory {
 	 */
 	private static Configuration loadConfigurationFromFile(final String filename,
 			final Configuration defaultValues) {
+		return ConfigurationFactory.loadConfigurationFromFile(Paths.get(filename), defaultValues);
+	}
+
+	/**
+	 * Returns the properties loaded from file propertiesFn with fallback on the default values. If the file does not
+	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
+	 *
+	 * @param path
+	 *            The path to the file which contains the properties.
+	 * @param defaultValues
+	 *            The configuration containing the default values.
+	 *
+	 * @return The created Configuration
+	 */
+	private static Configuration loadConfigurationFromFile(final Path path,
+			final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		InputStream is = null; // NOPMD (null)
 		try {
 			try {
-				is = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ);
+				is = Files.newInputStream(path, StandardOpenOption.READ);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(filename);
+				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(path.toString());
 				if (resourceUrl == null) {
-					LOGGER.warn("File '{}' not found", filename);
+					ConfigurationFactory.LOGGER.warn("File '{}' not found", path.toString());
 					return new Configuration(defaultValues);
 				}
 				is = resourceUrl.openStream();
@@ -140,13 +172,13 @@ public final class ConfigurationFactory {
 			properties.load(is);
 			return properties;
 		} catch (final IOException ex) {
-			LOGGER.error("Error reading file '{}'", filename, ex);
+			ConfigurationFactory.LOGGER.error("Error reading file '{}'", path.toString(), ex);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					LOGGER.warn("Failed to close FileInputStream", ex);
+					ConfigurationFactory.LOGGER.warn("Failed to close FileInputStream", ex);
 				}
 			}
 		}
@@ -168,14 +200,14 @@ public final class ConfigurationFactory {
 			final Configuration defaultValues) {
 		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 		if (resourceUrl == null) {
-			LOGGER.warn("File '{}' not found in classpath", propertiesFn);
+			ConfigurationFactory.LOGGER.warn("File '{}' not found in classpath", propertiesFn);
 		} else {
 			try (final InputStream is = resourceUrl.openStream()) {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final IOException ex) {
-				LOGGER.error("Error reading file '{}'", propertiesFn, ex);
+				ConfigurationFactory.LOGGER.error("Error reading file '{}'", propertiesFn, ex);
 			}
 		}
 		return new Configuration(defaultValues);

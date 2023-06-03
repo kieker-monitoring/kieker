@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 package kieker.model.analysismodel.util;
 
 import java.util.Map;
-
-import com.google.common.base.Objects;
 
 /**
  * Class representing a key (e.g., for a {@link Map}) that consists of three elements.
@@ -50,7 +48,11 @@ public final class ComposedKey<F, S> {
 			return false;
 		}
 		final ComposedKey<?, ?> p = (ComposedKey<?, ?>) o;
-		return Objects.equal(p.first, this.first) && Objects.equal(p.second, this.second);
+		return ComposedKey.equalOrBothNull(p.first, this.first) && ComposedKey.equalOrBothNull(p.second, this.second);
+	}
+
+	public static boolean equalOrBothNull(final Object a, final Object b) {
+		return (a == b) || ((a != null) && a.equals(b)); // NOPMD CompareObjectsWithEquals
 	}
 
 	@Override

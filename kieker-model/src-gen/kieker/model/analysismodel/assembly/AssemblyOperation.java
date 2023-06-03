@@ -51,6 +51,6 @@ public interface AssemblyOperation extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AssemblyComponent getAssemblyComponent();
+	AssemblyComponent getComponent();
 
 } // AssemblyOperation

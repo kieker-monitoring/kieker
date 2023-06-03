@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,28 +68,22 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 	 */
 	@Override
 	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
-		this.kiekerConfiguration = this.readConfiguration();
+		final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration());
 
-		if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
-			final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration());
+		final Thread shutdownThread = this.shutdownHook(execution);
 
-			final Thread shutdownThread = this.shutdownHook(execution);
+		this.logger.debug("Running {}", label);
 
-			this.logger.debug("Running {}", label);
+		execution.executeBlocking();
 
-			execution.executeBlocking();
-
-			if (!shutdownThread.isAlive()) {
-				Runtime.getRuntime().removeShutdownHook(shutdownThread);
-			}
-			this.shutdownService();
-
-			this.logger.debug("Done");
-
-			return SUCCESS_EXIT_CODE;
-		} else {
-			return CONFIGURATION_ERROR;
+		if (!shutdownThread.isAlive()) {
+			Runtime.getRuntime().removeShutdownHook(shutdownThread);
 		}
+		this.shutdownService();
+
+		this.logger.debug("Done");
+
+		return AbstractLegacyTool.SUCCESS_EXIT_CODE;
 	}
 
 	/**

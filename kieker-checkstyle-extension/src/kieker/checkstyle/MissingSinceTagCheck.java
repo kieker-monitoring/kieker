@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,11 +53,11 @@ public class MissingSinceTagCheck extends AbstractCheck {
 	@Override
 	public void visitToken(final DetailAST ast) {
 		// Do not check private classes etc.
-		if (!CSUtility.isPrivate(ast)) {
+		if (!CSUtils.isPrivate(ast)) {
 			this.checkSinceTag(ast);
 
 			if (ast.getType() == TokenTypes.INTERFACE_DEF) {
-				this.checkSinceTag(CSUtility.getMethodsFromClass(ast));
+				this.checkSinceTag(CSUtils.getMethodsFromClass(ast));
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class MissingSinceTagCheck extends AbstractCheck {
 	}
 
 	private void checkSinceTag(final DetailAST ast) {
-		if (!CSUtility.sinceTagAvailable(this, ast)) {
+		if (!CSUtils.sinceTagAvailable(this, ast)) {
 			this.log(ast.getLineNo(), "@since tag missing");
 		}
 	}

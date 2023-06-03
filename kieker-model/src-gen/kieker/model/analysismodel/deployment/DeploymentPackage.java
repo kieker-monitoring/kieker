@@ -68,13 +68,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Contexts</b></em>' map.
+	 * The feature id for the '<em><b>Contexts</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS = 0;
+	int DEPLOYMENT_MODEL__CONTEXTS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -315,13 +315,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT_FEATURE_COUNT = 7;
 
 	/**
-	 * The operation id for the '<em>Get Deployment Context</em>' operation.
+	 * The operation id for the '<em>Get Context</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT = 0;
+	int DEPLOYED_COMPONENT___GET_CONTEXT = 0;
 
 	/**
 	 * The number of operations of the '<em>Deployed Component</em>' class.
@@ -527,22 +527,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_PROVIDED_INTERFACE = 9;
 
 	/**
-	 * The feature id for the '<em><b>Provided Operations</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = 0;
-
-	/**
 	 * The feature id for the '<em><b>Provided Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = 1;
+	int DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Provided Interface</em>' class.
@@ -551,7 +542,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_PROVIDED_INTERFACE_FEATURE_COUNT = 2;
+	int DEPLOYED_PROVIDED_INTERFACE_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of operations of the '<em>Deployed Provided Interface</em>' class.
@@ -666,15 +657,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeploymentModel#getDeploymentContexts <em>Deployment Contexts</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeploymentModel#getContexts <em>Contexts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Deployment Contexts</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeploymentModel#getDeploymentContexts()
+	 * @return the meta object for the map '<em>Contexts</em>'.
+	 * @see kieker.model.analysismodel.deployment.DeploymentModel#getContexts()
 	 * @see #getDeploymentModel()
 	 * @generated
 	 */
-	EReference getDeploymentModel_DeploymentContexts();
+	EReference getDeploymentModel_Contexts();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployment Context Map Entry</em>}'.
@@ -864,14 +855,14 @@ public interface DeploymentPackage extends EPackage {
 	EAttribute getDeployedComponent_Signature();
 
 	/**
-	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedComponent#getDeploymentContext() <em>Get Deployment Context</em>}' operation.
+	 * Returns the meta object for the '{@link kieker.model.analysismodel.deployment.DeployedComponent#getContext() <em>Get Context</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Deployment Context</em>' operation.
-	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getDeploymentContext()
+	 * @return the meta object for the '<em>Get Context</em>' operation.
+	 * @see kieker.model.analysismodel.deployment.DeployedComponent#getContext()
 	 * @generated
 	 */
-	EOperation getDeployedComponent__GetDeploymentContext();
+	EOperation getDeployedComponent__GetContext();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Operation Map Entry</em>}'.
@@ -1014,17 +1005,6 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedProvidedInterface();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedOperations <em>Provided Operations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Provided Operations</em>'.
-	 * @see kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedOperations()
-	 * @see #getDeployedProvidedInterface()
-	 * @generated
-	 */
-	EReference getDeployedProvidedInterface_ProvidedOperations();
-
-	/**
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.deployment.DeployedProvidedInterface#getProvidedInterface <em>Provided Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1135,12 +1115,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_MODEL = eINSTANCE.getDeploymentModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Contexts</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS = eINSTANCE.getDeploymentModel_DeploymentContexts();
+		EReference DEPLOYMENT_MODEL__CONTEXTS = eINSTANCE.getDeploymentModel_Contexts();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl <em>EString To Deployment Context Map Entry</em>}' class.
@@ -1287,12 +1267,12 @@ public interface DeploymentPackage extends EPackage {
 		EAttribute DEPLOYED_COMPONENT__SIGNATURE = eINSTANCE.getDeployedComponent_Signature();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Deployment Context</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Context</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT = eINSTANCE.getDeployedComponent__GetDeploymentContext();
+		EOperation DEPLOYED_COMPONENT___GET_CONTEXT = eINSTANCE.getDeployedComponent__GetContext();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl <em>EString To Deployed Operation Map Entry</em>}' class.
@@ -1407,14 +1387,6 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DEPLOYED_PROVIDED_INTERFACE = eINSTANCE.getDeployedProvidedInterface();
-
-		/**
-		 * The meta object literal for the '<em><b>Provided Operations</b></em>' map feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS = eINSTANCE.getDeployedProvidedInterface_ProvidedOperations();
 
 		/**
 		 * The meta object literal for the '<em><b>Provided Interface</b></em>' reference feature.

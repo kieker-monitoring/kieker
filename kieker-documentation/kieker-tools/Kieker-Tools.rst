@@ -4,7 +4,7 @@ Kieker Tools
 ============
 
 All tools can be found in the binary bundle
-``(kieker-1.16-SNAPSHOT-binaries.zip``) in the ``tools`` directory. The
+``(kieker-2.0.0-SNAPSHOT-binaries.zip``) in the ``tools`` directory. The
 ``tools`` directory contains a set of tools prepacked as tar and zip
 archives. Each archive contains one tool with all its libraries and
 start scripts. The start scripts are located in the ``bin`` directory
@@ -24,6 +24,7 @@ or use the tool specific ``_OPTS`` variable, e.g.,
 Furthermore, you can use both variables to pass additional JVM
 parameters and options to a tool.
 
+-  :ref:`kieker-tools-behavior-analysis`
 -  :ref:`kieker-tools-webgui` (deprecated)
 -  :ref:`kieker-tools-trace-analysis-tool`
 -  :ref:`kieker-tools-trace-analysis-gui` (deprecated)

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.function.Function;
 import org.eclipse.emf.ecore.EObject;
 
 import kieker.analysis.util.RunningMedian;
-import kieker.model.analysismodel.statistics.EPropertyType;
 import kieker.model.analysismodel.statistics.StatisticRecord;
 
 /**
@@ -35,12 +34,13 @@ import kieker.model.analysismodel.statistics.StatisticRecord;
  *
  * @since 1.14
  */
-public class MedianCalculator<T> implements ICalculator<T> {
+public class MedianCalculator<T> extends AbstractCalculator<T> {
 
 	private final Map<EObject, RunningMedian<Long>> runningMedians = new HashMap<>(); // NOPMD (class not designed for concurrent access)
 	private final Function<T, Long> valueAccessor;
 
-	public MedianCalculator(final Function<T, Long> valueAccessor) {
+	public MedianCalculator(final String propertyName, final Function<T, Long> valueAccessor) {
+		super(propertyName);
 		this.valueAccessor = valueAccessor;
 	}
 
@@ -49,7 +49,7 @@ public class MedianCalculator<T> implements ICalculator<T> {
 		final RunningMedian<Long> runningMedian = this.runningMedians.computeIfAbsent(modelObject, o -> RunningMedian.forLong());
 		runningMedian.add(this.valueAccessor.apply(input));
 		final long newMedian = runningMedian.getMedian();
-		statistic.getProperties().put(EPropertyType.MEDIAN, newMedian);
+		statistic.getProperties().put(this.getPropertyName(), newMedian);
 	}
 
 }

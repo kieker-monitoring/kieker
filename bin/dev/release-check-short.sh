@@ -3,7 +3,7 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-KIEKER_VERSION="1.16-SNAPSHOT"
+KIEKER_VERSION="2.0.0-SNAPSHOT"
 
 # lists the files included in an archive without extracting it
 function cat_archive_content {
@@ -93,7 +93,6 @@ function assert_files_exist_common {
 	assert_file_exists_regular "bin/logging.verbose.properties"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty/javadoc/"
 	assert_dir_exists "lib/"
-	assert_dir_exists "lib/framework-libs/"
 	assert_file_exists_regular "README"
 	assert_file_exists_regular "HISTORY"
 	assert_file_exists_regular "LICENSE"
@@ -122,8 +121,8 @@ function assert_files_exist_common {
 
 	# Make sure that required infos included in each LICENSE file in lib/ (excluding subdirs)
 	information "Making sure that required infos included in each LICENSE file in lib/ (excluding subdirs)"
-	for info in "Project" "Description" "License" "Required by"; do
-	    for l in lib/*.LICENSE; do
+	for info in "Project" "Description" "License"; do
+	    for l in `find . -name '*.LICENSE'` ; do
 		information "Asserting '$l' contains '${info}' information .. "
 		if ! (grep -q "${info}:" $l); then
 		    error "'${info}' missing in $l";
@@ -134,7 +133,8 @@ function assert_files_exist_common {
 	done
 
 	information "Making sure that no references to old Kieker Jars included (note that we cannot check inside binary files) ..."
-	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?-[[:alpha:]]+)?\.jar"); then
+	pwd
+	if (grep -r "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?-[[:alpha:]]+)?\.jar"); then
 	    # Don't ask why results not dumped to stdout above
 	    warning "Found old version string. Add/correct replacement regexp in Gradle file?"
 	    error "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
@@ -206,14 +206,6 @@ function assert_files_exist_bin {
 #	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
 #	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
 #	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
-
-	warning "Deactived check for .project and .classfiles"
-	#information "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."
-	#for d in $(find -name ".project" -exec dirname {} \;); do
-	#    assert_file_exists_regular $d/.classpath
-	#    assert_file_exists_regular $d/.settings/org.eclipse.jdt.core.prefs
-	#done
-	#information OK
 
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"

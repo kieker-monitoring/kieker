@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,29 @@ import kieker.analysis.analysisComponent.IAnalysisComponent;
 
 /**
  * This is the interface for repositories within Kieker.
- * 
+ *
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15.1 old plugin api
  */
+@Deprecated
 public interface IRepository extends IAnalysisComponent {
 
 	/**
 	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.
-	 * 
+	 *
 	 * @return The name of the repository type.
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public abstract String getRepositoryName();
 
 	/**
 	 * This method delivers the description of this repository type.
-	 * 
+	 *
 	 * @return The description of the repository type.
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public abstract String getRepositoryDescription();

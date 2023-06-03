@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package kieker.examples.analysis.traceanalysis;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import com.beust.jcommander.JCommander;
 
@@ -69,7 +70,7 @@ public final class TraceAnalysisExampleMain extends AbstractService<TeeTimeConfi
 	}
 
 	@Override
-	protected File getConfigurationFile() {
+	protected Path getConfigurationPath() {
 		return null;
 	}
 	

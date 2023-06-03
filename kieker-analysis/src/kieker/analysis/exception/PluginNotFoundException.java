@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@ package kieker.analysis.exception;
 import kieker.common.configuration.Configuration;
 
 /**
- * 
+ *
  * @author Markus Fischer
  * @since 1.10
- * 
- * 
- *        The Plugin requested with the ID was not found in the registry.
- * 
+ * @deprecated since 1.15.1 plugin API
+ *
+ *
+ *             The Plugin requested with the ID was not found in the registry.
+ *
  */
+@Deprecated
 public class PluginNotFoundException extends Exception {
 
 	private static final long serialVersionUID = -8803287298408230964L;
@@ -35,7 +37,7 @@ public class PluginNotFoundException extends Exception {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param id
 	 *            requesting ID
 	 * @param configuration

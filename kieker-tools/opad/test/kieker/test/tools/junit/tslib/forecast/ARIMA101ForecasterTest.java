@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,12 +67,12 @@ public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 		// dprint(var_3$pred[1] - var_3$se[1])
 
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
-		final List<Double> expectedValues = new ArrayList<Double>(values.length);
+		final List<Double> expectedValues = new ArrayList<>(values.length);
 		for (final Double curVal : values) {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(ARIMA101ForecasterTest.START_TIME, TimeUnit.MILLISECONDS, ARIMA101ForecasterTest.DELTA_TIME_MILLIS);
+		final TimeSeries<Double> ts = new TimeSeries<>(ARIMA101ForecasterTest.START_TIME, TimeUnit.MILLISECONDS, ARIMA101ForecasterTest.DELTA_TIME_MILLIS);
 		ts.appendAll(values);
 
 		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, ARIMA101ForecasterTest.CONFIDENCE_LEVEL);

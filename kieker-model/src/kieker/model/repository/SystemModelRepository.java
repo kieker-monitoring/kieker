@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,10 @@ import kieker.model.system.model.Operation;
  * @author Reiner Jung -- ported
  *
  * @since 1.1
+ * @deprecated 2.0.0 should be removed in future releases
  */
-public class SystemModelRepository extends AbstractRepository {
+@Deprecated
+public class SystemModelRepository extends AbstractRepository { // NOPMD
 
 	public static final Execution ROOT_EXECUTION = new Execution(OperationRepository.ROOT_OPERATION,
 			AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
@@ -142,7 +144,7 @@ public class SystemModelRepository extends AbstractRepository {
 	private void printHtmlTableRow(final PrintStream ps, final String[] cells) {
 		ps.println("<tr class=\"cell\">");
 		for (final String cell : cells) {
-			ps.println("<td class=\"space\">" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>"); // NOCS
+			ps.println("<td class=\"space\">" + (cell.length() == 0 ? "&nbsp;" : cell) + "</td>"); // NOCS
 		}
 		ps.println("</tr>");
 	}
@@ -177,8 +179,9 @@ public class SystemModelRepository extends AbstractRepository {
 	 *             If the used default encoding is not
 	 *             supported.
 	 */
-	public void saveSystemToHTMLFile(final Path outputFile) throws IOException, FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE), true, ENCODING);
+	public void saveSystemToHTMLFile(final Path outputFile) throws IOException, // NOPMD
+			FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE), true, SystemModelRepository.ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n"
 				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"
@@ -201,7 +204,7 @@ public class SystemModelRepository extends AbstractRepository {
 							.append("</li>");
 				}
 			}
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
 				SystemModelRepository.simpleHTMLEscape(type.getPackageName()),
 				SystemModelRepository.simpleHTMLEscape(type.getTypeName()), opListBuilder.toString(), };
@@ -218,7 +221,7 @@ public class SystemModelRepository extends AbstractRepository {
 				paramListStrBuild.append("<li>").append(SystemModelRepository.simpleHTMLEscape(paramType))
 						.append("</li>");
 			}
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
 				this.htmlEntityRef(op.getComponentType().getId(),
 						SystemModelRepository.simpleHTMLEscape(op.getComponentType().getFullQualifiedName()),
@@ -232,7 +235,7 @@ public class SystemModelRepository extends AbstractRepository {
 		this.printOpenHtmlTable(ps, "Assembly Components", new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT),
 				ac.getName(),
 				this.htmlEntityRef(ac.getType().getId(),
@@ -245,7 +248,7 @@ public class SystemModelRepository extends AbstractRepository {
 		this.printOpenHtmlTable(ps, "Execution Containers", new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()),
 						EntityType.EXECUTION_CONTAINER),
 				SystemModelRepository.simpleHTMLEscape(container.getName()), };
@@ -258,7 +261,7 @@ public class SystemModelRepository extends AbstractRepository {
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory
 				.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()),
 						EntityType.ALLOCATION_COMPONENT),
 				this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(),

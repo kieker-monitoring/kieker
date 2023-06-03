@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.tools.source;
 
-import kieker.analysis.source.ISourceCompositeStage;
-import kieker.analysis.source.rewriter.ITraceMetadataRewriter;
-import kieker.analysis.source.rewriter.NoneTraceMetadataRewriter;
-import kieker.analysis.source.tcp.MultipleConnectionTcpSourceStage;
+import kieker.analysis.generic.source.ISourceCompositeStage;
+import kieker.analysis.generic.source.rewriter.ITraceMetadataRewriter;
+import kieker.analysis.generic.source.rewriter.NoneTraceMetadataRewriter;
+import kieker.analysis.generic.source.tcp.MultipleConnectionTcpSourceStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
@@ -65,7 +65,9 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 	 *            configuration parameters
 	 * @throws ConfigurationException
 	 *             on configuration errors during instantiation
+	 * @deprecated
 	 */
+	@Deprecated
 	public MultipleConnectionTcpSourceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final int inputPort = configuration.getIntProperty(MultipleConnectionTcpSourceCompositeStage.SOURCE_PORT,
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_SOURCE_PORT);
@@ -73,9 +75,8 @@ public class MultipleConnectionTcpSourceCompositeStage extends CompositeStage im
 				MultipleConnectionTcpSourceCompositeStage.DEFAULT_CAPACITY);
 		final String rewriterClassName = configuration.getStringProperty(MultipleConnectionTcpSourceCompositeStage.REWRITER,
 				NoneTraceMetadataRewriter.class.getName());
-		final Class<?>[] classes = null;
 		final ITraceMetadataRewriter rewriter = InstantiationFactory.getInstance(configuration).create(ITraceMetadataRewriter.class,
-				rewriterClassName, classes);
+				rewriterClassName, null);
 		this.reader = new MultipleConnectionTcpSourceStage(inputPort, capacity, rewriter);
 	}
 

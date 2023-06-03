@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,8 +120,8 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 
 		this.analysisController = new AnalysisController();
 		recordConverter = new RecordConverter(new Configuration(), this.analysisController);
-		this.simpleListReader = new ListReader<OperationExecutionRecord>(new Configuration(), this.analysisController);
-		this.listCollectionfilter = new ListCollectionFilter<NamedDoubleRecord>(new Configuration(), this.analysisController);
+		this.simpleListReader = new ListReader<>(new Configuration(), this.analysisController);
+		this.listCollectionfilter = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, recordConverter, RecordConverter.INPUT_PORT_NAME_OER);
 		this.analysisController.connect(recordConverter, RecordConverter.OUTPUT_PORT_NAME_NDR, this.listCollectionfilter, ListCollectionFilter.INPUT_PORT_NAME);

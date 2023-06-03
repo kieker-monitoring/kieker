@@ -26,10 +26,8 @@ import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
 
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
 
-import kieker.model.analysismodel.sources.SourcesPackage;
-
-import kieker.model.analysismodel.sources.impl.SourcesPackageImpl;
-
+import kieker.model.analysismodel.source.SourcePackage;
+import kieker.model.analysismodel.source.impl.SourcePackageImpl;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl;
@@ -201,8 +199,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcesPackage.eNS_URI);
-		SourcesPackageImpl theSourcesPackage = (SourcesPackageImpl)(registeredPackage instanceof SourcesPackageImpl ? registeredPackage : SourcesPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
+		SourcePackageImpl theSourcePackage = (SourcePackageImpl)(registeredPackage instanceof SourcePackageImpl ? registeredPackage : SourcePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDeploymentPackage.createPackageContents();
@@ -212,7 +210,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		theAssemblyPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
-		theSourcesPackage.createPackageContents();
+		theSourcePackage.createPackageContents();
 
 		// Initialize created meta-data
 		theDeploymentPackage.initializePackageContents();
@@ -222,7 +220,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		theAssemblyPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
-		theSourcesPackage.initializePackageContents();
+		theSourcePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theDeploymentPackage.freeze();
@@ -248,7 +246,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeploymentModel_DeploymentContexts() {
+	public EReference getDeploymentModel_Contexts() {
 		return (EReference)deploymentModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -428,7 +426,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EOperation getDeployedComponent__GetDeploymentContext() {
+	public EOperation getDeployedComponent__GetContext() {
 		return deployedComponentEClass.getEOperations().get(0);
 	}
 
@@ -568,18 +566,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * @generated
 	 */
 	@Override
-	public EReference getDeployedProvidedInterface_ProvidedOperations() {
-		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getDeployedProvidedInterface_ProvidedInterface() {
-		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(1);
+		return (EReference)deployedProvidedInterfaceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -672,7 +660,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		// Create classes and their features
 		deploymentModelEClass = createEClass(DEPLOYMENT_MODEL);
-		createEReference(deploymentModelEClass, DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS);
+		createEReference(deploymentModelEClass, DEPLOYMENT_MODEL__CONTEXTS);
 
 		eStringToDeploymentContextMapEntryEClass = createEClass(ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY);
 		createEAttribute(eStringToDeploymentContextMapEntryEClass, ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__KEY);
@@ -694,7 +682,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__PROVIDED_INTERFACES);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__REQUIRED_INTERFACES);
 		createEAttribute(deployedComponentEClass, DEPLOYED_COMPONENT__SIGNATURE);
-		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT);
+		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_CONTEXT);
 
 		eStringToDeployedOperationMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY);
 		createEAttribute(eStringToDeployedOperationMapEntryEClass, ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__KEY);
@@ -713,7 +701,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEOperation(deployedStorageEClass, DEPLOYED_STORAGE___GET_COMPONENT);
 
 		deployedProvidedInterfaceEClass = createEClass(DEPLOYED_PROVIDED_INTERFACE);
-		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_OPERATIONS);
 		createEReference(deployedProvidedInterfaceEClass, DEPLOYED_PROVIDED_INTERFACE__PROVIDED_INTERFACE);
 
 		eStringToDeployedProvidedInterfaceMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_PROVIDED_INTERFACE_MAP_ENTRY);
@@ -759,7 +746,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(deploymentModelEClass, DeploymentModel.class, "DeploymentModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeploymentModel_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1, DeploymentModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeploymentModel_Contexts(), this.getEStringToDeploymentContextMapEntry(), null, "contexts", null, 0, -1, DeploymentModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(eStringToDeploymentContextMapEntryEClass, Map.Entry.class, "EStringToDeploymentContextMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToDeploymentContextMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -782,7 +769,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getDeployedComponent_RequiredInterfaces(), this.getDeployedRequiredInterface(), null, "requiredInterfaces", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDeployedComponent_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getDeployedComponent__GetContext(), this.getDeploymentContext(), "getContext", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToDeployedOperationMapEntryEClass, Map.Entry.class, "EStringToDeployedOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToDeployedOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -803,7 +790,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEOperation(getDeployedStorage__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(deployedProvidedInterfaceEClass, DeployedProvidedInterface.class, "DeployedProvidedInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedProvidedInterface_ProvidedOperations(), theAssemblyPackage.getEStringToAssemblyOperationMapEntry(), null, "providedOperations", null, 0, -1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedProvidedInterface_ProvidedInterface(), theAssemblyPackage.getAssemblyProvidedInterface(), null, "providedInterface", null, 0, 1, DeployedProvidedInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eStringToDeployedProvidedInterfaceMapEntryEClass, Map.Entry.class, "EStringToDeployedProvidedInterfaceMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);

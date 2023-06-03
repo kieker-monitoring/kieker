@@ -110,6 +110,10 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 				return createRequiredInterfaceTypeAdapter();
 			}
 			@Override
+			public Adapter caseInterfaceEStringToOperationTypeMapEntry(Map.Entry<String, OperationType> object) {
+				return createInterfaceEStringToOperationTypeMapEntryAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -266,6 +270,20 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRequiredInterfaceTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Interface EString To Operation Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createInterfaceEStringToOperationTypeMapEntryAdapter() {
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,10 +58,10 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 		final long deltaTime = 1000;
 		this.timeUnit = TimeUnit.MILLISECONDS;
 		this.startTime = System.currentTimeMillis() - (deltaTime * 10);
-		this.unboundTS = new TimeSeries<Double>(this.startTime, this.timeUnit, deltaTime, this.timeUnit);
+		this.unboundTS = new TimeSeries<>(this.startTime, this.timeUnit, deltaTime, this.timeUnit);
 
 		this.bounds = 3;
-		this.boundedTS = new TimeSeries<Integer>(this.startTime, this.timeUnit, deltaTime, this.timeUnit, this.bounds);
+		this.boundedTS = new TimeSeries<>(this.startTime, this.timeUnit, deltaTime, this.timeUnit, this.bounds);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 
 	@Test
 	public void testTimeUnitPropagation() {
-		final TimeSeries<Double> testTS = new TimeSeries<Double>(1L, TimeUnit.NANOSECONDS, 10L, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> testTS = new TimeSeries<>(1L, TimeUnit.NANOSECONDS, 10L, TimeUnit.MILLISECONDS);
 		testTS.append(1.0);
 		Assert.assertEquals(TimeUnit.NANOSECONDS, testTS.getTimeSeriesTimeUnit());
 		Assert.assertEquals(TimeUnit.MILLISECONDS, testTS.getDeltaTimeUnit());

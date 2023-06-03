@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ package kieker.model.system.model;
  *
  * @since 1.1
  */
-public class Execution {
+public class Execution { // NOPMD DataClass
 
 	/** This constant marks that an execution has no session ID. */
 	public static final String NO_SESSION_ID = "<NOSESSIONID>";
