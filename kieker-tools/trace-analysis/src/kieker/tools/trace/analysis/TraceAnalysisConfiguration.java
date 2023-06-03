@@ -54,7 +54,7 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.InvalidExecutionTrace;
 import kieker.model.system.model.MessageTrace;
-import kieker.tools.common.DateConverter;
+import kieker.tools.settings.converters.DateConverter;
 import kieker.tools.source.LogsReaderCompositeStage;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.visualization.trace.GraphWriterPlugin;
