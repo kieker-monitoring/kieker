@@ -13,60 +13,61 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
+import ch.usi.dag.disl.staticcontext.ClassStaticContext;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 public class OperationExecutionDiSL {
-	
-	private static final ThreadLocal<Stack<OperationStartData>> stack = new ThreadLocal<Stack<OperationStartData>>() {
-		@Override
-		protected Stack<OperationStartData> initialValue() {
-			return new Stack<>();
-		}
-	};
-	
+
+	@ch.usi.dag.disl.annotation.ThreadLocal
+	static Stack<OperationStartData> stack;
+
 	@Before(marker = BodyMarker.class, scope = "Main.*")
-	public static void beforemain(final MethodStaticContext msc, final DynamicContext dc) {
+	public static void beforemain(final MethodStaticContext msc, ClassStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
-		
+
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		
-		System.out.println("Enabled");
-		System.out.println("Class: " + dc.getClass());
-		final String clazz = dc.getThis().getClass().toString();
-		System.out.println("Class: " + clazz);
-		final String methodFullName = msc.thisMethodFullName();
-		final String operationSignature = clazz + "." + methodFullName;
-		
+
+		System.out.println("Enabled: " + c.getInternalName() + " " + msc.thisMethodFullName());
+//		final String clazz = c.getInternalName();
+		final String operationSignature = msc.thisMethodFullName();
+//		final String operationSignature = clazz + "." + methodFullName;
+		System.out.println("Signature: " + operationSignature);
+
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		
+
 		final long tin = TIME.getTime();
-		
+
 		final OperationStartData data = new OperationStartData(true, "1", 1, tin, "", 0, 0);
-		stack.get().push(data);
+
+		if (stack == null) {
+			stack = new Stack<>();
+		}
+
+		stack.push(data);
 	}
 
 	@After(marker = BodyMarker.class, scope = "Main.*")
-	public static void aftermain(final MethodStaticContext msc, final DynamicContext dc) {
+	public static void aftermain(final MethodStaticContext msc, ClassStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
-		
-		final String clazz = dc.getThis().getClass().toString();
-		final String methodFullName = msc.thisMethodFullName();
-		final String operationSignature = clazz + "." + methodFullName;
-		
+
+//		final String clazz = c.getInternalName();
+		final String operationSignature = msc.thisMethodFullName();
+//		final String operationSignature = clazz + "." + methodFullName;
+
 		if (!CTRLINST.isMonitoringEnabled() || !CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		
-		final OperationStartData data = stack.get().pop();
+
+		final OperationStartData data = stack.pop();
 
 		final long tout = TIME.getTime();
-		
+
 		CTRLINST.newMonitoringRecord(
 				new OperationExecutionRecord(operationSignature, data.getSessionId(),
 						data.getTraceId(), data.getTin(), tout, data.getHostname(), data.getEoi(), data.getEss()));
