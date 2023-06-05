@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -17,7 +16,6 @@ import kieker.monitoring.timer.ITimeSource;
 
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
-import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.staticcontext.ClassStaticContext;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
@@ -28,8 +26,8 @@ public class OperationExecutionDiSL {
 
 	@ch.usi.dag.disl.annotation.ThreadLocal
 	static Stack<OperationStartData> stack;
-
-	@Before(marker = BodyMarker.class, scope = "Main.*")
+	
+	@Before(marker = BodyMarker.class, scope = "MonitoredClass*.*")
 	public static void beforemain(final MethodStaticContext msc, ClassStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -78,7 +76,7 @@ public class OperationExecutionDiSL {
 		stack.push(data);
 	}
 
-	@After(marker = BodyMarker.class, scope = "Main.*")
+	@After(marker = BodyMarker.class, scope = "MonitoredClass*.*")
 	public static void aftermain(final MethodStaticContext msc, ClassStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
