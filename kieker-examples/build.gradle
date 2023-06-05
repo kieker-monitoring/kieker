@@ -56,7 +56,7 @@ task replaceHardCodedVersionNames() {
 
 // bookstore
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
-	dir = 'userguide/bookstore-application/build.gradle'
+	buildFile = 'userguide/bookstore-application/build.gradle'
 	tasks = ['jar']
 }
 
@@ -69,7 +69,7 @@ task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootPro
 }
 
 task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh2Instr') {
-	dir = 'userguide/ch2--manual-instrumentation/build.gradle'
+	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
 	tasks = ['jar']
 }
 
