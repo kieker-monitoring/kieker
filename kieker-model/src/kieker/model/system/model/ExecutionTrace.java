@@ -86,21 +86,22 @@ public class ExecutionTrace extends AbstractTrace {
 	 *             ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
+		System.err.println(">> ESS " + execution.toString());
 		synchronized (this) {
 			if (this.getTraceId() != execution.getTraceId()) {
 				throw new InvalidTraceException(
 						String.format("TraceId of new record (%d) differs from Id of this trace (%d)", execution.getTraceId(), this.getTraceId()));
 			}
-			if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
+			if (this.minTin < 0 || execution.getTin() < this.minTin) {
 				this.minTin = execution.getTin();
 			}
-			if ((this.maxTout < 0) || (execution.getTout() > this.maxTout)) {
+			if (this.maxTout < 0 || execution.getTout() > this.maxTout) {
 				this.maxTout = execution.getTout();
 			}
-			if ((this.minEoi < 0) || (execution.getEoi() < this.minEoi)) {
+			if (this.minEoi < 0 || execution.getEoi() < this.minEoi) {
 				this.minEoi = execution.getEoi();
 			}
-			if ((this.maxEoi < 0) || (execution.getEoi() > this.maxEoi)) {
+			if (this.maxEoi < 0 || execution.getEoi() > this.maxEoi) {
 				this.maxEoi = execution.getEoi();
 			}
 			if (execution.getEss() > this.maxEss) {
@@ -145,28 +146,19 @@ public class ExecutionTrace extends AbstractTrace {
 			while (executionsIterator.hasNext()) {
 				final Execution currentExecution = executionsIterator.next();
 
-				if (expectingEntryCall && (currentExecution.getEss() != 0)) {
-					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess "
-							+ "0 (found " + currentExecution.getEss() + ")\n Causing execution: " + currentExecution);
-					// don't log and throw
-					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
-					// trace here
-					throw ex;
+				if (expectingEntryCall && currentExecution.getEss() != 0) {
+					throw new InvalidTraceException(String.format("First execution must have ess 0 (found %d)\n Causing execution: %s",
+							currentExecution.getEss(), currentExecution.toString()));
 				}
 				expectingEntryCall = false; // now we're happy
-				if (previousEoi != (currentExecution.getEoi() - 1)) {
-					final InvalidTraceException ex = new InvalidTraceException(String.format(
-							"Eois must increment by 1 -- but found sequence <%d,%d> (Execution: %s)", previousEoi, currentExecution.getEoi(),
-							currentExecution.toString()));
-					// don't log and throw
-					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
-					// trace here
-					throw ex;
+				if (previousEoi != currentExecution.getEoi() - 1) {
+					throw new InvalidTraceException(String.format("Eois must increment by 1 -- but found sequence <%d,%d> (Execution: %s)",
+							previousEoi, currentExecution.getEoi(), currentExecution.toString()));
 				}
 				previousEoi = currentExecution.getEoi();
 
 				// First, we might need to clean up the stack for the next execution callMessage
-				if ((!previousExecution.equals(rootExecution)) && (previousExecution.getEss() >= currentExecution.getEss())) {
+				if (!previousExecution.equals(rootExecution) && previousExecution.getEss() >= currentExecution.getEss()) {
 					Execution currentReturnReceiver; // receiverComponentName of return message
 					while (currentMessageStack.size() > currentExecution.getEss()) {
 						final AbstractMessage poppedCall = currentMessageStack.pop();
@@ -209,7 +201,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 		if (prevE.equals(rootExecution)) { // initial execution callMessage
 			message = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
-		} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and
+		} else if (prevE.getEss() + 1 == curE.getEss()) { // usual callMessage with senderComponentName and
 			// receiverComponentName
 			message = new SynchronousCallMessage(curE.getTin(), prevE, curE);
 		} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1

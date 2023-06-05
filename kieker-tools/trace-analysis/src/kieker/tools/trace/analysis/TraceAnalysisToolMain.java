@@ -145,7 +145,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.settings.getSelectTraces()) {
 					this.settings.getSelectedTraces().add(idStr);
 				}
-				this.logger.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				this.logger.info("{} trace{} selected", numSelectedTraces, numSelectedTraces > 1 ? "s" : ""); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				this.logger.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
 				return false;
@@ -159,7 +159,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.settings.getSelectTraces()) {
 					this.settings.getSelectedTraces().add(idStr);
 				}
-				this.logger.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				this.logger.info("{} trace{} filtered", numSelectedTraces, numSelectedTraces > 1 ? "s" : ""); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				this.logger.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
 				return false;
