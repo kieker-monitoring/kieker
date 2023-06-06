@@ -54,14 +54,16 @@ public class ModelGenerationCompositeStage extends CompositeStage {
 	 *            processing the event's class and operation signature
 	 * @param userSessionTimeout
 	 *            timeout for observe sessions
+	 * @param waitForCompleteTrace
+	 *            wait for complete traces before processing a trace
 	 * @throws ConfigurationException
 	 */
 	public ModelGenerationCompositeStage(final IEntryCallAcceptanceMatcher entryCallMatcher,
-			final ITraceSignatureProcessor traceSignatureProcessor, final Long userSessionTimeout)
+			final ITraceSignatureProcessor traceSignatureProcessor, final Long userSessionTimeout, final boolean waitForCompleteTrace)
 			throws ConfigurationException {
 
 		final DynamicEventDispatcher eventDispatcher = new DynamicEventDispatcher(null, true, true, false);
-		final CreateEntryLevelEventStage createEntryLevelEventStage = new CreateEntryLevelEventStage(true); // TODO make this true/false an option
+		final CreateEntryLevelEventStage createEntryLevelEventStage = new CreateEntryLevelEventStage(waitForCompleteTrace);
 		final IEventMatcher<IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
 
 		final UserSessionGeneratorCompositeStage sessionGenerator = new UserSessionGeneratorCompositeStage(

@@ -46,6 +46,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
+
 	/**
 	 * The pointcut for the monitored constructors. Inheriting classes should extend
 	 * the pointcut in order to find the correct constructor executions (e.g. all
@@ -53,13 +60,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
-
-	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
-		@Override
-		protected Counter initialValue() {
-			return new Counter();
-		}
-	};
 
 	/**
 	 * The advice used around the constructor executions.
@@ -87,7 +87,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			trace = TRACEREGISTRY.registerTrace();
 			CTRLINST.newMonitoringRecord(trace);
 		}
-		currentStackIndex.get().incrementValue();
+		this.currentStackIndex.get().incrementValue();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		// measure before execution
@@ -105,7 +105,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 
@@ -125,7 +125,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 

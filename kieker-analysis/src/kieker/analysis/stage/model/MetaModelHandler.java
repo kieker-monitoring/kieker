@@ -69,7 +69,8 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
- * This is a helper class for the {@link kieker.analysis.AnalysisController}, which manages the handling of the meta model instances.
+ * This is a helper class for the {@link kieker.analysis.AnalysisController}, which manages the handling
+ * of the meta model instances.
  *
  * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
  *
@@ -94,7 +95,7 @@ public final class MetaModelHandler {
 	 * @throws IOException
 	 *             If something went wrong during the saving.
 	 */
-	public static final void saveProjectToFile(final File file, final MIProject project) throws IOException {
+	public static void saveProjectToFile(final File file, final MIProject project) throws IOException {
 		// Create a resource and put the given project into it
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
@@ -119,7 +120,7 @@ public final class MetaModelHandler {
 	 * @throws IOException
 	 *             If something went wrong during the loading.
 	 */
-	public static final MIProject loadProjectFromFile(final File file) throws IOException {
+	public static MIProject loadProjectFromFile(final File file) throws IOException {
 		// Create a resource set to work with.
 		final ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -156,7 +157,7 @@ public final class MetaModelHandler {
 	 *            The properties to be converted.
 	 * @return A filled configuration object.
 	 */
-	public static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
+	public static Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
 		final Configuration configuration = new Configuration();
 		// Run through the properties and convert every single of them
 		for (final MIProperty mProperty : mProperties) {
@@ -166,10 +167,11 @@ public final class MetaModelHandler {
 	}
 
 	/**
-	 * This method checks the ports of the given model plugin against the ports of the actual plugin. If there are ports which are in the model instance, but not in
-	 * the "real" plugin, an exception is thrown.
+	 * This method checks the ports of the given model plugin against the ports of the actual plugin. If there are
+	 * ports which are in the model instance, but not in the "real" plugin, an exception is thrown.
 	 *
-	 * This method should be called during the creation of an <i>AnalysisController</i> via a configuration file to find invalid (outdated) ports.
+	 * This method should be called during the creation of an <i>AnalysisController</i> via a configuration file
+	 * to find invalid (outdated) ports.
 	 *
 	 * @param mPlugin
 	 *            The model instance of the plugin.
@@ -238,7 +240,7 @@ public final class MetaModelHandler {
 	 *            The name of the searched input port.
 	 * @return The searched port or null, if it is not available.
 	 */
-	public static final MIInputPort findInputPort(final MIFilter mPlugin, final String name) {
+	public static MIInputPort findInputPort(final MIFilter mPlugin, final String name) {
 		for (final MIInputPort port : mPlugin.getInputPorts()) {
 			if (port.getName().equals(name)) {
 				return port;
@@ -256,7 +258,7 @@ public final class MetaModelHandler {
 	 *            The name of the searched output port.
 	 * @return The searched port or null, if it is not available.
 	 */
-	public static final MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
+	public static MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
 		for (final MIOutputPort port : mPlugin.getOutputPorts()) {
 			if (port.getName().equals(name)) {
 				return port;
@@ -266,7 +268,8 @@ public final class MetaModelHandler {
 	}
 
 	/**
-	 * This method can be used to convert the current analysis configuration (which is represented by Java objects) into a meta model.
+	 * This method can be used to convert the current analysis configuration (which is represented by
+	 * Java objects) into a meta model.
 	 *
 	 * @param readers
 	 *            The readers within the analysis.
@@ -286,7 +289,7 @@ public final class MetaModelHandler {
 	 * @throws AnalysisConfigurationException
 	 *             If the given analysis components are somehow invalid connected.
 	 */
-	public static final MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
+	public static MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
 			final Collection<AbstractRepository> repositories, final Collection<MIDependency> dependencies, final String projectName,
 			final Configuration globalConfiguration) throws AnalysisConfigurationException {
 		try {
@@ -429,14 +432,16 @@ public final class MetaModelHandler {
 	 * @param globalConfiguration
 	 *            The global project configuration (this object will be filled by the method).
 	 * @param repositoryMap
-	 *            The mapping between the created repositories and the meta model instances (this object will be filled by the method).
+	 *            The mapping between the created repositories and the meta model instances (this object will
+	 *            be filled by the method).
 	 * @param pluginMap
-	 *            The mapping between the created plugins and the meta model instances (this object will be filled by the method).
+	 *            The mapping between the created plugins and the meta model instances (this object will be filled
+	 *            by the method).
 	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the given meta model instance is somehow invalid configured.
 	 */
-	public static final void metaModelToJava(final MIProject mProject, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
+	public static void metaModelToJava(final MIProject mProject, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
 			final Collection<RepositoryConnection> repositoryConnections, final Collection<MIDependency> dependencies, final ClassLoader classLoader,
 			final Configuration globalConfiguration, final Map<MIRepository, AbstractRepository> repositoryMap, final Map<MIPlugin, AbstractPlugin> pluginMap)
 			throws AnalysisConfigurationException {
@@ -519,7 +524,7 @@ public final class MetaModelHandler {
 	 *             If the class could not be found or the class doesn't implement the correct classloader.
 	 */
 	@SuppressWarnings("unchecked")
-	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
+	private static <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
 			final IProjectContext projectContext, final ClassLoader classLoader) throws AnalysisConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(classname, true, classLoader);
@@ -540,10 +545,12 @@ public final class MetaModelHandler {
 	}
 
 	/**
-	 * This method uses the given configuration object and checks the used keys against the actual existing keys within the given plugin. If there are keys in the
-	 * configuration object which are not used in the plugin, an exception is thrown.
+	 * This method uses the given configuration object and checks the used keys against the actual existing keys
+	 * within the given plugin. If there are keys in the configuration object which are not used in the plugin,
+	 * an exception is thrown.
 	 *
-	 * This method should be called during the creation of the plugins via a given configuration file to find outdated properties.
+	 * This method should be called during the creation of the plugins via a given configuration file to find
+	 * outdated properties.
 	 *
 	 * @param plugin
 	 *            The plugin to be used for the check.

@@ -59,7 +59,7 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 				settings.getOperationSignatureAcceptancePatterns(),
 				settings.getAcceptanceMatcherMode());
 		final ModelGenerationCompositeStage modelGeneration = new ModelGenerationCompositeStage(entryCallAcceptanceMatcher,
-				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout());
+				settings.getTraceSignatureProcessor(), settings.getUserSessionTimeout(), true);
 
 		final GraphEditDistance<INode, UserBehaviorEdge> gedDistanceFunction = new GraphEditDistance<>(costFunction);
 
