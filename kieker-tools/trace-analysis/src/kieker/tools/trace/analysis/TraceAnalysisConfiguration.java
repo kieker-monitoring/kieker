@@ -190,7 +190,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		if (parameters.isInvertTraceIdFilter()) {
 			this.connectPorts(traceIdFilter.getMismatchingTraceIdOutputPort(), dispatcher.getInputPort());
 		} else {
-			this.connectPorts(traceIdFilter.getMatchingTraceIdOutputPort(), dispatcher.getInputPort());
+			this.connectPorts(traceIdFilter.getOutputPort(), dispatcher.getInputPort());
 		}
 
 		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(), executionRecordTransformationStage.getInputPort());

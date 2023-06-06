@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 
 import com.beust.jcommander.Parameter;
 
-import kieker.analysis.generic.time.TimestampFilter;
 import kieker.tools.settings.converters.DateConverter;
 
 /**
