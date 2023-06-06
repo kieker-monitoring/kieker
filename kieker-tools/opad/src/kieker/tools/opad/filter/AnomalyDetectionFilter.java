@@ -39,9 +39,9 @@ import kieker.tools.opad.record.StorableDetectionResult;
  *
  */
 @Plugin(name = "AnomalyScore Detection Filter", outputPorts = {
-	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
-	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE),
-	@OutputPort(eventTypes = { ExtendedStorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) },
+	@OutputPort(eventTypes = StorableDetectionResult.class, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
+	@OutputPort(eventTypes = StorableDetectionResult.class, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE),
+	@OutputPort(eventTypes = ExtendedStorableDetectionResult.class, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) },
 		configuration = {
 			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, defaultValue = "0.5", updateable = true) })
 public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {

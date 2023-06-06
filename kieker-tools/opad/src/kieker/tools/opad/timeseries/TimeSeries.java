@@ -107,6 +107,13 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	/**
 	 * Constructor using the timeunit as unit for internal usage and deltatime time unit.
 	 * Furthermore using infinite capacity and a frequency of 24 by default.
+	 *
+	 * @param startTime
+	 *            start time
+	 * @param timeUnit
+	 *            time unit
+	 * @param deltaTime
+	 *            delta time
 	 */
 	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime) {
 		this(startTime, timeUnit, deltaTime, timeUnit);

@@ -29,7 +29,7 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
  *
  * @since 1.10
- * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
+ * @author Nikolas Herbst
  *         Decomposition of the time series that contains zero values into
  *         two separate sequences: a non-zero valued time series and a second
  *         that contains the time intervals of zero values. Independent

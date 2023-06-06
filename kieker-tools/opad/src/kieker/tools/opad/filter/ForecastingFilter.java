@@ -49,9 +49,9 @@ import kieker.tools.opad.timeseries.forecast.IForecaster;
  *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
+	@OutputPort(eventTypes = IForecastResult.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+	@OutputPort(eventTypes = IForecastMeasurementPair.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
+	@OutputPort(eventTypes = IForecastMeasurementPair.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
 		configuration = {
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
