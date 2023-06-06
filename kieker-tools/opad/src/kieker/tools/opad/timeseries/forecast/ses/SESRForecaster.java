@@ -25,13 +25,13 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
  * paper on <i>Self-adaptive workload classification and forecasting for
  * proactive resource provisioning</i>
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
- * 
- * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
+ *
+ * @author Nikolas Herbst
  *         Generalization of MA by using weights according to the exponential function
  *         to give higher weight to more recent values.
  *         1st step: estimation of parameters for weights/exp. function
  *         2nd step: calculation of weighted averages as point forecast
- * 
+ *
  * @since 1.10
  */
 public class SESRForecaster extends AbstractRForecaster {
@@ -40,7 +40,7 @@ public class SESRForecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -49,10 +49,10 @@ public class SESRForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
-	 * 
+	 *
 	 * @param confidenceLevel
 	 *            confidenceLevel
 	 */
@@ -78,9 +78,9 @@ public class SESRForecaster extends AbstractRForecaster {
 	 * "MAM" is multiplicative Holt-Winters' method with multiplicative errors, and so on.
 	 * It is also possible for the model to be equal to the output from a previous call to ets.
 	 * In this case, the same model is fitted to y without re-estimating any parameters.
-	 * 
+	 *
 	 * no additional params required by this predictor
-	 * 
+	 *
 	 * @return emptyString array
 	 */
 	protected String[] getForecastFuncParams() {

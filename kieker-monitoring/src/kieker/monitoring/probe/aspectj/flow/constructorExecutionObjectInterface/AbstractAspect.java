@@ -42,16 +42,10 @@ import kieker.monitoring.timer.ITimeSource;
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
+
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
-
-	/**
-	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct constructor executions (e.g. all
-	 * constructors or only constructors with specific annotations).
-	 */
-	@Pointcut
-	public abstract void monitoredConstructor();
 
 	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
 		@Override
@@ -59,6 +53,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return new Counter();
 		}
 	};
+
+	/**
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct constructor executions (e.g. all
+	 * constructors or only constructors with specific annotations).
+	 */
+	@Pointcut
+	public abstract void monitoredConstructor();
 
 	@Before("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void beforeConstructor(final Object thisObject, final JoinPoint thisJoinPoint) throws Throwable { // NOCS
@@ -76,13 +77,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			trace = TRACEREGISTRY.registerTrace();
 			CTRLINST.newMonitoringRecord(trace);
 		}
-		currentStackIndex.get().incrementValue();
+		this.currentStackIndex.get().incrementValue();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		// measure before execution
 		final int objectId = System.identityHashCode(thisObject);
-		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId,
-				AbstractAspect.getInterface(thisJoinPoint)));
+		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz,
+				objectId, AbstractAspect.getInterface(thisJoinPoint)));
 	}
 
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
@@ -95,7 +96,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);
@@ -116,7 +117,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);

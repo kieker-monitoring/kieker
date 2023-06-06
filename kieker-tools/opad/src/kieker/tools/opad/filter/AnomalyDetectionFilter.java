@@ -95,7 +95,7 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 		return config;
 	}
 
-	@InputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
+	@InputPort(eventTypes = StorableDetectionResult.class, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(
 			final StorableDetectionResult anomalyScore) {
 		if (anomalyScore.getScore() >= this.threshold.get()) {

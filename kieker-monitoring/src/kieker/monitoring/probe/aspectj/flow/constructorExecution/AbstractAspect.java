@@ -46,6 +46,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
+
 	/**
 	 * The pointcut for the monitored constructors. Inheriting classes should extend
 	 * the pointcut in order to find the correct constructor executions (e.g. all
@@ -53,13 +60,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
-
-	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
-		@Override
-		protected Counter initialValue() {
-			return new Counter();
-		}
-	};
 
 	/**
 	 * The advice used around the constructor executions.

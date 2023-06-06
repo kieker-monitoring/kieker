@@ -143,7 +143,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 * @param input
 	 *            Incoming measurements
 	 */
-	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
+	@InputPort(eventTypes = NamedDoubleTimeSeriesPoint.class, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
 		if (this.checkInitialization(input.getName())) {
 			this.processInput(input, input.getTime(), input.getName());

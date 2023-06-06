@@ -146,7 +146,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	 * @param input
 	 *            The next incoming measurement
 	 */
-	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
+	@InputPort(eventTypes = NamedDoubleTimeSeriesPoint.class, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
 		final String name = input.getName();
 		this.aggregationVariables.putIfAbsent(name, new AggregationVariableSet());

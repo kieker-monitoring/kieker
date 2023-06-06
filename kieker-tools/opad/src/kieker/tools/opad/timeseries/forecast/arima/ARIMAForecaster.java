@@ -22,15 +22,15 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
 
 /**
  * An R-based time series forecaster, auto-arima model selection.
- * 
+ *
  * This is one of the forecasters used in the research
  * paper on <i>Self-adaptive workload classification and forecasting for
  * proactive resource provisioning</i>
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
- * 
+ *
  * @since 1.10
- * @author Andre van Hoorn, Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
- * 
+ * @author Andre van Hoorn, Nikolas Herbst
+ *
  *         The automated ARIMA model selection process of the R forecasting package starts
  *         with a complex estimation of an appropriate ARIMA(p, d, q)(P, D, Q)m model by using
  *         unit-root tests and an information criterions (like the AIC) in combination with
@@ -44,7 +44,7 @@ public class ARIMAForecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -53,7 +53,7 @@ public class ARIMAForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 * @param confidenceLevel

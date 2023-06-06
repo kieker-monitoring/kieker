@@ -27,14 +27,14 @@ import kieker.tools.opad.record.NamedDoubleRecord;
 
 /**
  * Converts OperationExecutionRecords to NamedDoubleRecords.
- * 
+ *
  * @author Thomas Duellmann
  * @since 1.10
- * 
+ *
  */
 @Plugin(
 		description = "Converts OperationExecutionRecords to NamedDoubleRecords",
-		outputPorts = @OutputPort(name = RecordConverter.OUTPUT_PORT_NAME_NDR, eventTypes = { NamedDoubleRecord.class }))
+		outputPorts = @OutputPort(name = RecordConverter.OUTPUT_PORT_NAME_NDR, eventTypes = NamedDoubleRecord.class))
 public class RecordConverter extends AbstractFilterPlugin {
 
 	/**
@@ -49,7 +49,7 @@ public class RecordConverter extends AbstractFilterPlugin {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            configuration for the converter
 	 * @param projectContext
@@ -67,11 +67,11 @@ public class RecordConverter extends AbstractFilterPlugin {
 
 	/**
 	 * Receives OperationExecutionRecords and delivers them converted to NamedDoubleRecords.
-	 * 
+	 *
 	 * @param oer
 	 *            OperationExecutionRecord object to be converted
 	 */
-	@InputPort(name = RecordConverter.INPUT_PORT_NAME_OER, eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = RecordConverter.INPUT_PORT_NAME_OER, eventTypes = OperationExecutionRecord.class)
 	public void convert(final OperationExecutionRecord oer) {
 		// string, long, double
 		final long timestamp = oer.getLoggingTimestamp();
