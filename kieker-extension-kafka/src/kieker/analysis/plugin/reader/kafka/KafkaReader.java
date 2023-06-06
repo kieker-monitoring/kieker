@@ -40,24 +40,29 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(
 		description = "A plugin that reads monitoring records from a Kafka topic",
 		outputPorts = {
-			@OutputPort(name = KafkaReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output port of the Kafka reader")
+			@OutputPort(name = KafkaReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+					description = "Output port of the Kafka reader")
 		},
 		configuration = {
 			@Property(name = KafkaReader.CONFIG_PROPERTY_TOPIC_NAME, defaultValue = "kiekerRecords",
 					description = "Name of the Kafka topic to read the records from"),
 			@Property(name = KafkaReader.CONFIG_PROPERTY_BOOTSTRAP_SERVERS, defaultValue = "localhost:9092",
 					description = "Bootstrap servers for the Kafka cluster"),
-			@Property(name = KafkaReader.CONFIG_PROPERTY_GROUP_ID, defaultValue = "kieker", description = "Group ID for the Kafka consumer group"),
-			@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT, defaultValue = "true", description = "Auto-commit the current position?"),
-			@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT_INTERVAL_MS, defaultValue = "1000", description = "Auto commit interval in milliseconds"),
-			@Property(name = KafkaReader.CONFIG_PROPERTY_SESSION_TIMEOUT_MS, defaultValue = "30000", description = "Session timeout interval in milliseconds")
+			@Property(name = KafkaReader.CONFIG_PROPERTY_GROUP_ID, defaultValue = "kieker",
+					description = "Group ID for the Kafka consumer group"),
+			@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT, defaultValue = "true",
+					description = "Auto-commit the current position?"),
+			@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT_INTERVAL_MS, defaultValue = "1000",
+					description = "Auto commit interval in milliseconds"),
+			@Property(name = KafkaReader.CONFIG_PROPERTY_SESSION_TIMEOUT_MS, defaultValue = "30000",
+					description = "Session timeout interval in milliseconds")
 		})
 public class KafkaReader extends AbstractRawDataReader {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
-	/** The name of the configuration property for the deserializer */
+	/** The name of the configuration property for the deserializer. */
 	public static final String CONFIG_PROPERTY_DESERIALIZER = "deserializer";
 	/** The name of the configuration property for the topic name. */
 	public static final String CONFIG_PROPERTY_TOPIC_NAME = "topicName";
@@ -85,7 +90,7 @@ public class KafkaReader extends AbstractRawDataReader {
 
 	/**
 	 * Creates a new Kafka reader using the givend data.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
@@ -139,7 +144,7 @@ public class KafkaReader extends AbstractRawDataReader {
 		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		properties.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
 
-		this.consumer = new KafkaConsumer<String, byte[]>(properties);
+		this.consumer = new KafkaConsumer<>(properties);
 
 		return true;
 	}
