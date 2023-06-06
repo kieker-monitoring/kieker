@@ -112,7 +112,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return this.checkInputDirs(commander)
+		return this.checkInputDirs()
 				&& ParameterEvaluationUtils.checkDirectory(this.settings.getOutputDir(), "Output", commander)
 				&& this.selectOrFilterTraces();
 	}
@@ -122,7 +122,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		// nothing to do here
 	}
 
-	private final boolean checkNotEmpty(final List<?> list) {
+	private boolean checkNotEmpty(final List<?> list) {
 		if (list == null) {
 			return false;
 		} else {
@@ -175,7 +175,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 *
 	 * @return true if {@link #inputDirs} exist and are Kieker directories; false otherwise
 	 */
-	private boolean checkInputDirs(final JCommander commander) {
+	private boolean checkInputDirs() {
 		if (this.settings.getInputDirs() == null) {
 			this.logger.error("No input directories specified.");
 			return false;

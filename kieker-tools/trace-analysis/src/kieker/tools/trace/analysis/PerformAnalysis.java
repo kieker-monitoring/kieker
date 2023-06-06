@@ -318,7 +318,7 @@ public class PerformAnalysis {
 				this.logger.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
 			}
 		}
-		if (!this.parameters.isIgnoreInvalidTraces() && numErrorCount > 0) {
+		if (!this.parameters.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
 			throw new AnalysisTerminationException(numErrorCount + " errors occured in trace processing components");
 		}
 
