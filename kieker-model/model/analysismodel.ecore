@@ -386,6 +386,7 @@
       <eLiterals name="READ"/>
       <eLiterals name="WRITE" value="1"/>
       <eLiterals name="BOTH" value="2"/>
+      <eLiterals name="NONE" value="3" literal="NONE"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Tuple">
       <eTypeParameters name="F"/>

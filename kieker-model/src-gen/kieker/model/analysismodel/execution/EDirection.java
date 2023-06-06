@@ -46,7 +46,15 @@ public enum EDirection implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	BOTH(2, "BOTH", "BOTH");
+	BOTH(2, "BOTH", "BOTH"), /**
+	 * The '<em><b>NONE</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #NONE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	NONE(3, "NONE", "NONE");
 
 	/**
 	 * The '<em><b>READ</b></em>' literal value.
@@ -82,6 +90,17 @@ public enum EDirection implements Enumerator {
 	public static final int BOTH_VALUE = 2;
 
 	/**
+	 * The '<em><b>NONE</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #NONE
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int NONE_VALUE = 3;
+
+	/**
 	 * An array of all the '<em><b>EDirection</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -92,6 +111,7 @@ public enum EDirection implements Enumerator {
 			READ,
 			WRITE,
 			BOTH,
+			NONE,
 		};
 
 	/**
@@ -151,6 +171,7 @@ public enum EDirection implements Enumerator {
 			case READ_VALUE: return READ;
 			case WRITE_VALUE: return WRITE;
 			case BOTH_VALUE: return BOTH;
+			case NONE_VALUE: return NONE;
 		}
 		return null;
 	}
