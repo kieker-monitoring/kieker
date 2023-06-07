@@ -24,9 +24,9 @@ import org.junit.Test;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.test.util.NamedPipeFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn
