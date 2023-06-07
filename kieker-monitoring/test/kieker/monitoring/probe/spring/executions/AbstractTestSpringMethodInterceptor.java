@@ -40,7 +40,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor;
 import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;

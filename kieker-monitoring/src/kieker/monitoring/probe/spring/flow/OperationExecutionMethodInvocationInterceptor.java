@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.probe.spring.flow;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -46,7 +45,8 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	}
 
 	/**
-	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead of using the singleton instance.
+	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead
+	 * of using the singleton instance.
 	 *
 	 * @param monitoringController
 	 *            must not be null
@@ -86,7 +86,8 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			retval = invocation.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			this.monitoringCtrl.newMonitoringRecord(new AfterOperationFailedEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+			this.monitoringCtrl.newMonitoringRecord(new AfterOperationFailedEvent(this.timeSource.getTime(),
+					traceId, trace.getNextOrderId(), signature, clazz,
 					th.toString()));
 			throw th;
 		} finally {
@@ -95,7 +96,8 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			}
 		}
 		// measure after successful execution
-		this.monitoringCtrl.newMonitoringRecord(new AfterOperationEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
+		this.monitoringCtrl.newMonitoringRecord(new AfterOperationEvent(this.timeSource.getTime(), traceId,
+				trace.getNextOrderId(), signature, clazz));
 		return retval;
 	}
 }

@@ -44,6 +44,9 @@ public abstract class AbstractMonitoringWriter {
 
 	/**
 	 * This event fires when Kieker has received a new record.
+	 *
+	 * @param record
+	 *            a monitoring record
 	 */
 	public abstract void writeMonitoringRecord(IMonitoringRecord record);
 

@@ -87,9 +87,8 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		final int nextESS;
-		long traceId = OperationExecutionJerseyClientInterceptor.CF_REGISTRY.recallThreadLocalTraceId(); // traceId, -1
-																											// if entry
-																											// point
+		// traceId, -1 if entry point
+		long traceId = OperationExecutionJerseyClientInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 		if (traceId == -1) {
 			entrypoint = true;
 			traceId = OperationExecutionJerseyClientInterceptor.CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();

@@ -127,8 +127,8 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		} else {
 			// thread-local traceId exists: eoi and ess should have been registered before
 			eoi = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.incrementAndRecallThreadLocalEOI();
-			ess = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalESS(); // do not increment in
-																									// this case!
+			// do not increment in this case!
+			ess = OperationExecutionSOAPRequestOutInterceptor.CF_REGISTRY.recallThreadLocalESS();
 			if (sessionID == null) {
 				sessionID = OperationExecutionRecord.NO_SESSION_ID;
 			}

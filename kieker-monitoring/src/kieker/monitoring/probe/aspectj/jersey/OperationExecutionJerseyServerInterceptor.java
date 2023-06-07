@@ -148,12 +148,10 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 			// Store thread-local values
 			OperationExecutionJerseyServerInterceptor.CF_REGISTRY.storeThreadLocalTraceId(traceId);
-			OperationExecutionJerseyServerInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has
-																							// EOI=eoi; next execution
-																							// will get eoi with
-																							// incrementAndRecall
-			OperationExecutionJerseyServerInterceptor.CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has
-																								// ESS=ess
+			// this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
+			OperationExecutionJerseyServerInterceptor.CF_REGISTRY.storeThreadLocalEOI(eoi);
+			// this execution has ESS=ess
+			OperationExecutionJerseyServerInterceptor.CF_REGISTRY.storeThreadLocalESS(ess + 1);
 			OperationExecutionJerseyServerInterceptor.SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 		}
 

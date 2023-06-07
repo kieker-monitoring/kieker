@@ -36,8 +36,10 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControlFlowRegistry.class); // NOPMD (enum logger)
 
 	// In order to (probabilistically!) avoid that other instances in our system (on another node, in another vm, ...) generate the same thread ids, we fill the
-	// left-most 16 bits of the thread id with a uniquely distributed random number (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes a
-	// uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values so
+	// left-most 16 bits of the thread id with a uniquely distributed random number
+	// (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes a
+	// uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case.
+	// Note that we restrict ourselves to the positive long values so
 	// far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
 	private final AtomicLong lastThreadId = new AtomicLong(MonitoringController.getInstance().isDebug() ? 0 // NOCS
 			: (long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1));
@@ -73,7 +75,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	}
 
 	/**
-	 * This method returns a thread-local traceid which is globally unique and stored it local for the thread. The thread is responsible for invalidating the stored
+	 * This method returns a thread-local traceid which is globally unique and stored it local
+	 * for the thread. The thread is responsible for invalidating the stored
 	 * curTraceId using the method unsetThreadLocalTraceId()!
 	 *
 	 * @return A unique trace ID.

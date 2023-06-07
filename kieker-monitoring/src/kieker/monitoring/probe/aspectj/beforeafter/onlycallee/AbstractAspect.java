@@ -137,7 +137,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
-				new AfterOperationFailedEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(), operationSignature, typeName, th.toString()));
+				new AfterOperationFailedEvent(TIME.getTime(), trace.getTraceId(),
+						trace.getNextOrderId(), operationSignature, typeName, th.toString()));
 	}
 
 	@After("monitoredOperation() && notWithinKieker()")

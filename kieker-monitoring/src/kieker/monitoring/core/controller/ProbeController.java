@@ -442,11 +442,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 	}
 
 	private void updatePatternFile() { // only called within synchronized
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-					Files.newOutputStream(Paths.get(this.configFilePathname), StandardOpenOption.CREATE),
-					ProbeController.ENCODING)));
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+				Files.newOutputStream(Paths.get(this.configFilePathname), StandardOpenOption.CREATE),
+				ProbeController.ENCODING)))) {
 			pw.print("## Adaptive Monitoring Config File: ");
 			pw.println(this.configFilePathname);
 			pw.print("## written on: ");
@@ -460,10 +458,6 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 		} catch (final IOException ex) {
 			ProbeController.LOGGER.error("Updating Adaptive Monitoring config file failed.", ex);
-		} finally {
-			if (pw != null) {
-				pw.close();
-			}
 		}
 		this.configFileReader.lastModifiedTimestamp = System.currentTimeMillis();
 		ProbeController.LOGGER.info("Updating Adaptive Monitoring config file succeeded.");
@@ -497,7 +491,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 				if (file.canRead() && ((lastModified = file.lastModified()) > 0L)) { // NOPMD NOCS
 					if (lastModified > this.lastModifiedTimestamp) {
 						this.lastModifiedTimestamp = lastModified;
-						reader = Files.newBufferedReader(file.toPath(), Charset.forName(ProbeController.ENCODING)); // NOPMD allow access to ENCODING
+						reader = Files.newBufferedReader(file.toPath(),
+								Charset.forName(ProbeController.ENCODING)); // NOPMD allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), false);
 							return;
@@ -509,9 +504,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 						return; // nothing do this time
 					}
 				}
-			} catch (final SecurityException ex) { // NOPMD NOCS
-				// file not found or not readable
-			} catch (final IOException ex) { // NOPMD NOCS
+			} catch (final SecurityException | IOException ex) { // NOPMD NOCS
 				// file not found or not readable
 			} finally {
 				if (reader != null) {
@@ -528,7 +521,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 							.getResource(this.configFilePathname);
 					if (null != configFileAsResource) {
 						reader = new BufferedReader(
-								new InputStreamReader(configFileAsResource.openStream(), Charset.forName(ProbeController.ENCODING))); // NOPMD
+								new InputStreamReader(configFileAsResource.openStream(),
+										Charset.forName(ProbeController.ENCODING))); // NOPMD
 						// allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), true);
@@ -538,9 +532,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 									this.configFilePathname, ex);
 						}
 					}
-				} catch (final SecurityException ex) { // NOPMD NOCS
-					// file not found or not readable
-				} catch (final IOException ex) { // NOPMD NOCS
+				} catch (final SecurityException | IOException ex) { // NOPMD NOCS
 					// file not found or not readable
 				} finally {
 					if (reader != null) {

@@ -24,12 +24,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import kieker.OSUtil;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
 import kieker.common.record.remotecontrol.IRemoteControlEvent;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.test.util.OSUtil;
 import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.dump.DumpWriter;
 import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
@@ -103,8 +103,8 @@ public class TCPControllerTest { // NOFB issues with integration test
 	 */
 	@Test(timeout = 30000)
 	public void testActivationAndDeactivation() throws IOException, InterruptedException {
-		Assume.assumeFalse(OSUtil.isWindows()); 
-		
+		Assume.assumeFalse(OSUtil.isWindows());
+
 		final MonitoringController controller = MonitoringController.createInstance(TCPControllerTest.configuration);
 
 		final String pattern = "void test.pattern()";

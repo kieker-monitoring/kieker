@@ -23,10 +23,10 @@ import org.jctools.queues.MpscArrayQueue;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.test.util.Await;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**

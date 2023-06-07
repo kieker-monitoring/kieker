@@ -51,7 +51,8 @@ public final class SamplingController extends AbstractController implements ISam
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
-			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
+			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize,
+					new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
 			this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 			this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);

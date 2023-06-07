@@ -49,6 +49,7 @@ public class CompilationSampler extends AbstractMXBeanSampler {
 
 		final CompilationMXBean compilationBean = ManagementFactory.getCompilationMXBean();
 
-		return new IMonitoringRecord[] { new CompilationRecord(timestamp, hostname, vmName, compilationBean.getName(), compilationBean.getTotalCompilationTime()), };
+		return new IMonitoringRecord[] { new CompilationRecord(timestamp, hostname, vmName,
+				compilationBean.getName(), compilationBean.getTotalCompilationTime()), };
 	}
 }

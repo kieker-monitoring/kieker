@@ -45,8 +45,6 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.writer.dump.DumpWriter;
 

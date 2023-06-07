@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.probe.aspectj.operationExecution;
 
 import java.io.File;
@@ -26,22 +25,23 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
  * Helper class for aspect integration tests
- * 
+ *
  * @author DaGeRe
  *
  */
 public enum Util {
-	; // NOPMD
+	; // NOPMD, NOCS
 
 	public static final File EXAMPLE_PROJECT_FOLDER = new File("test-resources/example-projects-aspectj");
 
 	/**
 	 * Creates a temporary project folder, containing the example project (for all
-	 * tests with standard traces)
-	 * 
+	 * tests with standard traces).
+	 *
 	 * @param aopXML
-	 * @return
+	 * @return a temporary file
 	 * @throws IOException
+	 *             on io error
 	 */
 	public static File createTemporaryProject(final File aopXML) throws IOException {
 		final File temporaryFile = new File("build/kieker-test-aspectj/example-project");
@@ -57,17 +57,17 @@ public enum Util {
 	}
 
 	/**
-	 * Runs a test case in a generated project
-	 * 
+	 * Runs a test case in a generated project.
+	 *
 	 * @param projectFolder
 	 * @param testcase
-	 * @return
+	 * @return returns log folder
 	 * @throws IOException
 	 */
 	public static File runTestcase(final File projectFolder, final String testcase) throws IOException {
-		final File logFolder = createLogFolder(projectFolder);
+		final File logFolder = Util.createLogFolder(projectFolder);
 
-		callTest(testcase, projectFolder);
+		Util.callTest(testcase, projectFolder);
 
 		return logFolder;
 	}
@@ -83,18 +83,18 @@ public enum Util {
 	}
 
 	/**
-	 * Runs a test case in an individual project
-	 * 
+	 * Runs a test case in an individual project.
+	 *
 	 * @param projectName
 	 * @param testcase
-	 * @return
+	 * @return returns log folder
 	 * @throws IOException
 	 */
 	public static File runTestcase(final String projectName, final String testcase) throws IOException {
 		final File folder = new File(EXAMPLE_PROJECT_FOLDER, projectName);
-		final File logFolder = createLogFolder(folder);
+		final File logFolder = Util.createLogFolder(folder);
 
-		callTest(testcase, folder);
+		Util.callTest(testcase, folder);
 		return logFolder;
 	}
 
@@ -104,6 +104,13 @@ public enum Util {
 		StreamGobbler.showFullProcess(processBuilder.start());
 	}
 
+	/**
+	 *
+	 * @param monitoringFolder
+	 *            folder containing a monitoring log
+	 * @return returns list of data files
+	 * @throws IOException
+	 */
 	public static List<String> getLatestLogRecord(final File monitoringFolder) throws IOException {
 		final File dataFolder = monitoringFolder.listFiles()[0];
 		final File dataFile = dataFolder.listFiles((FilenameFilter) new WildcardFileFilter("*.dat"))[0];

@@ -76,13 +76,10 @@ public class SystemResourceUsageServletContextListener extends AbstractRegularSa
 			.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl.
-																										// order)
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file. */
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
-																												// (decl.
-																												// order)
 			+ ".initialSamplingDelaySeconds";
 
 	/**

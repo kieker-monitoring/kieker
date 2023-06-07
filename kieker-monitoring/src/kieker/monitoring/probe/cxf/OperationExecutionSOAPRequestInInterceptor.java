@@ -144,7 +144,8 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 					LOGGER.warn("Invalid trace id", exc);
 				}
 			} else {
-				// SOAP Header doesn't contain a trace id. This might be caused by a request which has been sent by a host not equipped with the RequestOutProbe. We
+				// SOAP Header doesn't contain a trace id. This might be caused by a request which has been
+				// sent by a host not equipped with the RequestOutProbe. We
 				// will now acquire a thread id which is stored (below!!) in the thread local variable!
 				traceId = CF_REGISTRY.getUniqueTraceId();
 				sessionId = SESSION_ID_ASYNC_TRACE;

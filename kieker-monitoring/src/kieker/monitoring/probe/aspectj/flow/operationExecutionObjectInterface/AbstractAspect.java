@@ -44,7 +44,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	/**
-	 * This is the pointcut for the monitored operations. Inheriting classes should extend this pointcut to make sure that the correct joint points will be detected.
+	 * This is the pointcut for the monitored operations. Inheriting classes should extend this
+	 * pointcut to make sure that the correct joint points will be detected.
 	 */
 	@Pointcut
 	public abstract void monitoredOperation();
@@ -69,7 +70,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId,
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId,
+				trace.getNextOrderId(), operationSignature, clazz, objectId,
 				AbstractAspect.getInterface(thisJoinPoint)));
 		// execution of the called method
 		final Object retval;

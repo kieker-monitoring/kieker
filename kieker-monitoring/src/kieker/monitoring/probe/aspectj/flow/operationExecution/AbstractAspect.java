@@ -76,7 +76,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString()));
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId,
+					trace.getNextOrderId(), operationSignature, clazz, th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -115,7 +116,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString()));
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(),
+					traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace

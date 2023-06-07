@@ -67,8 +67,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 * @param thisObject
 	 * @param thisJoinPoint
 	 *
-	 * @return The result of the joint point's {@code proceed} method.
-	 *
 	 * @throws Throwable
 	 */
 	@Before("monitoredConstructor() && this(thisObject) && notWithinKieker()")

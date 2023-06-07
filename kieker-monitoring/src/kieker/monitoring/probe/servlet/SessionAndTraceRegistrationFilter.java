@@ -206,9 +206,11 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	}
 
 	/**
-	 * If the given {@link ServletRequest} is an instance of {@link HttpServletRequest}, this methods extracts the session ID and registers it in the
-	 * {@link #SESSION_REGISTRY} in order to be accessible for other probes in this thread. In case no session is associated with this request (or if the request is
-	 * not an instance of {@link HttpServletRequest}), this method returns without any further actions and returns {@link OperationExecutionRecord#NO_SESSION_ID}.
+	 * If the given {@link ServletRequest} is an instance of {@link HttpServletRequest}, this methods
+	 * extracts the session ID and registers it in the {@link #SESSION_REGISTRY} in order to be accessible
+	 * for other probes in this thread. In case no session is associated with this request (or if the
+	 * request is not an instance of {@link HttpServletRequest}), this method returns without any further
+	 * actions and returns {@link OperationExecutionRecord#NO_SESSION_ID}.
 	 *
 	 * @param request
 	 *            The request.

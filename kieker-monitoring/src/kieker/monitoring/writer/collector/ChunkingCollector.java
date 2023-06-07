@@ -129,7 +129,8 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		// Instantiate serializer and writer
 		final InstantiationFactory controllerFactory = InstantiationFactory.getInstance(configuration);
 		final String serializerName = configuration.getStringProperty(CONFIG_SERIALIZER_CLASSNAME);
-		final IMonitoringRecordSerializer serializer = controllerFactory.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
+		final IMonitoringRecordSerializer serializer = controllerFactory
+				.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
 		final String writerName = configuration.getStringProperty(CONFIG_WRITER_CLASSNAME);
 		final IRawDataWriter writer = controllerFactory.createAndInitialize(IRawDataWriter.class, writerName, configuration);
 

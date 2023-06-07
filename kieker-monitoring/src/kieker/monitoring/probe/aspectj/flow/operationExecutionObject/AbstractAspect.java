@@ -44,7 +44,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	/**
-	 * This is the pointcut for the monitored operations. Inheriting classes should extend this pointcut to make sure that the correct joint points will be detected.
+	 * This is the pointcut for the monitored operations. Inheriting classes should extend
+	 * this pointcut to make sure that the correct joint points will be detected.
 	 */
 	@Pointcut
 	public abstract void monitoredOperation();

@@ -32,6 +32,13 @@ public interface TakeStrategy { // NOCS //NOPMD (name without prefix "I" for rea
 	void signal();
 
 	/**
+	 * @param q
+	 *            the queue
+	 * @param <E>
+	 *            element type
+	 * @return one element from a queue
+	 * @throws InterruptedException
+	 *             on external interrupts
 	 * @since 1.13
 	 */
 	<E> E waitPoll(Queue<E> q) throws InterruptedException;

@@ -61,10 +61,10 @@ public final class WriterController extends AbstractController implements IWrite
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
-	/** The fully qualified name of the put strategy */
+	/** The fully qualified name of the put strategy. */
 	public static final String QUEUE_PUT_STRATEGY = "QueuePutStrategy";
 
-	/** The fully qualified name of the take strategy */
+	/** The fully qualified name of the take strategy. */
 	public static final String QUEUE_TAKE_STRATEGY = "QueueTakeStrategy";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WriterController.class);
@@ -113,9 +113,10 @@ public final class WriterController extends AbstractController implements IWrite
 		} else {
 			final String takeStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_TAKE_STRATEGY,
 					"kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy");
-			final TakeStrategy takeStrategy = newTakeStrategy(takeStrategyFqn);
-			final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY, "kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
-			final PutStrategy putStrategy = newPutStrategy(putStrategyFqn);
+			final TakeStrategy takeStrategy = this.newTakeStrategy(takeStrategyFqn);
+			final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY,
+					"kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
+			final PutStrategy putStrategy = this.newPutStrategy(putStrategyFqn);
 			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 

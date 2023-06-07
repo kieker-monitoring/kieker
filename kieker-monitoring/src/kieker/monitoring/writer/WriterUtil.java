@@ -35,6 +35,10 @@ public final class WriterUtil {
 	}
 
 	/**
+	 *
+	 * @param buffer
+	 * @param writableChannel
+	 * @param logger
 	 * @return the number of bytes written from the buffer to the channel
 	 */
 	public static long flushBuffer(final ByteBuffer buffer, final WritableByteChannel writableChannel, final Logger logger) {

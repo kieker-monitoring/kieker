@@ -33,7 +33,6 @@ import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.StringSerializer;
 
 /**

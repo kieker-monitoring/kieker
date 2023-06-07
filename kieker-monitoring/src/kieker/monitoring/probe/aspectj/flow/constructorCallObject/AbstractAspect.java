@@ -43,7 +43,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	/**
-	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct calls (e.g. all constructors or only
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut
+	 * in order to find the correct calls (e.g. all constructors or only
 	 * constructors with specific annotations).
 	 */
 	@Pointcut
@@ -54,6 +55,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 *
 	 * @param thisObject
 	 *            The caller object.
+	 * @param targetObject
+	 *            the target object
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
@@ -64,7 +67,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && this(thisObject) && target(targetObject)  && notWithinKieker()")
-	public Object member2constructor(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
+	public Object member2constructor(final Object thisObject, final Object targetObject,
+			final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
@@ -107,6 +111,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	/**
 	 * This is an advice used around calls from static elements to constructors.
 	 *
+	 * @param targetObject
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
@@ -117,7 +122,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
-	public Object static2constructor(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
+	public Object static2constructor(final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
+			final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();

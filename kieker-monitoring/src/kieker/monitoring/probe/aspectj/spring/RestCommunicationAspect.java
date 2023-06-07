@@ -75,6 +75,8 @@ public class RestCommunicationAspect {
 	 * we read the traceId and orderIndex from the Http header of our message.
 	 * If existing, we create a new BeforeReceivedEvent and pass it to the
 	 * MonitoringController.
+	 *
+	 * @param request
 	 */
 	@Before("frameworkServletService() && args(request, ..)")
 	public void doBeforeDispatcherService(final HttpServletRequest request) {
@@ -117,6 +119,8 @@ public class RestCommunicationAspect {
 	 * After a request creation with a RestTemplate, we get the current traceId
 	 * and orderIndex and add them to the Http header of our message. Also, we
 	 * create a new BeforeSentEvent, which we pass to the MonitoringController.
+	 *
+	 * @param request
 	 */
 	@AfterReturning(pointcut = "requestCreation()", returning = "request")
 	public void doAfterRequestCreation(final ClientHttpRequest request) {

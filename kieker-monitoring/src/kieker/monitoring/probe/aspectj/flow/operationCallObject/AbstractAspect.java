@@ -43,7 +43,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
 	/**
-	 * This is the pointcut for the monitored operations. Inheriting classes should extend this pointcut to make sure that the correct joint points will be detected.
+	 * This is the pointcut for the monitored operations. Inheriting classes should extend
+	 * this pointcut to make sure that the correct joint points will be detected.
 	 */
 	@Pointcut
 	public abstract void monitoredOperation();
@@ -114,7 +115,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 		final String calleeClazz = targetObject.getClass().getName();
 		final int calleeObject = System.identityHashCode(targetObject);
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz, 0,
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId,
+				trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz, 0,
 				calleeObject));
 		// call of the called method
 		final Object retval;
@@ -194,7 +196,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz, 0, 0));
+		CTRLINST.newMonitoringRecord(new CallOperationObjectEvent(TIME.getTime(), traceId,
+				trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz, 0, 0));
 		// call of the called method
 		final Object retval;
 		try {

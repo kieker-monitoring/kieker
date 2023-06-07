@@ -23,8 +23,6 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.monitoring.core.signaturePattern.InvalidPatternException;
-import kieker.monitoring.core.signaturePattern.PatternParser;
 import kieker.monitoring.test.util.signaturePattern.SignatureConstructor;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -222,7 +220,9 @@ public class TestPatternParser extends AbstractKiekerTest {
 											final Pattern pattern = PatternParser.parseToPattern(signature);
 											final Matcher m = pattern.matcher(signature01);
 											final boolean result = m.matches();
-											Assert.assertEquals("expected: " + expected + " for " + signature + " parsed to " + pattern.toString() + ", but was: " + result, expected, result);
+											Assert.assertEquals(
+													"expected: " + expected + " for " + signature + " parsed to " + pattern.toString() + ", but was: " + result,
+													expected, result);
 										}
 									}
 								}
@@ -296,7 +296,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 	 * Constructors signatures are often serialized as public package.Class.<init>(), but may also be serialized as
 	 * public new package.Class<init>(). To let each signature be matches by the pattern created from the signature itself,
 	 * the second variant should also be accepted.
-	 * 
+	 *
 	 * @throws InvalidPatternException
 	 */
 	@Test

@@ -24,10 +24,10 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
+import kieker.monitoring.test.util.Await;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**

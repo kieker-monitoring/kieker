@@ -52,6 +52,8 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * Creates a new instance using an empty configuration.
+	 *
+	 * @param pipeName
 	 */
 	public PipeWriter(final String pipeName) {
 		super(new Configuration());

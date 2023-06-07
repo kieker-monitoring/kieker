@@ -87,7 +87,8 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	private final WriterRegistry writerRegistry;
 
-	public AmqpWriter(final Configuration configuration) throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
+	public AmqpWriter(final Configuration configuration) throws KeyManagementException, NoSuchAlgorithmException,
+			URISyntaxException, IOException, TimeoutException {
 		super(configuration);
 
 		// Read configuration parameters from configuration

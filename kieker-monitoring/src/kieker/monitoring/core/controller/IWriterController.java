@@ -31,8 +31,9 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 
 	/**
 	 * <p>
-	 * Called for each new record to write it out to the pre-configured target (e.g., file system, database, or messaging queue). This method could invoke the given
-	 * <code>record</code>'s methods declared in {@link IMonitoringRecord} and thus alter its <code>loggingTimestamp</code> property.
+	 * Called for each new record to write it out to the pre-configured target (e.g., file system, database,
+	 * or messaging queue). This method could invoke the given <code>record</code>'s methods declared in
+	 * {@link IMonitoringRecord} and thus alter its <code>loggingTimestamp</code> property.
 	 *
 	 * <p>
 	 * Notice, that this method should not throw an exception, but indicate an error by the return value false.
@@ -47,7 +48,8 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
-	 * Waits for the termination of the monitoring controller. The termination must be previously triggered by {@link MonitoringController#terminateMonitoring()}.
+	 * Waits for the termination of the monitoring controller. The termination must be previously
+	 * triggered by {@link MonitoringController#terminateMonitoring()}.
 	 *
 	 * @param timeoutInMs
 	 *            timeout in milliseconds to wait (a timeout of 0 means to wait forever)

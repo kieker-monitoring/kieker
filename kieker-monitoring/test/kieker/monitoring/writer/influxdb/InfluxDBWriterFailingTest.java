@@ -22,8 +22,8 @@ import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import kieker.OSUtil;
 import kieker.common.configuration.Configuration;
+import kieker.monitoring.test.util.OSUtil;
 
 /**
  * @author Teerat Pitakrat

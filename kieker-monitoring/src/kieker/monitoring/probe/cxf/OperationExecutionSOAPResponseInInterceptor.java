@@ -117,7 +117,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				// No Kieker eoi in header. This may happen for responses from callees w/o
 				// Kieker instrumentation.
 
-				OperationExecutionSOAPResponseInInterceptor.LOGGER.info("Found no Kieker eoi in response header. Will unset all threadLocal variables");
+				OperationExecutionSOAPResponseInInterceptor.LOGGER
+						.info("Found no Kieker eoi in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -141,7 +142,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				// No Kieker trace Id in header. This may happen for responses from callees w/o
 				// Kieker instrumentation.
 
-				OperationExecutionSOAPResponseInInterceptor.LOGGER.info("Found no Kieker traceId in response header. Will unset all threadLocal variables");
+				OperationExecutionSOAPResponseInInterceptor.LOGGER
+						.info("Found no Kieker traceId in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
 			}
@@ -165,8 +167,9 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final long myTout = this.timeSource.getTime();
 
 			if (myTraceId != traceId) {
-				OperationExecutionSOAPResponseInInterceptor.LOGGER.warn("Inconsistency between traceId before and after SOAP request:\n{}(before) != {}(after)",
-						myTraceId, traceId);
+				OperationExecutionSOAPResponseInInterceptor.LOGGER
+						.warn("Inconsistency between traceId before and after SOAP request:\n{}(before) != {}(after)",
+								myTraceId, traceId);
 			}
 
 			// Log this execution

@@ -92,7 +92,8 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 		// allows values: Int>0
 		this.sensorIntervalSeconds = this.readLongInitParameter(c, this.contextParameterNameSamplingIntervalSeconds, DEFAULT_SENSOR_INTERVAL_SECONDS);
 		if (this.sensorIntervalSeconds == 0) {
-			LOGGER.warn("values for the init-param '{}' must be >0; found: {}. Using default value: {}", this.contextParameterNameSamplingIntervalSeconds,
+			LOGGER.warn("values for the init-param '{}' must be >0; found: {}. Using default value: {}",
+					this.contextParameterNameSamplingIntervalSeconds,
 					this.sensorIntervalSeconds, DEFAULT_SENSOR_INTERVAL_SECONDS);
 			this.sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 		}
@@ -126,7 +127,8 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 	private void initSensors() {
 		final ISampler[] samplers = this.createSamplers();
 		for (final ISampler sampler : samplers) {
-			final ScheduledSamplerJob job = this.samplingController.schedulePeriodicSampler(sampler, this.initialDelaySeconds, this.sensorIntervalSeconds,
+			final ScheduledSamplerJob job = this.samplingController.schedulePeriodicSampler(sampler,
+					this.initialDelaySeconds, this.sensorIntervalSeconds,
 					TimeUnit.SECONDS);
 			this.startedSamplerJobs.add(job);
 		}

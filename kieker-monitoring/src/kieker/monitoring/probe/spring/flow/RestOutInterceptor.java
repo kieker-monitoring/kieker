@@ -116,7 +116,8 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 					final List<String> responseHeaderList = responseHeaders.get(RestConstants.HEADER_FIELD);
 
 					if (responseHeaderList != null) {
-						RestOutInterceptor.LOGGER.debug("Received response from {} with header = {}", responseHeaders.getLocation().toString(),
+						RestOutInterceptor.LOGGER.debug("Received response from {} with header = {}",
+								responseHeaders.getLocation().toString(),
 								responseHeaders.toString());
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
@@ -131,7 +132,9 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 							}
 						}
 						if (traceId != retTraceId) {
-							RestOutInterceptor.LOGGER.error("TraceId in response header ({}) is different from that in request header ({})", retTraceId, traceId);
+							RestOutInterceptor.LOGGER
+									.error("TraceId in response header ({}) is different from that in request header ({})",
+											retTraceId, traceId);
 						}
 
 						// Extract session id
@@ -157,7 +160,8 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 								responseHeaders.getLocation().toString());
 					}
 				} else {
-					RestOutInterceptor.LOGGER.debug("Response header from {} is null. Is it instrumented?", response.getHeaders().getLocation().toString());
+					RestOutInterceptor.LOGGER.debug("Response header from {} is null. Is it instrumented?",
+							response.getHeaders().getLocation().toString());
 				}
 				response.close();
 			}

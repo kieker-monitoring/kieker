@@ -90,7 +90,8 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		final int parentOrderId;
 		if (tp != null) { // we have a known split point
 			if ((enclosingTrace != null) && (enclosingTrace.getTraceId() != tp.traceId)) {
-				LOGGER.error("Enclosing trace does not match split point. Found: {} expected: {}", enclosingTrace.getTraceId(), enclosingTrace.getTraceId());
+				LOGGER.error("Enclosing trace does not match split point. Found: {} expected: {}",
+						enclosingTrace.getTraceId(), enclosingTrace.getTraceId());
 			}
 			parentTraceId = tp.traceId;
 			parentOrderId = tp.orderId;

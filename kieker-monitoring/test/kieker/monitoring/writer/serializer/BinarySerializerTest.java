@@ -31,7 +31,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.collector.TestRawDataStorage;
 import kieker.monitoring.writer.collector.TestRawDataWriter;
-import kieker.monitoring.writer.serializer.BinarySerializer;
 
 /**
  * Tests for the default binary serializer.
