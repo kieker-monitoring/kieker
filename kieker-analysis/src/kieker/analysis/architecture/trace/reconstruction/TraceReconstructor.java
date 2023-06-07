@@ -41,8 +41,8 @@ import kieker.model.analysismodel.trace.Trace;
 final class TraceReconstructor {
 
 	private final DeploymentModel deploymentModel;
-	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>(); // NOPMD (no concurrent access
-																						// intended)
+	private final Map<Long, TraceReconstructionBuffer> traceBuffers =
+			new HashMap<>(); // NOPMD (no concurrent access intended)
 	private final List<TraceReconstructionBuffer> faultyTraceBuffers = new ArrayList<>();
 	// private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;

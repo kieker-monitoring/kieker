@@ -21,7 +21,7 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Stage that accepts a collection of object of type <T> and sends them to its output port individually.
+ * Stage that accepts a collection of object of type T and sends them to its output port individually.
  *
  * @author Jannis Kuckei
  * @author Reiner Jung -- generalization

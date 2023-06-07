@@ -28,14 +28,23 @@ import kieker.model.analysismodel.type.ComponentType;
 public interface IComponentNameBuilder {
 
 	/**
+	 * @param packageName
+	 *            name of the package
+	 * @param name
+	 *            name of the component
+	 *
+	 * @return compoent name
 	 * @since 1.14
 	 */
-	public String build(String packageName, String name);
+	String build(String packageName, String name);
 
 	/**
+	 * @param componentType
+	 *            component type object
+	 * @return component type string
 	 * @since 1.14
 	 */
-	public default String build(final ComponentType componentType) {
+	default String build(final ComponentType componentType) {
 		return this.build(componentType.getPackage(), componentType.getName());
 	}
 

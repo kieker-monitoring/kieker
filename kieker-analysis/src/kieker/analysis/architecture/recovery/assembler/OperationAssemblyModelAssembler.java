@@ -38,7 +38,20 @@ public class OperationAssemblyModelAssembler extends AbstractModelAssembler<Oper
 	private final TypeModel typeModel;
 	private final AssemblyModel assemblyModel;
 
-	public OperationAssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel, final String sourceLabel) {
+	/**
+	 * Create assembly model assembler using {@link OperationEvent}s to generate the assembly model.
+	 *
+	 * @param typeModel
+	 *            type model to be referred to by the assembly model
+	 * @param assemblyModel
+	 *            the assembly model itself
+	 * @param sourceModel
+	 *            the source model
+	 * @param sourceLabel
+	 *            the label to be used for assembly model elements
+	 */
+	public OperationAssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel, final SourceModel sourceModel,
+			final String sourceLabel) {
 		super(sourceModel, sourceLabel);
 		this.typeModel = typeModel;
 		this.assemblyModel = assemblyModel;

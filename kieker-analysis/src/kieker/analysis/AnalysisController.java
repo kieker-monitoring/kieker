@@ -268,7 +268,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *            object.
 	 * @return The configuration object.
 	 */
-	private static final Configuration createConfigurationWithProjectName(final String projectName) {
+	private static Configuration createConfigurationWithProjectName(final String projectName) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, projectName);
 		return configuration;
@@ -279,7 +279,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *
 	 * @return The default configuration.
 	 */
-	private final Configuration getDefaultConfiguration() {
+	private Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
 		// Get the (potential) annotation of our class
 		final kieker.analysis.annotation.AnalysisController annotation = this.getClass()
@@ -302,7 +302,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @param record
 	 *            the KiekerMetadataRecord containing the information
 	 */
-	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
+	public void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		AnalysisController.LOG.info(
 				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
 				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(),
@@ -313,7 +313,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void registerStateObserver(final IStateObserver stateObserver) {
+	public void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
 
@@ -321,7 +321,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void unregisterStateObserver(final IStateObserver stateObserver) {
+	public void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
 	}
 
@@ -329,7 +329,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This method runs through all observers and informs them about the current
 	 * state.
 	 */
-	private final void notifyStateObservers() {
+	private void notifyStateObservers() {
 		// Get the current state to make sure that all observers get the same state.
 		final STATE currState = this.state;
 		// Now inform the observers.
@@ -342,7 +342,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final String getProperty(final String key) {
+	public String getProperty(final String key) {
 		return this.globalConfiguration.getStringProperty(key);
 	}
 
@@ -359,7 +359,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the given project represents
 	 *             somehow an invalid configuration.
 	 */
-	private final void loadFromModelProject(final MIProject mProject, final ClassLoader classLoader)
+	private void loadFromModelProject(final MIProject mProject, final ClassLoader classLoader)
 			throws AnalysisConfigurationException {
 		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<>(); // NOPMD (no concurrent access)
 		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<>(); // NOPMD (no concurrent access)
@@ -386,7 +386,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
+	public void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
 	}
@@ -395,7 +395,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
+	public void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
 
@@ -403,7 +403,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
+	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
 			final String inputPortName) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
@@ -413,14 +413,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
-			throw new AnalysisConfigurationException(createCannotConnectToReader(dst));
+			throw new AnalysisConfigurationException(this.createCannotConnectToReader(dst));
 		}
 		// Make sure that the plugins are registered. */
 		if (!(this.filters.contains(src) || this.readers.contains(src))) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(src));
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(src));
 		}
 		if (!this.filters.contains(dst)) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(dst));
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(dst));
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connection.
@@ -431,21 +431,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void connect(final AbstractPlugin plugin, final String repositoryPort,
+	public void connect(final AbstractPlugin plugin, final String repositoryPort,
 			final AbstractRepository repository) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
 		if (repository == null) {
-			throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", plugin.getName(), plugin.getPluginName()));
+			throw new AnalysisConfigurationException(
+					String.format("Plugin '%s' (%s) has unconnected repositories.",
+							plugin.getName(), plugin.getPluginName()));
 		}
 		// Make sure that the plugin is registered.
 		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(plugin));
 		}
 		// Make sure that the repository is registered.
 		if (!this.repos.contains(repository)) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));		
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(plugin));
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connections.
@@ -456,7 +458,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
+	public MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		return MetaModelHandler.javaToMetaModel(this.readers, this.filters, this.repos, this.dependencies,
 				this.projectName, this.globalConfiguration);
 	}
@@ -465,7 +467,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void run() throws AnalysisConfigurationException {
+	public void run() throws AnalysisConfigurationException {
 		try {
 			synchronized (this) {
 				if (this.state != STATE.READY) {
@@ -484,22 +486,26 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!reader.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) has unconnected repositories.", reader.getName(), reader.getPluginName()));
+					throw new AnalysisConfigurationException(
+							String.format("Reader '%s' (%s) has unconnected repositories.", reader.getName(), reader.getPluginName()));
 				}
 				if (!reader.start()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) failed to initialize.", reader.getName(), reader.getPluginName()));
+					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) failed to initialize.",
+							reader.getName(), reader.getPluginName()));
 				}
 			}
 			for (final AbstractFilterPlugin filter : this.filters) {
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!filter.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", filter.getName(), filter.getPluginName()));
+					throw new AnalysisConfigurationException(
+							String.format("Plugin '%s' (%s) has unconnected repositories.", filter.getName(), filter.getPluginName()));
 				}
 				if (!filter.start()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) failed to initialize.", filter.getName(), filter.getPluginName()));
+					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) failed to initialize.",
+							filter.getName(), filter.getPluginName()));
 				}
 			}
 			// Start reading
@@ -542,7 +548,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Causes the calling thread to wait until the analysis controller has been
 	 * initialized.
 	 */
-	public final void awaitInitialization() {
+	public void awaitInitialization() {
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
@@ -554,7 +560,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void terminate() {
+	public void terminate() {
 		this.terminate(false);
 	}
 
@@ -562,7 +568,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void terminate(final boolean error) {
+	public void terminate(final boolean error) {
 		try {
 			synchronized (this) {
 				if (this.state != STATE.RUNNING) {
@@ -607,7 +613,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerReader(final AbstractReaderPlugin reader) {
+	public void registerReader(final AbstractReaderPlugin reader) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -630,7 +636,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerFilter(final AbstractFilterPlugin filter) {
+	public void registerFilter(final AbstractFilterPlugin filter) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -656,7 +662,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerRepository(final AbstractRepository repository) {
+	public void registerRepository(final AbstractRepository repository) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
@@ -674,7 +680,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final String getProjectName() {
+	public String getProjectName() {
 		return this.projectName;
 	}
 
@@ -682,7 +688,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final Collection<AbstractReaderPlugin> getReaders() {
+	public Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
 
@@ -690,7 +696,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final Collection<AbstractFilterPlugin> getFilters() {
+	public Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
 
@@ -698,7 +704,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final Collection<AbstractRepository> getRepositories() {
+	public Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
 
@@ -706,7 +712,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final STATE getState() {
+	public STATE getState() {
 		return this.state;
 	}
 
@@ -719,7 +725,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @throws IOException
 	 *             If something during loading went wrong.
 	 */
-	public static final MIProject loadFromFile(final File file) throws IOException {
+	public static MIProject loadFromFile(final File file) throws IOException {
 		try {
 			return MetaModelHandler.loadProjectFromFile(file);
 		} catch (final IOException ex) {
@@ -747,7 +753,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @throws IOException
 	 *             In case of errors.
 	 */
-	public static final void saveToFile(final File file, final MIProject project) throws IOException {
+	public static void saveToFile(final File file, final MIProject project) throws IOException {
 		try {
 			MetaModelHandler.saveProjectToFile(file, project);
 		} catch (final IOException ex) {
@@ -775,7 +781,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the given project could not be
 	 *             loaded.
 	 */
-	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project,
+	public static AnalysisControllerWithMapping createAnalysisController(final MIProject project,
 			final ClassLoader classLoader) throws AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController(project, classLoader);
 
@@ -794,7 +800,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	public boolean tryRegisterComponentName(final String name) {
 		return this.registeredComponentNames.add(name);
 	}
-	
 
 	private String createCannotConnectToReader(final AbstractPlugin plugin) {
 		return String.format("The plugin '%s' (%s) is a reader and can not be connected to.", plugin.getName(), plugin.getPluginName());
@@ -876,7 +881,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *
 	 * @since 1.5
 	 */
-	public static enum STATE {
+	public enum STATE {
 		/**
 		 * The controller has been initialized and is ready to be configured.
 		 */
@@ -907,7 +912,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *
 	 * @since 1.5
 	 */
-	public static interface IStateObserver {
+	public interface IStateObserver {
 
 		/**
 		 * This method will be called for every update of the state.

@@ -31,14 +31,31 @@ import kieker.model.analysismodel.type.OperationType;
 public interface IOperationNameBuilder {
 
 	/**
+	 * Composes a signature string for an operation based on its signature elements.
+	 *
+	 * @param modifiers
+	 *            modifiers of the operation
+	 * @param returnType
+	 *            name of the return type
+	 * @param name
+	 *            operation name
+	 * @param parameterTypes
+	 *            list of parameters of the operation
+	 *
+	 * @return signature string of an operation
 	 * @since 1.14
 	 */
-	public String build(Collection<String> modifiers, String returnType, String name, Collection<String> parameterTypes);
+	String build(Collection<String> modifiers, String returnType, String name, Collection<String> parameterTypes);
 
 	/**
+	 * Composes a signature string for an operation declaration in the type model.
+	 *
+	 * @param operationType
+	 *            type model operation declaration
+	 * @return signature string
 	 * @since 1.14
 	 */
-	public default String build(final OperationType operationType) {
+	default String build(final OperationType operationType) {
 		return this.build(operationType.getModifiers(), operationType.getReturnType(), operationType.getName(), operationType.getParameterTypes());
 	}
 

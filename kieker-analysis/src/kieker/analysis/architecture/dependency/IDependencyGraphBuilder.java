@@ -29,8 +29,12 @@ import kieker.analysis.generic.graph.INode;
 public interface IDependencyGraphBuilder {
 
 	/**
+	 * @param repository
+	 *
+	 * @return complete graph
+	 *
 	 * @since 1.16
 	 */
-	public IGraph<INode, IEdge> build(ModelRepository repository);
+	IGraph<INode, IEdge> build(ModelRepository repository);
 
 }

@@ -43,7 +43,8 @@ public class OperationExecutionRecordTimestampFilter extends AbstractTimestampFi
 
 	@Override
 	protected long getRecordSpecificTimestamp(final OperationExecutionRecord execution) {
-		// As this particular stage is using two timestamps instead of just one the execute method was overwritten anyway so there is no need for this method.
+		// As this particular stage is using two timestamps instead of just one the execute
+		// method was overwritten anyway so there is no need for this method.
 		throw new UnsupportedOperationException();
 	}
 

@@ -70,10 +70,11 @@ public class TimestampFilter extends CompositeStage {
 				IMonitoringRecord.class);
 
 		final EventRecordTimestampFilter eventRecordTimestampStage = new EventRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-		final OperationExecutionRecordTimestampFilter operationExecutionRecordTimestampStage = new OperationExecutionRecordTimestampFilter(ignoreBeforeTimestamp,
-				ignoreAfterTimestamp);
+		final OperationExecutionRecordTimestampFilter operationExecutionRecordTimestampStage =
+				new OperationExecutionRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 		final TraceMetadataTimestampFilter traceMetadataTimestampStage = new TraceMetadataTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-		final MonitioringRecordTimestampFilter monitoringRecordTimestampStage = new MonitioringRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+		final MonitioringRecordTimestampFilter monitoringRecordTimestampStage =
+				new MonitioringRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 
 		final Merger<IMonitoringRecord> recordsWithinTimePeriodMerger = new Merger<>();
 		final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger = new Merger<>();

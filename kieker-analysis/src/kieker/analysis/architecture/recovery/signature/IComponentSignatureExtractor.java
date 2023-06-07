@@ -28,8 +28,10 @@ import kieker.model.analysismodel.type.ComponentType;
 public interface IComponentSignatureExtractor {
 
 	/**
+	 * @param componentType
+	 *            component type which signature will be processed to fill in name and package fields.
 	 * @since 1.14
 	 */
-	public void extract(final ComponentType componentType);
+	void extract(final ComponentType componentType);
 
 }

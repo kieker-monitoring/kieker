@@ -24,8 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractProducerStage;
 
 /**
- * Gets records from a queue, calculates the delay for each records and forwards the records after the delay. As this stage extends {@link AbstractProducerStage} it
- * is always declared as active.
+ * Gets records from a queue, calculates the delay for each records and forwards the records after the delay.
+ * As this stage extends {@link AbstractProducerStage} it is always declared as active.
  *
  * @author Andre van Hoorn, Robert von Massow, Jan Waller, Lars Bluemke
  *
@@ -108,8 +108,8 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 
 				if (schedTimeFromNow < -this.negativeDelayWarningBound) {
 					final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
-					this.logger.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
-							+ " (seconds)-> scheduling with a delay of 0");
+					this.logger.warn("negative scheduling time: {} ({}) / (seconds)-> scheduling with a delay of 0",
+							schedTimeFromNow, this.timeunit.toString(), schedTimeSeconds);
 				}
 
 				if (schedTimeFromNow < 0) {
@@ -151,21 +151,21 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 	/**
 	 * @author Jan Waller
 	 */
-	private static enum TimerWithPrecision {
+	private enum TimerWithPrecision {
 		MILLISECONDS {
 			@Override
-			public long getCurrentTime(final TimeUnit timeunit) {
-				return timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+			public long getCurrentTime(final TimeUnit localTimeunit) {
+				return localTimeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 			}
 
 		},
 		NANOSECONDS {
 			@Override
-			public long getCurrentTime(final TimeUnit timeunit) {
-				return timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
+			public long getCurrentTime(final TimeUnit localTimeunit) {
+				return localTimeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 			}
 		};
 
-		public abstract long getCurrentTime(TimeUnit timeunit);
+		public abstract long getCurrentTime(TimeUnit localTimeunit);
 	}
 }

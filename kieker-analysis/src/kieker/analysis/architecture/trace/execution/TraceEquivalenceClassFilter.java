@@ -62,7 +62,7 @@ public class TraceEquivalenceClassFilter extends AbstractTraceProcessingStage<Ex
 	 *
 	 * @since 1.2
 	 */
-	public static enum TraceEquivalenceClassModes {
+	public enum TraceEquivalenceClassModes {
 		/** Disabled equivalence mode */
 		DISABLED,
 		/** Assembly-level equivalence */
@@ -123,7 +123,7 @@ public class TraceEquivalenceClassFilter extends AbstractTraceProcessingStage<Ex
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			this.logger.error("InvalidTraceException: {}", ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
+			this.logger.error("InvalidTraceException: {}", ex.getMessage()); // NOCS do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}

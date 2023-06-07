@@ -26,11 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
+ * This class represents a configuration object within the Kieker project. Technically it is a property
+ * list with some additional methods and possibilities.
  *
- * Some of the methods are marked as deprecated. This is not because they will be removed, but rather because they should not be used anymore (at least not directly
- * - they are still used in a valid way within this class). Normally we would remove them, but they are inherited from the class {@link Properties} and can neither
- * be removed nor get a lower visibility modificator.
+ * Some of the methods are marked as deprecated. This is not because they will be removed, but rather
+ * because they should not be used anymore (at least not directly - they are still used in a valid way
+ * within this class). Normally we would remove them, but they are inherited from the class
+ * {@link Properties} and can neither be removed nor get a lower visibility modificator.
  *
  * @author Jan Waller
  *
@@ -164,7 +166,8 @@ public class Configuration extends Properties {
 		try {
 			return Integer.parseInt(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}' of type int, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type int, found value '{}', using default value {}",
+					key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -213,7 +216,8 @@ public class Configuration extends Properties {
 		try {
 			return Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}' of type long, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type long, found value '{}', using default value {}",
+					key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -266,7 +270,8 @@ public class Configuration extends Properties {
 		try {
 			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
-			LOGGER.warn("Error parsing configuration property '{}' of type double, found value '{}', using default value {}", key, value, defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}' of type double, found value '{}', using default value {}",
+					key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -277,8 +282,13 @@ public class Configuration extends Properties {
 	 *
 	 * @param key
 	 *            The key of the property.
+	 * @param enumType
+	 *            class object for the enumeration
 	 * @param defaultValue
 	 *            The default value for this property
+	 *
+	 * @param <T>
+	 *            enumeration type
 	 *
 	 * @return A double with the value of the given property or the default value
 	 */
@@ -386,7 +396,7 @@ public class Configuration extends Properties {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);
-			if (i < values.length - 1) {
+			if (i < (values.length - 1)) {
 				sb.append('|');
 			}
 		}
@@ -423,15 +433,16 @@ public class Configuration extends Properties {
 
 		final int numberPathElements = path.size();
 		final Iterator<String> pathIter = path.iterator();
-		for (int i = 0; i < numberPathElements - 1; i++) {
+		for (int i = 0; i < (numberPathElements - 1); i++) {
 			sb.append(pathIter.next()).append('/');
 		}
 		if (pathIter.hasNext()) {
 			sb.append(pathIter.next());
 		}
 		if (endsWithSlash
-				&& sb.length() != 0 // not if the path is now empty
-				&& (sb.length() != 1 || sb.charAt(0) != '/')) { // not if the path is now '/'
+				&& (sb.length() != 0 // not if the path is now empty
+				)
+				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
 			sb.append('/');
 		}
 
@@ -540,7 +551,7 @@ public class Configuration extends Properties {
 	 */
 	public void setDefaultConfiguration(final Configuration defaultConfiguration) {
 		Configuration conf = this;
-		while (conf.defaults != null && conf.defaults instanceof Configuration) {
+		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
 			conf = (Configuration) conf.defaults;
 		}
 		if (conf.defaults == null) {
@@ -563,7 +574,8 @@ public class Configuration extends Properties {
 	 *
 	 * @return The old object which was stored under the given key or null if there wasn't a value before.
 	 *
-	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should
+	 *             only be used within this class. Don't call this method
 	 *             directly.
 	 */
 	@Override
@@ -581,7 +593,8 @@ public class Configuration extends Properties {
 	 *
 	 * @return The value for the specified key if available, null otherwise.
 	 *
-	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible),
+	 *             but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
 	@Override
@@ -599,7 +612,8 @@ public class Configuration extends Properties {
 	 *
 	 * @return The property for the specified key if available, null otherwise.
 	 *
-	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 * @deprecated This method will not be removed (as this is for technical reasons not
+	 *             possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
 	@Override
@@ -618,7 +632,8 @@ public class Configuration extends Properties {
 	 *
 	 * @return The property for the specified key if available, the given default value otherwise.
 	 *
-	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 * @deprecated This method will not be removed (as this is for technical reasons not
+	 *             possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
 	@Override

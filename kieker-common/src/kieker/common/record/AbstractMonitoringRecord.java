@@ -49,23 +49,34 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final String FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE = "Failed to instantiate new monitoring record of type ";
 	private static final long serialVersionUID = 1L;
 
-	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
-	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS =
+			new ConcurrentHashMap<>(); // NOCS
+	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES =
+			new ConcurrentHashMap<>(); // NOCS
 
 	// added by chw; differs only in the key type: from integer to string
-	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>(); // NOCS
+	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW =
+			new ConcurrentHashMap<>(); // NOCS
 
 	private volatile long loggingTimestamp = -1;
 
 	static {
-		CACHED_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", kieker.common.record.system.CPUUtilizationRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", kieker.common.record.system.MemSwapUsageRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", kieker.common.record.system.ResourceUtilizationRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
+		CACHED_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord",
+				kieker.common.record.controlflow.OperationExecutionRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord",
+				kieker.common.record.system.CPUUtilizationRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord",
+				kieker.common.record.system.MemSwapUsageRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord",
+				kieker.common.record.system.ResourceUtilizationRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord",
+				kieker.common.record.controlflow.OperationExecutionRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.BranchingRecord",
+				kieker.common.record.controlflow.BranchingRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord",
+				kieker.common.record.misc.RegistryRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace",
+				kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
 	/**
@@ -159,7 +170,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * This method checks the given arrays, making sure that they have the same length and that the value elements are compatible with the given value types. If the
+	 * This method checks the given arrays, making sure that they have the same length and that
+	 * the value elements are compatible with the given value types. If the
 	 * arrays are not compatible, this method throws an {@link IllegalArgumentException}.
 	 *
 	 * @param values
@@ -173,7 +185,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 		for (int curIdx = 0; curIdx < valueTypes.length; curIdx++) {
 			if (values[curIdx] == null) {
-				throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found null at position " + curIdx + " of the array.");
+				throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName()
+						+ " but found null at position " + curIdx + " of the array.");
 			} else if (valueTypes[curIdx] == int.class) {
 				if (values[curIdx] instanceof Integer) {
 					continue;
@@ -338,8 +351,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * This method delivers the types array of the given class, either by finding the declared field (in case of a factory record) or via the {@code getValueTypes}
-	 * method.
+	 * This method delivers the types array of the given class, either by finding the declared
+	 * field (in case of a factory record) or via the {@code getValueTypes} method.
 	 *
 	 * @param clazz
 	 *            The record class.

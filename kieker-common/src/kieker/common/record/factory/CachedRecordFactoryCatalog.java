@@ -41,7 +41,7 @@ public final class CachedRecordFactoryCatalog {
 	}
 
 	CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
-		this.cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
+		this.cachedRecordFactories = new ConcurrentHashMap<>();
 		this.recordFactoryResolver = recordFactoryResolver;
 	}
 
@@ -71,7 +71,8 @@ public final class CachedRecordFactoryCatalog {
 		if (recordFactory == null) {
 			recordFactory = this.recordFactoryResolver.get(recordClassName);
 			if (recordFactory != null) {
-				final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+				final IRecordFactory<? extends IMonitoringRecord> existingFactory =
+						this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
 				if (existingFactory != null) {
 					recordFactory = existingFactory;
 				}

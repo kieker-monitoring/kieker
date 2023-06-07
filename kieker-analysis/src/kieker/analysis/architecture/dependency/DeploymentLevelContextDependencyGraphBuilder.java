@@ -36,9 +36,6 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 
 	/**
 	 * Create new graph builder.
-	 *
-	 * @param repository
-	 *            model repository
 	 */
 	public DeploymentLevelContextDependencyGraphBuilder() {
 		super();

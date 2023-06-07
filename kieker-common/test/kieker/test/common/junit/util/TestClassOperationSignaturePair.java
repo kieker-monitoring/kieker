@@ -25,9 +25,9 @@ import kieker.common.util.signature.Signature;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestClassOperationSignaturePair extends AbstractKiekerTest {
@@ -76,7 +76,8 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 
 		// Obtain operation signature string based on class name and signature and compare with expected string.
 		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
-		final String expectedOpSignatureString = modifiers[0] + " " + modifiers[1] + " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", "
+		final String expectedOpSignatureString = modifiers[0] + " " + modifiers[1]
+				+ " " + returnType + " " + fqClassName + "." + opName + "(" + paramTypes[0] + ", "
 				+ paramTypes[1] + ")";
 		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
 

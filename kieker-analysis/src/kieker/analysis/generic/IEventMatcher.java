@@ -42,8 +42,8 @@ public interface IEventMatcher<T> {
 	 * @param event
 	 *            event to be evaluated
 	 * @param <R>
-	 *            a sub type of <T>
-	 * @return true if the even must be send to the corresponding output port
+	 *            a sub type of T
+	 * @return true if the even must be send to the corresponding output port.
 	 */
 	<R extends Object> boolean matchEvent(R event);
 

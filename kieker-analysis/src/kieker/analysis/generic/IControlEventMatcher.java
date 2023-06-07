@@ -30,7 +30,7 @@ package kieker.analysis.generic;
 public interface IControlEventMatcher<C, B> {
 
 	/**
-	 * Check whether the given event must be handled by the controller
+	 * Check whether the given event must be handled by the controller.
 	 *
 	 * @param baseEvent
 	 *            the base event

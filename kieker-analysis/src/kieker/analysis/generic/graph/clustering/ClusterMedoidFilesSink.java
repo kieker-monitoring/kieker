@@ -50,6 +50,8 @@ public class ClusterMedoidFilesSink<T> extends AbstractConsumerStage<T> {
 	 *
 	 * @param path
 	 *            path fragment used for each medoid
+	 * @param serializers
+	 *            collection of serializers for the obect mapper used to write data
 	 */
 	public ClusterMedoidFilesSink(final Path path, final StdSerializer<?>... serializers) {
 		this.objectMapper = new ObjectMapper();

@@ -37,9 +37,6 @@ public class XZDecompressionFilter extends AbstractDecompressionFilter {
 
 	/**
 	 * Create a new XZ decompression filter.
-	 *
-	 * @param settings
-	 *            configuration settings
 	 */
 	public XZDecompressionFilter() {
 		super();

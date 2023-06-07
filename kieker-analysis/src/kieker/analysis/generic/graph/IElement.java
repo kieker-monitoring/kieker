@@ -25,30 +25,63 @@ import java.util.Set;
  */
 public interface IElement {
 
-	public String getId();
+	String getId();
 
 	/**
+	 * Returns the property of an element identified by a key.
+	 *
+	 * @param key
+	 *            property name
+	 * @param <T>
+	 *            type of the property value
+	 *
+	 * @return a property value
 	 * @since 1.14
 	 */
-	public <T> T getProperty(String key);
+	<T> T getProperty(String key);
 
 	/**
+	 * Return all property keys of an element.
+	 *
+	 * @return list of keys
+	 *
 	 * @since 1.14
 	 */
-	public Set<String> getPropertyKeys();
+	Set<String> getPropertyKeys();
 
 	/**
+	 * Set a property of an element. Overwrite the value in case the property already exists.
+	 *
+	 * @param key
+	 *            key name
+	 * @param value
+	 *            value object
+	 *
 	 * @since 1.14
 	 */
-	public void setProperty(String key, Object value);
+	void setProperty(String key, Object value);
 
 	/**
+	 * Set a property of an element only if no property with the given key already exists.
+	 *
+	 * @param key
+	 *            key name
+	 * @param value
+	 *            value object
+	 *
 	 * @since 1.14
 	 */
-	public void setPropertyIfAbsent(String key, Object value);
+	void setPropertyIfAbsent(String key, Object value);
 
 	/**
+	 * Remove a property from the element.
+	 *
+	 * @param key
+	 *            key identifying the property
+	 * @param <T>
+	 *            type of the property value
+	 * @return the removed property value
 	 * @since 1.14
 	 */
-	public <T> T removeProperty(String key);
+	<T> T removeProperty(String key);
 }

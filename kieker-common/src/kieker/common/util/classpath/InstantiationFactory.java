@@ -165,7 +165,8 @@ public final class InstantiationFactory {
 				parameterTypeNames.append(", ");
 				parameterTypeNames.append(parameter.getClass().getName());
 			}
-			LOGGER.error("{}: Class '{}' has to implement a (public) constructor that accepts {}", c.getSimpleName(), className, parameterTypeNames.toString(), e);
+			LOGGER.error("{}: Class '{}' has to implement a (public) constructor that accepts {}",
+					c.getSimpleName(), className, parameterTypeNames.toString(), e);
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			LOGGER.error("{}: Failed to load class for name '{}'", c.getSimpleName(), className, e);

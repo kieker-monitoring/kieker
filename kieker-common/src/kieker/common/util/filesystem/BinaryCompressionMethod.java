@@ -62,14 +62,16 @@ public enum BinaryCompressionMethod {
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
 			return new DataOutputStream(
-					new BufferedOutputStream(new DeflaterOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE)), bufferSize));
+					new BufferedOutputStream(new DeflaterOutputStream(Files.newOutputStream(outputFile.toPath(),
+							StandardOpenOption.CREATE)), bufferSize));
 		}
 
 		@Override
 		// transferred to new API
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
 			return new DataInputStream(
-					new BufferedInputStream(new InflaterInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)), bufferSize));
+					new BufferedInputStream(new InflaterInputStream(Files.newInputStream(inputFile.toPath(),
+							StandardOpenOption.READ)), bufferSize));
 		}
 	},
 	/** A binary compression method using the compression format "GZIP". */
@@ -78,13 +80,15 @@ public enum BinaryCompressionMethod {
 		// transferred to new API
 		public DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException {
 			return new DataOutputStream(
-					new BufferedOutputStream(new GZIPOutputStream(Files.newOutputStream(outputFile.toPath(), StandardOpenOption.CREATE)), bufferSize));
+					new BufferedOutputStream(new GZIPOutputStream(Files.newOutputStream(outputFile.toPath(),
+							StandardOpenOption.CREATE)), bufferSize));
 		}
 
 		@Override
 		// transferred to new API
 		public DataInputStream getDataInputStream(final File inputFile, final int bufferSize) throws IOException {
-			return new DataInputStream(new BufferedInputStream(new GZIPInputStream(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)), bufferSize));
+			return new DataInputStream(new BufferedInputStream(new GZIPInputStream(
+					Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ)), bufferSize));
 		}
 	},
 	/** A binary compression method using the compression format "ZIP". */
@@ -110,7 +114,7 @@ public enum BinaryCompressionMethod {
 
 	private final String fileExtension;
 
-	private BinaryCompressionMethod(final String fileExtension) {
+	BinaryCompressionMethod(final String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
 
@@ -119,8 +123,8 @@ public enum BinaryCompressionMethod {
 	}
 
 	/**
-	 * Implementing compression methods should override this method to deliver an output stream which can be used to write data in a compressed way into the given
-	 * file.
+	 * Implementing compression methods should override this method to deliver an output stream which can
+	 * be used to write data in a compressed way into the given file.
 	 *
 	 * @param outputFile
 	 *            The output file.
@@ -135,8 +139,8 @@ public enum BinaryCompressionMethod {
 	public abstract DataOutputStream getDataOutputStream(final File outputFile, final int bufferSize) throws IOException;
 
 	/**
-	 * Implementing compression methods should override this method to deliver an input stream which can be used to read data in a non-compressed way from the given
-	 * file.
+	 * Implementing compression methods should override this method to deliver an input stream which
+	 * can be used to read data in a non-compressed way from the given file.
 	 *
 	 * @param inputFile
 	 *            The input file.

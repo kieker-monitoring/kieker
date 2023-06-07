@@ -61,7 +61,8 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
+		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP,
+				TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
 				CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -78,7 +79,8 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
+		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP,
+				TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
 				CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -95,7 +97,8 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
+		final AfterOperationFailedObjectEvent event2 =
+				new AfterOperationFailedObjectEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

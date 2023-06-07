@@ -23,7 +23,7 @@ package kieker.analysis.generic.sink.graph.dot.attributes;
  * can be extended at will.</strong>
  *
  * The whole set of attributes including further documentation can be found here:
- * {@link http://www.graphviz.org/doc/info/attrs.html}
+ * http://www.graphviz.org/doc/info/attrs.html
  *
  * @author Sören Henning
  *
@@ -35,7 +35,7 @@ public enum DotEdgeAttribute {
 
 	private final String attribute;
 
-	private DotEdgeAttribute(final String attribute) {
+	DotEdgeAttribute(final String attribute) {
 		this.attribute = attribute;
 	}
 

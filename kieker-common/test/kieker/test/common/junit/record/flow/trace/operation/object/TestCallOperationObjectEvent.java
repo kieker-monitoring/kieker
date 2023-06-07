@@ -63,7 +63,8 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID,
+				ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -82,7 +83,8 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID,
+				ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
 				FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -110,9 +112,11 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 
 	@Test
 	public void testCallsReferencedOperationOf() {
-		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
+		final CallOperationObjectEvent event1 = new CallOperationObjectEvent(TSTAMP, TRACE_ID,
+				ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
 				FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
-		final CallOperationObjectEvent event2 = new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE,
+		final CallOperationObjectEvent event2 = new CallOperationObjectEvent(TSTAMP, TRACE_ID,
+				ORDER_INDEX, FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE,
 				FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
 
 		Assert.assertTrue(UtilityClass.callsReferencedOperationOf(event1, event2));

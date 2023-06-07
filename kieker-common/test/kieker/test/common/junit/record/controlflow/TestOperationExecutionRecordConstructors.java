@@ -58,9 +58,10 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		final long tout = 33449; // any number will do
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
 		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
-		final OperationExecutionRecord opExecutionRecord = new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				sessionId, traceId,
-				tin, tout, hostname, eoi, ess);
+		final OperationExecutionRecord opExecutionRecord =
+				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+						sessionId, traceId,
+						tin, tout, hostname, eoi, ess);
 
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
@@ -99,7 +100,8 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
 		opExecutionRecord.serialize(BinaryValueSerializer.create(buffer, writerRegistry));
 		buffer.flip();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
+		final OperationExecutionRecord deserializedRecord =
+				new OperationExecutionRecord(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 

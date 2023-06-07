@@ -29,8 +29,12 @@ import kieker.model.analysismodel.type.OperationType;
 public interface IOperationSignatureExtractor {
 
 	/**
+	 * Extract the properties of a {@link OperationType} from its signature and set the attributes accordingly.
+	 *
+	 * @param operationType
+	 *            operation to be processed
 	 * @since 1.14
 	 */
-	public void extract(final OperationType operationType);
+	void extract(final OperationType operationType);
 
 }

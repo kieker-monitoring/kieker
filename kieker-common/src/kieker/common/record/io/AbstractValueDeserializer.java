@@ -57,6 +57,7 @@ public abstract class AbstractValueDeserializer { // NOPMD no abstract methods, 
 				return value;
 			}
 		}
-		throw new RecordInstantiationException("The given ordinal %d does not refer to a valid enumeration element in %s.", ordinal, enumType.getCanonicalName());
+		throw new RecordInstantiationException("The given ordinal %d does not refer to a valid enumeration element in %s.",
+				ordinal, enumType.getCanonicalName());
 	}
 }
