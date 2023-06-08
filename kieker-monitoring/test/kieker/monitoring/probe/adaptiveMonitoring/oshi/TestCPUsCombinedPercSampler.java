@@ -91,7 +91,8 @@ public class TestCPUsCombinedPercSampler extends AbstractKiekerTest { // NOCS
 		// There should be 2 times numCPUs new trigger events
 		final int numEventsAfterReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeDisabled;
 		Assert.assertEquals(
-				"Unexpected 2 times numCPUs triggering events after being re-enabled. Found " + numEventsAfterReEnabled + " (numCPUs = " + numCPUs + ")",
+				"Unexpected 2 times numCPUs triggering events after being re-enabled. Found "
+						+ numEventsAfterReEnabled + " (numCPUs = " + numCPUs + ")",
 				numEventsAfterReEnabled, 2 * numCPUs); // NOCS (MagicNumberCheck)
 
 		final String pattern4CPU0 = SignatureFactory.createCPUSignature(0);
@@ -99,7 +100,8 @@ public class TestCPUsCombinedPercSampler extends AbstractKiekerTest { // NOCS
 
 		Thread.sleep(2000); // sleep 2 seconds while being disabled
 		final int numEventsWhileCPU0Disabled = this.recordListFilledByListWriter.size() - numEventsAfterReEnabled - numEventsBeforeDisabled;
-		Assert.assertEquals("Unexpected number of triggering events while cpu0 disabled. Found" + numEventsWhileCPU0Disabled + " (numCPUs = " + numCPUs + ")",
+		Assert.assertEquals("Unexpected number of triggering events while cpu0 disabled. Found"
+				+ numEventsWhileCPU0Disabled + " (numCPUs = " + numCPUs + ")",
 				2 * (numCPUs - 1), numEventsWhileCPU0Disabled);
 
 		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof ResourceUtilizationRecord;

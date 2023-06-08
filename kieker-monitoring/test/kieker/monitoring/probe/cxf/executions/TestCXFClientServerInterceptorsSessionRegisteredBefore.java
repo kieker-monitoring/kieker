@@ -77,8 +77,9 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 				traceId = opRec.getTraceId();
 				Assert.assertTrue("Unexpected traceId: " + traceId, traceId != OperationExecutionRecord.NO_TRACE_ID);
 				sessionID = opRec.getSessionId();
-				Assert.assertFalse("Unexpected session ID: " + sessionID, OperationExecutionRecord.NO_SESSION_ID.equals(sessionID)); // do not use == here, because
-																																		// of SOAP transformations
+				Assert.assertFalse("Unexpected session ID: " + sessionID,
+						OperationExecutionRecord.NO_SESSION_ID.equals(sessionID)); // do not use == here, because
+																					// of SOAP transformations
 				break;
 			case 1:
 				Assert.assertEquals("Unexpected eoi", 0, opRec.getEoi());

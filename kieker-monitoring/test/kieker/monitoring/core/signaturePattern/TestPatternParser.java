@@ -34,6 +34,27 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestPatternParser extends AbstractKiekerTest {
 
+	private final String[] visibilities = { "public", "private", "package", "protected", "" };
+	private final String[] staticNonStatics = { "static", "non_static", "" };
+	private final String[] nativeNonNatives = { "native", "non_native", "" };
+	private final String[] returnTypes = { "java.lang.String", "*", "..*" };
+	private final String[] fqClassNames = { "a.b.C", "a.b.*", "*", "..*" };
+	private final String[] operationNames = { "doIt", "get*", "*" };
+	private final String[] paramLists = { "", "*", "A, B", ".." };
+	private final String[] whites = { " ", "  ", "\t" };
+	private final String[] whiteAndNoWhite = { " ", "  ", "\t",
+		"", }; // in addition to whites
+
+	// works
+	private final String signature01 = "public static native void package.Class.method()";
+	private final boolean[] visibilityMatches = { true, false, false, false, true };
+	private final boolean[] staticNonStaticMatches = { true, false, true };
+	private final boolean[] nativeNonNativeMatches = { true, false, true };
+	private final boolean[] returnTypeMatches = { false, true, true };
+	private final boolean[] fqClassNameMatches = { false, false, true, true };
+	private final boolean[] operationNameMatches = { false, false, true };
+	private final boolean[] paramListMatches = { true, false, false, true };
+
 	/**
 	 * Default constructor.
 	 */
@@ -134,95 +155,21 @@ public class TestPatternParser extends AbstractKiekerTest {
 	@Test
 	// 103.680 tests
 	public void testBasic() throws InvalidPatternException {
-		final String[] visibilities = { "public", "private", "package", "protected", "" };
-		final String[] staticNonStatics = { "static", "non_static", "" };
-		final String[] nativeNonNatives = { "native", "non_native", "" };
-		final String[] returnTypes = { "java.lang.String", "*", "..*" };
-		final String[] fqClassNames = { "a.b.C", "a.b.*", "*", "..*" };
-		final String[] operationNames = { "doIt", "get*", "*" };
-		final String[] paramLists = { "", "*", "A, B", ".." };
-		final String[] whites = { " ", "  ", "\t" };
-		final String[] whiteAndNoWhite = { " ", "  ", "\t",
-			"", }; // in addition to whites
-
-		// works
-		// final String signature01 = "public static void package.Class.method(A, B)";
-		// final boolean[] visibilityMatches = { true, false, false, false, true };
-		// final boolean[] staticNonStaticMatches = { true, false, true };
-		// final boolean[] nativeNonNativeMatches = { false, true, true };
-		// final boolean[] returnTypeOrNewMatches = { false, false, true, true };
-		// final boolean[] fqClassNameMatches = { false, false, false, true };
-		// final boolean[] operationNameMatches = { false, false, true };
-		// final boolean[] paramListMatches = { false, false, true, true };
-
-		// works
-		final String signature01 = "public static native void package.Class.method()";
-		final boolean[] visibilityMatches = { true, false, false, false, true };
-		final boolean[] staticNonStaticMatches = { true, false, true };
-		final boolean[] nativeNonNativeMatches = { true, false, true };
-		final boolean[] returnTypeMatches = { false, true, true };
-		final boolean[] fqClassNameMatches = { false, false, true, true };
-		final boolean[] operationNameMatches = { false, false, true };
-		final boolean[] paramListMatches = { true, false, false, true };
-
-		// works
-		// final String signature01 = "public static native void package.Class.method(A, B)";
-		// final boolean[] visibilityMatches = { true, false, false, false, true };
-		// final boolean[] staticNonStaticMatches = { true, false, true };
-		// final boolean[] nativeNonNativeMatches = { true, false, true };
-		// final boolean[] returnTypeOrNewMatches = { false, false, true, true };
-		// final boolean[] fqClassNameMatches = { false, false, false, true };
-		// final boolean[] operationNameMatches = { false, false, true };
-		// final boolean[] paramListMatches = { false, false, true, true };
-
-		for (int visibilityIdy = 0; visibilityIdy < visibilities.length; visibilityIdy++) {
-			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) { // NOCS
-				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) { // NOCS
-					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypes.length; returnTypeOrNewIdx++) { // NOCS
-						for (int fqClassNameIdx = 0; fqClassNameIdx < fqClassNames.length; fqClassNameIdx++) { // NOCS
-							for (int operationNameIdx = 0; operationNameIdx < operationNames.length; operationNameIdx++) { // NOCS
-								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) { // NOCS
-									for (final String white : whites) { // NOCS
-										for (final String whiteOrEmpty : whiteAndNoWhite) { // NOCS
-											final StringBuilder signatureBuilder = new StringBuilder();
-											signatureBuilder.append(whiteOrEmpty);
-											if (visibilities[visibilityIdy].length() > 0) {
-												signatureBuilder.append(visibilities[visibilityIdy]).append(white);
-											}
-											if (staticNonStatics[staticNonStaticIdx].length() > 0) {
-												signatureBuilder.append(staticNonStatics[staticNonStaticIdx]).append(white);
-											}
-											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
-												signatureBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
-											}
-											signatureBuilder.append(returnTypes[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
-													.append('.').append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
-
-											if (paramLists[paramListIdx].length() > 0) {
-												signatureBuilder.append(paramLists[paramListIdx]).append(whiteOrEmpty);
-											}
-											signatureBuilder.append(')').append(whiteOrEmpty);
-
-											final String signature = signatureBuilder.toString();
-
-											final boolean expected = visibilityMatches[visibilityIdy]
-													&& staticNonStaticMatches[staticNonStaticIdx]
-													&& nativeNonNativeMatches[nativeNonNativeIdx]
-													&& returnTypeMatches[returnTypeOrNewIdx]
-													&& fqClassNameMatches[fqClassNameIdx]
-													&& operationNameMatches[operationNameIdx]
-													&& paramListMatches[paramListIdx];
-
-											this.checkCombination(signature, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx],
-													nativeNonNatives[nativeNonNativeIdx], returnTypes[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
-													operationNames[operationNameIdx], paramLists[paramListIdx]);
-
-											final Pattern pattern = PatternParser.parseToPattern(signature);
-											final Matcher m = pattern.matcher(signature01);
-											final boolean result = m.matches();
-											Assert.assertEquals(
-													"expected: " + expected + " for " + signature + " parsed to " + pattern.toString() + ", but was: " + result,
-													expected, result);
+		for (int visibilityIdy = 0; visibilityIdy < this.visibilities.length; visibilityIdy++) {
+			for (int staticNonStaticIdx = 0; staticNonStaticIdx < this.staticNonStatics.length; staticNonStaticIdx++) { // NOCS
+				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < this.nativeNonNatives.length; nativeNonNativeIdx++) { // NOCS
+					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < this.returnTypes.length; returnTypeOrNewIdx++) { // NOCS
+						for (int fqClassNameIdx = 0; fqClassNameIdx < this.fqClassNames.length; fqClassNameIdx++) { // NOCS
+							for (int operationNameIdx = 0; operationNameIdx < this.operationNames.length; operationNameIdx++) { // NOCS
+								for (int paramListIdx = 0; paramListIdx < this.paramLists.length; paramListIdx++) { // NOCS
+									for (final String white : this.whites) { // NOCS
+										for (final String whiteOrEmpty : this.whiteAndNoWhite) { // NOCS
+											this.testBasicAction(visibilityIdy,
+													staticNonStaticIdx,
+													nativeNonNativeIdx,
+													returnTypeOrNewIdx,
+													fqClassNameIdx,
+													operationNameIdx, paramListIdx, white, whiteOrEmpty);
 										}
 									}
 								}
@@ -232,6 +179,51 @@ public class TestPatternParser extends AbstractKiekerTest {
 				}
 			}
 		}
+	}
+
+	private void testBasicAction(final int visibilityIdy, final int staticNonStaticIdx, final int nativeNonNativeIdx, final int returnTypeOrNewIdx,
+			final int fqClassNameIdx, final int operationNameIdx, final int paramListIdx, final String white, final String whiteOrEmpty)
+			throws InvalidPatternException {
+		final StringBuilder signatureBuilder = new StringBuilder();
+		signatureBuilder.append(whiteOrEmpty);
+		if (this.visibilities[visibilityIdy].length() > 0) {
+			signatureBuilder.append(this.visibilities[visibilityIdy]).append(white);
+		}
+		if (this.staticNonStatics[staticNonStaticIdx].length() > 0) {
+			signatureBuilder.append(this.staticNonStatics[staticNonStaticIdx]).append(white);
+		}
+		if (this.nativeNonNatives[nativeNonNativeIdx].length() > 0) {
+			signatureBuilder.append(this.nativeNonNatives[nativeNonNativeIdx]).append(white);
+		}
+		signatureBuilder.append(this.returnTypes[returnTypeOrNewIdx]).append(white).append(this.fqClassNames[fqClassNameIdx])
+				.append('.').append(this.operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
+
+		if (this.paramLists[paramListIdx].length() > 0) {
+			signatureBuilder.append(this.paramLists[paramListIdx]).append(whiteOrEmpty);
+		}
+		signatureBuilder.append(')').append(whiteOrEmpty);
+
+		final String signature = signatureBuilder.toString();
+
+		final boolean expected = this.visibilityMatches[visibilityIdy]
+				&& this.staticNonStaticMatches[staticNonStaticIdx]
+				&& this.nativeNonNativeMatches[nativeNonNativeIdx]
+				&& this.returnTypeMatches[returnTypeOrNewIdx]
+				&& this.fqClassNameMatches[fqClassNameIdx]
+				&& this.operationNameMatches[operationNameIdx]
+				&& this.paramListMatches[paramListIdx];
+
+		this.checkCombination(signature, this.visibilities[visibilityIdy], this.staticNonStatics[staticNonStaticIdx],
+				this.nativeNonNatives[nativeNonNativeIdx], this.returnTypes[returnTypeOrNewIdx], this.fqClassNames[fqClassNameIdx],
+				this.operationNames[operationNameIdx], this.paramLists[paramListIdx]);
+
+		final Pattern pattern = PatternParser.parseToPattern(signature);
+		final Matcher m = pattern.matcher(this.signature01);
+		final boolean result = m.matches();
+
+		Assert.assertEquals(
+				"expected: " + expected + " for " + signature + " parsed to " + pattern.toString() + ", but was: " + result,
+				expected, result);
 	}
 
 	@Test
@@ -293,8 +285,9 @@ public class TestPatternParser extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Constructors signatures are often serialized as public package.Class.<init>(), but may also be serialized as
-	 * public new package.Class<init>(). To let each signature be matches by the pattern created from the signature itself,
+	 * Constructors signatures are often serialized as <code>public package.Class.&lt;init&gt;()</code>, but may also be serialized as
+	 * <code>public new package.Class&lt;init&gt;()</code>. To let each signature be matches by the pattern created from the signature
+	 * itself,
 	 * the second variant should also be accepted.
 	 *
 	 * @throws InvalidPatternException

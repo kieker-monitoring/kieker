@@ -153,7 +153,8 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			final Class<?> queueClass = Class.forName(queueTypeName);
 			final Constructor<?> constructor = queueClass.getConstructor(int.class);
 			return (Queue<IMonitoringRecord>) constructor.newInstance(queueSize);
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// Instantiate default queue type if the desired queue type cannot be instantiated
 			LOGGER.error("Error instantiating queue type {}. Using default queue type instead.", queueTypeName, e);

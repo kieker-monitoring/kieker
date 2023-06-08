@@ -107,16 +107,20 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
 
 		// There should be no new records while monitoring being disabled
-		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
-		Assert.assertEquals("Unexpected number of triggering events while monitoring being disabled", 0, numEventsWhileMonitoringDisabled);
+		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size()
+				- (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
+		Assert.assertEquals("Unexpected number of triggering events while monitoring being disabled",
+				0, numEventsWhileMonitoringDisabled);
 
 		this.monitoringController.enableMonitoring(); // REACTIVATION (monitoring)
 
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
 
 		// There should be at least one new record
-		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterMonitoringReEnabled,
+		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size()
+				- (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found "
+				+ numEventsAfterMonitoringReEnabled,
 				numEventsAfterMonitoringReEnabled > 0);
 
 		this.monitoringController.terminateMonitoring();

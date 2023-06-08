@@ -43,7 +43,8 @@ public final class Await {
 		while (thread.getState() != state) {
 			if (waitingTimeInMs > timeoutInMs) {
 				throw new AssertionError(
-						"The given thread does not change its state to " + state + " within " + timeoutInMs + " ms. Current state: " + thread.getState());
+						"The given thread does not change its state to " + state + " within "
+								+ timeoutInMs + " ms. Current state: " + thread.getState());
 			}
 			Thread.sleep(interPauseTimeInMs);
 			waitingTimeInMs += interPauseTimeInMs;

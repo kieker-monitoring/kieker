@@ -96,8 +96,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	@Test
 	public void testIt() throws Throwable { // NOPMD (JUnitTestsShouldIncludeAssert), assertions in inv.checkEoiEss(); // NOCS
-		final OperationExecutionMethodInvocationInterceptor methodInterceptor = new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log
-																																						// executions
+		final OperationExecutionMethodInvocationInterceptor methodInterceptor =
+				new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log
 
 		final Bookstore bookstoreObject = new Bookstore();
 		final Method bookstoreMethod = bookstoreObject.lookupPseudoMethod();

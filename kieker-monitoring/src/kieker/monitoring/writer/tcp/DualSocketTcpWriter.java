@@ -61,7 +61,6 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 	/** configuration key for the size of the {@link #stringRegistryBuffer}. */
 	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS
-																											// (afterPREFIX)
 
 	/** <code>true</code> if the {@link #recordBuffer} should be flushed upon each new incoming monitoring record. */
 	private final boolean flush;
@@ -86,7 +85,8 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		int stringRegistryBufferSize = configuration.getIntProperty(CONFIG_STRING_REGISTRY_BUFFERSIZE);
 		if (stringRegistryBufferSize <= 0) {
-			LOGGER.warn("Invalid buffer size passed for string registry records: {}. Defaults to {}", stringRegistryBufferSize, DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
+			LOGGER.warn("Invalid buffer size passed for string registry records: {}. Defaults to {}",
+					stringRegistryBufferSize, DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
 			stringRegistryBufferSize = DEFAULT_STRING_REGISTRY_BUFFER_SIZE;
 		}
 

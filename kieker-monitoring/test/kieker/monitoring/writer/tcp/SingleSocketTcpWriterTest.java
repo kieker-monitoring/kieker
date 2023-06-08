@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.writer.tcp;
 
 import java.io.IOException;
@@ -69,8 +68,7 @@ public class SingleSocketTcpWriterTest {
 
 	@Test
 	public void shouldConnectWithDefault() throws Exception {
-		final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-		try {
+		try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
 			serverSocketChannel.bind(new InetSocketAddress(HOSTNAME, PORT));
 			serverSocketChannel.configureBlocking(false);
 			serverSocketChannel.accept(); // non-blocking accept
@@ -81,8 +79,6 @@ public class SingleSocketTcpWriterTest {
 			} finally {
 				writer.onTerminating();
 			}
-		} finally {
-			serverSocketChannel.close();
 		}
 
 		Assert.assertTrue(true); // NOPMD (this test should not throw any exception)

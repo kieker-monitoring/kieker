@@ -66,7 +66,10 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 	@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject") })
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
-	static final Logger LOG = LoggerFactory.getLogger(AnalysisController.class); // NOPMD package for inner class
+	static final Logger LOGGER = LoggerFactory.getLogger(AnalysisController.class); // NOPMD package for inner class
+
+	private static final String LOG_INFO_MESSAGE = "Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}',"
+			+ " debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'";
 
 	private final String projectName;
 
@@ -252,7 +255,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		try {
 			TimeUnit.valueOf(stringProperty);
 		} catch (final IllegalArgumentException ignore) {
-			AnalysisController.LOG.warn("{} is no valid TimeUnit! Using NANOSECONDS instead.", stringProperty);
+			AnalysisController.LOGGER.warn("{} is no valid TimeUnit! Using NANOSECONDS instead.", stringProperty);
 			configuration.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT,
 					TimeUnit.NANOSECONDS.name());
 		}
@@ -303,8 +306,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *            the KiekerMetadataRecord containing the information
 	 */
 	public void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
-		AnalysisController.LOG.info(
-				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
+		AnalysisController.LOGGER.info(LOG_INFO_MESSAGE,
 				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(),
 				record.isDebugMode(), record.getTimeOffset(), record.getTimeUnit(), record.getNumberOfRecords());
 	}
@@ -517,12 +519,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 						try {
 							if (!reader.read()) {
 								// here we started and won't throw any exceptions!
-								AnalysisController.LOG.error("Calling read() on Reader '{}' ({})  returned false.",
+								AnalysisController.LOGGER.error("Calling read() on Reader '{}' ({})  returned false.",
 										reader.getName(), reader.getPluginName());
 								AnalysisController.this.terminate(true);
 							}
 						} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
-							AnalysisController.LOG.error("Exception while reading on Reader '{}' ({}).",
+							AnalysisController.LOGGER.error("Exception while reading on Reader '{}' ({}).",
 									reader.getName(), reader.getPluginName(), t);
 							AnalysisController.this.terminate(true);
 						} finally {
@@ -536,7 +538,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				this.initializationLatch.countDown();
 				readerLatch.await();
 			} catch (final InterruptedException ex) {
-				AnalysisController.LOG.warn("Interrupted while waiting for readers to finish", ex);
+				AnalysisController.LOGGER.warn("Interrupted while waiting for readers to finish", ex);
 			}
 		} finally {
 			this.initializationLatch.countDown(); // just to make sure
@@ -552,7 +554,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
-			AnalysisController.LOG.warn("Interrupted while waiting for initialization of analysis controller.", ex);
+			AnalysisController.LOGGER.warn("Interrupted while waiting for initialization of analysis controller.", ex);
 		}
 	}
 
@@ -577,9 +579,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				this.state = STATE.TERMINATING;
 			}
 			if (error) {
-				AnalysisController.LOG.info("Error during analysis. Terminating ...");
+				AnalysisController.LOGGER.info("Error during analysis. Terminating ...");
 			} else {
-				AnalysisController.LOG.info("Terminating analysis.");
+				AnalysisController.LOGGER.info("Terminating analysis.");
 			}
 			for (final AbstractReaderPlugin reader : this.readers) {
 				reader.shutdown(error);
@@ -596,7 +598,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			// Make sure that neither an exception nor an error can crash the application
 			// Even if the logging or the notify method fails, we have a correct state now!
 			this.state = STATE.FAILED;
-			AnalysisController.LOG.error("Error during shutdown.", t);
+			AnalysisController.LOGGER.error("Error during shutdown.", t);
 		} finally {
 			this.notifyStateObservers();
 		}
@@ -618,11 +620,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		if (this.readers.contains(reader)) {
-			AnalysisController.LOG.warn("Reader {} already registered.", reader.getName());
+			AnalysisController.LOGGER.warn("Reader {} already registered.", reader.getName());
 			return;
 		}
 		this.readers.add(reader);
-		AnalysisController.LOG.debug("Registered reader {}", reader);
+		AnalysisController.LOGGER.debug("Registered reader {}", reader);
 	}
 
 	/**
@@ -641,13 +643,13 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		if (this.filters.contains(filter)) {
-			AnalysisController.LOG.warn("Filter '{}' ({}) already registered.", filter.getName(),
+			AnalysisController.LOGGER.warn("Filter '{}' ({}) already registered.", filter.getName(),
 					filter.getPluginName());
 			return;
 		}
 		this.filters.add(filter);
-		if (AnalysisController.LOG.isDebugEnabled()) {
-			AnalysisController.LOG.debug("Registered plugin " + filter);
+		if (AnalysisController.LOGGER.isDebugEnabled()) {
+			AnalysisController.LOGGER.debug("Registered plugin " + filter);
 		}
 	}
 
@@ -667,12 +669,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
 		if (this.repos.contains(repository)) {
-			AnalysisController.LOG.warn("Repository '{}' ({}) already registered.", repository.getName(),
+			AnalysisController.LOGGER.warn("Repository '{}' ({}) already registered.", repository.getName(),
 					repository.getRepositoryName());
 			return;
 		}
 		this.repos.add(repository);
-		AnalysisController.LOG.debug("Registered repository '{}' ({})", repository.getName(),
+		AnalysisController.LOGGER.debug("Registered repository '{}' ({})", repository.getName(),
 				repository.getRepositoryName());
 	}
 

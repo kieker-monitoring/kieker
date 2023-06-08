@@ -63,7 +63,8 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS //
 		// We will pass the property Configuration.AUTO_SET_LOGGINGTSTAMP as an additional configuration property
 		final Properties additionalConfigurationProperties = new Properties();
 		additionalConfigurationProperties.put(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(autoSetLoggingTimestamp));
-		final MonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);
+		final MonitoringController monitoringController = NamedPipeFactory
+				.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);
 
 		// We will now register a custom IPipeReader which receives records through the pipe and collects these in a list. On purpose, we are not using the
 		// corresponding PipeReader that comes with Kieker.

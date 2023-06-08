@@ -43,8 +43,8 @@ public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 	public boolean insert(final E element) {
 		final boolean offered = this.queue.offer(element);
 		if (!offered) {
-			LOGGER.error(
-					"Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
+			LOGGER.error("Failed to add new monitoring record to queue. Queue is full. "
+					+ "Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
 			return false;
 		} else {
 			return true;
