@@ -165,16 +165,7 @@ public class BinaryFileStreamProcessor {
 					final IMonitoringRecord record = recordFactory.create(deserializer);
 					record.setLoggingTimestamp(loggingTimestamp);
 					return record;
-				} catch (final RecordInstantiationException ex) { // This happens when dynamic
-					// arrays are used and the buffer
-					// does not hold the complete
-					// record.
-					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
-					// incomplete record, move back
-					this.buffer.reset();
-					this.buffer.compact();
-					return null;
-				} catch (final BufferUnderflowException ex) {
+				} catch (final RecordInstantiationException | BufferUnderflowException ex) {
 					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
 					// incomplete record, move back
 					this.buffer.reset();

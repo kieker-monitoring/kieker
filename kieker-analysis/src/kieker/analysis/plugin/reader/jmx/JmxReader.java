@@ -124,9 +124,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
 			this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
-		} catch (final MalformedObjectNameException e) {
-			throw new IllegalArgumentException("Failed to parse configuration.", e);
-		} catch (final MalformedURLException e) {
+		} catch (final MalformedObjectNameException | MalformedURLException e) {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
 		this.silentreconnect = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SILENT);
@@ -145,7 +143,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean read() {
+	public boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
 		}
@@ -207,7 +205,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		return ret;
 	}
 
-	private final boolean read2() {
+	private boolean read2() {
 		while (true) {
 			JMXConnector jmx = null;
 			MBeanServerConnection mbServer = null;
@@ -261,7 +259,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		}
 	}
 
-	private final void block() {
+	private void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
 			@Override
@@ -275,11 +273,11 @@ public final class JmxReader extends AbstractReaderPlugin {
 		}
 	}
 
-	final void unblock() { // NOPMD (package visible for inner class)
+	void unblock() { // NOPMD (package visible for inner class)
 		this.cdLatch.countDown();
 	}
 
-	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
+	boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
 		return super.deliver(outputPortName, data);
 	}
 
@@ -314,7 +312,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		}
 
 		@Override
-		public final void handleNotification(final Notification notification, final Object handback) {
+		public void handleNotification(final Notification notification, final Object handback) {
 			JmxReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
@@ -332,7 +330,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		}
 
 		@Override
-		public final void handleNotification(final Notification notification, final Object handback) {
+		public void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
 				if (!JmxReader.this.silentreconnect) {

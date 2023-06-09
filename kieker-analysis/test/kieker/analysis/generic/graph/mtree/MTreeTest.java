@@ -446,7 +446,7 @@ public class MTreeTest {
 				Assert.assertTrue(strippedResults.contains(data));
 			} else if (distance > farthest) {
 				Assert.assertFalse(strippedResults.contains(data));
-			} else { // NOCS
+			} else { // NOCS NOPMD
 				// distance == farthest
 			}
 		}

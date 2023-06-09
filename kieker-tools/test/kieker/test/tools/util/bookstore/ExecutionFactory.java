@@ -130,9 +130,7 @@ public class ExecutionFactory {
 					assemblyComponentA, containerC);
 		}
 
-		final Execution ret = new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout, false);
-
-		return ret;
+		return new Execution(operationAa, allocationComponentA, traceId, sessionId, eoi, ess, tin, tout, false);
 	}
 
 	/**

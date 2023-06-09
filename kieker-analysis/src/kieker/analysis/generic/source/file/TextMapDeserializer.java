@@ -55,9 +55,7 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 	@Override
 	public void processDataStream(final InputStream inputStream, final ReaderRegistry<String> registry, final String mapFileName) {
 		// found any kind of mapping file
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(inputStream, FSUtil.ENCODING));
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, FSUtil.ENCODING))) {
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -75,14 +73,6 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 			}
 		} catch (final IOException e) {
 			LOGGER.error("Error reading {}", mapFileName, e);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException ex) {
-					LOGGER.error("Exception while closing input stream for mapping file", ex);
-				}
-			}
 		}
 	}
 

@@ -44,7 +44,9 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		};
 		final AbstractModelAssembler<String> assembler = new AbstractModelAssembler<String>(model, LABEL) {
 			@Override
-			public void assemble(final String event) {}
+			public void assemble(final String event) {
+				// test code
+			}
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -70,7 +72,9 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		};
 		final AbstractModelAssembler<String> assembler = new AbstractModelAssembler<String>(model, LABEL) {
 			@Override
-			public void assemble(final String event) {}
+			public void assemble(final String event) {
+				// test code
+			}
 		};
 		for (final ComponentType type : types) {
 			assembler.updateSourceModel(type);
@@ -80,7 +84,9 @@ public class AbstractSourceModelAssemblerTest { // NOCS NOPMD this is a test cla
 		}
 		final AbstractModelAssembler<String> assembler2 = new AbstractModelAssembler<String>(model, SECOND) {
 			@Override
-			public void assemble(final String event) {}
+			public void assemble(final String event) {
+				// test code
+			}
 		};
 		for (final ComponentType type : types) {
 			assembler2.updateSourceModel(type);

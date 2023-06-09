@@ -121,19 +121,7 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 			this.connection = this.createConnection();
 			this.channel = this.connection.createChannel();
 			this.consumer = new QueueingConsumer(this.channel);
-		} catch (final KeyManagementException e) {
-			this.handleInitializationError(e);
-			return false;
-		} catch (final NoSuchAlgorithmException e) {
-			this.handleInitializationError(e);
-			return false;
-		} catch (final IOException e) {
-			this.handleInitializationError(e);
-			return false;
-		} catch (final TimeoutException e) {
-			this.handleInitializationError(e);
-			return false;
-		} catch (final URISyntaxException e) {
+		} catch (final KeyManagementException | NoSuchAlgorithmException | IOException | TimeoutException | URISyntaxException e) {
 			this.handleInitializationError(e);
 			return false;
 		}

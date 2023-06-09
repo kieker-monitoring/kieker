@@ -50,9 +50,7 @@ public class EquivalenceClassWriter extends AbstractConsumerStage<Map<ExecutionT
 
 	@Override
 	protected void execute(final Map<ExecutionTrace, Integer> element) throws Exception {
-		PrintStream ps = null;
-		try {
-			ps = new PrintStream(Files.newOutputStream(this.outputFile.toPath()), false, ENCODING);
+		try (PrintStream ps = new PrintStream(Files.newOutputStream(this.outputFile.toPath()), false, ENCODING)) {
 			int numClasses = 0;
 			for (final Entry<ExecutionTrace, Integer> e : element.entrySet()) {
 				final ExecutionTrace t = e.getKey();
@@ -64,12 +62,9 @@ public class EquivalenceClassWriter extends AbstractConsumerStage<Map<ExecutionT
 			this.logger.debug("# Plugin: Trace equivalence report");
 			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses,
 					(numClasses > 1 ? "es" : ""), this.outputFile.getCanonicalFile()); // NOCS
+			ps.close();
 		} catch (final FileNotFoundException e) {
-			this.logger.error("File not found", e);
-		} finally {
-			if (ps != null) {
-				ps.close();
-			}
+			this.logger.error("File not found: {}", this.outputFile.toPath().toString());
 		}
 	}
 

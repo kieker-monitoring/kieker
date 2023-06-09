@@ -72,9 +72,8 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
 		final long startTime = history.getStartTime();
-		final TimeSeries<T> tsFC = new TimeSeries<>(startTime, history.getTimeSeriesTimeUnit(),
+		return new TimeSeries<T>(startTime, history.getTimeSeriesTimeUnit(),
 				history.getDeltaTime(), history.getDeltaTimeUnit());
-		return tsFC;
 	}
 
 	protected boolean supportsConfidence() {

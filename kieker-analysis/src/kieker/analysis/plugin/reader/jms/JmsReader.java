@@ -169,7 +169,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 		return retVal;
 	}
 
-	private final void block() {
+	private void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
 			@Override
@@ -183,11 +183,11 @@ public final class JmsReader extends AbstractReaderPlugin {
 		}
 	}
 
-	final void unblock() { // NOPMD (package visible for inner class)
+	void unblock() { // NOPMD (package visible for inner class)
 		this.cdLatch.countDown();
 	}
 
-	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
+	boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
 		return super.deliver(outputPortName, data);
 	}
 
@@ -239,8 +239,6 @@ public final class JmsReader extends AbstractReaderPlugin {
 						if ((omo instanceof IMonitoringRecord) && (!JmsReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
 							JmsReader.this.getLog().error("deliverRecord returned false");
 						}
-					} catch (final MessageFormatException ex) {
-						JmsReader.this.getLog().error("Error delivering record", ex);
 					} catch (final JMSException ex) {
 						JmsReader.this.getLog().error("Error delivering record", ex);
 					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)

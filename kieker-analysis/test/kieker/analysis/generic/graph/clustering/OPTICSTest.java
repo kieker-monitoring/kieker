@@ -30,12 +30,12 @@ public class OPTICSTest {
 
 	@Test
 	public void test() {
-		final MTree<OpticsData<Integer>> mtree = new MTree<OpticsData<Integer>>(ClusteringHelper.opticsIntegerDistanceFunction(),
+		final MTree<OpticsData<Integer>> mtree = new MTree<>(ClusteringHelper.opticsIntegerDistanceFunction(),
 				ClusteringHelper.opticsIntegerSplitFunction());
 		final List<OpticsData<Integer>> models = new ArrayList<>();
 		final OPTICSDataGED<Integer> ged = new OPTICSDataGED<>(ClusteringHelper.integerDistanceFunction());
 		for (final int value : new int[] { 1, 2, 2, 3, 3, 4, 5 }) {
-			models.add(new OpticsData<Integer>(value, ged));
+			models.add(new OpticsData<>(value, ged));
 		}
 
 		final OPTICS<Integer> optics = new OPTICS<>(mtree, MAX_DISTANCE, MIN_PT_S, models);

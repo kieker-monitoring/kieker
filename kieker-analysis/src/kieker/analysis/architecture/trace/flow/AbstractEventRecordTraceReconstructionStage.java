@@ -73,7 +73,6 @@ public abstract class AbstractEventRecordTraceReconstructionStage extends Abstra
 	/** Input port receiving the trace records. */
 	private final InputPort<Long> timestampsInputPort;
 
-	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean hasTimeout;
@@ -97,11 +96,10 @@ public abstract class AbstractEventRecordTraceReconstructionStage extends Abstra
 	public AbstractEventRecordTraceReconstructionStage(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
 			final long maxTraceTimeout) {
 		super();
-		this.timeunit = timeUnit;
 
 		this.repairEventBasedTraces = repairEventBasedTraces;
-		this.maxTraceDuration = this.timeunit.convert(maxTraceDuration, timeUnit);
-		this.maxTraceTimeout = this.timeunit.convert(maxTraceTimeout, timeUnit);
+		this.maxTraceDuration = timeUnit.convert(maxTraceDuration, timeUnit);
+		this.maxTraceTimeout = timeUnit.convert(maxTraceTimeout, timeUnit);
 		this.hasTimeout = (this.maxTraceTimeout != Long.MAX_VALUE) || (this.maxTraceDuration != Long.MAX_VALUE);
 		if (this.hasTimeout) {
 			this.timestampsInputPort = this.createInputPort(Long.class);

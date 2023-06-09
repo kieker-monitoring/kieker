@@ -33,7 +33,7 @@ public class OpticsData<T> {
 	private double reachabilityDistance = OpticsData.UNDEFINED;
 
 	private double coreDistance = OpticsData.UNDEFINED;
-	private boolean visited = false;
+	private boolean visited = false; // NOPMD initialize with false for documentation purposes
 
 	private final T data;
 

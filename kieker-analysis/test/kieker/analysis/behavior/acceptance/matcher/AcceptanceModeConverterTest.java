@@ -41,7 +41,7 @@ public class AcceptanceModeConverterTest { // NOCS no constructor
 		try {
 			final EAcceptanceMode mode = converter.convert(AcceptanceModeConverterTest.INVALID);
 			Assert.fail("Converter should throw exception, but produces mode " + mode.name());
-		} catch (final ParameterException e) {
+		} catch (final ParameterException e) { // NOPMD
 			// throwing an exception is the expected behavior
 		}
 	}

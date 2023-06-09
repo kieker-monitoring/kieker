@@ -79,13 +79,7 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 			LOGGER.error("The deserializer class '{}' was not found.", deserializerClassName);
 		} catch (final NoSuchMethodException e) {
 			LOGGER.error("The deserializer class '{}' does not provide a suitable constructor.", deserializerClassName);
-		} catch (final InstantiationException e) {
-			this.logInstantiationFailed(deserializerClassName, e);
-		} catch (final IllegalAccessException e) {
-			this.logInstantiationFailed(deserializerClassName, e);
-		} catch (final IllegalArgumentException e) {
-			this.logInstantiationFailed(deserializerClassName, e);
-		} catch (final InvocationTargetException e) {
+		} catch (final InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			this.logInstantiationFailed(deserializerClassName, e);
 		}
 

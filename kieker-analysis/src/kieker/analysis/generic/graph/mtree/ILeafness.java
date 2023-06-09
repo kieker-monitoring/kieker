@@ -19,14 +19,20 @@ import kieker.analysis.exception.InternalErrorException;
 import kieker.analysis.generic.graph.mtree.nodes.AbstractNode;
 import kieker.analysis.generic.graph.mtree.nodes.IndexItem;
 
-public interface ILeafness<DATA> {
-	void doAddData(DATA data, double distance) throws InternalErrorException;
+/**
+ *
+ *
+ * @param <D>
+ *            data class
+ */
+public interface ILeafness<D> {
+	void doAddData(D data, double distance) throws InternalErrorException;
 
-	void addChild(IndexItem<DATA> child, double distance) throws InternalErrorException;
+	void addChild(IndexItem<D> child, double distance) throws InternalErrorException;
 
-	boolean doRemoveData(DATA data, double distance) throws InternalErrorException;
+	boolean doRemoveData(D data, double distance) throws InternalErrorException;
 
-	AbstractNode<DATA> newSplitNodeReplacement(DATA data);
+	AbstractNode<D> newSplitNodeReplacement(D data);
 
-	void checkChildClass(IndexItem<DATA> child);
+	void checkChildClass(IndexItem<D> child);
 }

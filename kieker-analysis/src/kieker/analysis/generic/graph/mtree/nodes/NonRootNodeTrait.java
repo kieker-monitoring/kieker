@@ -44,4 +44,4 @@ public class NonRootNodeTrait<T> extends AbstractNodeTrait<T> implements IRootne
 	public void checkDistanceToParent() {
 		assert this.thisNode.getDistanceToParent() >= 0;
 	}
-};
+}

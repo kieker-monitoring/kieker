@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
@@ -38,9 +37,6 @@ public class EntryCallSequenceStageTest { // NOCS tests do not need constructors
 	private static final String OP_2 = "op2()";
 	private static final String OP_3 = "op3()";
 	private static final String COMPONENT_1 = "component1";
-
-	@Before
-	public void setUp() throws Exception {}
 
 	@Test
 	public void testEntryCallSequenceNoTimeout() {

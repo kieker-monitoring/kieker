@@ -38,7 +38,9 @@ public class ValidEventRecordTraceCounter extends AbstractConsumerStage<TraceEve
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 */
-	public ValidEventRecordTraceCounter() {}
+	public ValidEventRecordTraceCounter() {
+		// default constructor
+	}
 
 	@Override
 	protected void execute(final TraceEventRecords trace) throws Exception {

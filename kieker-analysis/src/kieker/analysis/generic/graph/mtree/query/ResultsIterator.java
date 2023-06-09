@@ -137,7 +137,7 @@ public final class ResultsIterator<T> implements Iterator<ResultItem<T>> {
 			final ItemWithDistances<Entry<T>> nextNearest = this.nearestQueue.peek();
 			if (nextNearest.distance <= this.nextPendingMinDistance) {
 				this.nearestQueue.poll();
-				this.nextResultItem = new ResultItem<T>(nextNearest.item.getData(), nextNearest.distance);
+				this.nextResultItem = new ResultItem<>(nextNearest.item.getData(), nextNearest.distance);
 				++this.yieldedCount;
 				return true;
 			}

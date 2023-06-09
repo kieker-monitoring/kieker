@@ -156,12 +156,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 				final OutputStream stream = Files.newOutputStream(Paths.get(printStreamNameConfig), StandardOpenOption.CREATE,
 						this.append ? StandardOpenOption.APPEND : StandardOpenOption.WRITE); // NOCS
 				tmpPrintStream = new PrintStream(stream, false, this.encoding);
-			} catch (final UnsupportedEncodingException ex) {
-				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
-				tmpPrintStream = null; // NOPMD (null)
-			} catch (final FileNotFoundException ex) {
-				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
-				tmpPrintStream = null; // NOPMD (null)
 			} catch (final IOException ex) {
 				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
@@ -173,7 +167,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	}
 
 	@Override
-	public final void terminate(final boolean error) {
+	public void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
@@ -183,7 +177,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final Configuration getCurrentConfiguration() {
+	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_APPEND, Boolean.toString(this.append));
@@ -214,7 +208,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded",
 			eventTypes = Object.class)
-	public final void inputEvent(final Object object) {
+	public void inputEvent(final Object object) {
 		if (this.active) {
 			final StringBuilder sb = new StringBuilder(128);
 			sb.append(this.getName()).append('(').append(object.getClass().getSimpleName()).append(") ")

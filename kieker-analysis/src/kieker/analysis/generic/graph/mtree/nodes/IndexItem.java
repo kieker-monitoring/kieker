@@ -43,7 +43,7 @@ public class IndexItem<T> { // NOCS cannot be declared final
 		this.distanceToParent = distance;
 	}
 
-	int check() {
+	public int check() {
 		this.checkRadius();
 		this.checkDistanceToParent();
 

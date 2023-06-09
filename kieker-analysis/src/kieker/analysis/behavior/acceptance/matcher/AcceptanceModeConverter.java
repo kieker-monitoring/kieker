@@ -33,7 +33,7 @@ public class AcceptanceModeConverter implements IStringConverter<EAcceptanceMode
 	@Override
 	public EAcceptanceMode convert(final String arg0) {
 		for (final EAcceptanceMode value : EAcceptanceMode.values()) {
-			if (value.name().toLowerCase().equals(arg0.toLowerCase())) {
+			if (value.name().equals(arg0)) {
 				return value;
 			}
 		}

@@ -27,7 +27,6 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
@@ -163,7 +162,7 @@ public final class JMSReader {
 		return retVal;
 	}
 
-	private final void block() {
+	private void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public final void run() {
@@ -178,11 +177,11 @@ public final class JMSReader {
 		}
 	}
 
-	final void unblock() { // NOPMD (package visible for inner class)
+	void unblock() { // NOPMD (package visible for inner class)
 		this.cdLatch.countDown();
 	}
 
-	final void deliverIndirect(final IMonitoringRecord data) { // NOPMD (package visible for inner class)
+	void deliverIndirect(final IMonitoringRecord data) { // NOPMD (package visible for inner class)
 		this.elementReceivedCallback.accept(data);
 	}
 
@@ -219,10 +218,6 @@ public final class JMSReader {
 						if ((omo instanceof IMonitoringRecord)) {
 							JMSReader.this.deliverIndirect((IMonitoringRecord) omo);
 						}
-					} catch (final MessageFormatException ex) {
-						JMSReader.this.getLogger().error("Error delivering record", ex);
-					} catch (final JMSException ex) {
-						JMSReader.this.getLogger().error("Error delivering record", ex);
 					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 						JMSReader.this.getLogger().error("Error delivering record", ex);
 					}

@@ -100,9 +100,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			}
 		}
 		// found any kind of mapping file
-		BufferedReader in = null;
-		try {
-			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
+		try (BufferedReader in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING))) {
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -133,14 +131,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			}
 		} catch (final IOException ex) {
 			LOGGER.error("Error reading mapping file", ex);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException ex) {
-					LOGGER.error("Exception while closing input stream for mapping file", ex);
-				}
-			}
 		}
 	}
 
@@ -161,13 +151,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				fileInputStream = zipInputStream;
 			}
 			this.textFileStreamProcessor.processInputChannel(fileInputStream);
-		} catch (final IOException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final MappingException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final MonitoringRecordException e) {
-			LOGGER.error("Error reading {} {}", inputFile, e);
-		} catch (final UnknownRecordTypeException e) {
+		} catch (final IOException | MappingException | MonitoringRecordException | UnknownRecordTypeException e) {
 			LOGGER.error("Error reading {} {}", inputFile, e);
 		}
 	}
