@@ -16,6 +16,8 @@
 
 package kieker.monitoring.writer.dump;
 
+import java.util.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,10 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public class DumpWriter extends AbstractMonitoringWriter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DumpWriter.class);
+
+	private static final int DUMMY_LOOPS = Integer.parseInt(System.getenv("DUMMY_LOOPS"));
+
+	private static final Random r = new Random();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -52,6 +58,12 @@ public class DumpWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
+		int sum = 0;
+		for (int i = 0; i < DUMMY_LOOPS; i++) {
+			sum += r.nextInt();
+		}
+		record.setLoggingTimestamp(sum);
+
 		// consumes the record without further processing
 	}
 
