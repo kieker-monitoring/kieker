@@ -36,7 +36,7 @@ public class DumpWriter extends AbstractMonitoringWriter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DumpWriter.class);
 
-	private static final int DUMMY_LOOPS = Integer.parseInt(System.getenv("DUMMY_LOOPS"));
+	private static final int DUMMY_LOOPS = Integer.parseInt(System.getenv("DUMMY_LOOPS") != null ? System.getenv("DUMMY_LOOPS") : "0");
 
 	private static final Random r = new Random();
 
