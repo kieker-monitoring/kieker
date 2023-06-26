@@ -50,4 +50,6 @@ kieker-examples/analysis/trace-analysis/kieker.log
 *.iml
 *.iws
 
+# Do not version temporary files
 **/output-html/**
+kieker-tools/log-replayer/kieker.log
