@@ -60,36 +60,42 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 
 	@Override
 	protected void execute(final File directory) {
+		System.out.println("Reading " + directory);
 		final ReaderRegistry<String> registry = new ReaderRegistry<>();
 		/** read all map files. */
 		final File[] mapFiles = directory.listFiles(this.mapFilter);
 		if (mapFiles == null) {
 			this.logger.error("{} is not a proper directory.", directory.getAbsolutePath());
 		} else {
-			for (final File mapFile : mapFiles) {
-				final String mapFileName = mapFile.getName();
-				try (InputStream inputStream = Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ)) {
-					this.readMapFile(inputStream, mapFileName, registry);
+			readMapFiles(registry, mapFiles);
+			readLogFiles(directory, registry);
+		}
+	}
+
+	private void readMapFiles(final ReaderRegistry<String> registry, final File[] mapFiles) {
+		for (final File mapFile : mapFiles) {
+			final String mapFileName = mapFile.getName();
+			try (InputStream inputStream = Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ)) {
+				this.readMapFile(inputStream, mapFileName, registry);
+			} catch (final IOException e) {
+				this.logger.error("Cannot find map file {}.", mapFileName);
+			}
+		}
+	}
+
+	private void readLogFiles(final File directory, final ReaderRegistry<String> registry) {
+		try (Stream<Path> stream = Files.list(directory.toPath())) {
+			stream.sorted().forEach(logFilePath -> {
+				final File logFile = logFilePath.toFile();
+				final String logFileName = logFile.getName();
+				try (InputStream inputStream = Files.newInputStream(logFile.toPath(), StandardOpenOption.READ)) {
+					this.readLogFile(inputStream, logFileName, registry);
 				} catch (final IOException e) {
-					this.logger.error("Cannot find map file {}.", mapFileName);
+					this.logger.error("Cannot find log file {}.", logFileName);
 				}
-			}
-
-			/** read log files. */
-			try (Stream<Path> stream = Files.list(directory.toPath())) {
-				stream.sorted().forEach(logFilePath -> {
-					final File logFile = logFilePath.toFile();
-					final String logFileName = logFile.getName();
-					try (InputStream inputStream = Files.newInputStream(logFile.toPath(), StandardOpenOption.READ)) {
-						this.readLogFile(inputStream, logFileName, registry);
-					} catch (final IOException e) {
-						this.logger.error("Cannot find log file {}.", logFileName);
-					}
-				});
-			} catch (final IOException e1) {
-				this.logger.error("Cannot process directory {}", directory.getAbsolutePath());
-			}
-
+			});
+		} catch (final IOException e1) {
+			this.logger.error("Cannot process directory {}", directory.getAbsolutePath());
 		}
 	}
 
