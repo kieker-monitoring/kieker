@@ -31,7 +31,6 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.registry.reader.ReaderRegistry;
-
 import teetime.framework.OutputPort;
 
 /**

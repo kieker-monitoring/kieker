@@ -37,6 +37,7 @@ import teetime.framework.OutputPort;
  */
 public class LogsReaderCompositeStage extends CompositeStage implements ISourceCompositeStage {
 
+	private static final int SORTING_DEFAULT_RECORDS = 100000000;
 	public static final String PREFIX = LogsReaderCompositeStage.class.getCanonicalName() + ".";
 	public static final String LOG_DIRECTORIES = PREFIX + "logDirectories";
 	public static final String DATA_BUFFER_SIZE = PREFIX + "bufferSize";
@@ -69,7 +70,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize);
-		this.sorterStage = new RecordSorterStage(10000);
+		this.sorterStage = new RecordSorterStage(SORTING_DEFAULT_RECORDS);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());
@@ -90,7 +91,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
-		this.sorterStage = new RecordSorterStage(10000);
+		this.sorterStage = new RecordSorterStage(SORTING_DEFAULT_RECORDS);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());
@@ -113,7 +114,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
-		this.sorterStage = new RecordSorterStage(10000);
+		this.sorterStage = new RecordSorterStage(SORTING_DEFAULT_RECORDS);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());

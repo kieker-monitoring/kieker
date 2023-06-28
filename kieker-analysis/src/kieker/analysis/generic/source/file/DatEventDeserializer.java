@@ -29,7 +29,6 @@ import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.TextValueDeserializer;
 import kieker.common.registry.reader.ReaderRegistry;
-
 import teetime.framework.OutputPort;
 
 /**

@@ -20,7 +20,6 @@ import java.io.InputStream;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
-
 import teetime.framework.OutputPort;
 
 /**

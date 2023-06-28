@@ -41,4 +41,13 @@ public class MapFileFilter implements FilenameFilter {
 		return name.endsWith(FSUtil.MAP_FILE_EXTENSION);
 	}
 
+	public static FilenameFilter NOT_FILTER = new FilenameFilter() {
+
+		@Override
+		public boolean accept(File dir, String name) {
+			return !name.endsWith(FSUtil.MAP_FILE_EXTENSION);
+		}
+
+	};
+
 }
