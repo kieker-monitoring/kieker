@@ -59,10 +59,6 @@ public class TeetimeConfiguration extends Configuration {
 			this.connectPorts(outputPort, timestampFilter.getMonitoringRecordsCombinedInputPort());
 			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();
 		}
-		
-		RecordSorterStage sorterStage = new RecordSorterStage(100000);
-		this.connectPorts(outputPort, sorterStage.getInputPort());
-		outputPort = sorterStage.getOutputPort();
 
 		if (parameter.isTimeRelative()) {
 			final AdjustTimeStage rewriteTime = new AdjustTimeStage(new FlowEventTimeAdjuster(), new OperationExecutionRecordTimeAdjuster(),

@@ -46,6 +46,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 	private final DirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
 	private final DirectoryReaderStage directoryReaderStage;
+	private final RecordSorterStage sorterStage;
 
 	/**
 	 * Creates a composite stage to scan and read a set of Kieker log directories.
@@ -68,8 +69,10 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize);
+		this.sorterStage = new RecordSorterStage(10000);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());
 	}
 
 	/**
@@ -87,8 +90,10 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
+		this.sorterStage = new RecordSorterStage(10000);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());
 	}
 
 	/**
@@ -108,13 +113,15 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
 		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
+		this.sorterStage = new RecordSorterStage(10000);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
+		this.connectPorts(directoryReaderStage.getOutputPort(), sorterStage.getInputPort());
 	}
 
 	@Override
 	public OutputPort<IMonitoringRecord> getOutputPort() {
-		return this.directoryReaderStage.getOutputPort();
+		return this.sorterStage.getOutputPort();
 	}
 
 }
