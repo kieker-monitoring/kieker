@@ -1,4 +1,4 @@
-package kieker.tools.log.replayer.stages;
+package kieker.tools.source;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class TestSorterStage {
 
 	@Test
 	public void testStage() throws Exception {
-		SorterStage stage = addData();
+		RecordSorterStage stage = addData();
 		
 		List<IMonitoringRecord> records = readRecords(stage);
 		
@@ -26,7 +26,7 @@ public class TestSorterStage {
 		Assert.assertEquals("ClazzA.myTest3", third.getOperationSignature());
 	}
 
-	private List<IMonitoringRecord> readRecords(SorterStage stage) {
+	private List<IMonitoringRecord> readRecords(RecordSorterStage stage) {
 		List<IMonitoringRecord> records = new LinkedList<>();
 		IPipe<IMonitoringRecord> pipe = (IPipe<IMonitoringRecord>) stage.getOutputPort().getPipe();
 		System.out.println("Pipe has more: " + pipe.hasMore());
@@ -37,8 +37,8 @@ public class TestSorterStage {
 		return records;
 	}
 
-	private SorterStage addData() throws Exception {
-		SorterStage stage = new SorterStage(3);
+	private RecordSorterStage addData() throws Exception {
+		RecordSorterStage stage = new RecordSorterStage(3);
 		
 		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(ConfigurationFactory.createDefaultConfiguration());
 		new BoundedSynchedPipe(stage.getOutputPort(), consumer.getInputPort(), 100);

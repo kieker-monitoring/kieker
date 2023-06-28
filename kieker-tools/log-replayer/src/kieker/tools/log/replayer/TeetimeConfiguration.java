@@ -22,12 +22,11 @@ import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.log.replayer.stages.AdjustTimeStage;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
-import kieker.tools.log.replayer.stages.SorterStage;
 import kieker.tools.log.replayer.stages.time.adjuster.BranchingRecordTimeAdjuster;
 import kieker.tools.log.replayer.stages.time.adjuster.FlowEventTimeAdjuster;
 import kieker.tools.log.replayer.stages.time.adjuster.OperationExecutionRecordTimeAdjuster;
 import kieker.tools.source.LogsReaderCompositeStage;
-
+import kieker.tools.source.RecordSorterStage;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.framework.OutputPort;
@@ -61,7 +60,7 @@ public class TeetimeConfiguration extends Configuration {
 			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();
 		}
 		
-		SorterStage sorterStage = new SorterStage(100000);
+		RecordSorterStage sorterStage = new RecordSorterStage(100000);
 		this.connectPorts(outputPort, sorterStage.getInputPort());
 		outputPort = sorterStage.getOutputPort();
 

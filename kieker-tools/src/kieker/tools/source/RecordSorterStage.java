@@ -1,4 +1,4 @@
-package kieker.tools.log.replayer.stages;
+package kieker.tools.source;
 
 import java.util.PriorityQueue;
 
@@ -6,14 +6,14 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
-public class SorterStage extends AbstractConsumerStage<IMonitoringRecord> {
+public class RecordSorterStage extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 
 	private final PriorityQueue<IMonitoringRecord> sortedRecords = new PriorityQueue<>();
 	private final int size;
 
-	public SorterStage(int size) {
+	public RecordSorterStage(int size) {
 		this.size = size;
 	}
 
