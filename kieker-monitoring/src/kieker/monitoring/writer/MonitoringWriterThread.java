@@ -33,7 +33,7 @@ public class MonitoringWriterThread extends Thread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringWriterThread.class);
 
-	private static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
+	public static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
 
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 	private final AbstractMonitoringWriter writer;
