@@ -13,15 +13,15 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 
 	private boolean active = false;
 	private final IMonitoringRecord dummyObject = new OperationExecutionRecord("test", "test", 0l, 0l, 0l, "test", 0, 0);
-	
+
 	public DumpQueue() {
-		
+
 	}
-	
-	public DumpQueue(int initialSize) {
-		
+
+	public DumpQueue(final int initialSize) {
+
 	}
-	
+
 	@Override
 	public IMonitoringRecord remove() {
 		return null;
@@ -63,54 +63,55 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <T> T[] toArray(final T[] a) {
 		return null;
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public boolean containsAll(final Collection<?> c) {
 		return false;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends IMonitoringRecord> c) {
+	public boolean addAll(final Collection<? extends IMonitoringRecord> c) {
 		return false;
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean removeAll(final Collection<?> c) {
 		return false;
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public boolean retainAll(final Collection<?> c) {
 		return false;
 	}
 
 	@Override
 	public void clear() {
-		
+
 	}
 
 	@Override
-	public boolean add(IMonitoringRecord e) {
+	public boolean add(final IMonitoringRecord e) {
 		return false;
 	}
 
 	@Override
-	public boolean offer(IMonitoringRecord e) {
+	public boolean offer(final IMonitoringRecord e) {
 		return false;
 	}
 
 	@Override
-	public void put(IMonitoringRecord e) throws InterruptedException {
+	public void put(final IMonitoringRecord e) throws InterruptedException {
 		if (e == MonitoringWriterThread.END_OF_MONITORING_RECORD) {
 			active = false;
 		}
 	}
 
 	@Override
-	public boolean offer(IMonitoringRecord e, long timeout, TimeUnit unit) throws InterruptedException {
+	public boolean offer(final IMonitoringRecord e, final long timeout, final TimeUnit unit)
+			throws InterruptedException {
 		return false;
 	}
 
@@ -120,7 +121,7 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 	}
 
 	@Override
-	public IMonitoringRecord poll(long timeout, TimeUnit unit) throws InterruptedException {
+	public IMonitoringRecord poll(final long timeout, final TimeUnit unit) throws InterruptedException {
 		return null;
 	}
 
@@ -130,22 +131,22 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 	}
 
 	@Override
-	public boolean remove(Object o) {
+	public boolean remove(final Object o) {
 		return false;
 	}
 
 	@Override
-	public boolean contains(Object o) {
+	public boolean contains(final Object o) {
 		return false;
 	}
 
 	@Override
-	public int drainTo(Collection<? super IMonitoringRecord> c) {
+	public int drainTo(final Collection<? super IMonitoringRecord> c) {
 		return 0;
 	}
 
 	@Override
-	public int drainTo(Collection<? super IMonitoringRecord> c, int maxElements) {
+	public int drainTo(final Collection<? super IMonitoringRecord> c, final int maxElements) {
 		return 0;
 	}
 }
