@@ -11,15 +11,15 @@ import kieker.monitoring.writer.MonitoringWriterThread;
 
 public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 
-	private boolean active = false;
+	private boolean active;
 	private final IMonitoringRecord dummyObject = new OperationExecutionRecord("test", "test", 0l, 0l, 0l, "test", 0, 0);
 
 	public DumpQueue() {
-
+		// Empty on purpose
 	}
 
 	public DumpQueue(final int initialSize) {
-
+		// Empty on purpose
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 
 	@Override
 	public void clear() {
-
+		// Empty on purpose
 	}
 
 	@Override
