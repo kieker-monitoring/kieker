@@ -71,29 +71,29 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKieke
 
 	private ExecutionTrace genValidBookstoreTrace(final long traceId, final String sessionId, final long offset) throws InvalidTraceException {
 		// Executions of a valid trace
-		final Execution exec0_0__bookstore_searchBook; // NOCS
-		final Execution exec1_1__catalog_getBook; // NOCS
-		final Execution exec2_1__crm_getOrders; // NOCS
-		final Execution exec3_2__catalog_getBook; // NOCS
+		final Execution exec00BookstoreSearchBook; // NOCS
+		final Execution exec11CatalogGetBook; // NOCS
+		final Execution exec21CrmGetOrders; // NOCS
+		final Execution exec32CatalogGetBook; // NOCS
 
 		// Manually create Executions for a trace
-		exec0_0__bookstore_searchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId,
+		exec00BookstoreSearchBook = this.executionFactory.genExecution("Bookstore", "bookstore", "searchBook", traceId,
 				sessionId,
 				(1 * (1000 * 1000)) + offset, // tin //NOCS (MagicNumberCheck)
 				(10 * (1000 * 1000)) + offset, // tout
 				0, 0); // eoi, ess
 
-		exec1_1__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
+		exec11CatalogGetBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
 				sessionId,
 				(2 * (1000 * 1000)) + offset,
 				(4 * (1000 * 1000)) + offset,
 				1, 1);
-		exec2_1__crm_getOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId,
+		exec21CrmGetOrders = this.executionFactory.genExecution("CRM", "crm", "getOrders", traceId,
 				sessionId,
 				(5 * (1000 * 1000)) + offset,
 				(8 * (1000 * 1000)) + offset,
 				2, 1);
-		exec3_2__catalog_getBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
+		exec32CatalogGetBook = this.executionFactory.genExecution("Catalog", "catalog", "getBook", traceId,
 				sessionId,
 				(6 * (1000 * 1000)) + offset,
 				(7 * (1000 * 1000)) + offset,
@@ -102,10 +102,10 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKieke
 		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, TestTraceEquivalenceFilterAssemblyEquivalence.SESSION_ID);
 
-		executionTrace.add(exec3_2__catalog_getBook);
-		executionTrace.add(exec2_1__crm_getOrders);
-		executionTrace.add(exec0_0__bookstore_searchBook);
-		executionTrace.add(exec1_1__catalog_getBook);
+		executionTrace.add(exec32CatalogGetBook);
+		executionTrace.add(exec21CrmGetOrders);
+		executionTrace.add(exec00BookstoreSearchBook);
+		executionTrace.add(exec11CatalogGetBook);
 
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 

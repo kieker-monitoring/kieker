@@ -27,7 +27,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kieker.common.util.dataformat.LoggingTimestampConverter;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.model.system.model.exceptions.InvalidTraceException;
 
 /**
@@ -257,9 +257,9 @@ public class ExecutionTrace extends AbstractTrace {
 		synchronized (this) {
 			strBuild.append("TraceId ").append(this.getTraceId());
 			strBuild.append(" (minTin=").append(this.minTin);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin));
+			strBuild.append(" (").append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.minTin));
 			strBuild.append("); maxTout=").append(this.maxTout);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout));
+			strBuild.append(" (").append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.maxTout));
 			strBuild.append("); maxEss=").append(this.maxEss).append("):\n");
 			for (final Execution e : this.trace) {
 				strBuild.append('<');

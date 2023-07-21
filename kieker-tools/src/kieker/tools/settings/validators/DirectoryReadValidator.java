@@ -21,10 +21,16 @@ import java.io.IOException;
 import com.beust.jcommander.IValueValidator;
 import com.beust.jcommander.ParameterException;
 
+/**
+ * Validate whether the given directory file handle exists and is a directory.
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class DirectoryReadValidator implements IValueValidator<File> {
 
 	@Override
-	public void validate(final String name, final File value) throws ParameterException {
+	public void validate(final String name, final File value) throws ParameterException { // NOPMD jcommander
 		if (value == null) {
 			throw new ParameterException(String.format("%s path not specified.", name));
 		}
@@ -38,7 +44,7 @@ public class DirectoryReadValidator implements IValueValidator<File> {
 						value.getCanonicalPath()));
 			}
 		} catch (final IOException e) {
-			throw new ParameterException(String.format("%s path %s cannot be checked. Cause: %s", name, value,
+			throw new ParameterException(String.format("%s path %s cannot be checked. Cause: %s", name, value, // NOPMD
 					e.getLocalizedMessage()));
 		}
 	}

@@ -38,12 +38,14 @@ import kieker.common.configuration.Configuration;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated since 2.0.0
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
 		configuration = {
 			@Property(name = DescriptionRepository.CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, defaultValue = "")
 		})
+@Deprecated
 public class DescriptionRepository extends AbstractRepository {
 
 	/**
@@ -137,9 +139,7 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(fileName)), ENCODING));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(fileName)), ENCODING))) {
 			final ConcurrentMap<String, String> descriptionMap = new ConcurrentHashMap<>();
 
 			while (true) {
@@ -158,10 +158,6 @@ public class DescriptionRepository extends AbstractRepository {
 				descriptionMap.put(key, description);
 			}
 			return new DescriptionRepositoryData(descriptionMap);
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 		}
 	}
 

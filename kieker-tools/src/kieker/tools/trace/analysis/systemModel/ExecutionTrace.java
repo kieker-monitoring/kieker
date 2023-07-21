@@ -27,8 +27,8 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.tools.trace.analysis.filter.traceReconstruction.InvalidTraceException;
-import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * This class is a container for a whole trace of executions (represented as
@@ -266,9 +266,9 @@ public class ExecutionTrace extends AbstractTrace {
 		synchronized (this) {
 			strBuild.append("TraceId ").append(this.getTraceId());
 			strBuild.append(" (minTin=").append(this.minTin);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.minTin));
+			strBuild.append(" (").append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.minTin));
 			strBuild.append("); maxTout=").append(this.maxTout);
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.maxTout));
+			strBuild.append(" (").append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.maxTout));
 			strBuild.append("); maxEss=").append(this.maxEss).append("):\n");
 			for (final Execution e : this.set) {
 				strBuild.append('<');
@@ -437,7 +437,7 @@ public class ExecutionTrace extends AbstractTrace {
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
 		@Override
-		public final int compare(final Execution e1, final Execution e2) {
+		public int compare(final Execution e1, final Execution e2) {
 			// If executions equal, return immediately
 			if (e1.equals(e2)) {
 				return 0;

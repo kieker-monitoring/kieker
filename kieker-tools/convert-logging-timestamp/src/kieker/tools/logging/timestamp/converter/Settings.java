@@ -19,9 +19,9 @@ import java.util.List;
 
 import com.beust.jcommander.Parameter;
 
-import kieker.tools.common.AbstractSettings;
+import kieker.tools.common.BasicSettings;
 
-public class Settings extends AbstractSettings {
+public class Settings extends BasicSettings {
 
 	@Parameter(names = { "-t", "--timestamps" }, required = true, variableArity = true,
 			description = "List of timestamps (UTC timezone) to convert, e.g., timestamp1 ... timestampN")

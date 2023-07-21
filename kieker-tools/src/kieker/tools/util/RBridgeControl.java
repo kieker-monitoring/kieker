@@ -34,7 +34,9 @@ import org.slf4j.LoggerFactory;
  * @author Tillmann Carlos Bielefeld
  *
  * @since 1.10
+ * @deprecated
  */
+@Deprecated
 public final class RBridgeControl {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBridgeControl.class);
@@ -43,11 +45,13 @@ public final class RBridgeControl {
 	private Rsession rCon;
 
 	protected RBridgeControl() {
-		final OutputStream out = new OutputStream2StandardLog();
+		final OutputStream out = new OutputStream2StandardLog(); // NOPMD
 		try {
 			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
 		} catch (final UnsupportedEncodingException e) {
-			LOGGER.error(e.toString(), e);
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(e.toString(), e);
+			}
 		}
 	}
 
@@ -59,13 +63,13 @@ public final class RBridgeControl {
 	 *
 	 * @return The result or the error of the evaluation of the given R expression. The method tries to convert it into a string, if possible.
 	 */
-	public Object evalWithR(final String input) throws InvalidREvaluationResultException {
+	public Object evalWithR(final String input) throws InvalidREvaluationResultException { // NOPMD runtime exception
 		Object out = null;
 
 		try {
 			out = this.rCon.eval(input);
 
-			Object output = null;
+			Object output = null; // NOPMD is used in logger output
 
 			if (out instanceof REXPString) {
 				output = ((REXPString) out).asString();
@@ -79,7 +83,9 @@ public final class RBridgeControl {
 
 			RBridgeControl.LOGGER.trace("> REXP: {} return: {}", input, output);
 		} catch (final REXPMismatchException exc) {
-			RBridgeControl.LOGGER.error("Error R expr.: {} Cause: {}", input, exc.getMessage(), exc);
+			if (LOGGER.isErrorEnabled()) {
+				RBridgeControl.LOGGER.error("Error R expr.: {} Cause: {}", input, exc.getMessage(), exc);
+			}
 		}
 
 		return out;
@@ -91,7 +97,7 @@ public final class RBridgeControl {
 	 *            variable to R
 	 * @throws InvalidREvaluationResultException
 	 */
-	public void toTS(final String variable) throws InvalidREvaluationResultException {
+	public void toTS(final String variable) throws InvalidREvaluationResultException { // NOPMD runtime error
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
 			buf.append(variable)
@@ -110,7 +116,7 @@ public final class RBridgeControl {
 	 *            frequency to R
 	 * @throws InvalidREvaluationResultException
 	 */
-	public void toTS(final String variable, final long frequency) throws InvalidREvaluationResultException {
+	public void toTS(final String variable, final long frequency) throws InvalidREvaluationResultException { // NOPMD runtime
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
 			buf.append(variable)
@@ -141,7 +147,9 @@ public final class RBridgeControl {
 			RBridgeControl.LOGGER.error("Error casting value from R: {} Cause: {}", input, exc);
 			return resultOnFailure;
 		} catch (final InvalidREvaluationResultException exc) {
-			RBridgeControl.LOGGER.error(exc.getMessage(), exc);
+			if (LOGGER.isErrorEnabled()) {
+				RBridgeControl.LOGGER.error(exc.getMessage(), exc);
+			}
 			return resultOnFailure;
 		}
 	}
@@ -161,7 +169,9 @@ public final class RBridgeControl {
 
 			return stringResult.toString();
 		} catch (final InvalidREvaluationResultException exc) {
-			RBridgeControl.LOGGER.error(exc.getMessage(), exc);
+			if (LOGGER.isErrorEnabled()) {
+				RBridgeControl.LOGGER.error(exc.getMessage(), exc);
+			}
 			return resultOnFailure;
 		}
 	}
@@ -182,7 +192,9 @@ public final class RBridgeControl {
 		} catch (final REXPMismatchException e) {
 			return resultOnFailure;
 		} catch (final InvalidREvaluationResultException e) {
-			RBridgeControl.LOGGER.error(e.getMessage(), e);
+			if (LOGGER.isErrorEnabled()) {
+				RBridgeControl.LOGGER.error(e.getMessage(), e);
+			}
 			return resultOnFailure;
 		}
 	}
@@ -196,7 +208,7 @@ public final class RBridgeControl {
 	 *            assign value
 	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final double[] values) throws InvalidREvaluationResultException {
+	public void assign(final String variable, final double[] values) throws InvalidREvaluationResultException { // NOPMD
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable)
 				.append(" <- c(");
@@ -221,7 +233,7 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final Double[] values) throws InvalidREvaluationResultException {
+	public void assign(final String variable, final Double[] values) throws InvalidREvaluationResultException { // NOPMD
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable)
 				.append(" <- c(");
@@ -250,7 +262,7 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final Long[] values) throws InvalidREvaluationResultException {
+	public void assign(final String variable, final Long[] values) throws InvalidREvaluationResultException { // NOPMD
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable)
 				.append(" <- c(");
@@ -281,8 +293,8 @@ public final class RBridgeControl {
 	 *
 	 * @return The singleton instance.
 	 */
-	public static final RBridgeControl getInstance() {
-		return LazyHolder.INSTANCE;
+	public static RBridgeControl getInstance() {
+		return LazyHolderFactory.INSTANCE;
 	}
 
 	/**
@@ -292,7 +304,7 @@ public final class RBridgeControl {
 	 *
 	 * @since 1.10
 	 */
-	private static final class LazyHolder { // NOCS
+	private static final class LazyHolderFactory { // NOCS
 
 		static final RBridgeControl INSTANCE; // NOPMD (private modifier would require an additional getter method)
 

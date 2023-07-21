@@ -39,7 +39,9 @@ import kieker.tools.trace.analysis.systemModel.Operation;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated since 1.15.2
  */
+@Deprecated
 @Repository(
 		name = "System model repository",
 		description = "Model manager for Kieker's component model ")
@@ -118,7 +120,7 @@ public class SystemModelRepository extends AbstractRepository {
 		return this.assemblyPairFactory;
 	}
 
-	private static enum EntityType {
+	private enum EntityType {
 		COMPONENT_TYPE, OPERATION, ASSEMBLY_COMPONENT, ALLOCATION_COMPONENT, EXECUTION_CONTAINER
 	}
 

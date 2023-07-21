@@ -64,7 +64,7 @@ public class ConfigurationParser {
 		}
 	}
 
-	public void parse(final Configuration configuration) throws ParameterException {
+	public void parse(final Configuration configuration) throws ParameterException { // NOPMD jcommander requirement
 		for (final Field field : this.settings.getClass().getDeclaredFields()) {
 			final Setting annotation = field.getAnnotation(Setting.class);
 			if (annotation != null) {
@@ -92,7 +92,8 @@ public class ConfigurationParser {
 		}
 	}
 
-	private void validateValue(final String name, final Class<? extends IValueValidator>[] validators, final Object resultValue) throws ParameterException {
+	// TODO fix raw types
+	private void validateValue(final String name, final Class<? extends IValueValidator>[] validators, final Object resultValue) throws ParameterException { // NOPMD
 		for (final Class<? extends IValueValidator> validatorClass : validators) {
 			try {
 				final IValueValidator<Object> validator = validatorClass.newInstance();
@@ -152,7 +153,7 @@ public class ConfigurationParser {
 		}
 	}
 
-	private void setValue(final Field field, final Object value) throws ParameterException {
+	private void setValue(final Field field, final Object value) throws ParameterException { // NOPMD
 		try {
 			field.setAccessible(true);
 			field.set(this.settings, value);

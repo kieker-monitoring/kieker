@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.monitoring.writer.dump;
 
 import java.util.Collection;
@@ -9,17 +24,17 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.writer.MonitoringWriterThread;
 
-public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
+public class DumpQueue implements BlockingQueue<IMonitoringRecord> { // NOPMD
 
 	private boolean active;
-	private final IMonitoringRecord dummyObject = new OperationExecutionRecord("test", "test", 0l, 0l, 0l, "test", 0, 0);
+	private final IMonitoringRecord dummyObject = new OperationExecutionRecord("test", "test", 0L, 0L, 0L, "test", 0, 0);
 
 	public DumpQueue() {
-		// Empty on purpose
+		// empty constructor for API purposes
 	}
 
-	public DumpQueue(final int initialSize) {
-		// Empty on purpose
+	public DumpQueue(final int initialSize) { // NOPMD used for API purposes
+		// empty constructor for API purposes
 	}
 
 	@Override
@@ -59,12 +74,12 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 
 	@Override
 	public Object[] toArray() {
-		return null;
+		return new Object[0];
 	}
 
 	@Override
 	public <T> T[] toArray(final T[] a) {
-		return null;
+		return a;
 	}
 
 	@Override
@@ -105,7 +120,7 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 	@Override
 	public void put(final IMonitoringRecord e) throws InterruptedException {
 		if (e == MonitoringWriterThread.END_OF_MONITORING_RECORD) {
-			active = false;
+			this.active = false;
 		}
 	}
 
@@ -117,7 +132,7 @@ public class DumpQueue implements BlockingQueue<IMonitoringRecord> {
 
 	@Override
 	public IMonitoringRecord take() throws InterruptedException {
-		return active ? dummyObject : MonitoringWriterThread.END_OF_MONITORING_RECORD;
+		return this.active ? this.dummyObject : MonitoringWriterThread.END_OF_MONITORING_RECORD; // NOCS
 	}
 
 	@Override

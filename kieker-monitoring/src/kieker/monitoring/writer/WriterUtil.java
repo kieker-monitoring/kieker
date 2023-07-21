@@ -58,7 +58,9 @@ public final class WriterUtil {
 		try {
 			closeable.close();
 		} catch (final IOException e) {
-			logger.warn("Caught exception while closing '{}'.", closeable.getClass(), e);
+			if (logger.isWarnEnabled()) {
+				logger.warn("Caught exception while closing '{}'.", closeable.getClass(), e);
+			}
 		}
 	}
 }

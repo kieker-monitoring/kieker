@@ -127,15 +127,15 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		int eoi = 0;
 		long traceId = TRACE_ID_1;
 		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_1, traceId, ++time, ++time, eoi++, 0));
-		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, traceId, ++time, ++time, eoi++, 1));
+		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, traceId, ++time, ++time, eoi, 1));
 
 		eoi = 0;
 		traceId = TRACE_ID_2;
-		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, traceId, ++time, ++time, eoi++, 0));
+		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_2, traceId, ++time, ++time, eoi, 0));
 
 		eoi = 0;
 		traceId = TRACE_ID_3;
-		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_3, traceId, ++time, ++time, eoi++, 0));
+		records.add(TraceColoringFilterTest.createExecutionRecord(OPERATION_SIGNATURE_3, traceId, ++time, ++time, eoi, 0));
 
 		return records;
 	}
