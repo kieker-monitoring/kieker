@@ -86,8 +86,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws IllegalStateException,
-			AnalysisConfigurationException {
+	public void setUp() throws AnalysisConfigurationException {
 		// READER
 		final Configuration readerForecastConfiguration = new Configuration();
 		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
@@ -124,7 +123,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Test
-	public void testForecastingOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testForecastingOnly() throws InterruptedException, AnalysisConfigurationException {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

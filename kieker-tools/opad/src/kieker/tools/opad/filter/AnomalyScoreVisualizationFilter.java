@@ -54,7 +54,7 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 	}
 
-	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { StorableDetectionResult.class })
+	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_EVENTS, eventTypes = StorableDetectionResult.class)
 	public void inputNormal(final StorableDetectionResult record) {
 		this.updateDisplays(record);
 	}
@@ -70,7 +70,7 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 
 	private void updateDisplays(final StorableDetectionResult record) {
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext));
-		final String minutesAndSeconds = date.toString().substring(14, 19);
+		date.toString().substring(14, 19);
 	}
 
 }

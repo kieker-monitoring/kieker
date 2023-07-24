@@ -27,6 +27,8 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.analysis.util.TestDataRepositoryFactory;
@@ -60,7 +62,8 @@ public class BasicJMXWriterReaderTest {
 		super();
 	}
 
-	// @Test
+	@Ignore
+	@Test
 	public void testCommunication() throws Exception {
 		final MonitoringController monitoringController = this.createMonitoringController();
 		final TestAnalysis analysis = this.createAnalysis();
@@ -71,7 +74,7 @@ public class BasicJMXWriterReaderTest {
 		Thread.sleep(1000);
 
 		// 3. define analysis config
-		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
+		final List<IMonitoringRecord> records = BasicJMXWriterReaderTest.TEST_DATA_REPOSITORY.newTestEventRecords();
 
 		// 4. trigger records
 		final TestProbe testProbe = new TestProbe(monitoringController);
@@ -83,9 +86,9 @@ public class BasicJMXWriterReaderTest {
 		monitoringController.terminateMonitoring();
 
 		// 6. wait for termination
-		monitoringController.waitForTermination(MONITORING_TIMEOUT_IN_MS);
+		monitoringController.waitForTermination(BasicJMXWriterReaderTest.MONITORING_TIMEOUT_IN_MS);
 		// analysis.startAndWaitForTermination();
-		analysis.waitForTermination(ANALYSIS_TIMEOUT_IN_MS);
+		analysis.waitForTermination(BasicJMXWriterReaderTest.ANALYSIS_TIMEOUT_IN_MS);
 
 		// 7. read actual records
 		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
@@ -131,7 +134,7 @@ public class BasicJMXWriterReaderTest {
 		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type",
 				BasicJMXWriterReaderTest.CONTROLLER);
 
-		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
+		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL); // NOPMD
 		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
 
 		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName,

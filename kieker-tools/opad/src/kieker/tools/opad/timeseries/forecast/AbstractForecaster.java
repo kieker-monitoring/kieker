@@ -72,13 +72,12 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
 		final long startTime = history.getStartTime();
-		final TimeSeries<T> tsFC = new TimeSeries<>(startTime, history.getTimeSeriesTimeUnit(),
+		return new TimeSeries<>(startTime, history.getTimeSeriesTimeUnit(),
 				history.getDeltaTime(), history.getDeltaTimeUnit());
-		return tsFC;
 	}
 
 	protected boolean supportsConfidence() {
-		return CONFIDENCE_SUPPORTED_BY_DEFAULT;
+		return AbstractForecaster.CONFIDENCE_SUPPORTED_BY_DEFAULT;
 	}
 
 	@Override
@@ -87,7 +86,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 			return this.confidenceLevel;
 		} else {
 			if (!this.warningAlreadyLogged) {
-				LOGGER.warn("Confidence level not supported. Falling back to 0.0.");
+				AbstractForecaster.LOGGER.warn("Confidence level not supported. Falling back to 0.0.");
 				this.warningAlreadyLogged = true;
 			}
 			return 0;

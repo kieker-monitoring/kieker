@@ -76,11 +76,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi,
 			final int ess, final long tin, final long tout, final boolean assumed) {
-		if (LOGGER.isErrorEnabled()) {
-			LOGGER.error(
+		if (AbstractTraceAnalysisFilter.LOGGER.isErrorEnabled()) {
+			AbstractTraceAnalysisFilter.LOGGER.error(
 					"static createExecutionByEntityNames executionContainerName={} assemblyComponentTypeName={} componentTypeName={} operationSignature={} traceId={} sessionId={} eoi={} ess={} tin={} tout={} assumed={}",
 					executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout,
-					assumed ? "true" : "false");
+					assumed ? "true" : "false"); // NOCS
 		}
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::")
 				.append(assemblyComponentTypeName).toString();

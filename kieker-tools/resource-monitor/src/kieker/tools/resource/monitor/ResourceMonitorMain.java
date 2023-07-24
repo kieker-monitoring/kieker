@@ -91,8 +91,6 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 
 	@Override
 	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
-		LOGGER.info(this.toString());
-
 		final CountDownLatch cdl = new CountDownLatch(1);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -111,7 +109,7 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 		this.monitoringController = MonitoringController.createInstance(controllerConfiguration);
 
 		this.initSensors();
-		LOGGER.info("Monitoring started");
+		ResourceMonitorMain.LOGGER.info("Monitoring started");
 
 		if (this.settings.getDuration() >= 0) {
 			final Timer timer = new Timer();
@@ -122,20 +120,24 @@ public final class ResourceMonitorMain extends AbstractLegacyTool<Settings> {
 					timer.cancel();
 				}
 			}, TimeUnit.MILLISECONDS.convert(this.settings.getDuration(), this.settings.getDurationUnit()));
-			LOGGER.info("Waiting for {} {} timeout...", this.settings.getDuration(), this.settings.getDurationUnit());
+			if (ResourceMonitorMain.LOGGER.isInfoEnabled()) {
+				ResourceMonitorMain.LOGGER.info("Waiting for {} {} timeout...", this.settings.getDuration(), this.settings.getDurationUnit());
+			}
 		}
 
 		try {
-			LOGGER.info("Press Ctrl+c to terminate");
+			ResourceMonitorMain.LOGGER.info("Press Ctrl+c to terminate");
 			cdl.await();
 		} catch (final InterruptedException ex) {
-			LOGGER.warn("The monitoring has been interrupted", ex);
+			if (ResourceMonitorMain.LOGGER.isWarnEnabled()) {
+				ResourceMonitorMain.LOGGER.warn("The monitoring has been interrupted", ex);
+			}
 			return AbstractLegacyTool.RUNTIME_ERROR;
 		} finally {
-			LOGGER.info("Monitoring terminated");
+			ResourceMonitorMain.LOGGER.info("Monitoring terminated");
 		}
 
-		return SUCCESS_EXIT_CODE;
+		return AbstractLegacyTool.SUCCESS_EXIT_CODE;
 	}
 
 	@Override

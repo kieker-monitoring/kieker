@@ -63,8 +63,10 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
 	private static final String PARAMETERS = "()";
 
-	private static final String OPERATION_SIGNATURE_1 = TYPE_NAME_1 + "." + OPERATION_NAME_1 + PARAMETERS;
-	private static final String OPERATION_SIGNATURE_2 = TYPE_NAME_2 + "." + OPERATION_NAME_2 + PARAMETERS;
+	private static final String OPERATION_SIGNATURE_1 = ComponentAllocationDependencyGraphTest.TYPE_NAME_1 + "."
+			+ ComponentAllocationDependencyGraphTest.OPERATION_NAME_1 + ComponentAllocationDependencyGraphTest.PARAMETERS;
+	private static final String OPERATION_SIGNATURE_2 = ComponentAllocationDependencyGraphTest.TYPE_NAME_2 + "."
+			+ ComponentAllocationDependencyGraphTest.OPERATION_NAME_2 + ComponentAllocationDependencyGraphTest.PARAMETERS;
 
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_1 = "@1";
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_2 = "@2";
@@ -83,29 +85,31 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		final String inputPortName = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
 		final String repositoryPortName = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL;
 
-		testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(analysisController, filter, inputPortName, repositoryPortName,
+		ComponentAllocationDependencyGraphTest.testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(analysisController, filter, inputPortName,
+				repositoryPortName,
 				ComponentAllocationDependencyGraphTest.createExecutionRecords());
 	}
 
 	private static OperationExecutionRecord createExecutionRecord(final String signature, final int tin, final int tout, final int eoi, final int ess) {
-		return new OperationExecutionRecord(signature, SESSION_ID, TRACE_ID, tin, tout, HOSTNAME, eoi, ess);
+		return new OperationExecutionRecord(signature, ComponentAllocationDependencyGraphTest.SESSION_ID, ComponentAllocationDependencyGraphTest.TRACE_ID, tin, tout,
+				ComponentAllocationDependencyGraphTest.HOSTNAME, eoi, ess);
 	}
 
 	private static List<OperationExecutionRecord> createExecutionRecords() {
 		final List<OperationExecutionRecord> records = new ArrayList<>();
 		int eoi = 0;
 
-		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(OPERATION_SIGNATURE_1, 1, 2, eoi++, 0));
-		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(OPERATION_SIGNATURE_2, 2, 3, eoi++, 1));
-		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(OPERATION_SIGNATURE_2, 3, 4, eoi++, 0));
+		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(ComponentAllocationDependencyGraphTest.OPERATION_SIGNATURE_1, 1, 2, eoi++, 0));
+		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(ComponentAllocationDependencyGraphTest.OPERATION_SIGNATURE_2, 2, 3, eoi++, 1));
+		records.add(ComponentAllocationDependencyGraphTest.createExecutionRecord(ComponentAllocationDependencyGraphTest.OPERATION_SIGNATURE_2, 3, 4, eoi, 0));
 
 		return records;
 	}
 
 	@Test
 	public void testGraphCreation() throws AnalysisConfigurationException {
-		testSetup.run();
-		final GraphReceiverPlugin graphReceiver = testSetup.getResultCollectionPlugin();
+		ComponentAllocationDependencyGraphTest.testSetup.run();
+		final GraphReceiverPlugin graphReceiver = ComponentAllocationDependencyGraphTest.testSetup.getResultCollectionPlugin();
 
 		// Check number of produced graphs
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
@@ -115,8 +119,8 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		// Obtain the expected allocation components
-		final AllocationComponent allocationComponent1 = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1).getEntity();
-		final AllocationComponent allocationComponent2 = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_2).getEntity();
+		final AllocationComponent allocationComponent1 = nodeMap.get(ComponentAllocationDependencyGraphTest.EXPECTED_ALLOCATION_COMPONENT_NAME_1).getEntity();
+		final AllocationComponent allocationComponent2 = nodeMap.get(ComponentAllocationDependencyGraphTest.EXPECTED_ALLOCATION_COMPONENT_NAME_2).getEntity();
 		Assert.assertNotNull(allocationComponent1);
 		Assert.assertNotNull(allocationComponent2);
 
@@ -124,13 +128,13 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		final ComponentType type1 = allocationComponent1.getAssemblyComponent().getType();
 		final ComponentType type2 = allocationComponent2.getAssemblyComponent().getType();
 
-		Assert.assertEquals(TYPE_NAME_1, type1.getTypeName());
-		Assert.assertEquals(TYPE_NAME_2, type2.getTypeName());
+		Assert.assertEquals(ComponentAllocationDependencyGraphTest.TYPE_NAME_1, type1.getTypeName());
+		Assert.assertEquals(ComponentAllocationDependencyGraphTest.TYPE_NAME_2, type2.getTypeName());
 
 		// Inspect the edges
 		final DependencyGraphNode<AllocationComponent> rootNode = nodeMap.get(SystemModelRepository.ROOT_NODE_LABEL);
-		final DependencyGraphNode<AllocationComponent> type1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);
-		final DependencyGraphNode<AllocationComponent> type2Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_2);
+		final DependencyGraphNode<AllocationComponent> type1Node = nodeMap.get(ComponentAllocationDependencyGraphTest.EXPECTED_ALLOCATION_COMPONENT_NAME_1);
+		final DependencyGraphNode<AllocationComponent> type2Node = nodeMap.get(ComponentAllocationDependencyGraphTest.EXPECTED_ALLOCATION_COMPONENT_NAME_2);
 
 		// Check edges leaving the root
 		Assert.assertEquals(2, rootNode.getOutgoingEdges().size());

@@ -505,7 +505,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest extends Abstra
 	 *
 	 */
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
-			IllegalStateException, AnalysisConfigurationException {
+			AnalysisConfigurationException {
 		// Create the SimpleListReader
 		final Configuration readerConfiguration = new Configuration();
 		final ListReader<TraceEventRecords> reader = new ListReader<>(readerConfiguration, this.analysisController);

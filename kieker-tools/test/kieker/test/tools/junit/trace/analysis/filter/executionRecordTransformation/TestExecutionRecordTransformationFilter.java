@@ -64,7 +64,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
-	public void testAllFieldsComplete() throws IllegalStateException, AnalysisConfigurationException {
+	public void testAllFieldsComplete() throws AnalysisConfigurationException {
 		final String sessionId = "8T6NK1Q6";
 		final long traceId = 34523; // any number will do
 
@@ -113,7 +113,7 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	private final ExecutionRecordTransformationFilter execRecFilter = new ExecutionRecordTransformationFilter(new Configuration(), this.analysisController);
 	private final ExecutionSinkClass sinkPlugin = new ExecutionSinkClass(new Configuration(), this.analysisController);
 
-	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) throws IllegalStateException, AnalysisConfigurationException {
+	public ExecRecordTransformationFilterChecker(final List<OperationExecutionRecord> records) throws AnalysisConfigurationException {
 		for (final OperationExecutionRecord record : records) { // the reader will provide these records via its output port
 			this.listReader.addObject(record);
 		}
@@ -139,7 +139,7 @@ class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	 * @throws IllegalStateException
 	 *             If the internally assembled analysis is in an invalid state.
 	 */
-	public void doTestFilter(final List<Execution> expectedExecutions) throws IllegalStateException, AnalysisConfigurationException {
+	public void doTestFilter(final List<Execution> expectedExecutions) throws AnalysisConfigurationException {
 		this.analysisController.run();
 
 		Assert.assertEquals("Expected sink to contain 1 Execution", expectedExecutions.size(), this.sinkPlugin.getExecutions().size());

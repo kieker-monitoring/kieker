@@ -148,7 +148,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 	 * @throws AnalysisConfigurationException
 	 *             exception that can possibly be thrown by AnalysisController
 	 */
-	private void convertRecord(final OperationExecutionRecord oer) throws IllegalStateException, AnalysisConfigurationException {
+	private void convertRecord(final OperationExecutionRecord oer) throws AnalysisConfigurationException {
 		this.simpleListReader.addObject(oer);
 		this.analysisController.run();
 		this.conversionResult = this.listCollectionfilter.getList().get(0);

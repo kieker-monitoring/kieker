@@ -94,7 +94,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 			this.appJarFilePath = appJarFilePath;
 			this.appMainClassName = appMainClassName;
 
-			this.arguments.add("-javaagent:" + KIEKER_ASPECTJ_FILE_NAME);
+			this.arguments.add("-javaagent:" + AspectjMonitoringToAsciiFileLog.KIEKER_ASPECTJ_FILE_NAME);
 			this.arguments.add("-cp");
 			this.arguments.add("." + File.pathSeparator + this.appJarFilePath); // NOPMD
 			this.arguments.add(this.appMainClassName);
@@ -114,7 +114,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 			this.addJmvArgument(FileWriter.CONFIG_PATH + "=" + workingDirectory);
 
 			final List<String> commandWithArgs = new ArrayList<>();
-			commandWithArgs.add(JAVA_COMMAND);
+			commandWithArgs.add(AspectjMonitoringToAsciiFileLog.JAVA_COMMAND);
 			commandWithArgs.addAll(this.jvmArguments);
 			commandWithArgs.addAll(this.arguments);
 
@@ -153,8 +153,8 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 		private static final FileFilter FILE_FILTER = new NonMetaInfDirectoryFilter();
 
 		public List<IMonitoringRecord> runAnalysis(final File workingDirectory)
-				throws IllegalStateException, AnalysisConfigurationException {
-			final File[] directories = workingDirectory.listFiles(FILE_FILTER);
+				throws AnalysisConfigurationException {
+			final File[] directories = workingDirectory.listFiles(AspectjAnalysisFromAsciiFileLog.FILE_FILTER);
 			if (null == directories) {
 				return Collections.emptyList();
 			}
