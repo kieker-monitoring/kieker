@@ -56,7 +56,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testAggregatorOnly() throws InterruptedException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		// READER
@@ -125,7 +125,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testTimestampTimeUnitNano() throws IllegalStateException, AnalysisConfigurationException {
+	public void testTimestampTimeUnitNano() throws AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		// READER
@@ -170,7 +170,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testTimestampTimeUnitMilli() throws IllegalStateException, AnalysisConfigurationException {
+	public void testTimestampTimeUnitMilli() throws AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		// READER
@@ -215,7 +215,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testGlobalTimescope() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testGlobalTimescope() throws InterruptedException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		// READER

@@ -18,7 +18,7 @@ package kieker.model.system.model;
 
 import java.util.Comparator;
 
-import kieker.common.util.dataformat.LoggingTimestampConverter;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.model.system.model.util.TraceStartTimestampComparator;
 
 /**
@@ -53,10 +53,10 @@ public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> 
 			strBuild.append("SessionId ").append(this.getSessionId());
 			strBuild.append(" (startTime=").append(this.getStartTimestamp());
 			strBuild.append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getStartTimestamp()));
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.getStartTimestamp()));
 			strBuild.append("); endTime=").append(this.getEndTimestamp());
 			strBuild.append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getEndTimestamp()));
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.getEndTimestamp()));
 			strBuild.append("):\n");
 			for (final ExecutionTrace t : this.getStateContainedTraces()) {
 				strBuild.append('{');

@@ -88,6 +88,8 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	 * print buffer.
 	 */
 	public void printBuffer() {
-		LOGGER.info(this.toString());
+		if (TimeSeriesPointsBuffer.LOGGER.isInfoEnabled()) {
+			TimeSeriesPointsBuffer.LOGGER.info(this.toString());
+		}
 	}
 }

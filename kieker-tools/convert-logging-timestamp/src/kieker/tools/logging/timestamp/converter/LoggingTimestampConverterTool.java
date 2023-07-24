@@ -21,7 +21,7 @@ import com.beust.jcommander.JCommander;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
-import kieker.common.util.dataformat.LoggingTimestampConverter;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.tools.common.AbstractLegacyTool;
 
 /**
@@ -46,9 +46,9 @@ public final class LoggingTimestampConverterTool extends AbstractLegacyTool<Sett
 
 		for (final long timestampLong : this.settings.getTimestamps()) {
 			stringBuilder.append(timestampLong).append(": ")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(timestampLong));
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(timestampLong));
 			stringBuilder.append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(timestampLong))
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(timestampLong))
 					.append(')').append(lineSeperator);
 		}
 

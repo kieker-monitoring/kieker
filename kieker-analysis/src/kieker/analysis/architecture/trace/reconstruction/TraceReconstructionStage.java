@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.architecture.trace.AbstractTraceProcessingStage;
 import kieker.analysis.architecture.trace.execution.ExecutionEventProcessingException;
-import kieker.common.util.dataformat.LoggingTimestampConverter;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
 import kieker.model.system.model.ExecutionTrace;
@@ -296,16 +296,16 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 			super.printStatusMessage();
 			if (this.getSuccessCount() > 0 || this.getErrorCount() > 0) {
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-						.append(LoggingTimestampConverter
+						.append(LoggingTimestampConversionUtils
 								.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
 						.append(',')
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(this.minTin))
 						.append(')').toString();
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-						.append(LoggingTimestampConverter
+						.append(LoggingTimestampConversionUtils
 								.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
 						.append(',')
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
 						.append(')').toString();
 				this.logger.debug("First timestamp: {}", minTinStr);
 				this.logger.debug("Last timestamp: {}", maxToutStr);

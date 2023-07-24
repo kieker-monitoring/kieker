@@ -178,6 +178,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	private boolean checkInputDirs(final JCommander commander) {
 		if (this.settings.getInputDirs() == null) {
 			this.logger.error("No input directories specified.");
+			commander.usage();
 			return false;
 		}
 		for (final File inputDir : this.settings.getInputDirs()) {

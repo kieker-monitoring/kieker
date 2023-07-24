@@ -30,7 +30,7 @@ import com.beust.jcommander.ParameterException;
 public class ReadFileValueValidator implements IValueValidator<Path> { // NOPMD, NOCS
 
 	@Override
-	public void validate(final String name, final Path path) throws ParameterException {
+	public void validate(final String name, final Path path) throws ParameterException { // NOPMD jcommander
 		final File file = path.toAbsolutePath().toFile();
 		if (!file.exists()) {
 			throw new ParameterException(String.format("File %s does not exist", path.toAbsolutePath()));

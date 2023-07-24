@@ -73,26 +73,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	static {
 		final StringBuilder sb = new StringBuilder();
 		boolean error = true;
-		BufferedReader reader = null;
 
-		try {
-			final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SEQUENCE_PIC_PATH);
-			String line;
-			reader = new BufferedReader(new InputStreamReader(is, ENCODING));
-			while ((line = reader.readLine()) != null) { // NOPMD (assign)
-				sb.append(line).append('\n');
+		try (final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SEQUENCE_PIC_PATH)) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, ENCODING))) {
+				String line;
+				while ((line = reader.readLine()) != null) { // NOPMD (assign)
+					sb.append(line).append('\n');
+				}
+				error = false;
 			}
-			error = false;
 		} catch (final IOException exc) {
 			SequenceDiagramFilter.LOGGER.error("Error while reading {}", SEQUENCE_PIC_PATH, exc);
 		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (final IOException ex) {
-				SequenceDiagramFilter.LOGGER.error("Failed to close input stream", ex);
-			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
 				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";"; // NOCS (this)
@@ -107,7 +99,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *
 	 * @since 1.2
 	 */
-	public static enum SDModes {
+	public enum SDModes {
 		/** The assembly mode for the sequence diagrams. */
 		ASSEMBLY,
 		/** The allocation mode for the sequence diagrams. */

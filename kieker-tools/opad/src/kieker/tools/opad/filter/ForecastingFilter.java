@@ -49,9 +49,9 @@ import kieker.tools.opad.timeseries.forecast.IForecaster;
  *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
+	@OutputPort(eventTypes = IForecastResult.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+	@OutputPort(eventTypes = IForecastMeasurementPair.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
+	@OutputPort(eventTypes = IForecastMeasurementPair.class, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
 		configuration = {
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
@@ -143,7 +143,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 * @param input
 	 *            Incoming measurements
 	 */
-	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
+	@InputPort(eventTypes = NamedDoubleTimeSeriesPoint.class, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
 		if (this.checkInitialization(input.getName())) {
 			this.processInput(input, input.getTime(), input.getName());

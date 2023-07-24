@@ -33,7 +33,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * @since 1.9
  */
 @Plugin(name = "AnomalyScore Calculation Filter",
-		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE) })
+		outputPorts = { @OutputPort(eventTypes = StorableDetectionResult.class, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE) })
 public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
@@ -54,7 +54,7 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 	 * @param fmp
 	 *            Pair consisting of measurement and forecast
 	 */
-	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
+	@InputPort(eventTypes = IForecastMeasurementPair.class, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
 		Double score = 0.0;
 

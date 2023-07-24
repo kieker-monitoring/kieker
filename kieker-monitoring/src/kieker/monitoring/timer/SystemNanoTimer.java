@@ -20,9 +20,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import kieker.common.configuration.Configuration;
 
 /**
@@ -37,8 +34,6 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	public static final String CONFIG_OFFSET = SystemNanoTimer.class.getName() + ".offset";
 	/** This is the name of the configuration determining the used time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemNanoTimer.class.getName() + ".unit";
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(SystemNanoTimer.class);
 
 	private final long offset;
 	private final long clockdifference;

@@ -73,10 +73,11 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 					}
 					final ValidEventRecordTraceCounter validTraceCounter = tool.teetimeConfiguration.getValidEventRecordTraceCounter();
 					final InvalidEventRecordTraceCounter invalidTraceCounter = tool.teetimeConfiguration.getInvalidEventRecordTraceCounter();
-					if (validTraceCounter != null) {
+					if ((validTraceCounter != null) && tool.logger.isDebugEnabled()) {
 						tool.logger.debug("");
 						tool.logger.debug("#");
 						tool.logger.debug("# Plugin: {}", validTraceCounter.getClass().getName());
+
 						final int total = validTraceCounter.getTotalCount() + invalidTraceCounter.getTotalCount();
 						tool.logger.debug("Trace processing summary: {} total; {} succeeded; {} failed.",
 								total, validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
@@ -85,14 +86,19 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 						tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage().printStatusMessage();
 					}
 				} catch (final IOException e) {
-					tool.logger.error("Cannot save system model in {}: {}", systemModelPath.toString(), e.getLocalizedMessage());
+					if (tool.logger.isErrorEnabled()) {
+						tool.logger.error("Cannot save system model in {}: {}", systemModelPath.toString(), e.getLocalizedMessage());
+					}
 				}
 			} catch (final IOException e1) {
-				tool.logger.error("Cannot compose path: {}", e1.getLocalizedMessage());
+				if (tool.logger.isErrorEnabled()) {
+					tool.logger.error("Cannot compose path: {}", e1.getLocalizedMessage());
+				}
 			}
 
 		}
 		System.exit(result);
+
 	}
 
 	protected SystemModelRepository getSystemRepository() {

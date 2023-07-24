@@ -23,7 +23,8 @@ import com.beust.jcommander.Parameter;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public abstract class AbstractSettings {
+public class BasicSettings {
+
 	@Parameter(names = { "-v", "--verbose" }, required = false, description = "verbosely prints additional information")
 	private boolean verbose;
 

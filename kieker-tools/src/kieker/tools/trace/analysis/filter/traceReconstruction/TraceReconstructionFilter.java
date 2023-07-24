@@ -31,6 +31,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.trace.analysis.systemModel.Execution;
@@ -38,7 +39,6 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
-import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Andre van Hoorn
@@ -346,14 +346,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			super.printStatusMessage();
 			if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
 						.append(',')
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(this.minTin))
 						.append(')').toString();
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
 						.append(',')
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
+						.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
 						.append(')').toString();
 				LOGGER.debug("First timestamp: {}", minTinStr);
 				LOGGER.debug("Last timestamp: {}", maxToutStr);

@@ -70,10 +70,10 @@ public enum ForecastMethod {
 	 *
 	 * @return the forecaster for this algorithm
 	 *
-	 * @throws IllegalArgumentException
+	 * @throws UnsupportedOperationException
 	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) throws IllegalArgumentException {
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) { 
 		switch (this) {
 		case ARIMA:
 			return new ARIMAForecaster(history);
@@ -94,7 +94,7 @@ public enum ForecastMethod {
 		case SES:
 			return new SESRForecaster(history);
 		default:
-			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
+			throw new UnsupportedOperationException("No forecaster defined for " + this.toString());
 		}
 	}
 
@@ -110,7 +110,7 @@ public enum ForecastMethod {
 	 * @throws IllegalArgumentException
 	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history, final int alpha) throws IllegalArgumentException {
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history, final int alpha) {
 		switch (this) {
 		case ARIMA:
 			return new ARIMAForecaster(history, alpha);
@@ -131,7 +131,7 @@ public enum ForecastMethod {
 		case SES:
 			return new SESRForecaster(history, alpha);
 		default:
-			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
+			throw new UnsupportedOperationException("No forecaster defined for " + this.toString());
 		}
 	}
 

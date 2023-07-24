@@ -50,12 +50,15 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;
 	private static final String SESSION_ID = "Y2zm6CRc";
+	private static final String BOOKSTORE = "Bookstore";
+	private static final String CATALOG = "Catalog";
+	private static final String CRM = "CRM";
 
 	// Executions of a valid trace
-	private final Execution exec0_0__bookstore_searchBook; // NOCS
-	private final Execution exec1_1__catalog_getBook; // NOCS
-	private final Execution exec2_1__crm_getOrders; // NOCS
-	private final Execution exec3_2__catalog_getBook; // NOCS
+	private final Execution exec00BookstoreSearchBook; // NOCS
+	private final Execution exec11CatalogGetBook; // NOCS
+	private final Execution exec21CrmGetOrders; // NOCS
+	private final Execution exec32CatalogGetBook; // NOCS
 
 	/**
 	 * Creates a new instance of this class.
@@ -65,14 +68,17 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
 		// Manually create Executions for a trace
-		this.exec0_0__bookstore_searchBook = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec00BookstoreSearchBook = executionFactory.genExecution(TestTraceReconstructionFilter.BOOKSTORE, "bookstore", "searchBook",
+				TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
 
-		this.exec1_1__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec11CatalogGetBook = executionFactory.genExecution(TestTraceReconstructionFilter.CATALOG, "catalog", "getBook",
+				TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1);
-		this.exec2_1__crm_getOrders = executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec21CrmGetOrders = executionFactory.genExecution(TestTraceReconstructionFilter.CRM, "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1);
-		this.exec3_2__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
+		this.exec32CatalogGetBook = executionFactory.genExecution(TestTraceReconstructionFilter.CATALOG, "catalog", "getBook",
+				TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2);
 	}
 
@@ -87,10 +93,10 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
 
-		executionTrace.add(this.exec3_2__catalog_getBook);
-		executionTrace.add(this.exec2_1__crm_getOrders);
-		executionTrace.add(this.exec0_0__bookstore_searchBook);
-		executionTrace.add(this.exec1_1__catalog_getBook);
+		executionTrace.add(this.exec32CatalogGetBook);
+		executionTrace.add(this.exec21CrmGetOrders);
+		executionTrace.add(this.exec00BookstoreSearchBook);
+		executionTrace.add(this.exec11CatalogGetBook);
 
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
@@ -109,7 +115,8 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	@Test
-	public void testValidBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
+	public void testValidBookstoreTracePassed() throws InvalidTraceException, // NOPMD
+			AnalysisConfigurationException {
 		// These are the trace representations we want to be reconstructed by the filter
 		final ExecutionTrace validExecutionTrace;
 		final MessageTrace validMessageTrace;
@@ -189,15 +196,15 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	private ExecutionTrace genBrokenBookstoreTraceEssSkip(final ExecutionFactory executionFactory) throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
-		final Execution exec1_1__catalog_getBook__broken = executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
+		final Execution exec11CatalogGetBookBroken = executionFactory.genExecution(TestTraceReconstructionFilter.CATALOG, "catalog", "getBook", // NOCS
 				TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS
 		// (MagicNumberCheck)
-		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
+		Assert.assertNotEquals("Invalid test", exec11CatalogGetBookBroken, this.exec11CatalogGetBook);
 
-		executionTrace.add(this.exec3_2__catalog_getBook);
-		executionTrace.add(this.exec2_1__crm_getOrders);
-		executionTrace.add(this.exec0_0__bookstore_searchBook);
-		executionTrace.add(exec1_1__catalog_getBook__broken);
+		executionTrace.add(this.exec32CatalogGetBook);
+		executionTrace.add(this.exec21CrmGetOrders);
+		executionTrace.add(this.exec00BookstoreSearchBook);
+		executionTrace.add(exec11CatalogGetBookBroken);
 
 		return executionTrace;
 	}
@@ -213,7 +220,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
-	public void testBrokenBookstoreTracePassed() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
+	public void testBrokenBookstoreTracePassed() throws InvalidTraceException, AnalysisConfigurationException {
 		// These are the trace representations we want to be reconstructed by the filter
 		final ExecutionTrace invalidExecutionTrace;
 		final AnalysisController controller = new AnalysisController();
@@ -287,9 +294,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
 
-		executionTrace.add(this.exec3_2__catalog_getBook);
-		executionTrace.add(this.exec2_1__crm_getOrders);
-		executionTrace.add(this.exec1_1__catalog_getBook);
+		executionTrace.add(this.exec32CatalogGetBook);
+		executionTrace.add(this.exec21CrmGetOrders);
+		executionTrace.add(this.exec11CatalogGetBook);
 
 		return executionTrace;
 	}
@@ -305,7 +312,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
-	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException {
+	public void testIncompleteTraceDueToTimeout() throws InvalidTraceException, AnalysisConfigurationException {
 		// This trace is incomplete.
 		final ExecutionTrace incompleteExecutionTrace;
 		incompleteExecutionTrace = this.genBookstoreTraceWithoutEntryExecution();
@@ -316,8 +323,8 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		 * But: Then, it would exceed the maximum trace duration.
 		 */
 		final ExecutionTrace completingExecutionTrace = new ExecutionTrace(incompleteExecutionTrace.getTraceId(), incompleteExecutionTrace.getSessionId());
-		Assert.assertTrue("Test invalid (traceIds not matching)", this.exec0_0__bookstore_searchBook.getTraceId() == completingExecutionTrace.getTraceId());
-		completingExecutionTrace.add(this.exec0_0__bookstore_searchBook);
+		Assert.assertEquals("Test invalid (traceIds not matching)", this.exec00BookstoreSearchBook.getTraceId(), completingExecutionTrace.getTraceId());
+		completingExecutionTrace.add(this.exec00BookstoreSearchBook);
 
 		final AnalysisController controller = new AnalysisController();
 
@@ -327,13 +334,13 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		// We will use this execution to trigger the timeout check for pending traces within the filter.
 		final int triggerTraceLengthMillis = 1;
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
-		final Execution exec0_0__bookstore_searchBook__trigger = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
+		final Execution exec00BookstoreSearchBookTrigger = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
 				TestTraceReconstructionFilter.SESSION_ID, incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout()
 						+ (triggerTraceLengthMillis * (1000 * 1000)),
 				0, 0); // NOCS
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId, TestTraceReconstructionFilter.SESSION_ID);
 		final MessageTrace triggerMessageTrace;
-		triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
+		triggerExecutionTrace.add(exec00BookstoreSearchBookTrigger);
 		triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		// Instantiate reconstruction filter with timeout.
@@ -378,14 +385,14 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		/**
 		 * Pass the timeout "trigger execution"
 		 */
-		LOGGER.info("Expecting (caught/logged) exception in TraceReconstructionFilter:");
-		reader.addObject(exec0_0__bookstore_searchBook__trigger);
+		TestTraceReconstructionFilter.LOGGER.info("Expecting (caught/logged) exception in TraceReconstructionFilter:");
+		reader.addObject(exec00BookstoreSearchBookTrigger);
 
 		/**
 		 * Now, will pass the execution that would make the incomplete trace complete. But that incomplete trace should have been considered to be timeout already.
 		 * Thus, the completing execution trace should appear as a single incomplete execution trace.
 		 */
-		reader.addObject(this.exec0_0__bookstore_searchBook);
+		reader.addObject(this.exec00BookstoreSearchBook);
 
 		controller.run();
 

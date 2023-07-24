@@ -135,8 +135,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		LOGGER.info(message);
 	}
 
-	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
-		final Socket socket = this.socketChannel.socket();
+	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException { // NOPMD
+		final Socket socket = this.socketChannel.socket(); // NOPMD will be closed elsewhere
 
 		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
 

@@ -31,9 +31,9 @@ import kieker.common.record.misc.EmptyRecord;
  */
 public class MonitoringWriterThread extends Thread {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringWriterThread.class);
+	public static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
 
-	private static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
+	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringWriterThread.class);
 
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 	private final AbstractMonitoringWriter writer;
