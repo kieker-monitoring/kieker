@@ -51,13 +51,16 @@ public final class ToolsUtil {
 	private static void loadLogger(final String loggerProperties) {
 		try {
 			final LogManager logManager = LogManager.getLogManager();
-			final InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream(loggerProperties);
-			if (configStream != null) {
-				logManager.readConfiguration(configStream);
-			} else {
-				LOGGER.warn("Could not load verbose/debug logger");
+			try (final InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream(loggerProperties)) {
+				if (configStream != null) {
+					logManager.readConfiguration(configStream);
+				} else {
+					LOGGER.warn("Could not load verbose/debug logger");
+				}
+			} catch (final IOException ex) {
+				LOGGER.warn("Could not load verbose/debug logger", ex);
 			}
-		} catch (final SecurityException | IOException ex) {
+		} catch (final SecurityException ex) {
 			LOGGER.warn("Could not load verbose/debug logger", ex);
 		}
 	}

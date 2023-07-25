@@ -126,7 +126,9 @@ public class DependencyGraphConfiguration extends Configuration {
 		final IDependencyGraphBuilderFactory<IDependencyGraphBuilderConfiguration> graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
+
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
+
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 
 		final Distributor<IFlowRecord> flowRecordDistributor = new Distributor<>(new CopyByReferenceStrategy());
@@ -167,6 +169,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory,
 				DependencyGraphConfiguration.DOT_EXPORT_CONFIGURATION_FACTORY
 						.createForDeploymentLevelOperationDependencyGraph());
+
 		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory);
 
 		super.connectPorts(directoryScannerStage.getOutputPort(), directoryReaderStage.getInputPort());
@@ -184,6 +187,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		super.connectPorts(executionModelAssemblerStage.getOutputPort(), callStatisticsStage.getInputPort());
 		super.connectPorts(callStatisticsStage.getOutputPort(), fullStatisticsDecorator.getInputPort());
 		super.connectPorts(fullStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
+
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		super.connectPorts(dependencyGraphCreator.getOutputPort(), distributor.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), dotFileWriterStage.getInputPort());

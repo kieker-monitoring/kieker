@@ -79,8 +79,7 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws IllegalStateException,
-			AnalysisConfigurationException {
+	public void setUp() throws AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
 		// Start - Read OperationExecutionRecords

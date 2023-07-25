@@ -70,7 +70,7 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 	 */
 	public int run(final String title, final String label, final String[] args) {
 		final int result = super.run(title, label, args, this.parameter);
-		if (this.configuration != null) {
+		if ((this.configuration != null) && LOGGER.isInfoEnabled()) {
 			ReplayerMain.LOGGER.info("Records send {}", this.configuration.getCounter().getNumElementsPassed());
 		}
 		return result;

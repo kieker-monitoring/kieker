@@ -36,7 +36,7 @@ import kieker.tools.opad.record.NamedDoubleRecord;
  * 
  * @since 1.9
  */
-@Plugin(outputPorts = { @OutputPort(name = ExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) },
+@Plugin(outputPorts = { @OutputPort(name = ExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = NamedDoubleTimeSeriesPoint.class) },
 		configuration = {
 			@Property(name = ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = ExtractionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT)
 		})
@@ -71,7 +71,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = NamedDoubleRecord.class)
 	public void inputExecutionRecord(final NamedDoubleRecord record) {
 		final long timestampMillis = this.timeunit.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext);
 		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getResponseTime(), record.getApplicationName());

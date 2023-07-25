@@ -29,7 +29,7 @@ import com.beust.jcommander.ParameterException;
 public class WritePathValueValidator implements IValueValidator<Path> { // NOPMD, NOCS
 
 	@Override
-	public void validate(final String name, final Path path) throws ParameterException {
+	public void validate(final String name, final Path path) throws ParameterException { // NOPMD jcommander
 		if (!path.toAbsolutePath().getParent().toFile().exists()) {
 			throw new ParameterException(String.format("Path %s does not exist", path.toAbsolutePath().getParent()));
 		}

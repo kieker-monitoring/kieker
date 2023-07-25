@@ -21,7 +21,7 @@ package kieker.analysis.architecture.adaptation.events;
  * @author Marc Adolf
  * @since 1.15
  */
-public class TcpActivationControlEvent extends AbstractTcpControlEvent {
+public class TcpActivationControlEvent extends BasicTcpControlEvent {
 
 	/**
 	 * Creates a complete activation control event.

@@ -38,7 +38,7 @@ public interface ComponentType extends EObject {
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getComponentType_Signature()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getSignature();

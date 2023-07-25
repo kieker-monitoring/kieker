@@ -63,7 +63,8 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
 		this.configPrintStreamName = configuration.getStringProperty(STREAM);
-		this.printStream = new PrintStream(new ByteArrayOutputStream()); // Null Object Pattern
+
+		this.printStream = new PrintStream(new ByteArrayOutputStream()); // NOPMD, Null Object Pattern
 	}
 
 	@Override

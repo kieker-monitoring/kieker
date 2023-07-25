@@ -17,8 +17,12 @@ package kieker.tools.trace.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -50,6 +54,7 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.InvalidExecutionTrace;
 import kieker.model.system.model.MessageTrace;
+import kieker.tools.settings.converters.DateConverter;
 import kieker.tools.source.LogsReaderCompositeStage;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.visualization.trace.GraphWriterPlugin;
@@ -107,6 +112,26 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
 		final String pathPrefix = this.computePrefix(parameters);
+
+		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		if (parameters.getIgnoreExecutionsBeforeDate() == null) {
+			parameters.setIgnoreExecutionsBeforeDate(Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP));
+		} else {
+			if (TraceAnalysisConfiguration.LOGGER.isInfoEnabled()) {
+				TraceAnalysisConfiguration.LOGGER.info("Ignoring records before {} ({})", dateFormat.format(parameters.getIgnoreExecutionsBeforeDate()),
+						parameters.getIgnoreExecutionsBeforeDate());
+			}
+		}
+
+		if (parameters.getIgnoreExecutionsAfterDate() == null) {
+			parameters.setIgnoreExecutionsAfterDate(Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP));
+		} else {
+			if (TraceAnalysisConfiguration.LOGGER.isInfoEnabled()) {
+				TraceAnalysisConfiguration.LOGGER.info("Ignoring records after {} ({})", dateFormat.format(parameters.getIgnoreExecutionsAfterDate()),
+						parameters.getIgnoreExecutionsAfterDate());
+			}
+		}
 
 		final LogsReaderCompositeStage readerStage = new LogsReaderCompositeStage(parameters.getInputDirs(), parameters.isVerbose(), parameters.getReadBufferSize());
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
@@ -169,7 +194,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		if (parameters.isInvertTraceIdFilter()) {
 			this.connectPorts(traceIdFilter.getMismatchingTraceIdOutputPort(), dispatcher.getInputPort());
 		} else {
-			this.connectPorts(traceIdFilter.getMatchingTraceIdOutputPort(), dispatcher.getInputPort());
+			this.connectPorts(traceIdFilter.getOutputPort(), dispatcher.getInputPort());
 		}
 
 		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(), executionRecordTransformationStage.getInputPort());
@@ -337,7 +362,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private void createTraceCallTreeFilter(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean shortLabels) {
 		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(systemRepository, shortLabels,
-				pathPrefix + CALL_TREE_FN_PREFIX);
+				pathPrefix + TraceAnalysisConfiguration.CALL_TREE_FN_PREFIX);
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotTraceCallTrees.getInputPort());
 	}
 
@@ -360,17 +385,17 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final String filePrefix;
 		switch (equivalenceClassMode) {
 		case ASSEMBLY:
-			filePrefix = TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX;
+			filePrefix = TraceAnalysisConfiguration.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX;
 			break;
 		case ALLOCATION:
-			filePrefix = TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX;
+			filePrefix = TraceAnalysisConfiguration.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX;
 			break;
 		case DISABLED:
 		default:
 			return;
 		}
 		final TraceEquivalenceClassFilter traceAllocationEquivalenceClassFilter = new TraceEquivalenceClassFilter(systemRepository, equivalenceClassMode);
-		final EquivalenceClassWriter equivalenceClassWriter = new EquivalenceClassWriter(new File(pathPrefix + filePrefix + TXT_SUFFIX));
+		final EquivalenceClassWriter equivalenceClassWriter = new EquivalenceClassWriter(new File(pathPrefix + filePrefix + TraceAnalysisConfiguration.TXT_SUFFIX));
 
 		this.connectPorts(executionTraceDistributor.getNewOutputPort(), traceAllocationEquivalenceClassFilter.getInputPort());
 		this.connectPorts(traceAllocationEquivalenceClassFilter.getEquivalenceMapOutputPort(), equivalenceClassWriter.getInputPort());
@@ -380,10 +405,12 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final String pathPrefix) {
 		try {
 			final MessageTraceWriterFilter messageWriterStink = new MessageTraceWriterFilter(systemRepository,
-					new File(pathPrefix + MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX));
+					new File(pathPrefix + TraceAnalysisConfiguration.MESSAGE_TRACES_FN_PREFIX + TraceAnalysisConfiguration.TXT_SUFFIX));
 			this.connectPorts(messageTraceDistributor.getNewOutputPort(), messageWriterStink.getInputPort());
 		} catch (final IOException e) {
-			LOGGER.error(String.format("Error initializing %s cause %s", MessageTraceWriterFilter.class, e.getLocalizedMessage()));
+			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
+				TraceAnalysisConfiguration.LOGGER.error(String.format("Error initializing %s cause %s", MessageTraceWriterFilter.class, e.getLocalizedMessage()));
+			}
 		}
 	}
 
@@ -391,10 +418,12 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final String pathPrefix) {
 		try {
 			final ExecutionTraceWriterFilter executionWriterStink = new ExecutionTraceWriterFilter(systemRepository,
-					new File(pathPrefix + EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX));
+					new File(pathPrefix + TraceAnalysisConfiguration.EXECUTION_TRACES_FN_PREFIX + TraceAnalysisConfiguration.TXT_SUFFIX));
 			this.connectPorts(executionTraceDistributor.getNewOutputPort(), executionWriterStink.getInputPort());
 		} catch (final IOException e) {
-			LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
+			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
+				TraceAnalysisConfiguration.LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
+			}
 		}
 	}
 
@@ -402,10 +431,13 @@ public class TraceAnalysisConfiguration extends Configuration {
 			final Distributor<InvalidExecutionTrace> invalidExecutionTraceDistributor, final String pathPrefix) {
 		try {
 			final InvalidExecutionTraceWriterSink invalidExecutionTraceWriterSink = new InvalidExecutionTraceWriterSink(systemRepository,
-					new File(pathPrefix + INVALID_TRACES_FN_PREFIX + TXT_SUFFIX));
+					new File(pathPrefix + TraceAnalysisConfiguration.INVALID_TRACES_FN_PREFIX + TraceAnalysisConfiguration.TXT_SUFFIX));
 			this.connectPorts(invalidExecutionTraceDistributor.getNewOutputPort(), invalidExecutionTraceWriterSink.getInputPort());
 		} catch (final IOException e) {
-			LOGGER.error(String.format("Error initializing %s cause %s", InvalidExecutionTraceWriterSink.class, e.getLocalizedMessage()));
+			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
+				TraceAnalysisConfiguration.LOGGER
+						.error(String.format("Error initializing %s cause %s", InvalidExecutionTraceWriterSink.class, e.getLocalizedMessage()));
+			}
 		}
 	}
 
@@ -447,7 +479,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
 					continue;
-				} else if (RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				} else if (TraceAnalysisConfiguration.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
 					// if decorator is responseColoring, next value should be the threshold
 					final String thresholdStringStr = decoratorIterator.next();
 
@@ -456,10 +488,14 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 						plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
 					} catch (final NumberFormatException exc) {
-						LOGGER.error("Failed to parse int value of property threshold(ms) : {}", thresholdStringStr);
+						if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
+							TraceAnalysisConfiguration.LOGGER.error("Failed to parse int value of property threshold(ms) : {}", thresholdStringStr);
+						}
 					}
 				} else {
-					LOGGER.warn("Unknown decoration name '{}'.", currentDecoratorStr);
+					if (TraceAnalysisConfiguration.LOGGER.isWarnEnabled()) {
+						TraceAnalysisConfiguration.LOGGER.warn("Unknown decoration name '{}'.", currentDecoratorStr);
+					}
 					return;
 				}
 			}

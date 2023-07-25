@@ -21,7 +21,7 @@ package kieker.analysis.architecture.recovery.events;
  * @author Reiner Jung
  * @since 1.15
  */
-public class OperationEvent extends AbstractElementEvent {
+public class OperationEvent extends GenericElementEvent {
 
 	private final String operationSignature;
 
@@ -47,7 +47,7 @@ public class OperationEvent extends AbstractElementEvent {
 	}
 
 	private boolean compare(final String a, final String b) {
-		if (a == null && b == null) {
+		if ((a == null) && (b == null)) {
 			return true;
 		} else if (a != null) {
 			return a.equals(b);
@@ -58,7 +58,7 @@ public class OperationEvent extends AbstractElementEvent {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return super.hashCode() ^ this.operationSignature.hashCode();
 	}
 
 	@Override

@@ -137,9 +137,8 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
-					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()
+					return TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()
 							.getPairInstanceByPair(allocationComponent, op); // will never be null!
-					return destination;
 				}
 			}, mt, TraceCallTreeFilter.this.dotOutputFn + "-" + mt.getTraceId() + ".dot", false, TraceCallTreeFilter.this.shortLabels); // no weights
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());

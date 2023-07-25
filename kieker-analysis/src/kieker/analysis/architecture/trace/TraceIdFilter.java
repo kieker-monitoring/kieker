@@ -22,8 +22,8 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 
-import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
+import teetime.stage.basic.AbstractFilter;
 
 /**
  * Allows to filter Traces about their traceIds.
@@ -35,12 +35,11 @@ import teetime.framework.OutputPort;
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke, Reiner Jung
  * @since 1.15
  */
-public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
+public class TraceIdFilter extends AbstractFilter<IMonitoringRecord> {
 
 	private final boolean acceptAllTraces;
 	private final Set<Long> selectedTraceIds;
 
-	private final OutputPort<IMonitoringRecord> matchingTraceIdOutputPort = this.createOutputPort();
 	private final OutputPort<IMonitoringRecord> mismatchingTraceIdOutputPort = this.createOutputPort();
 
 	/**
@@ -75,7 +74,7 @@ public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private void process(final TraceMetadata element) {
 		if (this.acceptId(element.getTraceId())) {
-			this.matchingTraceIdOutputPort.send(element);
+			this.outputPort.send(element);
 		} else {
 			this.mismatchingTraceIdOutputPort.send(element);
 		}
@@ -83,7 +82,7 @@ public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private void process(final ITraceRecord element) {
 		if (this.acceptId(element.getTraceId())) {
-			this.matchingTraceIdOutputPort.send(element);
+			this.outputPort.send(element);
 		} else {
 			this.mismatchingTraceIdOutputPort.send(element);
 		}
@@ -91,7 +90,7 @@ public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private void process(final OperationExecutionRecord element) {
 		if (this.acceptId(element.getTraceId())) {
-			this.matchingTraceIdOutputPort.send(element);
+			this.outputPort.send(element);
 		} else {
 			this.mismatchingTraceIdOutputPort.send(element);
 		}
@@ -99,11 +98,6 @@ public class TraceIdFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
 	private final boolean acceptId(final long traceId) {
 		return this.acceptAllTraces || this.selectedTraceIds.contains(traceId);
-	}
-
-	/** Returns the output port delivering the records with matching IDs. */
-	public OutputPort<IMonitoringRecord> getMatchingTraceIdOutputPort() {
-		return this.matchingTraceIdOutputPort;
 	}
 
 	/** Returns the output port delivering the records with the non matching IDs. */

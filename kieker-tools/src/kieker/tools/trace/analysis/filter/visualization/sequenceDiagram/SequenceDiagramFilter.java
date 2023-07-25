@@ -100,8 +100,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		boolean error = true;
 		BufferedReader reader = null;
 
-		try {
-			final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SEQUENCE_PIC_PATH);
+		try (final InputStream is = SequenceDiagramFilter.class.getClassLoader().getResourceAsStream(SEQUENCE_PIC_PATH)) {
 			String line;
 			reader = new BufferedReader(new InputStreamReader(is, ENCODING));
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
@@ -132,7 +131,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *
 	 * @since 1.2
 	 */
-	public static enum SDModes {
+	public enum SDModes {
 		/** The assembly mode for the sequence diagrams. */
 		ASSEMBLY,
 		/** The allocation mode for the sequence diagrams. */
@@ -328,7 +327,9 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				LOGGER.error("Message type not supported: {}", me.getClass().getName());
+				if (LOGGER.isErrorEnabled()) {
+					LOGGER.error("Message type not supported: {}", me.getClass().getName());
+				}
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");
@@ -359,11 +360,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws IOException {
 		try (OutputStream stream = Files.newOutputStream(Paths.get(outputFilename))) {
-			final PrintStream ps = new PrintStream(stream, false, ENCODING);
-
-			SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
-			ps.flush();
-			ps.close();
+			try (final PrintStream ps = new PrintStream(stream, false, ENCODING)) {
+				SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
+				ps.flush();
+			}
 		}
 	}
 

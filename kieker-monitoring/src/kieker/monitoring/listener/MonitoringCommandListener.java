@@ -73,7 +73,9 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	 */
 	@Override
 	public void onRecordReceived(final IMonitoringRecord record) {
-		MonitoringCommandListener.LOGGER.debug("Received new record: {}", record.getClass().getName());
+		if (LOGGER.isDebugEnabled()) {
+			MonitoringCommandListener.LOGGER.debug("Received new record: {}", record.getClass().getName());
+		}
 
 		if (!(record instanceof IRemoteControlEvent)) {
 			MonitoringCommandListener.LOGGER
@@ -101,7 +103,7 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 			final IRemoteParameterControlEvent event = (IRemoteParameterControlEvent) record;
 			this.monitoringController.addPatternParameter(pattern, event.getName(),
 					new LinkedList<>(Arrays.asList(event.getValues())));
-		} else {
+		} else if (LOGGER.isInfoEnabled()) {
 			MonitoringCommandListener.LOGGER.info("Received unknown remote control event: {}",
 					record.getClass().getName());
 		}

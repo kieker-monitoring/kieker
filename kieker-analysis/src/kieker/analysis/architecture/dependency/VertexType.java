@@ -17,15 +17,26 @@
 package kieker.analysis.architecture.dependency;
 
 /**
+ * Enumeration representing the different types of vertices in a
+ * Kieker dependency graph with their names used in the graphics.
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
 public enum VertexType {
 
-	ENTRY("entry"), COMPONENT_TYPE("component type"), OPERATION_TYPE("operation type"), ASSEMBLY_COMPONENT("assembly component"), ASSEMBLY_OPERATION(
-			"assembly operation"), ASSEMBLY_STORAGE("assembly storage"), DEPLOYMENT_CONTEXT(
-					"deployment context"), DEPLOYED_COMPONENT("deployed component"), DEPLOYED_OPERATION("deployed operation"), DEPLOYED_STORAGE("deployed storage");
+	ENTRY("entry"), //
+	COMPONENT_TYPE("component type"), //
+	OPERATION_TYPE("operation type"), //
+	ASSEMBLY_COMPONENT("assembly component"), //
+	ASSEMBLY_OPERATION("assembly operation"), //
+	ASSEMBLY_STORAGE("assembly storage"), //
+	DEPLOYMENT_CONTEXT("deployment context"), //
+	DEPLOYED_COMPONENT("deployed component"), //
+	DEPLOYED_OPERATION("deployed operation"), //
+	DEPLOYED_STORAGE("deployed storage"); //
+
 
 	private final String name;
 

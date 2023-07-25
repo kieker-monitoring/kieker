@@ -65,21 +65,27 @@ public final class ParameterEvaluationUtils {
 		}
 		try {
 			if (!location.exists()) {
-				ParameterEvaluationUtils.LOGGER.error("{} path {} does not exist.", label,
-						location.getCanonicalPath());
+				if (LOGGER.isErrorEnabled()) {
+					ParameterEvaluationUtils.LOGGER.error("{} path {} does not exist.", label,
+							location.getCanonicalPath());
+				}
 				commander.usage();
 				return false;
 			}
 			if (!location.isDirectory()) {
-				ParameterEvaluationUtils.LOGGER.error("{} path {} is not a directory.", label,
-						location.getCanonicalPath());
+				if (LOGGER.isErrorEnabled()) {
+					ParameterEvaluationUtils.LOGGER.error("{} path {} is not a directory.", label,
+							location.getCanonicalPath());
+				}
 				commander.usage();
 				return false;
 			}
 
 			return true;
 		} catch (final IOException e) {
-			ParameterEvaluationUtils.LOGGER.error("{} path {} cannot be checked. Cause {}", label, location, e.getLocalizedMessage());
+			if (LOGGER.isErrorEnabled()) {
+				ParameterEvaluationUtils.LOGGER.error("{} path {} cannot be checked. Cause {}", label, location, e.getLocalizedMessage());
+			}
 			return false;
 		}
 	}
@@ -104,21 +110,29 @@ public final class ParameterEvaluationUtils {
 		}
 		try {
 			if (!file.exists()) {
-				ParameterEvaluationUtils.LOGGER.error("{} {} does not exist.", label, file.getCanonicalPath());
+				if (LOGGER.isErrorEnabled()) {
+					ParameterEvaluationUtils.LOGGER.error("{} {} does not exist.", label, file.getCanonicalPath());
+				}
 				return false;
 			}
 			if (!file.isFile()) {
-				ParameterEvaluationUtils.LOGGER.error("{} {} is not a file.", label, file.getCanonicalPath());
+				if (LOGGER.isErrorEnabled()) {
+					ParameterEvaluationUtils.LOGGER.error("{} {} is not a file.", label, file.getCanonicalPath());
+				}
 				return false;
 			}
 			if (!file.canRead()) {
-				ParameterEvaluationUtils.LOGGER.error("{} {} cannot be read.", label, file.getCanonicalPath());
+				if (LOGGER.isErrorEnabled()) {
+					ParameterEvaluationUtils.LOGGER.error("{} {} cannot be read.", label, file.getCanonicalPath());
+				}
 				return false;
 			}
 
 			return true;
 		} catch (final IOException e) {
-			ParameterEvaluationUtils.LOGGER.error("{} {} cannot be checked. Cause {}", label, file, e.getLocalizedMessage());
+			if (LOGGER.isErrorEnabled()) {
+				ParameterEvaluationUtils.LOGGER.error("{} {} cannot be checked. Cause {}", label, file, e.getLocalizedMessage());
+			}
 			return false;
 		}
 	}

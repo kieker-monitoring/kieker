@@ -40,7 +40,7 @@ public class JavaComponentSignatureExtractor implements IComponentSignatureExtra
 		final String name;
 		if (signature.indexOf('.') != -1) {
 			final String tmpComponentName = signature;
-			int index = 0;
+			int index;
 			for (index = tmpComponentName.length() - 1; index > 0; index--) {
 				if (tmpComponentName.charAt(index) == '.') {
 					break;

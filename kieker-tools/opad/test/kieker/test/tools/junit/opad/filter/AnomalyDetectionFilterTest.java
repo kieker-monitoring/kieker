@@ -84,7 +84,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws IllegalStateException, AnalysisConfigurationException {
+	public void setUp() throws AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
 		// READER
@@ -133,7 +133,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Test
-	public void testDetectionOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testDetectionOnly() throws InterruptedException, AnalysisConfigurationException {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

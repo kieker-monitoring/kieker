@@ -76,6 +76,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi,
 			final int ess, final long tin, final long tout, final boolean assumed) {
+		if (AbstractTraceAnalysisFilter.LOGGER.isErrorEnabled()) {
+			AbstractTraceAnalysisFilter.LOGGER.error(
+					"static createExecutionByEntityNames executionContainerName={} assemblyComponentTypeName={} componentTypeName={} operationSignature={} traceId={} sessionId={} eoi={} ess={} tin={} tout={} assumed={}",
+					executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout,
+					assumed ? "true" : "false"); // NOCS
+		}
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::")
 				.append(assemblyComponentTypeName).toString();
 		final String operationFactoryName = new StringBuilder(componentTypeName).append('.').append(operationSignature)
@@ -127,14 +133,14 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 				tin, tout, assumed);
 	}
 
-	protected final Execution createExecutionByEntityNames(final String executionContainerName,
-			final String assemblyComponentTypeName, final String componentTypeName, final Signature operationSignature,
-			final long traceId, final String sessionId, final int eoi, final int ess, final long tin, final long tout,
-			final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(),
-				executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId,
-				sessionId, eoi, ess, tin, tout, assumed);
-	}
+	// protected final Execution createExecutionByEntityNames(final String executionContainerName,
+	// final String assemblyComponentTypeName, final String componentTypeName, final Signature operationSignature,
+	// final long traceId, final String sessionId, final int eoi, final int ess, final long tin, final long tout,
+	// final boolean assumed) {
+	// return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(),
+	// executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId,
+	// sessionId, eoi, ess, tin, tout, assumed);
+	// }
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName,
 			final String assemblyComponentTypeName, final Signature operationSignature, final long traceId,

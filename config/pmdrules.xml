@@ -14,6 +14,7 @@
 
 	<rule ref="category/java/bestpractices.xml">
 		<exclude name="ArrayIsStoredDirectly"/>
+		<exclude name="JUnitTestsShouldIncludeAssert" /> <!--  check does not work with JUnit5 checks -->
 		<exclude name="JUnitAssertionsShouldIncludeMessage" />
 		<exclude name="UseVarargs" />
 	</rule>
@@ -22,6 +23,7 @@
     	<exclude name="AtLeastOneConstructor" />
     	<exclude name="AvoidFinalLocalVariable"/>
 		<exclude name="CallSuperInConstructor" />
+		<exclude name="CommentDefaultAccessModifier" />
 		<exclude name="ConfusingTernary" />
 		<exclude name="LongVariable" />
 		<exclude name="OnlyOneReturn" />

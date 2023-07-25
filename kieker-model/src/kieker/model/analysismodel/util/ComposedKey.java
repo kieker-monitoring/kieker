@@ -18,8 +18,6 @@ package kieker.model.analysismodel.util;
 
 import java.util.Map;
 
-import com.google.common.base.Objects;
-
 /**
  * Class representing a key (e.g., for a {@link Map}) that consists of three elements.
  * Please note that there is a similar class in execution generated via genmodel which
@@ -50,7 +48,11 @@ public final class ComposedKey<F, S> {
 			return false;
 		}
 		final ComposedKey<?, ?> p = (ComposedKey<?, ?>) o;
-		return Objects.equal(p.first, this.first) && Objects.equal(p.second, this.second);
+		return ComposedKey.equalOrBothNull(p.first, this.first) && ComposedKey.equalOrBothNull(p.second, this.second);
+	}
+
+	public static boolean equalOrBothNull(final Object a, final Object b) {
+		return (a == b) || ((a != null) && a.equals(b)); // NOPMD CompareObjectsWithEquals
 	}
 
 	@Override

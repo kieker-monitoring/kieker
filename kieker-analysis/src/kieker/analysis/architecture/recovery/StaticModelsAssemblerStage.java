@@ -15,6 +15,9 @@
  ***************************************************************************/
 package kieker.analysis.architecture.recovery;
 
+import kieker.analysis.architecture.recovery.assembler.OperationAssemblyModelAssembler;
+import kieker.analysis.architecture.recovery.assembler.OperationDeploymentModelAssembler;
+import kieker.analysis.architecture.recovery.assembler.OperationTypeModelAssembler;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
 import kieker.analysis.architecture.recovery.signature.SignatureExtractor;
 import kieker.model.analysismodel.assembly.AssemblyModel;
@@ -69,15 +72,15 @@ public class StaticModelsAssemblerStage extends CompositeStage { // NOPMD not a 
 		this.deploymentModel = deploymentModel;
 		this.sourceModel = sourceModel;
 
-		final OperationEventModelAssemblerStage typeModelAssembler = new OperationEventModelAssemblerStage(
-				new TypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
+		final ModelAssemblerStage<OperationEvent> typeModelAssembler = new ModelAssemblerStage<>(
+				new OperationTypeModelAssembler(this.typeModel, this.sourceModel, sourceLabel,
 						signatureExtractor.getComponentSignatureExtractor(),
 						signatureExtractor.getOperationSignatureExtractor()));
-		final OperationEventModelAssemblerStage assemblyModelAssembler = new OperationEventModelAssemblerStage(
-				new AssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
+		final ModelAssemblerStage<OperationEvent> assemblyModelAssembler = new ModelAssemblerStage<>(
+				new OperationAssemblyModelAssembler(this.typeModel, this.assemblyModel, this.sourceModel,
 						sourceLabel));
-		final OperationEventModelAssemblerStage deploymentModelAssembler = new OperationEventModelAssemblerStage(
-				new DeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
+		final ModelAssemblerStage<OperationEvent> deploymentModelAssembler = new ModelAssemblerStage<>(
+				new OperationDeploymentModelAssembler(this.assemblyModel, this.deploymentModel, this.sourceModel,
 						sourceLabel));
 
 		this.inputPort = typeModelAssembler.getInputPort();

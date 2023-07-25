@@ -45,7 +45,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public byte getByte() throws NumberFormatException;
+	public byte getByte() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves a {@code char} value from the underlying data source.
@@ -64,7 +64,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public short getShort() throws NumberFormatException; // NOPMD
+	public short getShort() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves an {@code int} value from the underlying data source.
@@ -75,7 +75,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public int getInt() throws NumberFormatException;
+	public int getInt() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves a {@code long} value from the underlying data source.
@@ -86,7 +86,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public long getLong() throws NumberFormatException;
+	public long getLong() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves a {@code float} value from the underlying data source.
@@ -97,7 +97,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public float getFloat() throws NumberFormatException;
+	public float getFloat() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves a {@code double} value from the underlying data source.
@@ -108,7 +108,7 @@ public interface IValueDeserializer {
 	 * @throws NumberFormatException
 	 *             on format errors
 	 */
-	public double getDouble() throws NumberFormatException;
+	public double getDouble() throws NumberFormatException; // NOPMD AvoidUncheckedExceptionsInSignatures
 
 	/**
 	 * Retrieves a {@code String} value from the underlying data source.

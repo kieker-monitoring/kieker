@@ -79,7 +79,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws IllegalStateException,
+	public void setUp() throws 
 			AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
@@ -113,7 +113,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Test
-	public void testAnomalyScoreCalculationOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testAnomalyScoreCalculationOnly() throws InterruptedException, AnalysisConfigurationException {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

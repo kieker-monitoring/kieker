@@ -15,14 +15,14 @@
  ***************************************************************************/
 package kieker.tools.logging.timestamp.converter;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.file.Path;
 
-import kieker.tools.AbstractCommandLineTool;
-import kieker.tools.util.LoggingTimestampConverter;
+import com.beust.jcommander.JCommander;
+
+import kieker.common.configuration.Configuration;
+import kieker.common.exception.ConfigurationException;
+import kieker.common.util.dataformat.LoggingTimestampConversionUtils;
+import kieker.tools.common.AbstractLegacyTool;
 
 /**
  * This tool can be used to convert timestamps.
@@ -31,72 +31,55 @@ import kieker.tools.util.LoggingTimestampConverter;
  *
  * @since 1.1
  */
-public final class LoggingTimestampConverterTool extends AbstractCommandLineTool {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoggingTimestampConverterTool.class);
-	private static final String FLAG_TIMESTAMPS_PARAMETER = "t";
-
-	private long[] timestampsLong;
-
-	private LoggingTimestampConverterTool() {
-		super(true);
-	}
+public final class LoggingTimestampConverterTool extends AbstractLegacyTool<Settings> {
 
 	public static void main(final String[] args) {
-		new LoggingTimestampConverterTool().start(args);
+		final LoggingTimestampConverterTool tool = new LoggingTimestampConverterTool();
+		System.exit(tool.run("ltct", "Logging timestamp converter tool", args, new Settings()));
 	}
 
 	@Override
-	protected void addAdditionalOptions(final Options options) {
-		final Option option = new Option(LoggingTimestampConverterTool.FLAG_TIMESTAMPS_PARAMETER, "timestamps", true,
-				"List of timestamps (UTC timezone) to convert");
-		option.setArgName("timestamp1 ... timestampN");
-		option.setRequired(false);
-		option.setArgs(Option.UNLIMITED_VALUES);
-
-		options.addOption(option);
-	}
-
-	@Override
-	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
-		final String[] timestampsStr = commandLine
-				.getOptionValues(LoggingTimestampConverterTool.FLAG_TIMESTAMPS_PARAMETER);
-		if ((timestampsStr == null) || (timestampsStr.length == 0)) {
-			LoggingTimestampConverterTool.LOGGER.error("No timestamp passed as argument.");
-			return false;
-		}
-
-		this.timestampsLong = new long[timestampsStr.length];
-
-		for (int curIdx = 0; curIdx < timestampsStr.length; curIdx++) {
-			try {
-				this.timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
-			} catch (final NumberFormatException ex) {
-				LoggingTimestampConverterTool.LOGGER.error("Failed to parse timestamp: {}", timestampsStr[curIdx], ex);
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	@Override
-	protected boolean performTask() {
+	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
 		final String lineSeperator = System.getProperty("line.separator");
-		final int estimatedNumberOfChars = this.timestampsLong.length * 85;
+		final int estimatedNumberOfChars = this.settings.getTimestamps().size() * 85;
 		final StringBuilder stringBuilder = new StringBuilder(estimatedNumberOfChars);
 
-		for (final long timestampLong : this.timestampsLong) {
+		for (final long timestampLong : this.settings.getTimestamps()) {
 			stringBuilder.append(timestampLong).append(": ")
-					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(timestampLong));
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampToUTCString(timestampLong));
 			stringBuilder.append(" (")
-					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(timestampLong))
+					.append(LoggingTimestampConversionUtils.convertLoggingTimestampLocalTimeZoneString(timestampLong))
 					.append(')').append(lineSeperator);
 		}
 
 		System.out.print(stringBuilder.toString()); // NOPMD (System.out)
 
+		return 0;
+	}
+
+	@Override
+	protected Path getConfigurationPath() {
+		return null;
+	}
+
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
 		return true;
+	}
+
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+		if (this.settings.getTimestamps().size() == 0) {
+			this.logger.error("No timestamps specified");
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	protected void shutdownService() {
+		// nothing to be done here
 	}
 
 }

@@ -42,12 +42,14 @@ import kieker.tools.trace.analysis.filter.visualization.graph.Color;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated since 2.0.0
  */
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring",
 		configuration = {
 			@Property(name = TraceColorRepository.CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME, defaultValue = "")
 		})
+@Deprecated
 public class TraceColorRepository extends AbstractRepository {
 
 	/**
@@ -174,9 +176,7 @@ public class TraceColorRepository extends AbstractRepository {
 	}
 
 	private static TraceColorRepositoryData readDataFromFile(final String fileName) throws IOException {
-		BufferedReader reader = null;
-		try {
-			reader = Files.newBufferedReader(Paths.get(fileName), Charset.forName(ENCODING));
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName), Charset.forName(ENCODING))) {
 			final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<>();
 			Color defaultColor = Color.BLACK;
 			Color collisionColor = Color.GRAY;
@@ -215,10 +215,6 @@ public class TraceColorRepository extends AbstractRepository {
 			}
 
 			return new TraceColorRepositoryData(colorMap, defaultColor, collisionColor);
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 		}
 	}
 

@@ -58,7 +58,10 @@ public class RBridgeTest extends AbstractKiekerRTest {
 		r.evalWithR("anomalies <- c(NA,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,0.8333333333333333,0.7446808510638298,"
 				+ "0.761768901569187,0.6308623298033282,0.2288135593220339,0.49510173323285606,0.3689400164338537,NA)");
 		final Object result = r.evalWithR("combined <- cbind(measures, forecasts, anomalies)");
-		LOGGER.info(result.toString());
+
+		if (RBridgeTest.LOGGER.isInfoEnabled()) {
+			RBridgeTest.LOGGER.info(result.toString());
+		}
 
 		Assert.assertTrue(result != null);
 		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);

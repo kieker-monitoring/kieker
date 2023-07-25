@@ -9,12 +9,12 @@ repositories {
 }
 
 dependencies {
-	compile 'ch.qos.logback:logback-classic:1.1.7'
-	compile 'org.slf4j:slf4j-api:1.7.30'
-	compile 'org.codehaus.groovy:groovy-all:3.0.2'
-	compile 'net.kieker-monitoring:kieker:1.15'
+        implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation 'net.kieker-monitoring:kieker:1.15'
 
-	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
+	implementation 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 	implementation 'com.rabbitmq:amqp-client:5.8.0'
 }
 

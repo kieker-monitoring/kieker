@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.architecture.adaptation.events.AbstractTcpControlEvent;
+import kieker.analysis.architecture.adaptation.events.BasicTcpControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpActivationParameterControlEvent;
 import kieker.analysis.architecture.adaptation.events.TcpDeactivationControlEvent;
@@ -72,14 +72,13 @@ public class TcpProbeController implements IProbeController {
 	 *             if the connection can not be established within a set timeout.
 	 */
 	@Override
-	public void controlProbe(final AbstractTcpControlEvent event) throws RemoteControlFailedException {
-		TcpProbeController.LOGGER.debug("control probe [{}] [{}] [{}]", event.getServiceComponent(), event.getIp(),
-				event.getPort());
-
+	public void controlProbe(final BasicTcpControlEvent event) throws RemoteControlFailedException {
 		final String ip = event.getIp();
 		final int port = event.getPort();
 		final String hostname = event.getServiceComponent();
 		final String pattern = event.getOperationSignature();
+
+		TcpProbeController.LOGGER.debug("control probe {} {} {}", hostname, ip, port);
 
 		if (event instanceof TcpActivationControlEvent) {
 			if (event instanceof TcpActivationParameterControlEvent) {
@@ -199,7 +198,7 @@ public class TcpProbeController implements IProbeController {
 		TcpControlConnection currentConnection = this.knownAddresses.get(writerKey);
 
 		// if host was never used or an other module was there before, create a new connection
-		if ((currentConnection == null) || (currentConnection.getServiceComponent() != serviceComponent)) {
+		if ((currentConnection == null) || (serviceComponent.equals(currentConnection.getServiceComponent()))) {
 			currentConnection = new TcpControlConnection(ip, port, serviceComponent, this.createNewTcpWriter(ip, port));
 			this.knownAddresses.put(writerKey, currentConnection);
 		}

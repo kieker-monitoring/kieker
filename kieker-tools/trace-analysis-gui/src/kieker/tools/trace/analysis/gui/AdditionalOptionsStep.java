@@ -31,12 +31,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.trace.analysis.StringConstants;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
@@ -192,7 +191,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 	@SuppressWarnings("synthetic-access")
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.verbose.isSelected()) {
-			parameters.add("--" + AbstractCommandLineTool.CMD_OPT_NAME_VERBOSE_LONG);
+			parameters.add("--verbose");
 		}
 
 		if (this.ignoreInvalidTraces.isSelected()) {
