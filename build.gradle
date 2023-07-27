@@ -510,7 +510,7 @@ task replaceHardCodedVersionNames() {
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
     regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
-    regexpReplaceInFiles(project.file("kieker-documentation/conf.py"), "release = '.*'", "release = '${v
+    regexpReplaceInFiles(project.file("kieker-documentation/conf.py"), "release = '.*'", "release = '${version}'")
   }
 }
 compileJava.dependsOn replaceHardCodedVersionNames
