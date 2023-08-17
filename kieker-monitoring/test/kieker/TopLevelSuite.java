@@ -14,6 +14,7 @@ import kieker.test.monitoring.junit.probe.spring.executions.TestSpringMethodInte
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+@RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestPeriodicSampling.class,
         TestJMXInterface.class,
@@ -26,12 +27,11 @@ import org.junit.runners.Suite;
         TestPatternParser.class,
         TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class,
         TestCXFClientServerInterceptorsSessionRegisteredBefore.class,
+        TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class,
         TestSpringMethodInterceptorInterceptorIsEntryPoint.class,
-        TestCXFClientServerInterceptors.class,
-        TestGCSampler.class,
         TestSpringMethodInterceptor.class,
-        TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class
+        TestCXFClientServerInterceptors.class,
+        TestGCSampler.class
 })
-@RunWith(Suite.class)
 public class TopLevelSuite {
 }
