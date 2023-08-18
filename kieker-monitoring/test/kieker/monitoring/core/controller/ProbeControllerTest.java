@@ -36,7 +36,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  *
  * @since 1.15
  */
-public class ProbeControllerTest {
+public abstract class ProbeControllerTest {
 
 	private static final String WHITELIST = "whitelist";
 	private static final String BLACKLIST = "blacklist";

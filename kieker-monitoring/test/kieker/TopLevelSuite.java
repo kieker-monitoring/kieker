@@ -74,4 +74,7 @@ import org.junit.runners.Suite;
         AsciiFileWriterTest.class
 })
 public class TopLevelSuite {
+    static class InSuiteOnly {
+        public static class SuiteProbeControllerTest extends ProbeControllerTest {}
+    }
 }
