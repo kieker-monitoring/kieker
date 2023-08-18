@@ -31,7 +31,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
-        ProbeControllerTest.class,
+        TopLevelSuite.InSuiteOnly.SuiteProbeControllerTest.class,
         //TCPControllerTest.class,
         WriterControllerTest.class,
         SystemMilliTimerTest.class,
