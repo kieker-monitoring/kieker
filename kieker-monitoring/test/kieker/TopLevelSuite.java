@@ -25,6 +25,7 @@ import kieker.test.monitoring.junit.probe.cxf.executions.TestCXFClientServerInte
 import kieker.test.monitoring.junit.probe.cxf.executions.TestCXFClientServerInterceptorsSessionRegisteredBefore;
 import kieker.test.monitoring.junit.probe.spring.executions.TestSpringMethodInterceptorInterceptorIsEntryPoint;
 import kieker.test.monitoring.junit.probe.spring.executions.TestSpringMethodInterceptorInterceptorIsNotEntryPoint;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -75,6 +76,7 @@ import org.junit.runners.Suite;
 })
 public class TopLevelSuite {
     //static class InSuiteOnly {
-        static class SuiteProbeControllerTest extends ProbeControllerTest {}
+        @Ignore
+        public static class SuiteProbeControllerTest extends ProbeControllerTest {}
     //}
 }
