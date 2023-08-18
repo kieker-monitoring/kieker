@@ -114,7 +114,7 @@ subprojects {
   }
 
   test {
-    exclude '**/ProbeControllerTest'
+    exclude '**/ProbeControllerTest.class'
 
     finalizedBy jacocoTestReport // report is always generated after tests run
 
