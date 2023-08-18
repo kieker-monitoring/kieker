@@ -32,7 +32,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
-        TopLevelSuite.SuiteProbeControllerTest.class,
+        ProbeControllerTest.class,
         //TCPControllerTest.class,
         WriterControllerTest.class,
         SystemMilliTimerTest.class,
@@ -75,8 +75,8 @@ import org.junit.runners.Suite;
         AsciiFileWriterTest.class
 })
 public class TopLevelSuite {
-    //static class InSuiteOnly {
+    /*static class InSuiteOnly {
         @Ignore
         public static class SuiteProbeControllerTest extends ProbeControllerTest {}
-    //}
+    }*/
 }

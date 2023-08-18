@@ -102,6 +102,7 @@ subprojects {
       resources {
         srcDirs = ['test-resources']
       }
+      exclude '**/ProbeControllerTest'
     }
     integrationTest {
       java {
