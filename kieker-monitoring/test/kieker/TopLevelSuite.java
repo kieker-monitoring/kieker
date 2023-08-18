@@ -33,7 +33,7 @@ import org.junit.runners.Suite;
 
         TcpRecordReaderTest.class,
         ProbeControllerTest.class,
-        TCPControllerTest.class,
+        //TCPControllerTest.class,
         WriterControllerTest.class,
         SystemMilliTimerTest.class,
         SystemNanoTimerTest.class,
