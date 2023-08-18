@@ -31,7 +31,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
-        TcpRecordReaderTest.class,
         ProbeControllerTest.class,
         //TCPControllerTest.class,
         WriterControllerTest.class,
@@ -40,36 +39,39 @@ import org.junit.runners.Suite;
         DeflateCompressionFilterTest.class,
         GZipCompressionFilterTest.class,
         NoneCompressionFilterTest.class,
-        XZCompressionFilterTest.class,
         ZipCompressionFilterTest.class,
         AsciiFileWriterTest.class,
-        BinaryFileWriterTest.class,
         BinaryLogStreamHandlerTest.class,
         GenericBinaryFileWriterTest.class,
-        GenericTextFileWriterTest.class,
         TextLogStreamHandlerTest.class,
         InfluxDBWriterFailingTest.class,
         TestPipeWriter.class,
         //SingleSocketTcpWriterTest.class,
         SocketChannelTest.class,
         MonitoringWriterThreadTest.class,
-        //
-        TestPeriodicSampling.class,
+        // test.monitoring
         TestJMXInterface.class,
-        TestProbeController.class,
         TestControllerConstruction.class,
         TestAutoSetLoggingTimestamp.class,
         TestMonitoringControllerStateTransitions.class,
         TestMonitoringControllerRecordsPassedInMonitoringStates.class,
         TestConfigurationFactoryMethods.class,
-        TestPatternParser.class,
         TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class,
         TestCXFClientServerInterceptorsSessionRegisteredBefore.class,
         TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class,
         TestSpringMethodInterceptorInterceptorIsEntryPoint.class,
         TestSpringMethodInterceptor.class,
         TestCXFClientServerInterceptors.class,
-        TestGCSampler.class
+        TestGCSampler.class,
+        //
+        XZCompressionFilterTest.class,
+        TcpRecordReaderTest.class,
+        TestPatternParser.class,
+        TestProbeController.class,
+        TestPeriodicSampling.class,
+        BinaryFileWriterTest.class,
+        GenericTextFileWriterTest.class,
+        AsciiFileWriterTest.class
 })
 public class TopLevelSuite {
 }
