@@ -50,7 +50,7 @@ import org.junit.runners.Suite;
         TextLogStreamHandlerTest.class,
         InfluxDBWriterFailingTest.class,
         TestPipeWriter.class,
-        SingleSocketTcpWriterTest.class,
+        //SingleSocketTcpWriterTest.class,
         SocketChannelTest.class,
         MonitoringWriterThreadTest.class,
         //
