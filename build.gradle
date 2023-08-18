@@ -102,7 +102,6 @@ subprojects {
       resources {
         srcDirs = ['test-resources']
       }
-      exclude '**/ProbeControllerTest'
     }
     integrationTest {
       java {
@@ -115,6 +114,8 @@ subprojects {
   }
 
   test {
+    exclude '**/ProbeControllerTest'
+
     finalizedBy jacocoTestReport // report is always generated after tests run
 
     systemProperty "java.io.tmpdir", "${buildDir}"
