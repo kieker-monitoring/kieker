@@ -146,6 +146,7 @@ subprojects {
     exclude '**/XZCompressionFilterTest.class'
     exclude '**/TcpRecordReaderTest.class'
     exclude '**/TestPatternParser.class'
+    exclude '**/ProbeController.class'
     exclude '**/TestPeriodicSampling.class'
     exclude '**/BinaryFileWriterTest.class'
     exclude '**/GenericTextFileWriterTest.class'
