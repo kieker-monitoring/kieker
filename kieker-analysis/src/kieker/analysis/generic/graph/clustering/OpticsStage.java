@@ -80,7 +80,7 @@ public class OpticsStage<N extends INode, E extends IEdge> extends AbstractStage
 
 			final List<OpticsData<MutableNetwork<N, E>>> result = optics.calculate();
 
-			this.logger.info("send optics result");
+			this.logger.debug("Send optics results {}", result.size());
 
 			this.outputPort.send(result);
 		}
