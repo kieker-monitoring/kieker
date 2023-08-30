@@ -87,7 +87,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(operationExecutionRecord.getOperationSignature(), isConstructor);
-
+		System.err.println(">> ESS old " + operationExecutionRecord.getEss());
 		final Execution execution = this.createExecutionByEntityNames(operationExecutionRecord.getHostname(),
 				fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
 				operationExecutionRecord.getTraceId(), operationExecutionRecord.getSessionId(), operationExecutionRecord.getEoi(),

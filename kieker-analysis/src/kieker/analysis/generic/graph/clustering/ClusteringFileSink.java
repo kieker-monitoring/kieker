@@ -48,6 +48,8 @@ public class ClusteringFileSink<T> extends AbstractConsumerStage<Clustering<T>> 
 	 *
 	 * @param path
 	 *            path
+	 * @param serializers
+	 *            serializers of type {@link StdSerializer}
 	 */
 	public ClusteringFileSink(final Path path, final StdSerializer<?>... serializers) {
 		this.objectMapper = new ObjectMapper();

@@ -37,11 +37,7 @@ public class ValidEventRecordTraceCounter extends AbstractConsumerStage<TraceEve
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
-	 * @param logInvalidTraces
-	 *            if true invalid traces are logged in the error log
 	 */
-	// TODO should this feature be added or the comment be fixed?
 	public ValidEventRecordTraceCounter() {}
 
 	@Override

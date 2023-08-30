@@ -677,6 +677,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		addEEnumLiteral(eDirectionEEnum, EDirection.READ);
 		addEEnumLiteral(eDirectionEEnum, EDirection.WRITE);
 		addEEnumLiteral(eDirectionEEnum, EDirection.BOTH);
+		addEEnumLiteral(eDirectionEEnum, EDirection.NONE);
 	}
 
 } //ExecutionPackageImpl

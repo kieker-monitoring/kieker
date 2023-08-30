@@ -18,6 +18,8 @@ dependencies {
 	implementation project(":kieker-tools")
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
+	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
+	implementation 'org.apache.commons:commons-compress:1.20'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')

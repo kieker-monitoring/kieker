@@ -76,7 +76,7 @@ public class TraceIdFilterTest extends AbstractKiekerTest {
 				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
-		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.producesNothing());
+		Assert.assertThat(traceidFilter.getOutputPort(), StageTester.producesNothing());
 		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
 	}
 
@@ -110,7 +110,7 @@ public class TraceIdFilterTest extends AbstractKiekerTest {
 				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
-		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
+		Assert.assertThat(traceidFilter.getOutputPort(), StageTester.produces(traceEvents));
 		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.producesNothing());
 	}
 
@@ -134,7 +134,7 @@ public class TraceIdFilterTest extends AbstractKiekerTest {
 				.send(traceEvents).to(traceidFilter.getInputPort()).and()
 				.start();
 
-		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
+		Assert.assertThat(traceidFilter.getOutputPort(), StageTester.produces(traceEvents));
 		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.producesNothing());
 	}
 }

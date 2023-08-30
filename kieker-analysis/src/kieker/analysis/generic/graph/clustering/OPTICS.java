@@ -195,7 +195,6 @@ public class OPTICS<T> {
 			while (!seeds.isEmpty()) {
 
 				final OpticsData<T> model2 = seeds.poll();
-				// TODO better naming
 				final List<OpticsData<T>> neighbors2 = this.getNeighbors(model2);
 				this.updateCoreDistance(model2);
 

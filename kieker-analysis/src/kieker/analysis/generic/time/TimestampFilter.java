@@ -60,7 +60,6 @@ public class TimestampFilter extends CompositeStage {
 	 *            The upper limit for the time stamps of the records.
 	 */
 	public TimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
-
 		// Instantiate internal stages
 		final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<>(
 				OperationExecutionRecord.class);

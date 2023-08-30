@@ -142,7 +142,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 *         ignoreBeforeTimestamp and ignoreAfterTimestamp.
 	 */
 	private final boolean inRange(final long timestamp) {
-		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
+		return timestamp >= this.ignoreBeforeTimestamp && timestamp <= this.ignoreAfterTimestamp;
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors",
