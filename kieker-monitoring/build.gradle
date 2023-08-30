@@ -98,6 +98,11 @@ dependencies {
 	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 	
 	implementation 'ch.usi.dag:disl:1.0-SNAPSHOT'
+	implementation 'org.ow2.asm:asm:9.5'
+	implementation 'org.ow2.asm:asm-tree:9.5'
+	implementation 'org.ow2.asm:asm-analysis:9.5'
+	implementation 'org.ow2.asm:asm-commons:9.5'
+	implementation 'org.ow2.asm:asm-util:9.5'
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"

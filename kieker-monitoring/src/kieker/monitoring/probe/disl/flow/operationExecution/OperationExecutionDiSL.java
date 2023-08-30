@@ -28,7 +28,7 @@ public class OperationExecutionDiSL {
 	static Stack<OperationStartData> stack;
 	
 	@Before(marker = BodyMarker.class, scope = "MonitoredClass*.*")
-	public static void beforemain(final MethodStaticContext msc, ClassStaticContext c) {
+	public static void beforemain(final KiekerStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
 		final String VMNAME = CTRLINST.getHostname();
@@ -38,7 +38,7 @@ public class OperationExecutionDiSL {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final String operationSignature = msc.thisMethodFullName();
+		final String operationSignature = c.operationSignature();
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
@@ -77,7 +77,7 @@ public class OperationExecutionDiSL {
 	}
 
 	@After(marker = BodyMarker.class, scope = "MonitoredClass*.*")
-	public static void aftermain(final MethodStaticContext msc, ClassStaticContext c) {
+	public static void aftermain(final KiekerStaticContext c) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
 		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
@@ -86,7 +86,7 @@ public class OperationExecutionDiSL {
 			return;
 		}
 
-		final String operationSignature = msc.thisMethodFullName();
+		final String operationSignature = c.operationSignature();
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
