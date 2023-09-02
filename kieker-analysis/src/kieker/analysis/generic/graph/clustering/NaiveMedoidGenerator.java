@@ -76,7 +76,7 @@ public class NaiveMedoidGenerator<T> extends AbstractTransformation<Clustering<T
 			this.outputPort.send(medoid);
 		}
 
-		this.logger.info("mediod generated");
+		this.logger.debug("mediod generated");
 	}
 
 }

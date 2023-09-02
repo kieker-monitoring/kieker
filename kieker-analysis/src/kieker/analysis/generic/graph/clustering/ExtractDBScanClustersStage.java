@@ -44,8 +44,8 @@ public class ExtractDBScanClustersStage<T>
 
 		this.logger.debug("received optics result");
 		for (final OpticsData<T> model : opticsResults) {
-			this.logger.debug(Double.toString(model.getReachabilityDistance()) + " and core: "
-					+ Double.toString(model.getCoreDistance()));
+			this.logger.debug("{} and core: {}", Double.toString(model.getReachabilityDistance()),
+					Double.toString(model.getCoreDistance()));
 		}
 		final Clustering<T> clustering = new Clustering<>();
 
@@ -67,7 +67,7 @@ public class ExtractDBScanClustersStage<T>
 				currentCluster.add(model.getData());
 			}
 		}
-		this.logger.info("generated " + clustering.getClusters().size() + " clusters.");
+		this.logger.debug("generated {} clusters.", clustering.getClusters().size());
 
 		this.getOutputPort().send(clustering);
 	}

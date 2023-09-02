@@ -57,7 +57,7 @@ public class MedoidGenerator<T> extends AbstractTransformation<Clustering<T>, T>
 
 			this.outputPort.send(trimed.calculate());
 		}
-		this.logger.info("gernerated all mediods of a clustering");
+		this.logger.debug("gernerated all mediods of a clustering");
 	}
 
 }

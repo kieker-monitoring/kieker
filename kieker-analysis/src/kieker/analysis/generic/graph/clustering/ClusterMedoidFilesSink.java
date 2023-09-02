@@ -69,7 +69,7 @@ public class ClusterMedoidFilesSink<T> extends AbstractConsumerStage<T> {
 		final Path numberedFilename = Paths.get(this.path.toString() + "_medoid_" + this.clusterNumber);
 		this.clusterNumber++;
 
-		this.logger.info("Write cluster medoid to " + numberedFilename);
+		this.logger.info("Write cluster medoid to {}", numberedFilename);
 		try (final BufferedWriter bw = Files.newBufferedWriter(numberedFilename)) {
 			this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 			this.objectMapper.writeValue(bw, model);
