@@ -80,7 +80,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 	}
 
 	@Test
-	public void test() {  // NOPMD uses MAtcherAssert
+	public void test() { // NOPMD uses MAtcherAssert
 
 		final List<OpticsData<MutableNetwork<INode, IEdge>>> opticsPlot = OpticsStageTest.runClusterStage(this.models, this.mTree);
 		// check, that no models are lost
@@ -111,7 +111,7 @@ public class OpticsStageTest { // NOCS test class does not need a constructor
 		mTreeInputList.add(mTree);
 
 		// these are the clustering arguments
-		final OpticsStage<INode, IEdge> optics = new OpticsStage<>(0, 4);
+		final OpticsStage<MutableNetwork<INode, IEdge>> optics = new OpticsStage<>(0, 4);
 
 		final List<List<OpticsData<MutableNetwork<INode, IEdge>>>> solutions = new ArrayList<>();
 

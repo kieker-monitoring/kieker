@@ -15,11 +15,6 @@
  ***************************************************************************/
 package kieker.analysis.generic.graph.clustering;
 
-import com.google.common.graph.MutableNetwork;
-
-import kieker.analysis.generic.graph.IEdge;
-import kieker.analysis.generic.graph.INode;
-
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
@@ -30,35 +25,33 @@ import teetime.framework.OutputPort;
  * Then, the optics algorithm sorts the models and assigns reachability-distances The
  * ExtractDBScanClusters stage is used to extract the clusters from the optisc result
  *
- * @param <N>
- *            node type
- * @param <E>
- *            edge type
+ * @param <T>
+ *            optics data type
  *
  * @author Lars Jürgensen
  * @since 2.0.0
  */
-public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends CompositeStage {
+public class ClusteringCompositeStage<T> extends CompositeStage {
 
-	private final InputPort<OpticsData<MutableNetwork<N, E>>> inputPort;
+	private final InputPort<OpticsData<T>> inputPort;
 	private final InputPort<Long> timerInputPort;
-	private final OutputPort<Clustering<MutableNetwork<N, E>>> outputPort;
+	private final OutputPort<Clustering<T>> outputPort;
 
 	public ClusteringCompositeStage(final double clusteringDistance, final int minPts, final Integer maxAmount,
-			final OPTICSDataGED<MutableNetwork<N, E>> distanceFunction) {
+			final OPTICSDataGED<T> distanceFunction) {
 
-		final DataCollectorStage<OpticsData<MutableNetwork<N, E>>> dataCollectorStage;
+		final DataCollectorStage<OpticsData<T>> dataCollectorStage;
 		if (maxAmount != null) {
 			dataCollectorStage = new DataCollectorStage<>(maxAmount);
 		} else {
 			dataCollectorStage = new DataCollectorStage<>();
 		}
 
-		final MTreeGeneratorStage<OpticsData<MutableNetwork<N, E>>> mTreeGeneratorStage = new MTreeGeneratorStage<>(distanceFunction);
+		final MTreeGeneratorStage<OpticsData<T>> mTreeGeneratorStage = new MTreeGeneratorStage<>(distanceFunction);
 
-		final OpticsStage<N, E> opticsStage = new OpticsStage<>(clusteringDistance, minPts);
+		final OpticsStage<T> opticsStage = new OpticsStage<>(clusteringDistance, minPts);
 
-		final ExtractDBScanClustersStage<MutableNetwork<N, E>> clustering = new ExtractDBScanClustersStage<>(clusteringDistance);
+		final ExtractDBScanClustersStage<T> clustering = new ExtractDBScanClustersStage<>(clusteringDistance);
 
 		this.timerInputPort = dataCollectorStage.getTimeTriggerInputPort();
 
@@ -73,7 +66,7 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 		this.outputPort = clustering.getOutputPort();
 	}
 
-	public InputPort<OpticsData<MutableNetwork<N, E>>> getInputPort() {
+	public InputPort<OpticsData<T>> getInputPort() {
 		return this.inputPort;
 	}
 
@@ -81,7 +74,7 @@ public class ClusteringCompositeStage<N extends INode, E extends IEdge> extends 
 		return this.timerInputPort;
 	}
 
-	public OutputPort<Clustering<MutableNetwork<N, E>>> getOutputPort() {
+	public OutputPort<Clustering<T>> getOutputPort() {
 		return this.outputPort;
 	}
 
