@@ -13,22 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+public class TrimmedAlgorithmTest {
 
-	private final IDistanceFunction<T> distanceFunction;
+	// 2 is the best candidate, while 3 has the same distance, it comes later so the first best candidate is selected
+	private static final Object BEST_CANDIDATE = 2;
 
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
-	}
+	@Test
+	public void testCalculation() {
+		final Integer[] models = { 1, 2, 3, 5 };
+		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<Integer>() {
 
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
+			@Override
+			public double calculate(final Integer data1, final Integer data2) {
+				return Math.abs(data1 - data2);
+			}
+
+		};
+		final TrimmedAlgorithm<Integer> algorithm = new TrimmedAlgorithm<>(models, distanceFunction);
+		Assert.assertEquals(BEST_CANDIDATE, algorithm.calculate());
 	}
 
 }

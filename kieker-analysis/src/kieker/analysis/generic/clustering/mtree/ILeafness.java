@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+import kieker.analysis.exception.InternalErrorException;
+import kieker.analysis.generic.clustering.mtree.nodes.AbstractNode;
+import kieker.analysis.generic.clustering.mtree.nodes.IndexItem;
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+public interface ILeafness<DATA> {
+	void doAddData(DATA data, double distance) throws InternalErrorException;
 
-	private final IDistanceFunction<T> distanceFunction;
+	void addChild(IndexItem<DATA> child, double distance) throws InternalErrorException;
 
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
-	}
+	boolean doRemoveData(DATA data, double distance) throws InternalErrorException;
 
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
-	}
+	AbstractNode<DATA> newSplitNodeReplacement(DATA data);
 
+	void checkChildClass(IndexItem<DATA> child);
 }

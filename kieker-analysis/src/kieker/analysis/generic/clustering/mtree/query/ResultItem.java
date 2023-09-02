@@ -13,22 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree.query;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+/**
+ * The type of the results for nearest-neighbor queries.
+ *
+ * @param <T>
+ *            data type of the result item
+ * 
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
+public final class ResultItem<T> {
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+	/** A nearest-neighbor. */
+	private final T data;
 
-	private final IDistanceFunction<T> distanceFunction;
+	/**
+	 * The distance from the nearest-neighbor to the query data object
+	 * parameter.
+	 */
+	private final double distance;
 
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
+	public ResultItem(final T data, final double distance) {
+		this.data = data;
+		this.distance = distance;
 	}
 
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
+	public T getData() {
+		return this.data;
 	}
 
+	public double getDistance() {
+		return this.distance;
+	}
 }

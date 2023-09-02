@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree.nodes;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+/**
+ * @param <T>
+ *            data element type
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
+public abstract class AbstractNodeTrait<T> {
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+	protected AbstractNode<T> thisNode;
 
-	private final IDistanceFunction<T> distanceFunction;
-
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
-	}
-
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
+	public AbstractNodeTrait(final AbstractNode<T> thisNode) {
+		this.thisNode = thisNode;
 	}
 
 }
