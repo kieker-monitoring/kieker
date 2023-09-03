@@ -16,7 +16,7 @@
 
 package kieker.monitoring.probe.aspectj.operationExecution;
 
-public final class OperationStartData {
+public class OperationStartData {
 	private final boolean entrypoint;
 	private final String sessionId;
 	private final long traceId;
