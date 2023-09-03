@@ -22,16 +22,16 @@ import com.google.common.graph.NetworkBuilder;
 
 import kieker.analysis.behavior.events.EntryCallEvent;
 import kieker.analysis.exception.InternalErrorException;
+import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
+import kieker.analysis.generic.clustering.mtree.MTree;
+import kieker.analysis.generic.clustering.optics.OpticsData;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.BasicCostFunction;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
 import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
-import kieker.analysis.generic.graph.clustering.OpticsData;
 import kieker.analysis.generic.graph.impl.EdgeImpl;
 import kieker.analysis.generic.graph.impl.NodeImpl;
-import kieker.analysis.generic.graph.mtree.IDistanceFunction;
-import kieker.analysis.generic.graph.mtree.MTree;
 
 /**
  *

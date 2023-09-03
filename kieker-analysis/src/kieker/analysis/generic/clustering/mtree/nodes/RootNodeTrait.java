@@ -13,22 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree.nodes;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+import kieker.analysis.exception.InternalErrorException;
+import kieker.analysis.generic.clustering.mtree.IRootness;
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+/**
+ * @param <T>
+ *            data element type
+ *
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
+public class RootNodeTrait<T> extends AbstractNodeTrait<T> implements IRootness {
 
-	private final IDistanceFunction<T> distanceFunction;
-
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
+	public RootNodeTrait(final AbstractNode<T> thisNode) {
+		super(thisNode);
 	}
 
 	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
+	public int getMinCapacity() throws InternalErrorException {
+		throw new InternalErrorException("Should not be called!");
 	}
 
+	@Override
+	public void checkDistanceToParent() {
+		assert this.thisNode.getDistanceToParent() == -1;
+	}
+
+	@Override
+	public void checkMinCapacity() {
+		this.thisNode.checkMinCapacity();
+	}
 }

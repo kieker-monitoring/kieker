@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+import java.util.Arrays;
+import java.util.List;
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
+import org.junit.Test;
 
-	private final IDistanceFunction<T> distanceFunction;
+import kieker.analysis.generic.clustering.ClusteringHelper;
 
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
-	}
+import teetime.framework.test.StageTester;
 
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
+public class MTreeGeneratorStageTest { // NOCS tests do not need constructors
+
+	@Test
+	public void testMTreeGeneratorStage() {
+		final List<Integer> list = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 10, 12, 15 });
+		final IDistanceFunction<Integer> distanceFunction = ClusteringHelper.integerDistanceFunction();
+		final MTreeGeneratorStage<Integer> stage = new MTreeGeneratorStage<>(distanceFunction);
+		StageTester.test(stage).and().send(list, list).to(stage.getInputPort()).start();
 	}
 
 }

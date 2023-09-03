@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (c) 2012-2013 Eduardo R. D'Avila (https://github.com/erdavila)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.graph.clustering;
+package kieker.analysis.generic.clustering.mtree;
 
-import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
-import kieker.analysis.generic.clustering.optics.OpticsData;
+/**
+ * An object that can calculate the distance between two data objects.
+ *
+ * @param <T>
+ *            The type of the data objects.
+ * 
+ * @author Eduardo R. D'Avila
+ * @since 2.0.0
+ */
+public interface IDistanceFunction<T> {
 
-public class OPTICSDataGED<T> implements IDistanceFunction<OpticsData<T>> {
-
-	private final IDistanceFunction<T> distanceFunction;
-
-	public OPTICSDataGED(final IDistanceFunction<T> distanceFunction) {
-		this.distanceFunction = distanceFunction;
-	}
-
-	@Override
-	public double calculate(final OpticsData<T> model1, final OpticsData<T> model2) {
-		return this.distanceFunction.calculate(model1.getData(), model2.getData());
-	}
+	double calculate(T data1, T data2);
 
 }

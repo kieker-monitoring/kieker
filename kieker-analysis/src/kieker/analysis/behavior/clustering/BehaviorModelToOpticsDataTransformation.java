@@ -17,11 +17,11 @@ package kieker.analysis.behavior.clustering;
 
 import com.google.common.graph.MutableNetwork;
 
+import kieker.analysis.generic.clustering.optics.OpticsData;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
-import kieker.analysis.generic.graph.clustering.OpticsData;
 
 import teetime.stage.basic.AbstractTransformation;
 

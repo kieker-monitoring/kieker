@@ -19,9 +19,9 @@ import java.util.Optional;
 
 import com.google.common.graph.MutableNetwork;
 
+import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.mtree.IDistanceFunction;
 
 /**
  * This class calculates a custom graph edit distance between two Behavior Models.

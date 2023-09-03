@@ -19,7 +19,7 @@ import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.INode;
 
 /**
- * Generic cost function implementation.
+ * Generic cost function implementation for graphs.
  *
  * @author Reiner Jung
  *

@@ -24,13 +24,13 @@ import kieker.analysis.behavior.clustering.BehaviorModelToOpticsDataTransformati
 import kieker.analysis.behavior.clustering.UserBehaviorCostFunction;
 import kieker.analysis.behavior.model.EntryCallEventSerializer;
 import kieker.analysis.behavior.model.UserBehaviorEdge;
+import kieker.analysis.generic.clustering.ClusterMedoidFilesSink;
+import kieker.analysis.generic.clustering.Clustering;
+import kieker.analysis.generic.clustering.ClusteringCompositeStage;
+import kieker.analysis.generic.clustering.ClusteringFileSink;
+import kieker.analysis.generic.clustering.NaiveMedoidGenerator;
 import kieker.analysis.generic.graph.INode;
-import kieker.analysis.generic.graph.clustering.ClusterMedoidFilesSink;
-import kieker.analysis.generic.graph.clustering.Clustering;
-import kieker.analysis.generic.graph.clustering.ClusteringCompositeStage;
-import kieker.analysis.generic.graph.clustering.ClusteringFileSink;
 import kieker.analysis.generic.graph.clustering.GraphEditDistance;
-import kieker.analysis.generic.graph.clustering.NaiveMedoidGenerator;
 import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 import kieker.analysis.util.stage.trigger.TerminationStage;
 import kieker.common.exception.ConfigurationException;
@@ -67,8 +67,9 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 
 		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation =
 				new BehaviorModelToOpticsDataTransformation<>(distanceFunction);
-		final ClusteringCompositeStage<INode, UserBehaviorEdge> clusteringCompositeStage = new ClusteringCompositeStage<>(settings.getClusteringDistance(),
-				settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
+		final ClusteringCompositeStage<MutableNetwork<INode, UserBehaviorEdge>> clusteringCompositeStage =
+				new ClusteringCompositeStage<>(settings.getClusteringDistance(),
+						settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		// TODO needed to use this during online runtime.
