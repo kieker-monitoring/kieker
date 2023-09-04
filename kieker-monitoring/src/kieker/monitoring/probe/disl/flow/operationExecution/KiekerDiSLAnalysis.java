@@ -20,7 +20,7 @@ public class KiekerDiSLAnalysis {
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
-	static DiSLOperationStartData operationStart(final String operationSignature) {
+	public static DiSLOperationStartData operationStart(final String operationSignature) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
 		final String VMNAME = CTRLINST.getHostname();
@@ -63,7 +63,7 @@ public class KiekerDiSLAnalysis {
 		return data;
 	}
 
-	static void operationEnd(DiSLOperationStartData startData) {
+	public static void operationEnd(DiSLOperationStartData startData) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
