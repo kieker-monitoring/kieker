@@ -23,11 +23,3 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 }
 
-
-task replaceHardCodedVersionNames() {
-	doLast {
-		regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
-	}
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames

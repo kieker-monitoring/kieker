@@ -167,20 +167,6 @@ sourceSets {
 	}
 }
 
-configurations {
-	jarIntegrationTestImplementation.extendsFrom testImplementation
-	jarIntegrationTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
-task jarIntegrationTest(type: Test) {
-	description = 'Runs integration tests.'
-	group = 'verification'
-
-	testClassesDirs = sourceSets.jarIntegrationTest.output.classesDirs
-	classpath = sourceSets.jarIntegrationTest.runtimeClasspath
-	dependsOn rootProject.aspectJJar
-}
-
 def resolveLibrary(String library) {
 def libraryDir = rootProject.file(dirLib)
 return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
