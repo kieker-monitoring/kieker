@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'java-library'
+	id 'eclipse'
 }
 
 sourceCompatibility = 1.8
@@ -54,11 +55,26 @@ dependencies {
 	api 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	// Use JUnit test framework
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
 
 	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+    classpath {
+        file {
+            whenMerged { classpath ->
+                classpath.entries.removeAll { entry ->
+                    entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+                        && entry.path == '/kieker-common'
+                        && entry.entryAttributes['test']
+                }
+            }
+        }
+    }
 }
