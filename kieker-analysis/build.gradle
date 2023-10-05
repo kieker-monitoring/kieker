@@ -76,5 +76,6 @@ eclipse {
                 }
             }
         }
+        containsTestFixtures = true
     }
 }
