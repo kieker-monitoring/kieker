@@ -116,6 +116,11 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 				this.createRecord(outputPort);
 				mark = i;
 			} else if (ch == '\r') {
+				if (i + 1 == numOfBufferedBytes) {
+					// end of the line has not been reached but it will be tried to go over the buffer.
+					// this cannot be allowed, returning the mark prematurely will allow the buffer to read the line again.
+					return mark;
+				}
 				if (buffer[i + 1] == '\n') {
 					i++;
 				}
