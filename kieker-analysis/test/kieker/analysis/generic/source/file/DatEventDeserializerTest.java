@@ -74,16 +74,4 @@ public class DatEventDeserializerTest {
         //  internal code of the class does not reach the point where the OutputPort.send Method is called.
     }
 
-    private static String stringWithCharacterLength(final int bufferSize) {
-        char[] chars = new char[bufferSize * 2];
-        for (int i = 0; i < chars.length; i++) {
-            if ((i + 1) % 25 == 0) {
-                chars[i] = '\r';
-            } else {
-                chars[i] = 'a';
-            }
-        }
-        return new String(chars);
-    }
-
 }
