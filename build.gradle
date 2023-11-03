@@ -113,45 +113,56 @@ subprojects {
     }
   }
 
-  test {
-    exclude '**/ProbeControllerTest.class'
-    exclude '**/WriterControllerTest.class'
-    exclude '**/SystemMilliTimerTest.class'
-    exclude '**/SystemNanoTimerTest.class'
-    exclude '**/DeflateCompressionFilterTest.class'
-    exclude '**/GZipCompressionFilterTest.class'
-    exclude '**/NoneCompressionFilterTest.class'
-    exclude '**/ZipCompressionFilterTest.class'
-    exclude '**/AsciiFileWriterTest.class'
-    exclude '**/BinaryLogStreamHandlerTest.class'
-    exclude '**/GenericBinaryFileWriterTest.class'
-    exclude '**/TextLogStreamHandlerTest.class'
-    exclude '**/InfluxDBWriterFailingTest.class'
-    exclude '**/TestPipeWriter.class'
-    exclude '**/SocketChannelTest.class'
-    exclude '**/MonitoringWriterThreadTest.class'
-    exclude '**/TestJMXInterface.class.class'
-    exclude '**/TestControllerConstruction.class'
-    exclude '**/TestAutoSetLoggingTimestamp.class'
-    exclude '**/TestMonitoringControllerStateTransitions.class'
-    exclude '**/TestMonitoringControllerRecordsPassedInMonitoringStates.class'
-    exclude '**/TestConfigurationFactoryMethods.class'
-    exclude '**/TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class'
-    exclude '**/TestCXFClientServerInterceptorsSessionRegisteredBefore.class'
-    exclude '**/TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class'
-    exclude '**/TestSpringMethodInterceptorInterceptorIsEntryPoint.class'
-    exclude '**/TestSpringMethodInterceptor.class'
-    exclude '**/TestCXFClientServerInterceptors.class'
-    exclude '**/TestGCSampler.class'
-    exclude '**/XZCompressionFilterTest.class'
-    exclude '**/TcpRecordReaderTest.class'
-    exclude '**/TestPatternParser.class'
-    exclude '**/TestProbeController.class'
-    exclude '**/TestPeriodicSampling.class'
-    exclude '**/BinaryFileWriterTest.class'
-    exclude '**/GenericTextFileWriterTest.class'
-    exclude '**/AsciiFileWriterTest.class'
+  exclude '**/AsciiFileWriterTest.class'
+  exclude '**/GenericTextFileWriterTest.class'
+  exclude '**/BinaryFileWriterTest.class'
+  exclude '**/GenericBinaryFileWriterTest.class'
+  exclude '**/TestPeriodicSampling.class'
+  exclude '**/TestCompilationSampler.class'
+  exclude '**/TestClassLoadingSampler.class'
+  exclude '**/TestMemorySampler.class'
+  exclude '**/TestThreadsStatusSampler.class'
+  exclude '**/TestGCSampler.class'
+  exclude '**/TestUptimeSampler.class'
+  exclude '**/TestProbeController.class'
+  exclude '**/TestCPUsCombinedPercSampler.class'
+  exclude '**/TestCPUsDetailedPercSampler.class'
+  exclude '**/TestMemSwapUsageSampler.class'
+  exclude '**/TestPatternParser.class'
+  exclude '**/TcpRecordReaderTest.class'
+  exclude '**/TestChunkingCollector.class'
+  exclude '**/XZCompressionFilterTestexclude'
+  exclude '**/SingleSocketTcpWriterTest.class'
+  exclude '**/ProbeControllerTest.class'
+  exclude '**/TestAutoSetLoggingTimestamp.class'
+  exclude '**/WriterControllerTest.class'
+  exclude '**/TCPControllerTest.class'
+  exclude '**/TestMonitoringControllerRecordsPassedInMonitoringStates.class'
+  exclude '**/SystemMilliTimerTest.class'
+  exclude '**/SystemNanoTimerTest.class'
+  exclude '**/MonitoringWriterThreadTest.class'
+  exclude '**/TestPipeWriter.class'
+  exclude '**/TestMonitoringControllerStateTransitions.class'
+  exclude '**/TestConfigurationFactoryMethods.class'
+  exclude '**/TestControllerConstruction.class'
+  exclude '**/TestSpringMethodInterceptorInterceptorIsEntryPoint.class'
+  exclude '**/ZipCompressionFilterTest.class'
+  exclude '**/DeflateCompressionFilterTest.class'
+  exclude '**/GZipCompressionFilterTest.class'
+  exclude '**/SocketChannelTest.class'
+  exclude '**/TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class'
+  exclude '**/TestJMXInterface.class'
+  exclude '**/NoneCompressionFilterTest.class'
+  exclude '**/BinaryLogStreamHandlerTest.class'
+  exclude '**/TextLogStreamHandlerTest.class'
+  exclude '**/TestSpringMethodInterceptor.class'
+  exclude '**/kieker.monitoring.writer.influxdb.InfluxDBWriterFailingTest.class'
+  exclude '**/TestCXFClientServerInterceptors.class'
+  exclude '**/TestSpringMethodInterceptor.class'
+  exclude '**/TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class'
+  exclude '**/TestCXFClientServerInterceptorsSessionRegisteredBefore.class'
 
+  test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 
     systemProperty "java.io.tmpdir", "${buildDir}"
@@ -548,7 +559,7 @@ task replaceHardCodedVersionNames() {
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
     regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
     regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
-    regexpReplaceInFiles(project.file("kieker-documentation/conf.py"), "release = '.*'", "release = '${version}'")
+
   }
 }
 compileJava.dependsOn replaceHardCodedVersionNames
@@ -567,6 +578,11 @@ def reportingCompatibleJavaVersionPresent() {
 
 def resolveRelativeToParent(String directory, String file) {
   return rootProject.file(directory + '/' + file)
+}
+
+def resolveLibrary(String library) {
+  def libraryDir = rootProject.file(dirLib)
+  return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
 }
 
 def today() {
