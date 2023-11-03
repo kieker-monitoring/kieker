@@ -115,6 +115,9 @@ subprojects {
 
   test {
 
+    exclude 'test/kieker/analysis/**'
+    exclude 'test/kieker/test.analysis/**'
+
     exclude '**/AsciiFileWriterTest.class'
     exclude '**/GenericTextFileWriterTest.class'
     exclude '**/BinaryFileWriterTest.class'
