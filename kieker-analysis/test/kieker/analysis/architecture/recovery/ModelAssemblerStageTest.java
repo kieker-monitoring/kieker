@@ -28,7 +28,7 @@ import teetime.framework.test.StageTester;
  * @author Reiner Jung
  * @since 2.0.0
  */
-class ModelAssemblerStageTest {
+public class ModelAssemblerStageTest {
 
 	private static final String HOST_NAME = "host";
 	private static final String COMPONENT_NAME = "component";

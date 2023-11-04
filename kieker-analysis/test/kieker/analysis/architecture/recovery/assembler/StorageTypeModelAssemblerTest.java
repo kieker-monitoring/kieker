@@ -31,7 +31,7 @@ import kieker.model.analysismodel.type.TypeModel;
  * @author Reiner Jung
  * @since 1.3.0
  */
-class StorageTypeModelAssemblerTest {
+public class StorageTypeModelAssemblerTest {
 
 	private static final String SOURCE_LABEL = "test";
 	private static final String HOSTNAME = "host";
