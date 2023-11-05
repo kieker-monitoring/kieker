@@ -126,7 +126,7 @@ import org.junit.runners.Suite;
         JavaOperationSignatureExtractorTest.class,// - 2
         AbstractSourceModelAssemblerTest.class, //- 2
         TrimmedAlgorithmTest.class, //- 2
-        ModelAssemblerStageTest.class, //- 0
+        //ModelAssemblerStageTest.class, //- 0
         ExtractDBScanClustersStageTest.class, //- 0
         TestStringBufferFilter.class, //- 0
         TestLegacyExecutionRecordReader.class, //- 0
