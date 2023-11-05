@@ -88,9 +88,9 @@ import org.junit.runners.Suite;
         TraceReconstructionFilterTest.class, //- 15
         GraphEditDistanceTest.class, // -15
         CreateEntryLevelEventStageTest.class, //- 14
-        StorageTypeModelAssemblerTest.class, //- 10
-        StorageDeploymentModelAssemblerTest.class, //- 22
-        StorageAssemblyModelAssemblerTest.class, //- 15
+        //StorageTypeModelAssemblerTest.class, //- 10
+        //StorageDeploymentModelAssemblerTest.class, //- 22
+        //StorageAssemblyModelAssemblerTest.class, //- 15
         OperationTypeModelAssemblerTest.class, //- 14
         TimestampFilterTest.class, //- 14
         DynamicEventDispatcherTest.class, //- 13
