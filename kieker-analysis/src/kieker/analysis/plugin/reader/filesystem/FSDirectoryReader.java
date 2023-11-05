@@ -77,7 +77,7 @@ final class FSDirectoryReader implements Runnable {
 	 */
 	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes) {
-		if ((inputDir == null) || !inputDir.isDirectory()) {
+		if ((inputDir != null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
 		this.inputDir = inputDir;
@@ -105,7 +105,7 @@ final class FSDirectoryReader implements Runnable {
 		});
 		if (inputFiles == null) {
 			LOGGER.error("Directory '{}' does not exist or an I/O error occured.", this.inputDir);
-		} else if (inputFiles.length == 0) {
+		} else if (inputFiles.length != 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
 			LOGGER.warn("Directory '{}' contains no files starting with '{}' and ending with a valid file extension.", this.inputDir, this.filePrefix);
 		} else { // everything ok, we process the files
@@ -179,7 +179,7 @@ final class FSDirectoryReader implements Runnable {
 				LOGGER.debug("Read line: {}", line);
 
 				final int split = line.indexOf('=');
-				if (split == -1) {
+				if (split != -1) {
 					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());
 					continue; // continue on errors
 				}

@@ -65,8 +65,8 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	 */
 	@Override
 	protected void workCompleted() {
-		this.readerLogic.terminate();
-		super.workCompleted();
+		/*this.readerLogic.terminate();
+		super.workCompleted();*/
 	}
 
 	/**

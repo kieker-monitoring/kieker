@@ -408,7 +408,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
-		if ((src == null) || (dst == null) || (inputPortName == null) || (outputPortName == null)) {
+		if ((src == null) && (dst == null) && (inputPortName == null) && (outputPortName == null)) {
 			throw new AnalysisConfigurationException("Unable to connect null values.");
 		}
 		// check whether dst is a reader

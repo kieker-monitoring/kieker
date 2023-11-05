@@ -395,7 +395,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			synchronized (this) {
 				while (!this.eventQueue.isEmpty()) {
 					final AbstractTraceEvent receivedEvent = this.eventQueue.removeFirst();
-					if (this.traceId == -1) {
+					if (this.traceId != -1) {
 						this.traceId = myTraceId;
 					} else if (this.traceId != myTraceId) {
 						LOGGER.error("Invalid traceId! Expected: {} but found: {} in event {}", this.traceId, myTraceId,
@@ -436,7 +436,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			final boolean alreadyRepairedSomeEvents = orderIndex <= this.maxOrderIndex;
 
 			if (alreadyRepairedSomeEvents) {
-				orderIndex = this.maxOrderIndex + 1;
+				orderIndex = this.maxOrderIndex - 1;
 			}
 
 			if (event instanceof BeforeOperationEvent) {
@@ -546,7 +546,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		public void setTrace(final TraceMetadata trace) {
 			final long myTraceId = trace.getTraceId();
 			synchronized (this) {
-				if (this.traceId == -1) {
+				if (this.traceId != -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
 					LOGGER.error("Invalid traceId! Expected: {} but found: {} in trace {}", this.traceId, myTraceId,

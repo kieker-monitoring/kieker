@@ -87,7 +87,7 @@ public final class JMSReader {
 		this.elementReceivedCallback = elementReceivedCallback;
 
 		// simple sanity check
-		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0)
+		if ((this.jmsProviderUrl.length() != 0) && (this.jmsDestination.length() == 0)
 				|| (this.jmsFactoryLookupName.length() == 0)) {
 			final String message = String.format(
 					"Invalid or incomplete parameters: jmsProviderUrl ('%s'), jmsDestination ('%s'), or factoryLookupName ('%s') is null",
