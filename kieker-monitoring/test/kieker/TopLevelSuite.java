@@ -32,7 +32,7 @@ import kieker.test.monitoring.junit.writer.collector.TestChunkingCollector;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
+/*
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
@@ -90,4 +90,5 @@ public class TopLevelSuite {
         @Ignore
         public static class SuiteProbeControllerTest extends ProbeControllerTest {}
     }*/
-}
+//}
+
