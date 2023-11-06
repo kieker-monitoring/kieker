@@ -220,9 +220,9 @@ final class FSDirectoryReader implements Runnable {
 	private final void processNormalInputFile(final File inputFile) {
 		try {
 			this.textFileStreamProcessor.processInputChannel(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ));
-			this.terminated = true;
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOGGER.error("Error reading {}", inputFile, ex);
+			this.terminated = true;
 		}
 	}
 
