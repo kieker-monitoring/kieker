@@ -33,7 +33,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 public enum Util {
 	; // NOPMD
 
-	public static final File EXAMPLE_PROJECT_FOLDER = new File("test-resources/example-projects-aspectj");
+	public static final File EXAMPLE_PROJECT_FOLDER = new File("integrationTest-resources/example-projects-aspectj");
 
 	/**
 	 * Creates a temporary project folder, containing the example project (for all
