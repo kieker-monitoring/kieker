@@ -34,15 +34,15 @@ task uploadArchives {
 }
 
 eclipse {
-    classpath {
-        file {
-            whenMerged { classpath ->
-                classpath.entries.removeAll { entry ->
-                    entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-                        && ['/kieker-common', '/kieker-tools'].contains(entry.path) 
-                        && entry.entryAttributes['test']
-                }
-            }
-        }
-    }
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
 }

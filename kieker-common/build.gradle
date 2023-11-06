@@ -34,7 +34,7 @@ task replaceHardCodedVersionNames() {
 compileJava.dependsOn replaceHardCodedVersionNames
 
 eclipse {
-    classpath {
-        containsTestFixtures = true
-    }
+	classpath {
+		containsTestFixtures = true
+	}
 }
