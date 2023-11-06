@@ -5,6 +5,10 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.15.3 (November 6, 2023)
+- Fix analysis problem: Allow analysis of multiple files again
+- Fix analysis problem: Correctly interpret timeout for maxTraceDuration
+
 * 1.15.2 (July 6, 2022)
 - Fix security vulnerability sonatype-2020-0926 by update to guava 31.1-jre
 

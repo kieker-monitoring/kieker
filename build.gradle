@@ -490,9 +490,9 @@ task updateLicenseHeaderYear() {
   doLast {
     FileTree tree = fileTree(dir: '.', include: '**/*.java')
     tree.each { File file ->
-      regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2022 Kieker Project')
+      regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2023 Kieker Project')
     }
-    regexpReplaceInFiles(project.file("kieker-common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
+    regexpReplaceInFiles(project.file("kieker-common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2023 Kieker Project')
   }
 }
 
