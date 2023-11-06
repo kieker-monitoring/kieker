@@ -86,7 +86,6 @@ public class ExecutionTrace extends AbstractTrace {
 	 *             ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
-		System.err.println(">> ESS " + execution.toString());
 		synchronized (this) {
 			if (this.getTraceId() != execution.getTraceId()) {
 				throw new InvalidTraceException(
