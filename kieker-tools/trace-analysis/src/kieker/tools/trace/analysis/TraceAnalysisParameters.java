@@ -127,7 +127,7 @@ public class TraceAnalysisParameters {
 	// "duration in ms"
 	@Parameter(names = { "--max-trace-duration" },
 			description = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).")
-	private Long maxTraceDuration;
+	private Long maxTraceDurationMillis;
 
 	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
 	@Parameter(names = { "--ignore-executions-before-date" },
@@ -288,10 +288,10 @@ public class TraceAnalysisParameters {
 	 * @return returns the max trace duration
 	 */
 	public Long getMaxTraceDuration() {
-		if (this.maxTraceDuration == null) {
-			this.maxTraceDuration = (long) (10 * 60 * 1000);
+		if (this.maxTraceDurationMillis == null) {
+			this.maxTraceDurationMillis = (long) (10 * 60 * 1000);
 		}
-		return this.maxTraceDuration;
+		return this.maxTraceDurationMillis;
 	}
 
 	/**
