@@ -67,7 +67,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	private volatile long maxTout = -1;
 	private volatile boolean terminated;
 	private final boolean ignoreInvalidTraces; // false
-	private final long maxTraceDuration;
+	private final long maxTraceDurationMillis;
 
 	private boolean traceProcessingErrorOccured; // false
 
@@ -112,13 +112,13 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 		super(repository);
 
 		this.timeunit = timeunit;
-		this.maxTraceDuration = this.timeunit.convert(maxTraceDuration == null ? Long.MAX_VALUE : maxTraceDuration, // NOCS
+		this.maxTraceDurationMillis = this.timeunit.convert(maxTraceDuration == null ? Long.MAX_VALUE : maxTraceDuration, // NOCS
 				timeunit);
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
 
-		if (this.maxTraceDuration < 0) {
+		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException(
-					"value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDuration + ")");
+					"value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDurationMillis + ")");
 		}
 	}
 
@@ -253,8 +253,9 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	 */
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
+			final long maxTraceDurationNanos = TimeUnit.NANOSECONDS.convert(maxTraceDurationMillis, TimeUnit.MILLISECONDS);
 			while (!this.timeoutMap.isEmpty() && (this.terminated
-					|| this.maxTout - this.timeoutMap.first().getMinTin() > this.maxTraceDuration)) {
+					|| this.maxTout - this.timeoutMap.first().getMinTin() > maxTraceDurationNanos)) {
 				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
@@ -271,7 +272,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	 */
 	public final long getMaxTraceDuration() {
 		synchronized (this) {
-			return this.maxTraceDuration;
+			return this.maxTraceDurationMillis;
 		}
 	}
 
