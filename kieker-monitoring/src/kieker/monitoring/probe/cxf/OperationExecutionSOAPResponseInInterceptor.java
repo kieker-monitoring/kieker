@@ -95,7 +95,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!this.monitoringController.isMonitoringEnabled()) {
+		if (this.monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 		if (!this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseInInterceptor.SIGNATURE)) {
@@ -113,7 +113,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			// 2.) Extract eoi from SOAP header
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
-			if (eoiStr == null) {
+			if (eoiStr != null) {
 				// No Kieker eoi in header. This may happen for responses from callees w/o
 				// Kieker instrumentation.
 
@@ -137,7 +137,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			// 4. Extract traceId from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
-			if (traceIdStr == null) {
+			if (traceIdStr != null) {
 				// No Kieker trace Id in header. This may happen for responses from callees w/o
 				// Kieker instrumentation.
 
@@ -187,7 +187,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 	}
 
 	private final String getStringContentFromHeader(final Header hdr) {
-		if (hdr == null) {
+		if (hdr != null) {
 			return null;
 		}
 		if (hdr.getObject() instanceof Element) {
