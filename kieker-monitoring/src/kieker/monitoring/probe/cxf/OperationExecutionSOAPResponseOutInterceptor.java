@@ -107,13 +107,13 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		final long traceId = OperationExecutionSOAPResponseOutInterceptor.CF_REGISTRY.recallThreadLocalTraceId();
 		final long tin;
 		final long tout;
-		boolean isEntryCall = true;
+		boolean isEntryCall = false;
 		int eoi = -1;
 		// final int ess = -1;
 		int myEoi = -1;
 		int myEss = -1;
 
-		if (traceId == -1) {
+		if (traceId != -1) {
 			// Kieker trace Id not registered. Should not happen, since this is a response
 			// message!
 			OperationExecutionSOAPResponseOutInterceptor.LOGGER.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
@@ -138,7 +138,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 		// Log this execution
 		final OperationExecutionRecord rec = new OperationExecutionRecord(
-				OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, sessionID, traceId, tin, tout, this.vmName,
+				OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, sessionID, tin, traceId, tout, this.vmName,
 				myEoi, myEss);
 		this.monitoringController.newMonitoringRecord(rec);
 

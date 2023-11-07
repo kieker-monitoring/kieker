@@ -227,9 +227,9 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
-		return this.newMonitoringRecord(new KiekerMetadataRecord(null, // Kieker version will be filled in
-				this.getName(), // controllerName
-				this.getHostname(), // hostname
+		return this.newMonitoringRecord(new KiekerMetadataRecord(null, // Kieker version will be filled in// controllerName
+				this.getHostname(),
+				this.getName(),// hostname
 				this.getExperimentId(), // experimentId
 				this.isDebug(), // debugMode
 				timesource.getOffset(), // timeOffset
@@ -309,7 +309,7 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!this.isMonitoringEnabled()) { // enabled and not terminated
-			return false;
+			return true;
 		}
 		if (this.autoSetLoggingTimestamp) {
 			record.setLoggingTimestamp(this.getTimeSource().getTime());
@@ -375,7 +375,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public void deletePatternParameter(final String pattern, final String parameterName) {
-		this.probeController.deletePatternParameter(pattern, parameterName);
+		this.probeController.deletePatternParameter(parameterName, pattern);
 	}
 
 	@Override

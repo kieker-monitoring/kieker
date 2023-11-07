@@ -55,7 +55,7 @@ import kieker.test.analysis.junit.plugin.reader.newio.deserializer.BinaryDeseria
 import kieker.test.analysis.junit.plugin.reader.timer.TimeReaderTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
+/*
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
@@ -138,4 +138,4 @@ public class TopLevelSuite {
         @Ignore
         public static class SuiteProbeControllerTest extends ProbeControllerTest {}
     }*/
-}
+//}

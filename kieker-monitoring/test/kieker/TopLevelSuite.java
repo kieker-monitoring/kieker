@@ -32,63 +32,63 @@ import kieker.test.monitoring.junit.writer.collector.TestChunkingCollector;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-/*
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
-        TestSpringMethodInterceptorInterceptorIsEntryPoint.class,
-        TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class,
-        TestSpringMethodInterceptor.class,
-        ProbeControllerTest.class,
-        TestControllerConstruction.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestCompilationSampler.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestClassLoadingSampler.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestMemorySampler.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestThreadsStatusSampler.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestGCSampler.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean.TestUptimeSampler.class,
-        TestProbeController.class,
-        TestChunkingCollector.class,
-        TestMemSwapUsageSampler.class,
-        TestCPUsDetailedPercSampler.class,
-        TestCPUsCombinedPercSampler.class,
-        TestPeriodicSampling.class,
-        TestMonitoringControllerRecordsPassedInMonitoringStates.class,
-        TestAutoSetLoggingTimestamp.class,
-        TestMonitoringControllerStateTransitions.class,
-        TestPipeWriter.class,
-        GenericBinaryFileWriterTest.class,
-        BinaryFileWriterTest.class,
-        GenericTextFileWriterTest.class,
-        AsciiFileWriterTest.class,
-        WriterControllerTest.class,
-        BinaryLogStreamHandlerTest.class,
-        SingleSocketTcpWriterTest.class,
-        TcpRecordReaderTest.class,
-        TextLogStreamHandlerTest.class,
-        TestConfigurationFactoryMethods.class,
-        TestPatternParser.class,
-        SystemMilliTimerTest.class,
-        SystemNanoTimerTest.class,
-        MonitoringWriterThreadTest.class,
-        ZipCompressionFilterTest.class,
-        XZCompressionFilterTest.class,
-        DeflateCompressionFilterTest.class,
-        NoneCompressionFilterTest.class,
-        GZipCompressionFilterTest.class,
-        TCPControllerTest.class,
-        kieker.test.monitoring.junit.probe.adaptiveMonitoring.cxf.TestCXFClientServerInterceptors.class,
-        kieker.test.monitoring.junit.probe.cxf.executions.TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class,
-        kieker.test.monitoring.junit.probe.cxf.executions.TestCXFClientServerInterceptorsSessionRegisteredBefore.class,
-        TestSpringMethodInterceptor.class,
-        TestJMXInterface.class,
-        SocketChannelTest.class,
-        InfluxDBWriterFailingTest.class
+        ProbeControllerTest.class, // - 175
+        TestSpringMethodInterceptorInterceptorIsNotEntryPoint.class, // - 169
+        TestCXFClientServerInterceptors.class, // - 166
+        TestSpringMethodInterceptorInterceptorIsEntryPoint.class, // - 164
+        TestProbeController.class, // - 163
+        TestPeriodicSampling.class, // - 163
+        TestCXFClientServerInterceptorsNoSessionRegisteredBefore.class, // - 162
+        TestCXFClientServerInterceptorsSessionRegisteredBefore.class, // - 160
+        TestControllerConstruction.class, // - 148
+        TestCPUsDetailedPercSampler.class, // - 145
+        TestClassLoadingSampler.class, // - 138
+        TestGCSampler.class, // - 138
+        TestMemorySampler.class, // - 138
+        TestThreadsStatusSampler.class, // - 138
+        TestUptimeSampler.class, // - 138
+        TestChunkingCollector.class, // - 137
+        TestCompilationSampler.class, // - 136
+        TestMemSwapUsageSampler.class, // - 135
+        TestCPUsCombinedPercSampler.class, // - 134
+        TestMonitoringControllerRecordsPassedInMonitoringStates.class, // - 113
+        TestPipeWriter.class, // - 111
+        TestAutoSetLoggingTimestamp.class, // - 111
+        WriterControllerTest.class, // - 35
+        BinaryFileWriterTest.class, // - 33
+        GenericBinaryFileWriterTest.class, // - 33
+        AsciiFileWriterTest.class, // - 31
+        GenericTextFileWriterTest.class, // - 31
+        TcpRecordReaderTest.class, // - 24
+        TestPatternParser.class, // - 20
+        SingleSocketTcpWriterTest.class, // - 14
+        SystemNanoTimerTest.class, // - 10
+        SystemMilliTimerTest.class, // - 10
+        TestConfigurationFactoryMethods.class, // - 10
+        MonitoringWriterThreadTest.class, // - 9
+        DeflateCompressionFilterTest.class, // - 8
+        NoneCompressionFilterTest.class, // - 8
+        XZCompressionFilterTest.class, //- 8
+        GZipCompressionFilterTest.class, // - 8
+        ZipCompressionFilterTest.class, // - 8
+        BinaryLogStreamHandlerTest.class, // - 8
+        TextLogStreamHandlerTest.class, // - 7
+        TCPControllerTest.class, // - 2
+        TextLogStreamHandlerTest.class, // - 0
+        InfluxDBWriterFailingTest.class, //- 0
+        SocketChannelTest.class, // - 0
+        TestJMXInterface.class, // - 0
+        TestMonitoringControllerStateTransitions.class, // - 0
+        TestSpringMethodInterceptor.class, // - 0
 })
 public class TopLevelSuite {
     /*static class InSuiteOnly {
         @Ignore
         public static class SuiteProbeControllerTest extends ProbeControllerTest {}
     }*/
-//}
+}
 

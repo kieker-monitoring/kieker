@@ -71,11 +71,11 @@ public class CPUMemUsageServletContextListener extends AbstractRegularSamplingSe
 	private static final String CONTEXT_PARAM_NAME_PREFIX = CPUMemUsageServletContextListener.class.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl.
+	private static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl.
 																										// order)
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
+	private static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
 																												// (decl.
 																												// order)
 			+ ".initialSamplingDelaySeconds";

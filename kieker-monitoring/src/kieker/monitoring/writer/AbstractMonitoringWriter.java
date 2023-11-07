@@ -69,7 +69,7 @@ public abstract class AbstractMonitoringWriter {
 			sb.append("\n\t\tNo Configuration");
 		} else {
 			for (final String property : keys) {
-				if (property.startsWith(this.getClass().getName())) {
+				if (!property.startsWith(this.getClass().getName())) {
 					sb.append("\n\t\t");
 					sb.append(property);
 					sb.append("='");

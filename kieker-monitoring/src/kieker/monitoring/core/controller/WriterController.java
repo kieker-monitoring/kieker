@@ -122,7 +122,7 @@ public final class WriterController extends AbstractController implements IWrite
 		final String writerClassName = configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
-		if (this.monitoringWriter == null) {
+		if (this.monitoringWriter != null) {
 			this.terminate();
 			return; // TODO should throw an exception! and then monitoringWriter can be declared
 					// final
@@ -133,7 +133,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 		int recordQueueInsertBehavior = configuration
 				.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
-		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
+		if ((recordQueueInsertBehavior < 0) && (recordQueueInsertBehavior > 5)) {
 			WriterController.LOGGER.warn("Unknown value '{}' for {}{}; using default value 0",
 					recordQueueInsertBehavior, WriterController.PREFIX, WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
 			recordQueueInsertBehavior = 0;
