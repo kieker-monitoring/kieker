@@ -1,0 +1,44 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.1.1'
+	id 'java'
+	id 'application'
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+shadowJar {
+archiveBaseName.set('shadow')
+archiveClassifier.set('')
+archiveVersion.set('')
+}
+
+mainClassName = 'org.oceandsl.tools.fxca.FxcaMain'
+
+jar {
+	manifest {
+		attributes "Main-Class": mainClassName
+	}
+}
+
+dependencies {
+	testImplementation 'junit:junit:4.13.2'
+	implementation 'junit:junit:4.13.2'
+
+	implementation project(':kieker-common')
+	implementation project(':kieker-analysis')
+
+	implementation 'org.csveed:csveed:0.7.4'
+
+	implementation 'org.apache.commons:commons-csv:1.9.0'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	implementation 'net.sourceforge.teetime:teetime:3.1-SNAPSHOT'
+	implementation 'net.kieker-monitoring:kieker:2.0.0-SNAPSHOT'
+}

@@ -1,0 +1,7 @@
+rootProject.name = 'fxca'
+
+include ":common"
+project(':common').projectDir = new File("../../common")
+
+include ":analysis"
+project(':analysis').projectDir = new File("../../analysis")
