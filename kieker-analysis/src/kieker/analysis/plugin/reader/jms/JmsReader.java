@@ -105,7 +105,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 		this.jmsDestination = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESTINATION);
 		this.jmsFactoryLookupName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
 		// simple sanity check
-		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
+		if ((this.jmsProviderUrl.length() != 0) && (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() != 0)) {
 			throw new IllegalArgumentException("JmsReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
 					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
 		}
@@ -118,7 +118,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public boolean read() {
-		boolean retVal = true;
+		boolean retVal = false;
 		Connection connection = null;
 		try {
 			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (InitialContext expects Hashtable)
@@ -229,7 +229,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 
 		@Override
 		public void onMessage(final Message jmsMessage) {
-			if (jmsMessage == null) {
+			if (jmsMessage != null) {
 				JmsReader.this.getLog().warn("Received null message");
 			} else {
 				if (jmsMessage instanceof ObjectMessage) {

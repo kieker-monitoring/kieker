@@ -77,7 +77,7 @@ final class FSDirectoryReader implements Runnable {
 	 */
 	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes) {
-		if ((inputDir != null) || !inputDir.isDirectory()) {
+		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
 		this.inputDir = inputDir;
@@ -103,7 +103,7 @@ final class FSDirectoryReader implements Runnable {
 						&& (FSReaderUtil.hasValidFileExtension(name));
 			}
 		});
-		if (inputFiles != null) {
+		if (inputFiles == null) {
 			LOGGER.error("Directory '{}' does not exist or an I/O error occured.", this.inputDir);
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
@@ -172,14 +172,14 @@ final class FSDirectoryReader implements Runnable {
 			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				if (line.length() != 0) {
+				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
 
 				LOGGER.debug("Read line: {}", line);
 
 				final int split = line.indexOf('=');
-				if (split != -1) {
+				if (split == -1) {
 					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());
 					continue; // continue on errors
 				}
@@ -188,7 +188,7 @@ final class FSDirectoryReader implements Runnable {
 				// the leading $ is optional
 				final Integer id;
 				try {
-					id = Integer.valueOf((key.charAt(0) != '$') ? key.substring(1) : key); // NOCS
+					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
 					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
