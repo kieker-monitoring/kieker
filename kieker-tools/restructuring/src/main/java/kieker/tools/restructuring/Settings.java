@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,45 +29,45 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings { // NOPMD data class
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input architecture model directories")
-    private List<Path> inputModelPaths;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input architecture model directories")
+	private List<Path> inputModelPaths;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Output architecture model directory")
-    private Path outputDirectory;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Output architecture model directory")
+	private Path outputDirectory;
 
-    @Parameter(names = { "-e", "--experiment" }, required = true, description = "Experiment name")
-    private String experimentName;
+	@Parameter(names = { "-e", "--experiment" }, required = true, description = "Experiment name")
+	private String experimentName;
 
-    @Parameter(names = { "-s",
-            "--strategy" }, required = true, converter = MappingStrategyConverter.class, description = "Strategy identifier")
-    private EMappingStrategy mappingStrat;
+	@Parameter(names = { "-s",
+		"--strategy" }, required = true, converter = MappingStrategyConverter.class, description = "Strategy identifier")
+	private EMappingStrategy mappingStrat;
 
-    @Parameter(names = "--eol", required = false, description = "End of line symbol")
-    private String lineSeparator = System.lineSeparator();
+	@Parameter(names = "--eol", required = false, description = "End of line symbol")
+	private String lineSeparator = System.lineSeparator();
 
-    public List<Path> getInputModelPaths() {
-        return this.inputModelPaths;
-    }
+	public List<Path> getInputModelPaths() {
+		return this.inputModelPaths;
+	}
 
-    public Path getOutputDirectory() {
-        return this.outputDirectory;
-    }
+	public Path getOutputDirectory() {
+		return this.outputDirectory;
+	}
 
-    public String getExperimentName() {
-        return this.experimentName;
-    }
+	public String getExperimentName() {
+		return this.experimentName;
+	}
 
-    public EMappingStrategy getMappingStrat() {
-        return this.mappingStrat;
-    }
+	public EMappingStrategy getMappingStrat() {
+		return this.mappingStrat;
+	}
 
-    public char[] getLineSeparator() {
-        return this.lineSeparator.toCharArray();
-    }
+	public char[] getLineSeparator() {
+		return this.lineSeparator.toCharArray();
+	}
 
-    public void setLineSeparator(final String lineSeparator) {
-        this.lineSeparator = lineSeparator;
-    }
+	public void setLineSeparator(final String lineSeparator) {
+		this.lineSeparator = lineSeparator;
+	}
 }

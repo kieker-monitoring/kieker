@@ -5,7 +5,7 @@
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
   <foreignModel>restructure.ecore</foreignModel>
-  <genPackages prefix="Restructuremodel" basePackage="org.oceandsl.tools.restructuring"
+  <genPackages prefix="Restructuremodel" basePackage="kieker.tools.restructuring"
       disposableProviderFactory="true" ecorePackage="restructure.ecore#/">
     <genClasses ecoreClass="restructure.ecore#//TransformationModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference restructure.ecore#//TransformationModel/transformations"/>

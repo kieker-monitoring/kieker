@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,5 +21,5 @@ package kieker.tools.restructuring;
  * @since 1.3.0
  */
 public enum EMappingStrategy {
-    NORMAL, EMPTY, RANDOM, KUHN
+	NORMAL, EMPTY, RANDOM, KUHN
 }

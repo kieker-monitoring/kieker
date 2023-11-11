@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,26 +22,26 @@ package kieker.tools.restructuring.stages;
  */
 public class ResultRecord {
 
-    private final String originalModelName;
-    private final String goalModelName;
-    private final int numberOfSteps;
+	private final String originalModelName;
+	private final String goalModelName;
+	private final int numberOfSteps;
 
-    public ResultRecord(final String originalModelName, final String goalModelName, final int numberOfSteps) {
-        this.originalModelName = originalModelName;
-        this.goalModelName = goalModelName;
-        this.numberOfSteps = numberOfSteps;
-    }
+	public ResultRecord(final String originalModelName, final String goalModelName, final int numberOfSteps) {
+		this.originalModelName = originalModelName;
+		this.goalModelName = goalModelName;
+		this.numberOfSteps = numberOfSteps;
+	}
 
-    public String getOriginalModelName() {
-        return this.originalModelName;
-    }
+	public String getOriginalModelName() {
+		return this.originalModelName;
+	}
 
-    public String getGoalModelName() {
-        return this.goalModelName;
-    }
+	public String getGoalModelName() {
+		return this.goalModelName;
+	}
 
-    public int getNumberOfSteps() {
-        return this.numberOfSteps;
-    }
+	public int getNumberOfSteps() {
+		return this.numberOfSteps;
+	}
 
 }

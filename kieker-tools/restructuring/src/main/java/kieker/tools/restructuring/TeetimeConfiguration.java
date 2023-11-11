@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,17 @@ package kieker.tools.restructuring;
 
 import java.io.IOException;
 
-import teetime.framework.Configuration;
-
-import org.oceandsl.analysis.architecture.stages.ModelRepositoryReaderStage;
-import org.oceandsl.analysis.architecture.stages.ModelSource;
-import org.oceandsl.analysis.generic.stages.TableCsvSink;
-
+import kieker.analysis.architecture.ModelRepositoryReaderStage;
+import kieker.analysis.architecture.ModelSource;
+import kieker.analysis.generic.sink.TableCsvSink;
 import kieker.tools.restructuring.stages.AggregateModelEditDistanceStage;
 import kieker.tools.restructuring.stages.GenerateRestructureModelStage;
 import kieker.tools.restructuring.stages.ModelEditDistanceEntry;
 import kieker.tools.restructuring.stages.RestructureModelSink;
 import kieker.tools.restructuring.stages.RestructurerStage;
 import kieker.tools.restructuring.stages.TraceRestoratorStage;
+
+import teetime.framework.Configuration;
 
 /**
  * Pipe and Filter configuration for the architecture creation tool.
@@ -38,28 +37,28 @@ import kieker.tools.restructuring.stages.TraceRestoratorStage;
  */
 public class TeetimeConfiguration extends Configuration {
 
-    public TeetimeConfiguration(final Settings settings) throws IOException {
+	public TeetimeConfiguration(final Settings settings) throws IOException {
 
-        final ModelSource modelSource = new ModelSource(settings.getInputModelPaths());
-        final ModelRepositoryReaderStage modelReader = new ModelRepositoryReaderStage();
-        final TraceRestoratorStage traceRestorator = new TraceRestoratorStage(settings.getMappingStrat());
-        final RestructurerStage restructurer = new RestructurerStage();
-        final GenerateRestructureModelStage generateModelStage = new GenerateRestructureModelStage();
-        final RestructureModelSink modelSink = new RestructureModelSink(settings.getOutputDirectory());
-        final AggregateModelEditDistanceStage aggregateStage = new AggregateModelEditDistanceStage();
-        final TableCsvSink<String, ModelEditDistanceEntry> medSinkStage = new TableCsvSink<>(
-                settings.getOutputDirectory(), ModelEditDistanceEntry.class, true, settings.getLineSeparator());
+		final ModelSource modelSource = new ModelSource(settings.getInputModelPaths());
+		final ModelRepositoryReaderStage modelReader = new ModelRepositoryReaderStage();
+		final TraceRestoratorStage traceRestorator = new TraceRestoratorStage(settings.getMappingStrat());
+		final RestructurerStage restructurer = new RestructurerStage();
+		final GenerateRestructureModelStage generateModelStage = new GenerateRestructureModelStage();
+		final RestructureModelSink modelSink = new RestructureModelSink(settings.getOutputDirectory());
+		final AggregateModelEditDistanceStage aggregateStage = new AggregateModelEditDistanceStage();
+		final TableCsvSink<String, ModelEditDistanceEntry> medSinkStage = new TableCsvSink<>(
+				settings.getOutputDirectory(), ModelEditDistanceEntry.class, true, settings.getLineSeparator());
 
-        this.connectPorts(modelSource.getOutputPort(), modelReader.getInputPort());
+		this.connectPorts(modelSource.getOutputPort(), modelReader.getInputPort());
 
-        this.connectPorts(modelReader.getOutputPort(), traceRestorator.getInputPort());
+		this.connectPorts(modelReader.getOutputPort(), traceRestorator.getInputPort());
 
-        this.connectPorts(traceRestorator.getOutputPort(), restructurer.getInputPort());
+		this.connectPorts(traceRestorator.getOutputPort(), restructurer.getInputPort());
 
-        this.connectPorts(restructurer.getStepsOutputPort(), generateModelStage.getInputPort());
-        this.connectPorts(generateModelStage.getOutputPort(), modelSink.getInputPort());
+		this.connectPorts(restructurer.getStepsOutputPort(), generateModelStage.getInputPort());
+		this.connectPorts(generateModelStage.getOutputPort(), modelSink.getInputPort());
 
-        this.connectPorts(restructurer.getNumberOfStepsOutputPort(), aggregateStage.getInputPort());
-        this.connectPorts(aggregateStage.getOutputPort(), medSinkStage.getInputPort());
-    }
+		this.connectPorts(restructurer.getNumberOfStepsOutputPort(), aggregateStage.getInputPort());
+		this.connectPorts(aggregateStage.getOutputPort(), medSinkStage.getInputPort());
+	}
 }

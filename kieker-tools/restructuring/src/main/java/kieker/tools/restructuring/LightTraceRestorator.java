@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,22 +28,22 @@ import kieker.tools.restructuring.stages.exec.RestructureStepFinder;
  */
 public class LightTraceRestorator {
 
-    private final AssemblyModel original;
-    private final AssemblyModel goal;
+	private final AssemblyModel original;
+	private final AssemblyModel goal;
 
-    public LightTraceRestorator(final AssemblyModel original, final AssemblyModel goal) {
-        this.original = original;
-        this.goal = goal;
-    }
+	public LightTraceRestorator(final AssemblyModel original, final AssemblyModel goal) {
+		this.original = original;
+		this.goal = goal;
+	}
 
-    public int getNumSteps() throws InternalErrorException {
-        // TODO find better names
-        final BasicComponentMapper mapper = new KuhnMatcherMapper(this.original, this.goal, "original", "goal");
+	public int getNumSteps() throws InternalErrorException {
+		// TODO find better names
+		final BasicComponentMapper mapper = new KuhnMatcherMapper(this.original, this.goal, "original", "goal");
 
-        final RestructureStepFinder stepfinder = new RestructureStepFinder(mapper);
-        stepfinder.findTransformation();
+		final RestructureStepFinder stepfinder = new RestructureStepFinder(mapper);
+		stepfinder.findTransformation();
 
-        return stepfinder.getNumberOfSteps();
-    }
+		return stepfinder.getNumberOfSteps();
+	}
 
 }

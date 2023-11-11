@@ -7,12 +7,11 @@ include 'kieker-analysis'
 include 'kieker-model'
 include 'kieker-tools'
 // shared
-//include 'kieker-tools:restructuring'
+include 'kieker-tools:restructuring'
 // tools
 include 'kieker-tools:behavior-analysis'
 include 'kieker-tools:cmi'
 include 'kieker-tools:collector'
-//include 'kieker-tools:cmi'
 include 'kieker-tools:convert-logging-timestamp'
 //include 'kieker-tools:dar'
 //include 'kieker-tools:delta'

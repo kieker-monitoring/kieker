@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  ***************************************************************************/
 package kieker.tools.restructuring.stages;
 
-import teetime.stage.basic.AbstractTransformation;
-
-import org.oceandsl.tools.restructuring.restructuremodel.TransformationModel;
-
+import kieker.tools.restructuring.restructuremodel.TransformationModel;
 import kieker.tools.restructuring.stages.exec.OutputModelCreator;
 import kieker.tools.restructuring.stages.exec.RestructureStepFinder;
 import kieker.tools.restructuring.util.TransformationFactory;
+
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Serafim Simonov -- initial contribution
@@ -30,16 +29,16 @@ import kieker.tools.restructuring.util.TransformationFactory;
  */
 public class GenerateRestructureModelStage extends AbstractTransformation<RestructureStepFinder, TransformationModel> {
 
-    @Override
-    protected void execute(final RestructureStepFinder element) throws Exception {
-        if (TransformationFactory.areSameModels(element.getGoal(), element.getOriginal())) {
-            final OutputModelCreator output = new OutputModelCreator();
-            final String filename = String.format("%s-%s", element.getComponentMapper().getOriginalModelName(),
-                    element.getComponentMapper().getGoalModelName());
-            this.outputPort.send(output.createOutputModel(filename, element.getSteps()));
-        } else {
-            this.logger.error("Faulty sequence");
-        }
-    }
+	@Override
+	protected void execute(final RestructureStepFinder element) throws Exception {
+		if (TransformationFactory.areSameModels(element.getGoal(), element.getOriginal())) {
+			final OutputModelCreator output = new OutputModelCreator();
+			final String filename = String.format("%s-%s", element.getComponentMapper().getOriginalModelName(),
+					element.getComponentMapper().getGoalModelName());
+			this.outputPort.send(output.createOutputModel(filename, element.getSteps()));
+		} else {
+			this.logger.error("Faulty sequence");
+		}
+	}
 
 }

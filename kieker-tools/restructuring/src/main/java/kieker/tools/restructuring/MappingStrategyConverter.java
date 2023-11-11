@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import com.beust.jcommander.IStringConverter;
  */
 public class MappingStrategyConverter implements IStringConverter<EMappingStrategy> {
 
-    @Override
-    public EMappingStrategy convert(final String value) {
-        return EMappingStrategy.valueOf(value.toUpperCase(Locale.getDefault()));
-    }
+	@Override
+	public EMappingStrategy convert(final String value) {
+		return EMappingStrategy.valueOf(value.toUpperCase(Locale.getDefault()));
+	}
 
 }

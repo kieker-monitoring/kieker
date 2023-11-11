@@ -356,9 +356,9 @@ def checkSubprojects = [
   project(':kieker-model'),
   project(':kieker-analysis'),
   project(':kieker-tools'),
+  project(':kieker-tools:restructuring'),
   project(':kieker-tools:behavior-analysis'),
   project(':kieker-tools:cmi'),
-//  project(':kieker-tools:cmi'),
   project(':kieker-tools:collector'),
   project(':kieker-tools:convert-logging-timestamp'),
   project(':kieker-tools:log-replayer'),
@@ -747,9 +747,9 @@ def binaryContent = project.copySpec {
 }
 
 def tools = [
+  'restructuring',
   'behavior-analysis',
   'cmi',
-//  'cmi',
   'collector',
   'convert-logging-timestamp',
   'log-replayer',
@@ -818,9 +818,9 @@ def exampleJavaEEContent = project.copySpec {
 /** binary distribution in zip format. */
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
+  ':kieker-tools:restructuring:distZip',
   ':kieker-tools:behavior-analysis:distZip',
   ':kieker-tools:cmi:distZip',
-//  ':kieker-tools:cmi:distZip',
   ':kieker-tools:collector:distZip',
   ':kieker-tools:convert-logging-timestamp:distZip',
   ':kieker-tools:log-replayer:distZip',
@@ -836,9 +836,9 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
+  ':kieker-tools:restructuring:distZip',
   ':kieker-tools:behavior-analysis:distZip',
   ':kieker-tools:cmi:distZip',
-//  ':kieker-tools:cmi:distZip',
   ':kieker-tools:collector:distZip',
   ':kieker-tools:convert-logging-timestamp:distZip',
   ':kieker-tools:log-replayer:distZip',
