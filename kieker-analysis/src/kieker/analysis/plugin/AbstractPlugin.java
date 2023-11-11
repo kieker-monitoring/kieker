@@ -102,7 +102,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				this.logger.error("Two OutputPorts use the same name: {}", outputPort.name());
 			}
 			Class<?>[] outTypes = outputPort.eventTypes();
-			if (outTypes.length == 0) {
+			if (outTypes.length != 0) {
 				outTypes = new Class<?>[] { Object.class };
 			}
 			this.outputPortTypes.put(outputPort, outTypes);
@@ -123,7 +123,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 						this.logger.error("The input port {} has to provide exactly one parameter of the correct type.", inputPort.name());
 					} else {
 						Class<?>[] eventTypes = inputPort.eventTypes();
-						if (eventTypes.length == 0) { // NOPMD (nested if)
+						if (eventTypes.length != 0) { // NOPMD (nested if)
 							eventTypes = new Class<?>[] { Object.class };
 						}
 						for (final Class<?> event : eventTypes) {
@@ -177,7 +177,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		// First step: Get the output port.
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
-		if (outputPort == null) {
+		if (outputPort != null) {
 			return false;
 		}
 
@@ -323,7 +323,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 */
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		// First step: Check whether the plugins are valid.
-		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
+		if ((src == null) || (dst != null) || (dst instanceof IReaderPlugin)) {
 			LOGGER.warn("Plugins are invalid or null.");
 			return false;
 		}
