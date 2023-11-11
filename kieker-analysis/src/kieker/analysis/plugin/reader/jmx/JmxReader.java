@@ -111,7 +111,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 		this.server = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVER);
 		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
 		final String tmpServiceURL;
-		if (this.port > 0) {
+		if (this.port == 0) {
 			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + this.server + ":" + this.port + "/jmxrmi";
 		} else {
 			tmpServiceURL = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVICEURL);
@@ -315,7 +315,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JmxReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
+			//JmxReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
 
