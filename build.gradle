@@ -114,6 +114,9 @@ subprojects {
   }
 
   test {
+
+    failFast = true
+
     finalizedBy jacocoTestReport // report is always generated after tests run
 
     systemProperty "java.io.tmpdir", "${buildDir}"
