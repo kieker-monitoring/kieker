@@ -176,17 +176,19 @@ subprojects {
 
   // --- quality assurance plugins ---
 
-  apply plugin: 'pmd'
-  pmd {    // is represented by the groovy class "PmdExtension"
-    // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
-    toolVersion = pmdVersion
-    ignoreFailures = true
-    consoleOutput = true
+//  apply plugin: 'pmd'
+//  pmd {    // is represented by the groovy class "PmdExtension"
+//    // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+//    toolVersion = pmdVersion
+//    ignoreFailures = true
+//    consoleOutput = true
+//    threads = 8
+//    incrementalAnalysis = true
 
-    // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
-    ruleSets = []
-    ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
-  }
+//    // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
+//    ruleSets = []
+//    ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
+//  }
 
   apply plugin: 'checkstyle'
   checkstyle {
@@ -217,14 +219,14 @@ subprojects {
   // jvmArgs = [ '-Duser.language=ja' ]
   //}
 
-  tasks.withType(Pmd) {
-    reports {
-      xml.required = true
-      html.required = true
-    }
-    // the following line of code adds our custom PMD rules as jar file to the classpath
-    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
-  }
+//  tasks.withType(Pmd) {
+//    reports {
+//      xml.required = true
+//      html.required = true
+//    }
+//    // the following line of code adds our custom PMD rules as jar file to the classpath
+//    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+//  }
 
   tasks.withType(Checkstyle) {
     reports {
@@ -355,6 +357,8 @@ def checkSubprojects = [
   project(':kieker-analysis'),
   project(':kieker-tools'),
   project(':kieker-tools:behavior-analysis'),
+  project(':kieker-tools:cmi'),
+//  project(':kieker-tools:cmi'),
   project(':kieker-tools:collector'),
   project(':kieker-tools:convert-logging-timestamp'),
   project(':kieker-tools:log-replayer'),
@@ -744,6 +748,8 @@ def binaryContent = project.copySpec {
 
 def tools = [
   'behavior-analysis',
+  'cmi',
+//  'cmi',
   'collector',
   'convert-logging-timestamp',
   'log-replayer',
@@ -813,6 +819,8 @@ def exampleJavaEEContent = project.copySpec {
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
   ':kieker-tools:behavior-analysis:distZip',
+  ':kieker-tools:cmi:distZip',
+//  ':kieker-tools:cmi:distZip',
   ':kieker-tools:collector:distZip',
   ':kieker-tools:convert-logging-timestamp:distZip',
   ':kieker-tools:log-replayer:distZip',
@@ -829,6 +837,8 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
   ':kieker-tools:behavior-analysis:distZip',
+  ':kieker-tools:cmi:distZip',
+//  ':kieker-tools:cmi:distZip',
   ':kieker-tools:collector:distZip',
   ':kieker-tools:convert-logging-timestamp:distZip',
   ':kieker-tools:log-replayer:distZip',
@@ -843,6 +853,7 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'
 }
+
 
 /** collect all sources. */
 def sourceContent = project.copySpec {

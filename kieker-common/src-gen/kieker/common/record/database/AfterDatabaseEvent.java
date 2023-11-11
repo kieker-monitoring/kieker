@@ -29,7 +29,7 @@ import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * API compatibility: Kieker 2.0.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */

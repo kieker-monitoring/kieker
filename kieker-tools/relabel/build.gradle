@@ -7,13 +7,25 @@
 */
 
 plugins {
-	id 'java'
 	id 'application'
 }
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.relabel.RelabelSourceMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
 	implementation project(':kieker-common')
 	implementation project(':kieker-analysis')
+	implementation project(':kieker-tools')
+	
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
@@ -26,8 +38,10 @@ dependencies {
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.3'
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
 	implementation 'org.apache.commons:commons-compress:1.20'
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 }
 
-application {
-	getMainClass().set('org.oceandsl.tools.relabel.RelabelSourceMain')
+
+task uploadArchives {
+	println 'log-replayer skipped'
 }

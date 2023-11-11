@@ -14,6 +14,7 @@ plugins {
 dependencies {
 	implementation project(':kieker-common')
 	implementation project(':kieker-analysis')
+	implementation project(':kieker-model')
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'

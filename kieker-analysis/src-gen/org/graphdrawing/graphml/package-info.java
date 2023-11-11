@@ -7,4 +7,3 @@
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://graphml.graphdrawing.org/xmlns", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.graphdrawing.graphml;
-

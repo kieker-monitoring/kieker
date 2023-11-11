@@ -30,30 +30,30 @@ public final class NodeFactory {
 	}
 
 	public static <R> RootNode<R> createRootNode(final MTree<R> mtree, final R data) {
-		final RootNode<R> node = new RootNode<R>(mtree, data);
-		node.rootness = new RootNodeTrait<R>(node);
-		node.leafness = new NonLeafNodeTrait<R>(node);
+		final RootNode<R> node = new RootNode<>(mtree, data);
+		node.rootness = new RootNodeTrait<>(node);
+		node.leafness = new NonLeafNodeTrait<>(node);
 		return node;
 	}
 
 	public static <R> RootLeafNode<R> createRootLeafNode(final MTree<R> mtree, final R data) {
-		final RootLeafNode<R> node = new RootLeafNode<R>(mtree, data);
-		node.rootness = new RootNodeTrait<R>(node);
-		node.leafness = new LeafNodeTrait<R>(node);
+		final RootLeafNode<R> node = new RootLeafNode<>(mtree, data);
+		node.rootness = new RootNodeTrait<>(node);
+		node.leafness = new LeafNodeTrait<>(node);
 		return node;
 	}
 
 	public static <R> LeafNode<R> createLeafNode(final MTree<R> mtree, final R data) {
-		final LeafNode<R> node = new LeafNode<R>(mtree, data);
-		node.rootness = new NonRootNodeTrait<R>(node);
-		node.leafness = new LeafNodeTrait<R>(node);
+		final LeafNode<R> node = new LeafNode<>(mtree, data);
+		node.rootness = new NonRootNodeTrait<>(node);
+		node.leafness = new LeafNodeTrait<>(node);
 		return node;
 	}
 
 	public static <R> InternalNode<R> createInternalNode(final MTree<R> mtree, final R data) {
-		final InternalNode<R> node = new InternalNode<R>(mtree, data);
-		node.rootness = new NonRootNodeTrait<R>(node);
-		node.leafness = new NonLeafNodeTrait<R>(node);
+		final InternalNode<R> node = new InternalNode<>(mtree, data);
+		node.rootness = new NonRootNodeTrait<>(node);
+		node.leafness = new NonLeafNodeTrait<>(node);
 		return node;
 	}
 }

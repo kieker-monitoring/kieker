@@ -1,9 +1,0 @@
-package org.oceandsl.common
-
-@author "Reiner Jung" @since "1.0"
-entity OperationCallEvent {
-	string sourceComponent
-	string sourceOperation
-	string targetComponent
-	string targetOperation
-}

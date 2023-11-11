@@ -46,7 +46,7 @@ public class MinCalculator<T> extends AbstractCalculator<T> {
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Optional<Long> oldMin = Optional.ofNullable((Long) statistic.getProperties().get(this.getPropertyName()));
-		if (!oldMin.isPresent() || value < oldMin.get()) {
+		if (!oldMin.isPresent() || (value < oldMin.get())) {
 			statistic.getProperties().put(this.getPropertyName(), value);
 		}
 	}

@@ -55,7 +55,7 @@ public class MeanCalculator<T> extends AbstractCalculator<T> {
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final Long total = (Long) statistic.getProperties().get(this.totalName);
 		final Long count = (Long) statistic.getProperties().get(this.countName);
-		if (total != null && count != null) {
+		if ((total != null) && (count != null)) {
 			final Long avg = total / count;
 			statistic.getProperties().put(this.getPropertyName(), avg);
 		}

@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 2.0.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */

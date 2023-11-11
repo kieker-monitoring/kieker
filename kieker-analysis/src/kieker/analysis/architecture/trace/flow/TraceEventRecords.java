@@ -23,7 +23,7 @@ import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class TraceEventRecords {
@@ -37,7 +37,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param trace
 	 *            The trace to be stored in this object.
 	 * @param traceEvents
@@ -56,7 +56,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Delivers the stored traces.
-	 * 
+	 *
 	 * @return The traces currently stored in this object.
 	 */
 	public TraceMetadata getTraceMetadata() {
@@ -65,7 +65,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Delivers the stored trace events.
-	 * 
+	 *
 	 * @return The trace events currently stored in this object.
 	 */
 	public AbstractTraceEvent[] getTraceEvents() {
@@ -108,10 +108,7 @@ public final class TraceEventRecords {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
+		if ((obj == null) || (this.getClass() != obj.getClass())) {
 			return false;
 		}
 		final TraceEventRecords other = (TraceEventRecords) obj;

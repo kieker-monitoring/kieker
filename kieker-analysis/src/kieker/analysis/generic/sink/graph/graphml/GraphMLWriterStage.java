@@ -37,7 +37,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14

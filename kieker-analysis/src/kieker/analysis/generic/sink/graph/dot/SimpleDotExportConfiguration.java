@@ -30,7 +30,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14

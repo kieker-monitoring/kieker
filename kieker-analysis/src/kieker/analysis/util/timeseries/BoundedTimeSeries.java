@@ -25,7 +25,7 @@ import java.time.Instant;
  *
  * @param <T>
  *            Type of the elements in this time series.
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14

@@ -89,17 +89,17 @@ public final class EntryCallSequenceStage extends AbstractStage {
 	private void processSessionEvent(final ISessionEvent sessionEvent) {
 		if (sessionEvent != null) {
 			if (sessionEvent instanceof SessionStartEvent) {
-				processSessionStartEvent((SessionStartEvent) sessionEvent);
+				this.processSessionStartEvent((SessionStartEvent) sessionEvent);
 			}
 			if (sessionEvent instanceof SessionEndEvent) {
-				processSessionEndEvent((SessionEndEvent) sessionEvent);
+				this.processSessionEndEvent((SessionEndEvent) sessionEvent);
 			}
 		}
 	}
 
 	private void processSessionStartEvent(final SessionStartEvent sessionEvent) {
 		this.sessions.put(UserSession.createUserSessionId(sessionEvent),
-				new UserSession(sessionEvent.getHostname(), sessionEvent.getSessionId()));	
+				new UserSession(sessionEvent.getHostname(), sessionEvent.getSessionId()));
 	}
 
 	private void processSessionEndEvent(final SessionEndEvent sessionEvent) {
@@ -107,9 +107,9 @@ public final class EntryCallSequenceStage extends AbstractStage {
 		if (session != null) {
 			this.userSessionOutputPort.send(session);
 			this.sessions.remove(sessionEvent.getSessionId());
-		}	
+		}
 	}
-	
+
 	/**
 	 * removes all expired sessions from the filter and sends them to
 	 * tBehaviorModelPreperationOutputPort.
@@ -122,7 +122,7 @@ public final class EntryCallSequenceStage extends AbstractStage {
 			final UserSession session = this.sessions.get(sessionId);
 			final long exitTime = session.getExitTime();
 
-			final boolean isExpired = exitTime + this.userSessionTimeout < timeNow;
+			final boolean isExpired = (exitTime + this.userSessionTimeout) < timeNow;
 
 			if (isExpired) {
 				this.userSessionOutputPort.send(session);

@@ -32,7 +32,7 @@ public class LeafNodeTrait<T> extends AbstractNodeTrait<T> implements ILeafness<
 
 	@Override
 	public void doAddData(final T data, final double distance) {
-		final Entry<T> entry = new Entry<T>(data);
+		final Entry<T> entry = new Entry<>(data);
 		assert !this.thisNode.getChildren().containsKey(data);
 		this.thisNode.getChildren().put(data, entry);
 		assert this.thisNode.getChildren().containsKey(data);

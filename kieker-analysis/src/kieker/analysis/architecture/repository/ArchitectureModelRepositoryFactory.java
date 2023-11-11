@@ -146,7 +146,7 @@ public final class ArchitectureModelRepositoryFactory {
 	 *             on errors
 	 */
 	public static ModelRepository readModelRepository(final Path inputDirectory, final ModelDescriptor... descriptors) throws ConfigurationException {
-		final ModelRepository repository = new ModelRepository(inputDirectory.getFileName().toString());
+		final ModelRepository repository = ArchitectureModelRepositoryFactory.createEmptyModelRepository(inputDirectory.getFileName().toString());
 
 		final Resource.Factory.Registry registry = Resource.Factory.Registry.INSTANCE;
 		final Map<String, Object> extensionToFactoryMap = registry.getExtensionToFactoryMap();
@@ -168,31 +168,32 @@ public final class ArchitectureModelRepositoryFactory {
 	}
 
 	private static <T extends EObject> void readModel(final ResourceSet resourceSet, final ModelRepository repository,
-			final ModelDescriptor descriptor, final Path path) throws ConfigurationException {
-		ArchitectureModelRepositoryFactory.LOGGER.debug("Loading model {}", descriptor.getFilename());
-		final File modelFile = ArchitectureModelRepositoryFactory.createReadModelFileHandle(path, descriptor.getFilename());
+			final ModelDescriptor modelDescriptor, final Path path) throws ConfigurationException {
+		ArchitectureModelRepositoryFactory.LOGGER.debug("Loading model {}", modelDescriptor.getFilename());
+		final File modelFile = ArchitectureModelRepositoryFactory.createReadModelFileHandle(path, modelDescriptor.getFilename());
 		if (modelFile.exists()) {
 			final Resource resource = resourceSet.getResource(URI.createFileURI(modelFile.getAbsolutePath()), true);
 			for (final Diagnostic error : resource.getErrors()) {
-				ArchitectureModelRepositoryFactory.LOGGER.error("Error loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Error loading '{}' of {}:{}  {}", modelDescriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
 			for (final Diagnostic error : resource.getWarnings()) {
-				ArchitectureModelRepositoryFactory.LOGGER.error("Warning loading '{}' of {}:{}  {}", descriptor.getFilename(),
+				ArchitectureModelRepositoryFactory.LOGGER.error("Warning loading '{}' of {}:{}  {}", modelDescriptor.getFilename(),
 						error.getLocation(), error.getLine(), error.getMessage());
 			}
-			repository.register(descriptor, resource.getContents().get(0));
+			repository.register(modelDescriptor, resource.getContents().get(0));
 			final Iterator<EObject> iterator = resource.getAllContents();
 			while (iterator.hasNext()) {
 				iterator.next().eCrossReferences();
 			}
-		} else if (descriptor.isRequired()) {
+		} else if (modelDescriptor.isRequired()) {
 			ArchitectureModelRepositoryFactory.LOGGER.error("Error reading model file {}. File does not exist.",
 					modelFile.getAbsoluteFile());
 			throw new ConfigurationException(
 					String.format("Error reading model file %s. File does not exist.", modelFile.getAbsoluteFile()));
 		} else {
-			ArchitectureModelRepositoryFactory.LOGGER.info("Model file {} not present", modelFile.getAbsolutePath());
+			ArchitectureModelRepositoryFactory.LOGGER.warn("Optional model file {} not present.", modelFile.getAbsoluteFile());
+			repository.register(modelDescriptor, modelDescriptor.getFactory().create(modelDescriptor.getRootClass()));
 		}
 	}
 

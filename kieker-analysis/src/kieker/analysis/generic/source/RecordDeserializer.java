@@ -59,12 +59,8 @@ public class RecordDeserializer {
 
 		final String recordClassName = this.registry.get(clazzId);
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (recordFactory == null) {
-			return false;
-		}
-
 		// identify record data
-		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) {
+		if ((recordFactory == null) || (buffer.remaining() < recordFactory.getRecordSizeInBytes())) {
 			return false;
 		}
 
