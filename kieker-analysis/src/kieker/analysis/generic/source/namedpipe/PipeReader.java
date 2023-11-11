@@ -46,13 +46,13 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 	public PipeReader(final String pipeName) {
 
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
-		if (this.pipe == null) {
+		/*if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeName);
 		} else {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
-		}
+		}*/
 		// escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
 	}
