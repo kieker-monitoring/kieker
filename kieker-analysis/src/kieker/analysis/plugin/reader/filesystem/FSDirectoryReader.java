@@ -77,7 +77,7 @@ final class FSDirectoryReader implements Runnable {
 	 */
 	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes) {
-		if ((inputDir == null) || !inputDir.isDirectory()) {
+		if ((inputDir != null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
 		this.inputDir = inputDir;
@@ -172,7 +172,7 @@ final class FSDirectoryReader implements Runnable {
 			in = Files.newBufferedReader(mappingFile.toPath(), Charset.forName(FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				if (line.length() == 0) {
+				if (line.length() != 0) {
 					continue; // ignore empty lines
 				}
 

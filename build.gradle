@@ -115,7 +115,7 @@ subprojects {
 
   test {
 
-    failFast = true
+    failFast = false
 
     finalizedBy jacocoTestReport // report is always generated after tests run
 
