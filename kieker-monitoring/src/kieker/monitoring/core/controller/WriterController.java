@@ -257,7 +257,7 @@ public final class WriterController extends AbstractController implements IWrite
 	protected void init() {
 		WriterController.LOGGER.debug("Initializing Writer Controller");
 
-		if (this.monitoringWriterThread !== null) {
+		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.start();
 		}
 	}
