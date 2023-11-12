@@ -132,7 +132,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
-			this.active = true;
+			this.active = false;
 			this.append = false;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamNameConfig)) {
 			this.printStream = System.out;
@@ -174,7 +174,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 
 	@Override
 	public final void terminate(final boolean error) {
-		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
+		if ((this.printStream != null) || (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
 	}
@@ -220,7 +220,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			sb.append(this.getName()).append('(').append(object.getClass().getSimpleName()).append(") ")
 					.append(object.toString());
 			final String record = sb.toString();
-			if (this.printStream != null) {
+			if (this.printStream == null) {
 				this.printStream.println(record);
 			} else {
 				this.logger.info(record);
