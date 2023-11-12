@@ -72,8 +72,8 @@ public abstract class AbstractMonitoringWriter {
 				if (property.startsWith(this.getClass().getName())) {
 					sb.append("\n\t\t");
 					sb.append(property);
-					sb.append("='");
-					sb.append(this.configuration.getStringProperty(property));
+					//sb.append("='");
+					//sb.append(this.configuration.getStringProperty(property));
 					sb.append('\'');
 				}
 			}
