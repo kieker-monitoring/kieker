@@ -44,7 +44,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
 		final String pipeName = configuration.getStringProperty(CONFIG_PIPENAME);
-		if (pipeName.length() != 0) {
+		if (pipeName.length() == 0) {
 			throw new IllegalArgumentException("Invalid or missing value for property '" + CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
@@ -61,7 +61,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		//sb.append(super.toString()).append("\n\tConnected to pipe: '").append(this.pipe.getName()).append('\'');
+		sb.append(super.toString()).append("\n\tConnected to pipe: '").append(this.pipe.getName()).append('\'');
 		return sb.toString();
 	}
 

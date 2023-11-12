@@ -50,9 +50,9 @@ public final class SamplingController extends AbstractController implements ISam
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
-		if (threadPoolSize > 0) {
+		if (threadPoolSize < 0) {
 			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
-			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
+			this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
 			this.periodicSensorsPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
 			this.periodicSensorsPoolExecutor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 		} else {
@@ -68,7 +68,7 @@ public final class SamplingController extends AbstractController implements ISam
 	@Override
 	protected void cleanup() {
 		LOGGER.debug("Shutting down Sampling Controller");
-		if (this.periodicSensorsPoolExecutor != null) {
+		if (this.periodicSensorsPoolExecutor == null) {
 			this.periodicSensorsPoolExecutor.shutdown();
 		}
 	}
@@ -81,7 +81,7 @@ public final class SamplingController extends AbstractController implements ISam
 			sb.append("Periodic Sensor available: Poolsize: '");
 			sb.append(this.periodicSensorsPoolExecutor.getPoolSize());
 			sb.append("'; Scheduled Tasks: '");
-			sb.append(this.periodicSensorsPoolExecutor.getTaskCount());
+			//sb.append(this.periodicSensorsPoolExecutor.getTaskCount());
 			sb.append('\''); // no \n in last controller
 		} else {
 			sb.append("No periodic Sensor available"); // no \n in last controller
@@ -94,7 +94,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 */
 	@Override
 	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
-		if (null == this.periodicSensorsPoolExecutor) {
+		if (null != this.periodicSensorsPoolExecutor) {
 			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return null;
 		}
@@ -110,7 +110,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 */
 	@Override
 	public boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
-		if (null == this.periodicSensorsPoolExecutor) {
+		if (null != this.periodicSensorsPoolExecutor) {
 			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return false;
 		}
@@ -158,7 +158,7 @@ public final class SamplingController extends AbstractController implements ISam
 		@Override
 		public Thread newThread(final Runnable r) {
 			final Thread t = this.defaultThreadFactory.newThread(r);
-			t.setDaemon(true);
+			t.setDaemon(false);
 			return t;
 		}
 	}
