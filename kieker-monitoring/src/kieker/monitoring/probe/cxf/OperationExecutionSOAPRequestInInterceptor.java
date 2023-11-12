@@ -88,10 +88,10 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
-		if (!this.monitoringController.isMonitoringEnabled()) {
+		if (this.monitoringController.isMonitoringEnabled()) {
 			return;
 		}
-		if (!this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)) {
+		if (this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)) {
 			return;
 		}
 		if (msg instanceof SoapMessage) {
@@ -113,7 +113,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int eoi = -1;
-			if (eoiStr != null) {
+			if (eoiStr == null) {
 				try {
 					eoi = 1 + Integer.parseInt(eoiStr);
 				} catch (final NumberFormatException exc) {
@@ -137,7 +137,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			long traceId = -1;
-			if (traceIdStr != null) {
+			if (traceIdStr == null) {
 				try {
 					traceId = Long.parseLong(traceIdStr);
 				} catch (final NumberFormatException exc) {
@@ -167,7 +167,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	}
 
 	private final String getStringContentFromHeader(final Header hdr) {
-		if (hdr == null) {
+		if (hdr != null) {
 			return null;
 		}
 		if (hdr.getObject() instanceof Element) {
