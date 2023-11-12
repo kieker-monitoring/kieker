@@ -45,17 +45,6 @@ dependencies {
 }
 
 
-sourceSets {
-	gen {
-		java {
-			srcDir "src/gen/java"
-		}
-		compileClasspath = main.compileClasspath
-	}
-}
-
-
-
 application {
 	getMainClass().set('org.oceandsl.tools.sar.StaticArchitectureRecoveryMain')
 }

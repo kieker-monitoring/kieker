@@ -1,8 +1,11 @@
 plugins {
-	id 'com.github.johnrengelman.shadow' version '7.1.1'
+//	id 'com.github.johnrengelman.shadow' version '7.1.1'
 	id 'java'
 	id 'application'
 }
+
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
 	mavenCentral()
@@ -10,13 +13,14 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
-shadowJar {
-archiveBaseName.set('shadow')
-archiveClassifier.set('')
-archiveVersion.set('')
-}
+// decativated zip file too large
+//shadowJar {
+//archiveBaseName.set('shadow')
+//archiveClassifier.set('')
+//archiveVersion.set('')
+//}
 
-mainClassName = 'org.oceandsl.tools.fxca.FxcaMain'
+mainClassName = 'kieker.tools.fxca.FxcaMain'
 
 jar {
 	manifest {
@@ -25,11 +29,9 @@ jar {
 }
 
 dependencies {
-	testImplementation 'junit:junit:4.13.2'
-	implementation 'junit:junit:4.13.2'
-
 	implementation project(':kieker-common')
 	implementation project(':kieker-analysis')
+	implementation project(':kieker-tools')
 
 	implementation 'org.csveed:csveed:0.7.4'
 
@@ -39,6 +41,18 @@ dependencies {
 	implementation 'commons-io:commons-io:2.11.0'
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
-	implementation 'net.sourceforge.teetime:teetime:3.1-SNAPSHOT'
-	implementation 'net.kieker-monitoring:kieker:2.0.0-SNAPSHOT'
+	implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
+
+	testImplementation 'org.mockito:mockito-core:2.21.0'
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+
 }

@@ -37,10 +37,19 @@ dependencies {
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.3'
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
 	implementation 'org.apache.commons:commons-compress:1.20'
-	
-	testImplementation 'junit:junit:4.13'
-	testImplementation 'org.hamcrest:hamcrest-all:1.3'
-	testImplementation "org.mockito:mockito-core:3.+"
+
+		implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
+
+	testImplementation 'org.mockito:mockito-core:2.21.0'
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+
 }
 
 application {

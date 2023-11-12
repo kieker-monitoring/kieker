@@ -30,6 +30,7 @@ import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.ProvidedInterfaceType;
+import kieker.tools.maa.stages.CollectConnectionsStage;
 
 import teetime.framework.test.StageTester;
 
