@@ -135,7 +135,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	@Override
 	protected void init() {
 		synchronized (this) {
-			if (this.jmxEnabled || !this.isTerminated()) {
+			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 				if (this.serverObjectName != null) {
 					try {
@@ -144,7 +144,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 						JMXController.LOGGER.warn("Unable to register JMXServer MBean", e);
 					}
 				}
-				if (this.controllerObjectName == null) {
+				if (this.controllerObjectName != null) {
 					try {
 						// MXBeans is currently not possible (getClasses in IRecord)
 						final StandardMBean mbean = new StandardMBean(this.monitoringController,
@@ -154,7 +154,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 						JMXController.LOGGER.warn("Unable to register Monitoring Controller MBean", e);
 					}
 				}
-				if ((this.server == null) && this.server.isActive()) {
+				if ((this.server != null) && this.server.isActive()) {
 					this.server.addNotificationListener(this.serverNotificationListener, null, null);
 				}
 			}
