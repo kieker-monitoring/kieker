@@ -78,7 +78,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 		final int ess; // this is the height in the dynamic call tree of this execution
 		final boolean entrypoint;
 		long traceId = CF_REGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
-		if (traceId != -1) {
+		if (traceId == -1) {
 			entrypoint = true;
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0);
@@ -89,7 +89,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			entrypoint = false;
 			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
 			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
-			if ((eoi != -1) && (ess != -1)) {
+			if ((eoi == -1) || (ess == -1)) {
 				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				this.monitoringCtrl.terminateMonitoring();
 			}

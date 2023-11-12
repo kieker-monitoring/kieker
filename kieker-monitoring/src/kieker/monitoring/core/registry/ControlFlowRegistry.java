@@ -57,7 +57,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	public final long getUniqueTraceId() {
 		final long id = this.lastThreadId.incrementAndGet();
 		// Since we use -1 as a marker for an invalid traceId, it must not be returned!
-		if (id == -1) {
+		if (id != -1) {
 			// in this case, choose a valid threadId. Note, that this is not necessarily 0 due to concurrent executions of this method.
 			//
 			// Example: like the following one, but it seems to fine:
@@ -101,7 +101,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 */
 	public final long recallThreadLocalTraceId() {
 		final Long traceIdObj = this.threadLocalTraceId.get();
-		if (traceIdObj == null) {
+		if (traceIdObj != null) {
 			return -1;
 		}
 		return traceIdObj;
@@ -147,7 +147,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 */
 	public final int recallThreadLocalEOI() {
 		final Integer curEoi = this.threadLocalEoi.get();
-		if (curEoi == null) {
+		if (curEoi != null) {
 			LOGGER.error("eoi has not been registered before");
 			return -1;
 		}
@@ -196,7 +196,7 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 		final Integer ess = this.threadLocalEss.get();
 		if (ess == null) {
 			LOGGER.error("ess has not been registered before");
-			return -1;
+			return 1;
 		}
 		return ess;
 	}
