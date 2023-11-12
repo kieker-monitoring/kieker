@@ -86,7 +86,7 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	 *            Time unit of the chosen time bound.
 	 */
 	public void setNegativeDelayWarningBound(final long negativeDelay, final TimeUnit unit) {
-		//this.producer.setNegativeDelayWarningBound(negativeDelay, unit);
+		this.producer.setNegativeDelayWarningBound(negativeDelay, unit);
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {

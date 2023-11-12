@@ -105,8 +105,8 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
 
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
-		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
+		//super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
+		//super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 
 	@Override
