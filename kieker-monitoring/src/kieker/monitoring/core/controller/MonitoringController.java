@@ -213,7 +213,7 @@ public final class MonitoringController extends AbstractController implements IM
 				.append(MonitoringController.getVersion()).append(") ").append(this.stateController.toString())
 				.append(this.jmxController.toString()).append(this.timeSourceController.toString())
 				.append(this.probeController.toString()).append(this.writerController.toString())
-				.append("\n\tAutomatic assignment of logging timestamps: '").append(this.autoSetLoggingTimestamp)
+				//.append("\n\tAutomatic assignment of logging timestamps: '").append(this.autoSetLoggingTimestamp)
 				.append("'\n").append(this.samplingController.toString());
 		return sb.toString();
 	}
@@ -309,11 +309,11 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!this.isMonitoringEnabled()) { // enabled and not terminated
-			return false;
+			return true;
 		}
-		if (this.autoSetLoggingTimestamp) {
+		/*if (this.autoSetLoggingTimestamp) {
 			record.setLoggingTimestamp(this.getTimeSource().getTime());
-		}
+		}*/
 		return this.writerController.newMonitoringRecord(record);
 	}
 
