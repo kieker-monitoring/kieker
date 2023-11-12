@@ -1,5 +1,3 @@
-package kieker.tools.delta;
-
 /***************************************************************************
  * Copyright (C) 2023 Kieker Project (https://kieker-monitoring.net)
  *
@@ -16,12 +14,14 @@ package kieker.tools.delta;
  * limitations under the License.
  ***************************************************************************/
 
+package kieker.tools.delta;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
-import com.beust.jcommander.JCommander;
-
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.JCommander;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
@@ -30,49 +30,49 @@ import kieker.tools.common.AbstractService;
 /**
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class DeltaMain extends AbstractService<TeetimeConfiguration, Settings> {
 
-    public static void main(final String[] args) {
-        final DeltaMain main = new DeltaMain();
-        try {
-            final int exitCode = main.run("output delta of restructuring", "delta", args, new Settings());
-            System.exit(exitCode);
-        } catch (final IllegalArgumentException e) {
-            LoggerFactory.getLogger(DeltaMain.class).error("Configuration error: {}", e.getLocalizedMessage());
-            System.exit(1);
-        }
-    }
+	public static void main(final String[] args) {
+		final DeltaMain main = new DeltaMain();
+		try {
+			final int exitCode = main.run("output delta of restructuring", "delta", args, new Settings());
+			System.exit(exitCode);
+		} catch (final IllegalArgumentException e) {
+			LoggerFactory.getLogger(DeltaMain.class).error("Configuration error: {}", e.getLocalizedMessage());
+			System.exit(1);
+		}
+	}
 
-    @Override
-    protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
-        try {
-            return new TeetimeConfiguration(this.settings);
-        } catch (final IOException e) {
-            throw new ConfigurationException(e);
-        }
-    }
+	@Override
+	protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		try {
+			return new TeetimeConfiguration(this.settings);
+		} catch (final IOException e) {
+			throw new ConfigurationException(e);
+		}
+	}
 
-    @Override
-    protected Path getConfigurationPath() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	protected Path getConfigurationPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-        return true;
-    }
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
+		return true;
+	}
 
-    @Override
-    protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    protected void shutdownService() {
-        // No special operation necessary.
-    }
+	@Override
+	protected void shutdownService() {
+		// No special operation necessary.
+	}
 }

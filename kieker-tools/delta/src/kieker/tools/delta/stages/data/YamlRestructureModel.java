@@ -18,8 +18,6 @@ package kieker.tools.delta.stages.data;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-
 /**
  * YAML model for restructuring.
  *
@@ -28,14 +26,20 @@ import lombok.Getter;
  */
 public class YamlRestructureModel {
 
-    @Getter
-    private final String name;
+	private final String name;
 
-    @Getter
-    private final Map<String, YamlComponent> components = new HashMap<>();
+	private final Map<String, YamlComponent> components = new HashMap<>();
 
-    public YamlRestructureModel(final String name) {
-        this.name = name;
-    }
+	public YamlRestructureModel(final String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public Map<String, YamlComponent> getComponents() {
+		return this.components;
+	}
 
 }

@@ -15,8 +15,6 @@
  ***************************************************************************/
 package kieker.tools.maa.stages;
 
-import lombok.Getter;
-
 /**
  * Call entry.
  *
@@ -25,24 +23,39 @@ import lombok.Getter;
  */
 public class CallEntry {
 
-    @Getter
-    private final String callerComponent;
-    @Getter
-    private final String caller;
-    @Getter
-    private final String calleeComponent;
-    @Getter
-    private final String callee;
-    @Getter
-    private final int numOfCalls;
+	private final String callerComponent;
+	private final String caller;
+	private final String calleeComponent;
+	private final String callee;
+	private final int numOfCalls;
 
-    public CallEntry(final String callerComponent, final String caller, final String calleeComponent,
-            final String callee, final int numOfCalls) {
-        this.callerComponent = callerComponent;
-        this.caller = caller;
-        this.calleeComponent = calleeComponent;
-        this.callee = callee;
-        this.numOfCalls = numOfCalls;
-    }
+	public CallEntry(final String callerComponent, final String caller, final String calleeComponent,
+			final String callee, final int numOfCalls) {
+		this.callerComponent = callerComponent;
+		this.caller = caller;
+		this.calleeComponent = calleeComponent;
+		this.callee = callee;
+		this.numOfCalls = numOfCalls;
+	}
+
+	public String getCallerComponent() {
+		return this.callerComponent;
+	}
+
+	public String getCaller() {
+		return this.caller;
+	}
+
+	public String getCalleeComponent() {
+		return this.calleeComponent;
+	}
+
+	public String getCallee() {
+		return this.callee;
+	}
+
+	public int getNumOfCalls() {
+		return this.numOfCalls;
+	}
 
 }

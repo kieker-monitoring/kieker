@@ -1,5 +1,3 @@
-package kieker.tools.delta;
-
 /***************************************************************************
  * Copyright (C) 2023 Kieker Project (https://kieker-monitoring.net)
  *
@@ -15,6 +13,7 @@ package kieker.tools.delta;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.tools.delta;
 
 import java.nio.file.Path;
 
@@ -25,34 +24,34 @@ import com.beust.jcommander.converters.PathConverter;
  * All settings including command line parameters for the analysis.
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class Settings { // NOPMD data class
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, converter = PathConverter.class, description = "Input restructure information")
-    private Path inputPath;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, converter = PathConverter.class, description = "Input restructure information")
+	private Path inputPath;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Output restructure information path and filename without extension")
-    private Path outputPath;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Output restructure information path and filename without extension")
+	private Path outputPath;
 
-    @Parameter(names = { "--eol" }, required = false, description = "End of line symbol")
-    private String lineSeparator = System.lineSeparator();
+	@Parameter(names = "--eol", required = false, description = "End of line symbol")
+	private String lineSeparator = System.lineSeparator();
 
-    public Path getInputPath() {
-        return this.inputPath;
-    }
+	public Path getInputPath() {
+		return this.inputPath;
+	}
 
-    public Path getOutputPath() {
-        return this.outputPath;
-    }
+	public Path getOutputPath() {
+		return this.outputPath;
+	}
 
-    public char[] getLineSeparator() {
-        return this.lineSeparator.toCharArray();
-    }
+	public char[] getLineSeparator() {
+		return this.lineSeparator.toCharArray();
+	}
 
-    public void setLineSeparator(final String lineSeparator) {
-        this.lineSeparator = lineSeparator;
-    }
+	public void setLineSeparator(final String lineSeparator) {
+		this.lineSeparator = lineSeparator;
+	}
 }

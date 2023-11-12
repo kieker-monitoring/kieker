@@ -24,6 +24,8 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EMap;
 
 import kieker.analysis.architecture.repository.ModelRepository;
+import kieker.analysis.generic.MapFileReader;
+import kieker.analysis.generic.StringValueConverter;
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
 import kieker.model.analysismodel.assembly.AssemblyModel;
@@ -35,80 +37,77 @@ import kieker.model.analysismodel.type.TypePackage;
 
 import teetime.stage.basic.AbstractTransformation;
 
-import org.oceandsl.analysis.utils.MapFileReader;
-import org.oceandsl.analysis.utils.StringValueConverter;
-
 /**
  * @author Reiner Jung
  * @since 1.3
  */
 public class GroupComponentsHierarchicallyStage extends AbstractTransformation<ModelRepository, ModelRepository> {
 
-    // File to module map
-    private final Map<String, String> componentMap = new HashMap<>();
+	// File to module map
+	private final Map<String, String> componentMap = new HashMap<>();
 
-    public GroupComponentsHierarchicallyStage(final List<Path> componentMapFiles, final String separator,
-            final boolean caseInsensitive) throws IOException {
-        for (final Path componentMapFile : componentMapFiles) {
-            this.logger.info("Reading map file {}", componentMapFile.toString());
-            final MapFileReader<String, String> mapFileReader = new MapFileReader<>(componentMapFile, separator,
-                    this.componentMap, new StringValueConverter(caseInsensitive, 1),
-                    new StringValueConverter(caseInsensitive, 0));
-            mapFileReader.read();
-        }
-    }
+	public GroupComponentsHierarchicallyStage(final List<Path> componentMapFiles, final String separator,
+			final boolean caseInsensitive) throws IOException {
+		for (final Path componentMapFile : componentMapFiles) {
+			this.logger.info("Reading map file {}", componentMapFile.toString());
+			final MapFileReader<String, String> mapFileReader = new MapFileReader<>(componentMapFile, separator,
+					this.componentMap, new StringValueConverter(caseInsensitive, 1),
+					new StringValueConverter(caseInsensitive, 0));
+			mapFileReader.read();
+		}
+	}
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final TypeModel typeModel = repository.getModel(TypePackage.Literals.TYPE_MODEL);
-        final AssemblyModel assemblyModel = repository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL);
-        this.componentMap.values().forEach(componentName -> {
-            if (!typeModel.getComponentTypes().containsKey(componentName)) {
-                final ComponentType componentType = this.createComponentType(componentName);
-                final AssemblyComponent component = this.createAssemblyComponent(componentName, componentType);
-                this.addSubComponents(componentType, component, assemblyModel.getComponents());
-                if (component.getContainedComponents().size() > 0) { // ignore empty main component
-                    typeModel.getComponentTypes().put(componentName, componentType);
-                    assemblyModel.getComponents().put(componentName, component);
-                } // TODO should also update source model and deployment model
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final TypeModel typeModel = repository.getModel(TypePackage.Literals.TYPE_MODEL);
+		final AssemblyModel assemblyModel = repository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL);
+		this.componentMap.values().forEach(componentName -> {
+			if (!typeModel.getComponentTypes().containsKey(componentName)) {
+				final ComponentType componentType = this.createComponentType(componentName);
+				final AssemblyComponent component = this.createAssemblyComponent(componentName, componentType);
+				this.addSubComponents(componentType, component, assemblyModel.getComponents());
+				if (component.getContainedComponents().size() > 0) { // ignore empty main component
+					typeModel.getComponentTypes().put(componentName, componentType);
+					assemblyModel.getComponents().put(componentName, component);
+				} // TODO should also update source model and deployment model
 
-            }
-        });
-        this.outputPort.send(repository);
-    }
+			}
+		});
+		this.outputPort.send(repository);
+	}
 
-    private void addSubComponents(final ComponentType componentType, final AssemblyComponent component,
-            final EMap<String, AssemblyComponent> components) {
-        this.componentMap.entrySet().forEach(entry -> {
-            if (entry.getValue().equals(component.getSignature())) {
-                final AssemblyComponent subComponent = components.get(entry.getKey());
-                if (subComponent != null) {
-                    componentType.getContainedComponents().add(subComponent.getComponentType());
-                    component.getContainedComponents().add(subComponent);
-                }
-            }
-        });
-    }
+	private void addSubComponents(final ComponentType componentType, final AssemblyComponent component,
+			final EMap<String, AssemblyComponent> components) {
+		this.componentMap.entrySet().forEach(entry -> {
+			if (entry.getValue().equals(component.getSignature())) {
+				final AssemblyComponent subComponent = components.get(entry.getKey());
+				if (subComponent != null) {
+					componentType.getContainedComponents().add(subComponent.getComponentType());
+					component.getContainedComponents().add(subComponent);
+				}
+			}
+		});
+	}
 
-    private ComponentType createComponentType(final String componentName) {
-        final ComponentType componentType = TypeFactory.eINSTANCE.createComponentType();
-        componentType.setSignature(componentName);
-        final int divider = componentName.lastIndexOf('.');
-        componentType.setName(componentName.substring(divider + 1));
-        if (divider <= 0) {
-            componentType.setPackage("");
-        } else {
-            componentType.setPackage(componentName.substring(0, divider - 1));
-        }
+	private ComponentType createComponentType(final String componentName) {
+		final ComponentType componentType = TypeFactory.eINSTANCE.createComponentType();
+		componentType.setSignature(componentName);
+		final int divider = componentName.lastIndexOf('.');
+		componentType.setName(componentName.substring(divider + 1));
+		if (divider <= 0) {
+			componentType.setPackage("");
+		} else {
+			componentType.setPackage(componentName.substring(0, divider - 1));
+		}
 
-        return componentType;
-    }
+		return componentType;
+	}
 
-    private AssemblyComponent createAssemblyComponent(final String componentName, final ComponentType componentType) {
-        final AssemblyComponent component = AssemblyFactory.eINSTANCE.createAssemblyComponent();
-        component.setSignature(componentName);
-        component.setComponentType(componentType);
+	private AssemblyComponent createAssemblyComponent(final String componentName, final ComponentType componentType) {
+		final AssemblyComponent component = AssemblyFactory.eINSTANCE.createAssemblyComponent();
+		component.setSignature(componentName);
+		component.setComponentType(componentType);
 
-        return component;
-    }
+		return component;
+	}
 }

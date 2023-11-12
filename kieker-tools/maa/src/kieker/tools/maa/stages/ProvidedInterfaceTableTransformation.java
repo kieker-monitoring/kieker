@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kieker.analysis.architecture.repository.ModelRepository;
+import kieker.analysis.generic.Table;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.ProvidedInterfaceType;
@@ -32,8 +33,6 @@ import kieker.model.analysismodel.type.TypePackage;
 
 import teetime.stage.basic.AbstractTransformation;
 
-import org.oceandsl.analysis.generic.Table;
-
 /**
  * Generate table for interfaces in component type, interface name, operations.
  *
@@ -41,47 +40,47 @@ import org.oceandsl.analysis.generic.Table;
  * @since 1.2
  */
 public class ProvidedInterfaceTableTransformation
-        extends AbstractTransformation<ModelRepository, Table<String, ProvidedInterfaceEntry>> {
+		extends AbstractTransformation<ModelRepository, Table<String, ProvidedInterfaceEntry>> {
 
-    @Override
-    protected void execute(final ModelRepository element) throws Exception {
-        final Table<String, ProvidedInterfaceEntry> table = new Table<>("interfaces");
-        final TypeModel typeModel = element.getModel(TypePackage.Literals.TYPE_MODEL);
-        final Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> providedToRequiredMap = this
-                .createLookupProvidedInterfaceType(typeModel.getComponentTypes().values());
+	@Override
+	protected void execute(final ModelRepository element) throws Exception {
+		final Table<String, ProvidedInterfaceEntry> table = new Table<>("interfaces");
+		final TypeModel typeModel = element.getModel(TypePackage.Literals.TYPE_MODEL);
+		final Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> providedToRequiredMap = this
+				.createLookupProvidedInterfaceType(typeModel.getComponentTypes().values());
 
-        for (final ComponentType componentType : typeModel.getComponentTypes().values()) {
-            for (final ProvidedInterfaceType providedInterfaceType : componentType.getProvidedInterfaceTypes()) {
-                final String requiredString = providedToRequiredMap.get(providedInterfaceType).stream().map(
-                        requiredInterfaceType -> ((ComponentType) requiredInterfaceType.eContainer()).getSignature())
-                        .collect(Collectors.joining(","));
+		for (final ComponentType componentType : typeModel.getComponentTypes().values()) {
+			for (final ProvidedInterfaceType providedInterfaceType : componentType.getProvidedInterfaceTypes()) {
+				final String requiredString = providedToRequiredMap.get(providedInterfaceType).stream().map(
+						requiredInterfaceType -> ((ComponentType) requiredInterfaceType.eContainer()).getSignature())
+						.collect(Collectors.joining(","));
 
-                for (final OperationType operation : providedInterfaceType.getProvidedOperationTypes().values()) {
-                    table.getRows().add(new ProvidedInterfaceEntry(componentType.getSignature(),
-                            providedInterfaceType.getSignature(), operation.getSignature(), requiredString));
-                }
-            }
-        }
-        this.outputPort.send(table);
-    }
+				for (final OperationType operation : providedInterfaceType.getProvidedOperationTypes().values()) {
+					table.getRows().add(new ProvidedInterfaceEntry(componentType.getSignature(),
+							providedInterfaceType.getSignature(), operation.getSignature(), requiredString));
+				}
+			}
+		}
+		this.outputPort.send(table);
+	}
 
-    private Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> createLookupProvidedInterfaceType(
-            final Collection<ComponentType> componentTypes) {
-        final Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> providedToRequiredMap = new HashMap<>();
+	private Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> createLookupProvidedInterfaceType(
+			final Collection<ComponentType> componentTypes) {
+		final Map<ProvidedInterfaceType, Set<RequiredInterfaceType>> providedToRequiredMap = new HashMap<>();
 
-        componentTypes.forEach(componentType -> {
-            componentType.getRequiredInterfaceTypes().forEach(requiredInterfaceType -> {
-                Set<RequiredInterfaceType> requiredInterfaceTypes = providedToRequiredMap
-                        .get(requiredInterfaceType.getRequires());
-                if (requiredInterfaceTypes == null) {
-                    requiredInterfaceTypes = new HashSet<>();
-                    providedToRequiredMap.put(requiredInterfaceType.getRequires(), requiredInterfaceTypes);
-                }
-                requiredInterfaceTypes.add(requiredInterfaceType);
-            });
-        });
+		componentTypes.forEach(componentType -> {
+			componentType.getRequiredInterfaceTypes().forEach(requiredInterfaceType -> {
+				Set<RequiredInterfaceType> requiredInterfaceTypes = providedToRequiredMap
+						.get(requiredInterfaceType.getRequires());
+				if (requiredInterfaceTypes == null) {
+					requiredInterfaceTypes = new HashSet<>();
+					providedToRequiredMap.put(requiredInterfaceType.getRequires(), requiredInterfaceTypes);
+				}
+				requiredInterfaceTypes.add(requiredInterfaceType);
+			});
+		});
 
-        return providedToRequiredMap;
-    }
+		return providedToRequiredMap;
+	}
 
 }

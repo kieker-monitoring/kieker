@@ -51,48 +51,48 @@ import teetime.stage.basic.AbstractTransformation;
  * portion of the interface while another component is using more of a set interface.
  *
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  */
 public class CollectConnectionsStage extends AbstractTransformation<ModelRepository, ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final ExecutionModel executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final ExecutionModel executionModel = repository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL);
 
-        repository.register(
-                new ModelDescriptor("connections.xmi", CollectionPackage.Literals.CONNECTIONS,
-                        CollectionFactory.eINSTANCE),
-                this.collectInterconnections(executionModel.getInvocations().values()));
+		repository.register(
+				new ModelDescriptor("connections.xmi", CollectionPackage.Literals.CONNECTIONS,
+						CollectionFactory.eINSTANCE),
+				this.collectInterconnections(executionModel.getInvocations().values()));
 
-        this.outputPort.send(repository);
-    }
+		this.outputPort.send(repository);
+	}
 
-    private Connections collectInterconnections(final Collection<Invocation> invocations) {
-        final Connections interconnections = CollectionFactory.eINSTANCE.createConnections();
+	private Connections collectInterconnections(final Collection<Invocation> invocations) {
+		final Connections interconnections = CollectionFactory.eINSTANCE.createConnections();
 
-        for (final Invocation invocation : invocations) {
-            if (!invocation.getCaller().getComponent().equals(invocation.getCallee().getComponent())) { // only
-                                                                                                        // inter-component
-                                                                                                        // edges
-                final Coupling key = CollectionFactory.eINSTANCE.createCoupling();
-                key.setCaller(invocation.getCaller().getComponent().getAssemblyComponent().getComponentType());
-                key.setCallee(invocation.getCallee().getComponent().getAssemblyComponent().getComponentType());
+		for (final Invocation invocation : invocations) {
+			if (!invocation.getCaller().getComponent().equals(invocation.getCallee().getComponent())) { // only
+																										// inter-component
+																										// edges
+				final Coupling key = CollectionFactory.eINSTANCE.createCoupling();
+				key.setCaller(invocation.getCaller().getComponent().getAssemblyComponent().getComponentType());
+				key.setCallee(invocation.getCallee().getComponent().getAssemblyComponent().getComponentType());
 
-                OperationCollection calleeOperationCollection = interconnections.getConnections().get(key);
+				OperationCollection calleeOperationCollection = interconnections.getConnections().get(key);
 
-                if (calleeOperationCollection == null) {
-                    calleeOperationCollection = CollectionFactory.eINSTANCE.createOperationCollection();
-                    calleeOperationCollection.setCaller(key.getCaller());
-                    calleeOperationCollection.setCallee(key.getCallee());
-                    interconnections.getConnections().put(key, calleeOperationCollection);
-                }
+				if (calleeOperationCollection == null) {
+					calleeOperationCollection = CollectionFactory.eINSTANCE.createOperationCollection();
+					calleeOperationCollection.setCaller(key.getCaller());
+					calleeOperationCollection.setCallee(key.getCallee());
+					interconnections.getConnections().put(key, calleeOperationCollection);
+				}
 
-                final OperationType calleeOperation = invocation.getCallee().getAssemblyOperation().getOperationType();
-                calleeOperationCollection.getOperations().put(calleeOperation.getSignature(), calleeOperation);
-            }
-        }
+				final OperationType calleeOperation = invocation.getCallee().getAssemblyOperation().getOperationType();
+				calleeOperationCollection.getOperations().put(calleeOperation.getSignature(), calleeOperation);
+			}
+		}
 
-        return interconnections;
-    }
+		return interconnections;
+	}
 
 }

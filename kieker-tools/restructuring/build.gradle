@@ -3,6 +3,9 @@ plugins {
 	id 'eclipse'
 }
 
+sourceCompatibility = 11
+targetCompatibility = 11
+
 distTar.enabled=false
 distZip.enabled=true
 

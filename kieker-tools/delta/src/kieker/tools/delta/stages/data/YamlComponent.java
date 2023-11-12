@@ -18,8 +18,6 @@ package kieker.tools.delta.stages.data;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-
 /**
  * Yaml model component.
  *
@@ -28,13 +26,19 @@ import lombok.Getter;
  */
 public class YamlComponent {
 
-    @Getter
-    private final String name;
+	private final String name;
 
-    @Getter
-    private final Map<String, YamlOperation> operations = new HashMap<>();
+	private final Map<String, YamlOperation> operations = new HashMap<>();
 
-    public YamlComponent(final String name) {
-        this.name = name;
-    }
+	public YamlComponent(final String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public Map<String, YamlOperation> getOperations() {
+		return this.operations;
+	}
 }

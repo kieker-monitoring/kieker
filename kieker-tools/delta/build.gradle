@@ -11,6 +11,9 @@ plugins {
 	id 'application'
 }
 
+sourceCompatibility = 11
+targetCompatibility = 11
+
 dependencies {
 	implementation project(':kieker-common')
 	implementation project(':kieker-analysis')
@@ -25,12 +28,6 @@ dependencies {
 
 	implementation 'org.csveed:csveed:0.7.4'
 
-	compileOnly 'org.projectlombok:lombok:1.18.26'
-	testCompileOnly 'org.projectlombok:lombok:1.18.26'
-	annotationProcessor 'org.projectlombok:lombok:1.18.26'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
-
-	// runtime 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 
@@ -38,7 +35,7 @@ dependencies {
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
 	implementation 'org.apache.commons:commons-compress:1.20'
 
-		implementation "com.beust:jcommander:${jcommanderVersion}"
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'

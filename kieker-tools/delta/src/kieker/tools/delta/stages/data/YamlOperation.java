@@ -15,8 +15,6 @@
  ***************************************************************************/
 package kieker.tools.delta.stages.data;
 
-import lombok.Getter;
-
 /**
  * Yaml model operation.
  *
@@ -25,14 +23,20 @@ import lombok.Getter;
  */
 public class YamlOperation {
 
-    @Getter
-    private final String name;
+	private final String name;
 
-    @Getter
-    private final String sourceComponentName;
+	private final String sourceComponentName;
 
-    public YamlOperation(final String operationName, final String componentName) {
-        this.name = operationName;
-        this.sourceComponentName = componentName;
-    }
+	public YamlOperation(final String operationName, final String componentName) {
+		this.name = operationName;
+		this.sourceComponentName = componentName;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getSourceComponentName() {
+		return this.sourceComponentName;
+	}
 }
