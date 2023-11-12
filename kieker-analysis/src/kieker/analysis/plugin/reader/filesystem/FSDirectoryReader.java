@@ -76,7 +76,7 @@ final class FSDirectoryReader implements Runnable {
 	 *            select only records of this type; null selects all
 	 */
 	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
-			final boolean ignoreUnknownRecordTypes) {
+							 final boolean ignoreUnknownRecordTypes) {
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
@@ -220,9 +220,9 @@ final class FSDirectoryReader implements Runnable {
 	private final void processNormalInputFile(final File inputFile) {
 		try {
 			this.textFileStreamProcessor.processInputChannel(Files.newInputStream(inputFile.toPath(), StandardOpenOption.READ));
-			this.terminated = true;
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
 			LOGGER.error("Error reading {}", inputFile, ex);
+			this.terminated = true;
 		}
 	}
 
