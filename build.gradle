@@ -729,7 +729,9 @@ task javadocJar(type: Jar, dependsOn: apidoc) {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-  dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+  dependsOn: [
+   //':distributeBinaryZip', 
+   ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 
 /**
@@ -842,35 +844,35 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
-  'kieker-examples:buildStandaloneExamples',
-  ':kieker-tools:restructuring:distZip',
-  ':kieker-tools:behavior-analysis:distZip',
-  ':kieker-tools:cmi:distZip',
-  ':kieker-tools:collector:distZip',
-  ':kieker-tools:convert-logging-timestamp:distZip',
-  ':kieker-tools:dar:distZip',
-  ':kieker-tools:delta:distZip',
-  ':kieker-tools:fxca:distZip',
-  ':kieker-tools:log-replayer:distZip',
-  ':kieker-tools:maa:distZip',
-  ':kieker-tools:mktable:distZip',
-  ':kieker-tools:mop:distZip',
-  ':kieker-tools:mt:distZip',
-  ':kieker-tools:mvis:distZip',
-  ':kieker-tools:pp-static-log:distZip',
-  ':kieker-tools:relabel:distZip',
-  ':kieker-tools:resource-monitor:distZip',
-  ':kieker-tools:rewrite-log-entries:distZip',
-  ':kieker-tools:runtime-analysis:distZip',
-  ':kieker-tools:sar:distZip',
-  ':kieker-tools:trace-analysis:distZip',
-  ':kieker-tools:trace-analysis-gui:distZip',
-  ':kieker-examples:jar',
-  ':kieker-examples:spotlessMisc' ]) {
-  archiveClassifier = 'binaries'
-  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
-}
+//task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+//  'kieker-examples:buildStandaloneExamples',
+//  ':kieker-tools:restructuring:distZip',
+//  ':kieker-tools:behavior-analysis:distZip',
+//  ':kieker-tools:cmi:distZip',
+//  ':kieker-tools:collector:distZip',
+//  ':kieker-tools:convert-logging-timestamp:distZip',
+//  ':kieker-tools:dar:distZip',
+//  ':kieker-tools:delta:distZip',
+//  ':kieker-tools:fxca:distZip',
+//  ':kieker-tools:log-replayer:distZip',
+//  ':kieker-tools:maa:distZip',
+//  ':kieker-tools:mktable:distZip',
+//  ':kieker-tools:mop:distZip',
+//  ':kieker-tools:mt:distZip',
+//  ':kieker-tools:mvis:distZip',
+//  ':kieker-tools:pp-static-log:distZip',
+//  ':kieker-tools:relabel:distZip',
+//  ':kieker-tools:resource-monitor:distZip',
+//  ':kieker-tools:rewrite-log-entries:distZip',
+//  ':kieker-tools:runtime-analysis:distZip',
+//  ':kieker-tools:sar:distZip',
+//  ':kieker-tools:trace-analysis:distZip',
+//  ':kieker-tools:trace-analysis-gui:distZip',
+//  ':kieker-examples:jar',
+//  ':kieker-examples:spotlessMisc' ]) {
+//  archiveClassifier = 'binaries'
+//  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+//}
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
