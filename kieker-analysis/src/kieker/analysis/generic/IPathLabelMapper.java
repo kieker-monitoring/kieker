@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2022 Kieker Project (https://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package org.oceandsl.tools.sar.stages.dataflow;
+package kieker.analysis.generic;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.nio.file.Path;
 
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
+ *
+ * @param <T>
  */
-class ElementAndDataflow4StaticDataStageTest {
+public interface IPathLabelMapper<T> {
 
-    @Test
-    void test() {
-        Assertions.fail("Not yet implemented");
-    }
-
+	/**
+	 * Map path to label.
+	 *
+	 * @param path
+	 *            input path
+	 * @return returns label
+	 */
+	T map(Path path);
 }

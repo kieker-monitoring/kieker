@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2021 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class AllenDeployedArchitectureGraphStage
 		extends AbstractTransformation<ModelRepository, Graph<Node<DeployedComponent>>> {

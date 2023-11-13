@@ -18,35 +18,35 @@ package kieker.tools.sar.signature.processor;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.oceandsl.analysis.code.CodeUtils;
+import kieker.analysis.code.CodeUtils;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class FileBasedSignatureProcessor extends AbstractSignatureProcessor {
 
-    public FileBasedSignatureProcessor(final boolean caseInsensitive) {
-        super(caseInsensitive);
-    }
+	public FileBasedSignatureProcessor(final boolean caseInsensitive) {
+		super(caseInsensitive);
+	}
 
-    @Override
-    public boolean processSignatures(final String pathString, final String componentSignature,
-            final String elementSignature) {
-        if (CodeUtils.NO_FILE.equals(pathString)) {
-            this.componentSignature = pathString;
-        } else {
-            final Path path = Paths.get(pathString);
-            this.componentSignature = this.convertToLowerCase(path.getName(path.getNameCount() - 1).toString());
-        }
+	@Override
+	public boolean processSignatures(final String pathString, final String componentSignature,
+			final String elementSignature) {
+		if (CodeUtils.NO_FILE.equals(pathString)) {
+			this.componentSignature = pathString;
+		} else {
+			final Path path = Paths.get(pathString);
+			this.componentSignature = this.convertToLowerCase(path.getName(path.getNameCount() - 1).toString());
+		}
 
-        this.elementSignature = this.convertToLowerCase(elementSignature);
-        return true;
-    }
+		this.elementSignature = this.convertToLowerCase(elementSignature);
+		return true;
+	}
 
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
+	@Override
+	public String getErrorMessage() {
+		return null;
+	}
 
 }

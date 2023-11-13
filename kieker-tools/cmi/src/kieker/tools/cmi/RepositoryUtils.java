@@ -35,7 +35,7 @@ import kieker.tools.cmi.stages.Report;
 
 /**
  * @author Reiner Jung
- *
+ * @since 2.0.0
  */
 public final class RepositoryUtils {
 

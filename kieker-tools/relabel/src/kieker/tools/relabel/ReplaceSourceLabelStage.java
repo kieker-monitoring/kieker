@@ -30,7 +30,7 @@ import teetime.stage.basic.AbstractFilter;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class ReplaceSourceLabelStage extends AbstractFilter<ModelRepository> {
 

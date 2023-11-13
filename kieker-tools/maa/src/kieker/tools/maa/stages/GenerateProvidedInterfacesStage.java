@@ -49,7 +49,7 @@ import teetime.stage.basic.AbstractTransformation;
  * Generate interfaces. TODO currently sub components are not supported.
  *
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  */
 public class GenerateProvidedInterfacesStage extends
         AbstractTransformation<Tuple<ModelRepository, Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>>>, ModelRepository> {

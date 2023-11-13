@@ -24,7 +24,7 @@ import teetime.framework.OutputPort;
  * Marker class for all model operations.
  *
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  *
  */
 public interface IModelOperationStage {

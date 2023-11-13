@@ -28,7 +28,7 @@ import kieker.tools.common.AbstractService;
  * Fix static log which misses the component value of the callee..
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class FixStaticLogMain extends AbstractService<FixStaticLogTeetimeConfiguration, Settings> {
 

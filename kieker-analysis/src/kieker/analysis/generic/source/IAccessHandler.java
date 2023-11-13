@@ -20,7 +20,7 @@ package kieker.analysis.generic.source;
  *
  * @author Reiner Jung
  *
- * @since 1.15
+ * @since 2.0.0
  * @experimental
  */
 public interface IAccessHandler {

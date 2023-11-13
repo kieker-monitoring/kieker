@@ -36,7 +36,7 @@ import kieker.model.analysismodel.type.TypePackage;
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class SimilarMethodPrefixMergeInterfaceStage extends AbstractMergeInterfaceStage {
 
@@ -208,7 +208,7 @@ public class SimilarMethodPrefixMergeInterfaceStage extends AbstractMergeInterfa
      * Internal Tuple class.
      *
      * @author Reiner Jung
-     * @since 1.3.0
+     * @since 2.0.0
      */
     private class Tuple {
 
@@ -225,7 +225,7 @@ public class SimilarMethodPrefixMergeInterfaceStage extends AbstractMergeInterfa
      * Internal MethodDistance class.
      *
      * @author Reiner Jung
-     * @since 1.3.0
+     * @since 2.0.0
      */
     private class MethodDistance {
 

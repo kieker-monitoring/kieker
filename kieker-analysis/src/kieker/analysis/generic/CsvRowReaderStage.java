@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.csv;
+package kieker.analysis.generic;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,30 +24,25 @@ import org.csveed.api.CsvClient;
 import org.csveed.api.CsvClientImpl;
 import org.csveed.report.CsvException;
 
-import kieker.analysis.generic.Table;
-
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * Reader for multiple CSV files. Output them as tables.
+ * Reader for multiple CSV files, producing single records for each row.
  *
- * @param <R>
- *            label data type
  * @param <T>
- *            record data type
+ *            ICsvRecord datatype
  *
  * @author Reiner Jung
  * @since 1.0
  *
  */
-public class CsvTableReaderStage<R, T> extends AbstractTransformation<Path, Table<R, T>> {
+public class CsvRowReaderStage<T> extends AbstractTransformation<Path, T> {
 
 	private final char separator;
 	private final char quoteSymbol;
 	private final char escapeSymbol;
 	private final boolean header;
 	private final Class<T> clazz;
-	private final IPathLabelMapper<R> mapper;
 
 	/**
 	 * Read a single CSV file.
@@ -62,20 +57,17 @@ public class CsvTableReaderStage<R, T> extends AbstractTransformation<Path, Tabl
 	 *            indicate how to interpret the first line in the CSV file, set to true to indicate
 	 *            that the first line contains the header information
 	 * @param clazz
-	 *            bean class
-	 * @param mapper
-	 *            path to label mapper
+	 *            row class
 	 * @throws IOException
 	 *             when a stream could not be opened.
 	 */
-	public CsvTableReaderStage(final char separator, final char quoteSymbol, final char escapeSymbol,
-			final boolean header, final Class<T> clazz, final IPathLabelMapper<R> mapper) {
+	public CsvRowReaderStage(final char separator, final char quoteSymbol, final char escapeSymbol,
+			final boolean header, final Class<T> clazz) {
 		this.separator = separator;
 		this.quoteSymbol = quoteSymbol;
 		this.escapeSymbol = escapeSymbol;
 		this.header = header;
 		this.clazz = clazz;
-		this.mapper = mapper;
 	}
 
 	@Override
@@ -88,19 +80,16 @@ public class CsvTableReaderStage<R, T> extends AbstractTransformation<Path, Tabl
 			csvClient.setUseHeader(this.header);
 			csvClient.skipEmptyLines(true);
 
-			final Table<R, T> table = new Table<>(this.mapper.map(path));
-
 			try {
 				while (!csvClient.isFinished()) {
 					final T bean = csvClient.readBean();
 					if (bean != null) {
-						table.getRows().add(bean);
+						this.outputPort.send(bean);
 					} else {
 						break;
 					}
 				}
 
-				this.outputPort.send(table);
 			} catch (final CsvException e) {
 				this.logger.error("Error reading csv file in line {} path {}", csvClient.getCurrentLine(),
 						path.toString());

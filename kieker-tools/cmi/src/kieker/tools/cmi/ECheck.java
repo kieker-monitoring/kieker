@@ -16,8 +16,8 @@
 package kieker.tools.cmi;
 
 /**
- * @author reiner
- *
+ * @author Reiner Jung
+ * @since 2.0.0
  */
 public enum ECheck {
     TYPE, ASSEMBLY, DEPLOYMENT, EXECUTION, SOURCE, STATISTICS

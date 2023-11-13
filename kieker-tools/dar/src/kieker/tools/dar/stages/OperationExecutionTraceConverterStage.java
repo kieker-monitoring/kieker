@@ -31,7 +31,7 @@ import teetime.stage.basic.AbstractTransformation;
  * Convert old style operation execution traces to flow traces.
  *
  * @author Reiner Jung
- *
+ * @since 2.0.0
  */
 public class OperationExecutionTraceConverterStage
         extends AbstractTransformation<OperationExecutionRecord, IFlowRecord> {

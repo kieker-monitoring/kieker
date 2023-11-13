@@ -22,7 +22,7 @@ import kieker.model.analysismodel.type.TypeFactory;
 
 /**
  * @author Reiner Jung
- * @since 1.3.1
+ * @since 2.0.0
  *
  */
 public class ComponentTypeConverter extends AbstractConverter<ComponentType> {

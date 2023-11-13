@@ -18,6 +18,10 @@ package kieker.tools.cmi.stages;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class Report {
 
     private final String name;

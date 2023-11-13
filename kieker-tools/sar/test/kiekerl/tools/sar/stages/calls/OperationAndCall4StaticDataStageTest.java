@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package org.oceandsl.tools.sar.stages.calls;
+package kiekerl.tools.sar.stages.calls;
 
 import java.time.Duration;
 
@@ -26,13 +26,13 @@ import kieker.tools.sar.stages.calls.OperationAndCall4StaticDataStage;
 
 import teetime.framework.test.StageTester;
 
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
+import kieker.analysis.code.data.CallerCalleeEntry;
 
 /**
  * Testing operation and call data stage..
  *
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  */
 class OperationAndCall4StaticDataStageTest {
 

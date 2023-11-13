@@ -25,7 +25,7 @@ import teetime.framework.AbstractConsumerStage;
 /**
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class RestructureModelSink extends AbstractConsumerStage<TransformationModel> {
 	private final Path outputPath;

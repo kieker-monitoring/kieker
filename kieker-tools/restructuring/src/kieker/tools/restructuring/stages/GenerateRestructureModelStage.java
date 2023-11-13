@@ -25,7 +25,7 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * @author Serafim Simonov -- initial contribution
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class GenerateRestructureModelStage extends AbstractTransformation<RestructureStepFinder, TransformationModel> {
 

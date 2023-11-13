@@ -24,7 +24,7 @@ import teetime.framework.OutputPort;
  *
  * @author Reiner Jung
  *
- * @since 1.15
+ * @since 2.0.0
  *
  */
 public interface ISourceCompositeStage {

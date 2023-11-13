@@ -15,26 +15,25 @@
  ***************************************************************************/
 package kieker.tools.mvis.stages.graph;
 
-import org.oceandsl.analysis.graph.IGraphElementSelector;
-
+import kieker.analysis.generic.graph.IGraphElementSelector;
 import kieker.tools.mvis.graph.IColorDependencyGraphBuilderConfiguration;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  *
  */
 public class ColorDependencyGraphBuilderConfiguration implements IColorDependencyGraphBuilderConfiguration {
 
-    private final IGraphElementSelector selector;
+	private final IGraphElementSelector selector;
 
-    public ColorDependencyGraphBuilderConfiguration(final IGraphElementSelector selector) {
-        this.selector = selector;
-    }
+	public ColorDependencyGraphBuilderConfiguration(final IGraphElementSelector selector) {
+		this.selector = selector;
+	}
 
-    @Override
-    public IGraphElementSelector getSelector() {
-        return this.selector;
-    }
+	@Override
+	public IGraphElementSelector getSelector() {
+		return this.selector;
+	}
 
 }

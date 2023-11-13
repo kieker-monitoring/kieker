@@ -21,7 +21,7 @@ import kieker.model.analysismodel.execution.EDirection;
 
 /**
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class CommonBlockArgumentDataflow implements IDataflowEntry {

@@ -21,8 +21,10 @@ import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
 /**
- * @author reiner
+ * Validator for ECheck parameters.
  *
+ * @author Reiner Jung
+ * @since 2.0.0
  */
 public class CheckValidator implements IParameterValidator {
 

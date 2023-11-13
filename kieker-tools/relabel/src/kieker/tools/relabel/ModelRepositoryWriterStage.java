@@ -17,30 +17,29 @@ package kieker.tools.relabel;
 
 import java.nio.file.Path;
 
+import kieker.analysis.architecture.repository.ArchitectureModelRepositoryFactory;
 import kieker.analysis.architecture.repository.ModelRepository;
 
 import teetime.framework.AbstractConsumerStage;
-
-import org.oceandsl.analysis.architecture.ArchitectureModelManagementUtils;
 
 /**
  * Write model to repository.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  *
  */
 public class ModelRepositoryWriterStage extends AbstractConsumerStage<ModelRepository> {
 
-    private final Path outputDirectory;
+	private final Path outputDirectory;
 
-    public ModelRepositoryWriterStage(final Path outputDirectory) {
-        this.outputDirectory = outputDirectory;
-    }
+	public ModelRepositoryWriterStage(final Path outputDirectory) {
+		this.outputDirectory = outputDirectory;
+	}
 
-    @Override
-    protected void execute(final ModelRepository element) throws Exception {
-        ArchitectureModelManagementUtils.writeModelRepository(this.outputDirectory, element);
-    }
+	@Override
+	protected void execute(final ModelRepository element) throws Exception {
+		ArchitectureModelRepositoryFactory.writeModelRepository(this.outputDirectory, element);
+	}
 
 }

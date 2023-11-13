@@ -24,7 +24,7 @@ import kieker.analysis.generic.graph.INode;
 
 /**
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class DedicatedFileNameMapper implements Function<IGraph<INode, IEdge>, Path> {
 

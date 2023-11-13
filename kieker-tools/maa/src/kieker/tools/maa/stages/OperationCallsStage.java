@@ -27,7 +27,7 @@ import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Reiner Jung
- * @since 1.4
+ * @since 2.0.0
  *
  */
 public class OperationCallsStage extends AbstractTransformation<ModelRepository, Table<String, CallEntry>> {

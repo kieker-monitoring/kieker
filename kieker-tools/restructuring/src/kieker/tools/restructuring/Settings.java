@@ -25,7 +25,7 @@ import com.beust.jcommander.converters.PathConverter;
  * All settings including command line parameters for the analysis.
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class Settings { // NOPMD data class
 

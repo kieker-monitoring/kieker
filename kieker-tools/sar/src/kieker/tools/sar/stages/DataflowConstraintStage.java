@@ -35,7 +35,7 @@ import teetime.framework.OutputPort;
  * been processed.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class DataflowConstraintStage extends AbstractStage {

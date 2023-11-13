@@ -20,8 +20,8 @@ import java.util.Locale;
 import com.beust.jcommander.IStringConverter;
 
 /**
- * @author reiner
- *
+ * @author Reiner Jung
+ * @since 2.0.0
  */
 public class CheckConverter implements IStringConverter<ECheck> {
 

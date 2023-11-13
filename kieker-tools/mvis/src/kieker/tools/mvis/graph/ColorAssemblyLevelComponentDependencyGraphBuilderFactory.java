@@ -20,7 +20,7 @@ import kieker.analysis.architecture.dependency.IDependencyGraphBuilderFactory;
 
 /**
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  *
  */
 public class ColorAssemblyLevelComponentDependencyGraphBuilderFactory

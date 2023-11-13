@@ -22,7 +22,7 @@ import kieker.model.analysismodel.type.OperationType;
  * Convert operation signature from ELF format.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class ELFOperationSignatureExtractor implements IOperationSignatureExtractor {
 

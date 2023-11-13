@@ -17,7 +17,7 @@ package kieker.tools.mvis.graph;
 
 /**
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public final class ExtraConstantsUtils {
 

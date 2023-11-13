@@ -13,6 +13,10 @@ mainClassName='kieker.tools.mop.ModelOperationMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
+test {
+	useJUnitPlatform()
+}
+
 dependencies {
 	implementation project(":kieker-common")
 	implementation project(":kieker-analysis")
@@ -32,6 +36,9 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
 	implementation 'org.csveed:csveed:0.7.4'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')

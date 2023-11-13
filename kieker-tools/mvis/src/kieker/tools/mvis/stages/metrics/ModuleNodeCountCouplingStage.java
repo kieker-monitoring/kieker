@@ -15,41 +15,40 @@
  ***************************************************************************/
 package kieker.tools.mvis.stages.metrics;
 
+import kieker.analysis.generic.Table;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
 
 import teetime.stage.basic.AbstractTransformation;
 
-import org.oceandsl.analysis.generic.Table;
-
 /**
  * Counts the incoming and outgoing edges for each node. Where nodes represent modules/components in
  * the architecture.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class ModuleNodeCountCouplingStage
-        extends AbstractTransformation<IGraph<INode, IEdge>, Table<String, ModuleNodeCountCouplingEntry>> {
+		extends AbstractTransformation<IGraph<INode, IEdge>, Table<String, ModuleNodeCountCouplingEntry>> {
 
-    @Override
-    protected void execute(final IGraph<INode, IEdge> graph) throws Exception {
-        final Table<String, ModuleNodeCountCouplingEntry> result = new Table<>(graph.getLabel());
+	@Override
+	protected void execute(final IGraph<INode, IEdge> graph) throws Exception {
+		final Table<String, ModuleNodeCountCouplingEntry> result = new Table<>(graph.getLabel());
 
-        for (final INode vertex : graph.getGraph().nodes()) {
-            result.getRows().add(new ModuleNodeCountCouplingEntry(this.getFilepath(vertex.getId()),
-                    graph.getGraph().inDegree(vertex), graph.getGraph().outDegree(vertex)));
+		for (final INode vertex : graph.getGraph().nodes()) {
+			result.getRows().add(new ModuleNodeCountCouplingEntry(this.getFilepath(vertex.getId()),
+					graph.getGraph().inDegree(vertex), graph.getGraph().outDegree(vertex)));
 
-        }
+		}
 
-        this.outputPort.send(result);
-    }
+		this.outputPort.send(result);
+	}
 
-    private String getFilepath(final Object id) {
-        final String stringId = (String) id;
-        String filepath = stringId.split("\\.f")[0];
-        filepath = filepath.split("@")[1];
-        return filepath.concat(".f");
-    }
+	private String getFilepath(final Object id) {
+		final String stringId = (String) id;
+		String filepath = stringId.split("\\.f")[0];
+		filepath = filepath.split("@")[1];
+		return filepath.concat(".f");
+	}
 }

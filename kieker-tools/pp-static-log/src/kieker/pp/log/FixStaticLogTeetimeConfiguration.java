@@ -17,31 +17,31 @@ package kieker.pp.log;
 
 import java.io.IOException;
 
-import teetime.framework.Configuration;
+import kieker.analysis.code.data.CallerCalleeEntry;
+import kieker.analysis.generic.source.CsvRowReaderProducerStage;
 
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
-import org.oceandsl.analysis.generic.source.CsvRowReaderProducerStage;
+import teetime.framework.Configuration;
 
 /**
  * Pipe and Filter configuration for the static log preprocessor.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class FixStaticLogTeetimeConfiguration extends Configuration {
 
-    public FixStaticLogTeetimeConfiguration(final Settings parameterConfiguration) throws IOException {
-        final CsvRowReaderProducerStage<CallerCalleeEntry> readCsvStage = new CsvRowReaderProducerStage<>(
-                parameterConfiguration.getInputPath(), ',', '"', '\\', true, CallerCalleeEntry.class);
+	public FixStaticLogTeetimeConfiguration(final Settings parameterConfiguration) throws IOException {
+		final CsvRowReaderProducerStage<CallerCalleeEntry> readCsvStage = new CsvRowReaderProducerStage<>(
+				parameterConfiguration.getInputPath(), ',', '"', '\\', true, CallerCalleeEntry.class);
 
-        final CsvFunctionMapperStage functionMapperStage = new CsvFunctionMapperStage(
-                parameterConfiguration.getMapPaths());
-        final CorrectCallsStage correctCallsStage = new CorrectCallsStage();
-        correctCallsStage.declareActive();
-        final CsvWriterStage writeCsvStage = new CsvWriterStage(parameterConfiguration.getOutputFile().toPath());
+		final CsvFunctionMapperStage functionMapperStage = new CsvFunctionMapperStage(
+				parameterConfiguration.getMapPaths());
+		final CorrectCallsStage correctCallsStage = new CorrectCallsStage();
+		correctCallsStage.declareActive();
+		final CsvWriterStage writeCsvStage = new CsvWriterStage(parameterConfiguration.getOutputFile().toPath());
 
-        this.connectPorts(readCsvStage.getOutputPort(), correctCallsStage.getInputPort());
-        this.connectPorts(functionMapperStage.getOutputPort(), correctCallsStage.getMapInputPort());
-        this.connectPorts(correctCallsStage.getOutputPort(), writeCsvStage.getInputPort());
-    }
+		this.connectPorts(readCsvStage.getOutputPort(), correctCallsStage.getInputPort());
+		this.connectPorts(functionMapperStage.getOutputPort(), correctCallsStage.getMapInputPort());
+		this.connectPorts(correctCallsStage.getOutputPort(), writeCsvStage.getInputPort());
+	}
 }

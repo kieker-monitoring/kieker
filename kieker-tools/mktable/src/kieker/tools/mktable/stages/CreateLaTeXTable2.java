@@ -22,92 +22,92 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import teetime.framework.AbstractConsumerStage;
+import kieker.analysis.generic.Table;
+import kieker.analysis.generic.data.MoveOperationEntry;
 
-import org.oceandsl.analysis.generic.Table;
-import org.oceandsl.analysis.generic.data.MoveOperationEntry;
+import teetime.framework.AbstractConsumerStage;
 
 /**
  * Generate a LaTeX file for all optimizations.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class CreateLaTeXTable2 extends AbstractConsumerStage<Table<String, MoveOperationEntry>> {
 
-    private BufferedWriter writer;
-    private PrintWriter printWriter;
+	private BufferedWriter writer;
+	private PrintWriter printWriter;
 
-    public CreateLaTeXTable2(final Path outputPath) {
-        try {
-            this.writer = Files.newBufferedWriter(outputPath);
-            this.printWriter = new PrintWriter(this.writer);
-            this.printWriter.println("\\documentclass{article}");
-            this.printWriter.println("\\usepackage{multirow}");
-            this.printWriter.println("\\begin{document}");
-        } catch (final IOException e) {
-            this.logger.error("Cannot write to {}, cause {}", outputPath.toString(), e.getLocalizedMessage());
-        }
-    }
+	public CreateLaTeXTable2(final Path outputPath) {
+		try {
+			this.writer = Files.newBufferedWriter(outputPath);
+			this.printWriter = new PrintWriter(this.writer);
+			this.printWriter.println("\\documentclass{article}");
+			this.printWriter.println("\\usepackage{multirow}");
+			this.printWriter.println("\\begin{document}");
+		} catch (final IOException e) {
+			this.logger.error("Cannot write to {}, cause {}", outputPath.toString(), e.getLocalizedMessage());
+		}
+	}
 
-    @Override
-    protected void execute(final Table<String, MoveOperationEntry> optimization) throws Exception {
-        this.logger.info("Processing {} with {} entries\n", optimization.getLabel(), optimization.getRows().size());
-        final List<MoveOperationEntry> list = optimization.getRows();
+	@Override
+	protected void execute(final Table<String, MoveOperationEntry> optimization) throws Exception {
+		this.logger.info("Processing {} with {} entries\n", optimization.getLabel(), optimization.getRows().size());
+		final List<MoveOperationEntry> list = optimization.getRows();
 
-        this.printWriter.printf("\\section{%s}\n", optimization.getLabel());
-        this.printWriter.println("\\begin{tabular}{|r|c|l|}");
-        this.printWriter.println("\\textbf{Source} & \\textbf{Operation} & \\textbf{Target} \\\\ \\hline");
+		this.printWriter.printf("\\section{%s}\n", optimization.getLabel());
+		this.printWriter.println("\\begin{tabular}{|r|c|l|}");
+		this.printWriter.println("\\textbf{Source} & \\textbf{Operation} & \\textbf{Target} \\\\ \\hline");
 
-        this.computeTable(list);
+		this.computeTable(list);
 
-        this.printWriter.println("\\end{tabular}\n\n");
-        this.printWriter.println("\\newpage");
-        this.printWriter.flush();
-    }
+		this.printWriter.println("\\end{tabular}\n\n");
+		this.printWriter.println("\\newpage");
+		this.printWriter.flush();
+	}
 
-    private void computeTable(final List<MoveOperationEntry> list) {
+	private void computeTable(final List<MoveOperationEntry> list) {
 
-        for (final MoveOperationEntry entry : list) {
-            this.printWriter.printf("%s &\n%s &\n%s \\\\\n\\hline\n",
-                    this.escape(this.compactComponent(entry.getSourceComponentName())),
-                    this.escape(this.compactOperation(entry.getOperationName())),
-                    this.escape(this.compactComponent(entry.getTargetComponentName())));
-        }
-    }
+		for (final MoveOperationEntry entry : list) {
+			this.printWriter.printf("%s &\n%s &\n%s \\\\\n\\hline\n",
+					this.escape(this.compactComponent(entry.getSourceComponentName())),
+					this.escape(this.compactOperation(entry.getOperationName())),
+					this.escape(this.compactComponent(entry.getTargetComponentName())));
+		}
+	}
 
-    private String compactOperation(final String operationName) {
-        final int last = operationName.lastIndexOf(":::");
-        if (last == -1) {
-            return operationName;
-        } else {
-            return operationName.substring(last);
-        }
-    }
+	private String compactOperation(final String operationName) {
+		final int last = operationName.lastIndexOf(":::");
+		if (last == -1) {
+			return operationName;
+		} else {
+			return operationName.substring(last);
+		}
+	}
 
-    private String compactComponent(final String componentName) {
-        final int last = componentName.lastIndexOf('/');
-        if (last == -1) {
-            return componentName;
-        } else {
-            return componentName.substring(last);
-        }
-    }
+	private String compactComponent(final String componentName) {
+		final int last = componentName.lastIndexOf('/');
+		if (last == -1) {
+			return componentName;
+		} else {
+			return componentName.substring(last);
+		}
+	}
 
-    private String escape(final String input) {
-        return input.replace("_", "\\_");
-    }
+	private String escape(final String input) {
+		return input.replace("_", "\\_");
+	}
 
-    @Override
-    protected void onTerminating() {
-        this.printWriter.println("\\end{document}");
-        this.printWriter.close();
-        try {
-            this.writer.close();
-        } catch (final IOException e) {
-            this.logger.error("Cannot close LaTeX file. Cause: {}", e);
-        }
-        super.onTerminating();
-    }
+	@Override
+	protected void onTerminating() {
+		this.printWriter.println("\\end{document}");
+		this.printWriter.close();
+		try {
+			this.writer.close();
+		} catch (final IOException e) {
+			this.logger.error("Cannot close LaTeX file. Cause: {}", e);
+		}
+		super.onTerminating();
+	}
 
 }

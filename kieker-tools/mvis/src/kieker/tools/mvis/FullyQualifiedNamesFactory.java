@@ -25,7 +25,7 @@ import kieker.model.analysismodel.deployment.DeployedStorage;
 
 /**
  * @author Reiner Jung
- * @since 1.2.0
+ * @since 2.0.0
  *
  */
 public final class FullyQualifiedNamesFactory {

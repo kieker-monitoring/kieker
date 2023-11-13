@@ -21,7 +21,7 @@ import java.util.List;
  * Description for one replacement rule.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class Replacement {
 

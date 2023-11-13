@@ -23,7 +23,7 @@ import kieker.tools.fxca.utils.Pair;
 
 /**
  * @author Henning Schnoor
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class FortranProject extends MMObject {
 

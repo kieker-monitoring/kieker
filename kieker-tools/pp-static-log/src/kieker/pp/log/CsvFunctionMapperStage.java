@@ -29,7 +29,7 @@ import teetime.framework.AbstractProducerStage;
  * Read function to file map.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class CsvFunctionMapperStage extends AbstractProducerStage<Map<String, String>> {
 

@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class FortranVariable extends DataflowObject implements IContainable, IDataflowEndpoint {

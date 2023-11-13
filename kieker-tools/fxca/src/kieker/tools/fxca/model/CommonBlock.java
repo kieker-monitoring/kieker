@@ -21,7 +21,7 @@ import org.w3c.dom.Node;
 
 /**
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class CommonBlock extends MMObject implements IDataflowEndpoint, IContainable {
 

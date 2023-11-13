@@ -19,7 +19,7 @@ package kieker.tools.dar;
  * List of supported signature converters.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public enum ESignatureExtractor {
     ELF, PYTHON, JAVA

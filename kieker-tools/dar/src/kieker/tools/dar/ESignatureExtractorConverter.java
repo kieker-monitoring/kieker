@@ -22,7 +22,7 @@ import com.beust.jcommander.ParameterException;
  * Convert command line input for class and operation name conversion.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class ESignatureExtractorConverter implements IStringConverter<ESignatureExtractor> {
 

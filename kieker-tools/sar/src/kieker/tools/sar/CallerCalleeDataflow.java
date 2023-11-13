@@ -15,50 +15,71 @@
  ***************************************************************************/
 package kieker.tools.sar;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import kieker.model.analysismodel.execution.EDirection;
 
 /**
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class CallerCalleeDataflow {
 
-    @Getter
-    private final String sourceFileName;
+	private final String sourceFileName;
 
-    @Getter
-    private final String sourceModuleName;
+	private final String sourceModuleName;
 
-    @Getter
-    private final String sourceOperationName;
+	private final String sourceOperationName;
 
-    @Getter
-    private final String targetFileName;
+	private final String targetFileName;
 
-    @Getter
-    private final String targetModuleName;
+	private final String targetModuleName;
 
-    @Getter
-    private final String targetOperatioName;
+	private final String targetOperatioName;
 
-    @Getter
-    @Setter
-    private EDirection direction; // NOPMD pmd does not understand lombok
+	private EDirection direction;
 
-    public CallerCalleeDataflow(final String sourceFileName, final String sourceModuleName,
-            final String sourceOperationName, final String targetFileName, final String targetModuleName,
-            final String targetOperatioName, final EDirection direction) {
-        this.sourceFileName = sourceFileName;
-        this.sourceModuleName = sourceModuleName;
-        this.sourceOperationName = sourceOperationName;
-        this.targetFileName = targetFileName;
-        this.targetModuleName = targetModuleName;
-        this.targetOperatioName = targetOperatioName;
-        this.direction = direction;
-    }
+	public CallerCalleeDataflow(final String sourceFileName, final String sourceModuleName,
+			final String sourceOperationName, final String targetFileName, final String targetModuleName,
+			final String targetOperatioName, final EDirection direction) {
+		this.sourceFileName = sourceFileName;
+		this.sourceModuleName = sourceModuleName;
+		this.sourceOperationName = sourceOperationName;
+		this.targetFileName = targetFileName;
+		this.targetModuleName = targetModuleName;
+		this.targetOperatioName = targetOperatioName;
+		this.direction = direction;
+	}
+
+	public EDirection getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(final EDirection direction) {
+		this.direction = direction;
+	}
+
+	public String getSourceFileName() {
+		return this.sourceFileName;
+	}
+
+	public String getSourceModuleName() {
+		return this.sourceModuleName;
+	}
+
+	public String getSourceOperationName() {
+		return this.sourceOperationName;
+	}
+
+	public String getTargetFileName() {
+		return this.targetFileName;
+	}
+
+	public String getTargetModuleName() {
+		return this.targetModuleName;
+	}
+
+	public String getTargetOperatioName() {
+		return this.targetOperatioName;
+	}
 
 }

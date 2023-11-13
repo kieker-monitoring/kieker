@@ -43,7 +43,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 

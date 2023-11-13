@@ -27,7 +27,7 @@ import kieker.model.analysismodel.type.TypePackage;
  * Merge two different model repositories.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public final class ModelRepositoryMergerUtils {
 

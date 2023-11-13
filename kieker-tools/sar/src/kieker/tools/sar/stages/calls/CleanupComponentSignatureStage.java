@@ -17,67 +17,66 @@ package kieker.tools.sar.stages.calls;
 
 import java.util.List;
 
+import kieker.analysis.code.CodeUtils;
+import kieker.analysis.code.data.CallerCalleeEntry;
+import kieker.tools.sar.signature.processor.AbstractSignatureProcessor;
+
 import teetime.framework.OutputPort;
 import teetime.stage.basic.AbstractFilter;
 
-import org.oceandsl.analysis.code.CodeUtils;
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
-
-import kieker.tools.sar.signature.processor.AbstractSignatureProcessor;
-
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class CleanupComponentSignatureStage extends AbstractFilter<CallerCalleeEntry> {
 
-    private final OutputPort<String> errorMessageOutputPort = this.createOutputPort(String.class);
+	private final OutputPort<String> errorMessageOutputPort = this.createOutputPort(String.class);
 
-    private final List<AbstractSignatureProcessor> processors;
+	private final List<AbstractSignatureProcessor> processors;
 
-    public CleanupComponentSignatureStage(final List<AbstractSignatureProcessor> processors) {
-        this.processors = processors;
-    }
+	public CleanupComponentSignatureStage(final List<AbstractSignatureProcessor> processors) {
+		this.processors = processors;
+	}
 
-    @Override
-    protected void execute(final CallerCalleeEntry event) throws Exception {
-        final FullyQualifiedOperation caller = this.executeOperation(event.getSourcePath(), event.getSourceModule(),
-                event.getCaller());
-        final FullyQualifiedOperation callee = this.executeOperation(event.getTargetPath(), event.getTargetModule(),
-                event.getCallee());
-        final CallerCalleeEntry newEvent = new CallerCalleeEntry(event.getSourcePath(), caller.component,
-                caller.operation, event.getTargetPath(), callee.component, callee.operation);
+	@Override
+	protected void execute(final CallerCalleeEntry event) throws Exception {
+		final FullyQualifiedOperation caller = this.executeOperation(event.getSourcePath(), event.getSourceModule(),
+				event.getCaller());
+		final FullyQualifiedOperation callee = this.executeOperation(event.getTargetPath(), event.getTargetModule(),
+				event.getCallee());
+		final CallerCalleeEntry newEvent = new CallerCalleeEntry(event.getSourcePath(), caller.component,
+				caller.operation, event.getTargetPath(), callee.component, callee.operation);
 
-        this.outputPort.send(newEvent);
-    }
+		this.outputPort.send(newEvent);
+	}
 
-    private FullyQualifiedOperation executeOperation(final String path, final String componentSignature,
-            final String operationSignature) {
-        final FullyQualifiedOperation entry = new FullyQualifiedOperation();
-        entry.component = CodeUtils.UNKNOWN_COMPONENT;
-        entry.operation = CodeUtils.UNKNOWN_OPERATION;
+	private FullyQualifiedOperation executeOperation(final String path, final String componentSignature,
+			final String operationSignature) {
+		final FullyQualifiedOperation entry = new FullyQualifiedOperation();
+		entry.component = CodeUtils.UNKNOWN_COMPONENT;
+		entry.operation = CodeUtils.UNKNOWN_OPERATION;
 
-        for (final AbstractSignatureProcessor processor : this.processors) {
-            if (!processor.processSignatures(path, componentSignature, operationSignature)) {
-                this.errorMessageOutputPort.send(processor.getErrorMessage());
-            }
-            if (CodeUtils.UNKNOWN_COMPONENT.equals(entry.component)) {
-                entry.component = processor.getComponentSignature();
-            }
-            if (CodeUtils.UNKNOWN_OPERATION.equals(entry.operation)) {
-                entry.operation = processor.getElementSignature();
-            }
-        }
-        return entry;
-    }
+		for (final AbstractSignatureProcessor processor : this.processors) {
+			if (!processor.processSignatures(path, componentSignature, operationSignature)) {
+				this.errorMessageOutputPort.send(processor.getErrorMessage());
+			}
+			if (CodeUtils.UNKNOWN_COMPONENT.equals(entry.component)) {
+				entry.component = processor.getComponentSignature();
+			}
+			if (CodeUtils.UNKNOWN_OPERATION.equals(entry.operation)) {
+				entry.operation = processor.getElementSignature();
+			}
+		}
+		return entry;
+	}
 
-    public OutputPort<String> getErrorMessageOutputPort() {
-        return this.errorMessageOutputPort;
-    }
+	public OutputPort<String> getErrorMessageOutputPort() {
+		return this.errorMessageOutputPort;
+	}
 
-    private class FullyQualifiedOperation {
-        private String component;
-        private String operation;
-    }
+	private class FullyQualifiedOperation {
+		private String component;
+		private String operation;
+	}
 
 }

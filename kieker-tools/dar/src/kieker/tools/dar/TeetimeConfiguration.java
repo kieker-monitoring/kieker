@@ -71,7 +71,7 @@ import teetime.stage.basic.merger.Merger;
  * Pipe and Filter configuration for the architecture creation tool.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 

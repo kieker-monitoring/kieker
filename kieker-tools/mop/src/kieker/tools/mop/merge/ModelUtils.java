@@ -41,7 +41,7 @@ import kieker.model.analysismodel.type.StorageType;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public final class ModelUtils {
 

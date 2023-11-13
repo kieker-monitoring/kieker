@@ -16,6 +16,6 @@
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 package kieker.tools.mvis.graph;

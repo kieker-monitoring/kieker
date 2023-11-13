@@ -21,7 +21,7 @@ import com.beust.jcommander.IStringConverter;
  * Convert input string into a correct setup for the sort descriptor.
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  */
 public class SortDescriptorConverter implements IStringConverter<SortDescriptor> {
 

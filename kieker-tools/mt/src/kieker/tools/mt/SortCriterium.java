@@ -19,7 +19,7 @@ package kieker.tools.mt;
  * Define one sort criterium.
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  *
  */
 public class SortCriterium {

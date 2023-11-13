@@ -36,7 +36,7 @@ import kieker.tools.common.AbstractService;
  * Architecture analysis main class.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class DynamicArchitectureRecoveryMain extends AbstractService<TeetimeConfiguration, Settings> {
 

@@ -19,40 +19,40 @@ import java.util.Locale;
 
 import com.beust.jcommander.IStringConverter;
 
-import org.oceandsl.analysis.graph.IGraphElementSelector;
-import org.oceandsl.analysis.graph.selector.AllSelector;
-import org.oceandsl.analysis.graph.selector.AllSelectorColor;
-import org.oceandsl.analysis.graph.selector.DiffSelector;
-import org.oceandsl.analysis.graph.selector.IntersectSelector;
-import org.oceandsl.analysis.graph.selector.SubtractSelector;
+import kieker.analysis.generic.graph.IGraphElementSelector;
+import kieker.analysis.generic.graph.selector.AllSelector;
+import kieker.analysis.generic.graph.selector.AllSelectorColor;
+import kieker.analysis.generic.graph.selector.DiffSelector;
+import kieker.analysis.generic.graph.selector.IntersectSelector;
+import kieker.analysis.generic.graph.selector.SubtractSelector;
 
 /**
  * Convert string to selector used in graph selection.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class SelectorKindConverter implements IStringConverter<IGraphElementSelector> {
 
-    @Override
-    public IGraphElementSelector convert(final String value) {
-        final String[] parts = value.split(":");
-        final String command = parts[0];
-        final ESelectorKind selectorKind = ESelectorKind.valueOf(command.toUpperCase(Locale.ROOT).replaceAll("-", "_"));
-        switch (selectorKind) {
-        case ALL:
-            return new AllSelector();
-        case ALL_COLOR:
-            return new AllSelectorColor(parts[1].split(","), parts[2].split(","));
-        case DIFF:
-            return new DiffSelector(parts[1].split(","), parts[2].split(","));
-        case SUBTRACT:
-            return new SubtractSelector(parts[1].split(","));
-        case INTERSECT:
-            return new IntersectSelector(parts[1].split(","), parts[2].split(","));
-        default:
-            return new AllSelector();
-        }
-    }
+	@Override
+	public IGraphElementSelector convert(final String value) {
+		final String[] parts = value.split(":");
+		final String command = parts[0];
+		final ESelectorKind selectorKind = ESelectorKind.valueOf(command.toUpperCase(Locale.ROOT).replaceAll("-", "_"));
+		switch (selectorKind) {
+		case ALL:
+			return new AllSelector();
+		case ALL_COLOR:
+			return new AllSelectorColor(parts[1].split(","), parts[2].split(","));
+		case DIFF:
+			return new DiffSelector(parts[1].split(","), parts[2].split(","));
+		case SUBTRACT:
+			return new SubtractSelector(parts[1].split(","));
+		case INTERSECT:
+			return new IntersectSelector(parts[1].split(","), parts[2].split(","));
+		default:
+			return new AllSelector();
+		}
+	}
 
 }

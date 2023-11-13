@@ -39,7 +39,7 @@ import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  */
 public class GroupComponentsHierarchicallyStage extends AbstractTransformation<ModelRepository, ModelRepository> {
 

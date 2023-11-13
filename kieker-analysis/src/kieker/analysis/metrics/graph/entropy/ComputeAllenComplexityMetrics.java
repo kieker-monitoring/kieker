@@ -43,7 +43,7 @@ import teetime.stage.basic.AbstractTransformation;
  *            node element type
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class ComputeAllenComplexityMetrics<T>
 		extends AbstractTransformation<Graph<Node<T>>, Map<Class<? extends CodeMetric>, CodeMetric>> {

@@ -22,7 +22,7 @@ import kieker.analysis.architecture.dependency.IDependencyGraphBuilderFactory;
  * Factory for colored assembly level operation dependency graphs.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class ColorAssemblyLevelOperationDependencyGraphBuilderFactory
         implements IDependencyGraphBuilderFactory<IColorDependencyGraphBuilderConfiguration> {

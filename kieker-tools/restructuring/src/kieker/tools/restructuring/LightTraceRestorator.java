@@ -24,7 +24,7 @@ import kieker.tools.restructuring.stages.exec.RestructureStepFinder;
 /**
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class LightTraceRestorator {
 

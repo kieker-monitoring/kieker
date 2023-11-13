@@ -24,7 +24,7 @@ import kieker.model.analysismodel.type.TypeFactory;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  *
  */
 public final class TypeModelCloneUtils {

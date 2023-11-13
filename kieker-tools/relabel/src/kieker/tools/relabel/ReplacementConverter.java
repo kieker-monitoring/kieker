@@ -23,7 +23,7 @@ import com.beust.jcommander.IStringConverter;
 /**
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class ReplacementConverter implements IStringConverter<Replacement> {
 

@@ -34,7 +34,7 @@ import kieker.tools.sar.signature.processor.MapBasedSignatureProcessor;
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 class MapBasedSignatureProcessorTest {
 

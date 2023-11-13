@@ -30,7 +30,7 @@ import kieker.tools.common.AbstractService;
  * Manipulate tables main class
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  */
 public class ManipulateTablesMain extends AbstractService<TeetimeConfiguration, Settings> {
 

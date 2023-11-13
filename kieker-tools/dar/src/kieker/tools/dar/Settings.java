@@ -31,7 +31,7 @@ import kieker.analysis.generic.EModuleModeConverter;
  * All settings including command line parameters for the analysis.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class Settings { // NOPMD data class
 

@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.source;
+package kieker.analysis.generic;
 
-import teetime.framework.AbstractProducerStage;
+import java.nio.file.Path;
 
 /**
- *
- * @param<T> data
- *               model
- *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
+ *
  */
-public class YamlReader<T> extends AbstractProducerStage<T> {
+public class FileNameLabelMapper implements IPathLabelMapper<String> {
 
 	@Override
-	protected void execute() throws Exception {
-		this.workCompleted();
+	public String map(final Path path) {
+		return path.getFileName().toString();
 	}
 
 }

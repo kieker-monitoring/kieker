@@ -42,7 +42,7 @@ import teetime.framework.OutputPort;
  * structurally intact traces.
  *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
 // TODO merge this class after fixing with Kieker code base
 public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowRecord> {
@@ -223,7 +223,7 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	/**
 	 *
 	 * @author Reiner Jung
-	 * @since 1.15
+	 * @since 2.0.0
 	 */
 	private final class TraceData {
 

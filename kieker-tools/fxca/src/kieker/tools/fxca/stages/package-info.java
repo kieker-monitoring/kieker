@@ -16,6 +16,6 @@
 
 /**
  * @author Henning Schnoor
- * @since 1.3.0
+ * @since 2.0.0
  */
 package kieker.tools.fxca.stages;

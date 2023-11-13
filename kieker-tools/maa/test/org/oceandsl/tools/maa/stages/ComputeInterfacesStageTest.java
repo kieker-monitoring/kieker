@@ -37,7 +37,7 @@ import teetime.framework.test.StageTester;
 /**
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 class ComputeInterfacesStageTest {
 

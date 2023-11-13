@@ -49,7 +49,7 @@ import teetime.stage.basic.AbstractTransformation;
  * are no longer used.
  *
  * @author Reiner Jung
- * @since 1.3
+ * @since 2.0.0
  *
  */
 public class ModelSelectStage extends AbstractTransformation<ModelRepository, ModelRepository>

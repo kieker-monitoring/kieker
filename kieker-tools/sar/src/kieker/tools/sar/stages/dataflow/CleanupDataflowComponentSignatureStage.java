@@ -17,66 +17,65 @@ package kieker.tools.sar.stages.dataflow;
 
 import java.util.List;
 
+import kieker.analysis.code.CodeUtils;
+import kieker.analysis.code.data.DataflowEntry;
+import kieker.tools.sar.signature.processor.AbstractSignatureProcessor;
+
 import teetime.framework.OutputPort;
 import teetime.stage.basic.AbstractFilter;
 
-import org.oceandsl.analysis.code.CodeUtils;
-import org.oceandsl.analysis.code.stages.data.DataflowEntry;
-
-import kieker.tools.sar.signature.processor.AbstractSignatureProcessor;
-
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class CleanupDataflowComponentSignatureStage extends AbstractFilter<DataflowEntry> {
 
-    private final OutputPort<String> errorMessageOutputPort = this.createOutputPort(String.class);
+	private final OutputPort<String> errorMessageOutputPort = this.createOutputPort(String.class);
 
-    private final List<AbstractSignatureProcessor> processors;
+	private final List<AbstractSignatureProcessor> processors;
 
-    public CleanupDataflowComponentSignatureStage(final List<AbstractSignatureProcessor> processors) {
-        this.processors = processors;
-    }
+	public CleanupDataflowComponentSignatureStage(final List<AbstractSignatureProcessor> processors) {
+		this.processors = processors;
+	}
 
-    @Override
-    protected void execute(final DataflowEntry event) throws Exception {
-        final Entry caller = this.executeEntry(event.getSourcePath(), event.getSourceModule(),
-                event.getSourceOperation());
-        final Entry callee = this.executeEntry(event.getTargetPath(), event.getTargetModule(),
-                event.getTargetOperation());
-        final DataflowEntry newEvent = new DataflowEntry(event.getSourcePath(), caller.component, caller.element,
-                event.getTargetPath(), callee.component, callee.element, event.getDirection());
+	@Override
+	protected void execute(final DataflowEntry event) throws Exception {
+		final Entry caller = this.executeEntry(event.getSourcePath(), event.getSourceModule(),
+				event.getSourceOperation());
+		final Entry callee = this.executeEntry(event.getTargetPath(), event.getTargetModule(),
+				event.getTargetOperation());
+		final DataflowEntry newEvent = new DataflowEntry(event.getSourcePath(), caller.component, caller.element,
+				event.getTargetPath(), callee.component, callee.element, event.getDirection());
 
-        this.outputPort.send(newEvent);
-    }
+		this.outputPort.send(newEvent);
+	}
 
-    private Entry executeEntry(final String path, final String componentSignature, final String operationSignature) {
-        final Entry entry = new Entry();
-        entry.component = CodeUtils.UNKNOWN_COMPONENT;
-        entry.element = CodeUtils.UNKNOWN_OPERATION;
+	private Entry executeEntry(final String path, final String componentSignature, final String operationSignature) {
+		final Entry entry = new Entry();
+		entry.component = CodeUtils.UNKNOWN_COMPONENT;
+		entry.element = CodeUtils.UNKNOWN_OPERATION;
 
-        for (final AbstractSignatureProcessor processor : this.processors) {
-            if (!processor.processSignatures(path, componentSignature, operationSignature)) {
-                this.errorMessageOutputPort.send(processor.getErrorMessage());
-            }
-            if (CodeUtils.UNKNOWN_COMPONENT.equals(entry.component)) {
-                entry.component = processor.getComponentSignature();
-            }
-            if (CodeUtils.UNKNOWN_OPERATION.equals(entry.element)) {
-                entry.element = processor.getElementSignature();
-            }
-        }
-        return entry;
-    }
+		for (final AbstractSignatureProcessor processor : this.processors) {
+			if (!processor.processSignatures(path, componentSignature, operationSignature)) {
+				this.errorMessageOutputPort.send(processor.getErrorMessage());
+			}
+			if (CodeUtils.UNKNOWN_COMPONENT.equals(entry.component)) {
+				entry.component = processor.getComponentSignature();
+			}
+			if (CodeUtils.UNKNOWN_OPERATION.equals(entry.element)) {
+				entry.element = processor.getElementSignature();
+			}
+		}
+		return entry;
+	}
 
-    public OutputPort<String> getErrorMessageOutputPort() {
-        return this.errorMessageOutputPort;
-    }
+	public OutputPort<String> getErrorMessageOutputPort() {
+		return this.errorMessageOutputPort;
+	}
 
-    private class Entry {
-        private String component;
-        private String element;
-    }
+	private class Entry {
+		private String component;
+		private String element;
+	}
 
 }

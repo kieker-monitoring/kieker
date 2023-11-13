@@ -19,7 +19,7 @@ package kieker.tools.sar.signature.processor;
  * Process module information in signatures based on Fortran 95 code.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class ModuleBasedSignatureProcessor extends AbstractSignatureProcessor {

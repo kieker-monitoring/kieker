@@ -26,7 +26,7 @@ import teetime.stage.basic.AbstractFilter;
  * Aggregate common block entries.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class AggregateCommonBlocksStage extends AbstractFilter<CommonBlockEntry> {
 

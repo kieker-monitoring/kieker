@@ -20,43 +20,42 @@ import java.util.List;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
+import kieker.analysis.generic.Table;
 import kieker.analysis.generic.clustering.mtree.IDistanceFunction;
 import kieker.analysis.generic.clustering.optics.OpticsData;
+import kieker.analysis.generic.data.MoveOperationEntry;
 import kieker.analysis.generic.graph.clustering.OPTICSDataGED;
 
 import teetime.stage.basic.AbstractTransformation;
-
-import org.oceandsl.analysis.generic.Table;
-import org.oceandsl.analysis.generic.data.MoveOperationEntry;
 
 /**
  * Convert table into optics input data.
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  */
 public class ConvertTableToOpticsDataStage
-        extends AbstractTransformation<Table<String, MoveOperationEntry>, List<OpticsData<MoveOperationEntry>>> {
+		extends AbstractTransformation<Table<String, MoveOperationEntry>, List<OpticsData<MoveOperationEntry>>> {
 
-    @Override
-    protected void execute(final Table<String, MoveOperationEntry> table) throws Exception {
-        final IDistanceFunction<MoveOperationEntry> distanceFunction = new IDistanceFunction<>() {
+	@Override
+	protected void execute(final Table<String, MoveOperationEntry> table) throws Exception {
+		final IDistanceFunction<MoveOperationEntry> distanceFunction = new IDistanceFunction<>() {
 
-            final LevenshteinDistance distance = new LevenshteinDistance();
+			final LevenshteinDistance distance = new LevenshteinDistance();
 
-            @Override
-            public double calculate(final MoveOperationEntry data1, final MoveOperationEntry data2) {
-                final String left = data1.getOperationName();
-                final String right = data2.getOperationName();
-                return (double) this.distance.apply(left, right) / (double) (left.length() + right.length());
-            }
-        };
+			@Override
+			public double calculate(final MoveOperationEntry data1, final MoveOperationEntry data2) {
+				final String left = data1.getOperationName();
+				final String right = data2.getOperationName();
+				return (double) this.distance.apply(left, right) / (double) (left.length() + right.length());
+			}
+		};
 
-        final OPTICSDataGED<MoveOperationEntry> opticsDistance = new OPTICSDataGED<>(distanceFunction);
+		final OPTICSDataGED<MoveOperationEntry> opticsDistance = new OPTICSDataGED<>(distanceFunction);
 
-        final List<OpticsData<MoveOperationEntry>> results = new ArrayList<>();
-        table.getRows().forEach(entry -> results.add(new OpticsData<>(entry, opticsDistance)));
-        this.outputPort.send(results);
-    }
+		final List<OpticsData<MoveOperationEntry>> results = new ArrayList<>();
+		table.getRows().forEach(entry -> results.add(new OpticsData<>(entry, opticsDistance)));
+		this.outputPort.send(results);
+	}
 
 }

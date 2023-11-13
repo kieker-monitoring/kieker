@@ -37,7 +37,7 @@ import teetime.stage.basic.AbstractTransformation;
  * Generate table for interfaces in component type, interface name, operations.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class ProvidedInterfaceTableTransformation
 		extends AbstractTransformation<ModelRepository, Table<String, ProvidedInterfaceEntry>> {

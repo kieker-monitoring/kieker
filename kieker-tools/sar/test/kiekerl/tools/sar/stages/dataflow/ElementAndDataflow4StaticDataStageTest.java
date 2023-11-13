@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright (C) 2022 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.csv;
+package kiekerl.tools.sar.stages.dataflow;
 
-import java.nio.file.Path;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
+ *
  * @author Reiner Jung
  * @since 2.0.0
- *
  */
-public class FileNameLabelMapper implements IPathLabelMapper<String> {
+class ElementAndDataflow4StaticDataStageTest {
 
-	@Override
-	public String map(final Path path) {
-		return path.getFileName().toString();
-	}
+    @Test
+    void test() {
+        Assertions.fail("Not yet implemented");
+    }
 
 }

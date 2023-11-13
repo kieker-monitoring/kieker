@@ -15,25 +15,25 @@
  ***************************************************************************/
 package kieker.tools.relabel;
 
-import teetime.framework.Configuration;
+import kieker.analysis.architecture.ModelRepositoryProducerStage;
 
-import org.oceandsl.analysis.architecture.stages.ModelRepositoryProducerStage;
+import teetime.framework.Configuration;
 
 /**
  * Pipe and Filter configuration relabling tool.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 
-    public TeetimeConfiguration(final Settings settings) {
-        final ModelRepositoryProducerStage readerStage = new ModelRepositoryProducerStage(settings.getInputDirectory());
-        final ReplaceSourceLabelStage replaceSourceLabelStage = new ReplaceSourceLabelStage(
-                settings.getExperimentName(), settings.getReplacements());
-        final ModelRepositoryWriterStage writerStage = new ModelRepositoryWriterStage(settings.getOutputDirectory());
+	public TeetimeConfiguration(final Settings settings) {
+		final ModelRepositoryProducerStage readerStage = new ModelRepositoryProducerStage(settings.getInputDirectory());
+		final ReplaceSourceLabelStage replaceSourceLabelStage = new ReplaceSourceLabelStage(
+				settings.getExperimentName(), settings.getReplacements());
+		final ModelRepositoryWriterStage writerStage = new ModelRepositoryWriterStage(settings.getOutputDirectory());
 
-        this.connectPorts(readerStage.getOutputPort(), replaceSourceLabelStage.getInputPort());
-        this.connectPorts(replaceSourceLabelStage.getOutputPort(), writerStage.getInputPort());
-    }
+		this.connectPorts(readerStage.getOutputPort(), replaceSourceLabelStage.getInputPort());
+		this.connectPorts(replaceSourceLabelStage.getOutputPort(), writerStage.getInputPort());
+	}
 }

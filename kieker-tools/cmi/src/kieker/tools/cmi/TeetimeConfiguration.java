@@ -37,7 +37,7 @@ import teetime.stage.basic.merger.Merger;
  * Pipe and Filter configuration for the model integrity checker.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 

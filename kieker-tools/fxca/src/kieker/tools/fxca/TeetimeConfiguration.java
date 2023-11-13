@@ -60,7 +60,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  * Pipe and Filter configuration for the architecture creation tool.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 

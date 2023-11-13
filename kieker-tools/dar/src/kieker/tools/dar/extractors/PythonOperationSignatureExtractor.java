@@ -22,7 +22,7 @@ import kieker.model.analysismodel.type.OperationType;
  * Extract and parse python operation names.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class PythonOperationSignatureExtractor implements IOperationSignatureExtractor {
 

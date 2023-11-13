@@ -21,38 +21,38 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import teetime.framework.AbstractConsumerStage;
+import kieker.analysis.code.data.CallerCalleeEntry;
 
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
+import teetime.framework.AbstractConsumerStage;
 
 /**
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  *
  */
 public class CsvWriterStage extends AbstractConsumerStage<CallerCalleeEntry> {
 
-    private final BufferedWriter writer;
+	private final BufferedWriter writer;
 
-    public CsvWriterStage(final Path outputPath) throws IOException {
-        this.writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8);
-    }
+	public CsvWriterStage(final Path outputPath) throws IOException {
+		this.writer = Files.newBufferedWriter(outputPath, StandardCharsets.UTF_8);
+	}
 
-    @Override
-    protected void execute(final CallerCalleeEntry element) throws Exception {
-        final String result = String.format("%s,%s,%s,%s\n", element.getSourcePath(), element.getCaller(),
-                element.getTargetPath(), element.getCallee());
-        this.writer.write(result);
-    }
+	@Override
+	protected void execute(final CallerCalleeEntry element) throws Exception {
+		final String result = String.format("%s,%s,%s,%s\n", element.getSourcePath(), element.getCaller(),
+				element.getTargetPath(), element.getCallee());
+		this.writer.write(result);
+	}
 
-    @Override
-    protected void onTerminating() {
-        try {
-            this.writer.close();
-        } catch (final IOException e) {
-            this.logger.error("Could not close writer. Cause: {}", e.getLocalizedMessage());
-        }
-        super.onTerminating();
-    }
+	@Override
+	protected void onTerminating() {
+		try {
+			this.writer.close();
+		} catch (final IOException e) {
+			this.logger.error("Could not close writer. Cause: {}", e.getLocalizedMessage());
+		}
+		super.onTerminating();
+	}
 
 }

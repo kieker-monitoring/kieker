@@ -17,24 +17,24 @@ package kieker.tools.mvis;
 
 import com.beust.jcommander.IStringConverter;
 
-import org.oceandsl.analysis.graph.EGraphGenerationMode;
+import kieker.analysis.generic.graph.EGraphGenerationMode;
 
 /**
  * Convert command line parameter strings to @{link EGraphGenerationMode}s.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class GraphGenerationConverter implements IStringConverter<EGraphGenerationMode> {
 
-    @Override
-    public EGraphGenerationMode convert(final String value) {
-        for (final EGraphGenerationMode mode : EGraphGenerationMode.values()) {
-            if (mode.getKey().equals(value)) {
-                return mode;
-            }
-        }
-        throw new IllegalArgumentException(String.format("Graph generation mode %s is not supported.", value));
-    }
+	@Override
+	public EGraphGenerationMode convert(final String value) {
+		for (final EGraphGenerationMode mode : EGraphGenerationMode.values()) {
+			if (mode.getKey().equals(value)) {
+				return mode;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Graph generation mode %s is not supported.", value));
+	}
 
 }

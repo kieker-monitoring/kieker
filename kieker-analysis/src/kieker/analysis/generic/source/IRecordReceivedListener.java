@@ -21,7 +21,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Christian Wulf
  *
- * @since 1.14
+ * @since 2.0.0
  */
 public interface IRecordReceivedListener {
 

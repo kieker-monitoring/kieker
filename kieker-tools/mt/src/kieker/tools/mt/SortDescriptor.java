@@ -22,7 +22,7 @@ import java.util.List;
  * Hold all sort criteria.
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  *
  */
 public class SortDescriptor {

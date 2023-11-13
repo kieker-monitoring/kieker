@@ -40,7 +40,7 @@ import kieker.tools.fxca.utils.IOUtils;
  * Tool to process fxtran XML files into a calltable, operation-definitions and a notfound file.
  *
  * @author Henning Schnoor
- * @since 1.3.0
+ * @since 2.0.0
  */
 public final class FxcaMain extends AbstractService<TeetimeConfiguration, Settings> {
 

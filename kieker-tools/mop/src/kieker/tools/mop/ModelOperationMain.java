@@ -34,7 +34,7 @@ import kieker.tools.common.ParameterEvaluationUtils;
  * Architecture analysis main class.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class ModelOperationMain extends AbstractService<TeetimeConfiguration, Settings> {
 

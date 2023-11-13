@@ -18,35 +18,34 @@ package kieker.tools.mop.stages;
 import java.nio.file.Path;
 
 import kieker.analysis.architecture.repository.ModelRepository;
+import kieker.analysis.generic.sink.TableCsvSink;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
-import org.oceandsl.analysis.generic.stages.TableCsvSink;
-
 public class NearestModelMergeStage extends CompositeStage implements IModelOperationStage {
 
-    private final ModelMergeStage modelMergeStage;
-    private final MergeClosestFitComponentStage mergeClosestFitComponentStage;
+	private final ModelMergeStage modelMergeStage;
+	private final MergeClosestFitComponentStage mergeClosestFitComponentStage;
 
-    public NearestModelMergeStage(final String name, final Path path, final double threshold) {
-        this.mergeClosestFitComponentStage = new MergeClosestFitComponentStage(threshold);
-        this.modelMergeStage = new ModelMergeStage(name);
-        final TableCsvSink<String, SimilarityEntry> similartyCsvSink = new TableCsvSink<>(
-                n -> path.resolve("similarity-" + n), SimilarityEntry.class, true, TableCsvSink.LF);
-        this.connectPorts(this.mergeClosestFitComponentStage.getOutputPort(), this.modelMergeStage.getInputPort());
-        this.connectPorts(this.mergeClosestFitComponentStage.getSimilarityOutputPort(),
-                similartyCsvSink.getInputPort());
-    }
+	public NearestModelMergeStage(final String name, final Path path, final double threshold) {
+		this.mergeClosestFitComponentStage = new MergeClosestFitComponentStage(threshold);
+		this.modelMergeStage = new ModelMergeStage(name);
+		final TableCsvSink<String, SimilarityEntry> similartyCsvSink = new TableCsvSink<>(
+				n -> path.resolve("similarity-" + n), SimilarityEntry.class, true, TableCsvSink.LF);
+		this.connectPorts(this.mergeClosestFitComponentStage.getOutputPort(), this.modelMergeStage.getInputPort());
+		this.connectPorts(this.mergeClosestFitComponentStage.getSimilarityOutputPort(),
+				similartyCsvSink.getInputPort());
+	}
 
-    @Override
-    public InputPort<ModelRepository> getInputPort() {
-        return this.mergeClosestFitComponentStage.getInputPort();
-    }
+	@Override
+	public InputPort<ModelRepository> getInputPort() {
+		return this.mergeClosestFitComponentStage.getInputPort();
+	}
 
-    @Override
-    public OutputPort<ModelRepository> getOutputPort() {
-        return this.modelMergeStage.getOutputPort();
-    }
+	@Override
+	public OutputPort<ModelRepository> getOutputPort() {
+		return this.modelMergeStage.getOutputPort();
+	}
 }

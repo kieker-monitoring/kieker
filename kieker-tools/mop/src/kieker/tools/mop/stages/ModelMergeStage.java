@@ -17,37 +17,36 @@ package kieker.tools.mop.stages;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import kieker.analysis.architecture.repository.ArchitectureModelRepositoryFactory;
 import kieker.analysis.architecture.repository.ModelRepository;
 import kieker.tools.mop.merge.ModelRepositoryMergerUtils;
 
 import teetime.stage.basic.AbstractTransformation;
 
-import org.oceandsl.analysis.architecture.ArchitectureModelManagementUtils;
-
 /**
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class ModelMergeStage extends AbstractTransformation<ModelRepository, ModelRepository>
-        implements IModelOperationStage {
+		implements IModelOperationStage {
 
-    private final ModelRepository lastModel;
+	private final ModelRepository lastModel;
 
-    public ModelMergeStage(final String repositoryName) {
-        this.lastModel = ArchitectureModelManagementUtils.createModelRepository(repositoryName);
-    }
+	public ModelMergeStage(final String repositoryName) {
+		this.lastModel = ArchitectureModelRepositoryFactory.createModelRepository(repositoryName);
+	}
 
-    @Override
-    protected void execute(final ModelRepository element) throws Exception {
-        element.getModels().values().forEach(model -> EcoreUtil.resolveAll(model.eResource()));
-        this.logger.info("Merging models {}", element.getName());
-        ModelRepositoryMergerUtils.perform(this.lastModel, element);
-    }
+	@Override
+	protected void execute(final ModelRepository element) throws Exception {
+		element.getModels().values().forEach(model -> EcoreUtil.resolveAll(model.eResource()));
+		this.logger.info("Merging models {}", element.getName());
+		ModelRepositoryMergerUtils.perform(this.lastModel, element);
+	}
 
-    @Override
-    protected void onTerminating() {
-        this.outputPort.send(this.lastModel);
-        super.onTerminating();
-    }
+	@Override
+	protected void onTerminating() {
+		this.outputPort.send(this.lastModel);
+		super.onTerminating();
+	}
 
 }

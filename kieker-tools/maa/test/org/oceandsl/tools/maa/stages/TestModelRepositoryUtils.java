@@ -39,7 +39,7 @@ import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public final class TestModelRepositoryUtils { // NOPMD not a test class
 

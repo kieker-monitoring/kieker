@@ -26,7 +26,7 @@ import kieker.model.analysismodel.type.ComponentType;
  * Extract component signatures from Python classnames.
  *
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public class PythonComponentSignatureExtractor implements IComponentSignatureExtractor {
 

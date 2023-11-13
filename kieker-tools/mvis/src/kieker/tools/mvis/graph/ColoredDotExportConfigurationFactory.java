@@ -35,7 +35,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
  * Based on DotExportConfigurationFactory with support for colored edges.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class ColoredDotExportConfigurationFactory {
 

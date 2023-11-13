@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2021 OceanDSL (https://oceandsl.uni-kiel.de)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.generic.csv;
+package kieker.analysis.generic.source;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +24,7 @@ import org.csveed.api.CsvClient;
 import org.csveed.api.CsvClientImpl;
 import org.csveed.report.CsvException;
 
+import kieker.analysis.generic.IPathLabelMapper;
 import kieker.analysis.generic.Table;
 
 import teetime.framework.AbstractProducerStage;
@@ -37,7 +38,7 @@ import teetime.framework.AbstractProducerStage;
  *            record data type
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  *
  */
 public class CsvTableReaderProducerStage<R, T> extends AbstractProducerStage<Table<R, T>> {

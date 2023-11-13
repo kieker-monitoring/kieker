@@ -31,7 +31,7 @@ import kieker.tools.restructuring.transformations.SplitTransformation;
 /**
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public final class TransformationFactory {
 

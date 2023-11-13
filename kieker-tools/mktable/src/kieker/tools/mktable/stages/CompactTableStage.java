@@ -15,50 +15,50 @@
  ***************************************************************************/
 package kieker.tools.mktable.stages;
 
-import teetime.stage.basic.AbstractFilter;
+import kieker.analysis.generic.Table;
+import kieker.analysis.generic.data.MoveOperationEntry;
 
-import org.oceandsl.analysis.generic.Table;
-import org.oceandsl.analysis.generic.data.MoveOperationEntry;
+import teetime.stage.basic.AbstractFilter;
 
 public class CompactTableStage extends AbstractFilter<Table<String, MoveOperationEntry>> {
 
-    @Override
-    protected void execute(final Table<String, MoveOperationEntry> table) throws Exception {
-        final Table<String, MoveOperationEntry> newTable = new Table<>(table.getLabel() + "-compact");
+	@Override
+	protected void execute(final Table<String, MoveOperationEntry> table) throws Exception {
+		final Table<String, MoveOperationEntry> newTable = new Table<>(table.getLabel() + "-compact");
 
-        final MoveOperationEntry entry = table.getRows().get(0);
-        MoveOperationCounter counter = new MoveOperationCounter(entry.getSourceComponentName(),
-                entry.getTargetComponentName());
-        for (final MoveOperationEntry element : table.getRows()) {
-            if (element.getSourceComponentName().equals(counter.sourceComponentName)
-                    && element.getTargetComponentName().equals(counter.targetComponentName)) {
-                counter.increment();
-            } else {
-                newTable.getRows().add(new MoveOperationEntry(counter.sourceComponentName, counter.targetComponentName,
-                        String.valueOf(counter.count)));
-                counter = new MoveOperationCounter(element.getSourceComponentName(), element.getTargetComponentName());
-                counter.increment();
-            }
-        }
-        newTable.getRows().add(new MoveOperationEntry(counter.sourceComponentName, counter.targetComponentName,
-                String.valueOf(counter.count)));
+		final MoveOperationEntry entry = table.getRows().get(0);
+		MoveOperationCounter counter = new MoveOperationCounter(entry.getSourceComponentName(),
+				entry.getTargetComponentName());
+		for (final MoveOperationEntry element : table.getRows()) {
+			if (element.getSourceComponentName().equals(counter.sourceComponentName)
+					&& element.getTargetComponentName().equals(counter.targetComponentName)) {
+				counter.increment();
+			} else {
+				newTable.getRows().add(new MoveOperationEntry(counter.sourceComponentName, counter.targetComponentName,
+						String.valueOf(counter.count)));
+				counter = new MoveOperationCounter(element.getSourceComponentName(), element.getTargetComponentName());
+				counter.increment();
+			}
+		}
+		newTable.getRows().add(new MoveOperationEntry(counter.sourceComponentName, counter.targetComponentName,
+				String.valueOf(counter.count)));
 
-        this.outputPort.send(newTable);
-    }
+		this.outputPort.send(newTable);
+	}
 
-    private final class MoveOperationCounter {
-        private final String sourceComponentName;
-        private final String targetComponentName;
-        private long count;
+	private final class MoveOperationCounter {
+		private final String sourceComponentName;
+		private final String targetComponentName;
+		private long count;
 
-        public MoveOperationCounter(final String sourceComponentName, final String targetComponentName) {
-            this.sourceComponentName = sourceComponentName;
-            this.targetComponentName = targetComponentName;
-            this.count = 0;
-        }
+		public MoveOperationCounter(final String sourceComponentName, final String targetComponentName) {
+			this.sourceComponentName = sourceComponentName;
+			this.targetComponentName = targetComponentName;
+			this.count = 0;
+		}
 
-        public void increment() {
-            this.count++;
-        }
-    }
+		public void increment() {
+			this.count++;
+		}
+	}
 }

@@ -23,7 +23,7 @@ import org.w3c.dom.Document;
 
 /**
  * @author Henning Schnoor
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class FortranModule extends MMObject implements IContainable {
 

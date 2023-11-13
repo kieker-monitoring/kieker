@@ -43,7 +43,7 @@ import kieker.model.analysismodel.type.TypeModel;
 
 /**
  * @author Reiner Jung
- * @since 1.2
+ * @since 2.0.0
  */
 public abstract class AbstractModelTestFactory { // NOCS cannot be final, NOPMD no abstract method
 

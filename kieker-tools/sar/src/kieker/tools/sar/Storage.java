@@ -18,28 +18,39 @@ package kieker.tools.sar;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-
 /**
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  *
  */
 public class Storage {
 
-    @Getter
-    private final String name;
+	private final String name;
 
-    @Getter
-    private final List<String> files = new ArrayList<>();
+	private final List<String> files = new ArrayList<>();
 
-    @Getter
-    private final List<String> modules = new ArrayList<>();
+	private final List<String> modules = new ArrayList<>();
 
-    @Getter
-    private final List<String> variables = new ArrayList<>();
+	private final List<String> variables = new ArrayList<>();
 
-    public Storage(final String name) {
-        this.name = name;
-    }
+	public Storage(final String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public List<String> getFiles() {
+		return this.files;
+	}
+
+	public List<String> getModules() {
+		return this.modules;
+	}
+
+	public List<String> getVariables() {
+		return this.variables;
+	}
+
 }

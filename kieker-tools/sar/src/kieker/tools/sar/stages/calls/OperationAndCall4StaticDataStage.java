@@ -19,11 +19,10 @@ import java.time.Duration;
 
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
+import kieker.analysis.code.data.CallerCalleeEntry;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
-
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
 
 /**
  * Transform @{link CallerCallee}s to @{link OperationEvent}s and @{CallEvent}s on model level. The
@@ -32,36 +31,36 @@ import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
  * the dynamic architecture reconstruction.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class OperationAndCall4StaticDataStage extends AbstractConsumerStage<CallerCalleeEntry> {
 
-    private final OutputPort<OperationEvent> operationOutputPort = this.createOutputPort(OperationEvent.class);
-    private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
+	private final OutputPort<OperationEvent> operationOutputPort = this.createOutputPort(OperationEvent.class);
+	private final OutputPort<CallEvent> callOutputPort = this.createOutputPort(CallEvent.class);
 
-    private final String hostname;
+	private final String hostname;
 
-    public OperationAndCall4StaticDataStage(final String hostname) {
-        this.hostname = hostname;
-    }
+	public OperationAndCall4StaticDataStage(final String hostname) {
+		this.hostname = hostname;
+	}
 
-    @Override
-    protected void execute(final CallerCalleeEntry element) throws Exception {
-        final OperationEvent caller = new OperationEvent(this.hostname, element.getSourceModule(), element.getCaller());
-        final OperationEvent callee = new OperationEvent(this.hostname, element.getTargetModule(), element.getCallee());
+	@Override
+	protected void execute(final CallerCalleeEntry element) throws Exception {
+		final OperationEvent caller = new OperationEvent(this.hostname, element.getSourceModule(), element.getCaller());
+		final OperationEvent callee = new OperationEvent(this.hostname, element.getTargetModule(), element.getCallee());
 
-        final CallEvent callEvent = new CallEvent(caller, callee, Duration.ZERO);
+		final CallEvent callEvent = new CallEvent(caller, callee, Duration.ZERO);
 
-        this.operationOutputPort.send(caller);
-        this.operationOutputPort.send(callee);
-        this.callOutputPort.send(callEvent);
-    }
+		this.operationOutputPort.send(caller);
+		this.operationOutputPort.send(callee);
+		this.callOutputPort.send(callEvent);
+	}
 
-    public OutputPort<CallEvent> getCallOutputPort() {
-        return this.callOutputPort;
-    }
+	public OutputPort<CallEvent> getCallOutputPort() {
+		return this.callOutputPort;
+	}
 
-    public OutputPort<OperationEvent> getOperationOutputPort() {
-        return this.operationOutputPort;
-    }
+	public OutputPort<OperationEvent> getOperationOutputPort() {
+		return this.operationOutputPort;
+	}
 }

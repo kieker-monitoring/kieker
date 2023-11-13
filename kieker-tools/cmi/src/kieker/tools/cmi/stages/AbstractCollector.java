@@ -23,7 +23,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @param <T>
  *            i/o datatype
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public abstract class AbstractCollector<T> extends AbstractTransformation<T, T> {
 

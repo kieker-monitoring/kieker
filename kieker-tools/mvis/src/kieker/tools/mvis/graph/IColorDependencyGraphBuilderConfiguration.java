@@ -16,14 +16,13 @@
 package kieker.tools.mvis.graph;
 
 import kieker.analysis.architecture.dependency.IDependencyGraphBuilderConfiguration;
-
-import org.oceandsl.analysis.graph.IGraphElementSelector;
+import kieker.analysis.generic.graph.IGraphElementSelector;
 
 /**
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public interface IColorDependencyGraphBuilderConfiguration extends IDependencyGraphBuilderConfiguration {
 
-    IGraphElementSelector getSelector();
+	IGraphElementSelector getSelector();
 }

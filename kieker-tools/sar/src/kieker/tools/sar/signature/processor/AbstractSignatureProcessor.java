@@ -17,7 +17,7 @@ package kieker.tools.sar.signature.processor;
 
 /**
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public abstract class AbstractSignatureProcessor {
 

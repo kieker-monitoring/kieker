@@ -38,7 +38,7 @@ import kieker.tools.restructuring.util.TransformationFactory;
 /**
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class RestructureStepFinder {
 

@@ -26,15 +26,14 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
+import kieker.analysis.generic.graph.EGraphGenerationMode;
 import kieker.tools.common.AbstractService;
-
-import org.oceandsl.analysis.graph.EGraphGenerationMode;
 
 /**
  * Architecture analysis main class.
  *
  * @author Reiner Jung
- * @since 1.0
+ * @since 2.0.0
  */
 public class ModelVisualizationMain extends AbstractService<TeetimeConfiguration, Settings> {
 

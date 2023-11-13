@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import kieker.analysis.code.data.CallerCalleeEntry;
+
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
-
-import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
 
 /**
  * Read process caller callee events and fills in the callee's file name.
@@ -34,59 +34,59 @@ import org.oceandsl.analysis.code.stages.data.CallerCalleeEntry;
  * </ul>
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class CorrectCallsStage extends AbstractStage {
 
-    private final InputPort<CallerCalleeEntry> inputPort = this.createInputPort(CallerCalleeEntry.class);
-    private final InputPort<Map<String, String>> mapInputPort = this.createInputPort();
-    private final OutputPort<CallerCalleeEntry> outputPort = this.createOutputPort(CallerCalleeEntry.class);
+	private final InputPort<CallerCalleeEntry> inputPort = this.createInputPort(CallerCalleeEntry.class);
+	private final InputPort<Map<String, String>> mapInputPort = this.createInputPort();
+	private final OutputPort<CallerCalleeEntry> outputPort = this.createOutputPort(CallerCalleeEntry.class);
 
-    private final Map<String, String> functionFileMap = new HashMap<>();
-    private final Map<String, String> learnedFileMap = new HashMap<>();
-    private CallerCalleeEntry unprocessedInvocation;
+	private final Map<String, String> functionFileMap = new HashMap<>();
+	private final Map<String, String> learnedFileMap = new HashMap<>();
+	private CallerCalleeEntry unprocessedInvocation;
 
-    @Override
-    protected void execute() throws Exception {
-        if (this.unprocessedInvocation == null) {
-            this.unprocessedInvocation = this.inputPort.receive();
-        }
-        if (this.unprocessedInvocation != null) {
-            this.learnedFileMap.put(this.unprocessedInvocation.getCaller(), this.unprocessedInvocation.getSourcePath());
-            final String calleeFile = this.functionFileMap
-                    .get(this.unprocessedInvocation.getCallee().toLowerCase(Locale.ROOT));
-            if (calleeFile != null) {
-                this.unprocessedInvocation.setTargetPath(calleeFile);
-                this.outputPort.send(this.unprocessedInvocation);
-                this.unprocessedInvocation = null; // NOPMD NullAssignment
-            } else if (!this.functionFileMap.isEmpty()) {
-                this.logger.warn("No match found for function {}", this.unprocessedInvocation.getCallee());
-                final String guessedCalleeFile = this.learnedFileMap.get(this.unprocessedInvocation.getCallee());
-                if (guessedCalleeFile != null) {
-                    this.unprocessedInvocation.setTargetPath(guessedCalleeFile);
-                } else {
-                    this.unprocessedInvocation
-                            .setTargetPath(String.format("no file for %s", this.unprocessedInvocation.getCallee()));
-                }
-                this.outputPort.send(this.unprocessedInvocation);
-                this.unprocessedInvocation = null; // NOPMD
-            }
-        }
-        final Map<String, String> mapping = this.mapInputPort.receive();
-        if (mapping != null) {
-            this.functionFileMap.putAll(mapping);
-        }
-    }
+	@Override
+	protected void execute() throws Exception {
+		if (this.unprocessedInvocation == null) {
+			this.unprocessedInvocation = this.inputPort.receive();
+		}
+		if (this.unprocessedInvocation != null) {
+			this.learnedFileMap.put(this.unprocessedInvocation.getCaller(), this.unprocessedInvocation.getSourcePath());
+			final String calleeFile = this.functionFileMap
+					.get(this.unprocessedInvocation.getCallee().toLowerCase(Locale.ROOT));
+			if (calleeFile != null) {
+				this.unprocessedInvocation.setTargetPath(calleeFile);
+				this.outputPort.send(this.unprocessedInvocation);
+				this.unprocessedInvocation = null; // NOPMD NullAssignment
+			} else if (!this.functionFileMap.isEmpty()) {
+				this.logger.warn("No match found for function {}", this.unprocessedInvocation.getCallee());
+				final String guessedCalleeFile = this.learnedFileMap.get(this.unprocessedInvocation.getCallee());
+				if (guessedCalleeFile != null) {
+					this.unprocessedInvocation.setTargetPath(guessedCalleeFile);
+				} else {
+					this.unprocessedInvocation
+							.setTargetPath(String.format("no file for %s", this.unprocessedInvocation.getCallee()));
+				}
+				this.outputPort.send(this.unprocessedInvocation);
+				this.unprocessedInvocation = null; // NOPMD
+			}
+		}
+		final Map<String, String> mapping = this.mapInputPort.receive();
+		if (mapping != null) {
+			this.functionFileMap.putAll(mapping);
+		}
+	}
 
-    public InputPort<CallerCalleeEntry> getInputPort() {
-        return this.inputPort;
-    }
+	public InputPort<CallerCalleeEntry> getInputPort() {
+		return this.inputPort;
+	}
 
-    public InputPort<Map<String, String>> getMapInputPort() {
-        return this.mapInputPort;
-    }
+	public InputPort<Map<String, String>> getMapInputPort() {
+		return this.mapInputPort;
+	}
 
-    public OutputPort<CallerCalleeEntry> getOutputPort() {
-        return this.outputPort;
-    }
+	public OutputPort<CallerCalleeEntry> getOutputPort() {
+		return this.outputPort;
+	}
 }

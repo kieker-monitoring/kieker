@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package org.oceandsl.tools.sar.stages.dataflow;
+package kiekerl.tools.sar.stages.dataflow;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ import org.junit.jupiter.api.Test;
 /**
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
-class CountUniqueDataflowCallsStageTest {
+class CleanupDataflowComponentSignatureStageTest {
 
     @Test
     void test() {

@@ -15,37 +15,36 @@
  ***************************************************************************/
 package kieker.tools.mt.stages;
 
+import kieker.analysis.generic.Table;
 import kieker.analysis.generic.clustering.Clustering;
+import kieker.analysis.generic.data.MoveOperationEntry;
 
 import teetime.stage.basic.AbstractTransformation;
-
-import org.oceandsl.analysis.generic.Table;
-import org.oceandsl.analysis.generic.data.MoveOperationEntry;
 
 /**
  * Reconstruct table from clustering result.
  *
  * @author Reiner Jung
- * @since 1.4.0
+ * @since 2.0.0
  */
 public class ConstructTableStage
-        extends AbstractTransformation<Clustering<MoveOperationEntry>, Table<String, MoveOperationEntry>> {
+		extends AbstractTransformation<Clustering<MoveOperationEntry>, Table<String, MoveOperationEntry>> {
 
-    private final String label;
+	private final String label;
 
-    public ConstructTableStage(final String label) {
-        this.label = label;
-    }
+	public ConstructTableStage(final String label) {
+		this.label = label;
+	}
 
-    @Override
-    protected void execute(final Clustering<MoveOperationEntry> clustering) throws Exception {
-        final Table<String, MoveOperationEntry> table = new Table<>(this.label);
-        clustering.getClusters().forEach(cluster -> {
-            cluster.forEach(entry -> {
-                table.getRows().add(entry);
-            });
-        });
-        this.outputPort.send(table);
-    }
+	@Override
+	protected void execute(final Clustering<MoveOperationEntry> clustering) throws Exception {
+		final Table<String, MoveOperationEntry> table = new Table<>(this.label);
+		clustering.getClusters().forEach(cluster -> {
+			cluster.forEach(entry -> {
+				table.getRows().add(entry);
+			});
+		});
+		this.outputPort.send(table);
+	}
 
 }

@@ -34,7 +34,7 @@ import kieker.analysis.generic.sink.graph.dot.attributes.DotNodeAttribute;
 /**
  * @author Sören Henning
  *
- * @since 1.14
+ * @since 2.0.0
  */
 public class DotExportConfigurationFactory {
 

@@ -35,7 +35,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  *
  * @author Christian Wulf
  *
- * @since 1.13
+ * @since 2.0.0
  */
 public class RecordDeserializer {
 

@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.tools.mvis.stages.metrics;
 
+import kieker.analysis.generic.Table;
 import kieker.analysis.generic.graph.IEdge;
 import kieker.analysis.generic.graph.IGraph;
 import kieker.analysis.generic.graph.INode;
@@ -22,42 +23,40 @@ import kieker.common.exception.ConfigurationException;
 
 import teetime.stage.basic.AbstractTransformation;
 
-import org.oceandsl.analysis.generic.Table;
-
 /**
  * Counts the number of incoming and outgoing edges of each node. Nodes represent functions or
  * operations.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class OperationNodeCountCouplingStage
-        extends AbstractTransformation<IGraph<INode, IEdge>, Table<String, OperationNodeCountEntry>> {
+		extends AbstractTransformation<IGraph<INode, IEdge>, Table<String, OperationNodeCountEntry>> {
 
-    @Override
-    protected void execute(final IGraph<INode, IEdge> graph) throws Exception {
-        final Table<String, OperationNodeCountEntry> result = new Table<>(graph.getLabel());
+	@Override
+	protected void execute(final IGraph<INode, IEdge> graph) throws Exception {
+		final Table<String, OperationNodeCountEntry> result = new Table<>(graph.getLabel());
 
-        for (final INode vertex : graph.getGraph().nodes()) {
-            result.getRows()
-                    .add(new OperationNodeCountEntry(this.getFilepath(vertex.getId()), this.getFunction(vertex.getId()),
-                            graph.getGraph().inDegree(vertex), graph.getGraph().outDegree(vertex)));
-        }
+		for (final INode vertex : graph.getGraph().nodes()) {
+			result.getRows()
+					.add(new OperationNodeCountEntry(this.getFilepath(vertex.getId()), this.getFunction(vertex.getId()),
+							graph.getGraph().inDegree(vertex), graph.getGraph().outDegree(vertex)));
+		}
 
-        this.outputPort.send(result);
-    }
+		this.outputPort.send(result);
+	}
 
-    private String getFilepath(final Object id) {
-        final String stringId = (String) id;
-        String filepath = stringId.split("\\.f")[0];
-        filepath = filepath.split("@")[1];
-        return filepath.concat(".f");
-    }
+	private String getFilepath(final Object id) {
+		final String stringId = (String) id;
+		String filepath = stringId.split("\\.f")[0];
+		filepath = filepath.split("@")[1];
+		return filepath.concat(".f");
+	}
 
-    private String getFunction(final Object id) throws ConfigurationException {
-        final String stringId = (String) id;
-        final String[] filepath = stringId.split("\\.");
-        return filepath[filepath.length - 1];
-    }
+	private String getFunction(final Object id) throws ConfigurationException {
+		final String stringId = (String) id;
+		final String[] filepath = stringId.split("\\.");
+		return filepath[filepath.length - 1];
+	}
 
 }

@@ -33,7 +33,7 @@ import teetime.framework.Configuration;
  * Pipe and Filter configuration for the architecture creation tool.
  *
  * @author Serafim Simonov
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class TeetimeConfiguration extends Configuration {
 

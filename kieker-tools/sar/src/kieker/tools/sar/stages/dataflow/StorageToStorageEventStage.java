@@ -25,7 +25,7 @@ import teetime.stage.basic.AbstractTransformation;
  * multiple components, use storage name as component name.
  *
  * @author Reiner Jung
- * @since 1.3.0
+ * @since 2.0.0
  */
 public class StorageToStorageEventStage extends AbstractTransformation<Storage, StorageEvent> {
 

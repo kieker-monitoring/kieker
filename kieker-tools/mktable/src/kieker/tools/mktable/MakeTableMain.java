@@ -30,7 +30,7 @@ import kieker.tools.common.AbstractService;
  * Read CSV mappings for operation movements and create an LaTeX-table output sorted by a column.
  *
  * @author Reiner Jung
- * @since 1.1
+ * @since 2.0.0
  */
 public class MakeTableMain extends AbstractService<TeetimeConfiguration, Settings> {
 

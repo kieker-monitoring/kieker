@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
  *
  * @author Henning Schnoor
  *
- * @since 1.3.0
+ * @since 2.0.0
  */
 public final class LocalExpressionAccessUtils {
 
