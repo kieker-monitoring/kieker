@@ -219,14 +219,14 @@ subprojects {
   // jvmArgs = [ '-Duser.language=ja' ]
   //}
 
-//  tasks.withType(Pmd) {
-//    reports {
-//      xml.required = true
-//      html.required = true
-//    }
-//    // the following line of code adds our custom PMD rules as jar file to the classpath
-//    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
-//  }
+  tasks.withType(Pmd) {
+    reports {
+      xml.required = true
+      html.required = true
+    }
+    // the following line of code adds our custom PMD rules as jar file to the classpath
+    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+  }
 
   tasks.withType(Checkstyle) {
     reports {
@@ -864,7 +864,6 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
   ':kieker-tools:rewrite-log-entries:distZip',
   ':kieker-tools:runtime-analysis:distZip',
   ':kieker-tools:sar:distZip',
-  ':kieker-tools:test-resources:distZip',
   ':kieker-tools:trace-analysis:distZip',
   ':kieker-tools:trace-analysis-gui:distZip',
   ':kieker-examples:jar',
@@ -896,7 +895,6 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   ':kieker-tools:rewrite-log-entries:distZip',
   ':kieker-tools:runtime-analysis:distZip',
   ':kieker-tools:sar:distZip',
-  ':kieker-tools:test-resources:distZip',
   ':kieker-tools:trace-analysis:distZip',
   ':kieker-tools:trace-analysis-gui:distZip',
   ':kieker-examples:jar',
