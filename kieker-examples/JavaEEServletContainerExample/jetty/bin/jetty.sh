@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # LSB Tags
 ### BEGIN INIT INFO

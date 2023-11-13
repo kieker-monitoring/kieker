@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This scripts automates the execution of the AspectJ example
 
