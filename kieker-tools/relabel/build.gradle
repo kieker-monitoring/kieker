@@ -38,7 +38,7 @@ dependencies {
 }
 
 task uploadArchives {
-	println 'log-replayer skipped'
+	println 'relabel skipped'
 }
 
 eclipse {

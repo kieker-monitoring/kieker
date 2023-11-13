@@ -1,11 +1,14 @@
 plugins {
 //	id 'com.github.johnrengelman.shadow' version '7.1.1'
-	id 'java'
 	id 'application'
+	id 'eclipse'
 }
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
 
 repositories {
 	mavenCentral()
@@ -21,6 +24,8 @@ repositories {
 //}
 
 mainClassName = 'kieker.tools.fxca.FxcaMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 jar {
 	manifest {
@@ -54,5 +59,23 @@ dependencies {
 
 	testImplementation 'org.mockito:mockito-core:2.21.0'
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+}
 
+
+task uploadArchives {
+	println 'fxca skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
 }

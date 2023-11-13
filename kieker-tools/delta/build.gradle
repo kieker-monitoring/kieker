@@ -1,10 +1,17 @@
 plugins {
-	id 'java'
 	id 'application'
+	id 'eclipse'
 }
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.delta.DeltaMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
 	implementation project(':kieker-common')
@@ -41,6 +48,20 @@ dependencies {
 
 }
 
-application {
-	getMainClass().set('org.oceandsl.tools.delta.DeltaMain')
+task uploadArchives {
+	println 'delta skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
 }

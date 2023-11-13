@@ -1,10 +1,17 @@
 plugins {
-	id 'java'
 	id 'application'
+	id 'eclipse'
 }
 
 sourceCompatibility = 11
 targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.dar.DynamicArchitectureRecoveryMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
 	implementation project(':kieker-common')
@@ -37,6 +44,20 @@ dependencies {
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
 }
 
-application {
-	getMainClass().set('org.oceandsl.tools.dar.DynamicArchitectureRecoveryMain')
+task uploadArchives {
+	println 'dar skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
 }

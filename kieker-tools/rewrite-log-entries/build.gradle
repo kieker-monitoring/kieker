@@ -27,7 +27,7 @@ dependencies {
 }
 
 task uploadArchives {
-	println 'mktable skipped'
+	println 'rewrite-log-entries skipped'
 }
 
 eclipse {

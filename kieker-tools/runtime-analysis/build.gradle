@@ -1,5 +1,6 @@
 plugins {
 	id 'application'
+	id 'eclipse'
 }
 
 sourceCompatibility = 11
@@ -8,7 +9,7 @@ targetCompatibility = 11
 distTar.enabled=false
 distZip.enabled=true
 
-// mainClassName='kieker.tools.runtime.analysis.RuntimeAnalysisMain'
+mainClassName='kieker.tools.runtime.analysis.RuntimeAnalysisMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
@@ -21,9 +22,23 @@ dependencies {
 	testImplementation project(':kieker-analysis').sourceSets.test.output
 	testImplementation project(':kieker-tools').sourceSets.test.output
 
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
 }
 
 task uploadArchives {
 	println 'log-replayer skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
 }
