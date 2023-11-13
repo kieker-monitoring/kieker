@@ -20,9 +20,7 @@ if [ $? -eq 0 ]; then
   docker run -u `id -u` --rm -v `pwd`:/opt/kieker kieker/kieker-build:openjdk11 /bin/sh -c "\
     cd /opt/kieker;\
     export GRADLE_USER_HOME=/opt/kieker;\
-    ./gradlew clean && \
     ./gradlew compileJava compileTestJava &&\
-    ./gradlew test &&\
     ./gradlew check &&\
     ./gradlew build distribute"
 else

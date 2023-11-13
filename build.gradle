@@ -730,8 +730,9 @@ task javadocJar(type: Jar, dependsOn: apidoc) {
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
   dependsOn: [
-   //':distributeBinaryZip', 
-   ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+   //':distributeBinaryZip',
+   //':distributeSourceZip',
+':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 
 /**
@@ -948,12 +949,12 @@ def sourceContent = project.copySpec {
   into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-  'kieker-examples:buildStandaloneExamples']) {
-  description = 'Distributes source archive.'
-  archiveClassifier = 'sources'
-  with sourceContent
-}
+//task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+//  'kieker-examples:buildStandaloneExamples']) {
+//  description = 'Distributes source archive.'
+//  archiveClassifier = 'sources'
+//  with sourceContent
+//}
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
   'kieker-examples:buildStandaloneExamples']) {
