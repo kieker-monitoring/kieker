@@ -266,13 +266,14 @@ assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
 
-information "Check zip"
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
-check_bin_archive "${BINZIP}"
-rm -rf "${DIR}"
+# deactivated as distribution is too big
+#information "Check zip"
+#change_dir "${BASE_TMP_DIR_ABS}"
+#create_subdir_n_cd
+#DIR=$(pwd)
+#BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
+#check_bin_archive "${BINZIP}"
+#rm -rf "${DIR}"
 
 information "Check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"

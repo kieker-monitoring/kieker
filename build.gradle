@@ -729,10 +729,7 @@ task javadocJar(type: Jar, dependsOn: apidoc) {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-  dependsOn: [
-   //':distributeBinaryZip',
-   //':distributeSourceZip',
-':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+  dependsOn: [':distributeBinaryTar', ':replaceHardCodedVersionNames'])
 
 
 /**
@@ -956,15 +953,15 @@ def sourceContent = project.copySpec {
 //  with sourceContent
 //}
 
-task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-  'kieker-examples:buildStandaloneExamples']) {
-  description = 'Distributes source archive.'
-  archiveClassifier = 'sources'
-  with sourceContent
-
-  compression = Compression.GZIP
-  archiveExtension = 'tar.gz'
-}
+//task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+//  'kieker-examples:buildStandaloneExamples']) {
+//  description = 'Distributes source archive.'
+//  archiveClassifier = 'sources'
+//  with sourceContent
+//
+//  compression = Compression.GZIP
+//  archiveExtension = 'tar.gz'
+//}
 
 task startRServe() {
   doLast {
