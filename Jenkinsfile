@@ -31,7 +31,7 @@ pipeline {
     stage('Default Docker Stages') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           alwaysPull false
           args env.DOCKER_ARGS
         }
@@ -111,7 +111,7 @@ pipeline {
         stage('Release Check Short') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
@@ -129,7 +129,7 @@ pipeline {
         stage('Release Check Extended') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
@@ -157,7 +157,7 @@ pipeline {
     stage('Archive Artifacts') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           args env.DOCKER_ARGS
         }
       }
@@ -205,7 +205,7 @@ pipeline {
         stage('Upload Snapshot Version') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
@@ -238,7 +238,7 @@ pipeline {
       
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           args env.DOCKER_ARGS
         }
       }
