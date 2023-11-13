@@ -224,8 +224,6 @@ subprojects {
       xml.required = true
       html.required = true
     }
-    // the following line of code adds our custom PMD rules as jar file to the classpath
-    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
   }
 
   tasks.withType(Checkstyle) {

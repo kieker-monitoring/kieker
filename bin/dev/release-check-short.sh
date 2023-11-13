@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
