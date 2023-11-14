@@ -22,7 +22,7 @@ dependencies {
 	testImplementation project(':kieker-analysis').sourceSets.test.output
 	testImplementation project(':kieker-tools').sourceSets.test.output
 
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
 }
 
 task uploadArchives {
