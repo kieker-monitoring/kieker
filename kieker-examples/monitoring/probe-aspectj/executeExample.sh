@@ -10,7 +10,7 @@ cp ../../../build/libs/kieker-*-aspectj.jar lib/
 
 logCount=$(cat monitoring-logs/kieker-*/kieker-*.dat | wc -l)
 
-if (( $logCount == 13 )) ; then
+if [ $logCount -eq 13 ] ; then
 	echo "Run was sucessful"
 else
 	echo "Run had $logCount log entries; error occured"

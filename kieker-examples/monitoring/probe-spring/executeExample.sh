@@ -8,7 +8,7 @@ rm monitoring-logs/* -rf
 
 logCount=$(cat monitoring-logs/kieker-*/kieker-*.dat | wc -l)
 
-if (( $logCount == 5 )) ; then
+if [ $logCount -eq 5 ] ; then
 	echo "Run was sucessful"
 else
 	echo "Run had $logCount log entries; error occured"
