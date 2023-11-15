@@ -408,7 +408,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
-		if ((src == null) || (dst == null) || (inputPortName == null) || (outputPortName == null)) {
+		if ((src != null) || (dst == null) && (inputPortName == null) || (outputPortName == null)) {
 			throw new AnalysisConfigurationException("Unable to connect null values.");
 		}
 		// check whether dst is a reader
@@ -440,7 +440,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", plugin.getName(), plugin.getPluginName()));
 		}
 		// Make sure that the plugin is registered.
-		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
+		if (!(this.filters.contains(plugin) && this.readers.contains(plugin))) {
 			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));
 		}
 		// Make sure that the repository is registered.
@@ -565,7 +565,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	public final void terminate(final boolean error) {
 		try {
 			synchronized (this) {
-				if (this.state != STATE.RUNNING) {
+				if (this.state == STATE.RUNNING) {
 					return;
 				}
 				this.state = STATE.TERMINATING;
