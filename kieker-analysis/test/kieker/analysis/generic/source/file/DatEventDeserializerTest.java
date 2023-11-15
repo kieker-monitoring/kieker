@@ -15,17 +15,18 @@
  ***************************************************************************/
 package kieker.analysis.generic.source.file;
 
-import kieker.analysis.plugin.reader.newio.deserializer.DeserializerStringRegistry;
-import kieker.common.record.IMonitoringRecord;
-import org.junit.Test;
-import teetime.framework.OutputPort;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
+import java.util.List;
+import org.junit.Test;
 import static org.mockito.Mockito.mock;
+import teetime.framework.OutputPort;
+
+import kieker.analysis.plugin.reader.newio.deserializer.DeserializerStringRegistry;
+import kieker.common.record.IMonitoringRecord;
+
 /**
  * @author Clemens Kurz
  *
@@ -33,6 +34,10 @@ import static org.mockito.Mockito.mock;
  */
 public class DatEventDeserializerTest {
 
+    /**
+     * A simple record with '\r' at the end.
+     */
+    private static final String RECORD = "$0;1693267380061362600;1.15-SNAPSHOT;KIEKER;6d672498b3fb;1;false;0;NANOSECONDS;0\r";
 
     /**
      * Create test object.
@@ -40,11 +45,6 @@ public class DatEventDeserializerTest {
     public DatEventDeserializerTest() {
         // nothing to do
     }
-
-    /**
-     * A simple record with '\r' at the end.
-     */
-    private final static String RECORD = "$0;1693267380061362600;1.15-SNAPSHOT;KIEKER;6d672498b3fb;1;false;0;NANOSECONDS;0\r";
 
     /**
      * Buffer Size is chosen by the length of the first event + \r
@@ -58,12 +58,12 @@ public class DatEventDeserializerTest {
         // setup
         final int bufferSize = RECORD.getBytes().length;
 
-        final ArrayList<String> values = new ArrayList<>();
+        final List<String> values = new ArrayList<>();
         values.add("myClass"); // is required for the record to find a class and the Charset to get cleared.
         final DeserializerStringRegistry registry = new DeserializerStringRegistry(values);
         final DatEventDeserializer datEventDeserializer = new DatEventDeserializer(bufferSize, registry);
 
-        final OutputPort<IMonitoringRecord> outputPort = mock(OutputPort.class);
+        final OutputPort<IMonitoringRecord> outputPort = mock(OutputPort.class); // NOCS
 
         // test
         // The record is applied twice since the read bytes are read twice and the end od the array must be reached.
