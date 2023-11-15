@@ -37,7 +37,7 @@ public class DatEventDeserializerTest {
     /**
      * A simple record with '\r' at the end.
      */
-    private static final String RECORD = "$0;1693267380061362600;1.15-SNAPSHOT;KIEKER;6d672498b3fb;1;false;0;NANOSECONDS;0\r";
+    private final static String RECORD = "$0;1693267380061362600;1.15-SNAPSHOT;KIEKER;6d672498b3fb;1;false;0;NANOSECONDS;0\r";
 
     /**
      * Create test object.
