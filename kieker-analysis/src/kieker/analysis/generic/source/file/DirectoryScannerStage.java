@@ -61,7 +61,7 @@ public class DirectoryScannerStage extends AbstractFilter<Path> {
 	}
 
 	private FileVisitor<? super Path> createVisitor(final Path directory) {
-		return new SimpleFileVisitor<Path>() {
+		return new SimpleFileVisitor<>() {
 
 			@Override
 			public FileVisitResult visitFile(final Path filePath, final BasicFileAttributes attrs) {

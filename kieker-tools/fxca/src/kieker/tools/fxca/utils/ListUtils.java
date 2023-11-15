@@ -31,62 +31,62 @@ import java.util.List;
  */
 public final class ListUtils {
 
-    private ListUtils() {
-        // utility class
-    }
+	private ListUtils() {
+		// utility class
+	}
 
-    // mutable versions of List.of
-    public static <T> List<T> ofM() {
-        return new ArrayList<>();
-    }
+	// mutable versions of List.of
+	public static <T> List<T> ofM() {
+		return new ArrayList<>();
+	}
 
-    public static <T> List<T> ofM(final T element) {
-        final List<T> result = ListUtils.ofM();
-        result.add(element);
-        return result;
-    }
+	public static <T> List<T> ofM(final T element) {
+		final List<T> result = ListUtils.ofM();
+		result.add(element);
+		return result;
+	}
 
-    public static <T> List<T> ofM(final List<T> list1, final List<T> list2, final Comparator<T> comparator) {
-        final List<T> newList = (list1 == null) ? ListUtils.ofM() : ListUtils.ofM(list1);
-        if (list2 != null) {
-            newList.addAll(list2);
-        }
-        Collections.sort(newList, comparator);
-        return newList;
-    }
+	public static <T> List<T> ofM(final List<T> list1, final List<T> list2, final Comparator<T> comparator) {
+		final List<T> newList = (list1 == null) ? ListUtils.ofM() : ListUtils.ofM(list1);
+		if (list2 != null) {
+			newList.addAll(list2);
+		}
+		Collections.sort(newList, comparator);
+		return newList;
+	}
 
-    public static <T> List<T> ofM(final Iterable<T> elements) {
-        return ListUtils.ofM(elements.iterator());
-    }
+	public static <T> List<T> ofM(final Iterable<T> elements) {
+		return ListUtils.ofM(elements.iterator());
+	}
 
-    public static <T> List<T> ofM(final Iterable<T> elements, final Comparator<T> comparator) {
-        final List<T> result = ListUtils.ofM(elements.iterator());
-        Collections.sort(result, comparator);
-        return result;
-    }
+	public static <T> List<T> ofM(final Iterable<T> elements, final Comparator<T> comparator) {
+		final List<T> result = ListUtils.ofM(elements.iterator());
+		Collections.sort(result, comparator);
+		return result;
+	}
 
-    public static <T> List<T> ofM(final Iterator<T> iterator) {
-        final List<T> newList = ListUtils.ofM();
-        iterator.forEachRemaining(newList::add);
-        return newList;
-    }
+	public static <T> List<T> ofM(final Iterator<T> iterator) {
+		final List<T> newList = ListUtils.ofM();
+		iterator.forEachRemaining(newList::add);
+		return newList;
+	}
 
-    public static <T> T getUniqueElement(final Collection<T> collection) {
-        if (collection.size() != 1) {
-            final HashSet<T> checkForDoubles = new HashSet<>(collection);
-            checkForDoubles.forEach(System.out::println);
-            if (checkForDoubles.size() == 1) {
-                return ListUtils.getUniqueElement(checkForDoubles);
-            }
-            throw new IllegalArgumentException("Unique element exists only for singletons.");
+	public static <T> T getUniqueElement(final Collection<T> collection) {
+		if (collection.size() != 1) {
+			final HashSet<T> checkForDoubles = new HashSet<>(collection);
+			checkForDoubles.forEach(System.out::println);
+			if (checkForDoubles.size() == 1) {
+				return ListUtils.getUniqueElement(checkForDoubles);
+			}
+			throw new IllegalArgumentException("Unique element exists only for singletons.");
 
-        }
+		}
 
-        return collection.iterator().next();
-    }
+		return collection.iterator().next();
+	}
 
-    public static <T> T getUniqueElementIfNonEmpty(final Collection<T> collection, final T alternative) {
-        return collection.isEmpty() ? alternative : ListUtils.getUniqueElement(collection);
-    }
+	public static <T> T getUniqueElementIfNonEmpty(final Collection<T> collection, final T alternative) {
+		return collection.isEmpty() ? alternative : ListUtils.getUniqueElement(collection);
+	}
 
 }

@@ -20,13 +20,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
-import com.beust.jcommander.JCommander;
-
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
+
+import kieker.analysis.generic.graph.EGraphGenerationMode;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
-import kieker.analysis.generic.graph.EGraphGenerationMode;
 import kieker.tools.common.AbstractService;
 
 /**
@@ -37,86 +37,86 @@ import kieker.tools.common.AbstractService;
  */
 public class ModelVisualizationMain extends AbstractService<TeetimeConfiguration, Settings> {
 
-    public static void main(final String[] args) {
-        final ModelVisualizationMain main = new ModelVisualizationMain();
-        try {
-            final int exitCode = main.run("architecture modeler", "arch-mod", args, new Settings());
-            System.exit(exitCode);
-        } catch (final IllegalArgumentException e) {
-            LoggerFactory.getLogger(ModelVisualizationMain.class).error("Configuration error: {}",
-                    e.getLocalizedMessage());
-            System.exit(1);
-        }
-    }
+	public static void main(final String[] args) {
+		final ModelVisualizationMain main = new ModelVisualizationMain();
+		try {
+			final int exitCode = main.run("architecture modeler", "arch-mod", args, new Settings());
+			System.exit(exitCode);
+		} catch (final IllegalArgumentException e) {
+			LoggerFactory.getLogger(ModelVisualizationMain.class).error("Configuration error: {}",
+					e.getLocalizedMessage());
+			System.exit(1);
+		}
+	}
 
-    @Override
-    protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
-        try {
-            return new TeetimeConfiguration(this.settings);
-        } catch (final IOException e) {
-            this.logger.error("Error reading files. Cause: {}", e.getLocalizedMessage());
-            throw new ConfigurationException(e);
-        }
-    }
+	@Override
+	protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		try {
+			return new TeetimeConfiguration(this.settings);
+		} catch (final IOException e) {
+			this.logger.error("Error reading files. Cause: {}", e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		}
+	}
 
-    @Override
-    protected Path getConfigurationPath() {
-        // we do not use a configuration file
-        return null;
-    }
+	@Override
+	protected Path getConfigurationPath() {
+		// we do not use a configuration file
+		return null;
+	}
 
-    @Override
-    protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-        return true;
-    }
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
+		return true;
+	}
 
-    @Override
-    protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-        if (this.settings.getGraphGenerationMode() == null) {
-            this.logger.error("You need to specify a graph generation mode: {}",
-                    this.createModeList(EGraphGenerationMode.values()));
-            return false;
-        }
-        if (this.settings.getSelector() == null) {
-            this.logger.error("No valid node and edge selector specificed. Valid types are: {}",
-                    this.createSelectorList(ESelectorKind.values()));
-            return false;
-        }
-        if (!Files.isDirectory(this.settings.getOutputDirectory())) {
-            this.logger.error("Output path {} is not directory", this.settings.getOutputDirectory());
-            return false;
-        }
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+		if (this.settings.getGraphGenerationMode() == null) {
+			this.logger.error("You need to specify a graph generation mode: {}",
+					this.createModeList(EGraphGenerationMode.values()));
+			return false;
+		}
+		if (this.settings.getSelector() == null) {
+			this.logger.error("No valid node and edge selector specificed. Valid types are: {}",
+					this.createSelectorList(ESelectorKind.values()));
+			return false;
+		}
+		if (!Files.isDirectory(this.settings.getOutputDirectory())) {
+			this.logger.error("Output path {} is not directory", this.settings.getOutputDirectory());
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    private Object createSelectorList(final ESelectorKind[] values) {
-        String list = null;
-        for (final ESelectorKind value : values) {
-            if (list == null) {
-                list = value.name().toLowerCase(Locale.ROOT);
-            } else {
-                list += "," + value.name().toLowerCase(Locale.ROOT);
-            }
-        }
-        return list;
-    }
+	private Object createSelectorList(final ESelectorKind[] values) {
+		String list = null;
+		for (final ESelectorKind value : values) {
+			if (list == null) {
+				list = value.name().toLowerCase(Locale.ROOT);
+			} else {
+				list += "," + value.name().toLowerCase(Locale.ROOT);
+			}
+		}
+		return list;
+	}
 
-    private String createModeList(final EGraphGenerationMode[] values) {
-        String list = null;
-        for (final EGraphGenerationMode value : values) {
-            if (list == null) {
-                list = value.getKey();
-            } else {
-                list += "," + value.getKey();
-            }
-        }
-        return list;
-    }
+	private String createModeList(final EGraphGenerationMode[] values) {
+		String list = null;
+		for (final EGraphGenerationMode value : values) {
+			if (list == null) {
+				list = value.getKey();
+			} else {
+				list += "," + value.getKey();
+			}
+		}
+		return list;
+	}
 
-    @Override
-    protected void shutdownService() {
-        // No special shutdown function required
-    }
+	@Override
+	protected void shutdownService() {
+		// No special shutdown function required
+	}
 
 }

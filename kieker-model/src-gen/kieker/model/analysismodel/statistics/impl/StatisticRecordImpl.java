@@ -2,21 +2,17 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.StatisticRecord;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import kieker.model.analysismodel.statistics.StatisticRecord;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +22,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl#getProperties <em>Properties</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -36,6 +32,7 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getProperties()
 	 * @generated
 	 * @ordered
@@ -45,6 +42,7 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected StatisticRecordImpl() {
@@ -54,6 +52,7 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -64,26 +63,29 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EMap<String, Object> getProperties() {
-		if (properties == null) {
-			properties = new EcoreEMap<String,Object>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this, StatisticsPackage.STATISTIC_RECORD__PROPERTIES);
+		if (this.properties == null) {
+			this.properties = new EcoreEMap<>(StatisticsPackage.Literals.EPROPERTY_TYPE_TO_VALUE, EPropertyTypeToValueImpl.class, this,
+					StatisticsPackage.STATISTIC_RECORD__PROPERTIES);
 		}
-		return properties;
+		return this.properties;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
-				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
+		case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
+			return ((InternalEList<?>) this.getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -91,14 +93,18 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
-				if (coreType) return getProperties();
-				else return getProperties().map();
+		case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
+			if (coreType) {
+				return this.getProperties();
+			} else {
+				return this.getProperties().map();
+			}
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -106,14 +112,15 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
-				((EStructuralFeature.Setting)getProperties()).set(newValue);
-				return;
+		case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
+			((EStructuralFeature.Setting) this.getProperties()).set(newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -121,14 +128,15 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
-				getProperties().clear();
-				return;
+		case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
+			this.getProperties().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -136,15 +144,16 @@ public class StatisticRecordImpl extends MinimalEObjectImpl.Container implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
-				return properties != null && !properties.isEmpty();
+		case StatisticsPackage.STATISTIC_RECORD__PROPERTIES:
+			return (this.properties != null) && !this.properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //StatisticRecordImpl
+} // StatisticRecordImpl

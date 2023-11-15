@@ -29,29 +29,29 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class CheckProjectStage extends AbstractFilter<FortranProject> {
 
-    @Override
-    protected void execute(final FortranProject project) throws Exception {
-        this.logger.debug("CheckProject");
-        project.getModules().values().forEach(module -> module.getOperations().values().forEach(operation -> {
-            final boolean duplicate = operation.getParameters().values().stream().map(p -> p.getName())
-                    .anyMatch(v -> operation.getVariables().containsKey(v));
-            if (duplicate) {
-                this.logger.debug("----------------------------------");
-                this.logger.debug("op {}", operation.getName());
-                this.logger.debug("  parameter {}", this.makeStringSet(operation.getParameters().keySet()));
-                this.logger.debug("  variables {}", this.makeStringSet(operation.getVariables().keySet()));
-            }
-        }));
-        this.outputPort.send(project);
-    }
+	@Override
+	protected void execute(final FortranProject project) throws Exception {
+		this.logger.debug("CheckProject");
+		project.getModules().values().forEach(module -> module.getOperations().values().forEach(operation -> {
+			final boolean duplicate = operation.getParameters().values().stream().map(p -> p.getName())
+					.anyMatch(v -> operation.getVariables().containsKey(v));
+			if (duplicate) {
+				this.logger.debug("----------------------------------");
+				this.logger.debug("op {}", operation.getName());
+				this.logger.debug("  parameter {}", this.makeStringSet(operation.getParameters().keySet()));
+				this.logger.debug("  variables {}", this.makeStringSet(operation.getVariables().keySet()));
+			}
+		}));
+		this.outputPort.send(project);
+	}
 
-    private String makeStringSet(final Set<String> set) {
-        final Optional<String> result = set.stream().reduce((a, b) -> a + "," + b);
-        if (result.isPresent()) {
-            return result.get();
-        } else {
-            return "---";
-        }
-    }
+	private String makeStringSet(final Set<String> set) {
+		final Optional<String> result = set.stream().reduce((a, b) -> a + "," + b);
+		if (result.isPresent()) {
+			return result.get();
+		} else {
+			return "---";
+		}
+	}
 
 }

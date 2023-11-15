@@ -40,7 +40,7 @@ import kieker.analysis.generic.clustering.mtree.utils.Pair;
  */
 class MTreeClass extends MTree<Data> {
 
-	private static final IPromotionFunction<Data> NON_RANDOM_PROMOTION = new IPromotionFunction<Data>() {
+	private static final IPromotionFunction<Data> NON_RANDOM_PROMOTION = new IPromotionFunction<>() {
 		@Override
 		public Pair<Data> process(final Set<Data> dataSet, final IDistanceFunction<? super Data> distanceFunction) {
 			return MTreeUtils.minMax(dataSet);
@@ -51,7 +51,7 @@ class MTreeClass extends MTree<Data> {
 		super(2, DistanceFunctionFactory.EUCLIDEAN,
 				new ComposedSplitFunction<>(
 						MTreeClass.NON_RANDOM_PROMOTION,
-						new BalancedPartitionFunction<Data>()));
+						new BalancedPartitionFunction<>()));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ class MTreeClass extends MTree<Data> {
 	public IDistanceFunction<? super Data> getDistanceFunction() {
 		return super.getDistanceFunction();
 	}
-};
+}
 
 public class MTreeTest {
 

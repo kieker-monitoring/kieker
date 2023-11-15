@@ -27,10 +27,10 @@ import kieker.tools.opad.record.NamedDoubleRecord;
 
 /**
  * Converts OperationExecutionRecords to NamedDoubleRecords.
- * 
+ *
  * @author Thomas Duellmann
  * @since 1.10
- * 
+ *
  */
 @Plugin(
 		description = "Converts OperationExecutionRecords to NamedDoubleRecords",
@@ -49,7 +49,7 @@ public class RecordConverter extends AbstractFilterPlugin {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            configuration for the converter
 	 * @param projectContext
@@ -67,7 +67,7 @@ public class RecordConverter extends AbstractFilterPlugin {
 
 	/**
 	 * Receives OperationExecutionRecords and delivers them converted to NamedDoubleRecords.
-	 * 
+	 *
 	 * @param oer
 	 *            OperationExecutionRecord object to be converted
 	 */

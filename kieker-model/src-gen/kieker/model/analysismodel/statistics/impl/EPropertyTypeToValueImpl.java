@@ -2,18 +2,15 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,17 +20,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,Object> {
+public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String, Object> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -44,6 +42,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -54,6 +53,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * The default value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -64,6 +64,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -73,6 +74,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected EPropertyTypeToValueImpl() {
@@ -82,6 +84,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -92,57 +95,64 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getTypedKey() {
-		return key;
+		return this.key;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedKey(String newKey) {
-		String oldKey = key;
-		key = newKey;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY, oldKey, key));
+	public void setTypedKey(final String newKey) {
+		final String oldKey = this.key;
+		this.key = newKey;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY, oldKey, this.key));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Object getTypedValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedValue(Object newValue) {
-		Object oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE, oldValue, value));
+	public void setTypedValue(final Object newValue) {
+		final Object oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE, oldValue, this.value));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				return getTypedKey();
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
-				return getTypedValue();
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
+			return this.getTypedKey();
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
+			return this.getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -150,17 +160,18 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				setTypedKey((String)newValue);
-				return;
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
-				setTypedValue(newValue);
-				return;
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
+			this.setTypedKey((String) newValue);
+			return;
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
+			this.setTypedValue(newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -168,17 +179,18 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				setTypedKey(KEY_EDEFAULT);
-				return;
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
-				setTypedValue(VALUE_EDEFAULT);
-				return;
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
+			this.setTypedKey(KEY_EDEFAULT);
+			return;
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
+			this.setTypedValue(VALUE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -186,15 +198,16 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
-				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__KEY:
+			return KEY_EDEFAULT == null ? this.key != null : !KEY_EDEFAULT.equals(this.key);
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE__VALUE:
+			return VALUE_EDEFAULT == null ? this.value != null : !VALUE_EDEFAULT.equals(this.value);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -202,17 +215,20 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (key: ");
-		result.append(key);
+		result.append(this.key);
 		result.append(", value: ");
-		result.append(value);
+		result.append(this.value);
 		result.append(')');
 		return result.toString();
 	}
@@ -220,6 +236,7 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -227,78 +244,85 @@ public class EPropertyTypeToValueImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getHash() {
-		if (hash == -1) {
-			Object theKey = getKey();
-			hash = (theKey == null ? 0 : theKey.hashCode());
+		if (this.hash == -1) {
+			final Object theKey = this.getKey();
+			this.hash = (theKey == null ? 0 : theKey.hashCode());
 		}
-		return hash;
+		return this.hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setHash(int hash) {
+	public void setHash(final int hash) {
 		this.hash = hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getKey() {
-		return getTypedKey();
+		return this.getTypedKey();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setKey(String key) {
-		setTypedKey(key);
+	public void setKey(final String key) {
+		this.setTypedKey(key);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Object getValue() {
-		return getTypedValue();
+		return this.getTypedValue();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object setValue(Object value) {
-		Object oldValue = getValue();
-		setTypedValue(value);
+	public Object setValue(final Object value) {
+		final Object oldValue = this.getValue();
+		this.setTypedValue(value);
 		return oldValue;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<String, Object> getEMap() {
-		EObject container = eContainer();
-		return container == null ? null : (EMap<String, Object>)container.eGet(eContainmentFeature());
+		final EObject container = this.eContainer();
+		return container == null ? null : (EMap<String, Object>) container.eGet(this.eContainmentFeature());
 	}
 
-} //EPropertyTypeToValueImpl
+} // EPropertyTypeToValueImpl

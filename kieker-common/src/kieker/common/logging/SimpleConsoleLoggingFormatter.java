@@ -16,16 +16,16 @@
 
 package kieker.common.logging;
 
-import java.util.logging.Formatter; // NOCS 
-import java.util.logging.Level; // NOCS 
-import java.util.logging.LogRecord; // NOCS 
+import java.util.logging.Formatter; // NOCS
+import java.util.logging.Level; // NOCS
+import java.util.logging.LogRecord; // NOCS
 
 /**
  * A formatter for the logging to the console which is used by the Kieker tools.
  * It simplifies the log messages and prints only the important information.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class SimpleConsoleLoggingFormatter extends Formatter {
@@ -50,7 +50,7 @@ public class SimpleConsoleLoggingFormatter extends Formatter {
 
 	/**
 	 * Populates the string builder with logging information.
-	 * 
+	 *
 	 * @param sb
 	 *            the string builder
 	 * @param record

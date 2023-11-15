@@ -29,23 +29,23 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class StorageToStorageEventStage extends AbstractTransformation<Storage, StorageEvent> {
 
-    private final String hostname;
+	private final String hostname;
 
-    public StorageToStorageEventStage(final String hostname) {
-        this.hostname = hostname;
-    }
+	public StorageToStorageEventStage(final String hostname) {
+		this.hostname = hostname;
+	}
 
-    @Override
-    protected void execute(final Storage storage) throws Exception {
-        final String componentSignature;
-        if (storage.getModules().size() > 1) {
-            componentSignature = storage.getName();
-        } else {
-            componentSignature = storage.getModules().get(0);
-        }
-        final String storageSignature = storage.getName();
+	@Override
+	protected void execute(final Storage storage) throws Exception {
+		final String componentSignature;
+		if (storage.getModules().size() > 1) {
+			componentSignature = storage.getName();
+		} else {
+			componentSignature = storage.getModules().get(0);
+		}
+		final String storageSignature = storage.getName();
 
-        this.outputPort.send(new StorageEvent(this.hostname, componentSignature, storageSignature, "unknown"));
-    }
+		this.outputPort.send(new StorageEvent(this.hostname, componentSignature, storageSignature, "unknown"));
+	}
 
 }

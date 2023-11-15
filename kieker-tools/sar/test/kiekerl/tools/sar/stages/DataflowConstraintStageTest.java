@@ -29,56 +29,56 @@ import teetime.framework.test.StageTester;
 
 class DataflowConstraintStageTest {
 
-    private static final String HOSTNAME = "test-host";
-    private static final String COMPONENT = "TestComponent";
-    private static final String OPERATION_1 = "op1()";
-    private static final String OPERATION_2 = "op2()";
-    private static final String OPERATION_3 = "op3()";
+	private static final String HOSTNAME = "test-host";
+	private static final String COMPONENT = "TestComponent";
+	private static final String OPERATION_1 = "op1()";
+	private static final String OPERATION_2 = "op2()";
+	private static final String OPERATION_3 = "op3()";
 
-    /**
-     * Test whether all {@link DataflowEvent}s pass when all @{link {@link OperationEvent}s have
-     * been received.
-     */
-    @Test
-    void testIfAllDataflowPass() {
-        final DataflowConstraintStage stage = new DataflowConstraintStage();
+	/**
+	 * Test whether all {@link DataflowEvent}s pass when all @{link {@link OperationEvent}s have
+	 * been received.
+	 */
+	@Test
+	void testIfAllDataflowPass() {
+		final DataflowConstraintStage stage = new DataflowConstraintStage();
 
-        final OperationEvent e1 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_1);
-        final OperationEvent e2 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_2);
-        final OperationEvent e3 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_3);
+		final OperationEvent e1 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_1);
+		final OperationEvent e2 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_2);
+		final OperationEvent e3 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_3);
 
-        final DataflowEvent d1 = new DataflowEvent(e1, e2, EDirection.WRITE, Duration.ZERO);
-        final DataflowEvent d2 = new DataflowEvent(e2, e3, EDirection.WRITE, Duration.ZERO);
+		final DataflowEvent d1 = new DataflowEvent(e1, e2, EDirection.WRITE, Duration.ZERO);
+		final DataflowEvent d2 = new DataflowEvent(e2, e3, EDirection.WRITE, Duration.ZERO);
 
-        StageTester.test(stage).and().send(d1, d2).to(stage.getInputPort()).send(e1, e2, e3)
-                .to(stage.getControlInputPort()).start();
-        MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(d1, d2));
-    }
+		StageTester.test(stage).and().send(d1, d2).to(stage.getInputPort()).send(e1, e2, e3)
+				.to(stage.getControlInputPort()).start();
+		MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(d1, d2));
+	}
 
-    /**
-     * Test whether one {@link DataflowEvent} passes and one is held back, as not enough
-     * {@link OperationEvent}s have been received.
-     */
-    @Test
-    void testIfOnlyOneDataflowPasses() {
-        final DataflowConstraintStage stage = new DataflowConstraintStage();
+	/**
+	 * Test whether one {@link DataflowEvent} passes and one is held back, as not enough
+	 * {@link OperationEvent}s have been received.
+	 */
+	@Test
+	void testIfOnlyOneDataflowPasses() {
+		final DataflowConstraintStage stage = new DataflowConstraintStage();
 
-        final OperationEvent e1 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_1);
-        final OperationEvent e2 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_2);
-        final OperationEvent e3 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
-                DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_3);
+		final OperationEvent e1 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_1);
+		final OperationEvent e2 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_2);
+		final OperationEvent e3 = new OperationEvent(DataflowConstraintStageTest.HOSTNAME,
+				DataflowConstraintStageTest.COMPONENT, DataflowConstraintStageTest.OPERATION_3);
 
-        final DataflowEvent d1 = new DataflowEvent(e1, e2, EDirection.WRITE, Duration.ZERO);
-        final DataflowEvent d2 = new DataflowEvent(e2, e3, EDirection.WRITE, Duration.ZERO);
+		final DataflowEvent d1 = new DataflowEvent(e1, e2, EDirection.WRITE, Duration.ZERO);
+		final DataflowEvent d2 = new DataflowEvent(e2, e3, EDirection.WRITE, Duration.ZERO);
 
-        StageTester.test(stage).and().send(d1, d2).to(stage.getInputPort()).send(e1, e2).to(stage.getControlInputPort())
-                .start();
-        MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(d1));
-    }
+		StageTester.test(stage).and().send(d1, d2).to(stage.getInputPort()).send(e1, e2).to(stage.getControlInputPort())
+				.start();
+		MatcherAssert.assertThat(stage.getOutputPort(), StageTester.produces(d1));
+	}
 
 }

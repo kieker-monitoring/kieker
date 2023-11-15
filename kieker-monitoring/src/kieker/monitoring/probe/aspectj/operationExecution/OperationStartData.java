@@ -37,30 +37,30 @@ final class OperationStartData {
 	}
 
 	public boolean isEntrypoint() {
-		return entrypoint;
+		return this.entrypoint;
 	}
 
 	public String getSessionId() {
-		return sessionId;
+		return this.sessionId;
 	}
 
 	public long getTraceId() {
-		return traceId;
+		return this.traceId;
 	}
 
 	public long getTin() {
-		return tin;
+		return this.tin;
 	}
 
 	public String getHostname() {
-		return hostname;
+		return this.hostname;
 	}
 
 	public int getEoi() {
-		return eoi;
+		return this.eoi;
 	}
 
 	public int getEss() {
-		return ess;
+		return this.ess;
 	}
 }

@@ -25,29 +25,29 @@ import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcesso
  */
 public class ModuleSignatureProcessor extends AbstractSignatureProcessor {
 
-    public ModuleSignatureProcessor(final boolean caseInsensitive) {
-        super(caseInsensitive);
-    }
+	public ModuleSignatureProcessor(final boolean caseInsensitive) {
+		super(caseInsensitive);
+	}
 
-    @Override
-    public void processSignatures(final String componentSignature, final String operationSignature) {
-        final String[] values = operationSignature.split(this.caseInsensitive ? "_mod_" : "_MOD_");
-        if (values.length == 2) {
-            this.componentSignature = this
-                    .convertToLowerCase(this.removeLeadingUnderscore(this.removeTrailingUnderscore(values[0])));
-            this.operationSignature = this.convertToLowerCase(this.removeTrailingUnderscore(values[1]));
-        } else {
-            this.componentSignature = componentSignature;
-            this.operationSignature = this.convertToLowerCase(this.removeTrailingUnderscore(operationSignature));
-        }
-    }
+	@Override
+	public void processSignatures(final String componentSignature, final String operationSignature) {
+		final String[] values = operationSignature.split(this.caseInsensitive ? "_mod_" : "_MOD_"); // NOCS
+		if (values.length == 2) {
+			this.componentSignature = this
+					.convertToLowerCase(this.removeLeadingUnderscore(this.removeTrailingUnderscore(values[0])));
+			this.operationSignature = this.convertToLowerCase(this.removeTrailingUnderscore(values[1]));
+		} else {
+			this.componentSignature = componentSignature;
+			this.operationSignature = this.convertToLowerCase(this.removeTrailingUnderscore(operationSignature));
+		}
+	}
 
-    private String removeLeadingUnderscore(final String signature) {
-        if (signature.startsWith("_")) {
-            return this.removeLeadingUnderscore(signature.substring(1));
-        } else {
-            return signature;
-        }
-    }
+	private String removeLeadingUnderscore(final String signature) {
+		if (signature.startsWith("_")) {
+			return this.removeLeadingUnderscore(signature.substring(1));
+		} else {
+			return signature;
+		}
+	}
 
 }

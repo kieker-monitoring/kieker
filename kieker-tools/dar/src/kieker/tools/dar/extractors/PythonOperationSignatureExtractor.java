@@ -26,12 +26,12 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class PythonOperationSignatureExtractor implements IOperationSignatureExtractor {
 
-    @Override
-    public void extract(final OperationType operationType) {
-        // TODO this will be wrong when other parts are fixed.
-        final String name = operationType.getSignature();
-        operationType.setName(name);
-        operationType.setReturnType("unknown");
-    }
+	@Override
+	public void extract(final OperationType operationType) {
+		// TODO this will be wrong when other parts are fixed.
+		final String name = operationType.getSignature();
+		operationType.setName(name);
+		operationType.setReturnType("unknown");
+	}
 
 }

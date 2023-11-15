@@ -26,10 +26,10 @@ import kieker.model.analysismodel.type.OperationType;
  */
 public class ELFOperationSignatureExtractor implements IOperationSignatureExtractor {
 
-    @Override
-    public void extract(final OperationType operationType) {
-        final String name = operationType.getSignature();
-        operationType.setName(name);
-        operationType.setReturnType("unknown");
-    }
+	@Override
+	public void extract(final OperationType operationType) {
+		final String name = operationType.getSignature();
+		operationType.setName(name);
+		operationType.setReturnType("unknown");
+	}
 }

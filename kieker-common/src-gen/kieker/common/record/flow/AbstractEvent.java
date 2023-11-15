@@ -15,32 +15,28 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 
-import kieker.common.record.flow.IEventRecord;
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.5
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {			
-	
-		
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -8847127127729394312L;
-	
+
 	/** property declarations. */
 	private long timestamp;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 */
@@ -48,19 +44,16 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = timestamp;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AbstractEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 	}
-	
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -75,36 +68,34 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractEvent castedRecord = (AbstractEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp())) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		
+		code += ((int) this.getTimestamp());
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	public final void setTimestamp(long timestamp) {
+
+	public final void setTimestamp(final long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +104,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		String result = "AbstractEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		return result;
 	}
 }

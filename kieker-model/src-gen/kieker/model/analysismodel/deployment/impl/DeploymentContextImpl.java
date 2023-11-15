@@ -2,24 +2,20 @@
  */
 package kieker.model.analysismodel.deployment.impl;
 
-import kieker.model.analysismodel.deployment.DeployedComponent;
-import kieker.model.analysismodel.deployment.DeploymentContext;
-import kieker.model.analysismodel.deployment.DeploymentPackage;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import kieker.model.analysismodel.deployment.DeployedComponent;
+import kieker.model.analysismodel.deployment.DeploymentContext;
+import kieker.model.analysismodel.deployment.DeploymentPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,8 +25,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getComponents <em>Components</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.impl.DeploymentContextImpl#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @generated
@@ -40,6 +36,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -50,6 +47,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -60,6 +58,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getComponents() <em>Components</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponents()
 	 * @generated
 	 * @ordered
@@ -69,6 +68,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected DeploymentContextImpl() {
@@ -78,6 +78,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -88,49 +89,55 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_CONTEXT__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_CONTEXT__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EMap<String, DeployedComponent> getComponents() {
-		if (components == null) {
-			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
+		if (this.components == null) {
+			this.components = new EcoreEMap<>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY,
+					EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
 		}
-		return components;
+		return this.components;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-				return ((InternalEList<?>)getComponents()).basicRemove(otherEnd, msgs);
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+			return ((InternalEList<?>) this.getComponents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -138,16 +145,20 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-				return getName();
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-				if (coreType) return getComponents();
-				else return getComponents().map();
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+			return this.getName();
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+			if (coreType) {
+				return this.getComponents();
+			} else {
+				return this.getComponents().map();
+			}
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -155,17 +166,18 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-				setName((String)newValue);
-				return;
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-				((EStructuralFeature.Setting)getComponents()).set(newValue);
-				return;
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+			this.setName((String) newValue);
+			return;
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+			((EStructuralFeature.Setting) this.getComponents()).set(newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -173,17 +185,18 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-				getComponents().clear();
-				return;
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+			this.getComponents().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -191,15 +204,16 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
-				return components != null && !components.isEmpty();
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
+		case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
+			return (this.components != null) && !this.components.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -207,17 +221,20 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(')');
 		return result.toString();
 	}
 
-} //DeploymentContextImpl
+} // DeploymentContextImpl

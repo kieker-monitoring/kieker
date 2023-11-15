@@ -2,12 +2,11 @@
  */
 package kieker.model.collection;
 
+import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
-
-import org.eclipse.emf.common.util.EMap;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,9 +17,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.collection.OperationCollection#getCaller <em>Caller</em>}</li>
- *   <li>{@link kieker.model.collection.OperationCollection#getCallee <em>Callee</em>}</li>
- *   <li>{@link kieker.model.collection.OperationCollection#getOperations <em>Operations</em>}</li>
+ * <li>{@link kieker.model.collection.OperationCollection#getCaller <em>Caller</em>}</li>
+ * <li>{@link kieker.model.collection.OperationCollection#getCallee <em>Callee</em>}</li>
+ * <li>{@link kieker.model.collection.OperationCollection#getOperations <em>Operations</em>}</li>
  * </ul>
  *
  * @see kieker.model.collection.CollectionPackage#getOperationCollection()
@@ -32,6 +31,7 @@ public interface OperationCollection extends EObject {
 	 * Returns the value of the '<em><b>Caller</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Caller</em>' reference.
 	 * @see #setCaller(ComponentType)
 	 * @see kieker.model.collection.CollectionPackage#getOperationCollection_Caller()
@@ -44,7 +44,9 @@ public interface OperationCollection extends EObject {
 	 * Sets the value of the '{@link kieker.model.collection.OperationCollection#getCaller <em>Caller</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Caller</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Caller</em>' reference.
 	 * @see #getCaller()
 	 * @generated
 	 */
@@ -54,6 +56,7 @@ public interface OperationCollection extends EObject {
 	 * Returns the value of the '<em><b>Callee</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Callee</em>' reference.
 	 * @see #setCallee(ComponentType)
 	 * @see kieker.model.collection.CollectionPackage#getOperationCollection_Callee()
@@ -66,7 +69,9 @@ public interface OperationCollection extends EObject {
 	 * Sets the value of the '{@link kieker.model.collection.OperationCollection#getCallee <em>Callee</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Callee</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Callee</em>' reference.
 	 * @see #getCallee()
 	 * @generated
 	 */
@@ -78,6 +83,7 @@ public interface OperationCollection extends EObject {
 	 * and the value is of type {@link kieker.model.analysismodel.type.OperationType},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Operations</em>' map.
 	 * @see kieker.model.collection.CollectionPackage#getOperationCollection_Operations()
 	 * @model mapType="kieker.model.collection.NameToOperationMap&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.type.OperationType&gt;"

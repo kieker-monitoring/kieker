@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
  */
 class ElementAndDataflow4StaticDataStageTest {
 
-    @Test
-    void test() {
-        Assertions.fail("Not yet implemented");
-    }
+	@Test
+	void test() {
+		Assertions.fail("Not yet implemented");
+	}
 
 }

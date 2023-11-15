@@ -26,10 +26,10 @@ import com.beust.jcommander.ParameterException;
  */
 public class OperationValidator implements IParameterValidator {
 
-    @Override
-    public void validate(final String name, final String value) throws ParameterException { // NOPMD
-        final OperationConverter converter = new OperationConverter();
-        converter.convert(value);
-    }
+	@Override
+	public void validate(final String name, final String value) throws ParameterException { // NOPMD
+		final OperationConverter converter = new OperationConverter();
+		converter.convert(value);
+	}
 
 }

@@ -49,70 +49,69 @@ import kieker.model.analysismodel.type.TypeModel;
 import kieker.model.analysismodel.type.TypePackage;
 import kieker.tools.mop.AbstractModelTestFactory;
 import kieker.tools.mop.SarModelFactory;
-import kieker.tools.mop.stages.ModelSelectStage;
 
 import teetime.framework.test.StageTester;
 
 class ModelSelectStageTest {
 
-    private ModelRepository repository;
+	private ModelRepository repository;
 
-    @BeforeEach
-    void setUp() {
-        this.repository = new ModelRepository("test");
-        final TypeModel typeModel = SarModelFactory.createTypeModel();
-        this.repository.register(
-                new ModelDescriptor("type-model.xmi", TypePackage.eINSTANCE.getTypeModel(), TypeFactory.eINSTANCE),
-                typeModel);
-        final AssemblyModel assemblyModel = SarModelFactory.createAssemblyModel(typeModel);
-        this.repository.register(new ModelDescriptor("assembly-model.xmi", AssemblyPackage.eINSTANCE.getAssemblyModel(),
-                AssemblyFactory.eINSTANCE), assemblyModel);
-        final DeploymentModel deploymentModel = SarModelFactory.createDeploymentModel(assemblyModel);
-        this.repository.register(new ModelDescriptor("deloyment-model.xmi",
-                DeploymentPackage.eINSTANCE.getDeploymentModel(), DeploymentFactory.eINSTANCE), deploymentModel);
-        final ExecutionModel executionModel = SarModelFactory.createExecutionModel(deploymentModel);
-        this.repository.register(new ModelDescriptor("execution-model.xmi",
-                ExecutionPackage.eINSTANCE.getExecutionModel(), ExecutionFactory.eINSTANCE), executionModel);
-        final StatisticsModel statisticsModel = SarModelFactory.createStatisticsModel(executionModel);
-        this.repository.register(new ModelDescriptor("statistics-model.xmi",
-                StatisticsPackage.eINSTANCE.getStatisticsModel(), StatisticsFactory.eINSTANCE), statisticsModel);
-        final SourceModel sourceModel = AbstractModelTestFactory.createSourceModel(typeModel, assemblyModel,
-                deploymentModel, executionModel, "test");
-        this.repository.register(new ModelDescriptor("source-model.xmi", SourcePackage.eINSTANCE.getSourceModel(),
-                SourceFactory.eINSTANCE), sourceModel);
-    }
+	@BeforeEach
+	void setUp() {
+		this.repository = new ModelRepository("test");
+		final TypeModel typeModel = SarModelFactory.createTypeModel();
+		this.repository.register(
+				new ModelDescriptor("type-model.xmi", TypePackage.eINSTANCE.getTypeModel(), TypeFactory.eINSTANCE),
+				typeModel);
+		final AssemblyModel assemblyModel = SarModelFactory.createAssemblyModel(typeModel);
+		this.repository.register(new ModelDescriptor("assembly-model.xmi", AssemblyPackage.eINSTANCE.getAssemblyModel(),
+				AssemblyFactory.eINSTANCE), assemblyModel);
+		final DeploymentModel deploymentModel = SarModelFactory.createDeploymentModel(assemblyModel);
+		this.repository.register(new ModelDescriptor("deloyment-model.xmi",
+				DeploymentPackage.eINSTANCE.getDeploymentModel(), DeploymentFactory.eINSTANCE), deploymentModel);
+		final ExecutionModel executionModel = SarModelFactory.createExecutionModel(deploymentModel);
+		this.repository.register(new ModelDescriptor("execution-model.xmi",
+				ExecutionPackage.eINSTANCE.getExecutionModel(), ExecutionFactory.eINSTANCE), executionModel);
+		final StatisticsModel statisticsModel = SarModelFactory.createStatisticsModel(executionModel);
+		this.repository.register(new ModelDescriptor("statistics-model.xmi",
+				StatisticsPackage.eINSTANCE.getStatisticsModel(), StatisticsFactory.eINSTANCE), statisticsModel);
+		final SourceModel sourceModel = AbstractModelTestFactory.createSourceModel(typeModel, assemblyModel,
+				deploymentModel, executionModel, "test");
+		this.repository.register(new ModelDescriptor("source-model.xmi", SourcePackage.eINSTANCE.getSourceModel(),
+				SourceFactory.eINSTANCE), sourceModel);
+	}
 
-    @Test
-    void test() {
-        final List<Pattern> patterns = new ArrayList<>();
-        patterns.add(Pattern.compile(SarModelFactory.SAR_ASSEMBLY_SIGNATURE));
+	@Test
+	void test() {
+		final List<Pattern> patterns = new ArrayList<>();
+		patterns.add(Pattern.compile(SarModelFactory.SAR_ASSEMBLY_SIGNATURE));
 
-        final ModelSelectStage stage = new ModelSelectStage(patterns);
+		final ModelSelectStage stage = new ModelSelectStage(patterns);
 
-        final List<ModelRepository> results = new ArrayList<>();
-        StageTester.test(stage).send(this.repository).to(stage.getInputPort()).and().receive(results)
-                .from(stage.getOutputPort()).start();
+		final List<ModelRepository> results = new ArrayList<>();
+		StageTester.test(stage).send(this.repository).to(stage.getInputPort()).and().receive(results)
+				.from(stage.getOutputPort()).start();
 
-        Assertions.assertEquals(1, results.size(), "Number of model repositories");
+		Assertions.assertEquals(1, results.size(), "Number of model repositories");
 
-        final DeploymentModel deployment = this.repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel());
-        final Collection<DeployedComponent> deployedComponents = deployment.getContexts()
-                .get(AbstractModelTestFactory.HOSTNAME).getComponents().values();
-        Assertions.assertEquals(1, deployedComponents.size(), "Number of deployed components");
-        Assertions.assertEquals(SarModelFactory.SAR_ASSEMBLY_SIGNATURE,
-                deployedComponents.iterator().next().getSignature(), "Deployed component name");
+		final DeploymentModel deployment = this.repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel());
+		final Collection<DeployedComponent> deployedComponents = deployment.getContexts()
+				.get(AbstractModelTestFactory.HOSTNAME).getComponents().values();
+		Assertions.assertEquals(1, deployedComponents.size(), "Number of deployed components");
+		Assertions.assertEquals(SarModelFactory.SAR_ASSEMBLY_SIGNATURE,
+				deployedComponents.iterator().next().getSignature(), "Deployed component name");
 
-        final AssemblyModel assembly = this.repository.getModel(AssemblyPackage.eINSTANCE.getAssemblyModel());
-        final Collection<AssemblyComponent> assemblyComponents = assembly.getComponents().values();
-        Assertions.assertEquals(1, assemblyComponents.size(), "Number of assembly components");
-        Assertions.assertEquals(SarModelFactory.SAR_ASSEMBLY_SIGNATURE,
-                assemblyComponents.iterator().next().getSignature(), "Assembly component name");
+		final AssemblyModel assembly = this.repository.getModel(AssemblyPackage.eINSTANCE.getAssemblyModel());
+		final Collection<AssemblyComponent> assemblyComponents = assembly.getComponents().values();
+		Assertions.assertEquals(1, assemblyComponents.size(), "Number of assembly components");
+		Assertions.assertEquals(SarModelFactory.SAR_ASSEMBLY_SIGNATURE,
+				assemblyComponents.iterator().next().getSignature(), "Assembly component name");
 
-        final TypeModel type = this.repository.getModel(TypePackage.eINSTANCE.getTypeModel());
-        final Collection<ComponentType> componentTypes = type.getComponentTypes().values();
-        Assertions.assertEquals(1, componentTypes.size(), "Number of component types");
-        Assertions.assertEquals(SarModelFactory.SAR_COMPONENT_SIGNATURE,
-                componentTypes.iterator().next().getSignature(), "Component type name");
-    }
+		final TypeModel type = this.repository.getModel(TypePackage.eINSTANCE.getTypeModel());
+		final Collection<ComponentType> componentTypes = type.getComponentTypes().values();
+		Assertions.assertEquals(1, componentTypes.size(), "Number of component types");
+		Assertions.assertEquals(SarModelFactory.SAR_COMPONENT_SIGNATURE,
+				componentTypes.iterator().next().getSignature(), "Component type name");
+	}
 
 }

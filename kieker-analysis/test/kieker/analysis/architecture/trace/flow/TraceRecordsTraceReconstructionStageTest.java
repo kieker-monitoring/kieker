@@ -64,9 +64,9 @@ public class TraceRecordsTraceReconstructionStageTest { // NOCS test do not need
 
 		final TraceMetadata metadata = new TraceMetadata(1, 0, "test-session", "test-hostname", -1, -1);
 		final AbstractTraceEvent[] traceEvents = new AbstractTraceEvent[NUMBER_OF_EVENTS];
-		for (int i = 0; i < NUMBER_OF_EVENTS / 2; i++) {
+		for (int i = 0; i < (NUMBER_OF_EVENTS / 2); i++) {
 			traceEvents[i] = new BeforeOperationEvent(i, 1, i, "op()", "TestClass");
-			traceEvents[i + NUMBER_OF_EVENTS / 2] = new AfterOperationEvent(i + NUMBER_OF_EVENTS, 1, i + NUMBER_OF_EVENTS / 2, "op()", "TestClass");
+			traceEvents[i + (NUMBER_OF_EVENTS / 2)] = new AfterOperationEvent(i + NUMBER_OF_EVENTS, 1, i + (NUMBER_OF_EVENTS / 2), "op()", "TestClass");
 		}
 
 		final TraceEventRecords traceEventRecord = new TraceEventRecords(metadata, traceEvents);

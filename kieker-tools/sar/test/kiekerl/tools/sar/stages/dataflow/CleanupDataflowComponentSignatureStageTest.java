@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
  */
 class CleanupDataflowComponentSignatureStageTest {
 
-    @Test
-    void test() {
-        Assertions.fail("Not yet implemented");
-    }
+	@Test
+	void test() {
+		Assertions.fail("Not yet implemented");
+	}
 
 }

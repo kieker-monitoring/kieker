@@ -40,155 +40,155 @@ import kieker.model.analysismodel.source.SourceModel;
  */
 public class DataflowExecutionModelAssembler extends AbstractModelAssembler<DataflowEvent> {
 
-    private final ExecutionModel executionModel;
-    private final DeploymentModel deploymentModel;
-    private final Logger logger;
+	private final ExecutionModel executionModel;
+	private final DeploymentModel deploymentModel;
+	private final Logger logger;
 
-    public DataflowExecutionModelAssembler(final ExecutionModel executionModel, final DeploymentModel deploymentModel,
-            final SourceModel sourceModel, final String sourceLabel, final Logger logger) {
-        super(sourceModel, sourceLabel);
-        this.executionModel = executionModel;
-        this.deploymentModel = deploymentModel;
-        this.logger = logger;
-    }
+	public DataflowExecutionModelAssembler(final ExecutionModel executionModel, final DeploymentModel deploymentModel,
+			final SourceModel sourceModel, final String sourceLabel, final Logger logger) {
+		super(sourceModel, sourceLabel);
+		this.executionModel = executionModel;
+		this.deploymentModel = deploymentModel;
+		this.logger = logger;
+	}
 
-    @Override
-    public void assemble(final DataflowEvent event) {
-        final DeploymentContext sourceContext = this.deploymentModel.getContexts().get(event.getSource().getHostname());
-        final DeployedComponent callerComponent = sourceContext.getComponents()
-                .get(event.getSource().getComponentSignature());
-        if (callerComponent == null) {
-            this.logger.error("Event refers to not existing caller component {}",
-                    event.getSource().getComponentSignature());
-            return;
-        }
+	@Override
+	public void assemble(final DataflowEvent event) {
+		final DeploymentContext sourceContext = this.deploymentModel.getContexts().get(event.getSource().getHostname());
+		final DeployedComponent callerComponent = sourceContext.getComponents()
+				.get(event.getSource().getComponentSignature());
+		if (callerComponent == null) {
+			this.logger.error("Event refers to not existing caller component {}",
+					event.getSource().getComponentSignature());
+			return;
+		}
 
-        final DeploymentContext targetContext = this.deploymentModel.getContexts().get(event.getTarget().getHostname());
-        final DeployedComponent calleeComponent = targetContext.getComponents()
-                .get(event.getTarget().getComponentSignature());
-        if (calleeComponent == null) {
-            this.logger.error("Event refers to not existing callee component {}",
-                    event.getTarget().getComponentSignature());
-            return;
-        }
+		final DeploymentContext targetContext = this.deploymentModel.getContexts().get(event.getTarget().getHostname());
+		final DeployedComponent calleeComponent = targetContext.getComponents()
+				.get(event.getTarget().getComponentSignature());
+		if (calleeComponent == null) {
+			this.logger.error("Event refers to not existing callee component {}",
+					event.getTarget().getComponentSignature());
+			return;
+		}
 
-        if (event.getSource() instanceof OperationEvent) {
-            final OperationEvent sourceOperationEvent = (OperationEvent) event.getSource();
-            final DeployedOperation sourceOperation = callerComponent.getOperations()
-                    .get(sourceOperationEvent.getOperationSignature());
-            if (event.getTarget() instanceof OperationEvent) {
-                final OperationEvent targetOperationEvent = (OperationEvent) event.getTarget();
-                final DeployedOperation targetOperation = calleeComponent.getOperations()
-                        .get(targetOperationEvent.getOperationSignature());
-                this.addOperationDataflow(sourceOperation, targetOperation, event.getDirection());
-            } else if (event.getTarget() instanceof StorageEvent) {
-                final StorageEvent storageEvent = (StorageEvent) event.getTarget();
-                final DeployedStorage targetStorage = calleeComponent.getStorages()
-                        .get(storageEvent.getStorageSignature());
-                this.addOperationStorageDataflow(sourceOperation, targetStorage, event.getDirection());
-            } else {
-                this.logger.error("Unsupported dataflow target type {}",
-                        event.getTarget().getClass().getCanonicalName());
-            }
-        } else if (event.getSource() instanceof StorageEvent) {
-            final StorageEvent storageEvent = (StorageEvent) event.getSource();
-            final DeployedStorage sourceStorage = callerComponent.getStorages().get(storageEvent.getStorageSignature());
-            if (event.getTarget() instanceof OperationEvent) {
-                final OperationEvent targetOperationEvent = (OperationEvent) event.getTarget();
-                final DeployedOperation targetOperation = calleeComponent.getOperations()
-                        .get(targetOperationEvent.getOperationSignature());
-                this.addOperationStorageDataflow(targetOperation, sourceStorage, this.invert(event.getDirection()));
-            } else if (event.getTarget() instanceof StorageEvent) {
-                this.logger.error("Storage to storage dataflow is not allowed {} -> {}", event.getSource().toString(),
-                        event.getTarget().toString());
-            } else {
-                this.logger.error("Unsupported dataflow target type {}",
-                        event.getTarget().getClass().getCanonicalName());
-            }
-        } else {
-            this.logger.error("Unsupported dataflow source type {}", event.getTarget().getClass().getCanonicalName());
-        }
+		if (event.getSource() instanceof OperationEvent) {
+			final OperationEvent sourceOperationEvent = (OperationEvent) event.getSource();
+			final DeployedOperation sourceOperation = callerComponent.getOperations()
+					.get(sourceOperationEvent.getOperationSignature());
+			if (event.getTarget() instanceof OperationEvent) {
+				final OperationEvent targetOperationEvent = (OperationEvent) event.getTarget();
+				final DeployedOperation targetOperation = calleeComponent.getOperations()
+						.get(targetOperationEvent.getOperationSignature());
+				this.addOperationDataflow(sourceOperation, targetOperation, event.getDirection());
+			} else if (event.getTarget() instanceof StorageEvent) {
+				final StorageEvent storageEvent = (StorageEvent) event.getTarget();
+				final DeployedStorage targetStorage = calleeComponent.getStorages()
+						.get(storageEvent.getStorageSignature());
+				this.addOperationStorageDataflow(sourceOperation, targetStorage, event.getDirection());
+			} else {
+				this.logger.error("Unsupported dataflow target type {}",
+						event.getTarget().getClass().getCanonicalName());
+			}
+		} else if (event.getSource() instanceof StorageEvent) {
+			final StorageEvent storageEvent = (StorageEvent) event.getSource();
+			final DeployedStorage sourceStorage = callerComponent.getStorages().get(storageEvent.getStorageSignature());
+			if (event.getTarget() instanceof OperationEvent) {
+				final OperationEvent targetOperationEvent = (OperationEvent) event.getTarget();
+				final DeployedOperation targetOperation = calleeComponent.getOperations()
+						.get(targetOperationEvent.getOperationSignature());
+				this.addOperationStorageDataflow(targetOperation, sourceStorage, this.invert(event.getDirection()));
+			} else if (event.getTarget() instanceof StorageEvent) {
+				this.logger.error("Storage to storage dataflow is not allowed {} -> {}", event.getSource().toString(),
+						event.getTarget().toString());
+			} else {
+				this.logger.error("Unsupported dataflow target type {}",
+						event.getTarget().getClass().getCanonicalName());
+			}
+		} else {
+			this.logger.error("Unsupported dataflow source type {}", event.getTarget().getClass().getCanonicalName());
+		}
 
-    }
+	}
 
-    private void addOperationDataflow(final DeployedOperation sourceOperation, final DeployedOperation targetOperation,
-            final EDirection direction) {
-        final Tuple<DeployedOperation, DeployedOperation> key = ExecutionFactory.eINSTANCE.createTuple();
+	private void addOperationDataflow(final DeployedOperation sourceOperation, final DeployedOperation targetOperation,
+			final EDirection direction) {
+		final Tuple<DeployedOperation, DeployedOperation> key = ExecutionFactory.eINSTANCE.createTuple();
 
-        key.setFirst(sourceOperation);
-        key.setSecond(targetOperation);
-        this.updateSourceModel(key);
+		key.setFirst(sourceOperation);
+		key.setSecond(targetOperation);
+		this.updateSourceModel(key);
 
-        this.createOperationDataflow(key, sourceOperation, targetOperation, direction);
-    }
+		this.createOperationDataflow(key, sourceOperation, targetOperation, direction);
+	}
 
-    private void addOperationStorageDataflow(final DeployedOperation operation, final DeployedStorage storage,
-            final EDirection direction) {
-        final Tuple<DeployedOperation, DeployedStorage> key = ExecutionFactory.eINSTANCE.createTuple();
-        key.setFirst(operation);
-        key.setSecond(storage);
-        this.updateSourceModel(key);
+	private void addOperationStorageDataflow(final DeployedOperation operation, final DeployedStorage storage,
+			final EDirection direction) {
+		final Tuple<DeployedOperation, DeployedStorage> key = ExecutionFactory.eINSTANCE.createTuple();
+		key.setFirst(operation);
+		key.setSecond(storage);
+		this.updateSourceModel(key);
 
-        this.createStorageDataflow(key, operation, storage, direction);
-    }
+		this.createStorageDataflow(key, operation, storage, direction);
+	}
 
-    /**
-     *
-     * @param key
-     *            the created Access should be stored in.
-     * @param sourceOperation
-     *            of the dataflow step, stored in Deployment model
-     * @param accessedStorage
-     *            of the dataflow step, stored in Deployment model
-     * @param direction
-     *            dataflow direction
-     */
-    private void createStorageDataflow(final Tuple<DeployedOperation, DeployedStorage> key,
-            final DeployedOperation sourceOperation, final DeployedStorage accessedStorage,
-            final EDirection direction) {
-        final StorageDataflow storageDataflow = ExecutionFactory.eINSTANCE.createStorageDataflow();
-        storageDataflow.setCode(sourceOperation);
-        storageDataflow.setStorage(accessedStorage);
-        storageDataflow.setDirection(direction);
+	/**
+	 *
+	 * @param key
+	 *            the created Access should be stored in.
+	 * @param sourceOperation
+	 *            of the dataflow step, stored in Deployment model
+	 * @param accessedStorage
+	 *            of the dataflow step, stored in Deployment model
+	 * @param direction
+	 *            dataflow direction
+	 */
+	private void createStorageDataflow(final Tuple<DeployedOperation, DeployedStorage> key,
+			final DeployedOperation sourceOperation, final DeployedStorage accessedStorage,
+			final EDirection direction) {
+		final StorageDataflow storageDataflow = ExecutionFactory.eINSTANCE.createStorageDataflow();
+		storageDataflow.setCode(sourceOperation);
+		storageDataflow.setStorage(accessedStorage);
+		storageDataflow.setDirection(direction);
 
-        this.executionModel.getStorageDataflows().put(key, storageDataflow);
-        this.updateSourceModel(key);
-    }
+		this.executionModel.getStorageDataflows().put(key, storageDataflow);
+		this.updateSourceModel(key);
+	}
 
-    /**
-     *
-     * @param key
-     *            the created Access should be stored in.
-     * @param sourceOperation
-     *            of the dataflow step, stored in Deployment model
-     * @param targetOperation
-     *            of the dataflow step, stored in Deployment model
-     * @param direction
-     *            dataflow direction
-     */
-    private void createOperationDataflow(final Tuple<DeployedOperation, DeployedOperation> key,
-            final DeployedOperation sourceOperation, final DeployedOperation targetOperation,
-            final EDirection direction) {
-        final OperationDataflow operationDataflow = ExecutionFactory.eINSTANCE.createOperationDataflow();
-        operationDataflow.setCaller(sourceOperation);
-        operationDataflow.setCallee(targetOperation);
-        operationDataflow.setDirection(direction);
+	/**
+	 *
+	 * @param key
+	 *            the created Access should be stored in.
+	 * @param sourceOperation
+	 *            of the dataflow step, stored in Deployment model
+	 * @param targetOperation
+	 *            of the dataflow step, stored in Deployment model
+	 * @param direction
+	 *            dataflow direction
+	 */
+	private void createOperationDataflow(final Tuple<DeployedOperation, DeployedOperation> key,
+			final DeployedOperation sourceOperation, final DeployedOperation targetOperation,
+			final EDirection direction) {
+		final OperationDataflow operationDataflow = ExecutionFactory.eINSTANCE.createOperationDataflow();
+		operationDataflow.setCaller(sourceOperation);
+		operationDataflow.setCallee(targetOperation);
+		operationDataflow.setDirection(direction);
 
-        this.executionModel.getOperationDataflows().put(key, operationDataflow);
-        this.updateSourceModel(key);
-    }
+		this.executionModel.getOperationDataflows().put(key, operationDataflow);
+		this.updateSourceModel(key);
+	}
 
-    private EDirection invert(final EDirection direction) {
-        switch (direction) {
-        case READ:
-            return EDirection.WRITE;
-        case WRITE:
-            return EDirection.READ;
-        case BOTH:
-            return EDirection.BOTH;
-        default:
-            throw new InternalError("Unknown direction type found " + direction.name());
-        }
-    }
+	private EDirection invert(final EDirection direction) {
+		switch (direction) {
+		case READ:
+			return EDirection.WRITE;
+		case WRITE:
+			return EDirection.READ;
+		case BOTH:
+			return EDirection.BOTH;
+		default:
+			throw new InternalError("Unknown direction type found " + direction.name());
+		}
+	}
 
 }

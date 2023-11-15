@@ -22,25 +22,24 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.12
  */
-public class DiskUsageRecord extends AbstractMonitoringRecord  {			
+public class DiskUsageRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
-			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
-			 + TYPE_SIZE_STRING // DiskUsageRecord.deviceName
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
-			 + TYPE_SIZE_DOUBLE; // DiskUsageRecord.writesPerSecond
-	
+			+ TYPE_SIZE_STRING // DiskUsageRecord.hostname
+			+ TYPE_SIZE_STRING // DiskUsageRecord.deviceName
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
+			+ TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
+			+ TYPE_SIZE_DOUBLE; // DiskUsageRecord.writesPerSecond
+
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp
 		String.class, // DiskUsageRecord.hostname
@@ -52,7 +51,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		double.class, // DiskUsageRecord.writeBytesPerSecond
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -65,7 +64,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		"writeBytesPerSecond",
 		"writesPerSecond",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -77,7 +76,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
 	private static final long serialVersionUID = 2474236414042988334L;
-	
+
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
@@ -88,10 +87,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	private final double serviceTime;
 	private final double writeBytesPerSecond;
 	private final double writesPerSecond;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -111,10 +110,11 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	 * @param writesPerSecond
 	 *            writesPerSecond
 	 */
-	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queue, final double readBytesPerSecond, final double readsPerSecond, final double serviceTime, final double writeBytesPerSecond, final double writesPerSecond) {
+	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queue, final double readBytesPerSecond,
+			final double readsPerSecond, final double serviceTime, final double writeBytesPerSecond, final double writesPerSecond) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
-		this.deviceName = deviceName == null?DEVICE_NAME:deviceName;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
+		this.deviceName = deviceName == null ? DEVICE_NAME : deviceName;
 		this.queue = queue;
 		this.readBytesPerSecond = readBytesPerSecond;
 		this.readsPerSecond = readsPerSecond;
@@ -123,12 +123,11 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		this.writesPerSecond = writesPerSecond;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public DiskUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -141,7 +140,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		this.writeBytesPerSecond = deserializer.getDouble();
 		this.writesPerSecond = deserializer.getDouble();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,7 +156,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		serializer.putDouble(this.getWriteBytesPerSecond());
 		serializer.putDouble(this.getWritesPerSecond());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -165,7 +164,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -173,7 +172,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -182,7 +181,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -197,105 +195,88 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final DiskUsageRecord castedRecord = (DiskUsageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || !this.getHostname().equals(castedRecord.getHostname()) || !this.getDeviceName().equals(castedRecord.getDeviceName())) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getQueue(), castedRecord.getQueue())) {
 			return false;
 		}
-		if (!this.getHostname().equals(castedRecord.getHostname())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) {
 			return false;
 		}
-		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) {
 			return false;
 		}
-		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) {
 			return false;
 		}
-		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) {
 			return false;
 		}
-		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) {
 			return false;
 		}
-		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) {
-			return false;
-		}
-		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) {
-			return false;
-		}
-		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) {
-			return false;
-		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getDeviceName().hashCode();
-		code += ((int)this.getQueue());
-		code += ((int)this.getReadBytesPerSecond());
-		code += ((int)this.getReadsPerSecond());
-		code += ((int)this.getServiceTime());
-		code += ((int)this.getWriteBytesPerSecond());
-		code += ((int)this.getWritesPerSecond());
-		
+		code += ((int) this.getQueue());
+		code += ((int) this.getReadBytesPerSecond());
+		code += ((int) this.getReadsPerSecond());
+		code += ((int) this.getServiceTime());
+		code += ((int) this.getWriteBytesPerSecond());
+		code += ((int) this.getWritesPerSecond());
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final String getDeviceName() {
 		return this.deviceName;
 	}
-	
-	
+
 	public final double getQueue() {
 		return this.queue;
 	}
-	
-	
+
 	public final double getReadBytesPerSecond() {
 		return this.readBytesPerSecond;
 	}
-	
-	
+
 	public final double getReadsPerSecond() {
 		return this.readsPerSecond;
 	}
-	
-	
+
 	public final double getServiceTime() {
 		return this.serviceTime;
 	}
-	
-	
+
 	public final double getWriteBytesPerSecond() {
 		return this.writeBytesPerSecond;
 	}
-	
-	
+
 	public final double getWritesPerSecond() {
 		return this.writesPerSecond;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -304,31 +285,31 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		String result = "DiskUsageRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "deviceName = ";
 		result += this.getDeviceName() + ", ";
-		
+
 		result += "queue = ";
 		result += this.getQueue() + ", ";
-		
+
 		result += "readBytesPerSecond = ";
 		result += this.getReadBytesPerSecond() + ", ";
-		
+
 		result += "readsPerSecond = ";
 		result += this.getReadsPerSecond() + ", ";
-		
+
 		result += "serviceTime = ";
 		result += this.getServiceTime() + ", ";
-		
+
 		result += "writeBytesPerSecond = ";
 		result += this.getWriteBytesPerSecond() + ", ";
-		
+
 		result += "writesPerSecond = ";
 		result += this.getWritesPerSecond() + ", ";
-		
+
 		return result;
 	}
 }

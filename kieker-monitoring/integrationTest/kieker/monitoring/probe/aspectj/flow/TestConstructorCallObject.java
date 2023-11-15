@@ -29,7 +29,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
 /**
  * This should check whether probes in kieker.monitoring.probe.aspectj.flow.constructorCallObject work.
- * 
+ *
  * @author DaGeRe
  */
 // todo: Does currently not work (no monitoring logs are produced), added for completeness

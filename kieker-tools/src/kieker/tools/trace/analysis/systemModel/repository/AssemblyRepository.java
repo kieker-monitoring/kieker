@@ -25,9 +25,9 @@ import kieker.tools.trace.analysis.systemModel.ComponentType;
 import kieker.tools.trace.analysis.systemModel.RootAssemblyComponent;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
@@ -35,12 +35,12 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 	/** This constant represents the root assembly component. */
 	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT = new RootAssemblyComponent();
 
-	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -50,10 +50,10 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 
 	/**
 	 * Returns the instance for the passed ID; null if no instance with this ID exists.
-	 * 
+	 *
 	 * @param containerId
 	 *            The ID to search for.
-	 * 
+	 *
 	 * @return The component for the given ID if it exists; null otherwise.
 	 */
 	public final AssemblyComponent lookupAssemblyComponentById(final int containerId) {
@@ -63,10 +63,10 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 	/**
 	 * Returns the instance for the passed factoryIdentifier; null if no instance
 	 * with this factoryIdentifier.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier to search for.
-	 * 
+	 *
 	 * @return The component for the given identifier if it exists; null otherwise.
 	 */
 	public final AssemblyComponent lookupAssemblyComponentInstanceByNamedIdentifier(final String namedIdentifier) {
@@ -75,12 +75,12 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 
 	/**
 	 * Creates a new assembly component instance and registers it as well.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier of the new component.
 	 * @param componentType
 	 *            The new component type.
-	 * 
+	 *
 	 * @return The newly created assembly component.
 	 */
 	public final AssemblyComponent createAndRegisterAssemblyComponentInstance(final String namedIdentifier, final ComponentType componentType) {
@@ -96,7 +96,7 @@ public class AssemblyRepository extends AbstractSystemSubRepository {
 
 	/**
 	 * Delivers all available assembly component instances.
-	 * 
+	 *
 	 * @return A collection containing all components.
 	 */
 	public final Collection<AssemblyComponent> getAssemblyComponentInstances() {

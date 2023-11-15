@@ -26,14 +26,14 @@ import com.beust.jcommander.ParameterException;
  */
 public class OperationConverter implements IStringConverter<EOperation> {
 
-    @Override
-    public EOperation convert(final String value) {
-        for (final EOperation operation : EOperation.values()) {
-            if (operation.name().equalsIgnoreCase(value.replace("-", "_"))) {
-                return operation;
-            }
-        }
-        throw new ParameterException(String.format("%s is not a valid model operation.", value)); // NOPMD
-    }
+	@Override
+	public EOperation convert(final String value) {
+		for (final EOperation operation : EOperation.values()) {
+			if (operation.name().equalsIgnoreCase(value.replace("-", "_"))) {
+				return operation;
+			}
+		}
+		throw new ParameterException(String.format("%s is not a valid model operation.", value)); // NOPMD
+	}
 
 }

@@ -29,19 +29,19 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings {
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input mapping paths")
-    private List<Path> inputPaths;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input mapping paths")
+	private List<Path> inputPaths;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Output TeX file")
-    private Path outputPath;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Output TeX file")
+	private Path outputPath;
 
-    public List<Path> getInputPaths() {
-        return this.inputPaths;
-    }
+	public List<Path> getInputPaths() {
+		return this.inputPaths;
+	}
 
-    public Path getOutputPath() {
-        return this.outputPath;
-    }
+	public Path getOutputPath() {
+		return this.outputPath;
+	}
 }

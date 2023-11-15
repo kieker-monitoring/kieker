@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Teerat Pitakrat
- * 
+ *
  * @since 1.12
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
-	
 
 	@Override
 	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NetworkUtilizationRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

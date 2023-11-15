@@ -23,9 +23,9 @@ import javax.swing.JCheckBox;
 
 /**
  * An item listener which selects or deselects a given check box if the owning checkbox is selected or deselected.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public final class SelectionBindingItemListener implements ItemListener {

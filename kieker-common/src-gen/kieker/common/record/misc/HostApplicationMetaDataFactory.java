@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Christian Wulf
- * 
+ *
  * @since 1.13
  */
 public final class HostApplicationMetaDataFactory implements IRecordFactory<HostApplicationMetaData> {
-	
 
 	@Override
 	public HostApplicationMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new HostApplicationMetaData(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

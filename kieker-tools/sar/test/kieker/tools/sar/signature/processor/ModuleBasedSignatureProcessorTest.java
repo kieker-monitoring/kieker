@@ -20,8 +20,6 @@ import java.util.Locale;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import kieker.tools.sar.signature.processor.ModuleBasedSignatureProcessor;
-
 /**
  *
  * @author Reiner Jung
@@ -29,37 +27,37 @@ import kieker.tools.sar.signature.processor.ModuleBasedSignatureProcessor;
  */
 class ModuleBasedSignatureProcessorTest {
 
-    private static final String OPERATION = "doSomething()";
-    private static final String COMPONENT = "SpecialComponent";
-    private static final String SPECIAL_FILE_NAME = "specialFileName";
-    private static final String PATH = "a/b/" + ModuleBasedSignatureProcessorTest.SPECIAL_FILE_NAME;
+	private static final String OPERATION = "doSomething()";
+	private static final String COMPONENT = "SpecialComponent";
+	private static final String SPECIAL_FILE_NAME = "specialFileName";
+	private static final String PATH = "a/b/" + ModuleBasedSignatureProcessorTest.SPECIAL_FILE_NAME;
 
-    @Test
-    void testCaseSensitive() { // NOPMD Assertions
-        final ModuleBasedSignatureProcessor processor = new ModuleBasedSignatureProcessor(false);
-        final boolean result = processor.processSignatures(ModuleBasedSignatureProcessorTest.PATH,
-                ModuleBasedSignatureProcessorTest.COMPONENT, ModuleBasedSignatureProcessorTest.OPERATION);
-        Assertions.assertTrue(result, "File-based processor should never fail.");
-        Assertions.assertEquals(processor.getErrorMessage(), null, "there should never be an error message");
-        Assertions.assertEquals(processor.getComponentSignature(), ModuleBasedSignatureProcessorTest.COMPONENT,
-                "component name should not be lower case");
-        Assertions.assertEquals(processor.getElementSignature(), ModuleBasedSignatureProcessorTest.OPERATION,
-                "operation name should not be lower case");
-    }
+	@Test
+	void testCaseSensitive() { // NOPMD Assertions
+		final ModuleBasedSignatureProcessor processor = new ModuleBasedSignatureProcessor(false);
+		final boolean result = processor.processSignatures(ModuleBasedSignatureProcessorTest.PATH,
+				ModuleBasedSignatureProcessorTest.COMPONENT, ModuleBasedSignatureProcessorTest.OPERATION);
+		Assertions.assertTrue(result, "File-based processor should never fail.");
+		Assertions.assertEquals(processor.getErrorMessage(), null, "there should never be an error message");
+		Assertions.assertEquals(processor.getComponentSignature(), ModuleBasedSignatureProcessorTest.COMPONENT,
+				"component name should not be lower case");
+		Assertions.assertEquals(processor.getElementSignature(), ModuleBasedSignatureProcessorTest.OPERATION,
+				"operation name should not be lower case");
+	}
 
-    @Test
-    void testCaseInsensitive() { // NOPMD Assertions
-        final ModuleBasedSignatureProcessor processor = new ModuleBasedSignatureProcessor(true);
-        final boolean result = processor.processSignatures(ModuleBasedSignatureProcessorTest.PATH,
-                ModuleBasedSignatureProcessorTest.COMPONENT, ModuleBasedSignatureProcessorTest.OPERATION);
-        Assertions.assertTrue(result, "File-based processor should never fail.");
-        Assertions.assertEquals(processor.getErrorMessage(), null, "there should never be an error message");
-        Assertions.assertEquals(processor.getComponentSignature(),
-                ModuleBasedSignatureProcessorTest.COMPONENT.toLowerCase(Locale.getDefault()),
-                "component name should be lower case");
-        Assertions.assertEquals(processor.getElementSignature(),
-                ModuleBasedSignatureProcessorTest.OPERATION.toLowerCase(Locale.getDefault()),
-                "operation name should be lower case");
-    }
+	@Test
+	void testCaseInsensitive() { // NOPMD Assertions
+		final ModuleBasedSignatureProcessor processor = new ModuleBasedSignatureProcessor(true);
+		final boolean result = processor.processSignatures(ModuleBasedSignatureProcessorTest.PATH,
+				ModuleBasedSignatureProcessorTest.COMPONENT, ModuleBasedSignatureProcessorTest.OPERATION);
+		Assertions.assertTrue(result, "File-based processor should never fail.");
+		Assertions.assertEquals(processor.getErrorMessage(), null, "there should never be an error message");
+		Assertions.assertEquals(processor.getComponentSignature(),
+				ModuleBasedSignatureProcessorTest.COMPONENT.toLowerCase(Locale.getDefault()),
+				"component name should be lower case");
+		Assertions.assertEquals(processor.getElementSignature(),
+				ModuleBasedSignatureProcessorTest.OPERATION.toLowerCase(Locale.getDefault()),
+				"operation name should be lower case");
+	}
 
 }

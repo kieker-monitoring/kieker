@@ -31,35 +31,35 @@ import kieker.model.analysismodel.type.TypePackage;
  */
 public final class ModelRepositoryMergerUtils {
 
-    private ModelRepositoryMergerUtils() {
-        // Utility class
-    }
+	private ModelRepositoryMergerUtils() {
+		// Utility class
+	}
 
-    public static void perform(final ModelRepository lastModelRepository, final ModelRepository mergeModelRepository) {
-        TypeModelMerger.mergeTypeModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
-                mergeModelRepository.getModel(TypePackage.Literals.TYPE_MODEL));
-        AssemblyModelMerger.mergeAssemblyModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
-                lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
-                mergeModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL));
-        DeploymentModelMerger.mergeDeploymentModel(
-                lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
-                lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
-                mergeModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL));
-        ExecutionModelMerger.mergeExecutionModel(
-                lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
-                lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
-                mergeModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
-                mergeModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL));
-        StatisticsModelMerger.mergeStatisticsModel(
-                lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
-                lastModelRepository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL),
-                mergeModelRepository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL));
-        SourceModelMerger.mergeSourceModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
-                lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
-                lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
-                lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
-                lastModelRepository.getModel(SourcePackage.Literals.SOURCE_MODEL),
-                mergeModelRepository.getModel(SourcePackage.Literals.SOURCE_MODEL));
-    }
+	public static void perform(final ModelRepository lastModelRepository, final ModelRepository mergeModelRepository) {
+		TypeModelMerger.mergeTypeModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
+				mergeModelRepository.getModel(TypePackage.Literals.TYPE_MODEL));
+		AssemblyModelMerger.mergeAssemblyModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
+				lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
+				mergeModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL));
+		DeploymentModelMerger.mergeDeploymentModel(
+				lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
+				lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
+				mergeModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL));
+		ExecutionModelMerger.mergeExecutionModel(
+				lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
+				lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
+				mergeModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
+				mergeModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL));
+		StatisticsModelMerger.mergeStatisticsModel(
+				lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
+				lastModelRepository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL),
+				mergeModelRepository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL));
+		SourceModelMerger.mergeSourceModel(lastModelRepository.getModel(TypePackage.Literals.TYPE_MODEL),
+				lastModelRepository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL),
+				lastModelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL),
+				lastModelRepository.getModel(ExecutionPackage.Literals.EXECUTION_MODEL),
+				lastModelRepository.getModel(SourcePackage.Literals.SOURCE_MODEL),
+				mergeModelRepository.getModel(SourcePackage.Literals.SOURCE_MODEL));
+	}
 
 }

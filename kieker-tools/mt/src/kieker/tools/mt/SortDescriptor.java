@@ -27,9 +27,9 @@ import java.util.List;
  */
 public class SortDescriptor {
 
-    List<SortCriterium> sortCriteria = new ArrayList<>();
+	private final List<SortCriterium> sortCriteria = new ArrayList<>();
 
-    public List<SortCriterium> getSortCriteria() {
-        return this.sortCriteria;
-    }
+	public List<SortCriterium> getSortCriteria() {
+		return this.sortCriteria;
+	}
 }

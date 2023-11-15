@@ -424,7 +424,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
 	 */
 	public final boolean areAllRepositoryPortsConnected() {
-		for (String element : this.repositoryPorts.keySet()) {
+		for (final String element : this.repositoryPorts.keySet()) {
 			if (!this.registeredRepositories.containsKey(element)) {
 				// The current port is not connected.
 				return false;

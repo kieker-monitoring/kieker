@@ -22,47 +22,45 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.remotecontrol.IParameterValueEvent;
-
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.15
  */
-public class RemoveParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {			
+public class RemoveParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
-			 + TYPE_SIZE_STRING // IParameterValueEvent.name
-			 + TYPE_SIZE_STRING; // IParameterValueEvent.value
-	
+			+ TYPE_SIZE_STRING // IParameterValueEvent.name
+			+ TYPE_SIZE_STRING; // IParameterValueEvent.value
+
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
 		String.class, // IParameterValueEvent.name
 		String.class, // IParameterValueEvent.value
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 		"name",
 		"value",
 	};
-	
+
 	/** default constants. */
 	public static final String PATTERN = "";
 	public static final String NAME = "";
 	public static final String VALUE = "";
 	private static final long serialVersionUID = 3932734275237128548L;
-	
+
 	/** property declarations. */
 	private final String pattern;
 	private final String name;
 	private final String value;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param pattern
 	 *            pattern
 	 * @param name
@@ -71,24 +69,23 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 	 *            value
 	 */
 	public RemoveParameterValueEvent(final String pattern, final String name, final String value) {
-		this.pattern = pattern == null?"":pattern;
-		this.name = name == null?"":name;
-		this.value = value == null?"":value;
+		this.pattern = pattern == null ? "" : pattern;
+		this.name = name == null ? "" : name;
+		this.value = value == null ? "" : value;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public RemoveParameterValueEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 		this.name = deserializer.getString();
 		this.value = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -98,7 +95,7 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		serializer.putString(this.getName());
 		serializer.putString(this.getValue());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -106,7 +103,7 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -114,7 +111,7 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +120,6 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,23 +134,15 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final RemoveParameterValueEvent castedRecord = (RemoveParameterValueEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getPattern().equals(castedRecord.getPattern()) || !this.getName().equals(castedRecord.getName()) || !this.getValue().equals(castedRecord.getValue())) {
 			return false;
 		}
-		if (!this.getPattern().equals(castedRecord.getPattern())) {
-			return false;
-		}
-		if (!this.getName().equals(castedRecord.getName())) {
-			return false;
-		}
-		if (!this.getValue().equals(castedRecord.getValue())) {
-			return false;
-		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -164,25 +152,22 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		code += this.getPattern().hashCode();
 		code += this.getName().hashCode();
 		code += this.getValue().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getPattern() {
 		return this.pattern;
 	}
-	
-	
+
 	public final String getName() {
 		return this.name;
 	}
-	
-	
+
 	public final String getValue() {
 		return this.value;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -191,13 +176,13 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		String result = "RemoveParameterValueEvent: ";
 		result += "pattern = ";
 		result += this.getPattern() + ", ";
-		
+
 		result += "name = ";
 		result += this.getName() + ", ";
-		
+
 		result += "value = ";
 		result += this.getValue() + ", ";
-		
+
 		return result;
 	}
 }

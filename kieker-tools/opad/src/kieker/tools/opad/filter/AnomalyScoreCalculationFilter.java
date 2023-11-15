@@ -27,9 +27,9 @@ import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * This filter calculates the anomaly score based on the distance between the forecasted and the actual value.
- * 
+ *
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.9
  */
 @Plugin(name = "AnomalyScore Calculation Filter",
@@ -50,7 +50,7 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Representing the input port for pairs of measurements and forecasts.
-	 * 
+	 *
 	 * @param fmp
 	 *            Pair consisting of measurement and forecast
 	 */

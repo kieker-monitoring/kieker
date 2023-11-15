@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 public class ReaderRegistry<E> {
 
 	// NOCS TODO replace by a high performance map with primitive key type
-	private final Map<Long, E> registryEntries = new HashMap<Long, E>(); // NOPMD (should be unsynchronized)
+	private final Map<Long, E> registryEntries = new HashMap<>(); // NOPMD (should be unsynchronized)
 
 	/**
 	 * Constructs an unsynchronized reader registry.

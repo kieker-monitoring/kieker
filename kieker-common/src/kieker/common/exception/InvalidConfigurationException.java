@@ -29,7 +29,7 @@ public class InvalidConfigurationException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with the given message.
-	 * 
+	 *
 	 * @param message
 	 *            The message to associate with this exception
 	 */
@@ -39,7 +39,7 @@ public class InvalidConfigurationException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with the given message and cause.
-	 * 
+	 *
 	 * @param message
 	 *            The message to associate with this exception
 	 * @param cause

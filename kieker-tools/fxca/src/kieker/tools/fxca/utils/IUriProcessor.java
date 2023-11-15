@@ -22,6 +22,6 @@ package kieker.tools.fxca.utils;
  */
 public interface IUriProcessor {
 
-    String process(String uri);
+	String process(String uri);
 
 }

@@ -32,28 +32,28 @@ import kieker.analysis.architecture.repository.ArchitectureModelRepositoryFactor
  */
 public class PathIsModelDirectoryValidator implements IParameterValidator {
 
-    private final String[] modelFiles = { ".project", ArchitectureModelRepositoryFactory.TYPE_MODEL_NAME,
-            ArchitectureModelRepositoryFactory.ASSEMBLY_MODEL_NAME,
-            ArchitectureModelRepositoryFactory.DEPLOYMENT_MODEL_NAME,
-            ArchitectureModelRepositoryFactory.EXECUTION_MODEL_NAME,
-            ArchitectureModelRepositoryFactory.SOURCE_MODEL_NAME,
-            ArchitectureModelRepositoryFactory.STATISTICS_MODEL_NAME };
+	private final String[] modelFiles = { ".project", ArchitectureModelRepositoryFactory.TYPE_MODEL_NAME,
+		ArchitectureModelRepositoryFactory.ASSEMBLY_MODEL_NAME,
+		ArchitectureModelRepositoryFactory.DEPLOYMENT_MODEL_NAME,
+		ArchitectureModelRepositoryFactory.EXECUTION_MODEL_NAME,
+		ArchitectureModelRepositoryFactory.SOURCE_MODEL_NAME,
+		ArchitectureModelRepositoryFactory.STATISTICS_MODEL_NAME };
 
-    @Override
-    public void validate(final String name, final String value) throws ParameterException { // NOPMD
-        final File modelDirectory = Paths.get(value).toFile();
-        for (final String fileName : this.modelFiles) {
-            boolean found = false;
-            for (final File file : modelDirectory.listFiles()) {
-                if (file.getName().equals(fileName)) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                throw new ParameterException(
-                        String.format("Parameter %s: Missing model project file %s from %s", name, fileName, value));
-            }
-        }
-    }
+	@Override
+	public void validate(final String name, final String value) throws ParameterException { // NOPMD
+		final File modelDirectory = Paths.get(value).toFile();
+		for (final String fileName : this.modelFiles) {
+			boolean found = false;
+			for (final File file : modelDirectory.listFiles()) {
+				if (file.getName().equals(fileName)) {
+					found = true;
+				}
+			}
+			if (!found) {
+				throw new ParameterException(
+						String.format("Parameter %s: Missing model project file %s from %s", name, fileName, value));
+			}
+		}
+	}
 
 }

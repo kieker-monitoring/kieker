@@ -26,38 +26,38 @@ import kieker.model.analysismodel.statistics.StatisticsFactory;
  */
 public final class StatisticsModelCloneUtils {
 
-    private StatisticsModelCloneUtils() {
-        // Utility class
-    }
+	private StatisticsModelCloneUtils() {
+		// Utility class
+	}
 
-    public static StatisticRecord duplicate(final StatisticRecord value) {
-        final StatisticRecord newValue = StatisticsFactory.eINSTANCE.createStatisticRecord();
+	public static StatisticRecord duplicate(final StatisticRecord value) {
+		final StatisticRecord newValue = StatisticsFactory.eINSTANCE.createStatisticRecord();
 
-        for (final Entry<String, Object> statistics : value.getProperties()) {
-            newValue.getProperties().put(statistics.getKey(),
-                    StatisticsModelCloneUtils.duplicateObject(statistics.getValue()));
-        }
+		for (final Entry<String, Object> statistics : value.getProperties()) {
+			newValue.getProperties().put(statistics.getKey(),
+					StatisticsModelCloneUtils.duplicateObject(statistics.getValue()));
+		}
 
-        return newValue;
+		return newValue;
 
-    }
+	}
 
-    public static Object duplicateObject(final Object value) {
-        if (value instanceof Long) {
-            return ((Long) value).longValue();
-        } else if (value instanceof Double) {
-            return ((Double) value).doubleValue();
-        } else {
-            throw new InternalError("Unknown type");
-        }
-    }
+	public static Object duplicateObject(final Object value) {
+		if (value instanceof Long) {
+			return ((Long) value).longValue();
+		} else if (value instanceof Double) {
+			return ((Double) value).doubleValue();
+		} else {
+			throw new InternalError("Unknown type");
+		}
+	}
 
-    public static Object compute(final Object newValue, final Object value) {
-        if (newValue instanceof Long) {
-            return (Long) newValue + (Long) value;
-        } else {
-            throw new InternalError("Unknown type");
-        }
-    }
+	public static Object compute(final Object newValue, final Object value) {
+		if (newValue instanceof Long) {
+			return (Long) newValue + (Long) value;
+		} else {
+			throw new InternalError("Unknown type");
+		}
+	}
 
 }

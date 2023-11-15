@@ -23,18 +23,19 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation specifies the record factory to use for instantiating the annotated record class.
- * 
+ *
  * @author Holger Knoche
  * @since 2.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RecordFactory {
-    
-    /**
-     * The record factory class to use for instantiating the annotated record class.
-     * @return see above
-     */
-    Class<? extends IRecordFactory<?>> value();
+
+	/**
+	 * The record factory class to use for instantiating the annotated record class.
+	 *
+	 * @return see above
+	 */
+	Class<? extends IRecordFactory<?>> value();
 
 }

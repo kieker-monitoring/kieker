@@ -37,85 +37,85 @@ import kieker.model.analysismodel.type.TypeModel;
  */
 public final class SourceModelMerger {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SourceModelMerger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SourceModelMerger.class);
 
-    private SourceModelMerger() {
-        // Utility class
-    }
+	private SourceModelMerger() {
+		// Utility class
+	}
 
-    /* default */ static void mergeSourceModel(final TypeModel typeModel, final AssemblyModel assemblyModel, // NOPMD
-            final DeploymentModel deploymentModel, final ExecutionModel executionModel,
-            final SourceModel lastSourceModel, final SourceModel mergeSourceModel) {
-        for (final Entry<EObject, EList<String>> mergeSource : mergeSourceModel.getSources()) {
-            final EObject modelKey = SourceModelMerger.findCorrespondingKey(lastSourceModel.getSources(),
-                    mergeSource.getKey());
-            if (modelKey != null) {
-                final EList<String> modelSource = lastSourceModel.getSources().get(modelKey);
-                if (modelSource == null) {
-                    SourceModelMerger.LOGGER.error("Model error no sources for existing key {}", modelKey);
-                    lastSourceModel.getSources().put(modelKey, mergeSource.getValue());
-                } else {
-                    SourceModelMerger.mergeSources(modelSource, mergeSource.getValue());
-                }
-            } else {
-                final EList<String> modelSources = new BasicEList<>();
-                SourceModelMerger.mergeSources(modelSources, mergeSource.getValue());
-                lastSourceModel.getSources().put(SourceModelMerger.findCorrespondingObject(typeModel, assemblyModel,
-                        deploymentModel, executionModel, mergeSource.getKey()), modelSources);
-            }
-        }
-    }
+	/* default */ static void mergeSourceModel(final TypeModel typeModel, final AssemblyModel assemblyModel, // NOPMD
+			final DeploymentModel deploymentModel, final ExecutionModel executionModel,
+			final SourceModel lastSourceModel, final SourceModel mergeSourceModel) {
+		for (final Entry<EObject, EList<String>> mergeSource : mergeSourceModel.getSources()) {
+			final EObject modelKey = SourceModelMerger.findCorrespondingKey(lastSourceModel.getSources(),
+					mergeSource.getKey());
+			if (modelKey != null) {
+				final EList<String> modelSource = lastSourceModel.getSources().get(modelKey);
+				if (modelSource == null) {
+					SourceModelMerger.LOGGER.error("Model error no sources for existing key {}", modelKey);
+					lastSourceModel.getSources().put(modelKey, mergeSource.getValue());
+				} else {
+					SourceModelMerger.mergeSources(modelSource, mergeSource.getValue());
+				}
+			} else {
+				final EList<String> modelSources = new BasicEList<>();
+				SourceModelMerger.mergeSources(modelSources, mergeSource.getValue());
+				lastSourceModel.getSources().put(SourceModelMerger.findCorrespondingObject(typeModel, assemblyModel,
+						deploymentModel, executionModel, mergeSource.getKey()), modelSources);
+			}
+		}
+	}
 
-    private static EObject findCorrespondingObject(final TypeModel typeModel, final AssemblyModel assemblyModel,
-            final DeploymentModel deploymentModel, final ExecutionModel executionModel, final EObject key) {
-        EObject result = SourceModelMerger.findObjectInModel(typeModel.eAllContents(), key);
-        if (result != null) {
-            return result;
-        }
+	private static EObject findCorrespondingObject(final TypeModel typeModel, final AssemblyModel assemblyModel,
+			final DeploymentModel deploymentModel, final ExecutionModel executionModel, final EObject key) {
+		EObject result = SourceModelMerger.findObjectInModel(typeModel.eAllContents(), key);
+		if (result != null) {
+			return result;
+		}
 
-        result = SourceModelMerger.findObjectInModel(assemblyModel.eAllContents(), key);
-        if (result != null) {
-            return result;
-        }
+		result = SourceModelMerger.findObjectInModel(assemblyModel.eAllContents(), key);
+		if (result != null) {
+			return result;
+		}
 
-        result = SourceModelMerger.findObjectInModel(deploymentModel.eAllContents(), key);
-        if (result != null) {
-            return result;
-        }
+		result = SourceModelMerger.findObjectInModel(deploymentModel.eAllContents(), key);
+		if (result != null) {
+			return result;
+		}
 
-        result = SourceModelMerger.findObjectInModel(executionModel.eAllContents(), key);
-        if (result != null) {
-            return result;
-        }
+		result = SourceModelMerger.findObjectInModel(executionModel.eAllContents(), key);
+		if (result != null) {
+			return result;
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private static EObject findObjectInModel(final TreeIterator<EObject> iterator, final EObject key) {
-        while (iterator.hasNext()) {
-            final EObject item = iterator.next();
-            if (ModelUtils.areObjectsEqual(key, item)) {
-                return item;
-            }
-        }
+	private static EObject findObjectInModel(final TreeIterator<EObject> iterator, final EObject key) {
+		while (iterator.hasNext()) {
+			final EObject item = iterator.next();
+			if (ModelUtils.areObjectsEqual(key, item)) {
+				return item;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private static void mergeSources(final EList<String> modelSource, final EList<String> mergeSource) {
-        for (final String value : mergeSource) {
-            if (!modelSource.contains(value)) {
-                modelSource.add(value);
-            }
-        }
-    }
+	private static void mergeSources(final EList<String> modelSource, final EList<String> mergeSource) {
+		for (final String value : mergeSource) {
+			if (!modelSource.contains(value)) {
+				modelSource.add(value);
+			}
+		}
+	}
 
-    private static EObject findCorrespondingKey(final EMap<EObject, EList<String>> sources, final EObject mergeKey) {
-        for (final EObject key : sources.keySet()) {
-            if (ModelUtils.areObjectsEqual(key, mergeKey)) {
-                return key;
-            }
-        }
-        return null;
-    }
+	private static EObject findCorrespondingKey(final EMap<EObject, EList<String>> sources, final EObject mergeKey) {
+		for (final EObject key : sources.keySet()) {
+			if (ModelUtils.areObjectsEqual(key, mergeKey)) {
+				return key;
+			}
+		}
+		return null;
+	}
 }

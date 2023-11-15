@@ -122,7 +122,7 @@ public abstract class AbstractColorDependencyGraphBuilder extends AbstractDepend
 	}
 
 	private void handleInvocation(final Invocation invocation) {
-		final INode sourceVertex = invocation.getCaller() != null ? this.addVertex(invocation.getCaller())
+		final INode sourceVertex = invocation.getCaller() != null ? this.addVertex(invocation.getCaller()) // NOCS
 				: this.addVertexForEntry(); // NOCS (declarative)
 		final INode targetVertex = this.addVertex(invocation.getCallee());
 
@@ -137,7 +137,7 @@ public abstract class AbstractColorDependencyGraphBuilder extends AbstractDepend
 	}
 
 	private void handleStorageDataflow(final StorageDataflow storageDataflow) {
-		final INode sourceVertex = storageDataflow.getCode() != null ? this.addVertex(storageDataflow.getCode())
+		final INode sourceVertex = storageDataflow.getCode() != null ? this.addVertex(storageDataflow.getCode()) // NOCS
 				: this.addVertexForEntry(); // NOCS (declarative)
 		final INode targetVertex = this.addStorageVertex(storageDataflow.getStorage());
 

@@ -27,10 +27,10 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public abstract class AbstractCollector<T> extends AbstractTransformation<T, T> {
 
-    protected OutputPort<Report> reportOutputPort = this.createOutputPort(Report.class);
+	protected OutputPort<Report> reportOutputPort = this.createOutputPort(Report.class);
 
-    public OutputPort<Report> getReportOutputPort() {
-        return this.reportOutputPort;
-    }
+	public OutputPort<Report> getReportOutputPort() {
+		return this.reportOutputPort;
+	}
 
 }

@@ -23,9 +23,9 @@ import com.beust.jcommander.IStringConverter;
  */
 public class CharacterConverter implements IStringConverter<Character> {
 
-    @Override
-    public Character convert(final String value) {
-        return value.charAt(0);
-    }
+	@Override
+	public Character convert(final String value) {
+		return value.charAt(0);
+	}
 
 }

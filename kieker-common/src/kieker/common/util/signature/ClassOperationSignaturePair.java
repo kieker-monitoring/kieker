@@ -20,9 +20,9 @@ import java.util.StringTokenizer;
 
 /**
  * This class represents a pair containing the classname and the signature of an operation.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class ClassOperationSignaturePair {
@@ -33,7 +33,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param fqClassname
 	 *            The fully qualified name of the class.
 	 * @param signature
@@ -47,7 +47,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Delivers the fully qualified class name.
-	 * 
+	 *
 	 * @return the fqClassname
 	 */
 	public String getFqClassname() {
@@ -56,7 +56,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Delivers the signature.
-	 * 
+	 *
 	 * @return the signature
 	 */
 	public Signature getSignature() {
@@ -66,7 +66,7 @@ public class ClassOperationSignaturePair {
 	/**
 	 * This method delivers a simplified version of the fully qualified class name. In other words: The string behind the last '.' of the fully qualified name (this
 	 * is usually just the name of the class and nothing else).
-	 * 
+	 *
 	 * @return The simple class name.
 	 */
 	public String getSimpleClassname() {
@@ -79,7 +79,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * This method delivers the package name of the class. In other words: This method returns everything before the last '.' of the fully qualified name.
-	 * 
+	 *
 	 * @return The package name.
 	 */
 	public String getPackageName() {
@@ -92,7 +92,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * This method assembles an operation signature string from the current fields.
-	 * 
+	 *
 	 * @return An operation signature string.
 	 */
 	public String toOperationSignatureString() {
@@ -103,10 +103,10 @@ public class ClassOperationSignaturePair {
 	 * Extracts an {@link ClassOperationSignaturePair} from an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
 	 * Modifier list, return type, and parameter list wrapped by parentheses are optional. But note that a return type must be given if one or more modifiers are
 	 * present.
-	 * 
+	 *
 	 * @param operationSignatureStr
 	 *            The signature string.
-	 * 
+	 *
 	 * @return The {@link ClassOperationSignaturePair} extracted from the given string.
 	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
@@ -115,12 +115,12 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Split up an operation signature string and populate a class operation signature pair.
-	 * 
+	 *
 	 * @param operationSignatureStr
 	 *            the signature string
 	 * @param javaConstructor
 	 *            if true the string holds a constructor signature
-	 * 
+	 *
 	 * @return a ClassOperationSignaturePair
 	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr, final boolean javaConstructor) {
@@ -175,12 +175,12 @@ public class ClassOperationSignaturePair {
 	 * Given a fully-qualified class name <i>fqClassName</i> (e.g., <code>a.b.c.D</code>) and a {@link Signature} (e.g., for operation <code>op1</code> with
 	 * modifiers <code>public</code> and <code>static</code>, the return type <code>Boolean</code> , and the parameter types <code>Integer</code> and
 	 * <code>Long</code>), the method returns an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
-	 * 
+	 *
 	 * @param fqClassName
 	 *            The fully qualified class name.
 	 * @param signature
 	 *            The signature string.
-	 * 
+	 *
 	 * @return An operation signature string as defined by the given parameters.
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
@@ -214,7 +214,7 @@ public class ClassOperationSignaturePair {
 
 	/**
 	 * Returns a String representation of this {@link ClassOperationSignaturePair} using the {@link #createOperationSignatureString(String, Signature)} method.
-	 * 
+	 *
 	 * @return A string representation of this object.
 	 */
 	@Override
@@ -237,10 +237,7 @@ public class ClassOperationSignaturePair {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
+		if ((obj == null) || (this.getClass() != obj.getClass())) {
 			return false;
 		}
 		final ClassOperationSignaturePair other = (ClassOperationSignaturePair) obj;

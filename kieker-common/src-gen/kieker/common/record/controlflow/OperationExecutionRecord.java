@@ -22,24 +22,23 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 0.91
  */
-public class OperationExecutionRecord extends AbstractMonitoringRecord  {			
+public class OperationExecutionRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
-			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
-			 + TYPE_SIZE_INT; // OperationExecutionRecord.ess
-	
+			+ TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.traceId
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.tin
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.tout
+			+ TYPE_SIZE_STRING // OperationExecutionRecord.hostname
+			+ TYPE_SIZE_INT // OperationExecutionRecord.eoi
+			+ TYPE_SIZE_INT; // OperationExecutionRecord.ess
+
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature
 		String.class, // OperationExecutionRecord.sessionId
@@ -50,7 +49,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		int.class, // OperationExecutionRecord.eoi
 		int.class, // OperationExecutionRecord.ess
 	};
-	
+
 	/** user-defined constants. */
 	public static final String NO_HOSTNAME = "<default-host>";
 	public static final String NO_SESSION_ID = "<no-session-id>";
@@ -69,7 +68,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		"eoi",
 		"ess",
 	};
-	
+
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
@@ -80,7 +79,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public static final int EOI = NO_EOI_ESS;
 	public static final int ESS = NO_EOI_ESS;
 	private static final long serialVersionUID = -7768272829642950711L;
-	
+
 	/** property declarations. */
 	private final String operationSignature;
 	private final String sessionId;
@@ -90,10 +89,10 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	private final String hostname;
 	private final int eoi;
 	private final int ess;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param operationSignature
 	 *            operationSignature
 	 * @param sessionId
@@ -111,23 +110,23 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	 * @param ess
 	 *            ess
 	 */
-	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout, final String hostname, final int eoi, final int ess) {
-		this.operationSignature = operationSignature == null?NO_OPERATION_SIGNATURE:operationSignature;
-		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
+	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostname, final int eoi, final int ess) {
+		this.operationSignature = operationSignature == null ? NO_OPERATION_SIGNATURE : operationSignature;
+		this.sessionId = sessionId == null ? NO_SESSION_ID : sessionId;
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
+		this.hostname = hostname == null ? NO_HOSTNAME : hostname;
 		this.eoi = eoi;
 		this.ess = ess;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public OperationExecutionRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.operationSignature = deserializer.getString();
@@ -139,7 +138,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		this.eoi = deserializer.getInt();
 		this.ess = deserializer.getInt();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -154,7 +153,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		serializer.putInt(this.getEoi());
 		serializer.putInt(this.getEss());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +161,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -170,7 +169,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,7 +178,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -194,18 +192,9 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
-			return false;
-		}
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getOperationSignature().equals(castedRecord.getOperationSignature()) || !this.getSessionId().equals(castedRecord.getSessionId()) || (this.getTraceId() != castedRecord.getTraceId())) {
 			return false;
 		}
 		if (this.getTin() != castedRecord.getTin()) {
@@ -223,9 +212,10 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		if (this.getEss() != castedRecord.getEss()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -234,62 +224,56 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		int code = 0;
 		code += this.getOperationSignature().hashCode();
 		code += this.getSessionId().hashCode();
-		code += ((int)this.getTraceId());
-		code += ((int)this.getTin());
-		code += ((int)this.getTout());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getTin());
+		code += ((int) this.getTout());
 		code += this.getHostname().hashCode();
-		code += ((int)this.getEoi());
-		code += ((int)this.getEss());
-		
+		code += (this.getEoi());
+		code += (this.getEss());
+
 		return code;
 	}
-	
+
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
-	
-	
+
 	public final String getSessionId() {
 		return this.sessionId;
 	}
-	
-	
+
 	public final long getTraceId() {
 		return this.traceId;
 	}
-	
-	
+
 	public final long getTin() {
 		return this.tin;
 	}
-	
-	public final void setTin(long tin) {
+
+	public final void setTin(final long tin) {
 		this.tin = tin;
 	}
-	
+
 	public final long getTout() {
 		return this.tout;
 	}
-	
-	public final void setTout(long tout) {
+
+	public final void setTout(final long tout) {
 		this.tout = tout;
 	}
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final int getEoi() {
 		return this.eoi;
 	}
-	
-	
+
 	public final int getEss() {
 		return this.ess;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -298,28 +282,28 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		String result = "OperationExecutionRecord: ";
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "sessionId = ";
 		result += this.getSessionId() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "tin = ";
 		result += this.getTin() + ", ";
-		
+
 		result += "tout = ";
 		result += this.getTout() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "eoi = ";
 		result += this.getEoi() + ", ";
-		
+
 		result += "ess = ";
 		result += this.getEss() + ", ";
-		
+
 		return result;
 	}
 }

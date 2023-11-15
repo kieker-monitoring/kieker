@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.beust.jcommander.JCommander;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.JCommander;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
@@ -44,64 +44,63 @@ import kieker.tools.fxca.utils.IOUtils;
  */
 public final class FxcaMain extends AbstractService<TeetimeConfiguration, Settings> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FxcaMain.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FxcaMain.class);
 
-    /**
-     * As suggested by PMD, make this a utility class that cannot be instantiated.
-     */
-    private FxcaMain() {
-    }
+	/**
+	 * As suggested by PMD, make this a utility class that cannot be instantiated.
+	 */
+	private FxcaMain() {}
 
-    public static void main(final String[] args) {
-        final FxcaMain main = new FxcaMain();
-        try {
-            final int exitCode = main.run("fxtran code analysis", "fxca", args, new Settings());
-            System.exit(exitCode);
-        } catch (final IllegalArgumentException e) {
-            LoggerFactory.getLogger(FxcaMain.class).error("Configuration error: {}", e.getLocalizedMessage());
-            System.exit(1);
-        }
-    }
+	public static void main(final String[] args) {
+		final FxcaMain main = new FxcaMain();
+		try {
+			final int exitCode = main.run("fxtran code analysis", "fxca", args, new Settings());
+			System.exit(exitCode);
+		} catch (final IllegalArgumentException e) {
+			LoggerFactory.getLogger(FxcaMain.class).error("Configuration error: {}", e.getLocalizedMessage());
+			System.exit(1);
+		}
+	}
 
-    @Override
-    protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
-        return new TeetimeConfiguration(this.settings);
-    }
+	@Override
+	protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		return new TeetimeConfiguration(this.settings);
+	}
 
-    @Override
-    protected Path getConfigurationPath() {
-        return null;
-    }
+	@Override
+	protected Path getConfigurationPath() {
+		return null;
+	}
 
-    @Override
-    protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-        return true;
-    }
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
+		return true;
+	}
 
-    @Override
-    protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-        IOUtils.createDirectory(this.settings.getOutputDirectoryPath());
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+		IOUtils.createDirectory(this.settings.getOutputDirectoryPath());
 
-        final Predicate<Path> useDirectory = IOUtils.IS_DIRECTORY;
+		final Predicate<Path> useDirectory = IOUtils.IS_DIRECTORY;
 
-        final List<Path> directories = new ArrayList<>();
-        if (this.settings.isFlat()) {
-            directories.addAll(this.settings.getInputDirectoryPaths());
-        } else {
-            for (final Path rootPath : this.settings.getInputDirectoryPaths()) {
-                try {
-                    directories.addAll(IOUtils.pathsInDirectory(rootPath, useDirectory, useDirectory, true));
-                } catch (final IOException e) {
-                    FxcaMain.LOGGER.error("Error scanning directory {}: {} ", rootPath, e.getLocalizedMessage()); // NOPMD
-                }
-            }
-        }
+		final List<Path> directories = new ArrayList<>();
+		if (this.settings.isFlat()) {
+			directories.addAll(this.settings.getInputDirectoryPaths());
+		} else {
+			for (final Path rootPath : this.settings.getInputDirectoryPaths()) {
+				try {
+					directories.addAll(IOUtils.pathsInDirectory(rootPath, useDirectory, useDirectory, true));
+				} catch (final IOException e) {
+					FxcaMain.LOGGER.error("Error scanning directory {}: {} ", rootPath, e.getLocalizedMessage()); // NOPMD
+				}
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    protected void shutdownService() {
-        // nothing special to be done here
-    }
+	@Override
+	protected void shutdownService() {
+		// nothing special to be done here
+	}
 }

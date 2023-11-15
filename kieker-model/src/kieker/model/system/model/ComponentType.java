@@ -32,7 +32,7 @@ public class ComponentType { // NOPMD DataClass
 	private final int id;
 	private final String packageName;
 	private final String typeName;
-	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
+	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * // NOCS requests implementation of equals and hashCode in pairs// NOCS requests implementation of equals and hashCode in pairs* Creates a new instance of this
@@ -114,7 +114,7 @@ public class ComponentType { // NOPMD DataClass
 	 * @return The full qualified name.
 	 */
 	public final String getFullQualifiedName() {
-		if (this.packageName == null || this.packageName.length() == 0) {
+		if ((this.packageName == null) || (this.packageName.length() == 0)) {
 			return this.typeName;
 		}
 		return this.packageName + "." + this.typeName;

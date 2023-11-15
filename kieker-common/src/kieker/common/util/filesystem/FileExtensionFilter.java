@@ -41,7 +41,7 @@ public class FileExtensionFilter implements FilenameFilter {
 
 	/**
 	 * create filename filter.
-	 * 
+	 *
 	 * @param fileExtension
 	 *            extension
 	 */

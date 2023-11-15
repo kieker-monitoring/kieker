@@ -57,10 +57,7 @@ public class Pair<F, S> {
 		if (this == compareto) {
 			return true;
 		}
-		if (compareto == null) {
-			return false;
-		}
-		if (!(compareto instanceof Pair<?, ?>)) {
+		if ((compareto == null) || !(compareto instanceof Pair<?, ?>)) {
 			return false;
 		}
 

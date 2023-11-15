@@ -13,7 +13,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.VectorMeasurement#getValues <em>Values</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.VectorMeasurement#getValues <em>Values</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getVectorMeasurement()
@@ -26,6 +26,7 @@ public interface VectorMeasurement extends Measurement {
 	 * The list contents are of type {@link kieker.model.analysismodel.statistics.ScalarMeasurement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Values</em>' containment reference list.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getVectorMeasurement_Values()
 	 * @model containment="true"

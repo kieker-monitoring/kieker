@@ -34,75 +34,75 @@ import kieker.model.analysismodel.execution.StorageDataflow;
  */
 public final class ExecutionModelCloneUtils {
 
-    private ExecutionModelCloneUtils() {
-        // Utility class
-    }
+	private ExecutionModelCloneUtils() {
+		// Utility class
+	}
 
-    public static Invocation duplicate(final DeploymentModel deploymentModel, final Invocation invocation) {
-        final Invocation newInvocation = ExecutionFactory.eINSTANCE.createInvocation();
-        newInvocation
-                .setCaller(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, invocation.getCaller()));
-        newInvocation
-                .setCallee(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, invocation.getCallee()));
+	public static Invocation duplicate(final DeploymentModel deploymentModel, final Invocation invocation) {
+		final Invocation newInvocation = ExecutionFactory.eINSTANCE.createInvocation();
+		newInvocation
+				.setCaller(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, invocation.getCaller()));
+		newInvocation
+				.setCallee(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, invocation.getCallee()));
 
-        return newInvocation;
-    }
+		return newInvocation;
+	}
 
-    public static StorageDataflow duplicate(final DeploymentModel deploymentModel,
-            final StorageDataflow storageDataflow) {
-        final StorageDataflow newStorageDataflow = ExecutionFactory.eINSTANCE.createStorageDataflow();
-        newStorageDataflow.setDirection(storageDataflow.getDirection());
+	public static StorageDataflow duplicate(final DeploymentModel deploymentModel,
+			final StorageDataflow storageDataflow) {
+		final StorageDataflow newStorageDataflow = ExecutionFactory.eINSTANCE.createStorageDataflow();
+		newStorageDataflow.setDirection(storageDataflow.getDirection());
 
-        newStorageDataflow
-                .setCode(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, storageDataflow.getCode()));
-        newStorageDataflow.setStorage(
-                ExecutionModelCloneUtils.findDeployedStorage(deploymentModel, storageDataflow.getStorage()));
+		newStorageDataflow
+				.setCode(ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, storageDataflow.getCode()));
+		newStorageDataflow.setStorage(
+				ExecutionModelCloneUtils.findDeployedStorage(deploymentModel, storageDataflow.getStorage()));
 
-        return newStorageDataflow;
-    }
+		return newStorageDataflow;
+	}
 
-    public static OperationDataflow duplicate(final DeploymentModel deploymentModel,
-            final OperationDataflow operationDataflow) {
-        final OperationDataflow newOperationDataflow = ExecutionFactory.eINSTANCE.createOperationDataflow();
-        newOperationDataflow.setDirection(operationDataflow.getDirection());
+	public static OperationDataflow duplicate(final DeploymentModel deploymentModel,
+			final OperationDataflow operationDataflow) {
+		final OperationDataflow newOperationDataflow = ExecutionFactory.eINSTANCE.createOperationDataflow();
+		newOperationDataflow.setDirection(operationDataflow.getDirection());
 
-        newOperationDataflow.setCaller(
-                ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, operationDataflow.getCaller()));
-        newOperationDataflow.setCallee(
-                ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, operationDataflow.getCallee()));
+		newOperationDataflow.setCaller(
+				ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, operationDataflow.getCaller()));
+		newOperationDataflow.setCallee(
+				ExecutionModelCloneUtils.findDeployedOperation(deploymentModel, operationDataflow.getCallee()));
 
-        return newOperationDataflow;
-    }
+		return newOperationDataflow;
+	}
 
-    private static DeployedOperation findDeployedOperation(final DeploymentModel targetModel,
-            final DeployedOperation operation) {
-        final EStringToDeployedOperationMapEntryImpl mapOperationEntry = (EStringToDeployedOperationMapEntryImpl) operation
-                .eContainer();
-        final DeployedComponent component = (DeployedComponent) mapOperationEntry.eContainer();
+	private static DeployedOperation findDeployedOperation(final DeploymentModel targetModel,
+			final DeployedOperation operation) {
+		final EStringToDeployedOperationMapEntryImpl mapOperationEntry = (EStringToDeployedOperationMapEntryImpl) operation
+				.eContainer();
+		final DeployedComponent component = (DeployedComponent) mapOperationEntry.eContainer();
 
-        final EStringToDeployedComponentMapEntryImpl mapComponentEntry = (EStringToDeployedComponentMapEntryImpl) component
-                .eContainer();
-        final DeploymentContext context = (DeploymentContext) mapComponentEntry.eContainer();
+		final EStringToDeployedComponentMapEntryImpl mapComponentEntry = (EStringToDeployedComponentMapEntryImpl) component
+				.eContainer();
+		final DeploymentContext context = (DeploymentContext) mapComponentEntry.eContainer();
 
-        final DeploymentContext newContext = targetModel.getContexts().get(context.getName());
-        final DeployedComponent newComponent = newContext.getComponents().get(component.getSignature());
+		final DeploymentContext newContext = targetModel.getContexts().get(context.getName());
+		final DeployedComponent newComponent = newContext.getComponents().get(component.getSignature());
 
-        return newComponent.getOperations().get(operation.getAssemblyOperation().getOperationType().getSignature());
-    }
+		return newComponent.getOperations().get(operation.getAssemblyOperation().getOperationType().getSignature());
+	}
 
-    private static DeployedStorage findDeployedStorage(final DeploymentModel targetModel,
-            final DeployedStorage storage) {
-        final EStringToDeployedStorageMapEntryImpl mapStorageEntry = (EStringToDeployedStorageMapEntryImpl) storage
-                .eContainer();
-        final DeployedComponent component = (DeployedComponent) mapStorageEntry.eContainer();
+	private static DeployedStorage findDeployedStorage(final DeploymentModel targetModel,
+			final DeployedStorage storage) {
+		final EStringToDeployedStorageMapEntryImpl mapStorageEntry = (EStringToDeployedStorageMapEntryImpl) storage
+				.eContainer();
+		final DeployedComponent component = (DeployedComponent) mapStorageEntry.eContainer();
 
-        final EStringToDeployedComponentMapEntryImpl mapComponentEntry = (EStringToDeployedComponentMapEntryImpl) component
-                .eContainer();
-        final DeploymentContext context = (DeploymentContext) mapComponentEntry.eContainer();
+		final EStringToDeployedComponentMapEntryImpl mapComponentEntry = (EStringToDeployedComponentMapEntryImpl) component
+				.eContainer();
+		final DeploymentContext context = (DeploymentContext) mapComponentEntry.eContainer();
 
-        final DeploymentContext newContext = targetModel.getContexts().get(context.getName());
-        final DeployedComponent newComponent = newContext.getComponents().get(component.getSignature());
-        return newComponent.getStorages().get(storage.getAssemblyStorage().getStorageType().getName());
-    }
+		final DeploymentContext newContext = targetModel.getContexts().get(context.getName());
+		final DeployedComponent newComponent = newContext.getComponents().get(component.getSignature());
+		return newComponent.getStorages().get(storage.getAssemblyStorage().getStorageType().getName());
+	}
 
 }

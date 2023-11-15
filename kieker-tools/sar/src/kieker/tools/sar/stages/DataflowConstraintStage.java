@@ -40,94 +40,94 @@ import teetime.framework.OutputPort;
  */
 public class DataflowConstraintStage extends AbstractStage {
 
-    private final InputPort<DataflowEvent> inputPort = this.createInputPort(DataflowEvent.class);
-    private final InputPort<OperationEvent> controlInputPort = this.createInputPort(OperationEvent.class);
-    private final OutputPort<DataflowEvent> outputPort = this.createOutputPort(DataflowEvent.class);
+	private final InputPort<DataflowEvent> inputPort = this.createInputPort(DataflowEvent.class);
+	private final InputPort<OperationEvent> controlInputPort = this.createInputPort(OperationEvent.class);
+	private final OutputPort<DataflowEvent> outputPort = this.createOutputPort(DataflowEvent.class);
 
-    private final Map<String, Map<String, Set<String>>> operationEventRegister = new HashMap<>();
-    private final List<DataflowEvent> storedEvents = new ArrayList<>();
+	private final Map<String, Map<String, Set<String>>> operationEventRegister = new HashMap<>();
+	private final List<DataflowEvent> storedEvents = new ArrayList<>();
 
-    @Override
-    protected void execute() throws Exception {
-        this.processOperationEvent();
-        this.processDataflowEvent();
-    }
+	@Override
+	protected void execute() throws Exception {
+		this.processOperationEvent();
+		this.processDataflowEvent();
+	}
 
-    private void processOperationEvent() {
-        final OperationEvent operationEvent = this.controlInputPort.receive();
+	private void processOperationEvent() {
+		final OperationEvent operationEvent = this.controlInputPort.receive();
 
-        if (operationEvent != null) {
-            this.createComponentAndAddOperation(operationEvent);
-            for (int i = 0; i < this.storedEvents.size(); i++) {
-                final DataflowEvent dataflowEvent = this.storedEvents.get(i);
-                if (this.checkEndpoint(dataflowEvent.getSource()) && this.checkEndpoint(dataflowEvent.getTarget())) {
-                    this.outputPort.send(dataflowEvent);
-                    this.storedEvents.remove(i);
-                }
-            }
-        }
-    }
+		if (operationEvent != null) {
+			this.createComponentAndAddOperation(operationEvent);
+			for (int i = 0; i < this.storedEvents.size(); i++) {
+				final DataflowEvent dataflowEvent = this.storedEvents.get(i);
+				if (this.checkEndpoint(dataflowEvent.getSource()) && this.checkEndpoint(dataflowEvent.getTarget())) {
+					this.outputPort.send(dataflowEvent);
+					this.storedEvents.remove(i);
+				}
+			}
+		}
+	}
 
-    private void createComponentAndAddOperation(final OperationEvent operationEvent) {
-        if (this.operationEventRegister.containsKey(operationEvent.getHostname())) {
-            final Map<String, Set<String>> components = this.operationEventRegister.get(operationEvent.getHostname());
-            if (components.containsKey(operationEvent.getComponentSignature())) {
-                final Set<String> operations = components.get(operationEvent.getComponentSignature());
-                if (!operations.contains(operationEvent.getOperationSignature())) {
-                    operations.add(operationEvent.getOperationSignature());
-                }
-            } else {
-                components.put(operationEvent.getComponentSignature(), new HashSet<String>());
-            }
-        } else {
-            final Map<String, Set<String>> components = new HashMap<>();
-            final Set<String> operations = new HashSet<>();
-            operations.add(operationEvent.getOperationSignature());
-            components.put(operationEvent.getComponentSignature(), operations);
-            this.operationEventRegister.put(operationEvent.getHostname(), components);
-        }
-    }
+	private void createComponentAndAddOperation(final OperationEvent operationEvent) {
+		if (this.operationEventRegister.containsKey(operationEvent.getHostname())) {
+			final Map<String, Set<String>> components = this.operationEventRegister.get(operationEvent.getHostname());
+			if (components.containsKey(operationEvent.getComponentSignature())) {
+				final Set<String> operations = components.get(operationEvent.getComponentSignature());
+				if (!operations.contains(operationEvent.getOperationSignature())) {
+					operations.add(operationEvent.getOperationSignature());
+				}
+			} else {
+				components.put(operationEvent.getComponentSignature(), new HashSet<>());
+			}
+		} else {
+			final Map<String, Set<String>> components = new HashMap<>();
+			final Set<String> operations = new HashSet<>();
+			operations.add(operationEvent.getOperationSignature());
+			components.put(operationEvent.getComponentSignature(), operations);
+			this.operationEventRegister.put(operationEvent.getHostname(), components);
+		}
+	}
 
-    private void processDataflowEvent() {
-        final DataflowEvent dataflowEvent = this.inputPort.receive();
-        if (dataflowEvent != null) {
-            if (this.checkEndpoint(dataflowEvent.getSource()) && this.checkEndpoint(dataflowEvent.getTarget())) {
-                this.outputPort.send(dataflowEvent);
-            } else {
-                this.storedEvents.add(dataflowEvent);
-            }
-        }
-    }
+	private void processDataflowEvent() {
+		final DataflowEvent dataflowEvent = this.inputPort.receive();
+		if (dataflowEvent != null) {
+			if (this.checkEndpoint(dataflowEvent.getSource()) && this.checkEndpoint(dataflowEvent.getTarget())) {
+				this.outputPort.send(dataflowEvent);
+			} else {
+				this.storedEvents.add(dataflowEvent);
+			}
+		}
+	}
 
-    private boolean checkEndpoint(final GenericElementEvent event) {
-        if (event instanceof OperationEvent) {
-            return this.checkOperationEvent((OperationEvent) event);
-        } else {
-            return true;
-        }
-    }
+	private boolean checkEndpoint(final GenericElementEvent event) {
+		if (event instanceof OperationEvent) {
+			return this.checkOperationEvent((OperationEvent) event);
+		} else {
+			return true;
+		}
+	}
 
-    private boolean checkOperationEvent(final OperationEvent event) {
-        final Map<String, Set<String>> components = this.operationEventRegister.get(event.getHostname());
-        if (components != null) {
-            final Set<String> operations = components.get(event.getComponentSignature());
-            if (operations != null) {
-                return operations.contains(event.getOperationSignature());
-            }
-        }
-        return false;
-    }
+	private boolean checkOperationEvent(final OperationEvent event) {
+		final Map<String, Set<String>> components = this.operationEventRegister.get(event.getHostname());
+		if (components != null) {
+			final Set<String> operations = components.get(event.getComponentSignature());
+			if (operations != null) {
+				return operations.contains(event.getOperationSignature());
+			}
+		}
+		return false;
+	}
 
-    public InputPort<DataflowEvent> getInputPort() {
-        return this.inputPort;
-    }
+	public InputPort<DataflowEvent> getInputPort() {
+		return this.inputPort;
+	}
 
-    public InputPort<OperationEvent> getControlInputPort() {
-        return this.controlInputPort;
-    }
+	public InputPort<OperationEvent> getControlInputPort() {
+		return this.controlInputPort;
+	}
 
-    public OutputPort<DataflowEvent> getOutputPort() {
-        return this.outputPort;
-    }
+	public OutputPort<DataflowEvent> getOutputPort() {
+		return this.outputPort;
+	}
 
 }

@@ -35,197 +35,197 @@ import kieker.model.analysismodel.type.TypePackage;
 
 public class SimilarMethodSuffixMergeInterfaceStage extends AbstractMergeInterfaceStage {
 
-    private final double methodDistance;
+	private final double methodDistance;
 
-    /**
-     * Create interface merger.
-     *
-     * @param methodDistance
-     *            maximal distance if methods of two interfaces
-     */
-    public SimilarMethodSuffixMergeInterfaceStage(final double methodDistance) {
-        super();
-        this.methodDistance = methodDistance;
-    }
+	/**
+	 * Create interface merger.
+	 *
+	 * @param methodDistance
+	 *            maximal distance if methods of two interfaces
+	 */
+	public SimilarMethodSuffixMergeInterfaceStage(final double methodDistance) {
+		super();
+		this.methodDistance = methodDistance;
+	}
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final TypeModel typeModel = repository.getModel(TypePackage.Literals.TYPE_MODEL);
-        typeModel.getComponentTypes().values().forEach(componentType -> {
-            // find all provided interfaces of a component and compute their distance
-            final Stream<MethodDistance> distances = componentType.getProvidedInterfaceTypes().stream()
-                    .map(iface -> this.computeDistances(iface, componentType.getProvidedInterfaceTypes()))
-                    .reduce(new ArrayList<MethodDistance>(), (l, nl) -> this.joinList(l, nl)).stream()
-                    .filter(distance -> distance.distance >= this.methodDistance);
-            // group related interfaces
-            final Collection<Set<ProvidedInterfaceType>> groupedInterfaces = this.groupInterfaces(distances);
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final TypeModel typeModel = repository.getModel(TypePackage.Literals.TYPE_MODEL);
+		typeModel.getComponentTypes().values().forEach(componentType -> {
+			// find all provided interfaces of a component and compute their distance
+			final Stream<MethodDistance> distances = componentType.getProvidedInterfaceTypes().stream()
+					.map(iface -> this.computeDistances(iface, componentType.getProvidedInterfaceTypes()))
+					.reduce(new ArrayList<>(), (l, nl) -> this.joinList(l, nl)).stream()
+					.filter(distance -> distance.distance >= this.methodDistance);
+			// group related interfaces
+			final Collection<Set<ProvidedInterfaceType>> groupedInterfaces = this.groupInterfaces(distances);
 
-            // merge them
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
-            groupedInterfaces.forEach(set -> {
-                System.out.println("------------");
-                set.forEach(iface -> this.printIface(iface));
-            });
+			// merge them
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
+			groupedInterfaces.forEach(set -> {
+				System.out.println("------------");
+				set.forEach(iface -> this.printIface(iface));
+			});
 
-            // updated dependent required interfaces
+			// updated dependent required interfaces
 
-            // update assembly and deployment interfaces accordingly
-        });
-        this.outputPort.send(repository);
-    }
+			// update assembly and deployment interfaces accordingly
+		});
+		this.outputPort.send(repository);
+	}
 
-    private void printIface(final ProvidedInterfaceType iface) {
-        System.out.println(">> " + iface.getSignature());
-        iface.getProvidedOperationTypes().values().forEach(op -> System.out.println("  " + op.getSignature()));
-    }
+	private void printIface(final ProvidedInterfaceType iface) {
+		System.out.println(">> " + iface.getSignature());
+		iface.getProvidedOperationTypes().values().forEach(op -> System.out.println("  " + op.getSignature()));
+	}
 
-    private Collection<Set<ProvidedInterfaceType>> groupInterfaces(final Stream<MethodDistance> distances) {
-        final Map<ProvidedInterfaceType, Set<ProvidedInterfaceType>> groupedInterfaces = new HashMap<>();
+	private Collection<Set<ProvidedInterfaceType>> groupInterfaces(final Stream<MethodDistance> distances) {
+		final Map<ProvidedInterfaceType, Set<ProvidedInterfaceType>> groupedInterfaces = new HashMap<>();
 
-        distances.forEach(distance -> {
-            if (groupedInterfaces.containsKey(distance.firstIface)) {
-                groupedInterfaces.get(distance.firstIface).add(distance.firstIface);
-                groupedInterfaces.get(distance.firstIface).add(distance.secondIface);
-            } else {
-                final Set<ProvidedInterfaceType> ifaceSet = new HashSet<>();
-                ifaceSet.add(distance.firstIface);
-                ifaceSet.add(distance.secondIface);
-                groupedInterfaces.put(distance.firstIface, ifaceSet);
-            }
-            if (groupedInterfaces.containsKey(distance.secondIface)) {
-                groupedInterfaces.get(distance.secondIface).add(distance.firstIface);
-                groupedInterfaces.get(distance.secondIface).add(distance.secondIface);
-            } else {
-                final Set<ProvidedInterfaceType> ifaceSet = new HashSet<>();
-                ifaceSet.add(distance.firstIface);
-                ifaceSet.add(distance.secondIface);
-                groupedInterfaces.put(distance.secondIface, ifaceSet);
-            }
-        });
+		distances.forEach(distance -> {
+			if (groupedInterfaces.containsKey(distance.firstIface)) {
+				groupedInterfaces.get(distance.firstIface).add(distance.firstIface);
+				groupedInterfaces.get(distance.firstIface).add(distance.secondIface);
+			} else {
+				final Set<ProvidedInterfaceType> ifaceSet = new HashSet<>();
+				ifaceSet.add(distance.firstIface);
+				ifaceSet.add(distance.secondIface);
+				groupedInterfaces.put(distance.firstIface, ifaceSet);
+			}
+			if (groupedInterfaces.containsKey(distance.secondIface)) {
+				groupedInterfaces.get(distance.secondIface).add(distance.firstIface);
+				groupedInterfaces.get(distance.secondIface).add(distance.secondIface);
+			} else {
+				final Set<ProvidedInterfaceType> ifaceSet = new HashSet<>();
+				ifaceSet.add(distance.firstIface);
+				ifaceSet.add(distance.secondIface);
+				groupedInterfaces.put(distance.secondIface, ifaceSet);
+			}
+		});
 
-        final Collection<Set<ProvidedInterfaceType>> distinctSets = new ArrayList<>();
-        groupedInterfaces.values().forEach(set -> {
-            if (!this.containsSet(distinctSets, set)) {
-                distinctSets.add(set);
-            }
-        });
+		final Collection<Set<ProvidedInterfaceType>> distinctSets = new ArrayList<>();
+		groupedInterfaces.values().forEach(set -> {
+			if (!this.containsSet(distinctSets, set)) {
+				distinctSets.add(set);
+			}
+		});
 
-        return distinctSets;
-    }
+		return distinctSets;
+	}
 
-    private boolean containsSet(final Collection<Set<ProvidedInterfaceType>> distinctSets,
-            final Set<ProvidedInterfaceType> set) {
-        return distinctSets.stream().anyMatch(distinct -> this.compareSet(distinct, set));
-    }
+	private boolean containsSet(final Collection<Set<ProvidedInterfaceType>> distinctSets,
+			final Set<ProvidedInterfaceType> set) {
+		return distinctSets.stream().anyMatch(distinct -> this.compareSet(distinct, set));
+	}
 
-    private boolean compareSet(final Set<ProvidedInterfaceType> distinct, final Set<ProvidedInterfaceType> set) {
-        return distinct.stream().allMatch(distinctElement -> set.contains(distinctElement));
-    }
+	private boolean compareSet(final Set<ProvidedInterfaceType> distinct, final Set<ProvidedInterfaceType> set) {
+		return distinct.stream().allMatch(distinctElement -> set.contains(distinctElement));
+	}
 
-    private List<MethodDistance> joinList(final List<MethodDistance> list, final List<MethodDistance> secondList) {
-        secondList.forEach(element -> {
-            if (!this.isContainedInList(list, element)) {
-                list.add(element);
-            }
-        });
-        return list;
-    }
+	private List<MethodDistance> joinList(final List<MethodDistance> list, final List<MethodDistance> secondList) {
+		secondList.forEach(element -> {
+			if (!this.isContainedInList(list, element)) {
+				list.add(element);
+			}
+		});
+		return list;
+	}
 
-    private boolean isContainedInList(final List<MethodDistance> list, final MethodDistance distance) {
-        return list.stream().anyMatch(element -> ((element.firstIface == distance.firstIface)
-                && (element.secondIface == distance.secondIface))
-                || ((element.firstIface == distance.secondIface) && (element.secondIface == distance.firstIface)));
-    }
+	private boolean isContainedInList(final List<MethodDistance> list, final MethodDistance distance) {
+		return list.stream().anyMatch(element -> ((element.firstIface == distance.firstIface)
+				&& (element.secondIface == distance.secondIface))
+				|| ((element.firstIface == distance.secondIface) && (element.secondIface == distance.firstIface)));
+	}
 
-    private List<MethodDistance> computeDistances(final ProvidedInterfaceType iface,
-            final EList<ProvidedInterfaceType> providedInterfaceTypes) {
-        return providedInterfaceTypes.stream().filter(secondIface -> secondIface != iface)
-                .map(secondIface -> this.computeDistance(iface, secondIface))
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
+	private List<MethodDistance> computeDistances(final ProvidedInterfaceType iface,
+			final EList<ProvidedInterfaceType> providedInterfaceTypes) {
+		return providedInterfaceTypes.stream().filter(secondIface -> secondIface != iface)
+				.map(secondIface -> this.computeDistance(iface, secondIface))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
 
-    private MethodDistance computeDistance(final ProvidedInterfaceType firstIface,
-            final ProvidedInterfaceType secondIface) {
-        final double da = this.computeMatchingMethods(firstIface, secondIface);
-        // firstIface.getProvidedOperationTypes().size();
-        final double db = this.computeMatchingMethods(secondIface, firstIface);
-        // secondIface.getProvidedOperationTypes().size();
+	private MethodDistance computeDistance(final ProvidedInterfaceType firstIface,
+			final ProvidedInterfaceType secondIface) {
+		final double da = this.computeMatchingMethods(firstIface, secondIface);
+		// firstIface.getProvidedOperationTypes().size();
+		final double db = this.computeMatchingMethods(secondIface, firstIface);
+		// secondIface.getProvidedOperationTypes().size();
 
-        // System.err.printf("distance 1>2 %6.3f 2>1 %6.3f %3d %3d\n", da, db,
-        // firstIface.getProvidedOperationTypes().size(),
-        // secondIface.getProvidedOperationTypes().size());
+		// System.err.printf("distance 1>2 %6.3f 2>1 %6.3f %3d %3d\n", da, db,
+		// firstIface.getProvidedOperationTypes().size(),
+		// secondIface.getProvidedOperationTypes().size());
 
-        final double distance = da + db;
+		final double distance = da + db;
 
-        return new MethodDistance(firstIface, secondIface, distance);
-    }
+		return new MethodDistance(firstIface, secondIface, distance);
+	}
 
-    private double computeMatchingMethods(final ProvidedInterfaceType firstIface,
-            final ProvidedInterfaceType secondIface) {
-        final Set<OperationType> assignedOps = new HashSet<>();
-        final double distance = firstIface.getProvidedOperationTypes().values().stream().map(op -> {
-            final Tuple start = new Tuple(op, 0.0);
-            final Tuple minimal = secondIface.getProvidedOperationTypes().values().stream()
-                    .filter(otherOp -> !assignedOps.contains(otherOp))
-                    .map(otherOp -> new Tuple(otherOp, this.nameDistance(op, otherOp))).reduce(start, (l, r) -> {
-                        if (l.distance >= r.distance) {
-                            return l;
-                        } else {
-                            return r;
-                        }
-                    });
-            assignedOps.add(minimal.operationType);
-            return minimal.distance;
-        }).reduce(0.0, (l, r) -> l + r); // / firstIface.getProvidedOperationTypes().size();
-        return distance;
-    }
+	private double computeMatchingMethods(final ProvidedInterfaceType firstIface,
+			final ProvidedInterfaceType secondIface) {
+		final Set<OperationType> assignedOps = new HashSet<>();
+		final double distance = firstIface.getProvidedOperationTypes().values().stream().map(op -> {
+			final Tuple start = new Tuple(op, 0.0);
+			final Tuple minimal = secondIface.getProvidedOperationTypes().values().stream()
+					.filter(otherOp -> !assignedOps.contains(otherOp))
+					.map(otherOp -> new Tuple(otherOp, this.nameDistance(op, otherOp))).reduce(start, (l, r) -> {
+						if (l.distance >= r.distance) {
+							return l;
+						} else {
+							return r;
+						}
+					});
+			assignedOps.add(minimal.operationType);
+			return minimal.distance;
+		}).reduce(0.0, (l, r) -> l + r); // / firstIface.getProvidedOperationTypes().size();
+		return distance;
+	}
 
-    private double nameDistance(final OperationType left, final OperationType right) {
-        final String leftName = left.getName();
-        final String rightName = right.getName();
-        final int leftLength = leftName.length();
-        final int rightLength = rightName.length();
-        if (leftName.length() < rightName.length()) {
-            for (int i = 0; i < leftLength; i++) {
-                if (leftName.charAt(leftLength - 1 - i) != rightName.charAt(rightLength - 1 - i)) {
-                    return (double) i / (double) leftLength;
-                }
-            }
-            return 1.0;
-        } else {
-            for (int i = 0; i < rightLength; i++) {
-                if (leftName.charAt(leftLength - 1 - i) != rightName.charAt(rightLength - 1 - i)) {
-                    return (double) i / (double) rightLength;
-                }
-            }
-            return 1.0;
-        }
-    }
+	private double nameDistance(final OperationType left, final OperationType right) {
+		final String leftName = left.getName();
+		final String rightName = right.getName();
+		final int leftLength = leftName.length();
+		final int rightLength = rightName.length();
+		if (leftName.length() < rightName.length()) {
+			for (int i = 0; i < leftLength; i++) {
+				if (leftName.charAt(leftLength - 1 - i) != rightName.charAt(rightLength - 1 - i)) {
+					return (double) i / (double) leftLength;
+				}
+			}
+			return 1.0;
+		} else {
+			for (int i = 0; i < rightLength; i++) {
+				if (leftName.charAt(leftLength - 1 - i) != rightName.charAt(rightLength - 1 - i)) {
+					return (double) i / (double) rightLength;
+				}
+			}
+			return 1.0;
+		}
+	}
 
-    private class Tuple {
+	private class Tuple {
 
-        private final OperationType operationType;
-        private final double distance;
+		private final OperationType operationType;
+		private final double distance;
 
-        public Tuple(final OperationType operationType, final double distance) {
-            this.operationType = operationType;
-            this.distance = distance;
-        }
-    }
+		public Tuple(final OperationType operationType, final double distance) {
+			this.operationType = operationType;
+			this.distance = distance;
+		}
+	}
 
-    private class MethodDistance {
+	private class MethodDistance {
 
-        private final ProvidedInterfaceType firstIface;
-        private final ProvidedInterfaceType secondIface;
-        private final double distance;
+		private final ProvidedInterfaceType firstIface;
+		private final ProvidedInterfaceType secondIface;
+		private final double distance;
 
-        public MethodDistance(final ProvidedInterfaceType firstIface, final ProvidedInterfaceType secondIface,
-                final double distance) {
-            this.firstIface = firstIface;
-            this.secondIface = secondIface;
-            this.distance = distance;
-        }
+		public MethodDistance(final ProvidedInterfaceType firstIface, final ProvidedInterfaceType secondIface,
+				final double distance) {
+			this.firstIface = firstIface;
+			this.secondIface = secondIface;
+			this.distance = distance;
+		}
 
-    }
+	}
 
 }

@@ -2,14 +2,12 @@
  */
 package kieker.tools.restructuring.restructuremodel.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.tools.restructuring.restructuremodel.PasteOperation;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,8 +17,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl#getComponentName <em>Component Name</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl#getOperationName <em>Operation Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl#getComponentName <em>Component Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl#getOperationName <em>Operation Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -30,6 +28,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	 * The default value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -40,6 +39,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -50,6 +50,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	 * The default value of the '{@link #getOperationName() <em>Operation Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationName()
 	 * @generated
 	 * @ordered
@@ -60,6 +61,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getOperationName() <em>Operation Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationName()
 	 * @generated
 	 * @ordered
@@ -69,6 +71,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected PasteOperationImpl() {
@@ -78,6 +81,7 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -88,57 +92,66 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getComponentName() {
-		return componentName;
+		return this.componentName;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setComponentName(String newComponentName) {
-		String oldComponentName = componentName;
-		componentName = newComponentName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME, oldComponentName, componentName));
+	public void setComponentName(final String newComponentName) {
+		final String oldComponentName = this.componentName;
+		this.componentName = newComponentName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME, oldComponentName, this.componentName));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getOperationName() {
-		return operationName;
+		return this.operationName;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setOperationName(String newOperationName) {
-		String oldOperationName = operationName;
-		operationName = newOperationName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME, oldOperationName, operationName));
+	public void setOperationName(final String newOperationName) {
+		final String oldOperationName = this.operationName;
+		this.operationName = newOperationName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME, oldOperationName, this.operationName));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
-				return getComponentName();
-			case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
-				return getOperationName();
+		case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
+			return this.getComponentName();
+		case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
+			return this.getOperationName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -146,17 +159,18 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
-				setComponentName((String)newValue);
-				return;
-			case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
-				setOperationName((String)newValue);
-				return;
+		case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
+			this.setComponentName((String) newValue);
+			return;
+		case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
+			this.setOperationName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -164,17 +178,18 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
-				setComponentName(COMPONENT_NAME_EDEFAULT);
-				return;
-			case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
-				setOperationName(OPERATION_NAME_EDEFAULT);
-				return;
+		case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
+			this.setComponentName(COMPONENT_NAME_EDEFAULT);
+			return;
+		case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
+			this.setOperationName(OPERATION_NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -182,15 +197,16 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
-				return COMPONENT_NAME_EDEFAULT == null ? componentName != null : !COMPONENT_NAME_EDEFAULT.equals(componentName);
-			case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
-				return OPERATION_NAME_EDEFAULT == null ? operationName != null : !OPERATION_NAME_EDEFAULT.equals(operationName);
+		case RestructuremodelPackage.PASTE_OPERATION__COMPONENT_NAME:
+			return COMPONENT_NAME_EDEFAULT == null ? this.componentName != null : !COMPONENT_NAME_EDEFAULT.equals(this.componentName);
+		case RestructuremodelPackage.PASTE_OPERATION__OPERATION_NAME:
+			return OPERATION_NAME_EDEFAULT == null ? this.operationName != null : !OPERATION_NAME_EDEFAULT.equals(this.operationName);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -198,19 +214,22 @@ public class PasteOperationImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (componentName: ");
-		result.append(componentName);
+		result.append(this.componentName);
 		result.append(", operationName: ");
-		result.append(operationName);
+		result.append(this.operationName);
 		result.append(')');
 		return result.toString();
 	}
 
-} //PasteOperationImpl
+} // PasteOperationImpl

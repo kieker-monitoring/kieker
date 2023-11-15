@@ -2,14 +2,12 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.model.analysismodel.statistics.CustomUnit;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +17,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.CustomUnitImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.CustomUnitImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -29,6 +27,7 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -39,6 +38,7 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -48,6 +48,7 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected CustomUnitImpl() {
@@ -57,6 +58,7 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -67,36 +69,40 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.CUSTOM_UNIT__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.CUSTOM_UNIT__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.CUSTOM_UNIT__NAME:
-				return getName();
+		case StatisticsPackage.CUSTOM_UNIT__NAME:
+			return this.getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -104,14 +110,15 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.CUSTOM_UNIT__NAME:
-				setName((String)newValue);
-				return;
+		case StatisticsPackage.CUSTOM_UNIT__NAME:
+			this.setName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -119,14 +126,15 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.CUSTOM_UNIT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
+		case StatisticsPackage.CUSTOM_UNIT__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -134,13 +142,14 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.CUSTOM_UNIT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case StatisticsPackage.CUSTOM_UNIT__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -148,17 +157,20 @@ public class CustomUnitImpl extends SimpleUnitImpl implements CustomUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(')');
 		return result.toString();
 	}
 
-} //CustomUnitImpl
+} // CustomUnitImpl

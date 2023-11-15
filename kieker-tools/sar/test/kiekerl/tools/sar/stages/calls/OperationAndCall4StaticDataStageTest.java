@@ -22,11 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import kieker.analysis.architecture.recovery.events.CallEvent;
 import kieker.analysis.architecture.recovery.events.OperationEvent;
+import kieker.analysis.code.data.CallerCalleeEntry;
 import kieker.tools.sar.stages.calls.OperationAndCall4StaticDataStage;
 
 import teetime.framework.test.StageTester;
-
-import kieker.analysis.code.data.CallerCalleeEntry;
 
 /**
  * Testing operation and call data stage..
@@ -36,35 +35,35 @@ import kieker.analysis.code.data.CallerCalleeEntry;
  */
 class OperationAndCall4StaticDataStageTest {
 
-    private static final String HOSTNAME = "test";
-    private static final String SOURCE_PATH = "source/path";
-    private static final String SOURCE_MODULE = "source-module";
-    private static final String CALLER = "caller()";
-    private static final String TARGET_PATH = "target/path";
-    private static final String TARGET_MODULE = "target-module";
-    private static final String CALLEE = "callee()";
+	private static final String HOSTNAME = "test";
+	private static final String SOURCE_PATH = "source/path";
+	private static final String SOURCE_MODULE = "source-module";
+	private static final String CALLER = "caller()";
+	private static final String TARGET_PATH = "target/path";
+	private static final String TARGET_MODULE = "target-module";
+	private static final String CALLEE = "callee()";
 
-    @Test
-    void testExecuteCallerCallee() {
-        final OperationAndCall4StaticDataStage stage = new OperationAndCall4StaticDataStage(
-                OperationAndCall4StaticDataStageTest.HOSTNAME);
+	@Test
+	void testExecuteCallerCallee() {
+		final OperationAndCall4StaticDataStage stage = new OperationAndCall4StaticDataStage(
+				OperationAndCall4StaticDataStageTest.HOSTNAME);
 
-        final CallerCalleeEntry callerCallee = new CallerCalleeEntry(OperationAndCall4StaticDataStageTest.SOURCE_PATH,
-                OperationAndCall4StaticDataStageTest.SOURCE_MODULE, OperationAndCall4StaticDataStageTest.CALLER,
-                OperationAndCall4StaticDataStageTest.TARGET_PATH, OperationAndCall4StaticDataStageTest.TARGET_MODULE,
-                OperationAndCall4StaticDataStageTest.CALLEE);
-        final OperationEvent firstOp = new OperationEvent(OperationAndCall4StaticDataStageTest.HOSTNAME,
-                OperationAndCall4StaticDataStageTest.SOURCE_MODULE, OperationAndCall4StaticDataStageTest.CALLER);
-        final OperationEvent secondOp = new OperationEvent(OperationAndCall4StaticDataStageTest.HOSTNAME,
-                OperationAndCall4StaticDataStageTest.TARGET_MODULE, OperationAndCall4StaticDataStageTest.CALLEE);
+		final CallerCalleeEntry callerCallee = new CallerCalleeEntry(OperationAndCall4StaticDataStageTest.SOURCE_PATH,
+				OperationAndCall4StaticDataStageTest.SOURCE_MODULE, OperationAndCall4StaticDataStageTest.CALLER,
+				OperationAndCall4StaticDataStageTest.TARGET_PATH, OperationAndCall4StaticDataStageTest.TARGET_MODULE,
+				OperationAndCall4StaticDataStageTest.CALLEE);
+		final OperationEvent firstOp = new OperationEvent(OperationAndCall4StaticDataStageTest.HOSTNAME,
+				OperationAndCall4StaticDataStageTest.SOURCE_MODULE, OperationAndCall4StaticDataStageTest.CALLER);
+		final OperationEvent secondOp = new OperationEvent(OperationAndCall4StaticDataStageTest.HOSTNAME,
+				OperationAndCall4StaticDataStageTest.TARGET_MODULE, OperationAndCall4StaticDataStageTest.CALLEE);
 
-        final CallEvent call = new CallEvent(firstOp, secondOp, Duration.ZERO);
+		final CallEvent call = new CallEvent(firstOp, secondOp, Duration.ZERO);
 
-        StageTester.test(stage).and().send(callerCallee).to(stage.getInputPort()).start();
+		StageTester.test(stage).and().send(callerCallee).to(stage.getInputPort()).start();
 
-        MatcherAssert.assertThat("must produce two specific operation", stage.getOperationOutputPort(),
-                StageTester.produces(firstOp, secondOp));
-        MatcherAssert.assertThat("must produce one call", stage.getCallOutputPort(), StageTester.produces(call));
-    }
+		MatcherAssert.assertThat("must produce two specific operation", stage.getOperationOutputPort(),
+				StageTester.produces(firstOp, secondOp));
+		MatcherAssert.assertThat("must produce one call", stage.getCallOutputPort(), StageTester.produces(call));
+	}
 
 }

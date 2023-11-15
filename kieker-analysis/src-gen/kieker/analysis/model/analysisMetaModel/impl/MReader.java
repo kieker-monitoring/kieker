@@ -2,10 +2,10 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIReader;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +20,7 @@ public class MReader extends MPlugin implements MIReader {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MReader() {
@@ -30,7 +30,7 @@ public class MReader extends MPlugin implements MIReader {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override

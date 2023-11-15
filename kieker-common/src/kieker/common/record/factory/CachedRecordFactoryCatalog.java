@@ -41,7 +41,7 @@ public final class CachedRecordFactoryCatalog {
 	}
 
 	CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
-		this.cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
+		this.cachedRecordFactories = new ConcurrentHashMap<>();
 		this.recordFactoryResolver = recordFactoryResolver;
 	}
 

@@ -29,8 +29,8 @@ import teetime.framework.OutputPort;
  */
 public interface IModelOperationStage {
 
-    InputPort<ModelRepository> getInputPort();
+	InputPort<ModelRepository> getInputPort();
 
-    OutputPort<ModelRepository> getOutputPort();
+	OutputPort<ModelRepository> getOutputPort();
 
 }

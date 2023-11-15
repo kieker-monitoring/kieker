@@ -32,60 +32,61 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings { // NOPMD data class
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input architecture model directories")
-    private List<Path> inputModelPaths;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input architecture model directories")
+	private List<Path> inputModelPaths;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Output architecture model directory")
-    private Path outputDirectory;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Output architecture model directory")
+	private Path outputDirectory;
 
-    @Parameter(names = { "-e", "--experiment" }, required = true, description = "Experiment name")
-    private String experimentName;
+	@Parameter(names = { "-e", "--experiment" }, required = true, description = "Experiment name")
+	private String experimentName;
 
-    @Parameter(converter = OperationConverter.class, required = true, description = "Specify an operation merge, select", validateWith = OperationValidator.class)
-    private EOperation operation;
+	@Parameter(converter = OperationConverter.class, required = true, description = "Specify an operation merge, select", validateWith = OperationValidator.class)
+	private EOperation operation;
 
-    @Parameter(names = { "-s",
-            "--selection-criteria" }, required = false, converter = PathConverter.class, description = "Element selection criteria file")
-    private Path selectionCriteriaPath;
+	@Parameter(names = { "-s",
+		"--selection-criteria" }, required = false, converter = PathConverter.class, description = "Element selection criteria file")
+	private Path selectionCriteriaPath;
 
-    @Parameter(names = { "-t",
-            "--threshold" }, required = false, converter = DoubleConverter.class, description = "Threshold for accepted similarity in component names: 1 = identical, 0 = nothing identical, default = 0.4")
-    private double threshold = 0.4d;
+	@Parameter(names = { "-t",
+		"--threshold" }, required = false, converter = DoubleConverter.class,
+			description = "Threshold for accepted similarity in component names: 1 = identical, 0 = nothing identical, default = 0.4")
+	private double threshold = 0.4d;
 
-    private final List<Pattern> selectionCriteriaPatterns = new ArrayList<>();
+	private final List<Pattern> selectionCriteriaPatterns = new ArrayList<>();
 
-    public List<Path> getInputModelPaths() {
-        return this.inputModelPaths;
-    }
+	public List<Path> getInputModelPaths() {
+		return this.inputModelPaths;
+	}
 
-    public Path getOutputDirectory() {
-        return this.outputDirectory;
-    }
+	public Path getOutputDirectory() {
+		return this.outputDirectory;
+	}
 
-    public String getExperimentName() {
-        return this.experimentName;
-    }
+	public String getExperimentName() {
+		return this.experimentName;
+	}
 
-    public EOperation getOperation() {
-        return this.operation;
-    }
+	public EOperation getOperation() {
+		return this.operation;
+	}
 
-    public Path getSelectionCriteriaPath() {
-        return this.selectionCriteriaPath;
-    }
+	public Path getSelectionCriteriaPath() {
+		return this.selectionCriteriaPath;
+	}
 
-    public List<Pattern> getSelectionCriteriaPatterns() {
-        return this.selectionCriteriaPatterns;
-    }
+	public List<Pattern> getSelectionCriteriaPatterns() {
+		return this.selectionCriteriaPatterns;
+	}
 
-    public double getThreshold() {
-        return this.threshold;
-    }
+	public double getThreshold() {
+		return this.threshold;
+	}
 
-    public void setThreshold(final double threshold) {
-        this.threshold = threshold;
-    }
+	public void setThreshold(final double threshold) {
+		this.threshold = threshold;
+	}
 
 }

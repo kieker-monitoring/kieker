@@ -33,13 +33,13 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class ReadDomStage extends AbstractTransformation<Path, Document> {
 
-    @Override
-    protected void execute(final Path path) throws Exception {
-        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        final Document document = builder.parse(path.toFile());
-        document.getDocumentElement().normalize();
+	@Override
+	protected void execute(final Path path) throws Exception {
+		final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		final Document document = builder.parse(path.toFile());
+		document.getDocumentElement().normalize();
 
-        this.outputPort.send(document);
-    }
+		this.outputPort.send(document);
+	}
 
 }

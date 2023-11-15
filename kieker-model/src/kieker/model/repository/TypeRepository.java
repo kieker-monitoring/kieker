@@ -36,9 +36,9 @@ public class TypeRepository extends AbstractRepository {
 	public static final ComponentType ROOT_COMPONENT = new ComponentType(AbstractRepository.ROOT_ELEMENT_ID,
 			SystemModelRepository.ROOT_NODE_LABEL);
 
-	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>(); // NOPMD
+	private final Map<String, ComponentType> componentTypesByName = new Hashtable<>(); // NOPMD
 																											// (UseConcurrentHashMap)
-	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>(); // NOPMD
+	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<>(); // NOPMD
 																											// (UseConcurrentHashMap)
 
 	/**

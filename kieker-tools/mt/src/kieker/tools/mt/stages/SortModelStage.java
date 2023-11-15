@@ -34,7 +34,7 @@ import teetime.stage.basic.AbstractFilter;
  * priority of the columns and the sort order are specified in the {@link SortDescriptor}.
  *
  * @param <T>
- *            row type of the CSV table which must use {@link @CsvCell} annotations for its column
+ *            row type of the CSV table which must use {@link CsvCell} annotations for its column
  *            in the row type
  *
  * @author Reiner Jung
@@ -63,7 +63,7 @@ public class SortModelStage<T> extends AbstractFilter<Table<String, T>> {
 							SortModelStage.this.logger.error("No values for criterium {} found.",
 									criterium.getColumnName());
 						} else {
-							int result;
+							final int result;
 							if (criterium.getOrder() == EOrder.ASCENDING) {
 								result = this.ascending(leftValue, rightValue);
 							} else {

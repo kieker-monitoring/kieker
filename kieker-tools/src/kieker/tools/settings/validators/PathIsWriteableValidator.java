@@ -30,13 +30,13 @@ import com.beust.jcommander.ParameterException;
  */
 public class PathIsWriteableValidator implements IParameterValidator {
 
-    @Override
-    public void validate(final String name, final String value) throws ParameterException { // NOPMD
-        final File file = Paths.get(value).toFile();
-        if (!file.canWrite()) {
-            throw new ParameterException(String.format("Parameter %s: path %s is not writeable.", name, value));
-        }
+	@Override
+	public void validate(final String name, final String value) throws ParameterException { // NOPMD
+		final File file = Paths.get(value).toFile();
+		if (!file.canWrite()) {
+			throw new ParameterException(String.format("Parameter %s: path %s is not writeable.", name, value));
+		}
 
-    }
+	}
 
 }

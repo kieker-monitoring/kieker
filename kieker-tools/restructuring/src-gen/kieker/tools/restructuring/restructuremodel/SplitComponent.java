@@ -13,11 +13,11 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getNewComponent <em>New Component</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOperationsToMove <em>Operations To Move</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOldComponent <em>Old Component</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent <em>Create Component</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getMoveOperations <em>Move Operations</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getNewComponent <em>New Component</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOperationsToMove <em>Operations To Move</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOldComponent <em>Old Component</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent <em>Create Component</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getMoveOperations <em>Move Operations</em>}</li>
  * </ul>
  *
  * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent()
@@ -29,6 +29,7 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Returns the value of the '<em><b>New Component</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>New Component</em>' attribute.
 	 * @see #setNewComponent(String)
 	 * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent_NewComponent()
@@ -41,7 +42,9 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Sets the value of the '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getNewComponent <em>New Component</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>New Component</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>New Component</em>' attribute.
 	 * @see #getNewComponent()
 	 * @generated
 	 */
@@ -52,6 +55,7 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Operations To Move</em>' attribute list.
 	 * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent_OperationsToMove()
 	 * @model required="true"
@@ -63,6 +67,7 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Returns the value of the '<em><b>Old Component</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Old Component</em>' attribute.
 	 * @see #setOldComponent(String)
 	 * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent_OldComponent()
@@ -75,7 +80,9 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Sets the value of the '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOldComponent <em>Old Component</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Old Component</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Old Component</em>' attribute.
 	 * @see #getOldComponent()
 	 * @generated
 	 */
@@ -85,6 +92,7 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Returns the value of the '<em><b>Create Component</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Create Component</em>' containment reference.
 	 * @see #setCreateComponent(CreateComponent)
 	 * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent_CreateComponent()
@@ -97,7 +105,9 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * Sets the value of the '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent <em>Create Component</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Create Component</em>' containment reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Create Component</em>' containment reference.
 	 * @see #getCreateComponent()
 	 * @generated
 	 */
@@ -108,6 +118,7 @@ public interface SplitComponent extends AbstractTransformationStep {
 	 * The list contents are of type {@link kieker.tools.restructuring.restructuremodel.MoveOperation}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Move Operations</em>' containment reference list.
 	 * @see kieker.tools.restructuring.restructuremodel.RestructuremodelPackage#getSplitComponent_MoveOperations()
 	 * @model containment="true" required="true"

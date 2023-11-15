@@ -2,24 +2,20 @@
  */
 package kieker.model.analysismodel.execution.impl;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.OperationDataflow;
-import kieker.model.analysismodel.execution.Tuple;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.OperationDataflow;
+import kieker.model.analysismodel.execution.Tuple;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,17 +25,19 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedOperationsMapEntryImpl#getTypedValue <em>Value</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedOperationsMapEntryImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedOperationsMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.DeployedOperationsPairToDeployedOperationsMapEntryImpl#getTypedKey <em>Key</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedOperation>,OperationDataflow> {
+public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends MinimalEObjectImpl.Container
+		implements BasicEMap.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> {
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -50,6 +48,7 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -59,6 +58,7 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected DeployedOperationsPairToDeployedOperationsMapEntryImpl() {
@@ -68,6 +68,7 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -78,23 +79,30 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public OperationDataflow getTypedValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(OperationDataflow newValue, NotificationChain msgs) {
-		OperationDataflow oldValue = value;
-		value = newValue;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetTypedValue(final OperationDataflow newValue, NotificationChain msgs) {
+		final OperationDataflow oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, oldValue, newValue);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -102,42 +110,57 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedValue(OperationDataflow newValue) {
-		if (newValue != value) {
+	public void setTypedValue(final OperationDataflow newValue) {
+		if (newValue != this.value) {
 			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, null, msgs);
-			msgs = basicSetTypedValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.value != null) {
+				msgs = ((InternalEObject) this.value).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, null, msgs);
+			}
+			if (newValue != null) {
+				msgs = ((InternalEObject) newValue).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, null, msgs);
+			}
+			msgs = this.basicSetTypedValue(newValue, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, newValue,
+					newValue));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE, newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Tuple<DeployedOperation, DeployedOperation> getTypedKey() {
-		return key;
+		return this.key;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedKey(Tuple<DeployedOperation, DeployedOperation> newKey, NotificationChain msgs) {
-		Tuple<DeployedOperation, DeployedOperation> oldKey = key;
-		key = newKey;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, oldKey, newKey);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetTypedKey(final Tuple<DeployedOperation, DeployedOperation> newKey, NotificationChain msgs) {
+		final Tuple<DeployedOperation, DeployedOperation> oldKey = this.key;
+		this.key = newKey;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, oldKey, newKey);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -145,34 +168,43 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedKey(Tuple<DeployedOperation, DeployedOperation> newKey) {
-		if (newKey != key) {
+	public void setTypedKey(final Tuple<DeployedOperation, DeployedOperation> newKey) {
+		if (newKey != this.key) {
 			NotificationChain msgs = null;
-			if (key != null)
-				msgs = ((InternalEObject)key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, null, msgs);
-			if (newKey != null)
-				msgs = ((InternalEObject)newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, null, msgs);
-			msgs = basicSetTypedKey(newKey, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.key != null) {
+				msgs = ((InternalEObject) this.key).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, null, msgs);
+			}
+			if (newKey != null) {
+				msgs = ((InternalEObject) newKey).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, null, msgs);
+			}
+			msgs = this.basicSetTypedKey(newKey, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, newKey, newKey));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY, newKey, newKey));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
-				return basicSetTypedValue(null, msgs);
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
-				return basicSetTypedKey(null, msgs);
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
+			return this.basicSetTypedValue(null, msgs);
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
+			return this.basicSetTypedKey(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -180,15 +212,16 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
-				return getTypedValue();
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
-				return getTypedKey();
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
+			return this.getTypedValue();
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
+			return this.getTypedKey();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -196,18 +229,19 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
-				setTypedValue((OperationDataflow)newValue);
-				return;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
-				setTypedKey((Tuple<DeployedOperation, DeployedOperation>)newValue);
-				return;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
+			this.setTypedValue((OperationDataflow) newValue);
+			return;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
+			this.setTypedKey((Tuple<DeployedOperation, DeployedOperation>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -215,17 +249,18 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
-				setTypedValue((OperationDataflow)null);
-				return;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
-				setTypedKey((Tuple<DeployedOperation, DeployedOperation>)null);
-				return;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
+			this.setTypedValue((OperationDataflow) null);
+			return;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
+			this.setTypedKey((Tuple<DeployedOperation, DeployedOperation>) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -233,15 +268,16 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
-				return value != null;
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
-				return key != null;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__VALUE:
+			return this.value != null;
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY__KEY:
+			return this.key != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -249,6 +285,7 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -256,78 +293,85 @@ public class DeployedOperationsPairToDeployedOperationsMapEntryImpl extends Mini
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getHash() {
-		if (hash == -1) {
-			Object theKey = getKey();
-			hash = (theKey == null ? 0 : theKey.hashCode());
+		if (this.hash == -1) {
+			final Object theKey = this.getKey();
+			this.hash = (theKey == null ? 0 : theKey.hashCode());
 		}
-		return hash;
+		return this.hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setHash(int hash) {
+	public void setHash(final int hash) {
 		this.hash = hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Tuple<DeployedOperation, DeployedOperation> getKey() {
-		return getTypedKey();
+		return this.getTypedKey();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setKey(Tuple<DeployedOperation, DeployedOperation> key) {
-		setTypedKey(key);
+	public void setKey(final Tuple<DeployedOperation, DeployedOperation> key) {
+		this.setTypedKey(key);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public OperationDataflow getValue() {
-		return getTypedValue();
+		return this.getTypedValue();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public OperationDataflow setValue(OperationDataflow value) {
-		OperationDataflow oldValue = getValue();
-		setTypedValue(value);
+	public OperationDataflow setValue(final OperationDataflow value) {
+		final OperationDataflow oldValue = this.getValue();
+		this.setTypedValue(value);
 		return oldValue;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> getEMap() {
-		EObject container = eContainer();
-		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow>)container.eGet(eContainmentFeature());
+		final EObject container = this.eContainer();
+		return container == null ? null : (EMap<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow>) container.eGet(this.eContainmentFeature());
 	}
 
-} //DeployedOperationsPairToDeployedOperationsMapEntryImpl
+} // DeployedOperationsPairToDeployedOperationsMapEntryImpl

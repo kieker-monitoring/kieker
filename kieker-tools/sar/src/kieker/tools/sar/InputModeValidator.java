@@ -27,22 +27,22 @@ import com.beust.jcommander.ParameterException;
  */
 public class InputModeValidator implements IParameterValidator {
 
-    @Override
-    public void validate(final String name, final String value) throws ParameterException { // NOPMD
-        try {
-            EInputMode.valueOf(value.toUpperCase(Locale.getDefault()));
-        } catch (final IllegalArgumentException e) {
-            String modes = null;
-            for (final EInputMode mode : EInputMode.values()) {
-                if (modes == null) {
-                    modes = mode.name().toLowerCase(Locale.getDefault());
-                } else {
-                    modes += "," + mode.name().toLowerCase(Locale.getDefault());
-                }
-            }
-            throw new ParameterException(String.format("Parameter %s: %s is not a valid input mode. Valid modes are %s", // NOPMD
-                    name, value, modes));
-        }
-    }
+	@Override
+	public void validate(final String name, final String value) throws ParameterException { // NOPMD
+		try {
+			EInputMode.valueOf(value.toUpperCase(Locale.getDefault()));
+		} catch (final IllegalArgumentException e) {
+			String modes = null;
+			for (final EInputMode mode : EInputMode.values()) {
+				if (modes == null) {
+					modes = mode.name().toLowerCase(Locale.getDefault());
+				} else {
+					modes += "," + mode.name().toLowerCase(Locale.getDefault());
+				}
+			}
+			throw new ParameterException(String.format("Parameter %s: %s is not a valid input mode. Valid modes are %s", // NOPMD
+					name, value, modes));
+		}
+	}
 
 }

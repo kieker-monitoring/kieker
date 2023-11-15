@@ -45,35 +45,36 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings {
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, converter = PathConverter.class, description = "Directory for the input model")
-    private Path inputDirectory;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, converter = PathConverter.class, description = "Directory for the input model")
+	private Path inputDirectory;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Directory for the modified model")
-    private Path outputDirectory;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Directory for the modified model")
+	private Path outputDirectory;
 
-    @Parameter(names = { "-r",
-            "--replacements" }, required = true, variableArity = true, converter = ReplacementConverter.class, description = "Replacement for labels s1,...,sn:t1,...,tm")
-    private List<Replacement> replacements;
+	@Parameter(names = { "-r",
+		"--replacements" }, required = true, variableArity = true, converter = ReplacementConverter.class,
+			description = "Replacement for labels s1,...,sn:t1,...,tm")
+	private List<Replacement> replacements;
 
-    @Parameter(names = { "-e",
-            "--experiment" }, required = false, description = "Set experiment name of the model repository.")
-    private String experimentName;
+	@Parameter(names = { "-e",
+		"--experiment" }, required = false, description = "Set experiment name of the model repository.")
+	private String experimentName;
 
-    public Path getOutputDirectory() {
-        return this.outputDirectory;
-    }
+	public Path getOutputDirectory() {
+		return this.outputDirectory;
+	}
 
-    public Path getInputDirectory() {
-        return this.inputDirectory;
-    }
+	public Path getInputDirectory() {
+		return this.inputDirectory;
+	}
 
-    public List<Replacement> getReplacements() {
-        return this.replacements;
-    }
+	public List<Replacement> getReplacements() {
+		return this.replacements;
+	}
 
-    public String getExperimentName() {
-        return this.experimentName;
-    }
+	public String getExperimentName() {
+		return this.experimentName;
+	}
 }

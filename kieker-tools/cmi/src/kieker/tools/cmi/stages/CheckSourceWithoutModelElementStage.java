@@ -42,65 +42,65 @@ import kieker.tools.cmi.RepositoryUtils;
  */
 public class CheckSourceWithoutModelElementStage extends AbstractCollector<ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final Report report = new Report("source model");
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final Report report = new Report("source model");
 
-        final SourceModel sourceModel = repository.getModel(SourcePackage.Literals.SOURCE_MODEL);
+		final SourceModel sourceModel = repository.getModel(SourcePackage.Literals.SOURCE_MODEL);
 
-        this.checkForSourcesWithoutModelElements(sourceModel, repository, report);
+		this.checkForSourcesWithoutModelElements(sourceModel, repository, report);
 
-        this.outputPort.send(repository);
-        this.reportOutputPort.send(report);
-    }
+		this.outputPort.send(repository);
+		this.reportOutputPort.send(report);
+	}
 
-    private void checkForSourcesWithoutModelElements(final SourceModel sourceModel, final ModelRepository repository,
-            final Report report) {
-        long errors = 0;
-        for (final EObject element : sourceModel.getSources().keySet()) {
-            element.eCrossReferences();
-            if (!this.existsObjectForSource(element, repository, report)) {
-                errors++;
-            }
-        }
+	private void checkForSourcesWithoutModelElements(final SourceModel sourceModel, final ModelRepository repository,
+			final Report report) {
+		long errors = 0;
+		for (final EObject element : sourceModel.getSources().keySet()) {
+			element.eCrossReferences();
+			if (!this.existsObjectForSource(element, repository, report)) {
+				errors++;
+			}
+		}
 
-        report.addMessage("Number of missing references to sources %s", errors);
-    }
+		report.addMessage("Number of missing references to sources %s", errors);
+	}
 
-    private boolean existsObjectForSource(final EObject element, final ModelRepository repository,
-            final Report report) {
-        for (final EClass modelRootClass : this.configureModels().keySet()) {
-            final EObject model = repository.getModel(modelRootClass);
-            if (this.modelContains(model, element)) {
-                return true;
-            }
-        }
-        report.addMessage("Object %s not found.", RepositoryUtils.getName(element));
-        return false;
-    }
+	private boolean existsObjectForSource(final EObject element, final ModelRepository repository,
+			final Report report) {
+		for (final EClass modelRootClass : this.configureModels().keySet()) {
+			final EObject model = repository.getModel(modelRootClass);
+			if (this.modelContains(model, element)) {
+				return true;
+			}
+		}
+		report.addMessage("Object %s not found.", RepositoryUtils.getName(element));
+		return false;
+	}
 
-    private boolean modelContains(final EObject model, final EObject element) {
-        final TreeIterator<EObject> iterator = model.eAllContents();
-        while (iterator.hasNext()) {
-            final EObject modelElement = iterator.next();
-            if (modelElement.equals(element)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean modelContains(final EObject model, final EObject element) {
+		final TreeIterator<EObject> iterator = model.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject modelElement = iterator.next();
+			if (modelElement.equals(element)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    // used in multiple stages
-    private Map<EClass, List<Class<? extends EObject>>> configureModels() {
-        final Map<EClass, List<Class<? extends EObject>>> modelConfigs = new HashMap<>();
-        modelConfigs.put(TypePackage.Literals.TYPE_MODEL, new ArrayList<Class<? extends EObject>>());
-        modelConfigs.put(AssemblyPackage.Literals.ASSEMBLY_MODEL, new ArrayList<Class<? extends EObject>>());
-        modelConfigs.put(DeploymentPackage.Literals.DEPLOYMENT_MODEL, new ArrayList<Class<? extends EObject>>());
-        final List<Class<? extends EObject>> executionIgnoreList = new ArrayList<>();
-        executionIgnoreList.add(Tuple.class);
-        modelConfigs.put(ExecutionPackage.Literals.EXECUTION_MODEL, executionIgnoreList);
+	// used in multiple stages
+	private Map<EClass, List<Class<? extends EObject>>> configureModels() {
+		final Map<EClass, List<Class<? extends EObject>>> modelConfigs = new HashMap<>();
+		modelConfigs.put(TypePackage.Literals.TYPE_MODEL, new ArrayList<>());
+		modelConfigs.put(AssemblyPackage.Literals.ASSEMBLY_MODEL, new ArrayList<>());
+		modelConfigs.put(DeploymentPackage.Literals.DEPLOYMENT_MODEL, new ArrayList<>());
+		final List<Class<? extends EObject>> executionIgnoreList = new ArrayList<>();
+		executionIgnoreList.add(Tuple.class);
+		modelConfigs.put(ExecutionPackage.Literals.EXECUTION_MODEL, executionIgnoreList);
 
-        return modelConfigs;
-    }
+		return modelConfigs;
+	}
 
 }

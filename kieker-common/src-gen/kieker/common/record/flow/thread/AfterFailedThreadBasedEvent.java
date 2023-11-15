@@ -18,27 +18,25 @@ package kieker.common.record.flow.thread;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.flow.thread.AbstractThreadBasedEvent;
+import kieker.common.record.flow.IExceptionRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IExceptionRecord;
-
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.13
  */
-public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implements IExceptionRecord {			
+public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implements IExceptionRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // IThreadBasedRecord.threadId
-			 + TYPE_SIZE_INT // IThreadBasedRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
-	
+			+ TYPE_SIZE_LONG // IThreadBasedRecord.threadId
+			+ TYPE_SIZE_INT // IThreadBasedRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING; // IExceptionRecord.cause
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // IThreadBasedRecord.threadId
@@ -47,7 +45,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,17 +55,17 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		"classSignature",
 		"cause",
 	};
-	
+
 	/** default constants. */
 	public static final String CAUSE = "";
 	private static final long serialVersionUID = -561668403011752179L;
-	
+
 	/** property declarations. */
 	private final String cause;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param threadId
@@ -81,23 +79,23 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 * @param cause
 	 *            cause
 	 */
-	public AfterFailedThreadBasedEvent(final long timestamp, final long threadId, final int orderIndex, final String operationSignature, final String classSignature, final String cause) {
+	public AfterFailedThreadBasedEvent(final long timestamp, final long threadId, final int orderIndex, final String operationSignature, final String classSignature,
+			final String cause) {
 		super(timestamp, threadId, orderIndex, operationSignature, classSignature);
-		this.cause = cause == null?CAUSE:cause;
+		this.cause = cause == null ? CAUSE : cause;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AfterFailedThreadBasedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.cause = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -110,7 +108,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +116,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,7 +124,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,7 +133,6 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,18 +147,9 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AfterFailedThreadBasedEvent castedRecord = (AfterFailedThreadBasedEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getThreadId() != castedRecord.getThreadId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getThreadId() != castedRecord.getThreadId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -173,30 +161,30 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		if (!this.getCause().equals(castedRecord.getCause())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getThreadId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getThreadId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
 		code += this.getCause().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getCause() {
 		return this.cause;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -205,22 +193,22 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String result = "AfterFailedThreadBasedEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "threadId = ";
 		result += this.getThreadId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "cause = ";
 		result += this.getCause() + ", ";
-		
+
 		return result;
 	}
 }

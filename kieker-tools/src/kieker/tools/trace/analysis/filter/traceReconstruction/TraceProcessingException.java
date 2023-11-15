@@ -20,9 +20,9 @@ import kieker.analysis.exception.EventProcessingException;
 
 /**
  * This exceptions shows that something went wrong during the processing of a trace.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class TraceProcessingException extends EventProcessingException {
@@ -30,7 +30,7 @@ public class TraceProcessingException extends EventProcessingException {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param msg
 	 *            The message of this exception.
 	 */
@@ -40,7 +40,7 @@ public class TraceProcessingException extends EventProcessingException {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param msg
 	 *            The message of this exception.
 	 * @param t

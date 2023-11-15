@@ -29,27 +29,27 @@ import kieker.model.analysismodel.deployment.DeploymentPackage;
  */
 public class CheckDeploymentModelStage extends AbstractCollector<ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final Report report = new Report("deployment model");
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final Report report = new Report("deployment model");
 
-        final DeploymentModel deploymentModel = repository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL);
-        this.checkForDuplicateDeployedOperations(deploymentModel);
+		final DeploymentModel deploymentModel = repository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL);
+		this.checkForDuplicateDeployedOperations(deploymentModel);
 
-        GenericCheckUtils.missingSignature(deploymentModel.eAllContents(), report);
-        GenericCheckUtils.checkReferences(DeploymentPackage.Literals.DEPLOYMENT_MODEL, deploymentModel.eAllContents(),
-                report);
+		GenericCheckUtils.missingSignature(deploymentModel.eAllContents(), report);
+		GenericCheckUtils.checkReferences(DeploymentPackage.Literals.DEPLOYMENT_MODEL, deploymentModel.eAllContents(),
+				report);
 
-        this.outputPort.send(repository);
-        this.reportOutputPort.send(report);
-    }
+		this.outputPort.send(repository);
+		this.reportOutputPort.send(report);
+	}
 
-    private void checkForDuplicateDeployedOperations(final DeploymentModel model) {
-        for (final DeploymentContext context : model.getContexts().values()) {
-            for (final DeployedComponent component : context.getComponents().values()) {
-                component.getOperations().keySet();
-            }
-        }
-    }
+	private void checkForDuplicateDeployedOperations(final DeploymentModel model) {
+		for (final DeploymentContext context : model.getContexts().values()) {
+			for (final DeployedComponent component : context.getComponents().values()) {
+				component.getOperations().keySet();
+			}
+		}
+	}
 
 }

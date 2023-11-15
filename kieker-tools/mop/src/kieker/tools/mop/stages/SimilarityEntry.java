@@ -29,57 +29,57 @@ import kieker.model.analysismodel.type.ComponentType;
  */
 public class SimilarityEntry {
 
-    @CsvCell(columnIndex = 1, columnName = "left-type")
-    @CsvConverter(converter = ComponentTypeConverter.class)
-    private ComponentType left;
-    @CsvCell(columnIndex = 2, columnName = "right-type")
-    @CsvConverter(converter = ComponentTypeConverter.class)
-    private ComponentType right;
-    @CsvCell(columnIndex = 3, columnName = "similarity")
-    private double similarity;
-    @CsvIgnore
-    private transient int equalNamesCount;
+	@CsvCell(columnIndex = 1, columnName = "left-type")
+	@CsvConverter(converter = ComponentTypeConverter.class)
+	private ComponentType left;
+	@CsvCell(columnIndex = 2, columnName = "right-type")
+	@CsvConverter(converter = ComponentTypeConverter.class)
+	private ComponentType right;
+	@CsvCell(columnIndex = 3, columnName = "similarity")
+	private double similarity;
+	@CsvIgnore
+	private transient int equalNamesCount;
 
-    public SimilarityEntry() {
-        // csveed API
-    }
+	public SimilarityEntry() {
+		// csveed API
+	}
 
-    public SimilarityEntry(final ComponentType left, final ComponentType right, final double similarity) {
-        this.left = left;
-        this.right = right;
-        this.similarity = similarity;
-        this.equalNamesCount = 0;
-    }
+	public SimilarityEntry(final ComponentType left, final ComponentType right, final double similarity) {
+		this.left = left;
+		this.right = right;
+		this.similarity = similarity;
+		this.equalNamesCount = 0;
+	}
 
-    public ComponentType getLeft() {
-        return this.left;
-    }
+	public ComponentType getLeft() {
+		return this.left;
+	}
 
-    public void setLeft(final ComponentType left) {
-        this.left = left;
-    }
+	public void setLeft(final ComponentType left) {
+		this.left = left;
+	}
 
-    public ComponentType getRight() {
-        return this.right;
-    }
+	public ComponentType getRight() {
+		return this.right;
+	}
 
-    public void setRight(final ComponentType right) {
-        this.right = right;
-    }
+	public void setRight(final ComponentType right) {
+		this.right = right;
+	}
 
-    public double getSimilarity() {
-        return this.similarity;
-    }
+	public double getSimilarity() {
+		return this.similarity;
+	}
 
-    public void setSimilarity(final double similarity) {
-        this.similarity = similarity;
-    }
+	public void setSimilarity(final double similarity) {
+		this.similarity = similarity;
+	}
 
-    public int getEqualNamesCount() {
-        return this.equalNamesCount;
-    }
+	public int getEqualNamesCount() {
+		return this.equalNamesCount;
+	}
 
-    public void incrementEqualNamesCount() {
-        this.equalNamesCount++;
-    }
+	public void incrementEqualNamesCount() {
+		this.equalNamesCount++;
+	}
 }

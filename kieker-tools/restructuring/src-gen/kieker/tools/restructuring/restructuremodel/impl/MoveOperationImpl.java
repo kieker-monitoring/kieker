@@ -2,18 +2,16 @@
  */
 package kieker.tools.restructuring.restructuremodel.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.tools.restructuring.restructuremodel.CutOperation;
 import kieker.tools.restructuring.restructuremodel.MoveOperation;
 import kieker.tools.restructuring.restructuremodel.PasteOperation;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,11 +21,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getFrom <em>From</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getTo <em>To</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getOperationName <em>Operation Name</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getCutOperation <em>Cut Operation</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getPasteOperation <em>Paste Operation</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getFrom <em>From</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getTo <em>To</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getOperationName <em>Operation Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getCutOperation <em>Cut Operation</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl#getPasteOperation <em>Paste Operation</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,6 +35,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The default value of the '{@link #getFrom() <em>From</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getFrom()
 	 * @generated
 	 * @ordered
@@ -47,6 +46,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The cached value of the '{@link #getFrom() <em>From</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getFrom()
 	 * @generated
 	 * @ordered
@@ -57,6 +57,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The default value of the '{@link #getTo() <em>To</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTo()
 	 * @generated
 	 * @ordered
@@ -67,6 +68,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The cached value of the '{@link #getTo() <em>To</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTo()
 	 * @generated
 	 * @ordered
@@ -77,6 +79,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The default value of the '{@link #getOperationName() <em>Operation Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationName()
 	 * @generated
 	 * @ordered
@@ -87,6 +90,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The cached value of the '{@link #getOperationName() <em>Operation Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationName()
 	 * @generated
 	 * @ordered
@@ -97,6 +101,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The cached value of the '{@link #getCutOperation() <em>Cut Operation</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getCutOperation()
 	 * @generated
 	 * @ordered
@@ -107,6 +112,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	 * The cached value of the '{@link #getPasteOperation() <em>Paste Operation</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getPasteOperation()
 	 * @generated
 	 * @ordered
@@ -116,6 +122,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected MoveOperationImpl() {
@@ -125,6 +132,7 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -135,86 +143,104 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getFrom() {
-		return from;
+		return this.from;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setFrom(String newFrom) {
-		String oldFrom = from;
-		from = newFrom;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__FROM, oldFrom, from));
+	public void setFrom(final String newFrom) {
+		final String oldFrom = this.from;
+		this.from = newFrom;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__FROM, oldFrom, this.from));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getTo() {
-		return to;
+		return this.to;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTo(String newTo) {
-		String oldTo = to;
-		to = newTo;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__TO, oldTo, to));
+	public void setTo(final String newTo) {
+		final String oldTo = this.to;
+		this.to = newTo;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__TO, oldTo, this.to));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getOperationName() {
-		return operationName;
+		return this.operationName;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setOperationName(String newOperationName) {
-		String oldOperationName = operationName;
-		operationName = newOperationName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME, oldOperationName, operationName));
+	public void setOperationName(final String newOperationName) {
+		final String oldOperationName = this.operationName;
+		this.operationName = newOperationName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME, oldOperationName, this.operationName));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public CutOperation getCutOperation() {
-		return cutOperation;
+		return this.cutOperation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetCutOperation(CutOperation newCutOperation, NotificationChain msgs) {
-		CutOperation oldCutOperation = cutOperation;
-		cutOperation = newCutOperation;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, oldCutOperation, newCutOperation);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetCutOperation(final CutOperation newCutOperation, NotificationChain msgs) {
+		final CutOperation oldCutOperation = this.cutOperation;
+		this.cutOperation = newCutOperation;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION,
+					oldCutOperation,
+					newCutOperation);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -222,42 +248,57 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setCutOperation(CutOperation newCutOperation) {
-		if (newCutOperation != cutOperation) {
+	public void setCutOperation(final CutOperation newCutOperation) {
+		if (newCutOperation != this.cutOperation) {
 			NotificationChain msgs = null;
-			if (cutOperation != null)
-				msgs = ((InternalEObject)cutOperation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, null, msgs);
-			if (newCutOperation != null)
-				msgs = ((InternalEObject)newCutOperation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, null, msgs);
-			msgs = basicSetCutOperation(newCutOperation, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.cutOperation != null) {
+				msgs = ((InternalEObject) this.cutOperation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION,
+						null,
+						msgs);
+			}
+			if (newCutOperation != null) {
+				msgs = ((InternalEObject) newCutOperation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, null,
+						msgs);
+			}
+			msgs = this.basicSetCutOperation(newCutOperation, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, newCutOperation, newCutOperation));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION, newCutOperation, newCutOperation));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public PasteOperation getPasteOperation() {
-		return pasteOperation;
+		return this.pasteOperation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetPasteOperation(PasteOperation newPasteOperation, NotificationChain msgs) {
-		PasteOperation oldPasteOperation = pasteOperation;
-		pasteOperation = newPasteOperation;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION, oldPasteOperation, newPasteOperation);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetPasteOperation(final PasteOperation newPasteOperation, NotificationChain msgs) {
+		final PasteOperation oldPasteOperation = this.pasteOperation;
+		this.pasteOperation = newPasteOperation;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION,
+					oldPasteOperation, newPasteOperation);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -265,34 +306,43 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setPasteOperation(PasteOperation newPasteOperation) {
-		if (newPasteOperation != pasteOperation) {
+	public void setPasteOperation(final PasteOperation newPasteOperation) {
+		if (newPasteOperation != this.pasteOperation) {
 			NotificationChain msgs = null;
-			if (pasteOperation != null)
-				msgs = ((InternalEObject)pasteOperation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION, null, msgs);
-			if (newPasteOperation != null)
-				msgs = ((InternalEObject)newPasteOperation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION, null, msgs);
-			msgs = basicSetPasteOperation(newPasteOperation, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.pasteOperation != null) {
+				msgs = ((InternalEObject) this.pasteOperation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION,
+						null, msgs);
+			}
+			if (newPasteOperation != null) {
+				msgs = ((InternalEObject) newPasteOperation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION,
+						null, msgs);
+			}
+			msgs = this.basicSetPasteOperation(newPasteOperation, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION, newPasteOperation, newPasteOperation));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION, newPasteOperation, newPasteOperation));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
-				return basicSetCutOperation(null, msgs);
-			case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
-				return basicSetPasteOperation(null, msgs);
+		case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
+			return this.basicSetCutOperation(null, msgs);
+		case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
+			return this.basicSetPasteOperation(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -300,21 +350,22 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case RestructuremodelPackage.MOVE_OPERATION__FROM:
-				return getFrom();
-			case RestructuremodelPackage.MOVE_OPERATION__TO:
-				return getTo();
-			case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
-				return getOperationName();
-			case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
-				return getCutOperation();
-			case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
-				return getPasteOperation();
+		case RestructuremodelPackage.MOVE_OPERATION__FROM:
+			return this.getFrom();
+		case RestructuremodelPackage.MOVE_OPERATION__TO:
+			return this.getTo();
+		case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
+			return this.getOperationName();
+		case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
+			return this.getCutOperation();
+		case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
+			return this.getPasteOperation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -322,26 +373,27 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case RestructuremodelPackage.MOVE_OPERATION__FROM:
-				setFrom((String)newValue);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__TO:
-				setTo((String)newValue);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
-				setOperationName((String)newValue);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
-				setCutOperation((CutOperation)newValue);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
-				setPasteOperation((PasteOperation)newValue);
-				return;
+		case RestructuremodelPackage.MOVE_OPERATION__FROM:
+			this.setFrom((String) newValue);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__TO:
+			this.setTo((String) newValue);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
+			this.setOperationName((String) newValue);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
+			this.setCutOperation((CutOperation) newValue);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
+			this.setPasteOperation((PasteOperation) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -349,26 +401,27 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.MOVE_OPERATION__FROM:
-				setFrom(FROM_EDEFAULT);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__TO:
-				setTo(TO_EDEFAULT);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
-				setOperationName(OPERATION_NAME_EDEFAULT);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
-				setCutOperation((CutOperation)null);
-				return;
-			case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
-				setPasteOperation((PasteOperation)null);
-				return;
+		case RestructuremodelPackage.MOVE_OPERATION__FROM:
+			this.setFrom(FROM_EDEFAULT);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__TO:
+			this.setTo(TO_EDEFAULT);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
+			this.setOperationName(OPERATION_NAME_EDEFAULT);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
+			this.setCutOperation((CutOperation) null);
+			return;
+		case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
+			this.setPasteOperation((PasteOperation) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -376,21 +429,22 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.MOVE_OPERATION__FROM:
-				return FROM_EDEFAULT == null ? from != null : !FROM_EDEFAULT.equals(from);
-			case RestructuremodelPackage.MOVE_OPERATION__TO:
-				return TO_EDEFAULT == null ? to != null : !TO_EDEFAULT.equals(to);
-			case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
-				return OPERATION_NAME_EDEFAULT == null ? operationName != null : !OPERATION_NAME_EDEFAULT.equals(operationName);
-			case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
-				return cutOperation != null;
-			case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
-				return pasteOperation != null;
+		case RestructuremodelPackage.MOVE_OPERATION__FROM:
+			return FROM_EDEFAULT == null ? this.from != null : !FROM_EDEFAULT.equals(this.from);
+		case RestructuremodelPackage.MOVE_OPERATION__TO:
+			return TO_EDEFAULT == null ? this.to != null : !TO_EDEFAULT.equals(this.to);
+		case RestructuremodelPackage.MOVE_OPERATION__OPERATION_NAME:
+			return OPERATION_NAME_EDEFAULT == null ? this.operationName != null : !OPERATION_NAME_EDEFAULT.equals(this.operationName);
+		case RestructuremodelPackage.MOVE_OPERATION__CUT_OPERATION:
+			return this.cutOperation != null;
+		case RestructuremodelPackage.MOVE_OPERATION__PASTE_OPERATION:
+			return this.pasteOperation != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -398,21 +452,24 @@ public class MoveOperationImpl extends AbstractTransformationStepImpl implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (from: ");
-		result.append(from);
+		result.append(this.from);
 		result.append(", to: ");
-		result.append(to);
+		result.append(this.to);
 		result.append(", operationName: ");
-		result.append(operationName);
+		result.append(this.operationName);
 		result.append(')');
 		return result.toString();
 	}
 
-} //MoveOperationImpl
+} // MoveOperationImpl

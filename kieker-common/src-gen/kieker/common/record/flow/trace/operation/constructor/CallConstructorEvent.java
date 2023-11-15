@@ -18,28 +18,27 @@ package kieker.common.record.flow.trace.operation.constructor;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IConstructorRecord;
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.6
  */
-public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {			
+public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-			 + TYPE_SIZE_STRING; // ICallRecord.calleeClassSignature
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			+ TYPE_SIZE_STRING; // ICallRecord.calleeClassSignature
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,7 +48,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String.class, // ICallRecord.calleeOperationSignature
 		String.class, // ICallRecord.calleeClassSignature
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,13 +59,12 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		"calleeOperationSignature",
 		"calleeClassSignature",
 	};
-	
+
 	private static final long serialVersionUID = 9163096253392108958L;
-	
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -82,21 +80,21 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 * @param calleeClassSignature
 	 *            calleeClassSignature
 	 */
-	public CallConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature) {
+	public CallConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
+			final String calleeOperationSignature, final String calleeClassSignature) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, calleeOperationSignature, calleeClassSignature);
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public CallConstructorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -110,7 +108,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		serializer.putString(this.getCalleeOperationSignature());
 		serializer.putString(this.getCalleeClassSignature());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +116,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,7 +124,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,7 +133,6 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,18 +147,9 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final CallConstructorEvent castedRecord = (CallConstructorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -176,27 +164,27 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
 		code += this.getCalleeOperationSignature().hashCode();
 		code += this.getCalleeClassSignature().hashCode();
-		
+
 		return code;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -205,25 +193,25 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String result = "CallConstructorEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "calleeOperationSignature = ";
 		result += this.getCalleeOperationSignature() + ", ";
-		
+
 		result += "calleeClassSignature = ";
 		result += this.getCalleeClassSignature() + ", ";
-		
+
 		return result;
 	}
 }

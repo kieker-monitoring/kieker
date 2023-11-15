@@ -87,11 +87,11 @@ public class NoBlockCommentsCheck extends AbstractCheck {
 
 	@Override
 	public int[] getAcceptableTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 
 	@Override
 	public int[] getRequiredTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 }

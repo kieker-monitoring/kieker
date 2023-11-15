@@ -4,23 +4,19 @@ package kieker.tools.restructuring.restructuremodel.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.tools.restructuring.restructuremodel.AbstractTransformationStep;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
 import kieker.tools.restructuring.restructuremodel.TransformationModel;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,8 +26,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl#getTransformations <em>Transformations</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl#getTransformations <em>Transformations</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,6 +37,7 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	 * The cached value of the '{@link #getTransformations() <em>Transformations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTransformations()
 	 * @generated
 	 * @ordered
@@ -51,6 +48,7 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -61,6 +59,7 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -70,6 +69,7 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected TransformationModelImpl() {
@@ -79,6 +79,7 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -89,46 +90,52 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public EList<AbstractTransformationStep> getTransformations() {
-		if (transformations == null) {
-			transformations = new EObjectContainmentEList<AbstractTransformationStep>(AbstractTransformationStep.class, this, RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS);
+		if (this.transformations == null) {
+			this.transformations = new EObjectContainmentEList<>(AbstractTransformationStep.class, this,
+					RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS);
 		}
-		return transformations;
+		return this.transformations;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.TRANSFORMATION_MODEL__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.TRANSFORMATION_MODEL__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
-				return ((InternalEList<?>)getTransformations()).basicRemove(otherEnd, msgs);
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
+			return ((InternalEList<?>) this.getTransformations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -136,15 +143,16 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
-				return getTransformations();
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
-				return getName();
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
+			return this.getTransformations();
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
+			return this.getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -152,19 +160,20 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
-				getTransformations().clear();
-				getTransformations().addAll((Collection<? extends AbstractTransformationStep>)newValue);
-				return;
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
-				setName((String)newValue);
-				return;
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
+			this.getTransformations().clear();
+			this.getTransformations().addAll((Collection<? extends AbstractTransformationStep>) newValue);
+			return;
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
+			this.setName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -172,17 +181,18 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
-				getTransformations().clear();
-				return;
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
+			this.getTransformations().clear();
+			return;
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -190,15 +200,16 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
-				return transformations != null && !transformations.isEmpty();
-			case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__TRANSFORMATIONS:
+			return (this.transformations != null) && !this.transformations.isEmpty();
+		case RestructuremodelPackage.TRANSFORMATION_MODEL__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -206,17 +217,20 @@ public class TransformationModelImpl extends MinimalEObjectImpl.Container implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(')');
 		return result.toString();
 	}
 
-} //TransformationModelImpl
+} // TransformationModelImpl

@@ -4,23 +4,19 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisComponent;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,7 +39,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -54,7 +50,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -65,7 +61,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The default value of the '{@link #getClassname() <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getClassname()
 	 * @generated
 	 * @ordered
@@ -76,7 +72,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The cached value of the '{@link #getClassname() <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getClassname()
 	 * @generated
 	 * @ordered
@@ -87,7 +83,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getProperties()
 	 * @generated
 	 * @ordered
@@ -98,7 +94,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -109,7 +105,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -119,7 +115,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MAnalysisComponent() {
@@ -129,7 +125,7 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -140,96 +136,99 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getClassname() {
-		return classname;
+		return this.classname;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setClassname(String newClassname) {
-		String oldClassname = classname;
-		classname = newClassname;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME, oldClassname, classname));
+	public void setClassname(final String newClassname) {
+		final String oldClassname = this.classname;
+		this.classname = newClassname;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME, oldClassname, this.classname));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIProperty> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<MIProperty>(MIProperty.class, this, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES);
+		if (this.properties == null) {
+			this.properties = new EObjectContainmentEList<>(MIProperty.class, this, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES);
 		}
-		return properties;
+		return this.properties;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setId(String newId) {
-		String oldId = id;
-		id = newId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID, oldId, id));
+	public void setId(final String newId) {
+		final String oldId = this.id;
+		this.id = newId;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID, oldId, this.id));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
-			return ((InternalEList<?>) getProperties()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -237,20 +236,20 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME:
-			return getName();
+			return this.getName();
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME:
-			return getClassname();
+			return this.getClassname();
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
-			return getProperties();
+			return this.getProperties();
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
-			return getId();
+			return this.getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -258,25 +257,25 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME:
-			setName((String) newValue);
+			this.setName((String) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME:
-			setClassname((String) newValue);
+			this.setClassname((String) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
-			getProperties().clear();
-			getProperties().addAll((Collection<? extends MIProperty>) newValue);
+			this.getProperties().clear();
+			this.getProperties().addAll((Collection<? extends MIProperty>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
-			setId((String) newValue);
+			this.setId((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -285,23 +284,23 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME:
-			setName(NAME_EDEFAULT);
+			this.setName(NAME_EDEFAULT);
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME:
-			setClassname(CLASSNAME_EDEFAULT);
+			this.setClassname(CLASSNAME_EDEFAULT);
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
-			getProperties().clear();
+			this.getProperties().clear();
 			return;
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
-			setId(ID_EDEFAULT);
+			this.setId(ID_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -310,20 +309,20 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__CLASSNAME:
-			return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
+			return CLASSNAME_EDEFAULT == null ? this.classname != null : !CLASSNAME_EDEFAULT.equals(this.classname);
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
-			return properties != null && !properties.isEmpty();
+			return (this.properties != null) && !this.properties.isEmpty();
 		case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
-			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			return ID_EDEFAULT == null ? this.id != null : !ID_EDEFAULT.equals(this.id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -331,21 +330,22 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (this.eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", classname: ");
-		result.append(classname);
+		result.append(this.classname);
 		result.append(", id: ");
-		result.append(id);
+		result.append(this.id);
 		result.append(')');
 		return result.toString();
 	}

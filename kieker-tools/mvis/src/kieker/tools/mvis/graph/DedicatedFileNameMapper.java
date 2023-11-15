@@ -28,30 +28,30 @@ import kieker.analysis.generic.graph.INode;
  */
 public class DedicatedFileNameMapper implements Function<IGraph<INode, IEdge>, Path> {
 
-    private final Path outputDirectory;
-    private final String fileExtension;
-    private final String outputFilename;
+	private final Path outputDirectory;
+	private final String fileExtension;
+	private final String outputFilename;
 
-    /**
-     * Create a simple file mapper.
-     *
-     * @param outputDirectory
-     *            output directory path
-     * @param outputFilename
-     *            filename
-     * @param fileExtension
-     *            file extension for the graph
-     */
-    public DedicatedFileNameMapper(final Path outputDirectory, final String outputFilename,
-            final String fileExtension) {
-        this.outputDirectory = outputDirectory;
-        this.outputFilename = outputFilename;
-        this.fileExtension = fileExtension;
-    }
+	/**
+	 * Create a simple file mapper.
+	 *
+	 * @param outputDirectory
+	 *            output directory path
+	 * @param outputFilename
+	 *            filename
+	 * @param fileExtension
+	 *            file extension for the graph
+	 */
+	public DedicatedFileNameMapper(final Path outputDirectory, final String outputFilename,
+			final String fileExtension) {
+		this.outputDirectory = outputDirectory;
+		this.outputFilename = outputFilename;
+		this.fileExtension = fileExtension;
+	}
 
-    @Override
-    public Path apply(final IGraph<INode, IEdge> graph) {
-        return this.outputDirectory
-                .resolve(String.format("%s-%s.%s", graph.getLabel(), this.outputFilename, this.fileExtension));
-    }
+	@Override
+	public Path apply(final IGraph<INode, IEdge> graph) {
+		return this.outputDirectory
+				.resolve(String.format("%s-%s.%s", graph.getLabel(), this.outputFilename, this.fileExtension));
+	}
 }

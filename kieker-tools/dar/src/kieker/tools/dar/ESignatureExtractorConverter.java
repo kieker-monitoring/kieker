@@ -26,14 +26,14 @@ import com.beust.jcommander.ParameterException;
  */
 public class ESignatureExtractorConverter implements IStringConverter<ESignatureExtractor> {
 
-    @Override
-    public ESignatureExtractor convert(final String value) {
-        for (final ESignatureExtractor element : ESignatureExtractor.values()) {
-            if (element.name().equalsIgnoreCase(value)) {
-                return element;
-            }
-        }
-        throw new ParameterException(String.format("%s is not a valued signature extractor.", value));
-    }
+	@Override
+	public ESignatureExtractor convert(final String value) {
+		for (final ESignatureExtractor element : ESignatureExtractor.values()) {
+			if (element.name().equalsIgnoreCase(value)) {
+				return element;
+			}
+		}
+		throw new ParameterException(String.format("%s is not a valued signature extractor.", value));
+	}
 
 }

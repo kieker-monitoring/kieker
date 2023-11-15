@@ -22,5 +22,5 @@ package kieker.tools.mvis;
  * @since 2.0.0
  */
 public enum EStatistics {
-    ALLEN, NUM_OF_CALLS, OP_COUPLING, MODULE_COUPLING
+	ALLEN, NUM_OF_CALLS, OP_COUPLING, MODULE_COUPLING
 }

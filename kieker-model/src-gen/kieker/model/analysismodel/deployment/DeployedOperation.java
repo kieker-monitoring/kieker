@@ -2,9 +2,9 @@
  */
 package kieker.model.analysismodel.deployment;
 
-import kieker.model.analysismodel.assembly.AssemblyOperation;
-
 import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.assembly.AssemblyOperation;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation()
@@ -27,6 +27,7 @@ public interface DeployedOperation extends EObject {
 	 * Returns the value of the '<em><b>Assembly Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Assembly Operation</em>' reference.
 	 * @see #setAssemblyOperation(AssemblyOperation)
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_AssemblyOperation()
@@ -39,7 +40,9 @@ public interface DeployedOperation extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assembly Operation</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Assembly Operation</em>' reference.
 	 * @see #getAssemblyOperation()
 	 * @generated
 	 */
@@ -48,6 +51,7 @@ public interface DeployedOperation extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @model kind="operation"
 	 * @generated
 	 */

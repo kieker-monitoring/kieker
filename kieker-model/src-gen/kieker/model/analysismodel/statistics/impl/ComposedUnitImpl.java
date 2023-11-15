@@ -4,23 +4,19 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.model.analysismodel.statistics.ComposedUnit;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 import kieker.model.analysismodel.statistics.Unit;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,8 +26,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl#getUnits <em>Units</em>}</li>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl#getExponent <em>Exponent</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl#getUnits <em>Units</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl#getExponent <em>Exponent</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,6 +37,7 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	 * The cached value of the '{@link #getUnits() <em>Units</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getUnits()
 	 * @generated
 	 * @ordered
@@ -51,6 +48,7 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	 * The default value of the '{@link #getExponent() <em>Exponent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getExponent()
 	 * @generated
 	 * @ordered
@@ -61,6 +59,7 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	 * The cached value of the '{@link #getExponent() <em>Exponent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getExponent()
 	 * @generated
 	 * @ordered
@@ -70,6 +69,7 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected ComposedUnitImpl() {
@@ -79,6 +79,7 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -89,49 +90,54 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Unit> getUnits() {
-		if (units == null) {
-			units = new EObjectContainmentEList<Unit>(Unit.class, this, StatisticsPackage.COMPOSED_UNIT__UNITS);
+		if (this.units == null) {
+			this.units = new EObjectContainmentEList<>(Unit.class, this, StatisticsPackage.COMPOSED_UNIT__UNITS);
 		}
-		return units;
+		return this.units;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public long getExponent() {
-		return exponent;
+		return this.exponent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setExponent(long newExponent) {
-		long oldExponent = exponent;
-		exponent = newExponent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.COMPOSED_UNIT__EXPONENT, oldExponent, exponent));
+	public void setExponent(final long newExponent) {
+		final long oldExponent = this.exponent;
+		this.exponent = newExponent;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.COMPOSED_UNIT__EXPONENT, oldExponent, this.exponent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.COMPOSED_UNIT__UNITS:
-				return ((InternalEList<?>)getUnits()).basicRemove(otherEnd, msgs);
+		case StatisticsPackage.COMPOSED_UNIT__UNITS:
+			return ((InternalEList<?>) this.getUnits()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -139,15 +145,16 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.COMPOSED_UNIT__UNITS:
-				return getUnits();
-			case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
-				return getExponent();
+		case StatisticsPackage.COMPOSED_UNIT__UNITS:
+			return this.getUnits();
+		case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
+			return this.getExponent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -155,19 +162,20 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.COMPOSED_UNIT__UNITS:
-				getUnits().clear();
-				getUnits().addAll((Collection<? extends Unit>)newValue);
-				return;
-			case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
-				setExponent((Long)newValue);
-				return;
+		case StatisticsPackage.COMPOSED_UNIT__UNITS:
+			this.getUnits().clear();
+			this.getUnits().addAll((Collection<? extends Unit>) newValue);
+			return;
+		case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
+			this.setExponent((Long) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -175,17 +183,18 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.COMPOSED_UNIT__UNITS:
-				getUnits().clear();
-				return;
-			case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
-				setExponent(EXPONENT_EDEFAULT);
-				return;
+		case StatisticsPackage.COMPOSED_UNIT__UNITS:
+			this.getUnits().clear();
+			return;
+		case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
+			this.setExponent(EXPONENT_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -193,15 +202,16 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.COMPOSED_UNIT__UNITS:
-				return units != null && !units.isEmpty();
-			case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
-				return exponent != EXPONENT_EDEFAULT;
+		case StatisticsPackage.COMPOSED_UNIT__UNITS:
+			return (this.units != null) && !this.units.isEmpty();
+		case StatisticsPackage.COMPOSED_UNIT__EXPONENT:
+			return this.exponent != EXPONENT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -209,17 +219,20 @@ public class ComposedUnitImpl extends MinimalEObjectImpl.Container implements Co
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (exponent: ");
-		result.append(exponent);
+		result.append(this.exponent);
 		result.append(')');
 		return result.toString();
 	}
 
-} //ComposedUnitImpl
+} // ComposedUnitImpl

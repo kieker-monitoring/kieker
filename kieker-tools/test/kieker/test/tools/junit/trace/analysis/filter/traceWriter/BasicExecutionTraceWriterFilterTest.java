@@ -26,9 +26,9 @@ import kieker.tools.trace.analysis.filter.traceWriter.ExecutionTraceWriterFilter
 import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)

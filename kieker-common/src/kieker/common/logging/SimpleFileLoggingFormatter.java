@@ -18,15 +18,15 @@ package kieker.common.logging;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.logging.Formatter; // NOCS 
-import java.util.logging.Level; // NOCS 
-import java.util.logging.LogRecord; // NOCS 
+import java.util.logging.Formatter; // NOCS
+import java.util.logging.Level; // NOCS
+import java.util.logging.LogRecord; // NOCS
 
 /**
  * A formatter for the logging to files which is used by the Kieker tools.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class SimpleFileLoggingFormatter extends Formatter {
@@ -52,7 +52,7 @@ public class SimpleFileLoggingFormatter extends Formatter {
 
 	/**
 	 * Populates the string builder with logging information.
-	 * 
+	 *
 	 * @param sb
 	 *            the string builder
 	 * @param record

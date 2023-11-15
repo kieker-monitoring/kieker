@@ -22,9 +22,9 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * This class represents a pair consisting of an {@link Operation} and an {@link AllocationComponent}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AllocationComponentOperationPair implements ISystemModelElement {
@@ -35,7 +35,7 @@ public class AllocationComponentOperationPair implements ISystemModelElement {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this pair.
 	 * @param operation

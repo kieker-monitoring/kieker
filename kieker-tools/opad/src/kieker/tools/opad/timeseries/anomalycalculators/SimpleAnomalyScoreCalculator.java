@@ -21,7 +21,7 @@ import kieker.tools.opad.timeseries.forecast.IForecastResult;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
  */
 public class SimpleAnomalyScoreCalculator implements IAnomalyScoreCalculator<Double> {

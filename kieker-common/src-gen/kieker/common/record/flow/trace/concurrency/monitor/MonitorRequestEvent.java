@@ -18,31 +18,29 @@ package kieker.common.record.flow.trace.concurrency.monitor;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.8
  */
-public class MonitorRequestEvent extends AbstractMonitorEvent  {			
+public class MonitorRequestEvent extends AbstractMonitorEvent {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_INT; // AbstractMonitorEvent.lockId
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_INT; // AbstractMonitorEvent.lockId
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 		int.class, // AbstractMonitorEvent.lockId
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -50,13 +48,12 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		"orderIndex",
 		"lockId",
 	};
-	
+
 	private static final long serialVersionUID = -2519565185218681768L;
-	
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -70,17 +67,16 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		super(timestamp, traceId, orderIndex, lockId);
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public MonitorRequestEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -91,7 +87,7 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		serializer.putInt(this.getOrderIndex());
 		serializer.putInt(this.getLockId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -99,7 +95,7 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -107,7 +103,7 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +112,6 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,41 +126,32 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final MonitorRequestEvent castedRecord = (MonitorRequestEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (this.getLockId() != castedRecord.getLockId()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
-		code += ((int)this.getLockId());
-		
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
+		code += (this.getLockId());
+
 		return code;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -174,16 +160,16 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		String result = "MonitorRequestEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "lockId = ";
 		result += this.getLockId() + ", ";
-		
+
 		return result;
 	}
 }

@@ -4,22 +4,19 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDisplay;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,7 +38,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRepositories()
 	 * @generated
 	 * @ordered
@@ -52,7 +49,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getOutputPorts()
 	 * @generated
 	 * @ordered
@@ -63,7 +60,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	 * The cached value of the '{@link #getDisplays() <em>Displays</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDisplays()
 	 * @generated
 	 * @ordered
@@ -73,7 +70,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MPlugin() {
@@ -83,7 +80,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -94,58 +91,59 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIRepositoryConnector> getRepositories() {
-		if (repositories == null) {
-			repositories = new EObjectContainmentEList<MIRepositoryConnector>(MIRepositoryConnector.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
+		if (this.repositories == null) {
+			this.repositories = new EObjectContainmentEList<>(MIRepositoryConnector.class, this,
+					MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
 		}
-		return repositories;
+		return this.repositories;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIOutputPort> getOutputPorts() {
-		if (outputPorts == null) {
-			outputPorts = new EObjectContainmentWithInverseEList<MIOutputPort>(MIOutputPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS,
+		if (this.outputPorts == null) {
+			this.outputPorts = new EObjectContainmentWithInverseEList<>(MIOutputPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS,
 					MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT);
 		}
-		return outputPorts;
+		return this.outputPorts;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIDisplay> getDisplays() {
-		if (displays == null) {
-			displays = new EObjectContainmentWithInverseEList<MIDisplay>(MIDisplay.class, this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS,
+		if (this.displays == null) {
+			this.displays = new EObjectContainmentWithInverseEList<>(MIDisplay.class, this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS,
 					MIAnalysisMetaModelPackage.DISPLAY__PARENT);
 		}
-		return displays;
+		return this.displays;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getOutputPorts()).basicAdd(otherEnd, msgs);
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) this.getOutputPorts()).basicAdd(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getDisplays()).basicAdd(otherEnd, msgs);
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) this.getDisplays()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -153,18 +151,18 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-			return ((InternalEList<?>) getRepositories()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getRepositories()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			return ((InternalEList<?>) getOutputPorts()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getOutputPorts()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			return ((InternalEList<?>) getDisplays()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getDisplays()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -172,18 +170,18 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-			return getRepositories();
+			return this.getRepositories();
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			return getOutputPorts();
+			return this.getOutputPorts();
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			return getDisplays();
+			return this.getDisplays();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -191,24 +189,24 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-			getRepositories().clear();
-			getRepositories().addAll((Collection<? extends MIRepositoryConnector>) newValue);
+			this.getRepositories().clear();
+			this.getRepositories().addAll((Collection<? extends MIRepositoryConnector>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			getOutputPorts().clear();
-			getOutputPorts().addAll((Collection<? extends MIOutputPort>) newValue);
+			this.getOutputPorts().clear();
+			this.getOutputPorts().addAll((Collection<? extends MIOutputPort>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			getDisplays().clear();
-			getDisplays().addAll((Collection<? extends MIDisplay>) newValue);
+			this.getDisplays().clear();
+			this.getDisplays().addAll((Collection<? extends MIDisplay>) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -217,20 +215,20 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-			getRepositories().clear();
+			this.getRepositories().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			getOutputPorts().clear();
+			this.getOutputPorts().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			getDisplays().clear();
+			this.getDisplays().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -239,18 +237,18 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-			return repositories != null && !repositories.isEmpty();
+			return (this.repositories != null) && !this.repositories.isEmpty();
 		case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
-			return outputPorts != null && !outputPorts.isEmpty();
+			return (this.outputPorts != null) && !this.outputPorts.isEmpty();
 		case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
-			return displays != null && !displays.isEmpty();
+			return (this.displays != null) && !this.displays.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

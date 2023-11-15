@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 /**
  * @author Tillmann Carlos Bielefeld
  *         API compatibility: Kieker 1.15.0
- * 
+ *
  * @since 1.10
  */
 public class NamedTSPoint extends AbstractMonitoringRecord {
@@ -58,7 +58,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param value
@@ -134,16 +134,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord {
 		}
 
 		final NamedTSPoint castedRecord = (NamedTSPoint) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
-			return false;
-		}
-		if (!this.getName().equals(castedRecord.getName())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue()) || !this.getName().equals(castedRecord.getName())) {
 			return false;
 		}
 

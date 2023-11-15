@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Reiner Jung
- * 
+ *
  * @since 1.15
  */
 public final class RemoveParameterValueEventFactory implements IRecordFactory<RemoveParameterValueEvent> {
-	
 
 	@Override
 	public RemoveParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new RemoveParameterValueEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

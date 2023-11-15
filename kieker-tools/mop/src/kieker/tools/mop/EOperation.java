@@ -22,5 +22,5 @@ package kieker.tools.mop;
  * @since 2.0.0
  */
 public enum EOperation {
-    MERGE, SELECT, NEAREST_MERGE, FUNCTION_MERGE
+	MERGE, SELECT, NEAREST_MERGE, FUNCTION_MERGE
 }

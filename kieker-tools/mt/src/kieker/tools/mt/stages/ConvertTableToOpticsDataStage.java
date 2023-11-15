@@ -41,7 +41,7 @@ public class ConvertTableToOpticsDataStage
 	protected void execute(final Table<String, MoveOperationEntry> table) throws Exception {
 		final IDistanceFunction<MoveOperationEntry> distanceFunction = new IDistanceFunction<>() {
 
-			final LevenshteinDistance distance = new LevenshteinDistance();
+			private final LevenshteinDistance distance = new LevenshteinDistance();
 
 			@Override
 			public double calculate(final MoveOperationEntry data1, final MoveOperationEntry data2) {

@@ -22,5 +22,5 @@ package kieker.tools.dar;
  * @since 2.0.0
  */
 public enum ESignatureExtractor {
-    ELF, PYTHON, JAVA
+	ELF, PYTHON, JAVA
 }

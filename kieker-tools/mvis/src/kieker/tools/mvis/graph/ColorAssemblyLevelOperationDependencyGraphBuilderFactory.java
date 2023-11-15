@@ -25,12 +25,12 @@ import kieker.analysis.architecture.dependency.IDependencyGraphBuilderFactory;
  * @since 2.0.0
  */
 public class ColorAssemblyLevelOperationDependencyGraphBuilderFactory
-        implements IDependencyGraphBuilderFactory<IColorDependencyGraphBuilderConfiguration> {
+		implements IDependencyGraphBuilderFactory<IColorDependencyGraphBuilderConfiguration> {
 
-    @Override
-    public IDependencyGraphBuilder createDependencyGraphBuilder(
-            final IColorDependencyGraphBuilderConfiguration configuration) {
-        return new ColorAssemblyLevelOperationDependencyGraphBuilder(configuration.getSelector());
-    }
+	@Override
+	public IDependencyGraphBuilder createDependencyGraphBuilder(
+			final IColorDependencyGraphBuilderConfiguration configuration) {
+		return new ColorAssemblyLevelOperationDependencyGraphBuilder(configuration.getSelector());
+	}
 
 }

@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 /**
  * @author Tom Frotscher
  *         API compatibility: Kieker 1.15.0
- * 
+ *
  * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord {
@@ -58,7 +58,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param applicationName
 	 *            applicationName
 	 * @param timestamp
@@ -134,16 +134,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord {
 		}
 
 		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getApplicationName().equals(castedRecord.getApplicationName()) || (this.getTimestamp() != castedRecord.getTimestamp()) || AbstractMonitoringRecord.isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) {
 			return false;
 		}
 

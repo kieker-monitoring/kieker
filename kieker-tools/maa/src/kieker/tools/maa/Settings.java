@@ -27,75 +27,75 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings {
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = false, converter = PathConverter.class, description = "Input architecture model directory")
-    private Path inputModelPath;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = false, converter = PathConverter.class, description = "Input architecture model directory")
+	private Path inputModelPath;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, variableArity = false, converter = PathConverter.class, description = "Output architecture model directory")
-    private Path outputModelPath;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, variableArity = false, converter = PathConverter.class, description = "Output architecture model directory")
+	private Path outputModelPath;
 
-    @Parameter(names = { "-E", "--experiment-name" }, required = false, description = "Name of the output model")
-    private String experimentName;
+	@Parameter(names = { "-E", "--experiment-name" }, required = false, description = "Name of the output model")
+	private String experimentName;
 
-    @Parameter(names = { "-I",
-            "--compute-interfaces" }, required = false, description = "Compute interfaces based on aggregated invocations")
-    private boolean computeInterfaces;
+	@Parameter(names = { "-I",
+		"--compute-interfaces" }, required = false, description = "Compute interfaces based on aggregated invocations")
+	private boolean computeInterfaces;
 
-    @Parameter(names = { "-g",
-            "--hierarchy-grouping" }, required = false, description = "Generate a component hierarchy based on a map file")
-    private List<Path> mapFiles;
+	@Parameter(names = { "-g",
+		"--hierarchy-grouping" }, required = false, description = "Generate a component hierarchy based on a map file")
+	private List<Path> mapFiles;
 
-    @Parameter(names = { "-gs", "--separator" }, required = false, description = "Sparator string for CSV inputs")
-    private String separator;
+	@Parameter(names = { "-gs", "--separator" }, required = false, description = "Sparator string for CSV inputs")
+	private String separator;
 
-    @Parameter(names = { "-c", "--operation-calls" }, required = false, description = "Output the list of calls")
-    private boolean operationCalls;
+	@Parameter(names = { "-c", "--operation-calls" }, required = false, description = "Output the list of calls")
+	private boolean operationCalls;
 
-    @Parameter(names = { "-s",
-            "--component-statistics" }, required = false, description = "Output numerous component statistics")
-    private boolean componentStatistics;
+	@Parameter(names = { "-s",
+		"--component-statistics" }, required = false, description = "Output numerous component statistics")
+	private boolean componentStatistics;
 
-    @Parameter(names = "--eol", required = false, description = "End of line symbol")
-    private String lineSeparator = System.lineSeparator();
+	@Parameter(names = "--eol", required = false, description = "End of line symbol")
+	private String lineSeparator = System.lineSeparator();
 
-    public Path getInputModelPath() {
-        return this.inputModelPath;
-    }
+	public Path getInputModelPath() {
+		return this.inputModelPath;
+	}
 
-    public Path getOutputModelPath() {
-        return this.outputModelPath;
-    }
+	public Path getOutputModelPath() {
+		return this.outputModelPath;
+	}
 
-    public boolean isComputeInterfaces() {
-        return this.computeInterfaces;
-    }
+	public boolean isComputeInterfaces() {
+		return this.computeInterfaces;
+	}
 
-    public List<Path> getMapFiles() {
-        return this.mapFiles;
-    }
+	public List<Path> getMapFiles() {
+		return this.mapFiles;
+	}
 
-    public boolean isOperationCalls() {
-        return this.operationCalls;
-    }
+	public boolean isOperationCalls() {
+		return this.operationCalls;
+	}
 
-    public boolean isComponentStatistics() {
-        return this.componentStatistics;
-    }
+	public boolean isComponentStatistics() {
+		return this.componentStatistics;
+	}
 
-    public String getSeparator() {
-        return this.separator;
-    }
+	public String getSeparator() {
+		return this.separator;
+	}
 
-    public String getExperimentName() {
-        return this.experimentName;
-    }
+	public String getExperimentName() {
+		return this.experimentName;
+	}
 
-    public char[] getLineSeparator() {
-        return this.lineSeparator.toCharArray();
-    }
+	public char[] getLineSeparator() {
+		return this.lineSeparator.toCharArray();
+	}
 
-    public void setLineSeparator(final String lineSeparator) {
-        this.lineSeparator = lineSeparator;
-    }
+	public void setLineSeparator(final String lineSeparator) {
+		this.lineSeparator = lineSeparator;
+	}
 }

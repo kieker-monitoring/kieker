@@ -27,9 +27,9 @@ import kieker.tools.trace.analysis.filter.traceWriter.MessageTraceWriterFilter;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicMessageTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)

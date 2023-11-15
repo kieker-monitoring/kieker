@@ -18,8 +18,6 @@ package kieker.tools.dar.stages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import kieker.tools.dar.stages.SignatureProcessor;
-
 /**
  * Testing signature processor.
  *
@@ -28,18 +26,18 @@ import kieker.tools.dar.stages.SignatureProcessor;
  */
 class SignatureProcessorTest {
 
-    private static final String TYPICAL_SIGNATURE = "public static java.util.List tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations.getEntities(tools.descartes.teastore.registryclient.Service, java.lang.String, java.lang.Class, int, int)";
-    private static final String CLASS_SIGNATURE = "tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations";
-    private static final String OPERATION_SIGNATURE = "public static java.util.List getEntities(tools.descartes.teastore.registryclient.Service, java.lang.String, java.lang.Class, int, int)";
+	private static final String TYPICAL_SIGNATURE = "public static java.util.List tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations.getEntities(tools.descartes.teastore.registryclient.Service, java.lang.String, java.lang.Class, int, int)";
+	private static final String CLASS_SIGNATURE = "tools.descartes.teastore.registryclient.rest.LoadBalancedCRUDOperations";
+	private static final String OPERATION_SIGNATURE = "public static java.util.List getEntities(tools.descartes.teastore.registryclient.Service, java.lang.String, java.lang.Class, int, int)";
 
-    @Test
-    void test() {
-        final SignatureProcessor processor = new SignatureProcessor();
+	@Test
+	void test() {
+		final SignatureProcessor processor = new SignatureProcessor();
 
-        processor.parse(SignatureProcessorTest.TYPICAL_SIGNATURE);
+		processor.parse(SignatureProcessorTest.TYPICAL_SIGNATURE);
 
-        Assertions.assertEquals(SignatureProcessorTest.CLASS_SIGNATURE, processor.getClassSignature());
-        Assertions.assertEquals(SignatureProcessorTest.OPERATION_SIGNATURE, processor.getOperationSignature());
-    }
+		Assertions.assertEquals(SignatureProcessorTest.CLASS_SIGNATURE, processor.getClassSignature());
+		Assertions.assertEquals(SignatureProcessorTest.OPERATION_SIGNATURE, processor.getOperationSignature());
+	}
 
 }

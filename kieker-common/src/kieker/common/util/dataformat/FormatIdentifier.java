@@ -18,7 +18,7 @@ package kieker.common.util.dataformat;
 
 /**
  * Format identifiers used by Kieker.
- * 
+ *
  * @author Holger Knoche
  * @since 1.13
  */

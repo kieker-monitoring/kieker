@@ -78,7 +78,7 @@ public class TeetimeConfiguration extends Configuration {
 			final String inputFileName, final OutputPort<Table<String, MoveOperationEntry>> outputPort) {
 		final IDistanceFunction<OpticsData<MoveOperationEntry>> distanceFunction = new IDistanceFunction<>() {
 
-			final LevenshteinDistance distance = new LevenshteinDistance();
+			private final LevenshteinDistance distance = new LevenshteinDistance();
 
 			@Override
 			public double calculate(final OpticsData<MoveOperationEntry> data1,

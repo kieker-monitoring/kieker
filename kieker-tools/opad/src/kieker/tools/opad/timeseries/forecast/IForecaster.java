@@ -21,7 +21,7 @@ import kieker.tools.opad.timeseries.ITimeSeries;
 /**
  * @author Andre van Hoorn
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the forecaster.
  */
@@ -29,18 +29,18 @@ public interface IForecaster<T> {
 
 	/**
 	 * Performs a time series forecast for the given number of steps in the future.
-	 * 
+	 *
 	 * @param numForecastSteps
 	 *            number of steps which will be forecated
 	 * @return ForecastResult
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	public IForecastResult forecast(final int numForecastSteps);
 
 	/**
 	 * Returns the original time series used for the forecast.
-	 * 
+	 *
 	 * @return returns get ts original
 	 *
 	 * @since 1.10
@@ -49,7 +49,7 @@ public interface IForecaster<T> {
 
 	/**
 	 * Returns the confidence level to be computed for the forecast.
-	 * 
+	 *
 	 * @return returns the get confidence level
 	 *
 	 * @since 1.10

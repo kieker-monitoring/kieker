@@ -21,28 +21,28 @@ package kieker.tools.dar.stages;
  */
 public class SignatureProcessor {
 
-    private String classSignature;
-    private String operationSignature;
+	private String classSignature;
+	private String operationSignature;
 
-    public void parse(final String signature) {
-        final String[] parts = signature.split("\\(");
-        final String[] leftSideParts = parts[0].split(" ");
-        final String fqnOperationName = leftSideParts[leftSideParts.length - 1];
-        final int separatorPosition = fqnOperationName.lastIndexOf('.');
-        this.classSignature = fqnOperationName.substring(0, separatorPosition);
-        this.operationSignature = "";
-        for (int i = 0; i < (leftSideParts.length - 1); i++) {
-            this.operationSignature += leftSideParts[i] + " ";
-        }
-        this.operationSignature += fqnOperationName.substring(separatorPosition + 1) + "(" + parts[1];
-    }
+	public void parse(final String signature) {
+		final String[] parts = signature.split("\\(");
+		final String[] leftSideParts = parts[0].split(" ");
+		final String fqnOperationName = leftSideParts[leftSideParts.length - 1];
+		final int separatorPosition = fqnOperationName.lastIndexOf('.');
+		this.classSignature = fqnOperationName.substring(0, separatorPosition);
+		this.operationSignature = "";
+		for (int i = 0; i < (leftSideParts.length - 1); i++) {
+			this.operationSignature += leftSideParts[i] + " ";
+		}
+		this.operationSignature += fqnOperationName.substring(separatorPosition + 1) + "(" + parts[1];
+	}
 
-    public String getClassSignature() {
-        return this.classSignature;
-    }
+	public String getClassSignature() {
+		return this.classSignature;
+	}
 
-    public String getOperationSignature() {
-        return this.operationSignature;
-    }
+	public String getOperationSignature() {
+		return this.operationSignature;
+	}
 
 }

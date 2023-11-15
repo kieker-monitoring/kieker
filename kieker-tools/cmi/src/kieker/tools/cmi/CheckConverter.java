@@ -25,9 +25,9 @@ import com.beust.jcommander.IStringConverter;
  */
 public class CheckConverter implements IStringConverter<ECheck> {
 
-    @Override
-    public ECheck convert(final String value) {
-        return ECheck.valueOf(value.toUpperCase(Locale.getDefault()));
-    }
+	@Override
+	public ECheck convert(final String value) {
+		return ECheck.valueOf(value.toUpperCase(Locale.getDefault()));
+	}
 
 }

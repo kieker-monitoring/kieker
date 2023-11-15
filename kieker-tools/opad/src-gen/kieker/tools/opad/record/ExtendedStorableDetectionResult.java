@@ -18,14 +18,14 @@ package kieker.tools.opad.record;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.tools.opad.record.StorableDetectionResult;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Thomas Duellmann
  *         API compatibility: Kieker 1.15.0
- * 
+ *
  * @since 1.10
  */
 public class ExtendedStorableDetectionResult extends StorableDetectionResult {
@@ -63,7 +63,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param applicationName
 	 *            applicationName
 	 * @param value
@@ -147,25 +147,16 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 		}
 
 		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getApplicationName().equals(castedRecord.getApplicationName()) || AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue()) || (this.getTimestamp() != castedRecord.getTimestamp())) {
 			return false;
 		}
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getForecast(), castedRecord.getForecast())) {
 			return false;
 		}
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getScore(), castedRecord.getScore())) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) {
-			return false;
-		}
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
-			return false;
-		}
-		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) {
 			return false;
 		}
 

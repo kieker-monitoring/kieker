@@ -18,18 +18,18 @@ package kieker.model.system.model;
 
 /**
  * Abstract supertype for all entities in the system model.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public interface ISystemModelElement {
 
 	/**
 	 * Returns a textual identifier for this object (e.g., its name).
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public String getIdentifier();

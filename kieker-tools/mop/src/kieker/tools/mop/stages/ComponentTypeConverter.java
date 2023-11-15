@@ -27,24 +27,24 @@ import kieker.model.analysismodel.type.TypeFactory;
  */
 public class ComponentTypeConverter extends AbstractConverter<ComponentType> {
 
-    public ComponentTypeConverter() {
-        super(ComponentType.class);
-    }
+	public ComponentTypeConverter() {
+		super(ComponentType.class);
+	}
 
-    public ComponentTypeConverter(final Class<ComponentType> clazz) {
-        super(clazz);
-    }
+	public ComponentTypeConverter(final Class<ComponentType> clazz) {
+		super(clazz);
+	}
 
-    @Override
-    public ComponentType fromString(final String text) throws Exception {
-        final ComponentType componentType = TypeFactory.eINSTANCE.createComponentType();
-        componentType.setSignature(text);
-        return componentType;
-    }
+	@Override
+	public ComponentType fromString(final String text) throws Exception {
+		final ComponentType componentType = TypeFactory.eINSTANCE.createComponentType();
+		componentType.setSignature(text);
+		return componentType;
+	}
 
-    @Override
-    public String toString(final ComponentType value) throws Exception {
-        return value.getSignature();
-    }
+	@Override
+	public String toString(final ComponentType value) throws Exception {
+		return value.getSignature();
+	}
 
 }

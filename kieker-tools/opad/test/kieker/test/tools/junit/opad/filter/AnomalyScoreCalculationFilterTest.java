@@ -79,8 +79,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws 
-			AnalysisConfigurationException {
+	public void setUp() throws AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
 		// READER

@@ -22,5 +22,5 @@ package kieker.tools.mvis;
  * @since 2.0.0
  */
 public enum EOutputGraph {
-    DOT_OP, GRAPHML, DOT_COMPONENT
+	DOT_OP, GRAPHML, DOT_COMPONENT
 }

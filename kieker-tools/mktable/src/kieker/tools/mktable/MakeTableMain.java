@@ -17,10 +17,10 @@ package kieker.tools.mktable;
 
 import java.nio.file.Path;
 
-import com.beust.jcommander.JCommander;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.JCommander;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
@@ -34,44 +34,44 @@ import kieker.tools.common.AbstractService;
  */
 public class MakeTableMain extends AbstractService<TeetimeConfiguration, Settings> {
 
-    /** logger for all tools. */
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD
+	/** logger for all tools. */
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD
 
-    public static void main(final String[] args) {
-        final MakeTableMain main = new MakeTableMain();
-        try {
-            final int exitCode = main.run("make table", "mktable", args, new Settings());
-            System.exit(exitCode);
-        } catch (final IllegalArgumentException e) {
-            LoggerFactory.getLogger(MakeTableMain.class).error("Configuration error: {}", e.getLocalizedMessage());
-            System.exit(1);
-        }
-    }
+	public static void main(final String[] args) {
+		final MakeTableMain main = new MakeTableMain();
+		try {
+			final int exitCode = main.run("make table", "mktable", args, new Settings());
+			System.exit(exitCode);
+		} catch (final IllegalArgumentException e) {
+			LoggerFactory.getLogger(MakeTableMain.class).error("Configuration error: {}", e.getLocalizedMessage());
+			System.exit(1);
+		}
+	}
 
-    @Override
-    protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-        return true;
-    }
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+		return true;
+	}
 
-    @Override
-    protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
-        return new TeetimeConfiguration(this.settings);
-    }
+	@Override
+	protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		return new TeetimeConfiguration(this.settings);
+	}
 
-    @Override
-    protected Path getConfigurationPath() {
-        // we do not use a configuration file
-        return null;
-    }
+	@Override
+	protected Path getConfigurationPath() {
+		// we do not use a configuration file
+		return null;
+	}
 
-    @Override
-    protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-        return true;
-    }
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
+		return true;
+	}
 
-    @Override
-    protected void shutdownService() {
-        // nothing to do here
-    }
+	@Override
+	protected void shutdownService() {
+		// nothing to do here
+	}
 
 }

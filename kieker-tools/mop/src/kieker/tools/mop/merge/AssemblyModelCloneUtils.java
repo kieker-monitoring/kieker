@@ -34,67 +34,67 @@ import kieker.model.analysismodel.type.TypeModel;
  */
 public final class AssemblyModelCloneUtils {
 
-    private AssemblyModelCloneUtils() {
-        // Utility class
-    }
+	private AssemblyModelCloneUtils() {
+		// Utility class
+	}
 
-    public static AssemblyComponent duplicate(final TypeModel typeModel, final AssemblyComponent component) {
-        final AssemblyComponent newComponent = AssemblyFactory.eINSTANCE.createAssemblyComponent();
-        newComponent.setSignature(component.getSignature());
+	public static AssemblyComponent duplicate(final TypeModel typeModel, final AssemblyComponent component) {
+		final AssemblyComponent newComponent = AssemblyFactory.eINSTANCE.createAssemblyComponent();
+		newComponent.setSignature(component.getSignature());
 
-        if (component.getComponentType().eIsProxy()) {
-            EcoreUtil.resolveAll(component.getComponentType());
-            final ComponentType componentType = typeModel.getComponentTypes().get(component.getSignature());
-            component.setComponentType(componentType);
-            if (component.getComponentType().eIsProxy()) {
-                throw new InternalError(
-                        "Unresolved component type for " + component.getSignature() + " probably broken reference URI");
-            }
-        }
+		if (component.getComponentType().eIsProxy()) {
+			EcoreUtil.resolveAll(component.getComponentType());
+			final ComponentType componentType = typeModel.getComponentTypes().get(component.getSignature());
+			component.setComponentType(componentType);
+			if (component.getComponentType().eIsProxy()) {
+				throw new InternalError(
+						"Unresolved component type for " + component.getSignature() + " probably broken reference URI");
+			}
+		}
 
-        newComponent.setComponentType(
-                AssemblyModelCloneUtils.findComponentType(typeModel, component.getComponentType().getSignature()));
+		newComponent.setComponentType(
+				AssemblyModelCloneUtils.findComponentType(typeModel, component.getComponentType().getSignature()));
 
-        for (final Entry<String, AssemblyOperation> operation : component.getOperations()) {
-            newComponent.getOperations().put(operation.getKey(),
-                    AssemblyModelCloneUtils.duplicate(newComponent.getComponentType(), operation.getValue()));
-        }
+		for (final Entry<String, AssemblyOperation> operation : component.getOperations()) {
+			newComponent.getOperations().put(operation.getKey(),
+					AssemblyModelCloneUtils.duplicate(newComponent.getComponentType(), operation.getValue()));
+		}
 
-        for (final Entry<String, AssemblyStorage> storage : component.getStorages()) {
-            newComponent.getStorages().put(storage.getKey(),
-                    AssemblyModelCloneUtils.duplicate(newComponent.getComponentType(), storage.getValue()));
-        }
+		for (final Entry<String, AssemblyStorage> storage : component.getStorages()) {
+			newComponent.getStorages().put(storage.getKey(),
+					AssemblyModelCloneUtils.duplicate(newComponent.getComponentType(), storage.getValue()));
+		}
 
-        return newComponent;
-    }
+		return newComponent;
+	}
 
-    public static AssemblyOperation duplicate(final ComponentType type, final AssemblyOperation operation) {
-        final AssemblyOperation newOperation = AssemblyFactory.eINSTANCE.createAssemblyOperation();
-        newOperation.setOperationType(
-                AssemblyModelCloneUtils.findOperationType(type, operation.getOperationType().getSignature()));
+	public static AssemblyOperation duplicate(final ComponentType type, final AssemblyOperation operation) {
+		final AssemblyOperation newOperation = AssemblyFactory.eINSTANCE.createAssemblyOperation();
+		newOperation.setOperationType(
+				AssemblyModelCloneUtils.findOperationType(type, operation.getOperationType().getSignature()));
 
-        return newOperation;
-    }
+		return newOperation;
+	}
 
-    public static AssemblyStorage duplicate(final ComponentType type, final AssemblyStorage storage) {
-        final AssemblyStorage newStorage = AssemblyFactory.eINSTANCE.createAssemblyStorage();
-        newStorage.setStorageType(AssemblyModelCloneUtils.findStorageType(type, storage.getStorageType().getName()));
+	public static AssemblyStorage duplicate(final ComponentType type, final AssemblyStorage storage) {
+		final AssemblyStorage newStorage = AssemblyFactory.eINSTANCE.createAssemblyStorage();
+		newStorage.setStorageType(AssemblyModelCloneUtils.findStorageType(type, storage.getStorageType().getName()));
 
-        return newStorage;
-    }
+		return newStorage;
+	}
 
-    private static StorageType findStorageType(final ComponentType componentType, final String name) {
-        return componentType.getProvidedStorages().get(name);
-    }
+	private static StorageType findStorageType(final ComponentType componentType, final String name) {
+		return componentType.getProvidedStorages().get(name);
+	}
 
-    private static OperationType findOperationType(final ComponentType componentType, final String signature) {
-        return componentType.getProvidedOperations().get(signature);
-    }
+	private static OperationType findOperationType(final ComponentType componentType, final String signature) {
+		return componentType.getProvidedOperations().get(signature);
+	}
 
-    private static ComponentType findComponentType(final TypeModel typeModel, final String signature) {
-        if (signature == null) {
-            throw new InternalError("Try to find signature, bit signature is null");
-        }
-        return typeModel.getComponentTypes().get(signature);
-    }
+	private static ComponentType findComponentType(final TypeModel typeModel, final String signature) {
+		if (signature == null) {
+			throw new InternalError("Try to find signature, bit signature is null");
+		}
+		return typeModel.getComponentTypes().get(signature);
+	}
 }

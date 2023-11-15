@@ -22,7 +22,7 @@ package kieker.tools.fxca.model;
  */
 public interface IContainable {
 
-    void setParent(MMObject container);
+	void setParent(MMObject container);
 
-    MMObject getParent();
+	MMObject getParent();
 }

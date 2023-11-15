@@ -54,10 +54,7 @@ public class ThreadingAspect extends AbstractAspectJProbe {
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {
-		if (!CTRLINST.isMonitoringEnabled()) {
-			return;
-		}
-		if (!CTRLINST.isProbeActivated("public synchronized void java.lang.Thread.start()")) {
+		if (!CTRLINST.isMonitoringEnabled() || !CTRLINST.isProbeActivated("public synchronized void java.lang.Thread.start()")) {
 			return;
 		}
 		final TraceMetadata trace = TRACEREGISTRY.getTrace();

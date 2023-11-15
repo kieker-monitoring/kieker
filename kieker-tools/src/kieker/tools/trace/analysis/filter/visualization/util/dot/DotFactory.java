@@ -20,12 +20,12 @@ package kieker.tools.trace.analysis.filter.visualization.util.dot;
  * This class provides a collection of static methods to compile Graphviz Dot elements
  * from string attributes and properties.
  * These elements may be compiled to complete Dot files externally.
- * 
+ *
  * @see <a href="http://www.graphviz.org/">Graphviz - Graph Visualization Software</a>
  * @see <a href="http://de.wikipedia.org/wiki/Graphviz">Graphviz - Wikipedia</a>
- * 
+ *
  * @author Nina Marwede
- * 
+ *
  * @since 1.1
  */
 public final class DotFactory {
@@ -62,7 +62,7 @@ public final class DotFactory {
 
 	/**
 	 * This method constructs the neccesary dot code for a directed graph (digraph) file header (Should be called only once per dot file).
-	 * 
+	 *
 	 * @param name
 	 *            The name of the digraph.
 	 * @param label
@@ -73,7 +73,7 @@ public final class DotFactory {
 	 *            The name of the font.
 	 * @param fontsize
 	 *            The size of the font.
-	 * 
+	 *
 	 * @return The digraph header as valid dot code.
 	 */
 	public static StringBuilder createHeader(final String name, final String label, final String fontcolor, final String fontname, final double fontsize) {
@@ -95,7 +95,7 @@ public final class DotFactory {
 	/**
 	 * This method constructs the necessary dot code for the node defaults. Those values will be used if a parameter within a call of the other methods is null
 	 * (Should be called only once per dot file).
-	 * 
+	 *
 	 * @param style
 	 *            The default style of the nodes.
 	 * @param shape
@@ -110,7 +110,7 @@ public final class DotFactory {
 	 *            The default font size of the nodes.
 	 * @param imagescale
 	 *            The image scale property. This attribute determines how an image fills the "parent" node.
-	 * 
+	 *
 	 * @return The graph node defaults as valid dot code.
 	 */
 	public static StringBuilder createNodeDefaults(final String style, final String shape, final String framecolor, final String fontcolor, final String fontname,
@@ -137,7 +137,7 @@ public final class DotFactory {
 	/**
 	 * Constructs dot code for the edge defaults.
 	 * (Should be called only once per dot file.)
-	 * 
+	 *
 	 * @param style
 	 *            The default style for the edges.
 	 * @param arrowhead
@@ -160,7 +160,7 @@ public final class DotFactory {
 
 	/**
 	 * Constructs dot code for a node from the specified elements.
-	 * 
+	 *
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
 	 * @param nodeId
@@ -185,7 +185,7 @@ public final class DotFactory {
 	 *            This parameter can be used to add miscellaneous data and dot code.
 	 * @param tooltip
 	 *            The tooltip of this node. This parameter can be null.
-	 * 
+	 *
 	 * @return The graph node as valid dot code
 	 */
 	public static StringBuilder createNode(final String prefix, final String nodeId, final String label, final String shape, final String style,
@@ -292,7 +292,7 @@ public final class DotFactory {
 	 * Constructs dot code for a cluster from the specified elements.
 	 * <strong>ATTENTION: Without closing bracket!</strong>
 	 * ( "}" has to be appended by calling method.)
-	 * 
+	 *
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
 	 * @param name
@@ -313,7 +313,7 @@ public final class DotFactory {
 	 *            The size of the font. This parameter can be null.
 	 * @param misc
 	 *            This parameter can be used to add miscellaneous data and dot code (like further content). This parameter can be null.
-	 * 
+	 *
 	 * @return A graph cluster as valid dot code - but <b>without</b> the closing bracket.
 	 */
 	public static StringBuilder createCluster(final String prefix, final String name, final String label, final String shape, final String style,
@@ -373,7 +373,7 @@ public final class DotFactory {
 
 	/**
 	 * Creates dot code for a connection. It is assumed that the typical properties (color etc) are already formatted for the usage within dot.
-	 * 
+	 *
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
 	 * @param from
@@ -386,7 +386,7 @@ public final class DotFactory {
 	 *            The style of the edge. This parameter can be null.
 	 * @param arrowhead
 	 *            The type of the arrowhead of the edge. This parameter can be null.
-	 * 
+	 *
 	 * @return A graph connection as valid dot code.
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead, final String color) {
@@ -431,7 +431,7 @@ public final class DotFactory {
 	/**
 	 * Creates dot code for a connection. It is the same as a call to {@link #createConnection(String, String, String, String, String, String)} except that
 	 * a label can be added.
-	 * 
+	 *
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
 	 * @param from
@@ -446,7 +446,7 @@ public final class DotFactory {
 	 *            The style of the edge. This parameter can be null.
 	 * @param arrowhead
 	 *            The type of the arrowhead of the edge. This parameter can be null.
-	 * 
+	 *
 	 * @return A graph connection as valid dot code.
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead,
@@ -480,7 +480,7 @@ public final class DotFactory {
 	/**
 	 * This method creates dot code for a connection. It is the same as a call to {@link #createConnection(String, String, String, String, String, String)} except
 	 * that color, style and arrowhead cannot be modified and that a headlabel and a taillabel can be added.
-	 * 
+	 *
 	 * @param prefix
 	 *            usually spaces, dependent on hierarchy - only for nice ascii formatting inside the dot code
 	 * @param from

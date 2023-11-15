@@ -23,13 +23,13 @@ import teetime.framework.AbstractConsumerStage;
  */
 public class PrintReportStage extends AbstractConsumerStage<Report> {
 
-    @Override
-    protected void execute(final Report report) throws Exception {
-        System.out.println("+++++++++++++++++++");
-        System.out.println(report.getName());
-        System.out.println("+++++++++++++++++++");
-        report.getMessages().forEach(message -> System.out.println(message));
-        System.out.println();
-    }
+	@Override
+	protected void execute(final Report report) throws Exception {
+		System.out.println("+++++++++++++++++++");
+		System.out.println(report.getName());
+		System.out.println("+++++++++++++++++++");
+		report.getMessages().forEach(message -> System.out.println(message));
+		System.out.println();
+	}
 
 }

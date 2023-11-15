@@ -24,23 +24,23 @@ import java.util.List;
  */
 public class Report {
 
-    private final String name;
-    private final List<String> messages = new ArrayList<>();
+	private final String name;
+	private final List<String> messages = new ArrayList<>();
 
-    public Report(final String name) {
-        this.name = name;
-    }
+	public Report(final String name) {
+		this.name = name;
+	}
 
-    public void addMessage(final String format, final Object... values) {
-        this.messages.add(String.format(format, values));
-    }
+	public void addMessage(final String format, final Object... values) {
+		this.messages.add(String.format(format, values));
+	}
 
-    public String getName() {
-        return this.name;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public List<String> getMessages() {
-        return this.messages;
-    }
+	public List<String> getMessages() {
+		return this.messages;
+	}
 
 }

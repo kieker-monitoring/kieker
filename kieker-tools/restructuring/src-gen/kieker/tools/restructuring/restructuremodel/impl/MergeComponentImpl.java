@@ -4,24 +4,20 @@ package kieker.tools.restructuring.restructuremodel.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.tools.restructuring.restructuremodel.DeleteComponent;
 import kieker.tools.restructuring.restructuremodel.MergeComponent;
 import kieker.tools.restructuring.restructuremodel.MoveOperation;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,11 +27,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getMergeGoalComponent <em>Merge Goal Component</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getComponentName <em>Component Name</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getOperations <em>Operations</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getDeleteTransformation <em>Delete Transformation</em>}</li>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getOperationToMove <em>Operation To Move</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getMergeGoalComponent <em>Merge Goal Component</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getComponentName <em>Component Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getOperations <em>Operations</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getDeleteTransformation <em>Delete Transformation</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl#getOperationToMove <em>Operation To Move</em>}</li>
  * </ul>
  *
  * @generated
@@ -45,6 +41,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The default value of the '{@link #getMergeGoalComponent() <em>Merge Goal Component</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getMergeGoalComponent()
 	 * @generated
 	 * @ordered
@@ -55,6 +52,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getMergeGoalComponent() <em>Merge Goal Component</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getMergeGoalComponent()
 	 * @generated
 	 * @ordered
@@ -65,6 +63,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The default value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -75,6 +74,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -85,6 +85,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getOperations() <em>Operations</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperations()
 	 * @generated
 	 * @ordered
@@ -95,6 +96,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getDeleteTransformation() <em>Delete Transformation</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDeleteTransformation()
 	 * @generated
 	 * @ordered
@@ -105,6 +107,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	 * The cached value of the '{@link #getOperationToMove() <em>Operation To Move</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationToMove()
 	 * @generated
 	 * @ordered
@@ -114,6 +117,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected MergeComponentImpl() {
@@ -123,6 +127,7 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -133,77 +138,93 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getMergeGoalComponent() {
-		return mergeGoalComponent;
+		return this.mergeGoalComponent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setMergeGoalComponent(String newMergeGoalComponent) {
-		String oldMergeGoalComponent = mergeGoalComponent;
-		mergeGoalComponent = newMergeGoalComponent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT, oldMergeGoalComponent, mergeGoalComponent));
+	public void setMergeGoalComponent(final String newMergeGoalComponent) {
+		final String oldMergeGoalComponent = this.mergeGoalComponent;
+		this.mergeGoalComponent = newMergeGoalComponent;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT, oldMergeGoalComponent,
+					this.mergeGoalComponent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getComponentName() {
-		return componentName;
+		return this.componentName;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setComponentName(String newComponentName) {
-		String oldComponentName = componentName;
-		componentName = newComponentName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME, oldComponentName, componentName));
+	public void setComponentName(final String newComponentName) {
+		final String oldComponentName = this.componentName;
+		this.componentName = newComponentName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME, oldComponentName, this.componentName));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public EList<String> getOperations() {
-		if (operations == null) {
-			operations = new EDataTypeUniqueEList<String>(String.class, this, RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS);
+		if (this.operations == null) {
+			this.operations = new EDataTypeUniqueEList<>(String.class, this, RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS);
 		}
-		return operations;
+		return this.operations;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public DeleteComponent getDeleteTransformation() {
-		return deleteTransformation;
+		return this.deleteTransformation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetDeleteTransformation(DeleteComponent newDeleteTransformation, NotificationChain msgs) {
-		DeleteComponent oldDeleteTransformation = deleteTransformation;
-		deleteTransformation = newDeleteTransformation;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, oldDeleteTransformation, newDeleteTransformation);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetDeleteTransformation(final DeleteComponent newDeleteTransformation, NotificationChain msgs) {
+		final DeleteComponent oldDeleteTransformation = this.deleteTransformation;
+		this.deleteTransformation = newDeleteTransformation;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION,
+					oldDeleteTransformation, newDeleteTransformation);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -211,46 +232,56 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setDeleteTransformation(DeleteComponent newDeleteTransformation) {
-		if (newDeleteTransformation != deleteTransformation) {
+	public void setDeleteTransformation(final DeleteComponent newDeleteTransformation) {
+		if (newDeleteTransformation != this.deleteTransformation) {
 			NotificationChain msgs = null;
-			if (deleteTransformation != null)
-				msgs = ((InternalEObject)deleteTransformation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, null, msgs);
-			if (newDeleteTransformation != null)
-				msgs = ((InternalEObject)newDeleteTransformation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, null, msgs);
-			msgs = basicSetDeleteTransformation(newDeleteTransformation, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.deleteTransformation != null) {
+				msgs = ((InternalEObject) this.deleteTransformation).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, null, msgs);
+			}
+			if (newDeleteTransformation != null) {
+				msgs = ((InternalEObject) newDeleteTransformation).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, null, msgs);
+			}
+			msgs = this.basicSetDeleteTransformation(newDeleteTransformation, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, newDeleteTransformation,
+					newDeleteTransformation));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION, newDeleteTransformation, newDeleteTransformation));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public EList<MoveOperation> getOperationToMove() {
-		if (operationToMove == null) {
-			operationToMove = new EObjectContainmentEList<MoveOperation>(MoveOperation.class, this, RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE);
+		if (this.operationToMove == null) {
+			this.operationToMove = new EObjectContainmentEList<>(MoveOperation.class, this, RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE);
 		}
-		return operationToMove;
+		return this.operationToMove;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
-				return basicSetDeleteTransformation(null, msgs);
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
-				return ((InternalEList<?>)getOperationToMove()).basicRemove(otherEnd, msgs);
+		case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
+			return this.basicSetDeleteTransformation(null, msgs);
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
+			return ((InternalEList<?>) this.getOperationToMove()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -258,21 +289,22 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
-				return getMergeGoalComponent();
-			case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
-				return getComponentName();
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
-				return getOperations();
-			case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
-				return getDeleteTransformation();
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
-				return getOperationToMove();
+		case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
+			return this.getMergeGoalComponent();
+		case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
+			return this.getComponentName();
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
+			return this.getOperations();
+		case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
+			return this.getDeleteTransformation();
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
+			return this.getOperationToMove();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -280,29 +312,30 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
-				setMergeGoalComponent((String)newValue);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
-				setComponentName((String)newValue);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
-				getOperations().clear();
-				getOperations().addAll((Collection<? extends String>)newValue);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
-				setDeleteTransformation((DeleteComponent)newValue);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
-				getOperationToMove().clear();
-				getOperationToMove().addAll((Collection<? extends MoveOperation>)newValue);
-				return;
+		case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
+			this.setMergeGoalComponent((String) newValue);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
+			this.setComponentName((String) newValue);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
+			this.getOperations().clear();
+			this.getOperations().addAll((Collection<? extends String>) newValue);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
+			this.setDeleteTransformation((DeleteComponent) newValue);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
+			this.getOperationToMove().clear();
+			this.getOperationToMove().addAll((Collection<? extends MoveOperation>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -310,26 +343,27 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
-				setMergeGoalComponent(MERGE_GOAL_COMPONENT_EDEFAULT);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
-				setComponentName(COMPONENT_NAME_EDEFAULT);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
-				getOperations().clear();
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
-				setDeleteTransformation((DeleteComponent)null);
-				return;
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
-				getOperationToMove().clear();
-				return;
+		case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
+			this.setMergeGoalComponent(MERGE_GOAL_COMPONENT_EDEFAULT);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
+			this.setComponentName(COMPONENT_NAME_EDEFAULT);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
+			this.getOperations().clear();
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
+			this.setDeleteTransformation((DeleteComponent) null);
+			return;
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
+			this.getOperationToMove().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -337,21 +371,22 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
-				return MERGE_GOAL_COMPONENT_EDEFAULT == null ? mergeGoalComponent != null : !MERGE_GOAL_COMPONENT_EDEFAULT.equals(mergeGoalComponent);
-			case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
-				return COMPONENT_NAME_EDEFAULT == null ? componentName != null : !COMPONENT_NAME_EDEFAULT.equals(componentName);
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
-				return operations != null && !operations.isEmpty();
-			case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
-				return deleteTransformation != null;
-			case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
-				return operationToMove != null && !operationToMove.isEmpty();
+		case RestructuremodelPackage.MERGE_COMPONENT__MERGE_GOAL_COMPONENT:
+			return MERGE_GOAL_COMPONENT_EDEFAULT == null ? this.mergeGoalComponent != null : !MERGE_GOAL_COMPONENT_EDEFAULT.equals(this.mergeGoalComponent);
+		case RestructuremodelPackage.MERGE_COMPONENT__COMPONENT_NAME:
+			return COMPONENT_NAME_EDEFAULT == null ? this.componentName != null : !COMPONENT_NAME_EDEFAULT.equals(this.componentName);
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATIONS:
+			return (this.operations != null) && !this.operations.isEmpty();
+		case RestructuremodelPackage.MERGE_COMPONENT__DELETE_TRANSFORMATION:
+			return this.deleteTransformation != null;
+		case RestructuremodelPackage.MERGE_COMPONENT__OPERATION_TO_MOVE:
+			return (this.operationToMove != null) && !this.operationToMove.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -359,21 +394,24 @@ public class MergeComponentImpl extends AbstractTransformationStepImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (mergeGoalComponent: ");
-		result.append(mergeGoalComponent);
+		result.append(this.mergeGoalComponent);
 		result.append(", componentName: ");
-		result.append(componentName);
+		result.append(this.componentName);
 		result.append(", operations: ");
-		result.append(operations);
+		result.append(this.operations);
 		result.append(')');
 		return result.toString();
 	}
 
-} //MergeComponentImpl
+} // MergeComponentImpl

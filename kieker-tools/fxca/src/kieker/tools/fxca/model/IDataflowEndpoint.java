@@ -23,5 +23,5 @@ package kieker.tools.fxca.model;
  */
 public interface IDataflowEndpoint {
 
-    String getName();
+	String getName();
 }

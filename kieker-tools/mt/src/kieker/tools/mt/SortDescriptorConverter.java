@@ -25,15 +25,15 @@ import com.beust.jcommander.IStringConverter;
  */
 public class SortDescriptorConverter implements IStringConverter<SortDescriptor> {
 
-    @Override
-    public SortDescriptor convert(final String value) {
-        final SortDescriptor sortDescriptor = new SortDescriptor();
-        final String[] sortCriteriums = value.split(",");
-        for (final String sortCriterium : sortCriteriums) {
-            final String[] params = sortCriterium.split(":");
-            sortDescriptor.getSortCriteria().add(new SortCriterium(params[0], EOrder.valueOf(params[1].toUpperCase())));
-        }
-        return sortDescriptor;
-    }
+	@Override
+	public SortDescriptor convert(final String value) {
+		final SortDescriptor sortDescriptor = new SortDescriptor();
+		final String[] sortCriteriums = value.split(",");
+		for (final String sortCriterium : sortCriteriums) {
+			final String[] params = sortCriterium.split(":");
+			sortDescriptor.getSortCriteria().add(new SortCriterium(params[0], EOrder.valueOf(params[1].toUpperCase())));
+		}
+		return sortDescriptor;
+	}
 
 }

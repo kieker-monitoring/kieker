@@ -31,71 +31,70 @@ import kieker.tools.cmi.RepositoryUtils;
  */
 public final class GenericCheckUtils {
 
-    private GenericCheckUtils() {
-    }
+	private GenericCheckUtils() {}
 
-    public static void checkReferences(final EClass modelClass, final TreeIterator<EObject> iterator,
-            final Report report) {
-        long errorCount = 0;
-        while (iterator.hasNext()) {
-            final EObject object = iterator.next();
-            final EClass clazz = object.eClass();
-            for (final EReference reference : clazz.getEAllReferences()) {
-                final Object referencedObject = object.eGet(reference, true);
-                if (referencedObject == null) {
-                    report.addMessage("Model %s Missing referenced object: %s -> %s:%s", // NOPMD
-                            modelClass.getName(), RepositoryUtils.getName(object), reference.getEType().getName(),
-                            reference.getName());
-                    errorCount++;
+	public static void checkReferences(final EClass modelClass, final TreeIterator<EObject> iterator,
+			final Report report) {
+		long errorCount = 0;
+		while (iterator.hasNext()) {
+			final EObject object = iterator.next();
+			final EClass clazz = object.eClass();
+			for (final EReference reference : clazz.getEAllReferences()) {
+				final Object referencedObject = object.eGet(reference, true);
+				if (referencedObject == null) {
+					report.addMessage("Model %s Missing referenced object: %s -> %s:%s", // NOPMD
+							modelClass.getName(), RepositoryUtils.getName(object), reference.getEType().getName(),
+							reference.getName());
+					errorCount++;
 
-                }
-            }
-        }
-        report.addMessage("Missing references in %s %s", report.getName(), errorCount);
-    }
+				}
+			}
+		}
+		report.addMessage("Missing references in %s %s", report.getName(), errorCount);
+	}
 
-    public static void missingSignature(final TreeIterator<EObject> iterator, final Report report) {
-        GenericCheckUtils.missingAttribute(iterator, "signature", report);
-    }
+	public static void missingSignature(final TreeIterator<EObject> iterator, final Report report) {
+		GenericCheckUtils.missingAttribute(iterator, "signature", report);
+	}
 
-    public static void missingName(final TreeIterator<EObject> iterator, final Report report) {
-        GenericCheckUtils.missingAttribute(iterator, "name", report);
-    }
+	public static void missingName(final TreeIterator<EObject> iterator, final Report report) {
+		GenericCheckUtils.missingAttribute(iterator, "name", report);
+	}
 
-    public static void missingPackage(final TreeIterator<EObject> iterator, final Report report) {
-        GenericCheckUtils.missingAttribute(iterator, "package", report);
-    }
+	public static void missingPackage(final TreeIterator<EObject> iterator, final Report report) {
+		GenericCheckUtils.missingAttribute(iterator, "package", report);
+	}
 
-    private static void missingAttribute(final TreeIterator<EObject> iterator, final String attributeName,
-            final Report report) {
-        long errorCount = 0;
-        while (iterator.hasNext()) {
-            final EObject object = iterator.next();
-            final EClass clazz = object.eClass();
-            for (final EAttribute attribute : clazz.getEAllAttributes()) {
-                if (attributeName.equals(attribute.getName())) {
-                    final Object value = object.eGet(attribute);
-                    if (value == null) {
-                        report.addMessage("Object %s of type %s has %s attribute, but no value", // NOPMD
-                                attributeName, GenericCheckUtils.print(object), clazz.getName());
-                        errorCount++;
-                    }
-                }
-            }
-        }
-        report.addMessage("Missing %s in %s %s", attributeName, report.getName(), errorCount);
-    }
+	private static void missingAttribute(final TreeIterator<EObject> iterator, final String attributeName,
+			final Report report) {
+		long errorCount = 0;
+		while (iterator.hasNext()) {
+			final EObject object = iterator.next();
+			final EClass clazz = object.eClass();
+			for (final EAttribute attribute : clazz.getEAllAttributes()) {
+				if (attributeName.equals(attribute.getName())) {
+					final Object value = object.eGet(attribute);
+					if (value == null) {
+						report.addMessage("Object %s of type %s has %s attribute, but no value", // NOPMD
+								attributeName, GenericCheckUtils.print(object), clazz.getName());
+						errorCount++;
+					}
+				}
+			}
+		}
+		report.addMessage("Missing %s in %s %s", attributeName, report.getName(), errorCount);
+	}
 
-    private static String print(final EObject object) {
-        final EClass clazz = object.eClass();
-        String result = "class " + clazz.getName();
-        for (final EAttribute attribute : clazz.getEAllAttributes()) {
-            result += " " + attribute.getName() + "=" + object.eGet(attribute);
-        }
-        for (final EReference reference : clazz.getEAllReferences()) {
-            result += " " + reference.getEReferenceType().getName() + ":" + reference.getName() + "="
-                    + object.eGet(reference);
-        }
-        return result;
-    }
+	private static String print(final EObject object) {
+		final EClass clazz = object.eClass();
+		String result = "class " + clazz.getName();
+		for (final EAttribute attribute : clazz.getEAllAttributes()) {
+			result += " " + attribute.getName() + "=" + object.eGet(attribute);
+		}
+		for (final EReference reference : clazz.getEAllReferences()) {
+			result += " " + reference.getEReferenceType().getName() + ":" + reference.getName() + "="
+					+ object.eGet(reference);
+		}
+		return result;
+	}
 }

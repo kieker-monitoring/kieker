@@ -13,13 +13,14 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- *   <li>each class,</li>
- *   <li>each feature of each class,</li>
- *   <li>each operation of each class,</li>
- *   <li>each enum,</li>
- *   <li>and each data type</li>
+ * <li>each class,</li>
+ * <li>each feature of each class,</li>
+ * <li>each operation of each class,</li>
+ * <li>each enum,</li>
+ * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.statistics.StatisticsFactory
  * @model kind="package"
  * @generated
@@ -29,6 +30,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNAME = "statistics";
@@ -37,6 +39,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore/statistics";
@@ -45,6 +48,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "statistics";
@@ -53,6 +57,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	StatisticsPackage eINSTANCE = kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl.init();
@@ -61,6 +66,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl <em>Statistic Record</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticRecordImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticRecord()
 	 * @generated
@@ -71,6 +77,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Properties</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -80,6 +87,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Statistic Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -89,6 +97,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Statistic Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -98,6 +107,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyTypeToValue()
 	 * @generated
@@ -108,6 +118,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -117,6 +128,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -126,6 +138,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>EProperty Type To Value</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -135,6 +148,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>EProperty Type To Value</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -144,6 +158,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.MeasurementImpl <em>Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.MeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getMeasurement()
 	 * @generated
@@ -154,6 +169,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -163,6 +179,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -172,6 +189,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -181,6 +199,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.ScalarMeasurementImpl <em>Scalar Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.ScalarMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getScalarMeasurement()
 	 * @generated
@@ -191,6 +210,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -200,6 +220,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -209,6 +230,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Scalar Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -218,6 +240,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Scalar Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -227,6 +250,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl <em>Vector Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getVectorMeasurement()
 	 * @generated
@@ -237,6 +261,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -246,6 +271,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Values</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -255,6 +281,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Vector Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -264,6 +291,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Vector Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -273,6 +301,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.IntMeasurementImpl <em>Int Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.IntMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getIntMeasurement()
 	 * @generated
@@ -283,6 +312,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -292,6 +322,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -301,6 +332,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -310,6 +342,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Int Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -319,6 +352,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Int Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -328,6 +362,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.LongMeasurementImpl <em>Long Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.LongMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getLongMeasurement()
 	 * @generated
@@ -338,6 +373,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -347,6 +383,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -356,6 +393,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -365,6 +403,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Long Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -374,6 +413,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Long Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -383,6 +423,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.FloatMeasurementImpl <em>Float Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.FloatMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getFloatMeasurement()
 	 * @generated
@@ -393,6 +434,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -402,6 +444,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -411,6 +454,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -420,6 +464,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Float Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -429,6 +474,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Float Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -438,6 +484,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.DoubleMeasurementImpl <em>Double Measurement</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.DoubleMeasurementImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getDoubleMeasurement()
 	 * @generated
@@ -448,6 +495,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -457,6 +505,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -466,6 +515,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -475,6 +525,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Double Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -484,6 +535,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Double Measurement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -493,6 +545,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.UnitImpl <em>Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.UnitImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getUnit()
 	 * @generated
@@ -503,6 +556,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl <em>Composed Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.ComposedUnitImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getComposedUnit()
 	 * @generated
@@ -513,6 +567,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.SimpleUnitImpl <em>Simple Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.SimpleUnitImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getSimpleUnit()
 	 * @generated
@@ -523,6 +578,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.SIUnitImpl <em>SI Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.SIUnitImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getSIUnit()
 	 * @generated
@@ -533,6 +589,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.CustomUnitImpl <em>Custom Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.CustomUnitImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getCustomUnit()
 	 * @generated
@@ -543,6 +600,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.ESIUnitType <em>ESI Unit Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.ESIUnitType
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getESIUnitType()
 	 * @generated
@@ -553,6 +611,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.EPrefix <em>EPrefix</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.EPrefix
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPrefix()
 	 * @generated
@@ -563,6 +622,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.StatisticsModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsModelImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticsModel()
 	 * @generated
@@ -573,6 +633,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Statistics</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -582,6 +643,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Units</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -591,6 +653,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -600,15 +663,18 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int STATISTICS_MODEL_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map Entry</em>}'
+	 * class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl
 	 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEObjectToStatisticsMapEntry()
 	 * @generated
@@ -619,6 +685,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -628,6 +695,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -637,6 +705,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>EObject To Statistics Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -646,6 +715,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>EObject To Statistics Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -655,6 +725,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -664,6 +735,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -673,6 +745,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Units</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -682,6 +755,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Exponent</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -691,6 +765,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Composed Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -700,6 +775,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Composed Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -709,6 +785,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Prefix</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -718,6 +795,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Simple Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -727,6 +805,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Simple Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -736,6 +815,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Prefix</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -745,6 +825,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Unit Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -754,6 +835,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>SI Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -763,6 +845,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>SI Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -772,6 +855,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Prefix</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -781,6 +865,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -790,6 +875,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of structural features of the '<em>Custom Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -799,6 +885,7 @@ public interface StatisticsPackage extends EPackage {
 	 * The number of operations of the '<em>Custom Unit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -808,6 +895,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.StatisticRecord <em>Statistic Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Statistic Record</em>'.
 	 * @see kieker.model.analysismodel.statistics.StatisticRecord
 	 * @generated
@@ -818,6 +906,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.StatisticRecord#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Properties</em>'.
 	 * @see kieker.model.analysismodel.statistics.StatisticRecord#getProperties()
 	 * @see #getStatisticRecord()
@@ -829,6 +918,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EProperty Type To Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EProperty Type To Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -841,6 +931,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEPropertyTypeToValue()
@@ -852,6 +943,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEPropertyTypeToValue()
@@ -863,6 +955,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.Measurement <em>Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.Measurement
 	 * @generated
@@ -873,6 +966,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.Measurement#getTimestamp <em>Timestamp</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Timestamp</em>'.
 	 * @see kieker.model.analysismodel.statistics.Measurement#getTimestamp()
 	 * @see #getMeasurement()
@@ -884,6 +978,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.ScalarMeasurement <em>Scalar Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Scalar Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.ScalarMeasurement
 	 * @generated
@@ -894,6 +989,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.statistics.ScalarMeasurement#getUnit <em>Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.ScalarMeasurement#getUnit()
 	 * @see #getScalarMeasurement()
@@ -905,6 +1001,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.VectorMeasurement <em>Vector Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Vector Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.VectorMeasurement
 	 * @generated
@@ -915,6 +1012,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.statistics.VectorMeasurement#getValues <em>Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Values</em>'.
 	 * @see kieker.model.analysismodel.statistics.VectorMeasurement#getValues()
 	 * @see #getVectorMeasurement()
@@ -926,6 +1024,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.IntMeasurement <em>Int Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Int Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.IntMeasurement
 	 * @generated
@@ -936,6 +1035,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.IntMeasurement#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see kieker.model.analysismodel.statistics.IntMeasurement#getValue()
 	 * @see #getIntMeasurement()
@@ -947,6 +1047,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.LongMeasurement <em>Long Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Long Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.LongMeasurement
 	 * @generated
@@ -957,6 +1058,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.LongMeasurement#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see kieker.model.analysismodel.statistics.LongMeasurement#getValue()
 	 * @see #getLongMeasurement()
@@ -968,6 +1070,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.FloatMeasurement <em>Float Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Float Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.FloatMeasurement
 	 * @generated
@@ -978,6 +1081,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.FloatMeasurement#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see kieker.model.analysismodel.statistics.FloatMeasurement#getValue()
 	 * @see #getFloatMeasurement()
@@ -989,6 +1093,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.DoubleMeasurement <em>Double Measurement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Double Measurement</em>'.
 	 * @see kieker.model.analysismodel.statistics.DoubleMeasurement
 	 * @generated
@@ -999,6 +1104,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.DoubleMeasurement#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see kieker.model.analysismodel.statistics.DoubleMeasurement#getValue()
 	 * @see #getDoubleMeasurement()
@@ -1010,6 +1116,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.Unit <em>Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.Unit
 	 * @generated
@@ -1020,6 +1127,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.ComposedUnit <em>Composed Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Composed Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.ComposedUnit
 	 * @generated
@@ -1030,6 +1138,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.statistics.ComposedUnit#getUnits <em>Units</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Units</em>'.
 	 * @see kieker.model.analysismodel.statistics.ComposedUnit#getUnits()
 	 * @see #getComposedUnit()
@@ -1041,6 +1150,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.ComposedUnit#getExponent <em>Exponent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Exponent</em>'.
 	 * @see kieker.model.analysismodel.statistics.ComposedUnit#getExponent()
 	 * @see #getComposedUnit()
@@ -1052,6 +1162,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.SimpleUnit <em>Simple Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Simple Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.SimpleUnit
 	 * @generated
@@ -1062,6 +1173,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.SimpleUnit#getPrefix <em>Prefix</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Prefix</em>'.
 	 * @see kieker.model.analysismodel.statistics.SimpleUnit#getPrefix()
 	 * @see #getSimpleUnit()
@@ -1073,6 +1185,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.SIUnit <em>SI Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>SI Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.SIUnit
 	 * @generated
@@ -1083,6 +1196,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.SIUnit#getUnitType <em>Unit Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Unit Type</em>'.
 	 * @see kieker.model.analysismodel.statistics.SIUnit#getUnitType()
 	 * @see #getSIUnit()
@@ -1094,6 +1208,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.CustomUnit <em>Custom Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Custom Unit</em>'.
 	 * @see kieker.model.analysismodel.statistics.CustomUnit
 	 * @generated
@@ -1104,6 +1219,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.statistics.CustomUnit#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.model.analysismodel.statistics.CustomUnit#getName()
 	 * @see #getCustomUnit()
@@ -1115,6 +1231,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for enum '{@link kieker.model.analysismodel.statistics.ESIUnitType <em>ESI Unit Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for enum '<em>ESI Unit Type</em>'.
 	 * @see kieker.model.analysismodel.statistics.ESIUnitType
 	 * @generated
@@ -1125,6 +1242,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for enum '{@link kieker.model.analysismodel.statistics.EPrefix <em>EPrefix</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for enum '<em>EPrefix</em>'.
 	 * @see kieker.model.analysismodel.statistics.EPrefix
 	 * @generated
@@ -1135,6 +1253,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.statistics.StatisticsModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Model</em>'.
 	 * @see kieker.model.analysismodel.statistics.StatisticsModel
 	 * @generated
@@ -1145,6 +1264,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.statistics.StatisticsModel#getStatistics <em>Statistics</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Statistics</em>'.
 	 * @see kieker.model.analysismodel.statistics.StatisticsModel#getStatistics()
 	 * @see #getStatisticsModel()
@@ -1156,6 +1276,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.statistics.StatisticsModel#getUnits <em>Units</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Units</em>'.
 	 * @see kieker.model.analysismodel.statistics.StatisticsModel#getUnits()
 	 * @see #getStatisticsModel()
@@ -1167,9 +1288,10 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EObject To Statistics Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EObject To Statistics Map Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model features="value key" 
+	 * @model features="value key"
 	 *        valueType="kieker.model.analysismodel.statistics.StatisticRecord" valueContainment="true"
 	 *        keyType="org.eclipse.emf.ecore.EObject"
 	 * @generated
@@ -1180,6 +1302,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEObjectToStatisticsMapEntry()
@@ -1191,6 +1314,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEObjectToStatisticsMapEntry()
@@ -1202,6 +1326,7 @@ public interface StatisticsPackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -1211,13 +1336,14 @@ public interface StatisticsPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each operation of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 * <li>each class,</li>
+	 * <li>each feature of each class,</li>
+	 * <li>each operation of each class,</li>
+	 * <li>each enum,</li>
+	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
@@ -1225,6 +1351,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.StatisticRecordImpl <em>Statistic Record</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticRecordImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticRecord()
 		 * @generated
@@ -1235,6 +1362,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference STATISTIC_RECORD__PROPERTIES = eINSTANCE.getStatisticRecord_Properties();
@@ -1243,6 +1371,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl <em>EProperty Type To Value</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.EPropertyTypeToValueImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPropertyTypeToValue()
 		 * @generated
@@ -1253,6 +1382,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute EPROPERTY_TYPE_TO_VALUE__KEY = eINSTANCE.getEPropertyTypeToValue_Key();
@@ -1261,6 +1391,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute EPROPERTY_TYPE_TO_VALUE__VALUE = eINSTANCE.getEPropertyTypeToValue_Value();
@@ -1269,6 +1400,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.MeasurementImpl <em>Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.MeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getMeasurement()
 		 * @generated
@@ -1279,6 +1411,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Timestamp</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MEASUREMENT__TIMESTAMP = eINSTANCE.getMeasurement_Timestamp();
@@ -1287,6 +1420,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.ScalarMeasurementImpl <em>Scalar Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.ScalarMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getScalarMeasurement()
 		 * @generated
@@ -1297,6 +1431,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Unit</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SCALAR_MEASUREMENT__UNIT = eINSTANCE.getScalarMeasurement_Unit();
@@ -1305,6 +1440,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl <em>Vector Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getVectorMeasurement()
 		 * @generated
@@ -1315,6 +1451,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Values</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference VECTOR_MEASUREMENT__VALUES = eINSTANCE.getVectorMeasurement_Values();
@@ -1323,6 +1460,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.IntMeasurementImpl <em>Int Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.IntMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getIntMeasurement()
 		 * @generated
@@ -1333,6 +1471,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute INT_MEASUREMENT__VALUE = eINSTANCE.getIntMeasurement_Value();
@@ -1341,6 +1480,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.LongMeasurementImpl <em>Long Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.LongMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getLongMeasurement()
 		 * @generated
@@ -1351,6 +1491,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute LONG_MEASUREMENT__VALUE = eINSTANCE.getLongMeasurement_Value();
@@ -1359,6 +1500,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.FloatMeasurementImpl <em>Float Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.FloatMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getFloatMeasurement()
 		 * @generated
@@ -1369,6 +1511,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute FLOAT_MEASUREMENT__VALUE = eINSTANCE.getFloatMeasurement_Value();
@@ -1377,6 +1520,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.DoubleMeasurementImpl <em>Double Measurement</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.DoubleMeasurementImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getDoubleMeasurement()
 		 * @generated
@@ -1387,6 +1531,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DOUBLE_MEASUREMENT__VALUE = eINSTANCE.getDoubleMeasurement_Value();
@@ -1395,6 +1540,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.UnitImpl <em>Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.UnitImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getUnit()
 		 * @generated
@@ -1405,6 +1551,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.ComposedUnitImpl <em>Composed Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.ComposedUnitImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getComposedUnit()
 		 * @generated
@@ -1415,6 +1562,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Units</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPOSED_UNIT__UNITS = eINSTANCE.getComposedUnit_Units();
@@ -1423,6 +1571,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Exponent</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPOSED_UNIT__EXPONENT = eINSTANCE.getComposedUnit_Exponent();
@@ -1431,6 +1580,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.SimpleUnitImpl <em>Simple Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.SimpleUnitImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getSimpleUnit()
 		 * @generated
@@ -1441,6 +1591,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Prefix</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SIMPLE_UNIT__PREFIX = eINSTANCE.getSimpleUnit_Prefix();
@@ -1449,6 +1600,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.SIUnitImpl <em>SI Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.SIUnitImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getSIUnit()
 		 * @generated
@@ -1459,6 +1611,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Unit Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SI_UNIT__UNIT_TYPE = eINSTANCE.getSIUnit_UnitType();
@@ -1467,6 +1620,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.CustomUnitImpl <em>Custom Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.CustomUnitImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getCustomUnit()
 		 * @generated
@@ -1477,6 +1631,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CUSTOM_UNIT__NAME = eINSTANCE.getCustomUnit_Name();
@@ -1485,6 +1640,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.ESIUnitType <em>ESI Unit Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.ESIUnitType
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getESIUnitType()
 		 * @generated
@@ -1495,6 +1651,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.EPrefix <em>EPrefix</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.EPrefix
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEPrefix()
 		 * @generated
@@ -1505,6 +1662,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.StatisticsModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsModelImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getStatisticsModel()
 		 * @generated
@@ -1515,6 +1673,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Statistics</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference STATISTICS_MODEL__STATISTICS = eINSTANCE.getStatisticsModel_Statistics();
@@ -1523,14 +1682,17 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Units</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference STATISTICS_MODEL__UNITS = eINSTANCE.getStatisticsModel_Units();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl <em>EObject To Statistics Map
+		 * Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.statistics.impl.EObjectToStatisticsMapEntryImpl
 		 * @see kieker.model.analysismodel.statistics.impl.StatisticsPackageImpl#getEObjectToStatisticsMapEntry()
 		 * @generated
@@ -1541,6 +1703,7 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE = eINSTANCE.getEObjectToStatisticsMapEntry_Value();
@@ -1549,10 +1712,11 @@ public interface StatisticsPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY = eINSTANCE.getEObjectToStatisticsMapEntry_Key();
 
 	}
 
-} //StatisticsPackage
+} // StatisticsPackage

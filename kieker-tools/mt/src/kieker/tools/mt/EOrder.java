@@ -20,5 +20,5 @@ package kieker.tools.mt;
  * @since 2.0.0
  */
 public enum EOrder {
-    ASCENDING, DESCENDING
+	ASCENDING, DESCENDING
 }

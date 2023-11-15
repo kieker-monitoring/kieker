@@ -2,14 +2,12 @@
  */
 package kieker.tools.restructuring.restructuremodel.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.tools.restructuring.restructuremodel.CreateComponent;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +17,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl#getComponentName <em>Component Name</em>}</li>
+ * <li>{@link kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl#getComponentName <em>Component Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -29,6 +27,7 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	 * The default value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -39,6 +38,7 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	 * The cached value of the '{@link #getComponentName() <em>Component Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getComponentName()
 	 * @generated
 	 * @ordered
@@ -48,6 +48,7 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected CreateComponentImpl() {
@@ -57,6 +58,7 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -67,34 +69,39 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getComponentName() {
-		return componentName;
+		return this.componentName;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setComponentName(String newComponentName) {
-		String oldComponentName = componentName;
-		componentName = newComponentName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME, oldComponentName, componentName));
+	public void setComponentName(final String newComponentName) {
+		final String oldComponentName = this.componentName;
+		this.componentName = newComponentName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME, oldComponentName, this.componentName));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
-				return getComponentName();
+		case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
+			return this.getComponentName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -102,14 +109,15 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
-				setComponentName((String)newValue);
-				return;
+		case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
+			this.setComponentName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -117,14 +125,15 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
-				setComponentName(COMPONENT_NAME_EDEFAULT);
-				return;
+		case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
+			this.setComponentName(COMPONENT_NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -132,13 +141,14 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
-				return COMPONENT_NAME_EDEFAULT == null ? componentName != null : !COMPONENT_NAME_EDEFAULT.equals(componentName);
+		case RestructuremodelPackage.CREATE_COMPONENT__COMPONENT_NAME:
+			return COMPONENT_NAME_EDEFAULT == null ? this.componentName != null : !COMPONENT_NAME_EDEFAULT.equals(this.componentName);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -146,17 +156,20 @@ public class CreateComponentImpl extends AbstractTransformationStepImpl implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (componentName: ");
-		result.append(componentName);
+		result.append(this.componentName);
 		result.append(')');
 		return result.toString();
 	}
 
-} //CreateComponentImpl
+} // CreateComponentImpl

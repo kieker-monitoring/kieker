@@ -51,7 +51,7 @@ public class TeetimeConfiguration extends Configuration {
 		this.connectPorts(merger.getOutputPort(), reportStage.getInputPort());
 
 		if (settings.getChecks() == null) {
-			settings.setChecks(new ArrayList<ECheck>());
+			settings.setChecks(new ArrayList<>());
 		}
 		if (settings.getChecks().isEmpty()) {
 			settings.getChecks().add(ECheck.TYPE);

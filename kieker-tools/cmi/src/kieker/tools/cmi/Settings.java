@@ -29,24 +29,25 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings {
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, converter = PathConverter.class, description = "Directory for the input model")
-    private Path inputDirectory;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, converter = PathConverter.class, description = "Directory for the input model")
+	private Path inputDirectory;
 
-    @Parameter(names = { "-c",
-            "--checks" }, variableArity = true, required = false, converter = CheckConverter.class, validateWith = CheckValidator.class, description = "Select the model checks to be applied")
-    private List<ECheck> checks;
+	@Parameter(names = { "-c",
+		"--checks" }, variableArity = true, required = false, converter = CheckConverter.class, validateWith = CheckValidator.class,
+			description = "Select the model checks to be applied")
+	private List<ECheck> checks;
 
-    public Path getInputDirectory() {
-        return this.inputDirectory;
-    }
+	public Path getInputDirectory() {
+		return this.inputDirectory;
+	}
 
-    public List<ECheck> getChecks() {
-        return this.checks;
-    }
+	public List<ECheck> getChecks() {
+		return this.checks;
+	}
 
-    public void setChecks(final List<ECheck> checks) {
-        this.checks = checks;
-    }
+	public void setChecks(final List<ECheck> checks) {
+		this.checks = checks;
+	}
 
 }

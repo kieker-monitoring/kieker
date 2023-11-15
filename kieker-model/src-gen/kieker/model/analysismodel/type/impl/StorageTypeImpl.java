@@ -2,15 +2,13 @@
  */
 package kieker.model.analysismodel.type.impl;
 
-import kieker.model.analysismodel.type.StorageType;
-import kieker.model.analysismodel.type.TypePackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.type.StorageType;
+import kieker.model.analysismodel.type.TypePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,8 +18,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.type.impl.StorageTypeImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.StorageTypeImpl#getType <em>Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.StorageTypeImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.StorageTypeImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,6 +29,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -41,6 +40,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -51,6 +51,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -61,6 +62,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -70,6 +72,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected StorageTypeImpl() {
@@ -79,6 +82,7 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -89,61 +93,68 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.STORAGE_TYPE__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.STORAGE_TYPE__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getType() {
-		return type;
+		return this.type;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setType(String newType) {
-		String oldType = type;
-		type = newType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.STORAGE_TYPE__TYPE, oldType, type));
+	public void setType(final String newType) {
+		final String oldType = this.type;
+		this.type = newType;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.STORAGE_TYPE__TYPE, oldType, this.type));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case TypePackage.STORAGE_TYPE__NAME:
-				return getName();
-			case TypePackage.STORAGE_TYPE__TYPE:
-				return getType();
+		case TypePackage.STORAGE_TYPE__NAME:
+			return this.getName();
+		case TypePackage.STORAGE_TYPE__TYPE:
+			return this.getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -151,17 +162,18 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case TypePackage.STORAGE_TYPE__NAME:
-				setName((String)newValue);
-				return;
-			case TypePackage.STORAGE_TYPE__TYPE:
-				setType((String)newValue);
-				return;
+		case TypePackage.STORAGE_TYPE__NAME:
+			this.setName((String) newValue);
+			return;
+		case TypePackage.STORAGE_TYPE__TYPE:
+			this.setType((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -169,17 +181,18 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case TypePackage.STORAGE_TYPE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypePackage.STORAGE_TYPE__TYPE:
-				setType(TYPE_EDEFAULT);
-				return;
+		case TypePackage.STORAGE_TYPE__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
+		case TypePackage.STORAGE_TYPE__TYPE:
+			this.setType(TYPE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,15 +200,16 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case TypePackage.STORAGE_TYPE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypePackage.STORAGE_TYPE__TYPE:
-				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+		case TypePackage.STORAGE_TYPE__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
+		case TypePackage.STORAGE_TYPE__TYPE:
+			return TYPE_EDEFAULT == null ? this.type != null : !TYPE_EDEFAULT.equals(this.type);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -203,19 +217,22 @@ public class StorageTypeImpl extends MinimalEObjectImpl.Container implements Sto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", type: ");
-		result.append(type);
+		result.append(this.type);
 		result.append(')');
 		return result.toString();
 	}
 
-} //StorageTypeImpl
+} // StorageTypeImpl

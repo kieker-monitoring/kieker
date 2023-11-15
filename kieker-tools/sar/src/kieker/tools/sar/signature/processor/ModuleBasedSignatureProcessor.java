@@ -24,21 +24,21 @@ package kieker.tools.sar.signature.processor;
  */
 public class ModuleBasedSignatureProcessor extends AbstractSignatureProcessor {
 
-    public ModuleBasedSignatureProcessor(final boolean caseInsensitive) {
-        super(caseInsensitive);
-    }
+	public ModuleBasedSignatureProcessor(final boolean caseInsensitive) {
+		super(caseInsensitive);
+	}
 
-    @Override
-    public boolean processSignatures(final String path, final String componentSignature,
-            final String elementSignature) {
-        this.elementSignature = this.convertToLowerCase(elementSignature);
-        this.componentSignature = this.convertToLowerCase(componentSignature);
-        // path is ignored
-        return true;
-    }
+	@Override
+	public boolean processSignatures(final String path, final String componentSignature,
+			final String elementSignature) {
+		this.elementSignature = this.convertToLowerCase(elementSignature);
+		this.componentSignature = this.convertToLowerCase(componentSignature);
+		// path is ignored
+		return true;
+	}
 
-    @Override
-    public String getErrorMessage() {
-        return null;
-    }
+	@Override
+	public String getErrorMessage() {
+		return null;
+	}
 }

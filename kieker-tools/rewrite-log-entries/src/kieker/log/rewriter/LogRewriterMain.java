@@ -33,56 +33,56 @@ import kieker.tools.common.AbstractService;
  */
 public class LogRewriterMain extends AbstractService<TeetimeConfiguration, Settings> {
 
-    public static void main(final String[] args) {
-        System.exit(new LogRewriterMain().run("Kieker Log ELF Rewriter", "log-rewriter", args, new Settings()));
-    }
+	public static void main(final String[] args) {
+		System.exit(new LogRewriterMain().run("Kieker Log ELF Rewriter", "log-rewriter", args, new Settings()));
+	}
 
-    @Override
-    protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
-        try {
-            return new TeetimeConfiguration(this.settings);
-        } catch (final IOException e) {
-            throw new ConfigurationException(e);
-        }
-    }
+	@Override
+	protected TeetimeConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		try {
+			return new TeetimeConfiguration(this.settings);
+		} catch (final IOException e) {
+			throw new ConfigurationException(e);
+		}
+	}
 
-    @Override
-    protected Path getConfigurationPath() {
-        // we do not use a configuration file
-        return null;
-    }
+	@Override
+	protected Path getConfigurationPath() {
+		// we do not use a configuration file
+		return null;
+	}
 
-    @Override
-    protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-        return true;
-    }
+	@Override
+	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
+		return true;
+	}
 
-    @Override
-    protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-        if (!this.settings.getAddrlineExecutable().canExecute()) {
-            this.logger.error("Addr2line file {} is not executable", this.settings.getAddrlineExecutable());
-            return false;
-        }
-        if (!this.settings.getModelExecutable().canExecute()) {
-            this.logger.error("Model file {} is not executable", this.settings.getModelExecutable());
-            return false;
-        }
-        for (final File inputFile : this.settings.getInputFiles()) {
-            if (!inputFile.isDirectory()) {
-                this.logger.error("Input directory {} is not directory", inputFile);
-                return false;
-            }
-        }
-        if (!this.settings.getOutputFile().isDirectory()) {
-            this.logger.error("Output directory {} is not directory", this.settings.getOutputFile());
-            return false;
-        }
-        return true;
-    }
+	@Override
+	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
+		if (!this.settings.getAddrlineExecutable().canExecute()) {
+			this.logger.error("Addr2line file {} is not executable", this.settings.getAddrlineExecutable());
+			return false;
+		}
+		if (!this.settings.getModelExecutable().canExecute()) {
+			this.logger.error("Model file {} is not executable", this.settings.getModelExecutable());
+			return false;
+		}
+		for (final File inputFile : this.settings.getInputFiles()) {
+			if (!inputFile.isDirectory()) {
+				this.logger.error("Input directory {} is not directory", inputFile);
+				return false;
+			}
+		}
+		if (!this.settings.getOutputFile().isDirectory()) {
+			this.logger.error("Output directory {} is not directory", this.settings.getOutputFile());
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    protected void shutdownService() {
-        // TODO Auto-generated method stub
+	@Override
+	protected void shutdownService() {
+		// TODO Auto-generated method stub
 
-    }
+	}
 }

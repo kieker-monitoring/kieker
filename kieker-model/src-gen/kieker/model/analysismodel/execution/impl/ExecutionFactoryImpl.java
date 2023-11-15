@@ -4,24 +4,29 @@ package kieker.model.analysismodel.execution.impl;
 
 import java.util.Map;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
-import kieker.model.analysismodel.deployment.DeployedStorage;
-
-import kieker.model.analysismodel.execution.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.deployment.DeployedStorage;
+import kieker.model.analysismodel.execution.EDirection;
+import kieker.model.analysismodel.execution.ExecutionFactory;
+import kieker.model.analysismodel.execution.ExecutionModel;
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Invocation;
+import kieker.model.analysismodel.execution.OperationDataflow;
+import kieker.model.analysismodel.execution.StorageDataflow;
+import kieker.model.analysismodel.execution.Tuple;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
+ *
  * @generated
  */
 public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFactory {
@@ -29,16 +34,16 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static ExecutionFactory init() {
 		try {
-			ExecutionFactory theExecutionFactory = (ExecutionFactory)EPackage.Registry.INSTANCE.getEFactory(ExecutionPackage.eNS_URI);
+			final ExecutionFactory theExecutionFactory = (ExecutionFactory) EPackage.Registry.INSTANCE.getEFactory(ExecutionPackage.eNS_URI);
 			if (theExecutionFactory != null) {
 				return theExecutionFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new ExecutionFactoryImpl();
@@ -48,6 +53,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public ExecutionFactoryImpl() {
@@ -57,172 +63,197 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
+	public EObject create(final EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ExecutionPackage.EXECUTION_MODEL: return createExecutionModel();
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_INVOCATION_MAP_ENTRY: return (EObject)createDeployedOperationsPairToInvocationMapEntry();
-			case ExecutionPackage.INVOCATION: return createInvocation();
-			case ExecutionPackage.STORAGE_DATAFLOW: return createStorageDataflow();
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY: return (EObject)createDeployedOperationsPairToDeployedStorageMapEntry();
-			case ExecutionPackage.TUPLE: return createTuple();
-			case ExecutionPackage.OPERATION_DATAFLOW: return createOperationDataflow();
-			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY: return (EObject)createDeployedOperationsPairToDeployedOperationsMapEntry();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case ExecutionPackage.EXECUTION_MODEL:
+			return this.createExecutionModel();
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_INVOCATION_MAP_ENTRY:
+			return (EObject) this.createDeployedOperationsPairToInvocationMapEntry();
+		case ExecutionPackage.INVOCATION:
+			return this.createInvocation();
+		case ExecutionPackage.STORAGE_DATAFLOW:
+			return this.createStorageDataflow();
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_STORAGE_MAP_ENTRY:
+			return (EObject) this.createDeployedOperationsPairToDeployedStorageMapEntry();
+		case ExecutionPackage.TUPLE:
+			return this.createTuple();
+		case ExecutionPackage.OPERATION_DATAFLOW:
+			return this.createOperationDataflow();
+		case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_DEPLOYED_OPERATIONS_MAP_ENTRY:
+			return (EObject) this.createDeployedOperationsPairToDeployedOperationsMapEntry();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object createFromString(EDataType eDataType, String initialValue) {
+	public Object createFromString(final EDataType eDataType, final String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case ExecutionPackage.EDIRECTION:
-				return createEDirectionFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		case ExecutionPackage.EDIRECTION:
+			return this.createEDirectionFromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public String convertToString(EDataType eDataType, Object instanceValue) {
+	public String convertToString(final EDataType eDataType, final Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case ExecutionPackage.EDIRECTION:
-				return convertEDirectionToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		case ExecutionPackage.EDIRECTION:
+			return this.convertEDirectionToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ExecutionModel createExecutionModel() {
-		ExecutionModelImpl executionModel = new ExecutionModelImpl();
+		final ExecutionModelImpl executionModel = new ExecutionModelImpl();
 		return executionModel;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Map.Entry<Tuple<DeployedOperation, DeployedOperation>, Invocation> createDeployedOperationsPairToInvocationMapEntry() {
-		DeployedOperationsPairToInvocationMapEntryImpl deployedOperationsPairToInvocationMapEntry = new DeployedOperationsPairToInvocationMapEntryImpl();
+		final DeployedOperationsPairToInvocationMapEntryImpl deployedOperationsPairToInvocationMapEntry = new DeployedOperationsPairToInvocationMapEntryImpl();
 		return deployedOperationsPairToInvocationMapEntry;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Invocation createInvocation() {
-		InvocationImpl invocation = new InvocationImpl();
+		final InvocationImpl invocation = new InvocationImpl();
 		return invocation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public StorageDataflow createStorageDataflow() {
-		StorageDataflowImpl storageDataflow = new StorageDataflowImpl();
+		final StorageDataflowImpl storageDataflow = new StorageDataflowImpl();
 		return storageDataflow;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Map.Entry<Tuple<DeployedOperation, DeployedStorage>, StorageDataflow> createDeployedOperationsPairToDeployedStorageMapEntry() {
-		DeployedOperationsPairToDeployedStorageMapEntryImpl deployedOperationsPairToDeployedStorageMapEntry = new DeployedOperationsPairToDeployedStorageMapEntryImpl();
+		final DeployedOperationsPairToDeployedStorageMapEntryImpl deployedOperationsPairToDeployedStorageMapEntry = new DeployedOperationsPairToDeployedStorageMapEntryImpl();
 		return deployedOperationsPairToDeployedStorageMapEntry;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public <F, S> Tuple<F, S> createTuple() {
-		TupleImpl<F, S> tuple = new TupleImpl<F, S>();
+		final TupleImpl<F, S> tuple = new TupleImpl<>();
 		return tuple;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public OperationDataflow createOperationDataflow() {
-		OperationDataflowImpl operationDataflow = new OperationDataflowImpl();
+		final OperationDataflowImpl operationDataflow = new OperationDataflowImpl();
 		return operationDataflow;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Map.Entry<Tuple<DeployedOperation, DeployedOperation>, OperationDataflow> createDeployedOperationsPairToDeployedOperationsMapEntry() {
-		DeployedOperationsPairToDeployedOperationsMapEntryImpl deployedOperationsPairToDeployedOperationsMapEntry = new DeployedOperationsPairToDeployedOperationsMapEntryImpl();
+		final DeployedOperationsPairToDeployedOperationsMapEntryImpl deployedOperationsPairToDeployedOperationsMapEntry = new DeployedOperationsPairToDeployedOperationsMapEntryImpl();
 		return deployedOperationsPairToDeployedOperationsMapEntry;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public EDirection createEDirectionFromString(EDataType eDataType, String initialValue) {
-		EDirection result = EDirection.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+	public EDirection createEDirectionFromString(final EDataType eDataType, final String initialValue) {
+		final EDirection result = EDirection.get(initialValue);
+		if (result == null) {
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		}
 		return result;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public String convertEDirectionToString(EDataType eDataType, Object instanceValue) {
+	public String convertEDirectionToString(final EDataType eDataType, final Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ExecutionPackage getExecutionPackage() {
-		return (ExecutionPackage)getEPackage();
+		return (ExecutionPackage) this.getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @deprecated
 	 * @generated
 	 */
@@ -231,4 +262,4 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 		return ExecutionPackage.eINSTANCE;
 	}
 
-} //ExecutionFactoryImpl
+} // ExecutionFactoryImpl

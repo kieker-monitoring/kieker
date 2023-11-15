@@ -27,20 +27,20 @@ import kieker.model.analysismodel.assembly.AssemblyPackage;
  */
 public class CheckAssemblyModelStage extends AbstractCollector<ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final Report report = new Report("assembly model");
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final Report report = new Report("assembly model");
 
-        final AssemblyModel assemblyModel = repository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL);
+		final AssemblyModel assemblyModel = repository.getModel(AssemblyPackage.Literals.ASSEMBLY_MODEL);
 
-        GenericCheckUtils.missingSignature(assemblyModel.eAllContents(), report);
-        GenericCheckUtils.missingName(assemblyModel.eAllContents(), report);
-        GenericCheckUtils.missingPackage(assemblyModel.eAllContents(), report);
+		GenericCheckUtils.missingSignature(assemblyModel.eAllContents(), report);
+		GenericCheckUtils.missingName(assemblyModel.eAllContents(), report);
+		GenericCheckUtils.missingPackage(assemblyModel.eAllContents(), report);
 
-        GenericCheckUtils.checkReferences(AssemblyPackage.Literals.ASSEMBLY_MODEL, assemblyModel.eAllContents(),
-                report);
-        this.outputPort.send(repository);
-        this.reportOutputPort.send(report);
-    }
+		GenericCheckUtils.checkReferences(AssemblyPackage.Literals.ASSEMBLY_MODEL, assemblyModel.eAllContents(),
+				report);
+		this.outputPort.send(repository);
+		this.reportOutputPort.send(report);
+	}
 
 }

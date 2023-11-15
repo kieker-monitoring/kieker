@@ -21,48 +21,48 @@ package kieker.tools.sar.signature.processor;
  */
 public abstract class AbstractSignatureProcessor {
 
-    protected boolean caseInsensitive;
-    protected String componentSignature;
-    protected String elementSignature;
+	protected boolean caseInsensitive;
+	protected String componentSignature;
+	protected String elementSignature;
 
-    public AbstractSignatureProcessor(final boolean caseInsensitive) {
-        this.caseInsensitive = caseInsensitive;
-    }
+	public AbstractSignatureProcessor(final boolean caseInsensitive) {
+		this.caseInsensitive = caseInsensitive;
+	}
 
-    protected String removeTrailingUnderscore(final String string) {
-        if (string.endsWith("_")) {
-            return string.substring(0, string.length() - 1);
-        } else {
-            return string;
-        }
-    }
+	protected String removeTrailingUnderscore(final String string) {
+		if (string.endsWith("_")) {
+			return string.substring(0, string.length() - 1);
+		} else {
+			return string;
+		}
+	}
 
-    protected String convertToLowerCase(final String string) {
-        return this.caseInsensitive ? string.toLowerCase() : string; // NOCS NOPMD
-    }
+	protected String convertToLowerCase(final String string) {
+		return this.caseInsensitive ? string.toLowerCase() : string; // NOCS NOPMD
+	}
 
-    public abstract String getErrorMessage();
+	public abstract String getErrorMessage();
 
-    /**
-     * Process component and element signature of an operation or storage.
-     *
-     * @param path
-     *            file path of the element
-     * @param componentSignature
-     *            component signature of an element
-     * @param elementSignature
-     *            the element signature, i.e., operation or storage signature
-     * @return true when the processing worked
-     */
-    public abstract boolean processSignatures(String path, String componentSignature, String elementSignature); // NOCS
-                                                                                                                // hiding
-                                                                                                                // fields
+	/**
+	 * Process component and element signature of an operation or storage.
+	 *
+	 * @param path
+	 *            file path of the element
+	 * @param componentSignature
+	 *            component signature of an element
+	 * @param elementSignature
+	 *            the element signature, i.e., operation or storage signature
+	 * @return true when the processing worked
+	 */
+	public abstract boolean processSignatures(String path, String componentSignature, String elementSignature); // NOCS
+																												// hiding
+																												// fields
 
-    public String getComponentSignature() {
-        return this.componentSignature;
-    }
+	public String getComponentSignature() {
+		return this.componentSignature;
+	}
 
-    public String getElementSignature() {
-        return this.elementSignature;
-    }
+	public String getElementSignature() {
+		return this.elementSignature;
+	}
 }

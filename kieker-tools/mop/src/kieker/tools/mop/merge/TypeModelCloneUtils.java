@@ -29,44 +29,44 @@ import kieker.model.analysismodel.type.TypeFactory;
  */
 public final class TypeModelCloneUtils {
 
-    private TypeModelCloneUtils() {
-        // Utility class
-    }
+	private TypeModelCloneUtils() {
+		// Utility class
+	}
 
-    public static ComponentType duplicate(final ComponentType type) {
-        final ComponentType newType = TypeFactory.eINSTANCE.createComponentType();
+	public static ComponentType duplicate(final ComponentType type) {
+		final ComponentType newType = TypeFactory.eINSTANCE.createComponentType();
 
-        newType.setName(type.getName());
-        newType.setPackage(type.getPackage());
-        newType.setSignature(type.getSignature());
+		newType.setName(type.getName());
+		newType.setPackage(type.getPackage());
+		newType.setSignature(type.getSignature());
 
-        for (final Entry<String, OperationType> operation : type.getProvidedOperations()) {
-            newType.getProvidedOperations().put(operation.getKey(),
-                    TypeModelCloneUtils.duplicate(operation.getValue()));
-        }
+		for (final Entry<String, OperationType> operation : type.getProvidedOperations()) {
+			newType.getProvidedOperations().put(operation.getKey(),
+					TypeModelCloneUtils.duplicate(operation.getValue()));
+		}
 
-        for (final Entry<String, StorageType> storage : type.getProvidedStorages()) {
-            newType.getProvidedStorages().put(storage.getKey(), TypeModelCloneUtils.duplicate(storage.getValue()));
-        }
+		for (final Entry<String, StorageType> storage : type.getProvidedStorages()) {
+			newType.getProvidedStorages().put(storage.getKey(), TypeModelCloneUtils.duplicate(storage.getValue()));
+		}
 
-        return newType;
-    }
+		return newType;
+	}
 
-    public static OperationType duplicate(final OperationType operation) {
-        final OperationType newOperation = TypeFactory.eINSTANCE.createOperationType();
-        newOperation.setName(operation.getName());
-        newOperation.setReturnType(operation.getReturnType());
-        newOperation.setSignature(operation.getSignature());
+	public static OperationType duplicate(final OperationType operation) {
+		final OperationType newOperation = TypeFactory.eINSTANCE.createOperationType();
+		newOperation.setName(operation.getName());
+		newOperation.setReturnType(operation.getReturnType());
+		newOperation.setSignature(operation.getSignature());
 
-        return newOperation;
-    }
+		return newOperation;
+	}
 
-    public static StorageType duplicate(final StorageType storage) {
-        final StorageType newStorage = TypeFactory.eINSTANCE.createStorageType();
-        newStorage.setName(storage.getName());
-        newStorage.setType(storage.getType());
+	public static StorageType duplicate(final StorageType storage) {
+		final StorageType newStorage = TypeFactory.eINSTANCE.createStorageType();
+		newStorage.setName(storage.getName());
+		newStorage.setType(storage.getType());
 
-        return newStorage;
-    }
+		return newStorage;
+	}
 
 }

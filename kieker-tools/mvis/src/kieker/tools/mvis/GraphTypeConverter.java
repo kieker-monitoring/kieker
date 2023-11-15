@@ -26,15 +26,15 @@ import com.beust.jcommander.IStringConverter;
  */
 public class GraphTypeConverter implements IStringConverter<EOutputGraph> {
 
-    @Override
-    public EOutputGraph convert(final String value) {
-        for (final EOutputGraph outputGraph : EOutputGraph.values()) {
-            if (outputGraph.name().toLowerCase(Locale.ROOT).replace("_", "-").equals(value)) {
-                return outputGraph;
-            }
-        }
-        throw new IllegalArgumentException(String.format("Graph output type %s is not supported.", value));
+	@Override
+	public EOutputGraph convert(final String value) {
+		for (final EOutputGraph outputGraph : EOutputGraph.values()) {
+			if (outputGraph.name().toLowerCase(Locale.ROOT).replace("_", "-").equals(value)) {
+				return outputGraph;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Graph output type %s is not supported.", value));
 
-    }
+	}
 
 }

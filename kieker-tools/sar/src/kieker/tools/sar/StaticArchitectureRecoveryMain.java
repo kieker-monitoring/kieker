@@ -88,7 +88,7 @@ public class StaticArchitectureRecoveryMain {
 	 */
 	private void execute(final String label) throws ConfigurationException {
 		this.repository = ArchitectureModelRepositoryFactory.createModelRepository(String.format("%s-%s",
-				this.settings.getExperimentName(), this.settings.getComponentMapFiles() != null ? "map" : "file"));
+				this.settings.getExperimentName(), this.settings.getComponentMapFiles() != null ? "map" : "file")); // NOCS
 
 		if (this.containsValue(this.settings.getInputMode(), EInputMode.CALL, EInputMode.BOTH)) {
 			this.executeConfiguration("call", label, this.createTeetimeCallConfiguration());
@@ -183,16 +183,12 @@ public class StaticArchitectureRecoveryMain {
 		}
 		if (this.containsValue(this.settings.getInputMode(), EInputMode.DATAFLOW, EInputMode.BOTH)) {
 			if (!ParameterEvaluationUtils.isFileReadable(this.settings.getInputFile()
-					.resolve(StaticArchitectureRecoveryMain.CALLER_CALLEE_DATAFLOW_FILENAME).toFile(), "", commander)) {
-				return false;
-			}
-			if (!ParameterEvaluationUtils.isFileReadable(this.settings.getInputFile()
-					.resolve(StaticArchitectureRecoveryMain.STORAGE_DATAFLOW_FILENAME).toFile(), "", commander)) {
-				return false;
-			}
-			if (!ParameterEvaluationUtils.isFileReadable(
-					this.settings.getInputFile().resolve(StaticArchitectureRecoveryMain.STORAGE_FILENAME).toFile(), "",
-					commander)) {
+					.resolve(StaticArchitectureRecoveryMain.CALLER_CALLEE_DATAFLOW_FILENAME).toFile(), "", commander)
+					|| !ParameterEvaluationUtils.isFileReadable(this.settings.getInputFile()
+							.resolve(StaticArchitectureRecoveryMain.STORAGE_DATAFLOW_FILENAME).toFile(), "", commander)
+					|| !ParameterEvaluationUtils.isFileReadable(
+							this.settings.getInputFile().resolve(StaticArchitectureRecoveryMain.STORAGE_FILENAME).toFile(), "",
+							commander)) {
 				return false;
 			}
 		}

@@ -53,182 +53,182 @@ import teetime.stage.basic.AbstractTransformation;
  *
  */
 public class ModelSelectStage extends AbstractTransformation<ModelRepository, ModelRepository>
-        implements IModelOperationStage {
+		implements IModelOperationStage {
 
-    private final List<Pattern> patterns;
+	private final List<Pattern> patterns;
 
-    public ModelSelectStage(final List<Pattern> patterns) {
-        this.patterns = patterns;
-    }
+	public ModelSelectStage(final List<Pattern> patterns) {
+		this.patterns = patterns;
+	}
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final DeploymentModel model = repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel());
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final DeploymentModel model = repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel());
 
-        final Set<DeployedComponent> selectedDeployedComponents = this.selectPrimaryComponents(model);
-        selectedDeployedComponents.addAll(this.selectContainedComponents(model, selectedDeployedComponents));
+		final Set<DeployedComponent> selectedDeployedComponents = this.selectPrimaryComponents(model);
+		selectedDeployedComponents.addAll(this.selectContainedComponents(model, selectedDeployedComponents));
 
-        final Set<AssemblyComponent> selectedAssemblyComponents = this
-                .selectAssemblyComponents(selectedDeployedComponents);
-        final Set<ComponentType> selectedComponentTypes = this.selectComponentTypes(selectedAssemblyComponents);
+		final Set<AssemblyComponent> selectedAssemblyComponents = this
+				.selectAssemblyComponents(selectedDeployedComponents);
+		final Set<ComponentType> selectedComponentTypes = this.selectComponentTypes(selectedAssemblyComponents);
 
-        final Set<ComponentType> removedComponentTypes = this.removeComponentTypes(
-                repository.getModel(TypePackage.eINSTANCE.getTypeModel()), selectedComponentTypes);
-        final Set<AssemblyComponent> removedAssemblyComponents = this.removeAssemblyComponents(
-                repository.getModel(AssemblyPackage.eINSTANCE.getAssemblyModel()), selectedAssemblyComponents);
-        final Set<DeployedComponent> removedDeployedComponents = this.removeDeployedComponents(
-                repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel()), selectedDeployedComponents);
-        final Set<Invocation> removedExecutions = this.removeExecution(
-                repository.getModel(ExecutionPackage.eINSTANCE.getExecutionModel()), removedDeployedComponents);
+		final Set<ComponentType> removedComponentTypes = this.removeComponentTypes(
+				repository.getModel(TypePackage.eINSTANCE.getTypeModel()), selectedComponentTypes);
+		final Set<AssemblyComponent> removedAssemblyComponents = this.removeAssemblyComponents(
+				repository.getModel(AssemblyPackage.eINSTANCE.getAssemblyModel()), selectedAssemblyComponents);
+		final Set<DeployedComponent> removedDeployedComponents = this.removeDeployedComponents(
+				repository.getModel(DeploymentPackage.eINSTANCE.getDeploymentModel()), selectedDeployedComponents);
+		final Set<Invocation> removedExecutions = this.removeExecution(
+				repository.getModel(ExecutionPackage.eINSTANCE.getExecutionModel()), removedDeployedComponents);
 
-        final StatisticsModel statisticsModel = repository.getModel(StatisticsPackage.eINSTANCE.getStatisticsModel());
-        final SourceModel sourceModel = repository.getModel(SourcePackage.eINSTANCE.getSourceModel());
+		final StatisticsModel statisticsModel = repository.getModel(StatisticsPackage.eINSTANCE.getStatisticsModel());
+		final SourceModel sourceModel = repository.getModel(SourcePackage.eINSTANCE.getSourceModel());
 
-        removedComponentTypes.forEach(type -> this.removeStatisticsAndSources(statisticsModel, sourceModel, type));
-        removedAssemblyComponents
-                .forEach(assembly -> this.removeStatisticsAndSources(statisticsModel, sourceModel, assembly));
-        removedDeployedComponents
-                .forEach(deployed -> this.removeStatisticsAndSources(statisticsModel, sourceModel, deployed));
-        removedExecutions
-                .forEach(invocation -> this.removeStatisticsAndSources(statisticsModel, sourceModel, invocation));
+		removedComponentTypes.forEach(type -> this.removeStatisticsAndSources(statisticsModel, sourceModel, type));
+		removedAssemblyComponents
+				.forEach(assembly -> this.removeStatisticsAndSources(statisticsModel, sourceModel, assembly));
+		removedDeployedComponents
+				.forEach(deployed -> this.removeStatisticsAndSources(statisticsModel, sourceModel, deployed));
+		removedExecutions
+				.forEach(invocation -> this.removeStatisticsAndSources(statisticsModel, sourceModel, invocation));
 
-        this.outputPort.send(repository);
-    }
+		this.outputPort.send(repository);
+	}
 
-    private void removeStatisticsAndSources(final StatisticsModel statisticsModel, final SourceModel sourceModel,
-            final EObject element) {
-        final StatisticRecord statistics = statisticsModel.getStatistics().removeKey(element);
-        sourceModel.getSources().removeKey(element);
-        if (statistics != null) {
-            sourceModel.getSources().removeKey(statistics);
-        }
-    }
+	private void removeStatisticsAndSources(final StatisticsModel statisticsModel, final SourceModel sourceModel,
+			final EObject element) {
+		final StatisticRecord statistics = statisticsModel.getStatistics().removeKey(element);
+		sourceModel.getSources().removeKey(element);
+		if (statistics != null) {
+			sourceModel.getSources().removeKey(statistics);
+		}
+	}
 
-    private Set<DeployedComponent> selectPrimaryComponents(final DeploymentModel model) {
-        final Set<DeployedComponent> selectedComponents = new HashSet<>();
-        /** select primary components. */
-        model.getContexts().values().forEach(context -> {
-            context.getComponents().values().forEach(component -> {
-                if (this.selectComponent(component.getSignature())) {
-                    selectedComponents.add(component);
-                }
-            });
-        });
+	private Set<DeployedComponent> selectPrimaryComponents(final DeploymentModel model) {
+		final Set<DeployedComponent> selectedComponents = new HashSet<>();
+		/** select primary components. */
+		model.getContexts().values().forEach(context -> {
+			context.getComponents().values().forEach(component -> {
+				if (this.selectComponent(component.getSignature())) {
+					selectedComponents.add(component);
+				}
+			});
+		});
 
-        return selectedComponents;
-    }
+		return selectedComponents;
+	}
 
-    private Set<DeployedComponent> selectContainedComponents(final DeploymentModel model,
-            final Set<DeployedComponent> selectedComponents) {
-        final Set<DeployedComponent> indirectSelectedComponents = new HashSet<>();
-        model.getContexts().values().forEach(context -> {
-            context.getComponents().values().forEach(component -> {
-                if (this.containedInSelectedComponent(component, selectedComponents)) {
-                    indirectSelectedComponents.add(component);
-                }
-            });
-        });
+	private Set<DeployedComponent> selectContainedComponents(final DeploymentModel model,
+			final Set<DeployedComponent> selectedComponents) {
+		final Set<DeployedComponent> indirectSelectedComponents = new HashSet<>();
+		model.getContexts().values().forEach(context -> {
+			context.getComponents().values().forEach(component -> {
+				if (this.containedInSelectedComponent(component, selectedComponents)) {
+					indirectSelectedComponents.add(component);
+				}
+			});
+		});
 
-        return indirectSelectedComponents;
-    }
+		return indirectSelectedComponents;
+	}
 
-    private boolean containedInSelectedComponent(final DeployedComponent component,
-            final Set<DeployedComponent> selectedComponents) {
+	private boolean containedInSelectedComponent(final DeployedComponent component,
+			final Set<DeployedComponent> selectedComponents) {
 
-        for (final DeployedComponent container : selectedComponents) {
-            if (this.nestedContainedComponent(container, component)) {
-                return true;
-            }
-        }
+		for (final DeployedComponent container : selectedComponents) {
+			if (this.nestedContainedComponent(container, component)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean nestedContainedComponent(final DeployedComponent container, final DeployedComponent component) {
-        for (final DeployedComponent contained : container.getContainedComponents()) {
-            if (contained.equals(component)) {
-                return true;
-            } else {
-                return this.nestedContainedComponent(contained, component);
-            }
-        }
-        return false;
-    }
+	private boolean nestedContainedComponent(final DeployedComponent container, final DeployedComponent component) {
+		for (final DeployedComponent contained : container.getContainedComponents()) {
+			if (contained.equals(component)) {
+				return true;
+			} else {
+				return this.nestedContainedComponent(contained, component);
+			}
+		}
+		return false;
+	}
 
-    private boolean selectComponent(final String signature) {
-        for (final Pattern pattern : this.patterns) {
-            if (pattern.matcher(signature).matches()) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean selectComponent(final String signature) {
+		for (final Pattern pattern : this.patterns) {
+			if (pattern.matcher(signature).matches()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private Set<AssemblyComponent> selectAssemblyComponents(final Set<DeployedComponent> selectedDeployedComponents) {
-        final Set<AssemblyComponent> components = new HashSet<>();
-        selectedDeployedComponents.forEach(deployed -> components.add(deployed.getAssemblyComponent()));
-        return components;
-    }
+	private Set<AssemblyComponent> selectAssemblyComponents(final Set<DeployedComponent> selectedDeployedComponents) {
+		final Set<AssemblyComponent> components = new HashSet<>();
+		selectedDeployedComponents.forEach(deployed -> components.add(deployed.getAssemblyComponent()));
+		return components;
+	}
 
-    private Set<ComponentType> selectComponentTypes(final Set<AssemblyComponent> selectedAssemblyComponents) {
-        final Set<ComponentType> components = new HashSet<>();
-        selectedAssemblyComponents.forEach(assembly -> components.add(assembly.getComponentType()));
-        return components;
-    }
+	private Set<ComponentType> selectComponentTypes(final Set<AssemblyComponent> selectedAssemblyComponents) {
+		final Set<ComponentType> components = new HashSet<>();
+		selectedAssemblyComponents.forEach(assembly -> components.add(assembly.getComponentType()));
+		return components;
+	}
 
-    private Set<ComponentType> removeComponentTypes(final TypeModel model,
-            final Set<ComponentType> selectedComponentTypes) {
-        final Set<ComponentType> removeComponentTypes = new HashSet<>();
-        model.getComponentTypes().values().forEach(type -> {
-            if (!selectedComponentTypes.contains(type)) {
-                removeComponentTypes.add(type);
-            }
-        });
-        removeComponentTypes.forEach(type -> model.getComponentTypes().values().remove(type));
-        return removeComponentTypes;
-    }
+	private Set<ComponentType> removeComponentTypes(final TypeModel model,
+			final Set<ComponentType> selectedComponentTypes) {
+		final Set<ComponentType> removeComponentTypes = new HashSet<>();
+		model.getComponentTypes().values().forEach(type -> {
+			if (!selectedComponentTypes.contains(type)) {
+				removeComponentTypes.add(type);
+			}
+		});
+		removeComponentTypes.forEach(type -> model.getComponentTypes().values().remove(type));
+		return removeComponentTypes;
+	}
 
-    private Set<AssemblyComponent> removeAssemblyComponents(final AssemblyModel model,
-            final Set<AssemblyComponent> selectedAssemblyComponents) {
-        final Set<AssemblyComponent> removeAssemblyComponents = new HashSet<>();
-        model.getComponents().values().forEach(assembly -> {
-            if (!selectedAssemblyComponents.contains(assembly)) {
-                removeAssemblyComponents.add(assembly);
-            }
-        });
-        removeAssemblyComponents.forEach(assembly -> model.getComponents().values().remove(assembly));
-        return removeAssemblyComponents;
-    }
+	private Set<AssemblyComponent> removeAssemblyComponents(final AssemblyModel model,
+			final Set<AssemblyComponent> selectedAssemblyComponents) {
+		final Set<AssemblyComponent> removeAssemblyComponents = new HashSet<>();
+		model.getComponents().values().forEach(assembly -> {
+			if (!selectedAssemblyComponents.contains(assembly)) {
+				removeAssemblyComponents.add(assembly);
+			}
+		});
+		removeAssemblyComponents.forEach(assembly -> model.getComponents().values().remove(assembly));
+		return removeAssemblyComponents;
+	}
 
-    private Set<DeployedComponent> removeDeployedComponents(final DeploymentModel model,
-            final Set<DeployedComponent> selectedDeployedComponents) {
-        final Set<DeployedComponent> removeDeployedComponents = new HashSet<>();
-        model.getContexts().values().forEach(context -> {
-            context.getComponents().values().forEach(deployed -> {
-                if (!selectedDeployedComponents.contains(deployed)) {
-                    removeDeployedComponents.add(deployed);
-                }
-            });
-        });
-        model.getContexts().values().forEach(context -> {
-            removeDeployedComponents.forEach(deployed -> context.getComponents().values().remove(deployed));
-        });
-        return removeDeployedComponents;
-    }
+	private Set<DeployedComponent> removeDeployedComponents(final DeploymentModel model,
+			final Set<DeployedComponent> selectedDeployedComponents) {
+		final Set<DeployedComponent> removeDeployedComponents = new HashSet<>();
+		model.getContexts().values().forEach(context -> {
+			context.getComponents().values().forEach(deployed -> {
+				if (!selectedDeployedComponents.contains(deployed)) {
+					removeDeployedComponents.add(deployed);
+				}
+			});
+		});
+		model.getContexts().values().forEach(context -> {
+			removeDeployedComponents.forEach(deployed -> context.getComponents().values().remove(deployed));
+		});
+		return removeDeployedComponents;
+	}
 
-    private Set<Invocation> removeExecution(final ExecutionModel model,
-            final Set<DeployedComponent> removedDeployedComponents) {
-        final Set<Invocation> removeExecutions = new HashSet<>();
-        model.getInvocations().values().forEach(invocation -> {
-            if (removedDeployedComponents.contains(invocation.getCaller().getComponent())
-                    || removedDeployedComponents.contains(invocation.getCallee().getComponent())) {
-                removeExecutions.add(invocation);
-            }
-        });
+	private Set<Invocation> removeExecution(final ExecutionModel model,
+			final Set<DeployedComponent> removedDeployedComponents) {
+		final Set<Invocation> removeExecutions = new HashSet<>();
+		model.getInvocations().values().forEach(invocation -> {
+			if (removedDeployedComponents.contains(invocation.getCaller().getComponent())
+					|| removedDeployedComponents.contains(invocation.getCallee().getComponent())) {
+				removeExecutions.add(invocation);
+			}
+		});
 
-        removeExecutions.forEach(invocation -> model.getInvocations().values().remove(invocation));
+		removeExecutions.forEach(invocation -> model.getInvocations().values().remove(invocation));
 
-        return removeExecutions;
-    }
+		return removeExecutions;
+	}
 
 }

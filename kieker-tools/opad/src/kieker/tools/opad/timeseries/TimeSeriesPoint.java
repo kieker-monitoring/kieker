@@ -19,7 +19,7 @@ package kieker.tools.opad.timeseries;
 /**
  * @author Andre van Hoorn
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the point.
  */

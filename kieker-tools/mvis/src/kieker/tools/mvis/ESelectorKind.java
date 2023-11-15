@@ -21,5 +21,5 @@ package kieker.tools.mvis;
  *
  */
 public enum ESelectorKind {
-    ALL, ALL_COLOR, DIFF, SUBTRACT, INTERSECT;
+	ALL, ALL_COLOR, DIFF, SUBTRACT, INTERSECT;
 }

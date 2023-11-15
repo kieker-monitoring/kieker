@@ -44,69 +44,69 @@ import kieker.tools.cmi.RepositoryUtils;
  */
 public class CheckSourceMissingLabelStage extends AbstractCollector<ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final Report report = new Report("source model");
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final Report report = new Report("source model");
 
-        final SourceModel sourceModel = repository.getModel(SourcePackage.Literals.SOURCE_MODEL);
+		final SourceModel sourceModel = repository.getModel(SourcePackage.Literals.SOURCE_MODEL);
 
-        long errors = 0;
-        for (final Entry<EClass, List<Class<? extends EObject>>> modelConfig : this.configureModels().entrySet()) {
-            errors += this.checkForSourcesForAllModelElements(modelConfig.getKey().getInstanceTypeName(), sourceModel,
-                    repository.getModel(repository.getModelDescriptor(modelConfig.getKey()).getRootClass())
-                            .eAllContents(),
-                    modelConfig.getValue(), report);
-        }
-        report.addMessage("Number of missing source labels %s", errors);
+		long errors = 0;
+		for (final Entry<EClass, List<Class<? extends EObject>>> modelConfig : this.configureModels().entrySet()) {
+			errors += this.checkForSourcesForAllModelElements(modelConfig.getKey().getInstanceTypeName(), sourceModel,
+					repository.getModel(repository.getModelDescriptor(modelConfig.getKey()).getRootClass())
+							.eAllContents(),
+					modelConfig.getValue(), report);
+		}
+		report.addMessage("Number of missing source labels %s", errors);
 
-        this.outputPort.send(repository);
-        this.reportOutputPort.send(report);
-    }
+		this.outputPort.send(repository);
+		this.reportOutputPort.send(report);
+	}
 
-    private Map<EClass, List<Class<? extends EObject>>> configureModels() {
-        final Map<EClass, List<Class<? extends EObject>>> modelConfigs = new HashMap<>();
-        modelConfigs.put(TypePackage.Literals.TYPE_MODEL, new ArrayList<Class<? extends EObject>>());
-        modelConfigs.put(AssemblyPackage.Literals.ASSEMBLY_MODEL, new ArrayList<Class<? extends EObject>>());
-        modelConfigs.put(DeploymentPackage.Literals.DEPLOYMENT_MODEL, new ArrayList<Class<? extends EObject>>());
-        final List<Class<? extends EObject>> executionIgnoreList = new ArrayList<>();
-        executionIgnoreList.add(Tuple.class);
-        modelConfigs.put(ExecutionPackage.Literals.EXECUTION_MODEL, executionIgnoreList);
+	private Map<EClass, List<Class<? extends EObject>>> configureModels() {
+		final Map<EClass, List<Class<? extends EObject>>> modelConfigs = new HashMap<>();
+		modelConfigs.put(TypePackage.Literals.TYPE_MODEL, new ArrayList<>());
+		modelConfigs.put(AssemblyPackage.Literals.ASSEMBLY_MODEL, new ArrayList<>());
+		modelConfigs.put(DeploymentPackage.Literals.DEPLOYMENT_MODEL, new ArrayList<>());
+		final List<Class<? extends EObject>> executionIgnoreList = new ArrayList<>();
+		executionIgnoreList.add(Tuple.class);
+		modelConfigs.put(ExecutionPackage.Literals.EXECUTION_MODEL, executionIgnoreList);
 
-        return modelConfigs;
-    }
+		return modelConfigs;
+	}
 
-    private long checkForSourcesForAllModelElements(final String modelName, final SourceModel model,
-            final TreeIterator<EObject> treeIterator, final List<Class<? extends EObject>> ignoreList,
-            final Report report) {
-        report.addMessage("Source model entries %s", model.getSources().size());
-        long errorCount = 0;
-        long objectCount = 0;
-        while (treeIterator.hasNext()) {
-            final EObject object = treeIterator.next();
-            if (!(object instanceof BasicEMap.Entry)) {
-                if (!this.isOnIgnoreList(ignoreList, object)) { // NOPMD
-                    objectCount++;
-                    if (model.getSources().get(object) == null) {
-                        report.addMessage("Missing source reference for"); // NOPMD
-                        RepositoryUtils.print(report, object, "  ");
-                        report.addMessage("----");
-                        errorCount++;
-                    }
-                }
-            }
-        }
+	private long checkForSourcesForAllModelElements(final String modelName, final SourceModel model,
+			final TreeIterator<EObject> treeIterator, final List<Class<? extends EObject>> ignoreList,
+			final Report report) {
+		report.addMessage("Source model entries %s", model.getSources().size());
+		long errorCount = 0;
+		long objectCount = 0;
+		while (treeIterator.hasNext()) {
+			final EObject object = treeIterator.next();
+			if (!(object instanceof BasicEMap.Entry)) {
+				if (!this.isOnIgnoreList(ignoreList, object)) { // NOPMD
+					objectCount++;
+					if (model.getSources().get(object) == null) {
+						report.addMessage("Missing source reference for"); // NOPMD
+						RepositoryUtils.print(report, object, "  ");
+						report.addMessage("----");
+						errorCount++;
+					}
+				}
+			}
+		}
 
-        report.addMessage("Objects in model %s %s", modelName, objectCount);
-        return errorCount;
-    }
+		report.addMessage("Objects in model %s %s", modelName, objectCount);
+		return errorCount;
+	}
 
-    private boolean isOnIgnoreList(final List<Class<? extends EObject>> ignoreList, final EObject object) {
-        for (final Class<? extends EObject> element : ignoreList) {
-            if (element.isAssignableFrom(object.getClass())) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean isOnIgnoreList(final List<Class<? extends EObject>> ignoreList, final EObject object) {
+		for (final Class<? extends EObject> element : ignoreList) {
+			if (element.isAssignableFrom(object.getClass())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

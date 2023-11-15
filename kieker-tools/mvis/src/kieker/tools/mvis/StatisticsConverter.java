@@ -26,15 +26,15 @@ import com.beust.jcommander.IStringConverter;
  */
 public class StatisticsConverter implements IStringConverter<EStatistics> {
 
-    @Override
-    public EStatistics convert(final String value) {
-        for (final EStatistics outputGraph : EStatistics.values()) {
-            if (outputGraph.name().toLowerCase(Locale.ROOT).replace("_", "-").equals(value)) {
-                return outputGraph;
-            }
-        }
-        throw new IllegalArgumentException(String.format("Statistics %s is not supported.", value));
+	@Override
+	public EStatistics convert(final String value) {
+		for (final EStatistics outputGraph : EStatistics.values()) {
+			if (outputGraph.name().toLowerCase(Locale.ROOT).replace("_", "-").equals(value)) {
+				return outputGraph;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Statistics %s is not supported.", value));
 
-    }
+	}
 
 }

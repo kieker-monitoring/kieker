@@ -34,116 +34,116 @@ import teetime.stage.basic.AbstractTransformation;
  * @since 2.0.0
  */
 public class OperationExecutionTraceConverterStage
-        extends AbstractTransformation<OperationExecutionRecord, IFlowRecord> {
+		extends AbstractTransformation<OperationExecutionRecord, IFlowRecord> {
 
-    private final Map<Long, Trace> traces = new HashMap<>();
+	private final Map<Long, Trace> traces = new HashMap<>();
 
-    @Override
-    protected void execute(final OperationExecutionRecord element) throws Exception {
+	@Override
+	protected void execute(final OperationExecutionRecord element) throws Exception {
 
-        Trace trace = this.traces.get(element.getTraceId());
+		Trace trace = this.traces.get(element.getTraceId());
 
-        if (trace == null) {
-            trace = new Trace(element.getTraceId(), element.getSessionId(), element.getHostname(),
-                    element.getTraceId());
-            this.traces.put(element.getTraceId(), trace);
-        }
+		if (trace == null) {
+			trace = new Trace(element.getTraceId(), element.getSessionId(), element.getHostname(),
+					element.getTraceId());
+			this.traces.put(element.getTraceId(), trace);
+		}
 
-        trace.records.put(element.getEoi(), element);
-        trace.updateHighestEoi(element.getEoi());
+		trace.records.put(element.getEoi(), element);
+		trace.updateHighestEoi(element.getEoi());
 
-// reactivate to process traces right away, make this an option
-//        if (element.getEoi() == 0 && element.getEss() == 0) {
-//            this.produceTrace(trace);
-//        }
-    }
+		// reactivate to process traces right away, make this an option
+		// if (element.getEoi() == 0 && element.getEss() == 0) {
+		// this.produceTrace(trace);
+		// }
+	}
 
-    @Override
-    protected void onTerminating() {
-        this.traces.values().forEach(trace -> this.produceTrace(trace));
-        super.onTerminating();
+	@Override
+	protected void onTerminating() {
+		this.traces.values().forEach(trace -> this.produceTrace(trace));
+		super.onTerminating();
 
-    }
+	}
 
-    private void produceTrace(final Trace trace) {
-        final SignatureProcessor processor = new SignatureProcessor();
+	private void produceTrace(final Trace trace) {
+		final SignatureProcessor processor = new SignatureProcessor();
 
-        this.outputPort.send(new TraceMetadata(trace.traceId, trace.threadId, trace.sessionId, trace.hostname, 0, 0));
+		this.outputPort.send(new TraceMetadata(trace.traceId, trace.threadId, trace.sessionId, trace.hostname, 0, 0));
 
-        final Stack<OperationExecutionRecord> stack = new Stack<>();
+		final Stack<OperationExecutionRecord> stack = new Stack<>();
 
-        int depth = -1;
-        int orderIndex = 0;
-        for (int i = 0; i <= trace.highestEoi; i++) {
-            final OperationExecutionRecord record = trace.records.get(i);
-            if (depth < record.getEss()) { // step up
-                processor.parse(record.getOperationSignature());
-                this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
-                        processor.getOperationSignature(), processor.getClassSignature()));
-                depth = record.getEss();
-                stack.push(record);
-            } else if (depth == record.getEss()) {
-                final OperationExecutionRecord beforeOp = stack.pop();
-                processor.parse(beforeOp.getOperationSignature());
-                this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(), orderIndex++,
-                        processor.getOperationSignature(), processor.getClassSignature()));
+		int depth = -1;
+		int orderIndex = 0;
+		for (int i = 0; i <= trace.highestEoi; i++) {
+			final OperationExecutionRecord record = trace.records.get(i);
+			if (depth < record.getEss()) { // step up
+				processor.parse(record.getOperationSignature());
+				this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
+						processor.getOperationSignature(), processor.getClassSignature()));
+				depth = record.getEss();
+				stack.push(record);
+			} else if (depth == record.getEss()) {
+				final OperationExecutionRecord beforeOp = stack.pop();
+				processor.parse(beforeOp.getOperationSignature());
+				this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(), orderIndex++,
+						processor.getOperationSignature(), processor.getClassSignature()));
 
-                processor.parse(record.getOperationSignature());
-                this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
-                        processor.getOperationSignature(), processor.getClassSignature()));
-                depth = record.getEss();
-                stack.push(record);
-            } else {
-                while (depth >= record.getEss()) {
-                    final OperationExecutionRecord beforeOp = stack.pop();
-                    processor.parse(beforeOp.getOperationSignature());
-                    this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(),
-                            orderIndex++, processor.getOperationSignature(), processor.getClassSignature()));
-                    depth--;
-                }
+				processor.parse(record.getOperationSignature());
+				this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
+						processor.getOperationSignature(), processor.getClassSignature()));
+				depth = record.getEss();
+				stack.push(record);
+			} else {
+				while (depth >= record.getEss()) {
+					final OperationExecutionRecord beforeOp = stack.pop();
+					processor.parse(beforeOp.getOperationSignature());
+					this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(),
+							orderIndex++, processor.getOperationSignature(), processor.getClassSignature()));
+					depth--;
+				}
 
-                processor.parse(record.getOperationSignature());
-                this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
-                        processor.getOperationSignature(), processor.getClassSignature()));
-                depth = record.getEss();
-                stack.push(record);
-            }
-        }
+				processor.parse(record.getOperationSignature());
+				this.outputPort.send(new BeforeOperationEvent(record.getTin(), record.getTraceId(), orderIndex++,
+						processor.getOperationSignature(), processor.getClassSignature()));
+				depth = record.getEss();
+				stack.push(record);
+			}
+		}
 
-        if (depth > 0) {
-            while (!stack.isEmpty()) {
-                final OperationExecutionRecord beforeOp = stack.pop();
-                processor.parse(beforeOp.getOperationSignature());
-                this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(), orderIndex++,
-                        processor.getOperationSignature(), processor.getClassSignature()));
-                depth--;
-            }
-        }
-    }
+		if (depth > 0) {
+			while (!stack.isEmpty()) {
+				final OperationExecutionRecord beforeOp = stack.pop();
+				processor.parse(beforeOp.getOperationSignature());
+				this.outputPort.send(new AfterOperationEvent(beforeOp.getTout(), beforeOp.getTraceId(), orderIndex++,
+						processor.getOperationSignature(), processor.getClassSignature()));
+				depth--;
+			}
+		}
+	}
 
-    /** Internal trace representation. */
-    private class Trace {
-        private final long traceId;
-        private final long threadId;
-        private final String sessionId;
-        private final String hostname;
+	/** Internal trace representation. */
+	private class Trace {
+		private final long traceId;
+		private final long threadId;
+		private final String sessionId;
+		private final String hostname;
 
-        private final Map<Integer, OperationExecutionRecord> records = new HashMap<>();
-        private int highestEoi;
+		private final Map<Integer, OperationExecutionRecord> records = new HashMap<>();
+		private int highestEoi;
 
-        public Trace(final long traceId, final String sessionId, final String hostname, final long threadId) {
-            this.traceId = traceId;
-            this.sessionId = sessionId;
-            this.hostname = hostname;
-            this.threadId = threadId;
-            this.highestEoi = -1;
-        }
+		public Trace(final long traceId, final String sessionId, final String hostname, final long threadId) {
+			this.traceId = traceId;
+			this.sessionId = sessionId;
+			this.hostname = hostname;
+			this.threadId = threadId;
+			this.highestEoi = -1;
+		}
 
-        public void updateHighestEoi(final int eoi) {
-            if (eoi > this.highestEoi) {
-                this.highestEoi = eoi;
-            }
-        }
-    }
+		public void updateHighestEoi(final int eoi) {
+			if (eoi > this.highestEoi) {
+				this.highestEoi = eoi;
+			}
+		}
+	}
 
 }

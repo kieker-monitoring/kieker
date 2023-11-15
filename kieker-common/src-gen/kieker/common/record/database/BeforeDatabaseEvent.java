@@ -19,29 +19,28 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.flow.IClassSignature;
+import kieker.common.record.flow.IEventRecord;
+import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IEventRecord;
-import kieker.common.record.flow.IFlowRecord;
-import kieker.common.record.flow.IClassSignature;
-import kieker.common.record.flow.ITraceRecord;
-
 /**
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.14
  */
-public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {			
+public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // BeforeDatabaseEvent.parameters
-			 + TYPE_SIZE_STRING; // BeforeDatabaseEvent.technology
-	
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // BeforeDatabaseEvent.parameters
+			+ TYPE_SIZE_STRING; // BeforeDatabaseEvent.technology
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		String.class, // IClassSignature.classSignature
@@ -50,7 +49,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		String.class, // BeforeDatabaseEvent.parameters
 		String.class, // BeforeDatabaseEvent.technology
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,7 +59,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		"parameters",
 		"technology",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -69,7 +68,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	public static final String PARAMETERS = "";
 	public static final String TECHNOLOGY = "";
 	private static final long serialVersionUID = 3457043370101594469L;
-	
+
 	/** property declarations. */
 	private long timestamp;
 	private final String classSignature;
@@ -77,10 +76,10 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	private final int orderIndex;
 	private final String parameters;
 	private final String technology;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param classSignature
@@ -94,21 +93,21 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	 * @param technology
 	 *            technology
 	 */
-	public BeforeDatabaseEvent(final long timestamp, final String classSignature, final long traceId, final int orderIndex, final String parameters, final String technology) {
+	public BeforeDatabaseEvent(final long timestamp, final String classSignature, final long traceId, final int orderIndex, final String parameters,
+			final String technology) {
 		this.timestamp = timestamp;
-		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
+		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
-		this.parameters = parameters == null?"":parameters;
-		this.technology = technology == null?"":technology;
+		this.parameters = parameters == null ? "" : parameters;
+		this.technology = technology == null ? "" : technology;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public BeforeDatabaseEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -118,7 +117,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		this.parameters = deserializer.getString();
 		this.technology = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,7 +130,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		serializer.putString(this.getParameters());
 		serializer.putString(this.getTechnology());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -139,7 +138,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,7 +146,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,7 +155,6 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,18 +169,9 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final BeforeDatabaseEvent castedRecord = (BeforeDatabaseEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || !this.getClassSignature().equals(castedRecord.getClassSignature()) || (this.getTraceId() != castedRecord.getTraceId())) {
 			return false;
 		}
 		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
@@ -194,61 +183,58 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		if (!this.getTechnology().equals(castedRecord.getTechnology())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getClassSignature().hashCode();
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getParameters().hashCode();
 		code += this.getTechnology().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	public final void setTimestamp(long timestamp) {
+
+	public final void setTimestamp(final long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
-	
-	
+
 	public final long getTraceId() {
 		return this.traceId;
 	}
-	
-	public final void setTraceId(long traceId) {
+
+	public final void setTraceId(final long traceId) {
 		this.traceId = traceId;
 	}
-	
+
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
-	
-	
+
 	public final String getParameters() {
 		return this.parameters;
 	}
-	
-	
+
 	public final String getTechnology() {
 		return this.technology;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -257,22 +243,22 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		String result = "BeforeDatabaseEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "parameters = ";
 		result += this.getParameters() + ", ";
-		
+
 		result += "technology = ";
 		result += this.getTechnology() + ", ";
-		
+
 		return result;
 	}
 }

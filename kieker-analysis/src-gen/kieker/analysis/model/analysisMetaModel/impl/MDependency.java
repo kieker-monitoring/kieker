@@ -2,15 +2,13 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.MIDependency;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIDependency;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +28,7 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	 * The default value of the '{@link #getFilePath() <em>File Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFilePath()
 	 * @generated
 	 * @ordered
@@ -41,7 +39,7 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	 * The cached value of the '{@link #getFilePath() <em>File Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getFilePath()
 	 * @generated
 	 * @ordered
@@ -51,7 +49,7 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MDependency() {
@@ -61,7 +59,7 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -72,37 +70,38 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getFilePath() {
-		return filePath;
+		return this.filePath;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setFilePath(String newFilePath) {
-		String oldFilePath = filePath;
-		filePath = newFilePath;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH, oldFilePath, filePath));
+	public void setFilePath(final String newFilePath) {
+		final String oldFilePath = this.filePath;
+		this.filePath = newFilePath;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH, oldFilePath, this.filePath));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH:
-			return getFilePath();
+			return this.getFilePath();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,14 +109,14 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH:
-			setFilePath((String) newValue);
+			this.setFilePath((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,14 +125,14 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH:
-			setFilePath(FILE_PATH_EDEFAULT);
+			this.setFilePath(FILE_PATH_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -142,14 +141,14 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DEPENDENCY__FILE_PATH:
-			return FILE_PATH_EDEFAULT == null ? filePath != null : !FILE_PATH_EDEFAULT.equals(filePath);
+			return FILE_PATH_EDEFAULT == null ? this.filePath != null : !FILE_PATH_EDEFAULT.equals(this.filePath);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -157,17 +156,18 @@ public class MDependency extends EObjectImpl implements MIDependency {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (this.eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (filePath: ");
-		result.append(filePath);
+		result.append(this.filePath);
 		result.append(')');
 		return result.toString();
 	}

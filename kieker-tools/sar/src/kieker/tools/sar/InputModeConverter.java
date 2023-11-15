@@ -26,9 +26,9 @@ import com.beust.jcommander.IStringConverter;
  */
 public class InputModeConverter implements IStringConverter<EInputMode> {
 
-    @Override
-    public EInputMode convert(final String value) {
-        return EInputMode.valueOf(value.toUpperCase(Locale.getDefault()));
-    }
+	@Override
+	public EInputMode convert(final String value) {
+		return EInputMode.valueOf(value.toUpperCase(Locale.getDefault()));
+	}
 
 }

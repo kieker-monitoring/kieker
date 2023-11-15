@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
  *
  * @since 2.0.0
  */
-public final class Predicates { // NOPMD NCS
+public final class Predicates { // NOPMD NOCS
 
 	public static Predicate<Node> isProgramStatement = NodeUtils.hasName("program-stmt");
 	public static Predicate<Node> isEndProgramStatement = NodeUtils.hasName("end-program-stmt");

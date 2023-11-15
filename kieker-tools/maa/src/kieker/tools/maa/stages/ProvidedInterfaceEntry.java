@@ -19,85 +19,85 @@ import org.csveed.annotations.CsvCell;
 
 public class ProvidedInterfaceEntry {
 
-    @CsvCell(columnIndex = 1, columnName = "component-type")
-    private String componentType;
-    @CsvCell(columnIndex = 2, columnName = "provided-interface")
-    private String providedInterface;
-    @CsvCell(columnIndex = 3, columnName = "operation")
-    private String operation;
-    @CsvCell(columnIndex = 4, columnName = "caller-component-types")
-    private String callerComponentTypes;
+	@CsvCell(columnIndex = 1, columnName = "component-type")
+	private String componentType;
+	@CsvCell(columnIndex = 2, columnName = "provided-interface")
+	private String providedInterface;
+	@CsvCell(columnIndex = 3, columnName = "operation")
+	private String operation;
+	@CsvCell(columnIndex = 4, columnName = "caller-component-types")
+	private String callerComponentTypes;
 
-    public ProvidedInterfaceEntry() {
-        // dummy for csveed
-    }
+	public ProvidedInterfaceEntry() {
+		// dummy for csveed
+	}
 
-    public ProvidedInterfaceEntry(final String componentType, final String providedInterface, final String operation,
-            final String callerComponentTypes) {
-        this.componentType = componentType;
-        this.providedInterface = providedInterface;
-        this.operation = operation;
-        this.callerComponentTypes = callerComponentTypes;
-    }
+	public ProvidedInterfaceEntry(final String componentType, final String providedInterface, final String operation,
+			final String callerComponentTypes) {
+		this.componentType = componentType;
+		this.providedInterface = providedInterface;
+		this.operation = operation;
+		this.callerComponentTypes = callerComponentTypes;
+	}
 
-    public String getComponentType() {
-        return this.componentType;
-    }
+	public String getComponentType() {
+		return this.componentType;
+	}
 
-    public void setComponentType(final String componentType) {
-        this.componentType = componentType;
-    }
+	public void setComponentType(final String componentType) {
+		this.componentType = componentType;
+	}
 
-    public String getProvidedInterface() {
-        return this.providedInterface;
-    }
+	public String getProvidedInterface() {
+		return this.providedInterface;
+	}
 
-    public void setProvidedInterface(final String providedInterface) {
-        this.providedInterface = providedInterface;
-    }
+	public void setProvidedInterface(final String providedInterface) {
+		this.providedInterface = providedInterface;
+	}
 
-    public String getOperation() {
-        return this.operation;
-    }
+	public String getOperation() {
+		return this.operation;
+	}
 
-    public void setOperation(final String operation) {
-        this.operation = operation;
-    }
+	public void setOperation(final String operation) {
+		this.operation = operation;
+	}
 
-    public String getCallerComponentTypes() {
-        return this.callerComponentTypes;
-    }
+	public String getCallerComponentTypes() {
+		return this.callerComponentTypes;
+	}
 
-    public void setCallerComponentTypes(final String callerComponentTypes) {
-        this.callerComponentTypes = callerComponentTypes;
-    }
+	public void setCallerComponentTypes(final String callerComponentTypes) {
+		this.callerComponentTypes = callerComponentTypes;
+	}
 
-    @Override
-    public boolean equals(final Object object) {
-        if (object instanceof ProvidedInterfaceEntry) {
-            final ProvidedInterfaceEntry other = (ProvidedInterfaceEntry) object;
-            return this.checkString(this.callerComponentTypes, other.getCallerComponentTypes())
-                    && this.checkString(this.componentType, other.getComponentType())
-                    && this.checkString(this.operation, other.getOperation())
-                    && this.checkString(this.providedInterface, other.getProvidedInterface());
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof ProvidedInterfaceEntry) {
+			final ProvidedInterfaceEntry other = (ProvidedInterfaceEntry) object;
+			return this.checkString(this.callerComponentTypes, other.getCallerComponentTypes())
+					&& this.checkString(this.componentType, other.getComponentType())
+					&& this.checkString(this.operation, other.getOperation())
+					&& this.checkString(this.providedInterface, other.getProvidedInterface());
+		} else {
+			return false;
+		}
+	}
 
-    private boolean checkString(final String left, final String right) {
-        if (left == null && right == null) {
-            return true;
-        } else if (left != null && right != null) {
-            return left.equals(right);
-        } else {
-            return false;
-        }
-    }
+	private boolean checkString(final String left, final String right) {
+		if ((left == null) && (right == null)) {
+			return true;
+		} else if ((left != null) && (right != null)) {
+			return left.equals(right);
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public int hashCode() {
-        return this.callerComponentTypes.hashCode() ^ this.componentType.hashCode() ^ this.operation.hashCode()
-                ^ this.providedInterface.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return this.callerComponentTypes.hashCode() ^ this.componentType.hashCode() ^ this.operation.hashCode()
+				^ this.providedInterface.hashCode();
+	}
 }

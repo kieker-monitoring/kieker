@@ -27,17 +27,17 @@ import java.util.regex.Pattern;
  */
 public class PatternUriProcessor implements IUriProcessor {
 
-    private final Pattern regex;
-    private final String replacement;
+	private final Pattern regex;
+	private final String replacement;
 
-    public PatternUriProcessor(final String pattern, final String replacement) {
-        this.regex = Pattern.compile(pattern);
-        this.replacement = replacement;
-    }
+	public PatternUriProcessor(final String pattern, final String replacement) {
+		this.regex = Pattern.compile(pattern);
+		this.replacement = replacement;
+	}
 
-    @Override
-    public String process(final String uri) {
-        return this.regex.matcher(uri).replaceFirst(this.replacement);
-    }
+	@Override
+	public String process(final String uri) {
+		return this.regex.matcher(uri).replaceFirst(this.replacement);
+	}
 
 }

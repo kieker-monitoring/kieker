@@ -30,60 +30,60 @@ import kieker.model.analysismodel.deployment.DeployedStorage;
  */
 public final class FullyQualifiedNamesFactory {
 
-    private FullyQualifiedNamesFactory() {
-        // factory
-    }
+	private FullyQualifiedNamesFactory() {
+		// factory
+	}
 
-    public static String createFullyQualifiedName(final DeployedOperation operation) {
-        return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(operation.getComponent()), // NOPMD
-                operation.getAssemblyOperation().getOperationType().getSignature());
-    }
+	public static String createFullyQualifiedName(final DeployedOperation operation) {
+		return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(operation.getComponent()), // NOPMD
+				operation.getAssemblyOperation().getOperationType().getSignature());
+	}
 
-    public static String createFullyQualifiedName(final DeployedStorage storage) {
-        return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(storage.getComponent()),
-                storage.getAssemblyStorage().getStorageType().getType());
-    }
+	public static String createFullyQualifiedName(final DeployedStorage storage) {
+		return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(storage.getComponent()),
+				storage.getAssemblyStorage().getStorageType().getType());
+	}
 
-    public static String createFullyQualifiedName(final DeployedComponent component) {
-        return String.format("%s@%s_%d", component.getContext().getName(),
-                FullyQualifiedNamesFactory.createFullyQualifiedName(component.getAssemblyComponent()),
-                FullyQualifiedNamesFactory.findIndexNumber(component));
-    }
+	public static String createFullyQualifiedName(final DeployedComponent component) {
+		return String.format("%s@%s_%d", component.getContext().getName(),
+				FullyQualifiedNamesFactory.createFullyQualifiedName(component.getAssemblyComponent()),
+				FullyQualifiedNamesFactory.findIndexNumber(component));
+	}
 
-    public static String createFullyQualifiedName(final AssemblyOperation operation) {
-        return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(operation.getComponent()),
-                operation.getOperationType().getSignature());
-    }
+	public static String createFullyQualifiedName(final AssemblyOperation operation) {
+		return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(operation.getComponent()),
+				operation.getOperationType().getSignature());
+	}
 
-    public static String createFullyQualifiedName(final AssemblyStorage storage) {
-        return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(storage.getComponent()),
-                storage.getStorageType().getName());
-    }
+	public static String createFullyQualifiedName(final AssemblyStorage storage) {
+		return String.format("%s.%s", FullyQualifiedNamesFactory.createFullyQualifiedName(storage.getComponent()),
+				storage.getStorageType().getName());
+	}
 
-    public static String createFullyQualifiedName(final AssemblyComponent component) {
-        return String.format("%s_%d", component.getComponentType().getSignature(),
-                FullyQualifiedNamesFactory.findIndexNumber(component));
-    }
+	public static String createFullyQualifiedName(final AssemblyComponent component) {
+		return String.format("%s_%d", component.getComponentType().getSignature(),
+				FullyQualifiedNamesFactory.findIndexNumber(component));
+	}
 
-    public static int findIndexNumber(final AssemblyComponent component) {
-        final int numberOfComponent = 0;
-        for (final AssemblyComponent value : ((AssemblyModel) component.eContainer().eContainer()).getComponents()
-                .values()) {
-            if (value.equals(component)) {
-                return numberOfComponent;
-            }
-        }
-        return -1;
-    }
+	public static int findIndexNumber(final AssemblyComponent component) {
+		final int numberOfComponent = 0;
+		for (final AssemblyComponent value : ((AssemblyModel) component.eContainer().eContainer()).getComponents()
+				.values()) {
+			if (value.equals(component)) {
+				return numberOfComponent;
+			}
+		}
+		return -1;
+	}
 
-    public static int findIndexNumber(final DeployedComponent component) {
-        final int numberOfComponent = 0;
-        for (final DeployedComponent value : component.getContext().getComponents().values()) {
-            if (value.equals(component)) {
-                return numberOfComponent;
-            }
-        }
-        return -1;
-    }
+	public static int findIndexNumber(final DeployedComponent component) {
+		final int numberOfComponent = 0;
+		for (final DeployedComponent value : component.getContext().getComponents().values()) {
+			if (value.equals(component)) {
+				return numberOfComponent;
+			}
+		}
+		return -1;
+	}
 
 }

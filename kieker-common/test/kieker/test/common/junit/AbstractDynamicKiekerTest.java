@@ -77,7 +77,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String regExPattern,
 			final Collection<File> files) {
-		final Collection<File> results = new LinkedList<File>();
+		final Collection<File> results = new LinkedList<>();
 
 		for (final File file : files) {
 			if (file.getAbsolutePath().matches(regExPattern)) {
@@ -93,7 +93,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	}
 
 	private Collection<String> transformFilesToClassNames(final Collection<File> files) {
-		final Collection<String> results = new LinkedList<String>();
+		final Collection<String> results = new LinkedList<>();
 
 		for (final File file : files) {
 			final String pathName = this.workingPathToModulePath(file.getPath());
@@ -109,7 +109,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	private Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames)
 			throws ClassNotFoundException {
-		final Collection<Class<?>> results = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<>();
 
 		final ClassLoader classLoader = AbstractDynamicKiekerTest.class.getClassLoader();
 		for (final String className : classNames) {
@@ -127,7 +127,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	 * @return returns a collection with non abstract classes only
 	 */
 	protected Collection<Class<?>> filterOutAbstractClasses(final Collection<Class<?>> classes) {
-		final Collection<Class<?>> results = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<>();
 
 		for (final Class<?> clazz : classes) {
 			if (!Modifier.isAbstract(clazz.getModifiers())) {
@@ -149,7 +149,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	 */
 	protected Collection<Class<?>> filterOutClassesNotExtending(final Class<?> superClass,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> results = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<>();
 
 		for (final Class<?> clazz : classes) {
 			if (superClass.isAssignableFrom(clazz)) {
@@ -171,7 +171,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	 */
 	public Collection<Class<?>> filterOutClassesExtending(final Class<AbstractKiekerTest> superClass,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> results = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<>();
 
 		for (final Class<?> clazz : classes) {
 			if (!superClass.isAssignableFrom(clazz)) {
@@ -193,7 +193,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	 */
 	protected Collection<Class<?>> filterOutClassesNotMatchingFullQualifiedClassNamePattern(final String pattern,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> results = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<>();
 
 		for (final Class<?> clazz : classes) {
 			if (clazz.getCanonicalName().matches(pattern)) {

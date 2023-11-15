@@ -3,7 +3,6 @@
 package kieker.model.analysismodel.statistics;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -15,8 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.ComposedUnit#getUnits <em>Units</em>}</li>
- *   <li>{@link kieker.model.analysismodel.statistics.ComposedUnit#getExponent <em>Exponent</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.ComposedUnit#getUnits <em>Units</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.ComposedUnit#getExponent <em>Exponent</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getComposedUnit()
@@ -29,6 +28,7 @@ public interface ComposedUnit extends EObject {
 	 * The list contents are of type {@link kieker.model.analysismodel.statistics.Unit}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Units</em>' containment reference list.
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getComposedUnit_Units()
 	 * @model containment="true"
@@ -40,6 +40,7 @@ public interface ComposedUnit extends EObject {
 	 * Returns the value of the '<em><b>Exponent</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Exponent</em>' attribute.
 	 * @see #setExponent(long)
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getComposedUnit_Exponent()
@@ -52,7 +53,9 @@ public interface ComposedUnit extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.statistics.ComposedUnit#getExponent <em>Exponent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Exponent</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Exponent</em>' attribute.
 	 * @see #getExponent()
 	 * @generated
 	 */

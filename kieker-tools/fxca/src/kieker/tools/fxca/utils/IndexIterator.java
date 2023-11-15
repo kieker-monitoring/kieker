@@ -30,23 +30,23 @@ import java.util.function.Supplier;
  */
 public class IndexIterator<T> implements Iterator<T> {
 
-    private final Supplier<Integer> getLength;
-    private final Function<Integer, T> getElement;
-    private int index;
+	private final Supplier<Integer> getLength;
+	private final Function<Integer, T> getElement;
+	private int index;
 
-    public IndexIterator(final Supplier<Integer> getLength, final Function<Integer, T> getElement) {
-        this.getLength = getLength;
-        this.getElement = getElement;
-        this.index = 0;
-    }
+	public IndexIterator(final Supplier<Integer> getLength, final Function<Integer, T> getElement) {
+		this.getLength = getLength;
+		this.getElement = getElement;
+		this.index = 0;
+	}
 
-    @Override
-    public boolean hasNext() {
-        return this.index < this.getLength.get();
-    }
+	@Override
+	public boolean hasNext() {
+		return this.index < this.getLength.get();
+	}
 
-    @Override
-    public T next() {
-        return this.getElement.apply(this.index++);
-    }
+	@Override
+	public T next() {
+		return this.getElement.apply(this.index++);
+	}
 }

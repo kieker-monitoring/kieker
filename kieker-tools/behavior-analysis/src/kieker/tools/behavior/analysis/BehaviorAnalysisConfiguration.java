@@ -65,11 +65,11 @@ public class BehaviorAnalysisConfiguration extends Configuration {
 
 		final OPTICSDataGED<MutableNetwork<INode, UserBehaviorEdge>> distanceFunction = new OPTICSDataGED<>(gedDistanceFunction);
 
-		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation =
-				new BehaviorModelToOpticsDataTransformation<>(distanceFunction);
-		final ClusteringCompositeStage<MutableNetwork<INode, UserBehaviorEdge>> clusteringCompositeStage =
-				new ClusteringCompositeStage<>(settings.getClusteringDistance(),
-						settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
+		final BehaviorModelToOpticsDataTransformation<INode, UserBehaviorEdge> behaviorModelToOpticsDataTransformation = new BehaviorModelToOpticsDataTransformation<>(
+				distanceFunction);
+		final ClusteringCompositeStage<MutableNetwork<INode, UserBehaviorEdge>> clusteringCompositeStage = new ClusteringCompositeStage<>(
+				settings.getClusteringDistance(),
+				settings.getMinPts(), settings.getMaxAmount(), distanceFunction);
 		final Distributor<Clustering<MutableNetwork<INode, UserBehaviorEdge>>> distributor = new Distributor<>(new CopyByReferenceStrategy());
 
 		// TODO needed to use this during online runtime.

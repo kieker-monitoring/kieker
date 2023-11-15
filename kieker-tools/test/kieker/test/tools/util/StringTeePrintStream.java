@@ -22,11 +22,11 @@ import java.io.UnsupportedEncodingException;
 /**
  * This simple helper class wraps a given {@link PrintStream} but intercepts everything that is written to this instance.
  * The written content can later be accessed.
- * 
+ *
  * @see StringTeeOutputStream
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class StringTeePrintStream extends PrintStream {
@@ -37,7 +37,7 @@ public class StringTeePrintStream extends PrintStream {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param originalStream
 	 *            The stream to be intercepted.
 	 * @throws UnsupportedEncodingException
@@ -50,7 +50,7 @@ public class StringTeePrintStream extends PrintStream {
 
 	/**
 	 * Delivers a string representation of the stream's content.
-	 * 
+	 *
 	 * @return The written content.
 	 */
 	public String getString() {

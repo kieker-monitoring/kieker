@@ -30,22 +30,22 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class AggregateCommonBlocksStage extends AbstractFilter<CommonBlockEntry> {
 
-    private final Map<String, CommonBlockEntry> entries = new HashMap<>();
+	private final Map<String, CommonBlockEntry> entries = new HashMap<>();
 
-    @Override
-    protected void execute(final CommonBlockEntry entry) throws Exception {
-        final CommonBlockEntry existingEntry = this.entries.get(entry.getName());
-        if (existingEntry != null) {
-            existingEntry.merge(entry);
-        } else {
-            this.entries.put(entry.getName(), entry);
-        }
-    }
+	@Override
+	protected void execute(final CommonBlockEntry entry) throws Exception {
+		final CommonBlockEntry existingEntry = this.entries.get(entry.getName());
+		if (existingEntry != null) {
+			existingEntry.merge(entry);
+		} else {
+			this.entries.put(entry.getName(), entry);
+		}
+	}
 
-    @Override
-    protected void onTerminating() {
-        this.entries.values().forEach(entry -> this.outputPort.send(entry));
-        super.onTerminating();
-    }
+	@Override
+	protected void onTerminating() {
+		this.entries.values().forEach(entry -> this.outputPort.send(entry));
+		super.onTerminating();
+	}
 
 }

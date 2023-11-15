@@ -26,101 +26,101 @@ import kieker.model.analysismodel.execution.EDirection;
  */
 public class CommonBlockArgumentDataflow implements IDataflowEntry {
 
-    @CsvCell(columnIndex = 1, columnName = "common-block")
-    private String commonBlockName;
+	@CsvCell(columnIndex = 1, columnName = "common-block")
+	private String commonBlockName;
 
-    @CsvCell(columnIndex = 2, columnName = "file")
-    private String fileName;
+	@CsvCell(columnIndex = 2, columnName = "file")
+	private String fileName;
 
-    @CsvCell(columnIndex = 3, columnName = "module")
-    private String moduleName;
+	@CsvCell(columnIndex = 3, columnName = "module")
+	private String moduleName;
 
-    @CsvCell(columnIndex = 4, columnName = "operation")
-    private String operationName;
+	@CsvCell(columnIndex = 4, columnName = "operation")
+	private String operationName;
 
-    @CsvCell(columnIndex = 5, columnName = "direction")
-    private EDirection direction;
+	@CsvCell(columnIndex = 5, columnName = "direction")
+	private EDirection direction;
 
-    public CommonBlockArgumentDataflow() {
-        // dummy constructor for csveed
-    }
+	public CommonBlockArgumentDataflow() {
+		// dummy constructor for csveed
+	}
 
-    public CommonBlockArgumentDataflow(final String commonBlockName, final String fileName, final String moduleName,
-            final String operationName, final EDirection direction) {
-        this.commonBlockName = commonBlockName;
-        this.fileName = fileName;
-        this.moduleName = moduleName;
-        this.operationName = operationName;
-        this.direction = direction;
-    }
+	public CommonBlockArgumentDataflow(final String commonBlockName, final String fileName, final String moduleName,
+			final String operationName, final EDirection direction) {
+		this.commonBlockName = commonBlockName;
+		this.fileName = fileName;
+		this.moduleName = moduleName;
+		this.operationName = operationName;
+		this.direction = direction;
+	}
 
-    public String getCommonBlockName() {
-        return this.commonBlockName;
-    }
+	public String getCommonBlockName() {
+		return this.commonBlockName;
+	}
 
-    public void setCommonBlockName(final String commonBlockName) {
-        this.commonBlockName = commonBlockName;
-    }
+	public void setCommonBlockName(final String commonBlockName) {
+		this.commonBlockName = commonBlockName;
+	}
 
-    public String getFileName() {
-        return this.fileName;
-    }
+	public String getFileName() {
+		return this.fileName;
+	}
 
-    public void setFileName(final String fileName) {
-        this.fileName = fileName;
-    }
+	public void setFileName(final String fileName) {
+		this.fileName = fileName;
+	}
 
-    public String getModuleName() {
-        return this.moduleName;
-    }
+	public String getModuleName() {
+		return this.moduleName;
+	}
 
-    public void setModuleName(final String moduleName) {
-        this.moduleName = moduleName;
-    }
+	public void setModuleName(final String moduleName) {
+		this.moduleName = moduleName;
+	}
 
-    public String getOperationName() {
-        return this.operationName;
-    }
+	public String getOperationName() {
+		return this.operationName;
+	}
 
-    public void setOperationName(final String operationName) {
-        this.operationName = operationName;
-    }
+	public void setOperationName(final String operationName) {
+		this.operationName = operationName;
+	}
 
-    public EDirection getDirection() {
-        return this.direction;
-    }
+	public EDirection getDirection() {
+		return this.direction;
+	}
 
-    public void setDirection(final EDirection direction) {
-        this.direction = direction;
-    }
+	public void setDirection(final EDirection direction) {
+		this.direction = direction;
+	}
 
-    @Override
-    public boolean equals(final Object object) {
-        if (object instanceof CommonBlockArgumentDataflow) {
-            final CommonBlockArgumentDataflow other = (CommonBlockArgumentDataflow) object;
-            return this.checkString(this.commonBlockName, other.getCommonBlockName())
-                    && this.checkString(this.fileName, other.getFileName())
-                    && this.checkString(this.moduleName, other.getModuleName())
-                    && this.checkString(this.operationName, other.getOperationName())
-                    && this.direction.equals(other.getDirection());
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof CommonBlockArgumentDataflow) {
+			final CommonBlockArgumentDataflow other = (CommonBlockArgumentDataflow) object;
+			return this.checkString(this.commonBlockName, other.getCommonBlockName())
+					&& this.checkString(this.fileName, other.getFileName())
+					&& this.checkString(this.moduleName, other.getModuleName())
+					&& this.checkString(this.operationName, other.getOperationName())
+					&& this.direction.equals(other.getDirection());
+		} else {
+			return false;
+		}
+	}
 
-    private boolean checkString(final String left, final String right) {
-        if (left == null && right == null) {
-            return true;
-        } else if (left != null && right != null) {
-            return left.equals(right);
-        } else {
-            return false;
-        }
-    }
+	private boolean checkString(final String left, final String right) {
+		if ((left == null) && (right == null)) {
+			return true;
+		} else if ((left != null) && (right != null)) {
+			return left.equals(right);
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public int hashCode() {
-        return this.commonBlockName.hashCode() ^ this.direction.hashCode() ^ this.fileName.hashCode()
-                ^ this.moduleName.hashCode() ^ this.operationName.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return this.commonBlockName.hashCode() ^ this.direction.hashCode() ^ this.fileName.hashCode()
+				^ this.moduleName.hashCode() ^ this.operationName.hashCode();
+	}
 }

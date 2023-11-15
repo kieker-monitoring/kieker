@@ -27,17 +27,17 @@ import com.beust.jcommander.IStringConverter;
  */
 public class ReplacementConverter implements IStringConverter<Replacement> {
 
-    @Override
-    public Replacement convert(final String value) {
-        final String[] rule = value.split(":");
-        if (rule.length == 2) {
-            final List<String> sources = Arrays.asList(rule[0].split(","));
-            final List<String> targets = Arrays.asList(rule[1].split(","));
-            return new Replacement(sources, targets);
-        } else {
-            System.err.printf("Format of replacement rule is not supported: %s", value); // NOPMD
-            return null;
-        }
-    }
+	@Override
+	public Replacement convert(final String value) {
+		final String[] rule = value.split(":");
+		if (rule.length == 2) {
+			final List<String> sources = Arrays.asList(rule[0].split(","));
+			final List<String> targets = Arrays.asList(rule[1].split(","));
+			return new Replacement(sources, targets);
+		} else {
+			System.err.printf("Format of replacement rule is not supported: %s", value); // NOPMD
+			return null;
+		}
+	}
 
 }

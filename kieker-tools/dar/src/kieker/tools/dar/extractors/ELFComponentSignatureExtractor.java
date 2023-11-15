@@ -28,24 +28,24 @@ import kieker.model.analysismodel.type.ComponentType;
  */
 public class ELFComponentSignatureExtractor implements IComponentSignatureExtractor {
 
-    private final String experimentName;
+	private final String experimentName;
 
-    public ELFComponentSignatureExtractor(final String experimentName) {
-        this.experimentName = experimentName;
-    }
+	public ELFComponentSignatureExtractor(final String experimentName) {
+		this.experimentName = experimentName;
+	}
 
-    @Override
-    public void extract(final ComponentType componentType) {
-        String signature = componentType.getSignature();
-        if (signature == null) {
-            signature = "-- none --";
-        }
-        final Path path = Paths.get(signature);
-        final String name = path.getName(path.getNameCount() - 1).toString();
-        final String rest = path.getParent() != null ? this.experimentName + "." + path.getParent().toString()
-                : this.experimentName;
-        componentType.setName(name);
-        componentType.setPackage(rest);
-    }
+	@Override
+	public void extract(final ComponentType componentType) {
+		String signature = componentType.getSignature();
+		if (signature == null) {
+			signature = "-- none --";
+		}
+		final Path path = Paths.get(signature);
+		final String name = path.getName(path.getNameCount() - 1).toString();
+		final String rest = path.getParent() != null ? this.experimentName + "." + path.getParent().toString() // NOCS
+				: this.experimentName;
+		componentType.setName(name);
+		componentType.setPackage(rest);
+	}
 
 }

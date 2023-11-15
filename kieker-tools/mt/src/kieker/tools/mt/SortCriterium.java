@@ -24,19 +24,19 @@ package kieker.tools.mt;
  */
 public class SortCriterium {
 
-    String columnName;
-    EOrder order;
+	private final String columnName;
+	private final EOrder order;
 
-    public SortCriterium(final String columnName, final EOrder order) {
-        this.columnName = columnName;
-        this.order = order;
-    }
+	public SortCriterium(final String columnName, final EOrder order) {
+		this.columnName = columnName;
+		this.order = order;
+	}
 
-    public String getColumnName() {
-        return this.columnName;
-    }
+	public String getColumnName() {
+		return this.columnName;
+	}
 
-    public EOrder getOrder() {
-        return this.order;
-    }
+	public EOrder getOrder() {
+		return this.order;
+	}
 }

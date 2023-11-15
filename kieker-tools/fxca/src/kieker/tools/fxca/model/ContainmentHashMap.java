@@ -24,28 +24,28 @@ import java.util.Map;
  */
 public class ContainmentHashMap<K, V extends IContainable> extends HashMap<K, V> {
 
-    private static final long serialVersionUID = -599934940656656150L;
-    private final MMObject parent;
+	private static final long serialVersionUID = -599934940656656150L;
+	private final MMObject parent;
 
-    public ContainmentHashMap(final MMObject parent) {
-        this.parent = parent;
-    }
+	public ContainmentHashMap(final MMObject parent) {
+		this.parent = parent;
+	}
 
-    @Override
-    public V put(final K key, final V value) {
-        value.setParent(this.parent);
-        return super.put(key, value);
-    }
+	@Override
+	public V put(final K key, final V value) {
+		value.setParent(this.parent);
+		return super.put(key, value);
+	}
 
-    @Override
-    public void putAll(final Map<? extends K, ? extends V> m) {
-        m.values().forEach(value -> value.setParent(this.parent));
-        super.putAll(m);
-    }
+	@Override
+	public void putAll(final Map<? extends K, ? extends V> m) {
+		m.values().forEach(value -> value.setParent(this.parent));
+		super.putAll(m);
+	}
 
-    @Override
-    public V putIfAbsent(final K key, final V value) {
-        value.setParent(this.parent);
-        return super.putIfAbsent(key, value);
-    }
+	@Override
+	public V putIfAbsent(final K key, final V value) {
+		value.setParent(this.parent);
+		return super.putIfAbsent(key, value);
+	}
 }

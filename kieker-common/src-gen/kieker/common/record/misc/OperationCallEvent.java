@@ -22,27 +22,26 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 2.0.0
  */
-public class OperationCallEvent extends AbstractMonitoringRecord  {			
+public class OperationCallEvent extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // OperationCallEvent.sourceComponent
-			 + TYPE_SIZE_STRING // OperationCallEvent.sourceOperation
-			 + TYPE_SIZE_STRING // OperationCallEvent.targetComponent
-			 + TYPE_SIZE_STRING; // OperationCallEvent.targetOperation
-	
+			+ TYPE_SIZE_STRING // OperationCallEvent.sourceOperation
+			+ TYPE_SIZE_STRING // OperationCallEvent.targetComponent
+			+ TYPE_SIZE_STRING; // OperationCallEvent.targetOperation
+
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationCallEvent.sourceComponent
 		String.class, // OperationCallEvent.sourceOperation
 		String.class, // OperationCallEvent.targetComponent
 		String.class, // OperationCallEvent.targetOperation
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"sourceComponent",
@@ -50,23 +49,23 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		"targetComponent",
 		"targetOperation",
 	};
-	
+
 	/** default constants. */
 	public static final String SOURCE_COMPONENT = "";
 	public static final String SOURCE_OPERATION = "";
 	public static final String TARGET_COMPONENT = "";
 	public static final String TARGET_OPERATION = "";
 	private static final long serialVersionUID = -5250152168812250464L;
-	
+
 	/** property declarations. */
 	private final String sourceComponent;
 	private final String sourceOperation;
 	private final String targetComponent;
 	private final String targetOperation;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param sourceComponent
 	 *            sourceComponent
 	 * @param sourceOperation
@@ -77,18 +76,17 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 	 *            targetOperation
 	 */
 	public OperationCallEvent(final String sourceComponent, final String sourceOperation, final String targetComponent, final String targetOperation) {
-		this.sourceComponent = sourceComponent == null?"":sourceComponent;
-		this.sourceOperation = sourceOperation == null?"":sourceOperation;
-		this.targetComponent = targetComponent == null?"":targetComponent;
-		this.targetOperation = targetOperation == null?"":targetOperation;
+		this.sourceComponent = sourceComponent == null ? "" : sourceComponent;
+		this.sourceOperation = sourceOperation == null ? "" : sourceOperation;
+		this.targetComponent = targetComponent == null ? "" : targetComponent;
+		this.targetOperation = targetOperation == null ? "" : targetOperation;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public OperationCallEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.sourceComponent = deserializer.getString();
@@ -96,7 +94,7 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		this.targetComponent = deserializer.getString();
 		this.targetOperation = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -107,7 +105,7 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		serializer.putString(this.getTargetComponent());
 		serializer.putString(this.getTargetOperation());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +113,7 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +121,7 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +130,6 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,26 +144,18 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final OperationCallEvent castedRecord = (OperationCallEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (!this.getSourceComponent().equals(castedRecord.getSourceComponent())) {
-			return false;
-		}
-		if (!this.getSourceOperation().equals(castedRecord.getSourceOperation())) {
-			return false;
-		}
-		if (!this.getTargetComponent().equals(castedRecord.getTargetComponent())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getSourceComponent().equals(castedRecord.getSourceComponent()) || !this.getSourceOperation().equals(castedRecord.getSourceOperation()) || !this.getTargetComponent().equals(castedRecord.getTargetComponent())) {
 			return false;
 		}
 		if (!this.getTargetOperation().equals(castedRecord.getTargetOperation())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -177,30 +166,26 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		code += this.getSourceOperation().hashCode();
 		code += this.getTargetComponent().hashCode();
 		code += this.getTargetOperation().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getSourceComponent() {
 		return this.sourceComponent;
 	}
-	
-	
+
 	public final String getSourceOperation() {
 		return this.sourceOperation;
 	}
-	
-	
+
 	public final String getTargetComponent() {
 		return this.targetComponent;
 	}
-	
-	
+
 	public final String getTargetOperation() {
 		return this.targetOperation;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -209,16 +194,16 @@ public class OperationCallEvent extends AbstractMonitoringRecord  {
 		String result = "OperationCallEvent: ";
 		result += "sourceComponent = ";
 		result += this.getSourceComponent() + ", ";
-		
+
 		result += "sourceOperation = ";
 		result += this.getSourceOperation() + ", ";
-		
+
 		result += "targetComponent = ";
 		result += this.getTargetComponent() + ", ";
-		
+
 		result += "targetOperation = ";
 		result += this.getTargetOperation() + ", ";
-		
+
 		return result;
 	}
 }

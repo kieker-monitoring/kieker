@@ -25,16 +25,16 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
  * paper on <i>Self-adaptive workload classification and forecasting for
  * proactive resource provisioning</i>
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
- * 
+ *
  * @since 1.10
  * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  *         The naive forecast considers only the
  *         value of the most recent observation assuming that this
  *         value has the highest probability for the next forecast point.
- * 
+ *
  *         Horizon: very short term forecast (1-2 points)
  *         Overhead: nearly none O(1)
- * 
+ *
  */
 public class NaiveForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model
@@ -42,7 +42,7 @@ public class NaiveForecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -51,7 +51,7 @@ public class NaiveForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 * @param confidenceLevel

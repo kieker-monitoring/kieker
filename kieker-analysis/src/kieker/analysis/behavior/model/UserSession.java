@@ -38,7 +38,7 @@ public final class UserSession {
 	/**
 	 * Simple comparator for comparing the entry times.
 	 */
-	public static final Comparator<EntryCallEvent> SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME = new Comparator<EntryCallEvent>() {
+	public static final Comparator<EntryCallEvent> SORT_ENTRY_CALL_EVENTS_BY_ENTRY_TIME = new Comparator<>() {
 
 		@Override
 		public int compare(final EntryCallEvent o1, final EntryCallEvent o2) {
@@ -54,7 +54,7 @@ public final class UserSession {
 	/**
 	 * Simple comparator for comparing the exit times.
 	 */
-	public static final Comparator<EntryCallEvent> SORT_ENTRY_CALL_EVENTS_BY_EXIT_TIME = new Comparator<EntryCallEvent>() {
+	public static final Comparator<EntryCallEvent> SORT_ENTRY_CALL_EVENTS_BY_EXIT_TIME = new Comparator<>() {
 
 		@Override
 		public int compare(final EntryCallEvent o1, final EntryCallEvent o2) {

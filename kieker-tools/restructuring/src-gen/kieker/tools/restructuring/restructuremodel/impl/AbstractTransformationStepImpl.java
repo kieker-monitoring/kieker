@@ -2,12 +2,11 @@
  */
 package kieker.tools.restructuring.restructuremodel.impl;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import kieker.tools.restructuring.restructuremodel.AbstractTransformationStep;
 import kieker.tools.restructuring.restructuremodel.RestructuremodelPackage;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +19,7 @@ public abstract class AbstractTransformationStepImpl extends MinimalEObjectImpl.
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected AbstractTransformationStepImpl() {
@@ -29,6 +29,7 @@ public abstract class AbstractTransformationStepImpl extends MinimalEObjectImpl.
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -36,4 +37,4 @@ public abstract class AbstractTransformationStepImpl extends MinimalEObjectImpl.
 		return RestructuremodelPackage.Literals.ABSTRACT_TRANSFORMATION_STEP;
 	}
 
-} //AbstractTransformationStepImpl
+} // AbstractTransformationStepImpl

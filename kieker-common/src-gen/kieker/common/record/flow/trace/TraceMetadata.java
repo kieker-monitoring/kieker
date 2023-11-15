@@ -19,26 +19,25 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IFlowRecord;
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.5
  */
-public class TraceMetadata extends AbstractMonitoringRecord implements IFlowRecord {			
+public class TraceMetadata extends AbstractMonitoringRecord implements IFlowRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
-			 + TYPE_SIZE_LONG // TraceMetadata.threadId
-			 + TYPE_SIZE_STRING // TraceMetadata.sessionId
-			 + TYPE_SIZE_STRING // TraceMetadata.hostname
-			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
-			 + TYPE_SIZE_INT; // TraceMetadata.parentOrderId
-	
+			+ TYPE_SIZE_LONG // TraceMetadata.threadId
+			+ TYPE_SIZE_STRING // TraceMetadata.sessionId
+			+ TYPE_SIZE_STRING // TraceMetadata.hostname
+			+ TYPE_SIZE_LONG // TraceMetadata.parentTraceId
+			+ TYPE_SIZE_INT; // TraceMetadata.parentOrderId
+
 	public static final Class<?>[] TYPES = {
 		long.class, // TraceMetadata.traceId
 		long.class, // TraceMetadata.threadId
@@ -47,7 +46,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		long.class, // TraceMetadata.parentTraceId
 		int.class, // TraceMetadata.parentOrderId
 	};
-	
+
 	/** user-defined constants. */
 	public static final long NO_PARENT_TRACEID = -1L;
 	public static final int NO_PARENT_ORDER_INDEX = -1;
@@ -62,7 +61,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		"parentTraceId",
 		"parentOrderId",
 	};
-	
+
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
@@ -72,7 +71,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
 	public static final int NEXT_ORDER_ID = 0;
 	private static final long serialVersionUID = 2517933148667588979L;
-	
+
 	/** property declarations. */
 	private long traceId;
 	private final long threadId;
@@ -81,10 +80,10 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	private final long parentTraceId;
 	private final int parentOrderId;
 	private int nextOrderId = 0;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param traceId
 	 *            traceId
 	 * @param threadId
@@ -101,18 +100,17 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
-		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
+		this.sessionId = sessionId == null ? NO_SESSION_ID : sessionId;
+		this.hostname = hostname == null ? NO_HOSTNAME : hostname;
 		this.parentTraceId = parentTraceId;
 		this.parentOrderId = parentOrderId;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public TraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.traceId = deserializer.getLong();
@@ -123,7 +121,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		this.parentOrderId = deserializer.getInt();
 		this.nextOrderId = 0;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,7 +134,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		serializer.putLong(this.getParentTraceId());
 		serializer.putInt(this.getParentOrderId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,7 +142,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,7 +150,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -161,7 +159,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,18 +173,9 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final TraceMetadata castedRecord = (TraceMetadata) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getThreadId() != castedRecord.getThreadId()) {
-			return false;
-		}
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getThreadId() != castedRecord.getThreadId()) || !this.getSessionId().equals(castedRecord.getSessionId())) {
 			return false;
 		}
 		if (!this.getHostname().equals(castedRecord.getHostname())) {
@@ -202,64 +190,59 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		if (this.getNextOrderId() != castedRecord.getNextOrderId()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTraceId());
-		code += ((int)this.getThreadId());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getThreadId());
 		code += this.getSessionId().hashCode();
 		code += this.getHostname().hashCode();
-		code += ((int)this.getParentTraceId());
-		code += ((int)this.getParentOrderId());
-		code += ((int)this.getNextOrderId());
-		
+		code += ((int) this.getParentTraceId());
+		code += (this.getParentOrderId());
+		code += (this.getNextOrderId());
+
 		return code;
 	}
-	
+
 	public final long getTraceId() {
 		return this.traceId;
 	}
-	
-	public final void setTraceId(long traceId) {
+
+	public final void setTraceId(final long traceId) {
 		this.traceId = traceId;
 	}
-	
+
 	public final long getThreadId() {
 		return this.threadId;
 	}
-	
-	
+
 	public final String getSessionId() {
 		return this.sessionId;
 	}
-	
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final long getParentTraceId() {
 		return this.parentTraceId;
 	}
-	
-	
+
 	public final int getParentOrderId() {
 		return this.parentOrderId;
 	}
-	
-	
+
 	public final int getNextOrderId() {
 		return this.nextOrderId++;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -268,22 +251,22 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		String result = "TraceMetadata: ";
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "threadId = ";
 		result += this.getThreadId() + ", ";
-		
+
 		result += "sessionId = ";
 		result += this.getSessionId() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "parentTraceId = ";
 		result += this.getParentTraceId() + ", ";
-		
+
 		result += "parentOrderId = ";
 		result += this.getParentOrderId() + ", ";
-		
+
 		return result;
 	}
 }

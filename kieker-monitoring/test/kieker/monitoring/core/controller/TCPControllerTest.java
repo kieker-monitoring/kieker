@@ -103,8 +103,8 @@ public class TCPControllerTest { // NOFB issues with integration test
 	 */
 	@Test(timeout = 30000)
 	public void testActivationAndDeactivation() throws IOException, InterruptedException {
-		Assume.assumeFalse(OSUtil.isWindows()); 
-		
+		Assume.assumeFalse(OSUtil.isWindows());
+
 		final MonitoringController controller = MonitoringController.createInstance(TCPControllerTest.configuration);
 
 		final String pattern = "void test.pattern()";

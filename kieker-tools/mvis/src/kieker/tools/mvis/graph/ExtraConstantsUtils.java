@@ -21,10 +21,10 @@ package kieker.tools.mvis.graph;
  */
 public final class ExtraConstantsUtils {
 
-    public static final String BACKGROUND_COLOR = "bg-color";
-    public static final String FOREGROUND_COLOR = "fg-color";
+	public static final String BACKGROUND_COLOR = "bg-color";
+	public static final String FOREGROUND_COLOR = "fg-color";
 
-    private ExtraConstantsUtils() {
-        // Utility class
-    }
+	private ExtraConstantsUtils() {
+		// Utility class
+	}
 }

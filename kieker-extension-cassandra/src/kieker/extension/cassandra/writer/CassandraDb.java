@@ -43,7 +43,7 @@ import kieker.common.record.io.IValueSerializer;
 import kieker.extension.cassandra.CassandraValueSerializer;
 
 /**
- * 
+ *
  * @author Armin Moebius, Sven Ulrich, Reiner Jung
  * @since 1.16
  */
@@ -64,7 +64,7 @@ public class CassandraDb {
 	private static final String DB_BOOLEAN = "boolean";
 
 	private static final String DB_VARCHAR = "varchar";
-	
+
 	private final List<InetSocketAddress> contactPoints;
 	private final String keyspace;
 	private final String tablePrefix;
@@ -125,7 +125,7 @@ public class CassandraDb {
 
 	/**
 	 * Insert a record into the database.
-	 * 
+	 *
 	 * @param record
 	 *            the record
 	 * @param benchmarkId
@@ -136,7 +136,7 @@ public class CassandraDb {
 	public void insert(final IMonitoringRecord record, final String benchmarkId) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final BoundStatement boundStatement = this.getBoundStatement(this.getPreparedStatement(recordClass, benchmarkId));
-		
+
 		final IValueSerializer cassandraSerializer = new CassandraValueSerializer(boundStatement);
 		cassandraSerializer.putLong(record.getLoggingTimestamp());
 		record.serialize(cassandraSerializer);
@@ -206,7 +206,8 @@ public class CassandraDb {
 	private void initializeDatabaseTypeMapping() {
 		final Class<?>[] primitiveTypes = { String.class, int.class, Integer.class, long.class, Long.class, float.class, Float.class, double.class,
 			Double.class, boolean.class, Boolean.class, char.class, Character.class };
-		final String[] databaseTypes = { DB_TEXT, DB_INT, DB_INT, DB_BIGINT, DB_BIGINT, DB_FLOAT, DB_FLOAT, DB_DOUBLE, DB_DOUBLE, DB_INT, DB_INT, DB_BOOLEAN, DB_BOOLEAN,
+		final String[] databaseTypes = { DB_TEXT, DB_INT, DB_INT, DB_BIGINT, DB_BIGINT, DB_FLOAT, DB_FLOAT, DB_DOUBLE, DB_DOUBLE, DB_INT, DB_INT, DB_BOOLEAN,
+			DB_BOOLEAN,
 			DB_VARCHAR, DB_VARCHAR };
 		for (int i = 0; i < primitiveTypes.length; i++) {
 			this.databaseTypeMap.put(primitiveTypes[i], databaseTypes[i]);
@@ -307,7 +308,7 @@ public class CassandraDb {
 	}
 
 	private void createClassTable(final String tableName, final String className, final Class<?>[] attributeTypes) throws MonitoringRecordException {
-		final BoundStatement boundStatement = this.getBoundStatement(createClassTableString(tableName, attributeTypes));
+		final BoundStatement boundStatement = this.getBoundStatement(this.createClassTableString(tableName, attributeTypes));
 
 		try {
 			this.session.execute(boundStatement);

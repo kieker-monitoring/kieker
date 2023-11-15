@@ -28,46 +28,46 @@ import com.beust.jcommander.converters.PathConverter;
  */
 public class Settings { // NOPMD data class
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input table")
-    private Path inputTable;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = true, converter = PathConverter.class, description = "Input table")
+	private Path inputTable;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = PathConverter.class, description = "Output table")
-    private Path outputTable;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = PathConverter.class, description = "Output table")
+	private Path outputTable;
 
-    @Parameter(names = { "-s",
-            "--sort" }, required = false, converter = SortDescriptorConverter.class, description = "Sort description")
-    private SortDescriptor sortDescription;
+	@Parameter(names = { "-s",
+		"--sort" }, required = false, converter = SortDescriptorConverter.class, description = "Sort description")
+	private SortDescriptor sortDescription;
 
-    @Parameter(names = { "-p", "--min-ptr" }, required = false, description = "Min ptr value for clustering")
-    private Integer minPtr;
+	@Parameter(names = { "-p", "--min-ptr" }, required = false, description = "Min ptr value for clustering")
+	private Integer minPtr;
 
-    @Parameter(names = { "-d", "--cluster-distance" }, required = false, description = "Min cluster distance")
-    private Double clusteringDistance;
+	@Parameter(names = { "-d", "--cluster-distance" }, required = false, description = "Min cluster distance")
+	private Double clusteringDistance;
 
-    public Path getInputTable() {
-        return this.inputTable;
-    }
+	public Path getInputTable() {
+		return this.inputTable;
+	}
 
-    public Path getOutputTable() {
-        return this.outputTable;
-    }
+	public Path getOutputTable() {
+		return this.outputTable;
+	}
 
-    public SortDescriptor getSortDescription() {
-        return this.sortDescription;
-    }
+	public SortDescriptor getSortDescription() {
+		return this.sortDescription;
+	}
 
-    public int getMinPtr() {
-        if (this.minPtr == null) {
-            return 1;
-        } else {
-            return this.minPtr;
-        }
-    }
+	public int getMinPtr() {
+		if (this.minPtr == null) {
+			return 1;
+		} else {
+			return this.minPtr;
+		}
+	}
 
-    public Double getClusteringDistance() {
-        return this.clusteringDistance;
-    }
+	public Double getClusteringDistance() {
+		return this.clusteringDistance;
+	}
 
 }

@@ -102,7 +102,7 @@ public class CassandraDb {
 		final StringBuilder statement = new StringBuilder(200);
 		statement.append("SELECT ");
 
-		if (fields != null && !fields.isEmpty()) {
+		if ((fields != null) && !fields.isEmpty()) {
 			for (final String s : fields) {
 				statement.append(s);
 				statement.append(',');
@@ -115,7 +115,7 @@ public class CassandraDb {
 		statement.append(" FROM ");
 		statement.append(table);
 
-		if (whereClause != null && !whereClause.isEmpty()) {
+		if ((whereClause != null) && !whereClause.isEmpty()) {
 			statement.append(" WHERE ");
 			statement.append(whereClause);
 		}

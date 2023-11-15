@@ -268,7 +268,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private void addNewTsPoint(final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints, final NamedDoubleTimeSeriesPoint newTsPoint) {
 		final long newTsPointTimestamp = newTsPoint.getTime();
 		if (!orderedTsPoints.containsKey(newTsPointTimestamp)) {
-			orderedTsPoints.put(newTsPointTimestamp, new ArrayList<NamedDoubleTimeSeriesPoint>());
+			orderedTsPoints.put(newTsPointTimestamp, new ArrayList<>());
 		}
 		final List<NamedDoubleTimeSeriesPoint> tsPointList = orderedTsPoints.get(newTsPointTimestamp);
 		tsPointList.add(newTsPoint);

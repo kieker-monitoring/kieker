@@ -27,35 +27,35 @@ import com.beust.jcommander.converters.FileConverter;
  */
 public class Settings { // NOPMD
 
-    @Parameter(names = { "-i",
-            "--input" }, required = true, variableArity = true, converter = FileConverter.class, description = "Input Kieker log directories")
-    private List<File> inputFiles;
+	@Parameter(names = { "-i",
+		"--input" }, required = true, variableArity = true, converter = FileConverter.class, description = "Input Kieker log directories")
+	private List<File> inputFiles;
 
-    @Parameter(names = { "-o",
-            "--output" }, required = true, converter = FileConverter.class, description = "Output directory where to put the Kieker log directory")
-    private File outputFile;
+	@Parameter(names = { "-o",
+		"--output" }, required = true, converter = FileConverter.class, description = "Output directory where to put the Kieker log directory")
+	private File outputFile;
 
-    @Parameter(names = { "-a",
-            "--addrline" }, required = true, converter = FileConverter.class, description = "Location of the addrline tool")
-    private File addrlineExecutable;
+	@Parameter(names = { "-a",
+		"--addrline" }, required = true, converter = FileConverter.class, description = "Location of the addrline tool")
+	private File addrlineExecutable;
 
-    @Parameter(names = { "-m",
-            "--model" }, required = true, converter = FileConverter.class, description = "Location of the model executable")
-    private File modelExecutable;
+	@Parameter(names = { "-m",
+		"--model" }, required = true, converter = FileConverter.class, description = "Location of the model executable")
+	private File modelExecutable;
 
-    public List<File> getInputFiles() {
-        return this.inputFiles;
-    }
+	public List<File> getInputFiles() {
+		return this.inputFiles;
+	}
 
-    public File getOutputFile() {
-        return this.outputFile;
-    }
+	public File getOutputFile() {
+		return this.outputFile;
+	}
 
-    public File getAddrlineExecutable() {
-        return this.addrlineExecutable;
-    }
+	public File getAddrlineExecutable() {
+		return this.addrlineExecutable;
+	}
 
-    public File getModelExecutable() {
-        return this.modelExecutable;
-    }
+	public File getModelExecutable() {
+		return this.modelExecutable;
+	}
 }

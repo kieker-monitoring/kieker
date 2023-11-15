@@ -27,16 +27,16 @@ import kieker.model.analysismodel.statistics.StatisticsPackage;
  */
 public class CheckStatisticModelStage extends AbstractCollector<ModelRepository> {
 
-    @Override
-    protected void execute(final ModelRepository repository) throws Exception {
-        final Report report = new Report("Statistics model");
+	@Override
+	protected void execute(final ModelRepository repository) throws Exception {
+		final Report report = new Report("Statistics model");
 
-        final StatisticsModel model = repository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL);
+		final StatisticsModel model = repository.getModel(StatisticsPackage.Literals.STATISTICS_MODEL);
 
-        GenericCheckUtils.checkReferences(StatisticsPackage.Literals.STATISTICS_MODEL, model.eAllContents(), report);
+		GenericCheckUtils.checkReferences(StatisticsPackage.Literals.STATISTICS_MODEL, model.eAllContents(), report);
 
-        this.outputPort.send(repository);
-        this.reportOutputPort.send(report);
-    }
+		this.outputPort.send(repository);
+		this.reportOutputPort.send(report);
+	}
 
 }

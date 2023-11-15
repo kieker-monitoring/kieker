@@ -25,14 +25,14 @@ import kieker.analysis.architecture.recovery.signature.AbstractSignatureProcesso
  */
 public class JavaSignatureProcessor extends AbstractSignatureProcessor {
 
-    public JavaSignatureProcessor(final boolean caseInsensitive) {
-        super(caseInsensitive);
-    }
+	public JavaSignatureProcessor(final boolean caseInsensitive) {
+		super(caseInsensitive);
+	}
 
-    @Override
-    public void processSignatures(final String componentSignature, final String operationSignature) {
-        this.componentSignature = componentSignature;
-        this.operationSignature = operationSignature.replaceAll("[0-9A-Za-z$_.]*\\.", "");
-    }
+	@Override
+	public void processSignatures(final String componentSignature, final String operationSignature) {
+		this.componentSignature = componentSignature;
+		this.operationSignature = operationSignature.replaceAll("[0-9A-Za-z$_.]*\\.", "");
+	}
 
 }

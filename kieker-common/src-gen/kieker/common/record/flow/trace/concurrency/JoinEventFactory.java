@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public final class JoinEventFactory implements IRecordFactory<JoinEvent> {
-	
 
 	@Override
 	public JoinEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new JoinEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

@@ -12,13 +12,14 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- *   <li>each class,</li>
- *   <li>each feature of each class,</li>
- *   <li>each operation of each class,</li>
- *   <li>each enum,</li>
- *   <li>and each data type</li>
+ * <li>each class,</li>
+ * <li>each feature of each class,</li>
+ * <li>each operation of each class,</li>
+ * <li>each enum,</li>
+ * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see kieker.tools.restructuring.restructuremodel.RestructuremodelFactory
  * @model kind="package"
  * @generated
@@ -28,6 +29,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNAME = "restructuremodel";
@@ -36,6 +38,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_URI = "http://restructur.net/restructuremodel";
@@ -44,6 +47,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "restructuremodel";
@@ -52,6 +56,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	RestructuremodelPackage eINSTANCE = kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl.init();
@@ -60,6 +65,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl <em>Transformation Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getTransformationModel()
 	 * @generated
@@ -70,6 +76,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Transformations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -79,6 +86,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -88,6 +96,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Transformation Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -97,15 +106,18 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Transformation Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TRANSFORMATION_MODEL_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl <em>Abstract Transformation Step</em>}' class.
+	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl <em>Abstract Transformation Step</em>}'
+	 * class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getAbstractTransformationStep()
 	 * @generated
@@ -116,6 +128,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Abstract Transformation Step</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -125,6 +138,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Abstract Transformation Step</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -134,6 +148,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl <em>Create Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getCreateComponent()
 	 * @generated
@@ -144,6 +159,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -153,6 +169,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Create Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -162,6 +179,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Create Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -171,6 +189,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.DeleteComponentImpl <em>Delete Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.DeleteComponentImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getDeleteComponent()
 	 * @generated
@@ -181,6 +200,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -190,6 +210,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Delete Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -199,6 +220,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Delete Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -208,6 +230,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.CutOperationImpl <em>Cut Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.CutOperationImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getCutOperation()
 	 * @generated
@@ -218,6 +241,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -227,6 +251,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operation Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -236,6 +261,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Cut Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -245,6 +271,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Cut Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -254,6 +281,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl <em>Paste Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getPasteOperation()
 	 * @generated
@@ -264,6 +292,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -273,6 +302,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operation Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -282,6 +312,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Paste Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -291,6 +322,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Paste Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -300,6 +332,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl <em>Move Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getMoveOperation()
 	 * @generated
@@ -310,6 +343,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>From</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -319,6 +353,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>To</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -328,6 +363,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operation Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -337,6 +373,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Cut Operation</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -346,6 +383,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Paste Operation</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -355,6 +393,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Move Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -364,6 +403,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Move Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -373,6 +413,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl <em>Merge Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getMergeComponent()
 	 * @generated
@@ -383,6 +424,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Merge Goal Component</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -392,6 +434,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -401,6 +444,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operations</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -410,6 +454,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Delete Transformation</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -419,6 +464,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operation To Move</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -428,6 +474,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Merge Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -437,6 +484,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Merge Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -446,6 +494,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.tools.restructuring.restructuremodel.impl.SplitComponentImpl <em>Split Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.tools.restructuring.restructuremodel.impl.SplitComponentImpl
 	 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getSplitComponent()
 	 * @generated
@@ -456,6 +505,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>New Component</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -465,6 +515,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Operations To Move</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -474,6 +525,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Old Component</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -483,6 +535,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Create Component</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -492,6 +545,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The feature id for the '<em><b>Move Operations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -501,6 +555,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of structural features of the '<em>Split Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -510,16 +565,17 @@ public interface RestructuremodelPackage extends EPackage {
 	 * The number of operations of the '<em>Split Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int SPLIT_COMPONENT_OPERATION_COUNT = ABSTRACT_TRANSFORMATION_STEP_OPERATION_COUNT + 0;
 
-
 	/**
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.TransformationModel <em>Transformation Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Transformation Model</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.TransformationModel
 	 * @generated
@@ -527,9 +583,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EClass getTransformationModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.TransformationModel#getTransformations <em>Transformations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.TransformationModel#getTransformations
+	 * <em>Transformations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Transformations</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.TransformationModel#getTransformations()
 	 * @see #getTransformationModel()
@@ -541,6 +599,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.TransformationModel#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.TransformationModel#getName()
 	 * @see #getTransformationModel()
@@ -552,6 +611,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.AbstractTransformationStep <em>Abstract Transformation Step</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Abstract Transformation Step</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.AbstractTransformationStep
 	 * @generated
@@ -562,6 +622,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.CreateComponent <em>Create Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Create Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.CreateComponent
 	 * @generated
@@ -572,6 +633,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.CreateComponent#getComponentName <em>Component Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Component Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.CreateComponent#getComponentName()
 	 * @see #getCreateComponent()
@@ -583,6 +645,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.DeleteComponent <em>Delete Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Delete Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.DeleteComponent
 	 * @generated
@@ -593,6 +656,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.DeleteComponent#getComponentName <em>Component Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Component Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.DeleteComponent#getComponentName()
 	 * @see #getDeleteComponent()
@@ -604,6 +668,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.CutOperation <em>Cut Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Cut Operation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.CutOperation
 	 * @generated
@@ -614,6 +679,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.CutOperation#getComponentName <em>Component Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Component Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.CutOperation#getComponentName()
 	 * @see #getCutOperation()
@@ -625,6 +691,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.CutOperation#getOperationName <em>Operation Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Operation Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.CutOperation#getOperationName()
 	 * @see #getCutOperation()
@@ -636,6 +703,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.PasteOperation <em>Paste Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Paste Operation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.PasteOperation
 	 * @generated
@@ -646,6 +714,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.PasteOperation#getComponentName <em>Component Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Component Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.PasteOperation#getComponentName()
 	 * @see #getPasteOperation()
@@ -657,6 +726,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.PasteOperation#getOperationName <em>Operation Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Operation Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.PasteOperation#getOperationName()
 	 * @see #getPasteOperation()
@@ -668,6 +738,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.MoveOperation <em>Move Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Move Operation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation
 	 * @generated
@@ -678,6 +749,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getFrom <em>From</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>From</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation#getFrom()
 	 * @see #getMoveOperation()
@@ -689,6 +761,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getTo <em>To</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>To</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation#getTo()
 	 * @see #getMoveOperation()
@@ -700,6 +773,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getOperationName <em>Operation Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Operation Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation#getOperationName()
 	 * @see #getMoveOperation()
@@ -708,9 +782,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EAttribute getMoveOperation_OperationName();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getCutOperation <em>Cut Operation</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getCutOperation <em>Cut
+	 * Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Cut Operation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation#getCutOperation()
 	 * @see #getMoveOperation()
@@ -719,9 +795,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EReference getMoveOperation_CutOperation();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getPasteOperation <em>Paste Operation</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MoveOperation#getPasteOperation <em>Paste
+	 * Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Paste Operation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MoveOperation#getPasteOperation()
 	 * @see #getMoveOperation()
@@ -733,6 +811,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.MergeComponent <em>Merge Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Merge Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent
 	 * @generated
@@ -740,9 +819,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EClass getMergeComponent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getMergeGoalComponent <em>Merge Goal Component</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getMergeGoalComponent <em>Merge Goal
+	 * Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Merge Goal Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent#getMergeGoalComponent()
 	 * @see #getMergeComponent()
@@ -754,6 +835,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getComponentName <em>Component Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Component Name</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent#getComponentName()
 	 * @see #getMergeComponent()
@@ -765,6 +847,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute list '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getOperations <em>Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute list '<em>Operations</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent#getOperations()
 	 * @see #getMergeComponent()
@@ -773,9 +856,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EAttribute getMergeComponent_Operations();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getDeleteTransformation <em>Delete Transformation</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getDeleteTransformation <em>Delete
+	 * Transformation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Delete Transformation</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent#getDeleteTransformation()
 	 * @see #getMergeComponent()
@@ -784,9 +869,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EReference getMergeComponent_DeleteTransformation();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getOperationToMove <em>Operation To Move</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.MergeComponent#getOperationToMove <em>Operation
+	 * To Move</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Operation To Move</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.MergeComponent#getOperationToMove()
 	 * @see #getMergeComponent()
@@ -798,6 +885,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.tools.restructuring.restructuremodel.SplitComponent <em>Split Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Split Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent
 	 * @generated
@@ -808,6 +896,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getNewComponent <em>New Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>New Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent#getNewComponent()
 	 * @see #getSplitComponent()
@@ -816,9 +905,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EAttribute getSplitComponent_NewComponent();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOperationsToMove <em>Operations To Move</em>}'.
+	 * Returns the meta object for the attribute list '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOperationsToMove <em>Operations To
+	 * Move</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute list '<em>Operations To Move</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent#getOperationsToMove()
 	 * @see #getSplitComponent()
@@ -830,6 +921,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getOldComponent <em>Old Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Old Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent#getOldComponent()
 	 * @see #getSplitComponent()
@@ -838,9 +930,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EAttribute getSplitComponent_OldComponent();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent <em>Create Component</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent <em>Create
+	 * Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Create Component</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent#getCreateComponent()
 	 * @see #getSplitComponent()
@@ -849,9 +943,11 @@ public interface RestructuremodelPackage extends EPackage {
 	EReference getSplitComponent_CreateComponent();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getMoveOperations <em>Move Operations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.tools.restructuring.restructuremodel.SplitComponent#getMoveOperations <em>Move
+	 * Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Move Operations</em>'.
 	 * @see kieker.tools.restructuring.restructuremodel.SplitComponent#getMoveOperations()
 	 * @see #getSplitComponent()
@@ -863,6 +959,7 @@ public interface RestructuremodelPackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -872,13 +969,14 @@ public interface RestructuremodelPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each operation of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 * <li>each class,</li>
+	 * <li>each feature of each class,</li>
+	 * <li>each operation of each class,</li>
+	 * <li>each enum,</li>
+	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
@@ -886,6 +984,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl <em>Transformation Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.TransformationModelImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getTransformationModel()
 		 * @generated
@@ -896,6 +995,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Transformations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference TRANSFORMATION_MODEL__TRANSFORMATIONS = eINSTANCE.getTransformationModel_Transformations();
@@ -904,14 +1004,17 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute TRANSFORMATION_MODEL__NAME = eINSTANCE.getTransformationModel_Name();
 
 		/**
-		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl <em>Abstract Transformation Step</em>}' class.
+		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl <em>Abstract Transformation
+		 * Step</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.AbstractTransformationStepImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getAbstractTransformationStep()
 		 * @generated
@@ -922,6 +1025,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl <em>Create Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.CreateComponentImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getCreateComponent()
 		 * @generated
@@ -932,6 +1036,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CREATE_COMPONENT__COMPONENT_NAME = eINSTANCE.getCreateComponent_ComponentName();
@@ -940,6 +1045,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.DeleteComponentImpl <em>Delete Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.DeleteComponentImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getDeleteComponent()
 		 * @generated
@@ -950,6 +1056,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DELETE_COMPONENT__COMPONENT_NAME = eINSTANCE.getDeleteComponent_ComponentName();
@@ -958,6 +1065,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.CutOperationImpl <em>Cut Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.CutOperationImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getCutOperation()
 		 * @generated
@@ -968,6 +1076,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CUT_OPERATION__COMPONENT_NAME = eINSTANCE.getCutOperation_ComponentName();
@@ -976,6 +1085,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operation Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CUT_OPERATION__OPERATION_NAME = eINSTANCE.getCutOperation_OperationName();
@@ -984,6 +1094,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl <em>Paste Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.PasteOperationImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getPasteOperation()
 		 * @generated
@@ -994,6 +1105,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PASTE_OPERATION__COMPONENT_NAME = eINSTANCE.getPasteOperation_ComponentName();
@@ -1002,6 +1114,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operation Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PASTE_OPERATION__OPERATION_NAME = eINSTANCE.getPasteOperation_OperationName();
@@ -1010,6 +1123,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl <em>Move Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.MoveOperationImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getMoveOperation()
 		 * @generated
@@ -1020,6 +1134,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>From</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MOVE_OPERATION__FROM = eINSTANCE.getMoveOperation_From();
@@ -1028,6 +1143,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>To</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MOVE_OPERATION__TO = eINSTANCE.getMoveOperation_To();
@@ -1036,6 +1152,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operation Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MOVE_OPERATION__OPERATION_NAME = eINSTANCE.getMoveOperation_OperationName();
@@ -1044,6 +1161,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Cut Operation</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference MOVE_OPERATION__CUT_OPERATION = eINSTANCE.getMoveOperation_CutOperation();
@@ -1052,6 +1170,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Paste Operation</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference MOVE_OPERATION__PASTE_OPERATION = eINSTANCE.getMoveOperation_PasteOperation();
@@ -1060,6 +1179,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl <em>Merge Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.MergeComponentImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getMergeComponent()
 		 * @generated
@@ -1070,6 +1190,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Merge Goal Component</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MERGE_COMPONENT__MERGE_GOAL_COMPONENT = eINSTANCE.getMergeComponent_MergeGoalComponent();
@@ -1078,6 +1199,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MERGE_COMPONENT__COMPONENT_NAME = eINSTANCE.getMergeComponent_ComponentName();
@@ -1086,6 +1208,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operations</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute MERGE_COMPONENT__OPERATIONS = eINSTANCE.getMergeComponent_Operations();
@@ -1094,6 +1217,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Delete Transformation</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference MERGE_COMPONENT__DELETE_TRANSFORMATION = eINSTANCE.getMergeComponent_DeleteTransformation();
@@ -1102,6 +1226,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operation To Move</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference MERGE_COMPONENT__OPERATION_TO_MOVE = eINSTANCE.getMergeComponent_OperationToMove();
@@ -1110,6 +1235,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.tools.restructuring.restructuremodel.impl.SplitComponentImpl <em>Split Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.tools.restructuring.restructuremodel.impl.SplitComponentImpl
 		 * @see kieker.tools.restructuring.restructuremodel.impl.RestructuremodelPackageImpl#getSplitComponent()
 		 * @generated
@@ -1120,6 +1246,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>New Component</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SPLIT_COMPONENT__NEW_COMPONENT = eINSTANCE.getSplitComponent_NewComponent();
@@ -1128,6 +1255,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operations To Move</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SPLIT_COMPONENT__OPERATIONS_TO_MOVE = eINSTANCE.getSplitComponent_OperationsToMove();
@@ -1136,6 +1264,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Old Component</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute SPLIT_COMPONENT__OLD_COMPONENT = eINSTANCE.getSplitComponent_OldComponent();
@@ -1144,6 +1273,7 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Create Component</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SPLIT_COMPONENT__CREATE_COMPONENT = eINSTANCE.getSplitComponent_CreateComponent();
@@ -1152,10 +1282,11 @@ public interface RestructuremodelPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Move Operations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference SPLIT_COMPONENT__MOVE_OPERATIONS = eINSTANCE.getSplitComponent_MoveOperations();
 
 	}
 
-} //RestructuremodelPackage
+} // RestructuremodelPackage

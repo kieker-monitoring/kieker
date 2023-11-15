@@ -88,7 +88,7 @@ public class KiekerNode<T, E> implements Node<T> {
 				final DeployedStorage memberLocal = (DeployedStorage) this.member;
 				return (T) memberLocal.eContainer().eContainer();
 			} else {
-				System.err.println( // NOPMD we cannot trigger a exception, thus we have to handle
+				System.err.println( // NOCS, NOPMD we cannot trigger a exception, thus we have to handle
 									// this currently as println
 						"[Kieker Node Object] Invalid Kieker Node detected! Member is either an instance of DeployedOperation nor DeployedStorage.");
 				return null;

@@ -17,7 +17,6 @@ package kieker.extension.cassandra.reader;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.datastax.driver.core.ResultSet;
@@ -34,25 +33,25 @@ import teetime.framework.AbstractProducerStage;
 
 /**
  * Reader from Cassandra DB.
- * 
+ *
  * @author Armin Moebius, Sven Ulrich, Reiner Jung
  * @since 1.16
  */
 public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecord> {
-	
+
 	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
-	
+
 	private final String keyspace;
 	private final List<InetSocketAddress> contactPoints;
 	private final String tablePrefix;
-	
+
 	public CassandraSourceStage(final String keyspace, final String[] contactPoints, final String tablePrefix) {
 		this.keyspace = keyspace;
 		this.contactPoints = CassandraUtils.computeDatabaseConnections(contactPoints);
 
 		this.tablePrefix = tablePrefix;
 	}
-	
+
 	@Override
 	protected void execute() throws Exception {
 		CassandraDb database = null;
@@ -61,18 +60,14 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 			database.connect();
 
 			// index table
-			final ResultSet rs = database.select(new ArrayList<String>(), this.tablePrefix, null);
-			final Iterator<Row> iterator = rs.iterator();
-
-			while (iterator.hasNext()) {
-				final Row r = iterator.next();
-
+			final ResultSet rs = database.select(new ArrayList<>(), this.tablePrefix, null);
+			for (Row r : rs) {
 				final String tablename = r.getString(1);
 				final String classname = r.getString(2);
 
 				this.table2record(database, tablename, classname);
 			}
-		} catch (ConfigurationException exc) {
+		} catch (final ConfigurationException exc) {
 			this.logger.error(exc.getMessage());
 		} finally {
 			if (database != null) {
@@ -82,7 +77,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 			this.workCompleted();
 		}
 	}
-	
+
 	/**
 	 * This method uses the given table to read records and sends them to the output port.
 	 *
@@ -95,7 +90,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 	 * @throws Exception
 	 */
 	private void table2record(final CassandraDb database, final String tablename, final String eventTypeName) throws ConfigurationException {
-		final ResultSet rs = database.select(new ArrayList<String>(), tablename, null);
+		final ResultSet rs = database.select(new ArrayList<>(), tablename, null);
 
 		for (final Row row : rs) {
 			if ((rs.getAvailableWithoutFetching() == 10000) && !rs.isFullyFetched()) {
@@ -105,7 +100,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 			if (row != null) {
 				final CassandraValueDeserializer deserializer = new CassandraValueDeserializer(row);
 				final int loggingTimestamp = deserializer.getInt();
-				
+
 				final IRecordFactory<? extends IMonitoringRecord> eventTypeFactory = this.recordFactories.get(eventTypeName);
 				if (eventTypeFactory == null) {
 					this.logger.error("Class type {} was not found. Cannot instantiate event type.", eventTypeName);

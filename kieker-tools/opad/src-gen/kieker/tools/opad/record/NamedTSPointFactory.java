@@ -21,7 +21,7 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
  */
 public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {

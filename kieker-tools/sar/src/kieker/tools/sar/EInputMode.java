@@ -22,5 +22,5 @@ package kieker.tools.sar;
  * @since 2.0.0
  */
 public enum EInputMode {
-    CALL, DATAFLOW, BOTH
+	CALL, DATAFLOW, BOTH
 }

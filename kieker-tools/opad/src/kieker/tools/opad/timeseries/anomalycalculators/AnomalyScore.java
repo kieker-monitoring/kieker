@@ -18,9 +18,9 @@ package kieker.tools.opad.timeseries.anomalycalculators;
 
 /**
  * A simple container for an anomaly score.
- * 
+ *
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
  */
 public class AnomalyScore {

@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.session;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Reiner Jung
- * 
+ *
  * @since 2.0.0
  */
 public final class SessionEndEventFactory implements IRecordFactory<SessionEndEvent> {
-	
 
 	@Override
 	public SessionEndEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new SessionEndEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

@@ -28,43 +28,43 @@ import kieker.model.analysismodel.type.TypeModel;
  */
 public final class TypeModelMerger {
 
-    private TypeModelMerger() {
-        // Utility class
-    }
+	private TypeModelMerger() {
+		// Utility class
+	}
 
-    /* default */ static void mergeTypeModel(final TypeModel model, final TypeModel mergeModel) { // NOPMD
-        // add additional component types if necessary
-        for (final ComponentType mergeType : mergeModel.getComponentTypes().values()) {
-            if (!model.getComponentTypes().containsKey(mergeType.getSignature())) {
-                model.getComponentTypes().put(mergeType.getSignature(), TypeModelCloneUtils.duplicate(mergeType));
-            }
-        }
-        // now merge operations
-        for (final ComponentType type : model.getComponentTypes().values()) {
-            final ComponentType mergeType = mergeModel.getComponentTypes().get(type.getSignature());
-            if (mergeType != null) {
-                TypeModelMerger.mergeTypeOperations(type, mergeType.getProvidedOperations());
-                TypeModelMerger.mergeTypeStorages(type, mergeType.getProvidedStorages());
-            }
-        }
-    }
+	/* default */ static void mergeTypeModel(final TypeModel model, final TypeModel mergeModel) { // NOPMD
+		// add additional component types if necessary
+		for (final ComponentType mergeType : mergeModel.getComponentTypes().values()) {
+			if (!model.getComponentTypes().containsKey(mergeType.getSignature())) {
+				model.getComponentTypes().put(mergeType.getSignature(), TypeModelCloneUtils.duplicate(mergeType));
+			}
+		}
+		// now merge operations
+		for (final ComponentType type : model.getComponentTypes().values()) {
+			final ComponentType mergeType = mergeModel.getComponentTypes().get(type.getSignature());
+			if (mergeType != null) {
+				TypeModelMerger.mergeTypeOperations(type, mergeType.getProvidedOperations());
+				TypeModelMerger.mergeTypeStorages(type, mergeType.getProvidedStorages());
+			}
+		}
+	}
 
-    private static void mergeTypeOperations(final ComponentType type,
-            final EMap<String, OperationType> mergeProvidedOperations) {
-        for (final OperationType mergeOperation : mergeProvidedOperations.values()) {
-            if (!type.getProvidedOperations().containsKey(mergeOperation.getSignature())) {
-                type.getProvidedOperations().put(mergeOperation.getSignature(),
-                        TypeModelCloneUtils.duplicate(mergeOperation));
-            }
-        }
-    }
+	private static void mergeTypeOperations(final ComponentType type,
+			final EMap<String, OperationType> mergeProvidedOperations) {
+		for (final OperationType mergeOperation : mergeProvidedOperations.values()) {
+			if (!type.getProvidedOperations().containsKey(mergeOperation.getSignature())) {
+				type.getProvidedOperations().put(mergeOperation.getSignature(),
+						TypeModelCloneUtils.duplicate(mergeOperation));
+			}
+		}
+	}
 
-    private static void mergeTypeStorages(final ComponentType type, final EMap<String, StorageType> providedStorages) {
-        for (final StorageType mergeStorage : providedStorages.values()) {
-            if (!type.getProvidedStorages().containsKey(mergeStorage.getName())) {
-                type.getProvidedStorages().put(mergeStorage.getName(), TypeModelCloneUtils.duplicate(mergeStorage));
-            }
-        }
-    }
+	private static void mergeTypeStorages(final ComponentType type, final EMap<String, StorageType> providedStorages) {
+		for (final StorageType mergeStorage : providedStorages.values()) {
+			if (!type.getProvidedStorages().containsKey(mergeStorage.getName())) {
+				type.getProvidedStorages().put(mergeStorage.getName(), TypeModelCloneUtils.duplicate(mergeStorage));
+			}
+		}
+	}
 
 }

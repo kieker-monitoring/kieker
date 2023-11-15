@@ -2,9 +2,9 @@
  */
 package kieker.model.analysismodel.assembly;
 
-import kieker.model.analysismodel.type.OperationType;
-
 import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.type.OperationType;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation()
@@ -27,6 +27,7 @@ public interface AssemblyOperation extends EObject {
 	 * Returns the value of the '<em><b>Operation Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Operation Type</em>' reference.
 	 * @see #setOperationType(OperationType)
 	 * @see kieker.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation_OperationType()
@@ -39,7 +40,9 @@ public interface AssemblyOperation extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Operation Type</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Operation Type</em>' reference.
 	 * @see #getOperationType()
 	 * @generated
 	 */
@@ -48,6 +51,7 @@ public interface AssemblyOperation extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @model kind="operation"
 	 * @generated
 	 */

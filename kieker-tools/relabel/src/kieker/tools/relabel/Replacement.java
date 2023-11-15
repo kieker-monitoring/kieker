@@ -25,20 +25,20 @@ import java.util.List;
  */
 public class Replacement {
 
-    private final List<String> sources;
+	private final List<String> sources;
 
-    private final List<String> targets;
+	private final List<String> targets;
 
-    public Replacement(final List<String> sources, final List<String> targets) {
-        this.sources = sources;
-        this.targets = targets;
-    }
+	public Replacement(final List<String> sources, final List<String> targets) {
+		this.sources = sources;
+		this.targets = targets;
+	}
 
-    public List<String> getSources() {
-        return this.sources;
-    }
+	public List<String> getSources() {
+		return this.sources;
+	}
 
-    public List<String> getTargets() {
-        return this.targets;
-    }
+	public List<String> getTargets() {
+		return this.targets;
+	}
 }

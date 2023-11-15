@@ -19,51 +19,49 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.flow.IEventRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IEventRecord;
-import kieker.common.record.session.ISessionEvent;
-
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 2.0.0
  */
-public class SessionStartEvent extends AbstractMonitoringRecord implements IEventRecord, ISessionEvent {			
+public class SessionStartEvent extends AbstractMonitoringRecord implements IEventRecord, ISessionEvent {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_STRING // ISessionEvent.hostname
-			 + TYPE_SIZE_STRING; // ISessionEvent.sessionId
-	
+			+ TYPE_SIZE_STRING // ISessionEvent.hostname
+			+ TYPE_SIZE_STRING; // ISessionEvent.sessionId
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		String.class, // ISessionEvent.hostname
 		String.class, // ISessionEvent.sessionId
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"sessionId",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String SESSION_ID = "";
 	private static final long serialVersionUID = -2432476605280542594L;
-	
+
 	/** property declarations. */
 	private long timestamp;
 	private final String hostname;
 	private final String sessionId;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -73,23 +71,22 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 	 */
 	public SessionStartEvent(final long timestamp, final String hostname, final String sessionId) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.sessionId = sessionId == null?"":sessionId;
+		this.hostname = hostname == null ? "" : hostname;
+		this.sessionId = sessionId == null ? "" : sessionId;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public SessionStartEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.sessionId = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -99,7 +96,7 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getSessionId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -107,7 +104,7 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +112,7 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +121,6 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -139,54 +135,44 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final SessionStartEvent castedRecord = (SessionStartEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || !this.getHostname().equals(castedRecord.getHostname()) || !this.getSessionId().equals(castedRecord.getSessionId())) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (!this.getHostname().equals(castedRecord.getHostname())) {
-			return false;
-		}
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
-			return false;
-		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getSessionId().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	public final void setTimestamp(long timestamp) {
+
+	public final void setTimestamp(final long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public final String getHostname() {
 		return this.hostname;
 	}
-	
-	
+
 	public final String getSessionId() {
 		return this.sessionId;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -195,13 +181,13 @@ public class SessionStartEvent extends AbstractMonitoringRecord implements IEven
 		String result = "SessionStartEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "sessionId = ";
 		result += this.getSessionId() + ", ";
-		
+
 		return result;
 	}
 }
