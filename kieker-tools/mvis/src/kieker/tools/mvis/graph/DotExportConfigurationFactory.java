@@ -133,7 +133,7 @@ public class DotExportConfigurationFactory {
 			} else {
 				return new StringBuilder().append(this.createOperationLabelFromVertex(v))
 						.append(DotExportConfigurationFactory.NEWLINE)
-						.append(vertexStatistics ? this.createStatisticsFromVertex(v) : "").toString();
+						.append(vertexStatistics ? this.createStatisticsFromVertex(v) : "").toString(); // NOCS
 			}
 		});
 
