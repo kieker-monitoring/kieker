@@ -36,6 +36,21 @@ parameters and options to a tool.
 -  :ref:`kieker-tools-irl`
 -  :ref:`kieker-tools-dot-pic-file-converter`
 
+-  :ref:`kieker-tools-allen-upper-limit.rst`
+-  :ref:`kieker-tools-cmi.rst`
+-  :ref:`kieker-tools-dar.rst`
+-  :ref:`kieker-tools-delta.rst`
+-  :ref:`kieker-tools-fxca.rst`
+-  :ref:`kieker-tools-maa.rst`
+-  :ref:`kieker-tools-mktable.rst`
+-  :ref:`kieker-tools-mop.rst`
+-  :ref:`kieker-tools-mt.rst`
+-  :ref:`kieker-tools-mvis.rst`
+-  :ref:`kieker-tools-relabel.rst`
+-  :ref:`kieker-tools-rewrite-log-entries.rst`
+-  :ref:`kieker-tools-sar.rst`
+-  :ref:`kieker-tools-static-analysis-formats.rst`
+
 Please note there are other tools available for Kieker which are not
 bundled with Kieker.
 

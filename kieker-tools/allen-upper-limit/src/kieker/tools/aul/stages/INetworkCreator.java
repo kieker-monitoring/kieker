@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright (C) 2021 Kieker Project (https://kieker-monitoring.net)
+ * Copyright (C) 2023 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.tools.aul.stages;
+
+import java.util.Map;
+
+import org.mosim.refactorlizar.architecture.evaluation.graphs.Node;
+
+import com.google.common.graph.MutableGraph;
+
+import kieker.model.analysismodel.deployment.DeployedComponent;
+
 /**
  * @author Reiner Jung
- *
+ * @since 2.0.0
  */
-package kieker.pp.log;
+public interface INetworkCreator {
+
+	void createEdges(MutableGraph<Node<DeployedComponent>> graph, Map<Integer, Node<DeployedComponent>> nodes,
+			Integer numOfNodes);
+
+}
