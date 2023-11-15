@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mock; // NOCS
 import teetime.framework.OutputPort;
 
 import kieker.analysis.plugin.reader.newio.deserializer.DeserializerStringRegistry;
