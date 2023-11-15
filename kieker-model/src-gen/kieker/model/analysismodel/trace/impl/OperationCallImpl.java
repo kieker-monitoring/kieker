@@ -4,27 +4,21 @@ package kieker.model.analysismodel.trace.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-
 import java.util.Collection;
-
-import kieker.model.analysismodel.deployment.DeployedOperation;
-
-import kieker.model.analysismodel.trace.OperationCall;
-import kieker.model.analysismodel.trace.TracePackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import kieker.model.analysismodel.deployment.DeployedOperation;
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.TracePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,17 +28,17 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getOperation <em>Operation</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getParent <em>Parent</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getChildren <em>Children</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDuration <em>Duration</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getStart <em>Start</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDurRatioToParent <em>Dur Ratio To Parent</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getStackDepth <em>Stack Depth</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getOrderIndex <em>Order Index</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#isFailed <em>Failed</em>}</li>
- *   <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getFailedCause <em>Failed Cause</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getOperation <em>Operation</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getParent <em>Parent</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getChildren <em>Children</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDuration <em>Duration</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getStart <em>Start</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDurRatioToParent <em>Dur Ratio To Parent</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getStackDepth <em>Stack Depth</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getOrderIndex <em>Order Index</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#isFailed <em>Failed</em>}</li>
+ * <li>{@link kieker.model.analysismodel.trace.impl.OperationCallImpl#getFailedCause <em>Failed Cause</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,6 +48,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getOperation() <em>Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperation()
 	 * @generated
 	 * @ordered
@@ -64,6 +59,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getParent() <em>Parent</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getParent()
 	 * @generated
 	 * @ordered
@@ -74,6 +70,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getChildren() <em>Children</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getChildren()
 	 * @generated
 	 * @ordered
@@ -84,6 +81,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -94,6 +92,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered
@@ -104,6 +103,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getStart() <em>Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getStart()
 	 * @generated
 	 * @ordered
@@ -114,6 +114,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getStart() <em>Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getStart()
 	 * @generated
 	 * @ordered
@@ -124,6 +125,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getDurRatioToParent() <em>Dur Ratio To Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDurRatioToParent()
 	 * @generated
 	 * @ordered
@@ -134,6 +136,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getDurRatioToParent() <em>Dur Ratio To Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDurRatioToParent()
 	 * @generated
 	 * @ordered
@@ -144,6 +147,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getDurRatioToRootParent() <em>Dur Ratio To Root Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDurRatioToRootParent()
 	 * @generated
 	 * @ordered
@@ -154,6 +158,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getDurRatioToRootParent() <em>Dur Ratio To Root Parent</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDurRatioToRootParent()
 	 * @generated
 	 * @ordered
@@ -164,6 +169,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getStackDepth() <em>Stack Depth</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getStackDepth()
 	 * @generated
 	 * @ordered
@@ -174,6 +180,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getStackDepth() <em>Stack Depth</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getStackDepth()
 	 * @generated
 	 * @ordered
@@ -184,6 +191,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getOrderIndex() <em>Order Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOrderIndex()
 	 * @generated
 	 * @ordered
@@ -194,6 +202,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getOrderIndex() <em>Order Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOrderIndex()
 	 * @generated
 	 * @ordered
@@ -204,6 +213,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #isFailed() <em>Failed</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #isFailed()
 	 * @generated
 	 * @ordered
@@ -214,6 +224,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #isFailed() <em>Failed</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #isFailed()
 	 * @generated
 	 * @ordered
@@ -224,6 +235,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getFailedCause() <em>Failed Cause</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getFailedCause()
 	 * @generated
 	 * @ordered
@@ -234,6 +246,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getFailedCause() <em>Failed Cause</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getFailedCause()
 	 * @generated
 	 * @ordered
@@ -243,6 +256,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected OperationCallImpl() {
@@ -252,6 +266,7 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -262,81 +277,94 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public DeployedOperation getOperation() {
-		if (operation != null && operation.eIsProxy()) {
-			InternalEObject oldOperation = (InternalEObject)operation;
-			operation = (DeployedOperation)eResolveProxy(oldOperation);
-			if (operation != oldOperation) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__OPERATION, oldOperation, operation));
+		if ((this.operation != null) && this.operation.eIsProxy()) {
+			final InternalEObject oldOperation = (InternalEObject) this.operation;
+			this.operation = (DeployedOperation) this.eResolveProxy(oldOperation);
+			if (this.operation != oldOperation) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__OPERATION, oldOperation, this.operation));
+				}
 			}
 		}
-		return operation;
+		return this.operation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public DeployedOperation basicGetOperation() {
-		return operation;
+		return this.operation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setOperation(DeployedOperation newOperation) {
-		DeployedOperation oldOperation = operation;
-		operation = newOperation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__OPERATION, oldOperation, operation));
+	public void setOperation(final DeployedOperation newOperation) {
+		final DeployedOperation oldOperation = this.operation;
+		this.operation = newOperation;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__OPERATION, oldOperation, this.operation));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public OperationCall getParent() {
-		if (parent != null && parent.eIsProxy()) {
-			InternalEObject oldParent = (InternalEObject)parent;
-			parent = (OperationCall)eResolveProxy(oldParent);
-			if (parent != oldParent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__PARENT, oldParent, parent));
+		if ((this.parent != null) && this.parent.eIsProxy()) {
+			final InternalEObject oldParent = (InternalEObject) this.parent;
+			this.parent = (OperationCall) this.eResolveProxy(oldParent);
+			if (this.parent != oldParent) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__PARENT, oldParent, this.parent));
+				}
 			}
 		}
-		return parent;
+		return this.parent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public OperationCall basicGetParent() {
-		return parent;
+		return this.parent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetParent(OperationCall newParent, NotificationChain msgs) {
-		OperationCall oldParent = parent;
-		parent = newParent;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__PARENT, oldParent, newParent);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetParent(final OperationCall newParent, NotificationChain msgs) {
+		final OperationCall oldParent = this.parent;
+		this.parent = newParent;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__PARENT, oldParent, newParent);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -344,235 +372,270 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setParent(OperationCall newParent) {
-		if (newParent != parent) {
+	public void setParent(final OperationCall newParent) {
+		if (newParent != this.parent) {
 			NotificationChain msgs = null;
-			if (parent != null)
-				msgs = ((InternalEObject)parent).eInverseRemove(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
-			if (newParent != null)
-				msgs = ((InternalEObject)newParent).eInverseAdd(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
-			msgs = basicSetParent(newParent, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.parent != null) {
+				msgs = ((InternalEObject) this.parent).eInverseRemove(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
+			}
+			if (newParent != null) {
+				msgs = ((InternalEObject) newParent).eInverseAdd(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
+			}
+			msgs = this.basicSetParent(newParent, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__PARENT, newParent, newParent));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__PARENT, newParent, newParent));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<OperationCall> getChildren() {
-		if (children == null) {
-			children = new EObjectWithInverseResolvingEList<OperationCall>(OperationCall.class, this, TracePackage.OPERATION_CALL__CHILDREN, TracePackage.OPERATION_CALL__PARENT);
+		if (this.children == null) {
+			this.children = new EObjectWithInverseResolvingEList<>(OperationCall.class, this, TracePackage.OPERATION_CALL__CHILDREN,
+					TracePackage.OPERATION_CALL__PARENT);
 		}
-		return children;
+		return this.children;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Duration getDuration() {
-		return duration;
+		return this.duration;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setDuration(Duration newDuration) {
-		Duration oldDuration = duration;
-		duration = newDuration;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DURATION, oldDuration, duration));
+	public void setDuration(final Duration newDuration) {
+		final Duration oldDuration = this.duration;
+		this.duration = newDuration;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DURATION, oldDuration, this.duration));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Instant getStart() {
-		return start;
+		return this.start;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setStart(Instant newStart) {
-		Instant oldStart = start;
-		start = newStart;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__START, oldStart, start));
+	public void setStart(final Instant newStart) {
+		final Instant oldStart = this.start;
+		this.start = newStart;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__START, oldStart, this.start));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public float getDurRatioToParent() {
-		return durRatioToParent;
+		return this.durRatioToParent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setDurRatioToParent(float newDurRatioToParent) {
-		float oldDurRatioToParent = durRatioToParent;
-		durRatioToParent = newDurRatioToParent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT, oldDurRatioToParent, durRatioToParent));
+	public void setDurRatioToParent(final float newDurRatioToParent) {
+		final float oldDurRatioToParent = this.durRatioToParent;
+		this.durRatioToParent = newDurRatioToParent;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT, oldDurRatioToParent, this.durRatioToParent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public float getDurRatioToRootParent() {
-		return durRatioToRootParent;
+		return this.durRatioToRootParent;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setDurRatioToRootParent(float newDurRatioToRootParent) {
-		float oldDurRatioToRootParent = durRatioToRootParent;
-		durRatioToRootParent = newDurRatioToRootParent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT, oldDurRatioToRootParent, durRatioToRootParent));
+	public void setDurRatioToRootParent(final float newDurRatioToRootParent) {
+		final float oldDurRatioToRootParent = this.durRatioToRootParent;
+		this.durRatioToRootParent = newDurRatioToRootParent;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT, oldDurRatioToRootParent,
+					this.durRatioToRootParent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getStackDepth() {
-		return stackDepth;
+		return this.stackDepth;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setStackDepth(int newStackDepth) {
-		int oldStackDepth = stackDepth;
-		stackDepth = newStackDepth;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__STACK_DEPTH, oldStackDepth, stackDepth));
+	public void setStackDepth(final int newStackDepth) {
+		final int oldStackDepth = this.stackDepth;
+		this.stackDepth = newStackDepth;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__STACK_DEPTH, oldStackDepth, this.stackDepth));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getOrderIndex() {
-		return orderIndex;
+		return this.orderIndex;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setOrderIndex(int newOrderIndex) {
-		int oldOrderIndex = orderIndex;
-		orderIndex = newOrderIndex;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__ORDER_INDEX, oldOrderIndex, orderIndex));
+	public void setOrderIndex(final int newOrderIndex) {
+		final int oldOrderIndex = this.orderIndex;
+		this.orderIndex = newOrderIndex;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__ORDER_INDEX, oldOrderIndex, this.orderIndex));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public boolean isFailed() {
-		return failed;
+		return this.failed;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setFailed(boolean newFailed) {
-		boolean oldFailed = failed;
-		failed = newFailed;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED, oldFailed, failed));
+	public void setFailed(final boolean newFailed) {
+		final boolean oldFailed = this.failed;
+		this.failed = newFailed;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED, oldFailed, this.failed));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getFailedCause() {
-		return failedCause;
+		return this.failedCause;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setFailedCause(String newFailedCause) {
-		String oldFailedCause = failedCause;
-		failedCause = newFailedCause;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED_CAUSE, oldFailedCause, failedCause));
+	public void setFailedCause(final String newFailedCause) {
+		final String oldFailedCause = this.failedCause;
+		this.failedCause = newFailedCause;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED_CAUSE, oldFailedCause, this.failedCause));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__PARENT:
-				if (parent != null)
-					msgs = ((InternalEObject)parent).eInverseRemove(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
-				return basicSetParent((OperationCall)otherEnd, msgs);
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getChildren()).basicAdd(otherEnd, msgs);
+		case TracePackage.OPERATION_CALL__PARENT:
+			if (this.parent != null) {
+				msgs = ((InternalEObject) this.parent).eInverseRemove(this, TracePackage.OPERATION_CALL__CHILDREN, OperationCall.class, msgs);
+			}
+			return this.basicSetParent((OperationCall) otherEnd, msgs);
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) this.getChildren()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -580,15 +643,16 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__PARENT:
-				return basicSetParent(null, msgs);
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
+		case TracePackage.OPERATION_CALL__PARENT:
+			return this.basicSetParent(null, msgs);
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			return ((InternalEList<?>) this.getChildren()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -596,35 +660,40 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__OPERATION:
-				if (resolve) return getOperation();
-				return basicGetOperation();
-			case TracePackage.OPERATION_CALL__PARENT:
-				if (resolve) return getParent();
-				return basicGetParent();
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				return getChildren();
-			case TracePackage.OPERATION_CALL__DURATION:
-				return getDuration();
-			case TracePackage.OPERATION_CALL__START:
-				return getStart();
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
-				return getDurRatioToParent();
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
-				return getDurRatioToRootParent();
-			case TracePackage.OPERATION_CALL__STACK_DEPTH:
-				return getStackDepth();
-			case TracePackage.OPERATION_CALL__ORDER_INDEX:
-				return getOrderIndex();
-			case TracePackage.OPERATION_CALL__FAILED:
-				return isFailed();
-			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
-				return getFailedCause();
+		case TracePackage.OPERATION_CALL__OPERATION:
+			if (resolve) {
+				return this.getOperation();
+			}
+			return this.basicGetOperation();
+		case TracePackage.OPERATION_CALL__PARENT:
+			if (resolve) {
+				return this.getParent();
+			}
+			return this.basicGetParent();
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			return this.getChildren();
+		case TracePackage.OPERATION_CALL__DURATION:
+			return this.getDuration();
+		case TracePackage.OPERATION_CALL__START:
+			return this.getStart();
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
+			return this.getDurRatioToParent();
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
+			return this.getDurRatioToRootParent();
+		case TracePackage.OPERATION_CALL__STACK_DEPTH:
+			return this.getStackDepth();
+		case TracePackage.OPERATION_CALL__ORDER_INDEX:
+			return this.getOrderIndex();
+		case TracePackage.OPERATION_CALL__FAILED:
+			return this.isFailed();
+		case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+			return this.getFailedCause();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -632,46 +701,47 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__OPERATION:
-				setOperation((DeployedOperation)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__PARENT:
-				setParent((OperationCall)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				getChildren().clear();
-				getChildren().addAll((Collection<? extends OperationCall>)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__DURATION:
-				setDuration((Duration)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__START:
-				setStart((Instant)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
-				setDurRatioToParent((Float)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
-				setDurRatioToRootParent((Float)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__STACK_DEPTH:
-				setStackDepth((Integer)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__ORDER_INDEX:
-				setOrderIndex((Integer)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__FAILED:
-				setFailed((Boolean)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
-				setFailedCause((String)newValue);
-				return;
+		case TracePackage.OPERATION_CALL__OPERATION:
+			this.setOperation((DeployedOperation) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__PARENT:
+			this.setParent((OperationCall) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			this.getChildren().clear();
+			this.getChildren().addAll((Collection<? extends OperationCall>) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__DURATION:
+			this.setDuration((Duration) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__START:
+			this.setStart((Instant) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
+			this.setDurRatioToParent((Float) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
+			this.setDurRatioToRootParent((Float) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__STACK_DEPTH:
+			this.setStackDepth((Integer) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__ORDER_INDEX:
+			this.setOrderIndex((Integer) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__FAILED:
+			this.setFailed((Boolean) newValue);
+			return;
+		case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+			this.setFailedCause((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -679,44 +749,45 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__OPERATION:
-				setOperation((DeployedOperation)null);
-				return;
-			case TracePackage.OPERATION_CALL__PARENT:
-				setParent((OperationCall)null);
-				return;
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				getChildren().clear();
-				return;
-			case TracePackage.OPERATION_CALL__DURATION:
-				setDuration(DURATION_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__START:
-				setStart(START_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
-				setDurRatioToParent(DUR_RATIO_TO_PARENT_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
-				setDurRatioToRootParent(DUR_RATIO_TO_ROOT_PARENT_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__STACK_DEPTH:
-				setStackDepth(STACK_DEPTH_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__ORDER_INDEX:
-				setOrderIndex(ORDER_INDEX_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__FAILED:
-				setFailed(FAILED_EDEFAULT);
-				return;
-			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
-				setFailedCause(FAILED_CAUSE_EDEFAULT);
-				return;
+		case TracePackage.OPERATION_CALL__OPERATION:
+			this.setOperation((DeployedOperation) null);
+			return;
+		case TracePackage.OPERATION_CALL__PARENT:
+			this.setParent((OperationCall) null);
+			return;
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			this.getChildren().clear();
+			return;
+		case TracePackage.OPERATION_CALL__DURATION:
+			this.setDuration(DURATION_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__START:
+			this.setStart(START_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
+			this.setDurRatioToParent(DUR_RATIO_TO_PARENT_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
+			this.setDurRatioToRootParent(DUR_RATIO_TO_ROOT_PARENT_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__STACK_DEPTH:
+			this.setStackDepth(STACK_DEPTH_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__ORDER_INDEX:
+			this.setOrderIndex(ORDER_INDEX_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__FAILED:
+			this.setFailed(FAILED_EDEFAULT);
+			return;
+		case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+			this.setFailedCause(FAILED_CAUSE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -724,33 +795,34 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__OPERATION:
-				return operation != null;
-			case TracePackage.OPERATION_CALL__PARENT:
-				return parent != null;
-			case TracePackage.OPERATION_CALL__CHILDREN:
-				return children != null && !children.isEmpty();
-			case TracePackage.OPERATION_CALL__DURATION:
-				return DURATION_EDEFAULT == null ? duration != null : !DURATION_EDEFAULT.equals(duration);
-			case TracePackage.OPERATION_CALL__START:
-				return START_EDEFAULT == null ? start != null : !START_EDEFAULT.equals(start);
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
-				return durRatioToParent != DUR_RATIO_TO_PARENT_EDEFAULT;
-			case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
-				return durRatioToRootParent != DUR_RATIO_TO_ROOT_PARENT_EDEFAULT;
-			case TracePackage.OPERATION_CALL__STACK_DEPTH:
-				return stackDepth != STACK_DEPTH_EDEFAULT;
-			case TracePackage.OPERATION_CALL__ORDER_INDEX:
-				return orderIndex != ORDER_INDEX_EDEFAULT;
-			case TracePackage.OPERATION_CALL__FAILED:
-				return failed != FAILED_EDEFAULT;
-			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
-				return FAILED_CAUSE_EDEFAULT == null ? failedCause != null : !FAILED_CAUSE_EDEFAULT.equals(failedCause);
+		case TracePackage.OPERATION_CALL__OPERATION:
+			return this.operation != null;
+		case TracePackage.OPERATION_CALL__PARENT:
+			return this.parent != null;
+		case TracePackage.OPERATION_CALL__CHILDREN:
+			return (this.children != null) && !this.children.isEmpty();
+		case TracePackage.OPERATION_CALL__DURATION:
+			return DURATION_EDEFAULT == null ? this.duration != null : !DURATION_EDEFAULT.equals(this.duration);
+		case TracePackage.OPERATION_CALL__START:
+			return START_EDEFAULT == null ? this.start != null : !START_EDEFAULT.equals(this.start);
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_PARENT:
+			return this.durRatioToParent != DUR_RATIO_TO_PARENT_EDEFAULT;
+		case TracePackage.OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT:
+			return this.durRatioToRootParent != DUR_RATIO_TO_ROOT_PARENT_EDEFAULT;
+		case TracePackage.OPERATION_CALL__STACK_DEPTH:
+			return this.stackDepth != STACK_DEPTH_EDEFAULT;
+		case TracePackage.OPERATION_CALL__ORDER_INDEX:
+			return this.orderIndex != ORDER_INDEX_EDEFAULT;
+		case TracePackage.OPERATION_CALL__FAILED:
+			return this.failed != FAILED_EDEFAULT;
+		case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+			return FAILED_CAUSE_EDEFAULT == null ? this.failedCause != null : !FAILED_CAUSE_EDEFAULT.equals(this.failedCause);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -758,31 +830,34 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (duration: ");
-		result.append(duration);
+		result.append(this.duration);
 		result.append(", start: ");
-		result.append(start);
+		result.append(this.start);
 		result.append(", durRatioToParent: ");
-		result.append(durRatioToParent);
+		result.append(this.durRatioToParent);
 		result.append(", durRatioToRootParent: ");
-		result.append(durRatioToRootParent);
+		result.append(this.durRatioToRootParent);
 		result.append(", stackDepth: ");
-		result.append(stackDepth);
+		result.append(this.stackDepth);
 		result.append(", orderIndex: ");
-		result.append(orderIndex);
+		result.append(this.orderIndex);
 		result.append(", failed: ");
-		result.append(failed);
+		result.append(this.failed);
 		result.append(", failedCause: ");
-		result.append(failedCause);
+		result.append(this.failedCause);
 		result.append(')');
 		return result.toString();
 	}
 
-} //OperationCallImpl
+} // OperationCallImpl

@@ -53,10 +53,10 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 	@Test
 	public void testRecordWithFactoryUsingStandardResolution() {
 		final String recordClassName = AfterOperationEvent.class.getName();
-		
+
 		final RecordFactoryResolver resolver = new RecordFactoryResolver();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
-		
+
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 	}
 
@@ -69,7 +69,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 		final RecordFactoryResolver resolver = new RecordFactoryResolver();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
-		
+
 		Assert.assertNull(recordFactory);
 	}
 
@@ -82,7 +82,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 		final RecordFactoryResolver resolver = new RecordFactoryResolver();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = resolver.get(recordClassName);
-		
+
 		Assert.assertNotNull(recordFactory);
 		Assert.assertEquals(AnnotatedRecordFactory.class, recordFactory.getClass());
 	}
@@ -98,7 +98,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 		final RecordFactoryResolver resolver = new RecordFactoryResolver(Arrays.asList(new ProviderA(), new ProviderB()));
 		final IRecordFactory<? extends IMonitoringRecord> factoryForRecordA = resolver.get(recordClassNameA);
-		final IRecordFactory<? extends IMonitoringRecord> factoryForRecordB = resolver.get(recordClassNameB);		
+		final IRecordFactory<? extends IMonitoringRecord> factoryForRecordB = resolver.get(recordClassNameB);
 
 		// Assert that the factories returned by the providers match the expectations
 		Assert.assertNotNull(factoryForRecordA);
@@ -159,7 +159,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 		public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
 			return new RecordTypeFactoryA();
 		}
-		
+
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 		public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
 			return new RecordTypeFactoryB();
 		}
-		
+
 	}
 
 	/**
@@ -274,8 +274,9 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 	/**
 	 * Convenience superclass for dummy record factories.
-	 * 
-	 * @param <T> The record type created by this factory
+	 *
+	 * @param <T>
+	 *            The record type created by this factory
 	 */
 	private abstract static class AbstractDummyRecordFactory<T extends AbstractDummyRecord> implements IRecordFactory<T> {
 

@@ -76,7 +76,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 		synchronized (NAMED_LISTS) {
 			List<IMonitoringRecord> list = NAMED_LISTS.get(name);
 			if (list == null) {
-				list = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
+				list = Collections.synchronizedList(new ArrayList<>());
 				NAMED_LISTS.put(name, list);
 			}
 			return list;

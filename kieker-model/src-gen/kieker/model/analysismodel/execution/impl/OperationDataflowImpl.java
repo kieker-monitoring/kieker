@@ -2,19 +2,16 @@
  */
 package kieker.model.analysismodel.execution.impl;
 
-import kieker.model.analysismodel.deployment.DeployedOperation;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.execution.EDirection;
 import kieker.model.analysismodel.execution.ExecutionPackage;
 import kieker.model.analysismodel.execution.OperationDataflow;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,9 +21,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getCaller <em>Caller</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getCallee <em>Callee</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getDirection <em>Direction</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getCaller <em>Caller</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getCallee <em>Callee</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.OperationDataflowImpl#getDirection <em>Direction</em>}</li>
  * </ul>
  *
  * @generated
@@ -36,6 +33,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getCaller() <em>Caller</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getCaller()
 	 * @generated
 	 * @ordered
@@ -46,6 +44,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getCallee() <em>Callee</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getCallee()
 	 * @generated
 	 * @ordered
@@ -56,6 +55,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	 * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDirection()
 	 * @generated
 	 * @ordered
@@ -66,6 +66,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getDirection() <em>Direction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getDirection()
 	 * @generated
 	 * @ordered
@@ -75,6 +76,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected OperationDataflowImpl() {
@@ -84,6 +86,7 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -94,122 +97,140 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public DeployedOperation getCaller() {
-		if (caller != null && caller.eIsProxy()) {
-			InternalEObject oldCaller = (InternalEObject)caller;
-			caller = (DeployedOperation)eResolveProxy(oldCaller);
-			if (caller != oldCaller) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.OPERATION_DATAFLOW__CALLER, oldCaller, caller));
+		if ((this.caller != null) && this.caller.eIsProxy()) {
+			final InternalEObject oldCaller = (InternalEObject) this.caller;
+			this.caller = (DeployedOperation) this.eResolveProxy(oldCaller);
+			if (this.caller != oldCaller) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.OPERATION_DATAFLOW__CALLER, oldCaller, this.caller));
+				}
 			}
 		}
-		return caller;
+		return this.caller;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public DeployedOperation basicGetCaller() {
-		return caller;
+		return this.caller;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setCaller(DeployedOperation newCaller) {
-		DeployedOperation oldCaller = caller;
-		caller = newCaller;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__CALLER, oldCaller, caller));
+	public void setCaller(final DeployedOperation newCaller) {
+		final DeployedOperation oldCaller = this.caller;
+		this.caller = newCaller;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__CALLER, oldCaller, this.caller));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public DeployedOperation getCallee() {
-		if (callee != null && callee.eIsProxy()) {
-			InternalEObject oldCallee = (InternalEObject)callee;
-			callee = (DeployedOperation)eResolveProxy(oldCallee);
-			if (callee != oldCallee) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.OPERATION_DATAFLOW__CALLEE, oldCallee, callee));
+		if ((this.callee != null) && this.callee.eIsProxy()) {
+			final InternalEObject oldCallee = (InternalEObject) this.callee;
+			this.callee = (DeployedOperation) this.eResolveProxy(oldCallee);
+			if (this.callee != oldCallee) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.OPERATION_DATAFLOW__CALLEE, oldCallee, this.callee));
+				}
 			}
 		}
-		return callee;
+		return this.callee;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public DeployedOperation basicGetCallee() {
-		return callee;
+		return this.callee;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setCallee(DeployedOperation newCallee) {
-		DeployedOperation oldCallee = callee;
-		callee = newCallee;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__CALLEE, oldCallee, callee));
+	public void setCallee(final DeployedOperation newCallee) {
+		final DeployedOperation oldCallee = this.callee;
+		this.callee = newCallee;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__CALLEE, oldCallee, this.callee));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EDirection getDirection() {
-		return direction;
+		return this.direction;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setDirection(EDirection newDirection) {
-		EDirection oldDirection = direction;
-		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__DIRECTION, oldDirection, direction));
+	public void setDirection(final EDirection newDirection) {
+		final EDirection oldDirection = this.direction;
+		this.direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.OPERATION_DATAFLOW__DIRECTION, oldDirection, this.direction));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
-				if (resolve) return getCaller();
-				return basicGetCaller();
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
-				if (resolve) return getCallee();
-				return basicGetCallee();
-			case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
-				return getDirection();
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
+			if (resolve) {
+				return this.getCaller();
+			}
+			return this.basicGetCaller();
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
+			if (resolve) {
+				return this.getCallee();
+			}
+			return this.basicGetCallee();
+		case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
+			return this.getDirection();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -217,20 +238,21 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
-				setCaller((DeployedOperation)newValue);
-				return;
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
-				setCallee((DeployedOperation)newValue);
-				return;
-			case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
-				setDirection((EDirection)newValue);
-				return;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
+			this.setCaller((DeployedOperation) newValue);
+			return;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
+			this.setCallee((DeployedOperation) newValue);
+			return;
+		case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
+			this.setDirection((EDirection) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -238,20 +260,21 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
-				setCaller((DeployedOperation)null);
-				return;
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
-				setCallee((DeployedOperation)null);
-				return;
-			case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
-				setDirection(DIRECTION_EDEFAULT);
-				return;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
+			this.setCaller((DeployedOperation) null);
+			return;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
+			this.setCallee((DeployedOperation) null);
+			return;
+		case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
+			this.setDirection(DIRECTION_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -259,17 +282,18 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
-				return caller != null;
-			case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
-				return callee != null;
-			case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
-				return direction != DIRECTION_EDEFAULT;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLER:
+			return this.caller != null;
+		case ExecutionPackage.OPERATION_DATAFLOW__CALLEE:
+			return this.callee != null;
+		case ExecutionPackage.OPERATION_DATAFLOW__DIRECTION:
+			return this.direction != DIRECTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -277,17 +301,20 @@ public class OperationDataflowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (direction: ");
-		result.append(direction);
+		result.append(this.direction);
 		result.append(')');
 		return result.toString();
 	}
 
-} //OperationDataflowImpl
+} // OperationDataflowImpl

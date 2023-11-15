@@ -26,9 +26,9 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * This is a repository in which the available operations ({@link Operation}) can be stored.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class OperationRepository extends AbstractSystemSubRepository {
@@ -36,12 +36,12 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	public static final Operation ROOT_OPERATION = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TypeRepository.ROOT_COMPONENT,
 			ROOT_SIGNATURE);
 
-	private final Map<String, Operation> operationsByName = new Hashtable<String, Operation>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, Operation> operationsById = new Hashtable<Integer, Operation>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<String, Operation> operationsByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, Operation> operationsById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -52,7 +52,7 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	/**
 	 * @param namedIdentifier
 	 *            The identifier to search for.
-	 * 
+	 *
 	 * @return The instance for the passed namedIdentifier; null if no instance with this namedIdentifier.
 	 */
 	public final Operation lookupOperationByNamedIdentifier(final String namedIdentifier) {
@@ -72,7 +72,7 @@ public class OperationRepository extends AbstractSystemSubRepository {
 
 	/**
 	 * Delivers a collection containing all available operations.
-	 * 
+	 *
 	 * @return The already stored operations.
 	 */
 	public final Collection<Operation> getOperations() {

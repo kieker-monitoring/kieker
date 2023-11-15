@@ -30,7 +30,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
  * expected records. Since this tests also that a method after throwing an
  * exception is correctly recorded (throwingCallee), a individual test project
  * is used.
- * 
+ *
  * @author DaGeRe
  *
  */

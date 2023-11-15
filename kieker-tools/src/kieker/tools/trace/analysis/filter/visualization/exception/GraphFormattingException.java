@@ -18,9 +18,9 @@ package kieker.tools.trace.analysis.filter.visualization.exception;
 
 /**
  * Generic exception which denotes that an error has occured during graph formatting.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class GraphFormattingException extends RuntimeException {
@@ -29,7 +29,7 @@ public class GraphFormattingException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with the given message.
-	 * 
+	 *
 	 * @param message
 	 *            The message to use
 	 */
@@ -39,7 +39,7 @@ public class GraphFormattingException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with the given cause.
-	 * 
+	 *
 	 * @param cause
 	 *            The cause of this exception
 	 */
@@ -49,7 +49,7 @@ public class GraphFormattingException extends RuntimeException {
 
 	/**
 	 * Creates a new exception with a given message and a given cause.
-	 * 
+	 *
 	 * @param message
 	 *            The message to use
 	 * @param cause

@@ -33,7 +33,7 @@ public final class DistanceFunctionFactory {
 	 * the distance between two {@linkplain IEuclideanCoordinate euclidean
 	 * coordinates}.
 	 */
-	public static final IDistanceFunction<IEuclideanCoordinate> EUCLIDEAN = new IDistanceFunction<DistanceFunctionFactory.IEuclideanCoordinate>() {
+	public static final IDistanceFunction<IEuclideanCoordinate> EUCLIDEAN = new IDistanceFunction<>() {
 		@Override
 		public double calculate(final IEuclideanCoordinate coord1, final IEuclideanCoordinate coord2) {
 			return DistanceFunctionFactory.euclidean(coord1, coord2);
@@ -45,7 +45,7 @@ public final class DistanceFunctionFactory {
 	 * the distance between two coordinates represented by {@linkplain
 	 * java.util.List lists} of {@link java.lang.Integer}s.
 	 */
-	public static final IDistanceFunction<List<Integer>> EUCLIDEAN_INTEGER_LIST = new IDistanceFunction<List<Integer>>() {
+	public static final IDistanceFunction<List<Integer>> EUCLIDEAN_INTEGER_LIST = new IDistanceFunction<>() {
 		@Override
 		public double calculate(final List<Integer> data1, final List<Integer> data2) {
 			class IntegerListEuclideanCoordinate implements IEuclideanCoordinate {
@@ -77,7 +77,7 @@ public final class DistanceFunctionFactory {
 	 * the distance between two coordinates represented by {@linkplain
 	 * java.util.List lists} of {@link java.lang.Double}s.
 	 */
-	public static final IDistanceFunction<List<Double>> EUCLIDEAN_DOUBLE_LIST = new IDistanceFunction<List<Double>>() {
+	public static final IDistanceFunction<List<Double>> EUCLIDEAN_DOUBLE_LIST = new IDistanceFunction<>() {
 		@Override
 		public double calculate(final List<Double> data1, final List<Double> data2) {
 			class DoubleListEuclideanCoordinate implements IEuclideanCoordinate {
@@ -123,7 +123,7 @@ public final class DistanceFunctionFactory {
 	 * @return The cached distance function.
 	 */
 	public static <D> IDistanceFunction<D> cached(final IDistanceFunction<D> distanceFunction) {
-		return new IDistanceFunction<D>() {
+		return new IDistanceFunction<>() {
 			class Pair {
 				private final D data1;
 				private final D data2;

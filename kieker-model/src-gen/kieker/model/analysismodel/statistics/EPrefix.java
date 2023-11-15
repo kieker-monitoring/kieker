@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>EPrefix</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getEPrefix()
  * @model
  * @generated
@@ -22,6 +23,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>No P</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #NO_P_VALUE
 	 * @generated
 	 * @ordered
@@ -32,6 +34,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Yotta</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #YOTTA_VALUE
 	 * @generated
 	 * @ordered
@@ -42,6 +45,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Zetta</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ZETTA_VALUE
 	 * @generated
 	 * @ordered
@@ -52,6 +56,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Exa</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #EXA_VALUE
 	 * @generated
 	 * @ordered
@@ -62,6 +67,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Peta</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PETA_VALUE
 	 * @generated
 	 * @ordered
@@ -72,6 +78,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Tera</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #TERA_VALUE
 	 * @generated
 	 * @ordered
@@ -82,6 +89,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Giga</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #GIGA_VALUE
 	 * @generated
 	 * @ordered
@@ -92,6 +100,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Mega</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MEGA_VALUE
 	 * @generated
 	 * @ordered
@@ -102,6 +111,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Kilo</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #KILO_VALUE
 	 * @generated
 	 * @ordered
@@ -112,6 +122,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Hecto</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #HECTO_VALUE
 	 * @generated
 	 * @ordered
@@ -122,6 +133,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Deca</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #DECA_VALUE
 	 * @generated
 	 * @ordered
@@ -132,6 +144,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Deci</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #DECI_VALUE
 	 * @generated
 	 * @ordered
@@ -142,6 +155,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Centi</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #CENTI_VALUE
 	 * @generated
 	 * @ordered
@@ -152,6 +166,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Mili</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MILI_VALUE
 	 * @generated
 	 * @ordered
@@ -162,6 +177,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Micro</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MICRO_VALUE
 	 * @generated
 	 * @ordered
@@ -172,6 +188,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Nano</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #NANO_VALUE
 	 * @generated
 	 * @ordered
@@ -182,6 +199,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Pico</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PICO_VALUE
 	 * @generated
 	 * @ordered
@@ -192,6 +210,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Femto</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #FEMTO_VALUE
 	 * @generated
 	 * @ordered
@@ -202,6 +221,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Atto</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ATTO_VALUE
 	 * @generated
 	 * @ordered
@@ -212,6 +232,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Zepto</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ZEPTO_VALUE
 	 * @generated
 	 * @ordered
@@ -222,6 +243,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Yocto</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #YOCTO_VALUE
 	 * @generated
 	 * @ordered
@@ -232,6 +254,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>No P</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #NO_P
 	 * @model name="noP"
 	 * @generated
@@ -243,6 +266,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Yotta</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #YOTTA
 	 * @model name="yotta" literal="Y"
 	 * @generated
@@ -254,6 +278,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Zetta</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ZETTA
 	 * @model name="zetta" literal="Z"
 	 * @generated
@@ -265,6 +290,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Exa</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #EXA
 	 * @model name="exa" literal="E"
 	 * @generated
@@ -276,6 +302,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Peta</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PETA
 	 * @model name="peta" literal="P"
 	 * @generated
@@ -287,6 +314,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Tera</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #TERA
 	 * @model name="tera" literal="T"
 	 * @generated
@@ -298,6 +326,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Giga</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #GIGA
 	 * @model name="giga" literal="G"
 	 * @generated
@@ -309,6 +338,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Mega</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MEGA
 	 * @model name="mega" literal="M"
 	 * @generated
@@ -320,6 +350,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Kilo</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #KILO
 	 * @model name="kilo" literal="k"
 	 * @generated
@@ -331,6 +362,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Hecto</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #HECTO
 	 * @model name="hecto" literal="h"
 	 * @generated
@@ -342,6 +374,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Deca</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #DECA
 	 * @model name="deca" literal="da"
 	 * @generated
@@ -353,6 +386,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Deci</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #DECI
 	 * @model name="deci" literal="d"
 	 * @generated
@@ -364,6 +398,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Centi</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #CENTI
 	 * @model name="centi" literal="c"
 	 * @generated
@@ -375,6 +410,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Mili</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MILI
 	 * @model name="mili" literal="m"
 	 * @generated
@@ -386,6 +422,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Micro</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MICRO
 	 * @model name="micro" literal="mu"
 	 * @generated
@@ -397,6 +434,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Nano</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #NANO
 	 * @model name="nano" literal="n"
 	 * @generated
@@ -408,6 +446,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Pico</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PICO
 	 * @model name="pico" literal="p"
 	 * @generated
@@ -419,6 +458,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Femto</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #FEMTO
 	 * @model name="femto" literal="f"
 	 * @generated
@@ -430,6 +470,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Atto</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ATTO
 	 * @model name="atto" literal="a"
 	 * @generated
@@ -441,6 +482,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Zepto</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #ZEPTO
 	 * @model name="zepto" literal="z"
 	 * @generated
@@ -452,6 +494,7 @@ public enum EPrefix implements Enumerator {
 	 * The '<em><b>Yocto</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #YOCTO
 	 * @model name="yocto" literal="y"
 	 * @generated
@@ -463,37 +506,38 @@ public enum EPrefix implements Enumerator {
 	 * An array of all the '<em><b>EPrefix</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	private static final EPrefix[] VALUES_ARRAY =
-		new EPrefix[] {
-			NO_P,
-			YOTTA,
-			ZETTA,
-			EXA,
-			PETA,
-			TERA,
-			GIGA,
-			MEGA,
-			KILO,
-			HECTO,
-			DECA,
-			DECI,
-			CENTI,
-			MILI,
-			MICRO,
-			NANO,
-			PICO,
-			FEMTO,
-			ATTO,
-			ZEPTO,
-			YOCTO,
-		};
+	private static final EPrefix[] VALUES_ARRAY = new EPrefix[] {
+		NO_P,
+		YOTTA,
+		ZETTA,
+		EXA,
+		PETA,
+		TERA,
+		GIGA,
+		MEGA,
+		KILO,
+		HECTO,
+		DECA,
+		DECI,
+		CENTI,
+		MILI,
+		MICRO,
+		NANO,
+		PICO,
+		FEMTO,
+		ATTO,
+		ZEPTO,
+		YOCTO,
+	};
 
 	/**
 	 * A public read-only list of all the '<em><b>EPrefix</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final List<EPrefix> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
@@ -502,13 +546,14 @@ public enum EPrefix implements Enumerator {
 	 * Returns the '<em><b>EPrefix</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param literal the literal.
+	 *
+	 * @param literal
+	 *            the literal.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static EPrefix get(String literal) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			EPrefix result = VALUES_ARRAY[i];
+	public static EPrefix get(final String literal) {
+		for (final EPrefix result : VALUES_ARRAY) {
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -520,13 +565,14 @@ public enum EPrefix implements Enumerator {
 	 * Returns the '<em><b>EPrefix</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param name the name.
+	 *
+	 * @param name
+	 *            the name.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static EPrefix getByName(String name) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			EPrefix result = VALUES_ARRAY[i];
+	public static EPrefix getByName(final String name) {
+		for (final EPrefix result : VALUES_ARRAY) {
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -538,33 +584,56 @@ public enum EPrefix implements Enumerator {
 	 * Returns the '<em><b>EPrefix</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the integer value.
+	 *
+	 * @param value
+	 *            the integer value.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static EPrefix get(int value) {
+	public static EPrefix get(final int value) {
 		switch (value) {
-			case NO_P_VALUE: return NO_P;
-			case YOTTA_VALUE: return YOTTA;
-			case ZETTA_VALUE: return ZETTA;
-			case EXA_VALUE: return EXA;
-			case PETA_VALUE: return PETA;
-			case TERA_VALUE: return TERA;
-			case GIGA_VALUE: return GIGA;
-			case MEGA_VALUE: return MEGA;
-			case KILO_VALUE: return KILO;
-			case HECTO_VALUE: return HECTO;
-			case DECA_VALUE: return DECA;
-			case DECI_VALUE: return DECI;
-			case CENTI_VALUE: return CENTI;
-			case MILI_VALUE: return MILI;
-			case MICRO_VALUE: return MICRO;
-			case NANO_VALUE: return NANO;
-			case PICO_VALUE: return PICO;
-			case FEMTO_VALUE: return FEMTO;
-			case ATTO_VALUE: return ATTO;
-			case ZEPTO_VALUE: return ZEPTO;
-			case YOCTO_VALUE: return YOCTO;
+		case NO_P_VALUE:
+			return NO_P;
+		case YOTTA_VALUE:
+			return YOTTA;
+		case ZETTA_VALUE:
+			return ZETTA;
+		case EXA_VALUE:
+			return EXA;
+		case PETA_VALUE:
+			return PETA;
+		case TERA_VALUE:
+			return TERA;
+		case GIGA_VALUE:
+			return GIGA;
+		case MEGA_VALUE:
+			return MEGA;
+		case KILO_VALUE:
+			return KILO;
+		case HECTO_VALUE:
+			return HECTO;
+		case DECA_VALUE:
+			return DECA;
+		case DECI_VALUE:
+			return DECI;
+		case CENTI_VALUE:
+			return CENTI;
+		case MILI_VALUE:
+			return MILI;
+		case MICRO_VALUE:
+			return MICRO;
+		case NANO_VALUE:
+			return NANO;
+		case PICO_VALUE:
+			return PICO;
+		case FEMTO_VALUE:
+			return FEMTO;
+		case ATTO_VALUE:
+			return ATTO;
+		case ZEPTO_VALUE:
+			return ZEPTO;
+		case YOCTO_VALUE:
+			return YOCTO;
 		}
 		return null;
 	}
@@ -572,6 +641,7 @@ public enum EPrefix implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final int value;
@@ -579,6 +649,7 @@ public enum EPrefix implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final String name;
@@ -586,6 +657,7 @@ public enum EPrefix implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final String literal;
@@ -594,9 +666,10 @@ public enum EPrefix implements Enumerator {
 	 * Only this class can construct instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	private EPrefix(int value, String name, String literal) {
+	private EPrefix(final int value, final String name, final String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -605,42 +678,46 @@ public enum EPrefix implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getValue() {
-	  return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-	  return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getLiteral() {
-	  return literal;
+		return this.literal;
 	}
 
 	/**
 	 * Returns the literal value of the enumerator, which is its string representation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		return literal;
+		return this.literal;
 	}
-	
-} //EPrefix
+
+} // EPrefix

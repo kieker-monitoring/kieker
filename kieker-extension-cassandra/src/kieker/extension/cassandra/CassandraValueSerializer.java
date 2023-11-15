@@ -24,7 +24,7 @@ import kieker.common.record.io.IValueSerializer;
  * @since 1.16
  */
 public class CassandraValueSerializer implements IValueSerializer { // NOPMD TooManyMethods
-	
+
 	private final BoundStatement boundStatement;
 	private int column;
 
@@ -35,47 +35,47 @@ public class CassandraValueSerializer implements IValueSerializer { // NOPMD Too
 
 	@Override
 	public void putBoolean(final boolean value) {
-		this.boundStatement.setBool(column++, value);
+		this.boundStatement.setBool(this.column++, value);
 	}
 
 	@Override
 	public void putByte(final byte value) {
-		this.boundStatement.setByte(column++, value);
+		this.boundStatement.setByte(this.column++, value);
 	}
 
 	@Override
 	public void putChar(final char value) {
-		this.boundStatement.setString(column++, String.valueOf(value));
+		this.boundStatement.setString(this.column++, String.valueOf(value));
 	}
 
 	@Override
 	public void putShort(final short value) {
-		this.boundStatement.setShort(column++, value);
+		this.boundStatement.setShort(this.column++, value);
 	}
 
 	@Override
 	public void putInt(final int value) {
-		this.boundStatement.setInt(column++, value);
+		this.boundStatement.setInt(this.column++, value);
 	}
 
 	@Override
 	public void putLong(final long value) {
-		this.boundStatement.setLong(column++, value);
+		this.boundStatement.setLong(this.column++, value);
 	}
 
 	@Override
 	public void putFloat(final float value) {
-		this.boundStatement.setFloat(column++, value);
+		this.boundStatement.setFloat(this.column++, value);
 	}
 
 	@Override
 	public void putDouble(final double value) {
-		this.boundStatement.setDouble(column++, value);
+		this.boundStatement.setDouble(this.column++, value);
 	}
 
 	@Override
 	public <T extends Enum<T>> void putEnumeration(final T value) {
-		this.boundStatement.setInt(column++, value.ordinal());
+		this.boundStatement.setInt(this.column++, value.ordinal());
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class CassandraValueSerializer implements IValueSerializer { // NOPMD Too
 
 	@Override
 	public void putString(final String value) {
-		this.boundStatement.setString(column++, value);
+		this.boundStatement.setString(this.column++, value);
 	}
 
 }

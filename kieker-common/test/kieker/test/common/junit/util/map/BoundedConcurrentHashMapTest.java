@@ -43,7 +43,7 @@ public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testMaxEntryBehaviour() {
-		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<Integer, Integer>(BoundedCacheBehaviour.IGNORE_NEW_ENTRIES, 5);
+		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<>(BoundedCacheBehaviour.IGNORE_NEW_ENTRIES, 5);
 
 		for (int i = 0; i < 10; i++) {
 			map.put(i, i);
@@ -57,7 +57,7 @@ public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {
 
 	@Test
 	public void testRandomRemoveBehaviour() {
-		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<Integer, Integer>(BoundedCacheBehaviour.REMOVE_RANDOM_ENTRY, 5);
+		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<>(BoundedCacheBehaviour.REMOVE_RANDOM_ENTRY, 5);
 
 		for (int i = 0; i < 10; i++) {
 			map.put(i, i);
@@ -68,7 +68,7 @@ public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {
 
 	@Test
 	public void testClearBehaviour() {
-		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<Integer, Integer>(BoundedCacheBehaviour.CLEAR_CACHE, 5);
+		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<>(BoundedCacheBehaviour.CLEAR_CACHE, 5);
 
 		for (int i = 0; i < 6; i++) {
 			map.put(i, i);

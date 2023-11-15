@@ -31,7 +31,7 @@ public interface MIDisplay extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getDisplay_Name()
@@ -44,7 +44,7 @@ public interface MIDisplay extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
@@ -61,7 +61,7 @@ public interface MIDisplay extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Parent</em>' container reference.
 	 * @see #setParent(MIPlugin)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getDisplay_Parent()
@@ -75,7 +75,7 @@ public interface MIDisplay extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Parent</em>' container reference.
 	 * @see #getParent()
@@ -91,7 +91,7 @@ public interface MIDisplay extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getDisplay_Id()
@@ -104,7 +104,7 @@ public interface MIDisplay extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()

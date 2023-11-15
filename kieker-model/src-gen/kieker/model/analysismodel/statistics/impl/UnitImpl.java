@@ -2,12 +2,11 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 import kieker.model.analysismodel.statistics.Unit;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +19,7 @@ public class UnitImpl extends MinimalEObjectImpl.Container implements Unit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected UnitImpl() {
@@ -29,6 +29,7 @@ public class UnitImpl extends MinimalEObjectImpl.Container implements Unit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -36,4 +37,4 @@ public class UnitImpl extends MinimalEObjectImpl.Container implements Unit {
 		return StatisticsPackage.Literals.UNIT;
 	}
 
-} //UnitImpl
+} // UnitImpl

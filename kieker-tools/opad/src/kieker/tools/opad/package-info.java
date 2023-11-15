@@ -19,4 +19,3 @@
  *
  */
 package kieker.tools.opad;
-

@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Teerat Pitakrat
- * 
+ *
  * @since 1.12
  */
 public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverageRecord> {
-	
 
 	@Override
 	public LoadAverageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new LoadAverageRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

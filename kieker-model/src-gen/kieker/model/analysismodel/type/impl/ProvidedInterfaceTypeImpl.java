@@ -2,24 +2,20 @@
  */
 package kieker.model.analysismodel.type.impl;
 
-import kieker.model.analysismodel.type.OperationType;
-import kieker.model.analysismodel.type.ProvidedInterfaceType;
-import kieker.model.analysismodel.type.TypePackage;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.analysismodel.type.ProvidedInterfaceType;
+import kieker.model.analysismodel.type.TypePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,10 +25,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getProvidedOperationTypes <em>Provided Operation Types</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getPackage <em>Package</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getProvidedOperationTypes <em>Provided Operation Types</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getSignature <em>Signature</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl#getPackage <em>Package</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,6 +38,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The cached value of the '{@link #getProvidedOperationTypes() <em>Provided Operation Types</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getProvidedOperationTypes()
 	 * @generated
 	 * @ordered
@@ -52,6 +49,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -62,6 +60,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -72,6 +71,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -82,6 +82,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -92,6 +93,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The default value of the '{@link #getPackage() <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getPackage()
 	 * @generated
 	 * @ordered
@@ -102,6 +104,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	 * The cached value of the '{@link #getPackage() <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getPackage()
 	 * @generated
 	 * @ordered
@@ -111,6 +114,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected ProvidedInterfaceTypeImpl() {
@@ -120,6 +124,7 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -130,95 +135,107 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EMap<String, OperationType> getProvidedOperationTypes() {
-		if (providedOperationTypes == null) {
-			providedOperationTypes = new EcoreEMap<String,OperationType>(TypePackage.Literals.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY, InterfaceEStringToOperationTypeMapEntryImpl.class, this, TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES);
+		if (this.providedOperationTypes == null) {
+			this.providedOperationTypes = new EcoreEMap<>(TypePackage.Literals.INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY,
+					InterfaceEStringToOperationTypeMapEntryImpl.class, this, TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES);
 		}
-		return providedOperationTypes;
+		return this.providedOperationTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getSignature() {
-		return signature;
+		return this.signature;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setSignature(String newSignature) {
-		String oldSignature = signature;
-		signature = newSignature;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE, oldSignature, signature));
+	public void setSignature(final String newSignature) {
+		final String oldSignature = this.signature;
+		this.signature = newSignature;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE, oldSignature, this.signature));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getPackage() {
-		return package_;
+		return this.package_;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setPackage(String newPackage) {
-		String oldPackage = package_;
-		package_ = newPackage;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE, oldPackage, package_));
+	public void setPackage(final String newPackage) {
+		final String oldPackage = this.package_;
+		this.package_ = newPackage;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE, oldPackage, this.package_));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
-				return ((InternalEList<?>)getProvidedOperationTypes()).basicRemove(otherEnd, msgs);
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
+			return ((InternalEList<?>) this.getProvidedOperationTypes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -226,20 +243,24 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
-				if (coreType) return getProvidedOperationTypes();
-				else return getProvidedOperationTypes().map();
-			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
-				return getName();
-			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
-				return getSignature();
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
-				return getPackage();
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
+			if (coreType) {
+				return this.getProvidedOperationTypes();
+			} else {
+				return this.getProvidedOperationTypes().map();
+			}
+		case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
+			return this.getName();
+		case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+			return this.getSignature();
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+			return this.getPackage();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -247,23 +268,24 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
-				((EStructuralFeature.Setting)getProvidedOperationTypes()).set(newValue);
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
-				setName((String)newValue);
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
-				setSignature((String)newValue);
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
-				setPackage((String)newValue);
-				return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
+			((EStructuralFeature.Setting) this.getProvidedOperationTypes()).set(newValue);
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
+			this.setName((String) newValue);
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+			this.setSignature((String) newValue);
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+			this.setPackage((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -271,23 +293,24 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
-				getProvidedOperationTypes().clear();
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
-				setSignature(SIGNATURE_EDEFAULT);
-				return;
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
-				setPackage(PACKAGE_EDEFAULT);
-				return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
+			this.getProvidedOperationTypes().clear();
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+			this.setSignature(SIGNATURE_EDEFAULT);
+			return;
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+			this.setPackage(PACKAGE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -295,19 +318,20 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
-				return providedOperationTypes != null && !providedOperationTypes.isEmpty();
-			case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
-				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
-			case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
-				return PACKAGE_EDEFAULT == null ? package_ != null : !PACKAGE_EDEFAULT.equals(package_);
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES:
+			return (this.providedOperationTypes != null) && !this.providedOperationTypes.isEmpty();
+		case TypePackage.PROVIDED_INTERFACE_TYPE__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
+		case TypePackage.PROVIDED_INTERFACE_TYPE__SIGNATURE:
+			return SIGNATURE_EDEFAULT == null ? this.signature != null : !SIGNATURE_EDEFAULT.equals(this.signature);
+		case TypePackage.PROVIDED_INTERFACE_TYPE__PACKAGE:
+			return PACKAGE_EDEFAULT == null ? this.package_ != null : !PACKAGE_EDEFAULT.equals(this.package_);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -315,21 +339,24 @@ public class ProvidedInterfaceTypeImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", signature: ");
-		result.append(signature);
+		result.append(this.signature);
 		result.append(", package: ");
-		result.append(package_);
+		result.append(this.package_);
 		result.append(')');
 		return result.toString();
 	}
 
-} //ProvidedInterfaceTypeImpl
+} // ProvidedInterfaceTypeImpl

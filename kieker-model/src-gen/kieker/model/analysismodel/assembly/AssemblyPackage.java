@@ -13,13 +13,14 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- *   <li>each class,</li>
- *   <li>each feature of each class,</li>
- *   <li>each operation of each class,</li>
- *   <li>each enum,</li>
- *   <li>and each data type</li>
+ * <li>each class,</li>
+ * <li>each feature of each class,</li>
+ * <li>each operation of each class,</li>
+ * <li>each enum,</li>
+ * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.assembly.AssemblyFactory
  * @model kind="package"
  * @generated
@@ -29,6 +30,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNAME = "assembly";
@@ -37,6 +39,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore/assembly";
@@ -45,6 +48,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "assembly";
@@ -53,6 +57,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	AssemblyPackage eINSTANCE = kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl.init();
@@ -61,6 +66,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyModelImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyModel()
 	 * @generated
@@ -71,6 +77,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Components</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -80,6 +87,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -89,15 +97,18 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ASSEMBLY_MODEL_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map
+	 * Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyComponentMapEntry()
 	 * @generated
@@ -108,6 +119,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -117,6 +129,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -126,6 +139,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Assembly Component Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -135,6 +149,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>EString To Assembly Component Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -144,6 +159,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl <em>Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyComponent()
 	 * @generated
@@ -154,6 +170,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -163,6 +180,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Component Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -172,6 +190,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Storages</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -181,6 +200,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Contained Components</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -190,6 +210,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Interfaces</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -199,6 +220,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Required Interfaces</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -208,6 +230,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -217,6 +240,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -226,15 +250,18 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ASSEMBLY_COMPONENT_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map
+	 * Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyOperationMapEntry()
 	 * @generated
@@ -245,6 +272,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -254,6 +282,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -263,6 +292,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Assembly Operation Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -272,6 +302,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>EString To Assembly Operation Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -281,6 +312,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl <em>Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyOperation()
 	 * @generated
@@ -291,6 +323,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Operation Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -300,6 +333,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -309,6 +343,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The operation id for the '<em>Get Component</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -318,6 +353,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -327,6 +363,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl <em>Storage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyStorage()
 	 * @generated
@@ -337,6 +374,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Storage Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -346,6 +384,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Storage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -355,6 +394,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The operation id for the '<em>Get Component</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -364,15 +404,18 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Storage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ASSEMBLY_STORAGE_OPERATION_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl <em>EString To Assembly Storage Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl <em>EString To Assembly Storage Map
+	 * Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyStorageMapEntry()
 	 * @generated
@@ -383,6 +426,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -392,6 +436,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -401,6 +446,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Assembly Storage Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -410,6 +456,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>EString To Assembly Storage Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -419,6 +466,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl <em>Provided Interface</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyProvidedInterface()
 	 * @generated
@@ -429,6 +477,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Interface Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -438,6 +487,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Provided Interface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -447,15 +497,18 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Provided Interface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ASSEMBLY_PROVIDED_INTERFACE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl <em>EString To Assembly Provided Interface Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl <em>EString To Assembly Provided
+	 * Interface Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyProvidedInterfaceMapEntry()
 	 * @generated
@@ -466,6 +519,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -475,6 +529,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -484,6 +539,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Assembly Provided Interface Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -493,6 +549,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>EString To Assembly Provided Interface Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -502,6 +559,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl <em>Required Interface</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl
 	 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyRequiredInterface()
 	 * @generated
@@ -512,6 +570,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Requires</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -521,6 +580,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The feature id for the '<em><b>Required Interface Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -530,6 +590,7 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of structural features of the '<em>Required Interface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -539,16 +600,17 @@ public interface AssemblyPackage extends EPackage {
 	 * The number of operations of the '<em>Required Interface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int ASSEMBLY_REQUIRED_INTERFACE_OPERATION_COUNT = 0;
 
-
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Model</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyModel
 	 * @generated
@@ -559,6 +621,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyModel#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Components</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyModel#getComponents()
 	 * @see #getAssemblyModel()
@@ -570,6 +633,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Component Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Assembly Component Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -582,6 +646,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyComponentMapEntry()
@@ -593,6 +658,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyComponentMapEntry()
@@ -604,6 +670,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyComponent <em>Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Component</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent
 	 * @generated
@@ -614,6 +681,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getOperations <em>Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Operations</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getOperations()
 	 * @see #getAssemblyComponent()
@@ -625,6 +693,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Component Type</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getComponentType()
 	 * @see #getAssemblyComponent()
@@ -636,6 +705,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getStorages <em>Storages</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Storages</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getStorages()
 	 * @see #getAssemblyComponent()
@@ -644,9 +714,11 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyComponent_Storages();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getContainedComponents <em>Contained Components</em>}'.
+	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getContainedComponents <em>Contained
+	 * Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Contained Components</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getContainedComponents()
 	 * @see #getAssemblyComponent()
@@ -658,6 +730,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getProvidedInterfaces <em>Provided Interfaces</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Provided Interfaces</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getProvidedInterfaces()
 	 * @see #getAssemblyComponent()
@@ -666,9 +739,11 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyComponent_ProvidedInterfaces();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getRequiredInterfaces <em>Required Interfaces</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getRequiredInterfaces <em>Required
+	 * Interfaces</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Required Interfaces</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getRequiredInterfaces()
 	 * @see #getAssemblyComponent()
@@ -680,6 +755,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Signature</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyComponent#getSignature()
 	 * @see #getAssemblyComponent()
@@ -691,6 +767,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Operation Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Assembly Operation Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -703,6 +780,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyOperationMapEntry()
@@ -714,6 +792,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyOperationMapEntry()
@@ -725,6 +804,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyOperation <em>Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Operation</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyOperation
 	 * @generated
@@ -735,6 +815,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Operation Type</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyOperation#getOperationType()
 	 * @see #getAssemblyOperation()
@@ -746,6 +827,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyOperation#getComponent() <em>Get Component</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the '<em>Get Component</em>' operation.
 	 * @see kieker.model.analysismodel.assembly.AssemblyOperation#getComponent()
 	 * @generated
@@ -756,6 +838,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyStorage <em>Storage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Storage</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyStorage
 	 * @generated
@@ -766,6 +849,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyStorage#getStorageType <em>Storage Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Storage Type</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyStorage#getStorageType()
 	 * @see #getAssemblyStorage()
@@ -777,6 +861,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.assembly.AssemblyStorage#getComponent() <em>Get Component</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the '<em>Get Component</em>' operation.
 	 * @see kieker.model.analysismodel.assembly.AssemblyStorage#getComponent()
 	 * @generated
@@ -787,6 +872,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Storage Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Assembly Storage Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -799,6 +885,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyStorageMapEntry()
@@ -810,6 +897,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyStorageMapEntry()
@@ -821,6 +909,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface <em>Provided Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Provided Interface</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyProvidedInterface
 	 * @generated
@@ -828,9 +917,11 @@ public interface AssemblyPackage extends EPackage {
 	EClass getAssemblyProvidedInterface();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedInterfaceType <em>Provided Interface Type</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedInterfaceType <em>Provided
+	 * Interface Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Provided Interface Type</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyProvidedInterface#getProvidedInterfaceType()
 	 * @see #getAssemblyProvidedInterface()
@@ -842,6 +933,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Provided Interface Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Assembly Provided Interface Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -854,6 +946,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyProvidedInterfaceMapEntry()
@@ -865,6 +958,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToAssemblyProvidedInterfaceMapEntry()
@@ -876,6 +970,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface <em>Required Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Required Interface</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyRequiredInterface
 	 * @generated
@@ -886,6 +981,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequires <em>Requires</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Requires</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequires()
 	 * @see #getAssemblyRequiredInterface()
@@ -894,9 +990,11 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyRequiredInterface_Requires();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequiredInterfaceType <em>Required Interface Type</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequiredInterfaceType <em>Required
+	 * Interface Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Required Interface Type</em>'.
 	 * @see kieker.model.analysismodel.assembly.AssemblyRequiredInterface#getRequiredInterfaceType()
 	 * @see #getAssemblyRequiredInterface()
@@ -908,6 +1006,7 @@ public interface AssemblyPackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -917,13 +1016,14 @@ public interface AssemblyPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each operation of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 * <li>each class,</li>
+	 * <li>each feature of each class,</li>
+	 * <li>each operation of each class,</li>
+	 * <li>each enum,</li>
+	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
@@ -931,6 +1031,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyModelImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyModel()
 		 * @generated
@@ -941,14 +1042,17 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Components</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_MODEL__COMPONENTS = eINSTANCE.getAssemblyModel_Components();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component
+		 * Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyComponentMapEntry()
 		 * @generated
@@ -959,6 +1063,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY__KEY = eINSTANCE.getEStringToAssemblyComponentMapEntry_Key();
@@ -967,6 +1072,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY__VALUE = eINSTANCE.getEStringToAssemblyComponentMapEntry_Value();
@@ -975,6 +1081,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl <em>Component</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyComponentImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyComponent()
 		 * @generated
@@ -985,6 +1092,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__OPERATIONS = eINSTANCE.getAssemblyComponent_Operations();
@@ -993,6 +1101,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__COMPONENT_TYPE = eINSTANCE.getAssemblyComponent_ComponentType();
@@ -1001,6 +1110,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Storages</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__STORAGES = eINSTANCE.getAssemblyComponent_Storages();
@@ -1009,6 +1119,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Contained Components</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__CONTAINED_COMPONENTS = eINSTANCE.getAssemblyComponent_ContainedComponents();
@@ -1017,6 +1128,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Interfaces</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__PROVIDED_INTERFACES = eINSTANCE.getAssemblyComponent_ProvidedInterfaces();
@@ -1025,6 +1137,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Required Interfaces</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__REQUIRED_INTERFACES = eINSTANCE.getAssemblyComponent_RequiredInterfaces();
@@ -1033,14 +1146,17 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ASSEMBLY_COMPONENT__SIGNATURE = eINSTANCE.getAssemblyComponent_Signature();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation
+		 * Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyOperationMapEntry()
 		 * @generated
@@ -1051,6 +1167,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY__KEY = eINSTANCE.getEStringToAssemblyOperationMapEntry_Key();
@@ -1059,6 +1176,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY__VALUE = eINSTANCE.getEStringToAssemblyOperationMapEntry_Value();
@@ -1067,6 +1185,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl <em>Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyOperation()
 		 * @generated
@@ -1077,6 +1196,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Operation Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_OPERATION__OPERATION_TYPE = eINSTANCE.getAssemblyOperation_OperationType();
@@ -1085,6 +1205,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EOperation ASSEMBLY_OPERATION___GET_COMPONENT = eINSTANCE.getAssemblyOperation__GetComponent();
@@ -1093,6 +1214,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl <em>Storage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyStorageImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyStorage()
 		 * @generated
@@ -1103,6 +1225,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Storage Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_STORAGE__STORAGE_TYPE = eINSTANCE.getAssemblyStorage_StorageType();
@@ -1111,14 +1234,17 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EOperation ASSEMBLY_STORAGE___GET_COMPONENT = eINSTANCE.getAssemblyStorage__GetComponent();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl <em>EString To Assembly Storage Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl <em>EString To Assembly Storage Map
+		 * Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyStorageMapEntry()
 		 * @generated
@@ -1129,6 +1255,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY = eINSTANCE.getEStringToAssemblyStorageMapEntry_Key();
@@ -1137,6 +1264,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToAssemblyStorageMapEntry_Value();
@@ -1145,6 +1273,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl <em>Provided Interface</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyProvidedInterface()
 		 * @generated
@@ -1155,14 +1284,17 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Interface Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE = eINSTANCE.getAssemblyProvidedInterface_ProvidedInterfaceType();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl <em>EString To Assembly Provided Interface Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl <em>EString To Assembly
+		 * Provided Interface Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.EStringToAssemblyProvidedInterfaceMapEntryImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getEStringToAssemblyProvidedInterfaceMapEntry()
 		 * @generated
@@ -1173,6 +1305,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__KEY = eINSTANCE.getEStringToAssemblyProvidedInterfaceMapEntry_Key();
@@ -1181,6 +1314,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_ASSEMBLY_PROVIDED_INTERFACE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToAssemblyProvidedInterfaceMapEntry_Value();
@@ -1189,6 +1323,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl <em>Required Interface</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyRequiredInterfaceImpl
 		 * @see kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyRequiredInterface()
 		 * @generated
@@ -1199,6 +1334,7 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Requires</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_REQUIRED_INTERFACE__REQUIRES = eINSTANCE.getAssemblyRequiredInterface_Requires();
@@ -1207,10 +1343,11 @@ public interface AssemblyPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Required Interface Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ASSEMBLY_REQUIRED_INTERFACE__REQUIRED_INTERFACE_TYPE = eINSTANCE.getAssemblyRequiredInterface_RequiredInterfaceType();
 
 	}
 
-} //AssemblyPackage
+} // AssemblyPackage

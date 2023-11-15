@@ -46,7 +46,7 @@ public interface IMonitoringRecordDeserializer {
 
 	/**
 	 * Lifecycle event, is called before data is read.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If the initialization fails
 	 * @since 1.13
@@ -55,7 +55,7 @@ public interface IMonitoringRecordDeserializer {
 
 	/**
 	 * Lifecycle event, is called when the analysis terminates.
-	 * 
+	 *
 	 * @since 1.13
 	 */
 	public void terminate();

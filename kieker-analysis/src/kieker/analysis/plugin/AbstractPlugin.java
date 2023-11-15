@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +148,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Now create a linked queue for every output port of the class, to store the registered methods.
 		this.registeredMethods = new ConcurrentHashMap<>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
-			this.registeredMethods.put(outputPort.name(), new ArrayList<PluginInputPortReference>(1));
+			this.registeredMethods.put(outputPort.name(), new ArrayList<>(1));
 		}
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<>(1); // usually only one incoming
@@ -425,10 +424,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
 	 */
 	public final boolean areAllRepositoryPortsConnected() {
-		// Run through all port names and check them.
-		final Iterator<String> repositoryNameIter = this.repositoryPorts.keySet().iterator();
-		while (repositoryNameIter.hasNext()) {
-			if (!this.registeredRepositories.containsKey(repositoryNameIter.next())) {
+		for (final String element : this.repositoryPorts.keySet()) {
+			if (!this.registeredRepositories.containsKey(element)) {
 				// The current port is not connected.
 				return false;
 			}

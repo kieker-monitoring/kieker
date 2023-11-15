@@ -4,21 +4,24 @@ package kieker.model.collection.impl;
 
 import java.util.Map;
 
-import kieker.model.analysismodel.type.OperationType;
-
-import kieker.model.collection.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import kieker.model.analysismodel.type.OperationType;
+import kieker.model.collection.CollectionFactory;
+import kieker.model.collection.CollectionPackage;
+import kieker.model.collection.Connections;
+import kieker.model.collection.Coupling;
+import kieker.model.collection.OperationCollection;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
+ *
  * @generated
  */
 public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFactory {
@@ -26,16 +29,16 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static CollectionFactory init() {
 		try {
-			CollectionFactory theCollectionFactory = (CollectionFactory)EPackage.Registry.INSTANCE.getEFactory(CollectionPackage.eNS_URI);
+			final CollectionFactory theCollectionFactory = (CollectionFactory) EPackage.Registry.INSTANCE.getEFactory(CollectionPackage.eNS_URI);
 			if (theCollectionFactory != null) {
 				return theCollectionFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new CollectionFactoryImpl();
@@ -45,6 +48,7 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public CollectionFactoryImpl() {
@@ -54,87 +58,100 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
+	public EObject create(final EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case CollectionPackage.CONNECTIONS: return createConnections();
-			case CollectionPackage.OPERATION_COLLECTION: return createOperationCollection();
-			case CollectionPackage.COUPLING_TO_OPERATION_MAP: return (EObject)createCouplingToOperationMap();
-			case CollectionPackage.NAME_TO_OPERATION_MAP: return (EObject)createNameToOperationMap();
-			case CollectionPackage.COUPLING: return createCoupling();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case CollectionPackage.CONNECTIONS:
+			return this.createConnections();
+		case CollectionPackage.OPERATION_COLLECTION:
+			return this.createOperationCollection();
+		case CollectionPackage.COUPLING_TO_OPERATION_MAP:
+			return (EObject) this.createCouplingToOperationMap();
+		case CollectionPackage.NAME_TO_OPERATION_MAP:
+			return (EObject) this.createNameToOperationMap();
+		case CollectionPackage.COUPLING:
+			return this.createCoupling();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Connections createConnections() {
-		ConnectionsImpl connections = new ConnectionsImpl();
+		final ConnectionsImpl connections = new ConnectionsImpl();
 		return connections;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public OperationCollection createOperationCollection() {
-		OperationCollectionImpl operationCollection = new OperationCollectionImpl();
+		final OperationCollectionImpl operationCollection = new OperationCollectionImpl();
 		return operationCollection;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Map.Entry<Coupling, OperationCollection> createCouplingToOperationMap() {
-		CouplingToOperationMapImpl couplingToOperationMap = new CouplingToOperationMapImpl();
+		final CouplingToOperationMapImpl couplingToOperationMap = new CouplingToOperationMapImpl();
 		return couplingToOperationMap;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public Map.Entry<String, OperationType> createNameToOperationMap() {
-		NameToOperationMapImpl nameToOperationMap = new NameToOperationMapImpl();
+		final NameToOperationMapImpl nameToOperationMap = new NameToOperationMapImpl();
 		return nameToOperationMap;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Coupling createCoupling() {
-		CouplingImpl coupling = new CouplingImpl();
+		final CouplingImpl coupling = new CouplingImpl();
 		return coupling;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public CollectionPackage getCollectionPackage() {
-		return (CollectionPackage)getEPackage();
+		return (CollectionPackage) this.getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @deprecated
 	 * @generated
 	 */
@@ -143,4 +160,4 @@ public class CollectionFactoryImpl extends EFactoryImpl implements CollectionFac
 		return CollectionPackage.eINSTANCE;
 	}
 
-} //CollectionFactoryImpl
+} // CollectionFactoryImpl

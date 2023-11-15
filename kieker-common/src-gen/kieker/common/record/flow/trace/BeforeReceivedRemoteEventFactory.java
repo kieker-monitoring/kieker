@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Felix Eichhorst
- * 
+ *
  * @since 1.14
  */
 public final class BeforeReceivedRemoteEventFactory implements IRecordFactory<BeforeReceivedRemoteEvent> {
-	
 
 	@Override
 	public BeforeReceivedRemoteEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeReceivedRemoteEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

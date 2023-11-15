@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class CachedClassForNameResolver<T> {
 
-	private final ConcurrentMap<String, Class<? extends T>> cachedClasses = new ConcurrentHashMap<String, Class<? extends T>>(); // NOCS
+	private final ConcurrentMap<String, Class<? extends T>> cachedClasses = new ConcurrentHashMap<>(); // NOCS
 	private final ClassForNameResolver<T> classForNameResolver;
 
 	/**

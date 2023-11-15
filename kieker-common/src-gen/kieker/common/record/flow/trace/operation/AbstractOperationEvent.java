@@ -15,34 +15,31 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation;
 
-
 import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 
-import kieker.common.record.flow.IOperationRecord;
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.5
  */
-public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {			
-	
-		
+public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
+
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
 	private static final long serialVersionUID = -34090223642783143L;
-	
+
 	/** property declarations. */
 	private final String operationSignature;
 	private final String classSignature;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -56,25 +53,22 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
-		this.operationSignature = operationSignature == null?OPERATION_SIGNATURE:operationSignature;
-		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
+		this.operationSignature = operationSignature == null ? OPERATION_SIGNATURE : operationSignature;
+		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AbstractOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.operationSignature = deserializer.getString();
 		this.classSignature = deserializer.getString();
 	}
-	
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -89,18 +83,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractOperationEvent castedRecord = (AbstractOperationEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -109,34 +94,33 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
-	
-	
+
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -145,19 +129,19 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		String result = "AbstractOperationEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		return result;
 	}
 }

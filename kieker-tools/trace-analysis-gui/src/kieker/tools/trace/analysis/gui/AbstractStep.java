@@ -23,9 +23,9 @@ import javax.swing.JPanel;
 
 /**
  * An abstract base for all other steps within the trace analysis GUI.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public abstract class AbstractStep extends JPanel {

@@ -35,9 +35,9 @@ public class AssemblyRepository extends AbstractRepository {
 	/** This constant represents the root assembly component. */
 	public static final AssemblyComponent ROOT_ASSEMBLY_COMPONENT = new RootAssemblyComponent();
 
-	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<String, AssemblyComponent>(); // NOPMD
+	private final Map<String, AssemblyComponent> assemblyComponentInstancesByName = new Hashtable<>(); // NOPMD
 																																// (UseConcurrentHashMap)
-	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<Integer, AssemblyComponent>(); // NOPMD
+	private final Map<Integer, AssemblyComponent> assemblyComponentInstancesById = new Hashtable<>(); // NOPMD
 																																// (UseConcurrentHashMap)
 
 	/**

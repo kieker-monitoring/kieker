@@ -43,3 +43,11 @@ entity ThreadMetaData {
 	string hostname
 	long threadId
 }
+
+@author "Reiner Jung" @since "2.0.0"
+entity OperationCallEvent {
+	string sourceComponent
+	string sourceOperation
+	string targetComponent
+	string targetOperation
+}

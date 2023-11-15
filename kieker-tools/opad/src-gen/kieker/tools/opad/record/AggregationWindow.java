@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 /**
  * @author Thomas Duellmann
  *         API compatibility: Kieker 1.15.0
- * 
+ *
  * @since 1.10
  */
 public class AggregationWindow extends AbstractMonitoringRecord {
@@ -52,7 +52,7 @@ public class AggregationWindow extends AbstractMonitoringRecord {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param windowStart
 	 *            windowStart
 	 * @param windowEnd
@@ -123,13 +123,7 @@ public class AggregationWindow extends AbstractMonitoringRecord {
 		}
 
 		final AggregationWindow castedRecord = (AggregationWindow) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getWindowStart() != castedRecord.getWindowStart()) {
-			return false;
-		}
-		if (this.getWindowEnd() != castedRecord.getWindowEnd()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getWindowStart() != castedRecord.getWindowStart()) || (this.getWindowEnd() != castedRecord.getWindowEnd())) {
 			return false;
 		}
 

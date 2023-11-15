@@ -21,7 +21,7 @@ import kieker.tools.opad.timeseries.TimeSeriesPoint;
 /**
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implements INamedElement {
 
@@ -29,7 +29,7 @@ public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implemen
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param time
 	 *            timestamp
 	 * @param value

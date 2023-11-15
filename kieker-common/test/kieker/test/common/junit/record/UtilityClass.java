@@ -52,7 +52,7 @@ public final class UtilityClass {
 
 	/**
 	 * Check if a callee signature references another signature of another event.
-	 * 
+	 *
 	 * @param left
 	 *            The first record.
 	 * @param right

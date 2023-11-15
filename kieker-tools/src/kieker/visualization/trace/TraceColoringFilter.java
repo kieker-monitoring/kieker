@@ -16,7 +16,6 @@
 package kieker.visualization.trace;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,10 +70,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		TraceInformation relevantTraceInformation = null;
 		int relevantOrigins = 0;
 
-		// Count the relevant origins from the origin set
-		final Iterator<TraceInformation> origins = element.getOrigins().iterator();
-		while (origins.hasNext()) {
-			final TraceInformation traceInformation = origins.next();
+		for (TraceInformation traceInformation : element.getOrigins()) {
 			final long traceId = traceInformation.getTraceId();
 
 			if (this.colorMap.containsKey(traceId)) {

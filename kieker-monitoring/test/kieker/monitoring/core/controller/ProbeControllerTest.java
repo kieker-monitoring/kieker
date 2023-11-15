@@ -110,7 +110,7 @@ public class ProbeControllerTest {
 	 */
 	@Test
 	public void testGetProbePatternList() {
-		this.controller.setProbePatternList(new ArrayList<String>());
+		this.controller.setProbePatternList(new ArrayList<>());
 		final List<String> patterns = this.controller.getProbePatternList();
 		Assert.assertEquals("Before storing patterns, list should be empty", 0, patterns.size());
 

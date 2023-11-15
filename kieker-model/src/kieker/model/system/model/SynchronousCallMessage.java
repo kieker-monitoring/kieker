@@ -18,16 +18,16 @@ package kieker.model.system.model;
 
 /**
  * A specified class of messages which represent synchronous calls.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class SynchronousCallMessage extends AbstractMessage {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp of the message.
 	 * @param sendingExecution

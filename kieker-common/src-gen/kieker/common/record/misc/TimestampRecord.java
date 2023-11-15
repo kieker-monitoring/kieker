@@ -22,36 +22,35 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.5
  */
-public class TimestampRecord extends AbstractMonitoringRecord  {			
+public class TimestampRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG; // TimestampRecord.timestamp
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // TimestampRecord.timestamp
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -6797766837645151845L;
-	
+
 	/** property declarations. */
 	private final long timestamp;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 */
@@ -59,17 +58,16 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		this.timestamp = timestamp;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public TimestampRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -77,7 +75,7 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -85,7 +83,7 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -93,7 +91,7 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -102,7 +100,6 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,33 +114,30 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final TimestampRecord castedRecord = (TimestampRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp())) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		
+		code += ((int) this.getTimestamp());
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,7 +146,7 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		String result = "TimestampRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		return result;
 	}
 }

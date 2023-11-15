@@ -23,10 +23,10 @@ import kieker.tools.trace.analysis.systemModel.AbstractTrace;
 
 /**
  * Comparator which compares abstract traces according to their end timestamps.
- * 
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  */
 public class TraceEndTimestampComparator implements Comparator<AbstractTrace>, Serializable {
 

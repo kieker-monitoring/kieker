@@ -31,7 +31,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
 
 /**
  * Tests whether instrumented execution with constructorExecution creates the expected records.
- * 
+ *
  * @author DaGeRe
  *
  */
@@ -48,7 +48,7 @@ public class TestConstructorExecution {
 		final File logFolder = Util.runTestcase(temporaryFile, "TestSimpleOperationExecution");
 
 		final List<String> lines = Util.getLatestLogRecord(logFolder);
-		checkConstructorResult(lines);
+		TestConstructorExecution.checkConstructorResult(lines);
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class TestConstructorExecution {
 		final File logFolder = Util.runTestcase(temporaryFile, "TestOperationExecutionException");
 
 		final List<String> lines = Util.getLatestLogRecord(logFolder);
-		checkThrowingConstructorResult(lines);
+		TestConstructorExecution.checkThrowingConstructorResult(lines);
 	}
 
 	public static void checkConstructorResult(final List<String> lines) {

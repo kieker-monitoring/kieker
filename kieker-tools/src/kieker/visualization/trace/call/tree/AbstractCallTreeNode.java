@@ -41,7 +41,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	private final boolean rootNode;
 
-	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
+	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this class.

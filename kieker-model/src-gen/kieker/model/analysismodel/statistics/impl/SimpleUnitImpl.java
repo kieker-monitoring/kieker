@@ -2,15 +2,13 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.model.analysismodel.statistics.EPrefix;
 import kieker.model.analysismodel.statistics.SimpleUnit;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +18,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.SimpleUnitImpl#getPrefix <em>Prefix</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.SimpleUnitImpl#getPrefix <em>Prefix</em>}</li>
  * </ul>
  *
  * @generated
@@ -30,6 +28,7 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	 * The default value of the '{@link #getPrefix() <em>Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getPrefix()
 	 * @generated
 	 * @ordered
@@ -40,6 +39,7 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	 * The cached value of the '{@link #getPrefix() <em>Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getPrefix()
 	 * @generated
 	 * @ordered
@@ -49,6 +49,7 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected SimpleUnitImpl() {
@@ -58,6 +59,7 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -68,36 +70,40 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EPrefix getPrefix() {
-		return prefix;
+		return this.prefix;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setPrefix(EPrefix newPrefix) {
-		EPrefix oldPrefix = prefix;
-		prefix = newPrefix == null ? PREFIX_EDEFAULT : newPrefix;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.SIMPLE_UNIT__PREFIX, oldPrefix, prefix));
+	public void setPrefix(final EPrefix newPrefix) {
+		final EPrefix oldPrefix = this.prefix;
+		this.prefix = newPrefix == null ? PREFIX_EDEFAULT : newPrefix;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.SIMPLE_UNIT__PREFIX, oldPrefix, this.prefix));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.SIMPLE_UNIT__PREFIX:
-				return getPrefix();
+		case StatisticsPackage.SIMPLE_UNIT__PREFIX:
+			return this.getPrefix();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -105,14 +111,15 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.SIMPLE_UNIT__PREFIX:
-				setPrefix((EPrefix)newValue);
-				return;
+		case StatisticsPackage.SIMPLE_UNIT__PREFIX:
+			this.setPrefix((EPrefix) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -120,14 +127,15 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.SIMPLE_UNIT__PREFIX:
-				setPrefix(PREFIX_EDEFAULT);
-				return;
+		case StatisticsPackage.SIMPLE_UNIT__PREFIX:
+			this.setPrefix(PREFIX_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -135,13 +143,14 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.SIMPLE_UNIT__PREFIX:
-				return prefix != PREFIX_EDEFAULT;
+		case StatisticsPackage.SIMPLE_UNIT__PREFIX:
+			return this.prefix != PREFIX_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -149,17 +158,20 @@ public class SimpleUnitImpl extends UnitImpl implements SimpleUnit {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (prefix: ");
-		result.append(prefix);
+		result.append(this.prefix);
 		result.append(')');
 		return result.toString();
 	}
 
-} //SimpleUnitImpl
+} // SimpleUnitImpl

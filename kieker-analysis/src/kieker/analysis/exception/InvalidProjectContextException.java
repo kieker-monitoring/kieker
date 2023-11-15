@@ -18,9 +18,9 @@ package kieker.analysis.exception;
 
 /**
  * An exception to show that a plugin received an invalid project context.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public class InvalidProjectContextException extends RuntimeException {
@@ -29,7 +29,7 @@ public class InvalidProjectContextException extends RuntimeException {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param message
 	 *            The message of the exception.
 	 * @param cause
@@ -41,7 +41,7 @@ public class InvalidProjectContextException extends RuntimeException {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param message
 	 *            The message of the exception.
 	 */

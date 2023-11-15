@@ -18,29 +18,26 @@ package kieker.common.record.flow.trace.operation;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.trace.operation.IPayloadCharacterization;
-
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 2.0.0
  */
-public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent implements IPayloadCharacterization {			
+public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent implements IPayloadCharacterization {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IPayloadCharacterization.parameters
-			 + TYPE_SIZE_STRING // IPayloadCharacterization.values
-			 + TYPE_SIZE_INT; // IPayloadCharacterization.requestType
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // IPayloadCharacterization.parameters
+			+ TYPE_SIZE_STRING // IPayloadCharacterization.values
+			+ TYPE_SIZE_INT; // IPayloadCharacterization.requestType
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -51,7 +48,7 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		String[].class, // IPayloadCharacterization.values
 		int.class, // IPayloadCharacterization.requestType
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -63,17 +60,17 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		"values",
 		"requestType",
 	};
-	
+
 	private static final long serialVersionUID = -5792998777554640602L;
-	
+
 	/** property declarations. */
 	private final String[] parameters;
 	private final String[] values;
 	private final int requestType;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -91,37 +88,39 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	 * @param requestType
 	 *            requestType
 	 */
-	public EntryLevelBeforeOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String[] parameters, final String[] values, final int requestType) {
+	public EntryLevelBeforeOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final String[] parameters, final String[] values, final int requestType) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.parameters = parameters;
 		this.values = values;
 		this.requestType = requestType;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public EntryLevelBeforeOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		// load array sizes
 		final int _parameters_size0 = deserializer.getInt();
 		this.parameters = new String[_parameters_size0];
-		for (int i0=0;i0<_parameters_size0;i0++)
+		for (int i0 = 0; i0 < _parameters_size0; i0++) {
 			this.parameters[i0] = deserializer.getString();
-		
+		}
+
 		// load array sizes
 		final int _values_size0 = deserializer.getInt();
 		this.values = new String[_values_size0];
-		for (int i0=0;i0<_values_size0;i0++)
+		for (int i0 = 0; i0 < _values_size0; i0++) {
 			this.values[i0] = deserializer.getString();
-		
+		}
+
 		this.requestType = deserializer.getInt();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -133,20 +132,22 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		serializer.putString(this.getOperationSignature());
 		serializer.putString(this.getClassSignature());
 		// store array sizes
-		int _parameters_size0 = this.getParameters().length;
+		final int _parameters_size0 = this.getParameters().length;
 		serializer.putInt(_parameters_size0);
-		for (int i0=0;i0<_parameters_size0;i0++)
+		for (int i0 = 0; i0 < _parameters_size0; i0++) {
 			serializer.putString(this.getParameters()[i0]);
-		
+		}
+
 		// store array sizes
-		int _values_size0 = this.getValues().length;
+		final int _values_size0 = this.getValues().length;
 		serializer.putInt(_values_size0);
-		for (int i0=0;i0<_values_size0;i0++)
+		for (int i0 = 0; i0 < _values_size0; i0++) {
 			serializer.putString(this.getValues()[i0]);
-		
+		}
+
 		serializer.putInt(this.getRequestType());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -154,7 +155,7 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +163,7 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,7 +172,6 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -186,18 +186,9 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final EntryLevelBeforeOperationEvent castedRecord = (EntryLevelBeforeOperationEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -207,76 +198,76 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 			return false;
 		}
 		// get array length
-		int _parameters_size0 = this.getParameters().length;
+		final int _parameters_size0 = this.getParameters().length;
 		if (_parameters_size0 != castedRecord.getParameters().length) {
 			return false;
 		}
-		for (int i0=0;i0<_parameters_size0;i0++)
+		for (int i0 = 0; i0 < _parameters_size0; i0++) {
 			if (!this.getParameters()[i0].equals(castedRecord.getParameters()[i0])) {
 				return false;
 			}
-		
+		}
+
 		// get array length
-		int _values_size0 = this.getValues().length;
+		final int _values_size0 = this.getValues().length;
 		if (_values_size0 != castedRecord.getValues().length) {
 			return false;
 		}
-		for (int i0=0;i0<_values_size0;i0++)
+		for (int i0 = 0; i0 < _values_size0; i0++) {
 			if (!this.getValues()[i0].equals(castedRecord.getValues()[i0])) {
 				return false;
 			}
-		
+		}
+
 		if (this.getRequestType() != castedRecord.getRequestType()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
 		// get array length
-		for (int i0=0;i0 < this.parameters.length;i0++) {
-			for (int i1=0;i1 < this.parameters.length;i1++) {
+		for (int i0 = 0; i0 < this.parameters.length; i0++) {
+			for (int i1 = 0; i1 < this.parameters.length; i1++) {
 				code += this.getParameters()[i0].hashCode();
 			}
 		}
-		
+
 		// get array length
-		for (int i0=0;i0 < this.values.length;i0++) {
-			for (int i1=0;i1 < this.values.length;i1++) {
+		for (int i0 = 0; i0 < this.values.length; i0++) {
+			for (int i1 = 0; i1 < this.values.length; i1++) {
 				code += this.getValues()[i0].hashCode();
 			}
 		}
-		
-		code += ((int)this.getRequestType());
-		
+
+		code += (this.getRequestType());
+
 		return code;
 	}
-	
+
 	public final String[] getParameters() {
 		return this.parameters;
 	}
-	
-	
+
 	public final String[] getValues() {
 		return this.values;
 	}
-	
-	
+
 	public final int getRequestType() {
 		return this.requestType;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -285,38 +276,40 @@ public class EntryLevelBeforeOperationEvent extends BeforeOperationEvent impleme
 		String result = "EntryLevelBeforeOperationEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "parameters = ";
 		// store array sizes
-		int _parameters_size0 = this.getParameters().length;
+		final int _parameters_size0 = this.getParameters().length;
 		result += "{ ";
-		for (int i0=0;i0<_parameters_size0;i0++)
+		for (int i0 = 0; i0 < _parameters_size0; i0++) {
 			result += this.getParameters()[i0] + ", ";
+		}
 		result += " }";
-		
+
 		result += "values = ";
 		// store array sizes
-		int _values_size0 = this.getValues().length;
+		final int _values_size0 = this.getValues().length;
 		result += "{ ";
-		for (int i0=0;i0<_values_size0;i0++)
+		for (int i0 = 0; i0 < _values_size0; i0++) {
 			result += this.getValues()[i0] + ", ";
+		}
 		result += " }";
-		
+
 		result += "requestType = ";
 		result += this.getRequestType() + ", ";
-		
+
 		return result;
 	}
 }

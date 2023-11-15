@@ -4,15 +4,13 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.time.Instant;
 
-import kieker.model.analysismodel.statistics.Measurement;
-import kieker.model.analysismodel.statistics.StatisticsPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.statistics.Measurement;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +20,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.MeasurementImpl#getTimestamp <em>Timestamp</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.MeasurementImpl#getTimestamp <em>Timestamp</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,6 +30,7 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	 * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTimestamp()
 	 * @generated
 	 * @ordered
@@ -42,6 +41,7 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	 * The cached value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTimestamp()
 	 * @generated
 	 * @ordered
@@ -51,6 +51,7 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected MeasurementImpl() {
@@ -60,6 +61,7 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -70,36 +72,40 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public Instant getTimestamp() {
-		return timestamp;
+		return this.timestamp;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setTimestamp(Instant newTimestamp) {
-		Instant oldTimestamp = timestamp;
-		timestamp = newTimestamp;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.MEASUREMENT__TIMESTAMP, oldTimestamp, timestamp));
+	public void setTimestamp(final Instant newTimestamp) {
+		final Instant oldTimestamp = this.timestamp;
+		this.timestamp = newTimestamp;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.MEASUREMENT__TIMESTAMP, oldTimestamp, this.timestamp));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
-				return getTimestamp();
+		case StatisticsPackage.MEASUREMENT__TIMESTAMP:
+			return this.getTimestamp();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -107,14 +113,15 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
-				setTimestamp((Instant)newValue);
-				return;
+		case StatisticsPackage.MEASUREMENT__TIMESTAMP:
+			this.setTimestamp((Instant) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -122,14 +129,15 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
-				setTimestamp(TIMESTAMP_EDEFAULT);
-				return;
+		case StatisticsPackage.MEASUREMENT__TIMESTAMP:
+			this.setTimestamp(TIMESTAMP_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -137,13 +145,14 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.MEASUREMENT__TIMESTAMP:
-				return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
+		case StatisticsPackage.MEASUREMENT__TIMESTAMP:
+			return TIMESTAMP_EDEFAULT == null ? this.timestamp != null : !TIMESTAMP_EDEFAULT.equals(this.timestamp);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -151,17 +160,20 @@ public abstract class MeasurementImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (timestamp: ");
-		result.append(timestamp);
+		result.append(this.timestamp);
 		result.append(')');
 		return result.toString();
 	}
 
-} //MeasurementImpl
+} // MeasurementImpl

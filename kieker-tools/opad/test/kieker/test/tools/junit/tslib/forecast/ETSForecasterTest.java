@@ -33,7 +33,7 @@ import kieker.test.tools.junit.opad.util.AbstractKiekerRTest;
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  */
 public class ETSForecasterTest extends AbstractKiekerRTest {
 	private static final long START_TIME = 98890787;

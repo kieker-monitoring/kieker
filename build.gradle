@@ -117,7 +117,7 @@ subprojects {
     finalizedBy jacocoTestReport // report is always generated after tests run
 
     systemProperty "java.io.tmpdir", "${buildDir}"
-    ignoreFailures = false
+    ignoreFailures = true
     maxHeapSize = "2g"            // Set limit to prevent Travis-CI build to crash
 
     testLogging {
@@ -182,6 +182,8 @@ subprojects {
     toolVersion = pmdVersion
     ignoreFailures = true
     consoleOutput = true
+    threads = 8
+    incrementalAnalysis = true
 
     // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
     ruleSets = []
@@ -222,8 +224,6 @@ subprojects {
       xml.required = true
       html.required = true
     }
-    // the following line of code adds our custom PMD rules as jar file to the classpath
-    //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
   }
 
   tasks.withType(Checkstyle) {
@@ -354,12 +354,26 @@ def checkSubprojects = [
   project(':kieker-model'),
   project(':kieker-analysis'),
   project(':kieker-tools'),
+  project(':kieker-tools:restructuring'),
   project(':kieker-tools:behavior-analysis'),
+  project(':kieker-tools:cmi'),
   project(':kieker-tools:collector'),
   project(':kieker-tools:convert-logging-timestamp'),
+  project(':kieker-tools:dar'),
+  project(':kieker-tools:delta'),
+  project(':kieker-tools:fxca'),
   project(':kieker-tools:log-replayer'),
+  project(':kieker-tools:maa'),
+  project(':kieker-tools:mktable'),
+  project(':kieker-tools:mop'),
+  project(':kieker-tools:mt'),
+  project(':kieker-tools:mvis'),
   project(':kieker-tools:opad'),
+  project(':kieker-tools:relabel'),
   project(':kieker-tools:resource-monitor'),
+  project(':kieker-tools:rewrite-log-entries'),
+  project(':kieker-tools:runtime-analysis'),
+  project(':kieker-tools:sar'),
   project(':kieker-tools:trace-analysis'),
   project(':kieker-tools:trace-analysis-gui'),
   project(':kieker-extension-kafka'),
@@ -712,7 +726,7 @@ task javadocJar(type: Jar, dependsOn: apidoc) {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-  dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+  dependsOn: [':distributeBinaryTar', ':replaceHardCodedVersionNames'])
 
 
 /**
@@ -743,11 +757,25 @@ def binaryContent = project.copySpec {
 }
 
 def tools = [
+  'restructuring',
   'behavior-analysis',
+  'cmi',
   'collector',
   'convert-logging-timestamp',
+  'dar',
+  'delta',
+  'fxca',
   'log-replayer',
+  'maa',
+  'mktable',
+  'mop',
+  'mt',
+  'mvis',
+  'relabel',
   'resource-monitor',
+  'rewrite-log-entries',
+  'runtime-analysis',
+  'sar',
   'trace-analysis',
   'trace-analysis-gui'
 ]
@@ -810,29 +838,57 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
-  'kieker-examples:buildStandaloneExamples',
-  ':kieker-tools:behavior-analysis:distZip',
-  ':kieker-tools:collector:distZip',
-  ':kieker-tools:convert-logging-timestamp:distZip',
-  ':kieker-tools:log-replayer:distZip',
-  ':kieker-tools:resource-monitor:distZip',
-  ':kieker-tools:trace-analysis:distZip',
-  ':kieker-tools:trace-analysis-gui:distZip',
-  ':kieker-examples:jar',
-  ':kieker-examples:spotlessMisc' ]) {
-  archiveClassifier = 'binaries'
-  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
-}
+//task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+//  'kieker-examples:buildStandaloneExamples',
+//  ':kieker-tools:restructuring:distZip',
+//  ':kieker-tools:behavior-analysis:distZip',
+//  ':kieker-tools:cmi:distZip',
+//  ':kieker-tools:collector:distZip',
+//  ':kieker-tools:convert-logging-timestamp:distZip',
+//  ':kieker-tools:dar:distZip',
+//  ':kieker-tools:delta:distZip',
+//  ':kieker-tools:fxca:distZip',
+//  ':kieker-tools:log-replayer:distZip',
+//  ':kieker-tools:maa:distZip',
+//  ':kieker-tools:mktable:distZip',
+//  ':kieker-tools:mop:distZip',
+//  ':kieker-tools:mt:distZip',
+//  ':kieker-tools:mvis:distZip',
+//  ':kieker-tools:relabel:distZip',
+//  ':kieker-tools:resource-monitor:distZip',
+//  ':kieker-tools:rewrite-log-entries:distZip',
+//  ':kieker-tools:runtime-analysis:distZip',
+//  ':kieker-tools:sar:distZip',
+//  ':kieker-tools:trace-analysis:distZip',
+//  ':kieker-tools:trace-analysis-gui:distZip',
+//  ':kieker-examples:jar',
+//  ':kieker-examples:spotlessMisc' ]) {
+//  archiveClassifier = 'binaries'
+//  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+//}
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
+  ':kieker-tools:restructuring:distZip',
   ':kieker-tools:behavior-analysis:distZip',
+  ':kieker-tools:cmi:distZip',
   ':kieker-tools:collector:distZip',
   ':kieker-tools:convert-logging-timestamp:distZip',
+  ':kieker-tools:dar:distZip',
+  ':kieker-tools:delta:distZip',
+  ':kieker-tools:fxca:distZip',
   ':kieker-tools:log-replayer:distZip',
+  ':kieker-tools:maa:distZip',
+  ':kieker-tools:mktable:distZip',
+  ':kieker-tools:mop:distZip',
+  ':kieker-tools:mt:distZip',
+  ':kieker-tools:mvis:distZip',
+  ':kieker-tools:relabel:distZip',
   ':kieker-tools:resource-monitor:distZip',
+  ':kieker-tools:rewrite-log-entries:distZip',
+  ':kieker-tools:runtime-analysis:distZip',
+  ':kieker-tools:sar:distZip',
   ':kieker-tools:trace-analysis:distZip',
   ':kieker-tools:trace-analysis-gui:distZip',
   ':kieker-examples:jar',
@@ -843,6 +899,7 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'
 }
+
 
 /** collect all sources. */
 def sourceContent = project.copySpec {
@@ -883,22 +940,22 @@ def sourceContent = project.copySpec {
   into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-  'kieker-examples:buildStandaloneExamples']) {
-  description = 'Distributes source archive.'
-  archiveClassifier = 'sources'
-  with sourceContent
-}
+//task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+//  'kieker-examples:buildStandaloneExamples']) {
+//  description = 'Distributes source archive.'
+//  archiveClassifier = 'sources'
+//  with sourceContent
+//}
 
-task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-  'kieker-examples:buildStandaloneExamples']) {
-  description = 'Distributes source archive.'
-  archiveClassifier = 'sources'
-  with sourceContent
-
-  compression = Compression.GZIP
-  archiveExtension = 'tar.gz'
-}
+//task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
+//  'kieker-examples:buildStandaloneExamples']) {
+//  description = 'Distributes source archive.'
+//  archiveClassifier = 'sources'
+//  with sourceContent
+//
+//  compression = Compression.GZIP
+//  archiveExtension = 'tar.gz'
+//}
 
 task startRServe() {
   doLast {

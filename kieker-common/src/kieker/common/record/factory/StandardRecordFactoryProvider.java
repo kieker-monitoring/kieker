@@ -24,39 +24,39 @@ import kieker.common.util.classpath.ClassForNameResolver;
 /**
  * This factory provider implements the default factory resolution strategy by appending "Factory" to the record class name
  * and loading the respective class.
- * 
+ *
  * @author Holger Knoche
  * @since 2.0
  */
 @SuppressWarnings("rawtypes")
 public class StandardRecordFactoryProvider implements IRecordFactoryProvider {
 
-    private final ClassForNameResolver<IRecordFactory> classForNameResolver = new ClassForNameResolver<>(IRecordFactory.class);
+	private final ClassForNameResolver<IRecordFactory> classForNameResolver = new ClassForNameResolver<>(IRecordFactory.class);
 
-    public StandardRecordFactoryProvider() {
-        // Empty default constructor
-    }
+	public StandardRecordFactoryProvider() {
+		// Empty default constructor
+	}
 
-    @Override
-    public boolean isApplicableTo(final Class<?> recordClass) {
-        return true;
-    }
+	@Override
+	public boolean isApplicableTo(final Class<?> recordClass) {
+		return true;
+	}
 
-    private String buildRecordFactoryClassName(final String recordClassName) {
+	private String buildRecordFactoryClassName(final String recordClassName) {
 		return recordClassName + "Factory";
 	}
 
-    @Override
-    public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
-        final String recordFactoryClassName = this.buildRecordFactoryClassName(recordClass.getName());
+	@Override
+	public IRecordFactory<?> createFactoryFor(final Class<?> recordClass) {
+		final String recordFactoryClassName = this.buildRecordFactoryClassName(recordClass.getName());
 
 		try {
 			final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
-            final Constructor<? extends IRecordFactory> defaultConstructor = recordFactoryClass.getConstructor();
+			final Constructor<? extends IRecordFactory> defaultConstructor = recordFactoryClass.getConstructor();
 			return defaultConstructor.newInstance();
 		} catch (final ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			return null;
 		}
-    }
-    
+	}
+
 }

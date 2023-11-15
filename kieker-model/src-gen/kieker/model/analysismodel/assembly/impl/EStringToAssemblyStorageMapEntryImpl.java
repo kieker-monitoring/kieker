@@ -2,21 +2,18 @@
  */
 package kieker.model.analysismodel.assembly.impl;
 
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.AssemblyStorage;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+import kieker.model.analysismodel.assembly.AssemblyStorage;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,17 +23,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link kieker.model.analysismodel.assembly.impl.EStringToAssemblyStorageMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,AssemblyStorage> {
+public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String, AssemblyStorage> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -47,6 +45,7 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -57,6 +56,7 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -66,6 +66,7 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected EStringToAssemblyStorageMapEntryImpl() {
@@ -75,6 +76,7 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -85,44 +87,55 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public String getTypedKey() {
-		return key;
+		return this.key;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedKey(String newKey) {
-		String oldKey = key;
-		key = newKey;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY, oldKey, key));
+	public void setTypedKey(final String newKey) {
+		final String oldKey = this.key;
+		this.key = newKey;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY, oldKey, this.key));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public AssemblyStorage getTypedValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(AssemblyStorage newValue, NotificationChain msgs) {
-		AssemblyStorage oldValue = value;
-		value = newValue;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+	public NotificationChain basicSetTypedValue(final AssemblyStorage newValue, NotificationChain msgs) {
+		final AssemblyStorage oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE,
+					oldValue,
+					newValue);
+			if (msgs == null) {
+				msgs = notification;
+			} else {
+				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
@@ -130,32 +143,41 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	public void setTypedValue(AssemblyStorage newValue) {
-		if (newValue != value) {
+	public void setTypedValue(final AssemblyStorage newValue) {
+		if (newValue != this.value) {
 			NotificationChain msgs = null;
-			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, null, msgs);
-			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, null, msgs);
-			msgs = basicSetTypedValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
+			if (this.value != null) {
+				msgs = ((InternalEObject) this.value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE,
+						null,
+						msgs);
+			}
+			if (newValue != null) {
+				msgs = ((InternalEObject) newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, null,
+						msgs);
+			}
+			msgs = this.basicSetTypedValue(newValue, msgs);
+			if (msgs != null) {
+				msgs.dispatch();
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, newValue, newValue));
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE, newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
-				return basicSetTypedValue(null, msgs);
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
+			return this.basicSetTypedValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -163,15 +185,16 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
-				return getTypedKey();
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
-				return getTypedValue();
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
+			return this.getTypedKey();
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
+			return this.getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -179,17 +202,18 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
-				setTypedKey((String)newValue);
-				return;
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
-				setTypedValue((AssemblyStorage)newValue);
-				return;
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
+			this.setTypedKey((String) newValue);
+			return;
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
+			this.setTypedValue((AssemblyStorage) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -197,17 +221,18 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
-				setTypedKey(KEY_EDEFAULT);
-				return;
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
-				setTypedValue((AssemblyStorage)null);
-				return;
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
+			this.setTypedKey(KEY_EDEFAULT);
+			return;
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
+			this.setTypedValue((AssemblyStorage) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -215,15 +240,16 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
-				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
-				return value != null;
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__KEY:
+			return KEY_EDEFAULT == null ? this.key != null : !KEY_EDEFAULT.equals(this.key);
+		case AssemblyPackage.ESTRING_TO_ASSEMBLY_STORAGE_MAP_ENTRY__VALUE:
+			return this.value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -231,15 +257,18 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (key: ");
-		result.append(key);
+		result.append(this.key);
 		result.append(')');
 		return result.toString();
 	}
@@ -247,6 +276,7 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -254,78 +284,85 @@ public class EStringToAssemblyStorageMapEntryImpl extends MinimalEObjectImpl.Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getHash() {
-		if (hash == -1) {
-			Object theKey = getKey();
-			hash = (theKey == null ? 0 : theKey.hashCode());
+		if (this.hash == -1) {
+			final Object theKey = this.getKey();
+			this.hash = (theKey == null ? 0 : theKey.hashCode());
 		}
-		return hash;
+		return this.hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setHash(int hash) {
+	public void setHash(final int hash) {
 		this.hash = hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getKey() {
-		return getTypedKey();
+		return this.getTypedKey();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setKey(String key) {
-		setTypedKey(key);
+	public void setKey(final String key) {
+		this.setTypedKey(key);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AssemblyStorage getValue() {
-		return getTypedValue();
+		return this.getTypedValue();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public AssemblyStorage setValue(AssemblyStorage value) {
-		AssemblyStorage oldValue = getValue();
-		setTypedValue(value);
+	public AssemblyStorage setValue(final AssemblyStorage value) {
+		final AssemblyStorage oldValue = this.getValue();
+		this.setTypedValue(value);
 		return oldValue;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<String, AssemblyStorage> getEMap() {
-		EObject container = eContainer();
-		return container == null ? null : (EMap<String, AssemblyStorage>)container.eGet(eContainmentFeature());
+		final EObject container = this.eContainer();
+		return container == null ? null : (EMap<String, AssemblyStorage>) container.eGet(this.eContainmentFeature());
 	}
 
-} //EStringToAssemblyStorageMapEntryImpl
+} // EStringToAssemblyStorageMapEntryImpl

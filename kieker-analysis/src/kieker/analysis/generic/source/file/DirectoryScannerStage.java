@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2023 OceanDSL (https://oceandsl.uni-kiel.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,89 +16,77 @@
 package kieker.analysis.generic.source.file;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.Predicate;
 
-import teetime.framework.AbstractProducerStage;
+import teetime.stage.basic.AbstractFilter;
 
 /**
- * Scan a set of directories recursively for Kieker logs.
- * This producer stage outputs File objects representing valid Kieker log directories.
+ * Scan a directory for contained files.
  *
  * @author Reiner Jung
+ * @since 1.3.0
  *
- * @since 1.15
  */
-public class DirectoryScannerStage extends AbstractProducerStage<File> {
+public class DirectoryScannerStage extends AbstractFilter<Path> {
 
-	private final List<File> directories;
-	private final FilenameFilter filter = new MapFileFilter();
-	private int numOfDirectories;
+	private final boolean recursive;
+	private final Predicate<Path> fileFilter;
+	private final Predicate<Path> directoryFilter;
 
-	/**
-	 * Create a directory scanner.
-	 *
-	 * @param directories
-	 *            array of directories to scan
-	 */
-	public DirectoryScannerStage(final List<File> directories) { // NOPMD passing array is not an issue here, read only
-		this.directories = directories;
+	public DirectoryScannerStage(final boolean recursive, final Predicate<Path> directoryFilter,
+			final Predicate<Path> fileFilter) {
+		this.recursive = recursive;
+		this.directoryFilter = directoryFilter;
+		this.fileFilter = fileFilter;
 	}
 
-	/**
-	 * Create a directory scanner for a single directory.
-	 *
-	 * @param directory
-	 *            the single directory
-	 */
-	public DirectoryScannerStage(final File directory) {
-		this.directories = new ArrayList<>();
-		this.directories.add(directory);
-	}
-
-	/**
-	 * Execute the directory scanner.
-	 */
 	@Override
-	protected void execute() {
-		if (this.directories != null) {
-			for (final File directory : this.directories) {
-				this.logger.debug("Scanning directories in {} for Kieker logs", directory);
-				if (directory.isDirectory()) {
-					this.scanDirectory(directory);
-				}
-			}
+	protected void execute(final Path directory) throws Exception {
+		if (this.recursive) {
+			Files.walkFileTree(directory, this.createVisitor(directory));
 		} else {
-			this.logger.error("Cannot process an empty array of directories.");
-		}
-		this.logger.debug("Processed {} directories.", this.numOfDirectories);
-		this.workCompleted();
-	}
-
-	private void scanDirectory(final File directory) {
-		if (this.isKiekerDirectory(directory)) {
-			this.logger.debug("Reading log data from {}", directory.getAbsolutePath());
-			this.numOfDirectories++;
-			this.getOutputPort().send(directory);
-		} else {
-			for (final File subDirectory : directory.listFiles()) { // NOFB is guaranteed to be a directory
-				if (subDirectory.isDirectory()) {
-					this.scanDirectory(subDirectory);
+			for (final File file : directory.toFile().listFiles()) {
+				if (this.fileFilter.test(file.toPath())) {
+					this.outputPort.send(file.toPath());
 				}
 			}
 		}
 	}
 
-	private boolean isKiekerDirectory(final File directory) {
-		if (directory.isDirectory()) {
-			if (directory.exists()) { // NOPMD NOFB collapsing is not useful
-				if (directory.listFiles(this.filter).length > 0) { // NOPMD NOFB collapsing is not useful
-					return true;
+	private FileVisitor<? super Path> createVisitor(final Path directory) {
+		return new SimpleFileVisitor<>() {
+
+			@Override
+			public FileVisitResult visitFile(final Path filePath, final BasicFileAttributes attrs) {
+				if (!Files.isDirectory(filePath) && DirectoryScannerStage.this.fileFilter.test(filePath)) {
+					DirectoryScannerStage.this.outputPort.send(filePath);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
+					throws IOException {
+				if (dir.equals(directory) || DirectoryScannerStage.this.directoryFilter.test(dir)) {
+					return super.preVisitDirectory(dir, attrs);
+				} else {
+					return FileVisitResult.SKIP_SUBTREE;
 				}
 			}
-		}
-		return false;
+
+			@Override
+			public FileVisitResult visitFileFailed(final Path filePath, final IOException exc) {
+				DirectoryScannerStage.this.logger.warn("Could not visit {}: ", filePath.toString(), exc.getClass());
+				return FileVisitResult.CONTINUE;
+			}
+		};
 	}
 
 }

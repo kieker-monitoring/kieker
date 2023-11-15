@@ -25,7 +25,7 @@ import kieker.common.record.io.IValueSerializer;
 /**
  * @author Tom Frotscher, Thomas Duellmann
  *         API compatibility: Kieker 1.15.0
- * 
+ *
  * @since 1.10
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord {
@@ -66,7 +66,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param applicationName
 	 *            applicationName
 	 * @param value
@@ -152,22 +152,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord {
 		}
 
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || !this.getApplicationName().equals(castedRecord.getApplicationName()) || AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue()) || (this.getTimestamp() != castedRecord.getTimestamp())) {
 			return false;
 		}
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getForecast(), castedRecord.getForecast())) {
 			return false;
 		}
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) {
-			return false;
-		}
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getScore(), castedRecord.getScore())) {
 			return false;
 		}
 

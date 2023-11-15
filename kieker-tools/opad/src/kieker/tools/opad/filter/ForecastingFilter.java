@@ -150,7 +150,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		} else {
 			// Initialization of the forecasting variables for a new application
 			this.applicationForecastingWindow.put(input.getName(),
-					new TimeSeries<Double>(input.getTime(), super.recordsTimeUnitFromProjectContext, this.deltat.get(), this.timeSeriesWindowCapacity.get()));
+					new TimeSeries<>(input.getTime(), super.recordsTimeUnitFromProjectContext, this.deltat.get(), this.timeSeriesWindowCapacity.get()));
 			this.processInput(input, input.getTime(), input.getName());
 		}
 	}

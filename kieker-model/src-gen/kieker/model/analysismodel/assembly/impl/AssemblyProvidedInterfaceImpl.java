@@ -2,17 +2,15 @@
  */
 package kieker.model.analysismodel.assembly.impl;
 
-import kieker.model.analysismodel.assembly.AssemblyPackage;
-import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
-
-import kieker.model.analysismodel.type.ProvidedInterfaceType;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.assembly.AssemblyPackage;
+import kieker.model.analysismodel.assembly.AssemblyProvidedInterface;
+import kieker.model.analysismodel.type.ProvidedInterfaceType;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +20,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getProvidedInterfaceType <em>Provided Interface Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyProvidedInterfaceImpl#getProvidedInterfaceType <em>Provided Interface Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,6 +30,7 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	 * The cached value of the '{@link #getProvidedInterfaceType() <em>Provided Interface Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getProvidedInterfaceType()
 	 * @generated
 	 * @ordered
@@ -41,6 +40,7 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected AssemblyProvidedInterfaceImpl() {
@@ -50,6 +50,7 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -60,54 +61,65 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ProvidedInterfaceType getProvidedInterfaceType() {
-		if (providedInterfaceType != null && providedInterfaceType.eIsProxy()) {
-			InternalEObject oldProvidedInterfaceType = (InternalEObject)providedInterfaceType;
-			providedInterfaceType = (ProvidedInterfaceType)eResolveProxy(oldProvidedInterfaceType);
-			if (providedInterfaceType != oldProvidedInterfaceType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE, oldProvidedInterfaceType, providedInterfaceType));
+		if ((this.providedInterfaceType != null) && this.providedInterfaceType.eIsProxy()) {
+			final InternalEObject oldProvidedInterfaceType = (InternalEObject) this.providedInterfaceType;
+			this.providedInterfaceType = (ProvidedInterfaceType) this.eResolveProxy(oldProvidedInterfaceType);
+			if (this.providedInterfaceType != oldProvidedInterfaceType) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE,
+							oldProvidedInterfaceType, this.providedInterfaceType));
+				}
 			}
 		}
-		return providedInterfaceType;
+		return this.providedInterfaceType;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public ProvidedInterfaceType basicGetProvidedInterfaceType() {
-		return providedInterfaceType;
+		return this.providedInterfaceType;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setProvidedInterfaceType(ProvidedInterfaceType newProvidedInterfaceType) {
-		ProvidedInterfaceType oldProvidedInterfaceType = providedInterfaceType;
-		providedInterfaceType = newProvidedInterfaceType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE, oldProvidedInterfaceType, providedInterfaceType));
+	public void setProvidedInterfaceType(final ProvidedInterfaceType newProvidedInterfaceType) {
+		final ProvidedInterfaceType oldProvidedInterfaceType = this.providedInterfaceType;
+		this.providedInterfaceType = newProvidedInterfaceType;
+		if (this.eNotificationRequired()) {
+			this.eNotify(
+					new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE, oldProvidedInterfaceType,
+							this.providedInterfaceType));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
-				if (resolve) return getProvidedInterfaceType();
-				return basicGetProvidedInterfaceType();
+		case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+			if (resolve) {
+				return this.getProvidedInterfaceType();
+			}
+			return this.basicGetProvidedInterfaceType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -115,14 +127,15 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
-				setProvidedInterfaceType((ProvidedInterfaceType)newValue);
-				return;
+		case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+			this.setProvidedInterfaceType((ProvidedInterfaceType) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -130,14 +143,15 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
-				setProvidedInterfaceType((ProvidedInterfaceType)null);
-				return;
+		case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+			this.setProvidedInterfaceType((ProvidedInterfaceType) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -145,15 +159,16 @@ public class AssemblyProvidedInterfaceImpl extends MinimalEObjectImpl.Container 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
-				return providedInterfaceType != null;
+		case AssemblyPackage.ASSEMBLY_PROVIDED_INTERFACE__PROVIDED_INTERFACE_TYPE:
+			return this.providedInterfaceType != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AssemblyProvidedInterfaceImpl
+} // AssemblyProvidedInterfaceImpl

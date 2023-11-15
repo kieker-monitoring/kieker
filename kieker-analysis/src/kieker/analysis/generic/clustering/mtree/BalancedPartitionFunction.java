@@ -89,12 +89,12 @@ public final class BalancedPartitionFunction<T> implements IPartitionFunction<T>
 			}
 		});
 
-		final Pair<Set<T>> partitions = new Pair<>(new HashSet<T>(), new HashSet<T>());
+		final Pair<Set<T>> partitions = new Pair<>(new HashSet<>(), new HashSet<>());
 
 		int index1 = 0;
 		int index2 = 0;
 
-		while (index1 < queue1.size() || index2 != queue2.size()) {
+		while ((index1 < queue1.size()) || (index2 != queue2.size())) {
 			while (index1 < queue1.size()) {
 				final T data = queue1.get(index1++);
 				if (!partitions.getSecond().contains(data)) {

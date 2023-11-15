@@ -2,10 +2,10 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +20,7 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MRepository() {
@@ -30,7 +30,7 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override

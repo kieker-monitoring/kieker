@@ -17,11 +17,11 @@
 package kieker.tools.opad.timeseries.forecast;
 
 /**
- * 
+ *
  * @since 1.10
  * @author Tobias Rudolph
- * 
- * 
+ *
+ *
  *         ForecastObjecives:
  *         maxhorizon
  *         recenthorizon
@@ -33,13 +33,13 @@ public class ForecastObjectives {
 
 	/**
 	 * maximum number of point forecast into the future
-	 * 
+	 *
 	 * [1,5) short term
 	 * [5,10) medium term
 	 * >=10 long term
-	 * 
+	 *
 	 * forecast period = timeUnit * horizon
-	 * 
+	 *
 	 * The value of maxhorizon setting defines the
 	 * maximum number of time series points
 	 * to be forecasted.
@@ -102,7 +102,7 @@ public class ForecastObjectives {
 	 * can reach up to 60 sec for a maximum of
 	 * 200 time series points and may achieve smaller
 	 * confidence intervals than the tBATS approach.
-	 * 
+	 *
 	 * The overhead objective defines the highest overhead group
 	 * from which the forecast strategies will be chosen.
 	 * A value of 2 may be sufficient if the time series data
@@ -113,7 +113,7 @@ public class ForecastObjectives {
 	 * a setting of 3 for a maximum forecast
 	 * computation time of 30 seconds and 4 for forecast
 	 * computation times below 1 minute is recommended.
-	 * 
+	 *
 	 */
 	private int overhead = 4;
 

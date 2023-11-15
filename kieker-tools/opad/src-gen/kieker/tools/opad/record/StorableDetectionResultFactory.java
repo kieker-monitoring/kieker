@@ -21,7 +21,7 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Tom Frotscher, Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public final class StorableDetectionResultFactory implements IRecordFactory<StorableDetectionResult> {

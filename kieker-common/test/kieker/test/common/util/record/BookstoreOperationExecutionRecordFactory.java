@@ -24,9 +24,9 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 /**
  * Provides some constants for the bookstore example, including class names, operation signatures etc., as well as methods returning (valid and invalid) bookstore
  * traces.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public final class BookstoreOperationExecutionRecordFactory {
@@ -114,18 +114,18 @@ public final class BookstoreOperationExecutionRecordFactory {
 	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with short operation signatures, i.e., class name and
 	 * operation without modifiers, return type, args etc.
 	 * Example: <code>Catalog.searchBook</code>.
-	 * 
+	 *
 	 * @param sessionId
 	 *            The session ID.
 	 * @param traceId
 	 *            The trace ID.
-	 * 
+	 *
 	 * @return The list of operation execution records.
 	 */
 	public static List<OperationExecutionRecord> genValidBookstoreTraceFullSignature(final String sessionId, final long traceId) {
 		final String hostname = "srv9786";
 
-		final List<OperationExecutionRecord> traceEvents = new ArrayList<OperationExecutionRecord>(4); // 4 executions
+		final List<OperationExecutionRecord> traceEvents = new ArrayList<>(4); // 4 executions
 
 		final OperationExecutionRecord exec0_0__bookstore_searchBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,

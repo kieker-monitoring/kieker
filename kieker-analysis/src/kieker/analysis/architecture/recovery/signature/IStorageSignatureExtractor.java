@@ -25,12 +25,12 @@ import kieker.model.analysismodel.type.StorageType;
  */
 public interface IStorageSignatureExtractor {
 
-    /**
-     * Extract information from the signature to set all other parameter of a storage type.
-     *
-     * @param storageType
-     *            the storage type to be modified
-     */
-    void extract(StorageType storageType);
+	/**
+	 * Extract information from the signature to set all other parameter of a storage type.
+	 *
+	 * @param storageType
+	 *            the storage type to be modified
+	 */
+	void extract(StorageType storageType);
 
 }

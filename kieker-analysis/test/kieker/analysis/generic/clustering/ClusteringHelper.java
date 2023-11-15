@@ -33,7 +33,7 @@ public final class ClusteringHelper {
 	private ClusteringHelper() {}
 
 	public static IDistanceFunction<Integer> integerDistanceFunction() {
-		return new IDistanceFunction<Integer>() {
+		return new IDistanceFunction<>() {
 
 			@Override
 			public double calculate(final Integer data1, final Integer data2) {
@@ -50,7 +50,7 @@ public final class ClusteringHelper {
 	}
 
 	public static IDistanceFunction<OpticsData<Integer>> opticsIntegerDistanceFunction() {
-		return new IDistanceFunction<OpticsData<Integer>>() {
+		return new IDistanceFunction<>() {
 
 			@Override
 			public double calculate(final OpticsData<Integer> data1, final OpticsData<Integer> data2) {

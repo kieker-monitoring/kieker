@@ -21,6 +21,10 @@ import com.beust.jcommander.Parameter;
 
 import kieker.tools.common.BasicSettings;
 
+/**
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
 public class Settings extends BasicSettings {
 
 	@Parameter(names = { "-t", "--timestamps" }, required = true, variableArity = true,

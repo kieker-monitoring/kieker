@@ -100,7 +100,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final long tin = TIME.getTime();
 
 		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
-		stack.get().push(data);
+		this.stack.get().push(data);
 	}
 
 	@After("monitoredOperation() && notWithinKieker()")
@@ -114,7 +114,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			return;
 		}
 
-		final OperationStartData data = stack.get().pop();
+		final OperationStartData data = this.stack.get().pop();
 
 		final long tout = TIME.getTime();
 		CTRLINST.newMonitoringRecord(

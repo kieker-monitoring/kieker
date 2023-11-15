@@ -30,7 +30,7 @@ import kieker.common.registry.IRegistryListener;
  */
 public class WriterRegistry implements IWriterRegistry<String> {
 
-	private final Map<String, Integer> storage = new HashMap<String, Integer>(); // NOPMD (synchronization is not necessary)
+	private final Map<String, Integer> storage = new HashMap<>(); // NOPMD (synchronization is not necessary)
 	/** id of the next value which will be registered. */
 	private int nextId;
 	/** the listener of this registry which is notified upon a newly registered value. */

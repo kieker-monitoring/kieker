@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class CPUUtilizationRecordFactory implements IRecordFactory<CPUUtilizationRecord> {
-	
 
 	@Override
 	public CPUUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CPUUtilizationRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

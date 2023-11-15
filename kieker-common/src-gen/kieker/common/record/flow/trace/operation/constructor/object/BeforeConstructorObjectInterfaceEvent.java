@@ -18,28 +18,26 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
+import kieker.common.record.flow.IInterfaceRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IInterfaceRecord;
-
 /**
  * @author Florian Fittkau
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.10
  */
-public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {			
+public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_STRING; // IInterfaceRecord.interface
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_INT // IObjectRecord.objectId
+			+ TYPE_SIZE_STRING; // IInterfaceRecord.interface
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,7 +47,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		int.class, // IObjectRecord.objectId
 		String.class, // IInterfaceRecord.interface
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,17 +58,17 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		"objectId",
 		"interface",
 	};
-	
+
 	/** default constants. */
 	public static final String INTERFACE = "";
 	private static final long serialVersionUID = -4330598814273728600L;
-	
+
 	/** property declarations. */
 	private final String _interface;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -86,23 +84,23 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 * @param _interface
 	 *            _interface
 	 */
-	public BeforeConstructorObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId, final String _interface) {
+	public BeforeConstructorObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final int objectId, final String _interface) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, objectId);
-		this._interface = _interface == null?"":_interface;
+		this._interface = _interface == null ? "" : _interface;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public BeforeConstructorObjectInterfaceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this._interface = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +114,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		serializer.putInt(this.getObjectId());
 		serializer.putString(this.getInterface());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +122,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +130,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +139,6 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,18 +153,9 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final BeforeConstructorObjectInterfaceEvent castedRecord = (BeforeConstructorObjectInterfaceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -182,31 +170,31 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		if (!this.getInterface().equals(castedRecord.getInterface())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
-		code += ((int)this.getObjectId());
+		code += (this.getObjectId());
 		code += this.getInterface().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getInterface() {
 		return this._interface;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -215,25 +203,25 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		String result = "BeforeConstructorObjectInterfaceEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "objectId = ";
 		result += this.getObjectId() + ", ";
-		
+
 		result += "interface = ";
 		result += this.getInterface() + ", ";
-		
+
 		return result;
 	}
 }

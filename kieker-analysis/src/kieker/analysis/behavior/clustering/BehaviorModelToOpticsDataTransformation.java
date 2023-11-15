@@ -47,7 +47,7 @@ public class BehaviorModelToOpticsDataTransformation<N extends INode, E extends 
 
 	@Override
 	protected void execute(final IGraph<N, E> model) throws Exception {
-		final OpticsData<MutableNetwork<N, E>> opticsData = new OpticsData<MutableNetwork<N, E>>(model.getGraph(), this.opticsGed);
+		final OpticsData<MutableNetwork<N, E>> opticsData = new OpticsData<>(model.getGraph(), this.opticsGed);
 		this.outputPort.send(opticsData);
 		this.logger.debug("Converted BehaviorModel to OpticsData");
 	}

@@ -2,12 +2,13 @@
  */
 package kieker.model.analysismodel.trace.util;
 
-import kieker.model.analysismodel.trace.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import kieker.model.analysismodel.trace.OperationCall;
+import kieker.model.analysismodel.trace.Trace;
+import kieker.model.analysismodel.trace.TracePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,6 +20,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.trace.TracePackage
  * @generated
  */
@@ -27,6 +29,7 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected static TracePackage modelPackage;
@@ -35,6 +38,7 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public TraceSwitch() {
@@ -47,12 +51,14 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param ePackage the package in question.
+	 *
+	 * @param ePackage
+	 *            the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(EPackage ePackage) {
+	protected boolean isSwitchFor(final EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
@@ -60,25 +66,31 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(final int classifierID, final EObject theEObject) {
 		switch (classifierID) {
-			case TracePackage.TRACE: {
-				Trace trace = (Trace)theEObject;
-				T result = caseTrace(trace);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+		case TracePackage.TRACE: {
+			final Trace trace = (Trace) theEObject;
+			T result = this.caseTrace(trace);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case TracePackage.OPERATION_CALL: {
-				OperationCall operationCall = (OperationCall)theEObject;
-				T result = caseOperationCall(operationCall);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case TracePackage.OPERATION_CALL: {
+			final OperationCall operationCall = (OperationCall) theEObject;
+			T result = this.caseOperationCall(operationCall);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			default: return defaultCase(theEObject);
+			return result;
+		}
+		default:
+			return this.defaultCase(theEObject);
 		}
 	}
 
@@ -88,12 +100,14 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Trace</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTrace(Trace object) {
+	public T caseTrace(final Trace object) {
 		return null;
 	}
 
@@ -103,12 +117,14 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Operation Call</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOperationCall(OperationCall object) {
+	public T caseOperationCall(final OperationCall object) {
 		return null;
 	}
 
@@ -118,14 +134,16 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T defaultCase(final EObject object) {
 		return null;
 	}
 
-} //TraceSwitch
+} // TraceSwitch

@@ -36,29 +36,29 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public abstract class AbstractDataflowAssemblerStage<I, O> extends AbstractTransformation<I, O> {
 
-    protected final SourceModel sourceModel;
-    protected final String sourceLabel;
+	protected final SourceModel sourceModel;
+	protected final String sourceLabel;
 
-    public AbstractDataflowAssemblerStage(final SourceModel sourceModel, final String sourceLabel) {
-        this.sourceModel = sourceModel;
-        this.sourceLabel = sourceLabel;
-    }
+	public AbstractDataflowAssemblerStage(final SourceModel sourceModel, final String sourceLabel) {
+		this.sourceModel = sourceModel;
+		this.sourceLabel = sourceLabel;
+	}
 
-    protected void addObjectToSource(final EObject object) {
-        EList<String> sources = this.sourceModel.getSources().get(object);
-        boolean exists = false;
-        if (sources != null) {
-            for (final String source : sources) {
-                if (this.sourceLabel.equals(source)) {
-                    exists = true;
-                }
-            }
-        } else {
-            sources = new BasicEList<>();
-        }
-        if (!exists) {
-            sources.add(this.sourceLabel);
-            this.sourceModel.getSources().put(object, sources);
-        }
-    }
+	protected void addObjectToSource(final EObject object) {
+		EList<String> sources = this.sourceModel.getSources().get(object);
+		boolean exists = false;
+		if (sources != null) {
+			for (final String source : sources) {
+				if (this.sourceLabel.equals(source)) {
+					exists = true;
+				}
+			}
+		} else {
+			sources = new BasicEList<>();
+		}
+		if (!exists) {
+			sources.add(this.sourceLabel);
+			this.sourceModel.getSources().put(object, sources);
+		}
+	}
 }

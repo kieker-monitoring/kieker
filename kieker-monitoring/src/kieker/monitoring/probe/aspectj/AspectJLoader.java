@@ -70,11 +70,7 @@ public final class AspectJLoader {
 						"Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
 				KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION);
 
-		if (null != System.getProperty("aj5.def")) {
-			return true;
-		}
-
-		if (null != System.getProperty("org.aspectj.weaver.loadtime.configuration")) {
+		if ((null != System.getProperty("aj5.def")) || (null != System.getProperty("org.aspectj.weaver.loadtime.configuration"))) {
 			return true;
 		}
 

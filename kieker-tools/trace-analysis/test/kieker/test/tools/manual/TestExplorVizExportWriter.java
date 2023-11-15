@@ -48,7 +48,7 @@ public final class TestExplorVizExportWriter {
 
 		int traceId = 0;
 
-		while (traceId < 1000 * 1000 * 10) {
+		while (traceId < (1000 * 1000 * 10)) {
 			final TraceEventRecords events = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(traceId * 1000L, traceId++, "", "localhost");
 			ctrl.newMonitoringRecord(events.getTraceMetadata());
 			for (final AbstractTraceEvent event : events.getTraceEvents()) {

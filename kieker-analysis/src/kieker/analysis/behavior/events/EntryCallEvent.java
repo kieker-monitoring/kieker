@@ -109,10 +109,10 @@ public class EntryCallEvent {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return (int) (super.hashCode() + this.classSignature.hashCode() + this.entryTime + this.exitTime + hostname.hashCode() + sessionId.hashCode());
+		return (int) (super.hashCode() + this.classSignature.hashCode() + this.entryTime + this.exitTime + this.hostname.hashCode() + this.sessionId.hashCode());
 	}
 
 	private boolean compareArray(final String[] left, final String[] right) {

@@ -19,9 +19,9 @@ package kieker.analysis.architecture.trace.execution;
 import kieker.analysis.exception.EventProcessingException;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class ExecutionEventProcessingException extends EventProcessingException {
@@ -30,7 +30,7 @@ public class ExecutionEventProcessingException extends EventProcessingException 
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param msg
 	 *            The message of this exception.
 	 */
@@ -39,9 +39,9 @@ public class ExecutionEventProcessingException extends EventProcessingException 
 	}
 
 	/**
-	 * 
+	 *
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param msg
 	 *            The message of this exception.
 	 * @param t

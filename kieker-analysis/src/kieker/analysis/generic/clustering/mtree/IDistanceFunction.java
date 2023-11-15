@@ -20,7 +20,7 @@ package kieker.analysis.generic.clustering.mtree;
  *
  * @param <T>
  *            The type of the data objects.
- * 
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

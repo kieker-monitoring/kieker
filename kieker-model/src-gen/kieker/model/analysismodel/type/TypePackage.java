@@ -13,13 +13,14 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- *   <li>each class,</li>
- *   <li>each feature of each class,</li>
- *   <li>each operation of each class,</li>
- *   <li>each enum,</li>
- *   <li>and each data type</li>
+ * <li>each class,</li>
+ * <li>each feature of each class,</li>
+ * <li>each operation of each class,</li>
+ * <li>each enum,</li>
+ * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.type.TypeFactory
  * @model kind="package"
  * @generated
@@ -29,6 +30,7 @@ public interface TypePackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNAME = "type";
@@ -37,6 +39,7 @@ public interface TypePackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore/type";
@@ -45,6 +48,7 @@ public interface TypePackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "type";
@@ -53,6 +57,7 @@ public interface TypePackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	TypePackage eINSTANCE = kieker.model.analysismodel.type.impl.TypePackageImpl.init();
@@ -61,6 +66,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.TypeModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.TypeModelImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getTypeModel()
 	 * @generated
@@ -71,6 +77,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Component Types</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -80,6 +87,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -89,15 +97,18 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int TYPE_MODEL_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}'
+	 * class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToComponentTypeMapEntry()
 	 * @generated
@@ -108,6 +119,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -117,6 +129,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -126,6 +139,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Component Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -135,6 +149,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>EString To Component Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -144,6 +159,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl <em>Component Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.ComponentTypeImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getComponentType()
 	 * @generated
@@ -154,6 +170,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -163,6 +180,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -172,6 +190,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -181,6 +200,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Package</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -190,6 +210,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Storages</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -199,6 +220,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Contained Components</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -208,6 +230,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Interface Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -217,6 +240,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Required Interface Types</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -226,6 +250,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Component Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -235,15 +260,18 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Component Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int COMPONENT_TYPE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}'
+	 * class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToOperationTypeMapEntry()
 	 * @generated
@@ -254,6 +282,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -263,6 +292,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -272,6 +302,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Operation Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -281,6 +312,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>EString To Operation Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -290,6 +322,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToStorageTypeMapEntryImpl <em>EString To Storage Type Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.EStringToStorageTypeMapEntryImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToStorageTypeMapEntry()
 	 * @generated
@@ -300,6 +333,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -309,6 +343,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -318,6 +353,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Storage Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -327,6 +363,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>EString To Storage Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -336,6 +373,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.OperationTypeImpl <em>Operation Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.OperationTypeImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getOperationType()
 	 * @generated
@@ -346,6 +384,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -355,6 +394,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -364,6 +404,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Return Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -373,6 +414,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -382,6 +424,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Parameter Types</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -391,6 +434,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Operation Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -400,6 +444,7 @@ public interface TypePackage extends EPackage {
 	 * The operation id for the '<em>Get Component Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -409,6 +454,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Operation Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -418,6 +464,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.StorageTypeImpl <em>Storage Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.StorageTypeImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getStorageType()
 	 * @generated
@@ -428,6 +475,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -437,6 +485,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -446,6 +495,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Storage Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -455,6 +505,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Storage Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -464,6 +515,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl <em>Provided Interface Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getProvidedInterfaceType()
 	 * @generated
@@ -474,6 +526,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Provided Operation Types</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -483,6 +536,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -492,6 +546,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -501,6 +556,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Package</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -510,6 +566,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Provided Interface Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -519,15 +576,18 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Provided Interface Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int PROVIDED_INTERFACE_TYPE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map
+	 * Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToProvidedInterfaceTypeMapEntry()
 	 * @generated
@@ -538,6 +598,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -547,6 +608,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -556,6 +618,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>EString To Provided Interface Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -565,6 +628,7 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>EString To Provided Interface Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -574,6 +638,7 @@ public interface TypePackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl <em>Required Interface Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getRequiredInterfaceType()
 	 * @generated
@@ -584,6 +649,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Requires</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -593,6 +659,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Required Interface Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -602,16 +669,18 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Required Interface Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int REQUIRED_INTERFACE_TYPE_OPERATION_COUNT = 0;
 
-
 	/**
-	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl <em>Interface EString To Operation Type Map Entry</em>}' class.
+	 * The meta object id for the '{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl <em>Interface EString To Operation Type
+	 * Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl
 	 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getInterfaceEStringToOperationTypeMapEntry()
 	 * @generated
@@ -622,6 +691,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -631,6 +701,7 @@ public interface TypePackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -640,6 +711,7 @@ public interface TypePackage extends EPackage {
 	 * The number of structural features of the '<em>Interface EString To Operation Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -649,16 +721,17 @@ public interface TypePackage extends EPackage {
 	 * The number of operations of the '<em>Interface EString To Operation Type Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY_OPERATION_COUNT = 0;
 
-
 	/**
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.TypeModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Model</em>'.
 	 * @see kieker.model.analysismodel.type.TypeModel
 	 * @generated
@@ -669,6 +742,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.TypeModel#getComponentTypes <em>Component Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Component Types</em>'.
 	 * @see kieker.model.analysismodel.type.TypeModel#getComponentTypes()
 	 * @see #getTypeModel()
@@ -680,6 +754,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Component Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Component Type Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -692,6 +767,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToComponentTypeMapEntry()
@@ -703,6 +779,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToComponentTypeMapEntry()
@@ -714,6 +791,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.ComponentType <em>Component Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Component Type</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType
 	 * @generated
@@ -724,6 +802,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Signature</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getSignature()
 	 * @see #getComponentType()
@@ -735,6 +814,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.ComponentType#getProvidedOperations <em>Provided Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Provided Operations</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getProvidedOperations()
 	 * @see #getComponentType()
@@ -746,6 +826,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ComponentType#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getName()
 	 * @see #getComponentType()
@@ -757,6 +838,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Package</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getPackage()
 	 * @see #getComponentType()
@@ -768,6 +850,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.ComponentType#getProvidedStorages <em>Provided Storages</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Provided Storages</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getProvidedStorages()
 	 * @see #getComponentType()
@@ -779,6 +862,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the reference list '{@link kieker.model.analysismodel.type.ComponentType#getContainedComponents <em>Contained Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Contained Components</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getContainedComponents()
 	 * @see #getComponentType()
@@ -787,9 +871,11 @@ public interface TypePackage extends EPackage {
 	EReference getComponentType_ContainedComponents();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes <em>Provided Interface Types</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes <em>Provided
+	 * Interface Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Provided Interface Types</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getProvidedInterfaceTypes()
 	 * @see #getComponentType()
@@ -798,9 +884,11 @@ public interface TypePackage extends EPackage {
 	EReference getComponentType_ProvidedInterfaceTypes();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required Interface Types</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes <em>Required
+	 * Interface Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Required Interface Types</em>'.
 	 * @see kieker.model.analysismodel.type.ComponentType#getRequiredInterfaceTypes()
 	 * @see #getComponentType()
@@ -812,6 +900,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Operation Type Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -824,6 +913,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToOperationTypeMapEntry()
@@ -835,6 +925,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToOperationTypeMapEntry()
@@ -846,6 +937,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Storage Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Storage Type Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -858,6 +950,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToStorageTypeMapEntry()
@@ -869,6 +962,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToStorageTypeMapEntry()
@@ -880,6 +974,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.OperationType <em>Operation Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Operation Type</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType
 	 * @generated
@@ -890,6 +985,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.OperationType#getSignature <em>Signature</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Signature</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType#getSignature()
 	 * @see #getOperationType()
@@ -901,6 +997,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.OperationType#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType#getName()
 	 * @see #getOperationType()
@@ -912,6 +1009,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.OperationType#getReturnType <em>Return Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Return Type</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType#getReturnType()
 	 * @see #getOperationType()
@@ -923,6 +1021,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute list '{@link kieker.model.analysismodel.type.OperationType#getModifiers <em>Modifiers</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute list '<em>Modifiers</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType#getModifiers()
 	 * @see #getOperationType()
@@ -934,6 +1033,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute list '{@link kieker.model.analysismodel.type.OperationType#getParameterTypes <em>Parameter Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute list '<em>Parameter Types</em>'.
 	 * @see kieker.model.analysismodel.type.OperationType#getParameterTypes()
 	 * @see #getOperationType()
@@ -945,6 +1045,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the '{@link kieker.model.analysismodel.type.OperationType#getComponentType() <em>Get Component Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the '<em>Get Component Type</em>' operation.
 	 * @see kieker.model.analysismodel.type.OperationType#getComponentType()
 	 * @generated
@@ -955,6 +1056,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.StorageType <em>Storage Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Storage Type</em>'.
 	 * @see kieker.model.analysismodel.type.StorageType
 	 * @generated
@@ -965,6 +1067,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.StorageType#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.model.analysismodel.type.StorageType#getName()
 	 * @see #getStorageType()
@@ -976,6 +1079,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.StorageType#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type</em>'.
 	 * @see kieker.model.analysismodel.type.StorageType#getType()
 	 * @see #getStorageType()
@@ -987,6 +1091,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.ProvidedInterfaceType <em>Provided Interface Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Provided Interface Type</em>'.
 	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType
 	 * @generated
@@ -994,9 +1099,11 @@ public interface TypePackage extends EPackage {
 	EClass getProvidedInterfaceType();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getProvidedOperationTypes <em>Provided Operation Types</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getProvidedOperationTypes <em>Provided Operation
+	 * Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the map '<em>Provided Operation Types</em>'.
 	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getProvidedOperationTypes()
 	 * @see #getProvidedInterfaceType()
@@ -1008,6 +1115,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getName()
 	 * @see #getProvidedInterfaceType()
@@ -1019,6 +1127,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getSignature <em>Signature</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Signature</em>'.
 	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getSignature()
 	 * @see #getProvidedInterfaceType()
@@ -1030,6 +1139,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link kieker.model.analysismodel.type.ProvidedInterfaceType#getPackage <em>Package</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Package</em>'.
 	 * @see kieker.model.analysismodel.type.ProvidedInterfaceType#getPackage()
 	 * @see #getProvidedInterfaceType()
@@ -1041,6 +1151,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Provided Interface Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>EString To Provided Interface Type Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -1053,6 +1164,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToProvidedInterfaceTypeMapEntry()
@@ -1064,6 +1176,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getEStringToProvidedInterfaceTypeMapEntry()
@@ -1075,6 +1188,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.analysismodel.type.RequiredInterfaceType <em>Required Interface Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Required Interface Type</em>'.
 	 * @see kieker.model.analysismodel.type.RequiredInterfaceType
 	 * @generated
@@ -1085,6 +1199,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the reference '{@link kieker.model.analysismodel.type.RequiredInterfaceType#getRequires <em>Requires</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Requires</em>'.
 	 * @see kieker.model.analysismodel.type.RequiredInterfaceType#getRequires()
 	 * @see #getRequiredInterfaceType()
@@ -1096,6 +1211,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Interface EString To Operation Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Interface EString To Operation Type Map Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
@@ -1108,6 +1224,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getInterfaceEStringToOperationTypeMapEntry()
@@ -1119,6 +1236,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getInterfaceEStringToOperationTypeMapEntry()
@@ -1130,6 +1248,7 @@ public interface TypePackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -1139,13 +1258,14 @@ public interface TypePackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each operation of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 * <li>each class,</li>
+	 * <li>each feature of each class,</li>
+	 * <li>each operation of each class,</li>
+	 * <li>each enum,</li>
+	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
@@ -1153,6 +1273,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.TypeModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.TypeModelImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getTypeModel()
 		 * @generated
@@ -1163,14 +1284,17 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Component Types</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference TYPE_MODEL__COMPONENT_TYPES = eINSTANCE.getTypeModel_ComponentTypes();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map
+		 * Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToComponentTypeMapEntry()
 		 * @generated
@@ -1181,6 +1305,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToComponentTypeMapEntry_Key();
@@ -1189,6 +1314,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToComponentTypeMapEntry_Value();
@@ -1197,6 +1323,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.ComponentTypeImpl <em>Component Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.ComponentTypeImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getComponentType()
 		 * @generated
@@ -1207,6 +1334,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPONENT_TYPE__SIGNATURE = eINSTANCE.getComponentType_Signature();
@@ -1215,6 +1343,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_OPERATIONS = eINSTANCE.getComponentType_ProvidedOperations();
@@ -1223,6 +1352,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPONENT_TYPE__NAME = eINSTANCE.getComponentType_Name();
@@ -1231,6 +1361,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Package</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute COMPONENT_TYPE__PACKAGE = eINSTANCE.getComponentType_Package();
@@ -1239,6 +1370,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Storages</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_STORAGES = eINSTANCE.getComponentType_ProvidedStorages();
@@ -1247,6 +1379,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Contained Components</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__CONTAINED_COMPONENTS = eINSTANCE.getComponentType_ContainedComponents();
@@ -1255,6 +1388,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Interface Types</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_INTERFACE_TYPES = eINSTANCE.getComponentType_ProvidedInterfaceTypes();
@@ -1263,14 +1397,17 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Required Interface Types</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__REQUIRED_INTERFACE_TYPES = eINSTANCE.getComponentType_RequiredInterfaceTypes();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map
+		 * Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToOperationTypeMapEntry()
 		 * @generated
@@ -1281,6 +1418,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToOperationTypeMapEntry_Key();
@@ -1289,14 +1427,17 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToOperationTypeMapEntry_Value();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToStorageTypeMapEntryImpl <em>EString To Storage Type Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToStorageTypeMapEntryImpl <em>EString To Storage Type Map Entry</em>}'
+		 * class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.EStringToStorageTypeMapEntryImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToStorageTypeMapEntry()
 		 * @generated
@@ -1307,6 +1448,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_STORAGE_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToStorageTypeMapEntry_Key();
@@ -1315,6 +1457,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_STORAGE_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToStorageTypeMapEntry_Value();
@@ -1323,6 +1466,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.OperationTypeImpl <em>Operation Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.OperationTypeImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getOperationType()
 		 * @generated
@@ -1333,6 +1477,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__SIGNATURE = eINSTANCE.getOperationType_Signature();
@@ -1341,6 +1486,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__NAME = eINSTANCE.getOperationType_Name();
@@ -1349,6 +1495,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Return Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__RETURN_TYPE = eINSTANCE.getOperationType_ReturnType();
@@ -1357,6 +1504,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Modifiers</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__MODIFIERS = eINSTANCE.getOperationType_Modifiers();
@@ -1365,6 +1513,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Parameter Types</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__PARAMETER_TYPES = eINSTANCE.getOperationType_ParameterTypes();
@@ -1373,6 +1522,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Get Component Type</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EOperation OPERATION_TYPE___GET_COMPONENT_TYPE = eINSTANCE.getOperationType__GetComponentType();
@@ -1381,6 +1531,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.StorageTypeImpl <em>Storage Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.StorageTypeImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getStorageType()
 		 * @generated
@@ -1391,6 +1542,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute STORAGE_TYPE__NAME = eINSTANCE.getStorageType_Name();
@@ -1399,6 +1551,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute STORAGE_TYPE__TYPE = eINSTANCE.getStorageType_Type();
@@ -1407,6 +1560,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl <em>Provided Interface Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.ProvidedInterfaceTypeImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getProvidedInterfaceType()
 		 * @generated
@@ -1417,6 +1571,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Provided Operation Types</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference PROVIDED_INTERFACE_TYPE__PROVIDED_OPERATION_TYPES = eINSTANCE.getProvidedInterfaceType_ProvidedOperationTypes();
@@ -1425,6 +1580,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PROVIDED_INTERFACE_TYPE__NAME = eINSTANCE.getProvidedInterfaceType_Name();
@@ -1433,6 +1589,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PROVIDED_INTERFACE_TYPE__SIGNATURE = eINSTANCE.getProvidedInterfaceType_Signature();
@@ -1441,14 +1598,17 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Package</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PROVIDED_INTERFACE_TYPE__PACKAGE = eINSTANCE.getProvidedInterfaceType_Package();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface Type Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl <em>EString To Provided Interface
+		 * Type Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.EStringToProvidedInterfaceTypeMapEntryImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getEStringToProvidedInterfaceTypeMapEntry()
 		 * @generated
@@ -1459,6 +1619,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToProvidedInterfaceTypeMapEntry_Key();
@@ -1467,6 +1628,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ESTRING_TO_PROVIDED_INTERFACE_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToProvidedInterfaceTypeMapEntry_Value();
@@ -1475,6 +1637,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl <em>Required Interface Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.RequiredInterfaceTypeImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getRequiredInterfaceType()
 		 * @generated
@@ -1485,14 +1648,17 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Requires</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference REQUIRED_INTERFACE_TYPE__REQUIRES = eINSTANCE.getRequiredInterfaceType_Requires();
 
 		/**
-		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl <em>Interface EString To Operation Type Map Entry</em>}' class.
+		 * The meta object literal for the '{@link kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl <em>Interface EString To
+		 * Operation Type Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @see kieker.model.analysismodel.type.impl.InterfaceEStringToOperationTypeMapEntryImpl
 		 * @see kieker.model.analysismodel.type.impl.TypePackageImpl#getInterfaceEStringToOperationTypeMapEntry()
 		 * @generated
@@ -1503,6 +1669,7 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY = eINSTANCE.getInterfaceEStringToOperationTypeMapEntry_Key();
@@ -1511,10 +1678,11 @@ public interface TypePackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference INTERFACE_ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getInterfaceEStringToOperationTypeMapEntry_Value();
 
 	}
 
-} //TypePackage
+} // TypePackage

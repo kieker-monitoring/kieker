@@ -358,8 +358,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent,
 				final AbstractTraceEvent prevEvent, final Class<? extends CallOperationEvent> callClass) {
-			if (prevEvent != null && callClass.isAssignableFrom(prevEvent.getClass())
-					&& prevEvent.getOrderIndex() == beforeOperationEvent.getOrderIndex() - 1) {
+			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass())
+					&& (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
 				if (this.callsReferencedOperationOf((CallOperationEvent) prevEvent, beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
@@ -399,7 +399,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 			// Obtain the matching before-operation event from the stack
 			final AbstractTraceEvent potentialBeforeEvent = this.peekEvent();
 			// The element at the top of the stack needs to be a before-operation event...
-			if (potentialBeforeEvent == null || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
+			if ((potentialBeforeEvent == null) || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
 				throw new InvalidTraceException("Didn't find corresponding " + beforeClass.getName() + " for "
 						+ afterOperationEvent.getClass().getName() + " " + afterOperationEvent.toString() + " (found: "
 						+ potentialBeforeEvent + ").");
@@ -414,7 +414,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 			final AbstractTraceEvent prevEvent = this.peekEvent();
 			// A definite call occurs if either the stack is empty (entry into the trace) or
 			// if a matching call event is found
-			final boolean definiteCall = prevEvent == null
+			final boolean definiteCall = (prevEvent == null)
 					|| this.isPrevEventMatchingCall(beforeOperationEvent, prevEvent, callClass);
 			// If a matching call event was found, it must be removed from the stack
 			if (definiteCall && !this.eventStack.isEmpty()) {

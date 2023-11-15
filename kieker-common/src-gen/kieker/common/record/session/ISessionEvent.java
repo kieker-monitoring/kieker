@@ -19,12 +19,12 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Reiner Jung
- * 
+ *
  * @since 2.0.0
  */
 public interface ISessionEvent extends IMonitoringRecord {
 	public String getHostname();
-	
+
 	public String getSessionId();
-	
+
 }

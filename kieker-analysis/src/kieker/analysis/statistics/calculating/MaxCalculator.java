@@ -46,7 +46,7 @@ public class MaxCalculator<T> extends AbstractCalculator<T> {
 	public void calculate(final StatisticRecord statistic, final T input, final EObject modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Optional<Long> oldMax = Optional.ofNullable((Long) statistic.getProperties().get(this.getPropertyName()));
-		if (!oldMax.isPresent() || value > oldMax.get()) {
+		if (!oldMax.isPresent() || (value > oldMax.get())) {
 			statistic.getProperties().put(this.getPropertyName(), value);
 		}
 	}

@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.type.RequiredInterfaceType#getRequires <em>Requires</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.RequiredInterfaceType#getRequires <em>Requires</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.type.TypePackage#getRequiredInterfaceType()
@@ -25,6 +25,7 @@ public interface RequiredInterfaceType extends EObject {
 	 * Returns the value of the '<em><b>Requires</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Requires</em>' reference.
 	 * @see #setRequires(ProvidedInterfaceType)
 	 * @see kieker.model.analysismodel.type.TypePackage#getRequiredInterfaceType_Requires()
@@ -37,7 +38,9 @@ public interface RequiredInterfaceType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.RequiredInterfaceType#getRequires <em>Requires</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Requires</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Requires</em>' reference.
 	 * @see #getRequires()
 	 * @generated
 	 */

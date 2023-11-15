@@ -36,7 +36,7 @@ public class GraphEditDistanceTest { // NOCS NOPMD constructor
 	private final GraphEditDistance<INode, IEdge> ged = new GraphEditDistance<>(new BasicCostFunction<>(1, 1));
 
 	@Test
-	public void distanceToIdenticalModelIsZeroTest() {  // NOPMD has MatcherAssert
+	public void distanceToIdenticalModelIsZeroTest() { // NOPMD has MatcherAssert
 		MutableNetwork<INode, IEdge> model1 = TestHelper.createBehaviorModelA();
 		MutableNetwork<INode, IEdge> model2 = TestHelper.createBehaviorModelA();
 

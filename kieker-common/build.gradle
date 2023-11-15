@@ -3,6 +3,9 @@ plugins {
 	id 'eclipse'
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 // The following lines are necessay to create a test jar
 project.configurations {
 	testArchives.extendsFrom (testCompile)

@@ -29,7 +29,7 @@ public class InvalidFormatException extends RuntimeException {
 
 	/**
 	 * Creates a new instance using the given data.
-	 * 
+	 *
 	 * @param message
 	 *            The message for this exception
 	 */
@@ -39,7 +39,7 @@ public class InvalidFormatException extends RuntimeException {
 
 	/**
 	 * Creates a new instance using the given data.
-	 * 
+	 *
 	 * @param message
 	 *            The message for this exception
 	 * @param cause

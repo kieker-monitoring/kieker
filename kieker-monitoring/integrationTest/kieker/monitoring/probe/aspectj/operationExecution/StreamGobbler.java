@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Combines the streams of a process.
- * 
+ *
  * @author dagere
  *
  */
@@ -45,14 +45,14 @@ public final class StreamGobbler extends Thread {
 
 	@Override
 	public void run() {
-		try (final InputStreamReader isr = new InputStreamReader(is);
+		try (final InputStreamReader isr = new InputStreamReader(this.is);
 				final BufferedReader br = new BufferedReader(isr);) {
 
 			String line = null;
 			while ((line = br.readLine()) != null) { // NOPMD (assign)
-				if (output != null) {
-					output.append(line);
-					output.append("\n");
+				if (this.output != null) {
+					this.output.append(line);
+					this.output.append("\n");
 				}
 			}
 		} catch (final IOException e) {
@@ -61,13 +61,13 @@ public final class StreamGobbler extends Thread {
 	}
 
 	public static void showFullProcess(final Process process) {
-		getFullProcess(process, true);
+		StreamGobbler.getFullProcess(process, true);
 	}
 
 	/**
 	 * Combines the streams of the process and eventually shows the output. Parallel
 	 * calls to this method will lead to mixed outputs.
-	 * 
+	 *
 	 * @param process
 	 *            The process that should be printed
 	 * @param showOutput

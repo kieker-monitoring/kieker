@@ -31,7 +31,7 @@ import kieker.tools.trace.analysis.gui.util.AllSelectionBindingItemListener;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class PrintStep extends AbstractStep {

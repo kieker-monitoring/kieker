@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.type.StorageType#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.StorageType#getType <em>Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.StorageType#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.StorageType#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.type.TypePackage#getStorageType()
@@ -26,6 +26,7 @@ public interface StorageType extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getStorageType_Name()
@@ -38,7 +39,9 @@ public interface StorageType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.StorageType#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -48,6 +51,7 @@ public interface StorageType extends EObject {
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
 	 * @see kieker.model.analysismodel.type.TypePackage#getStorageType_Type()
@@ -60,7 +64,9 @@ public interface StorageType extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.type.StorageType#getType <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Type</em>' attribute.
 	 * @see #getType()
 	 * @generated
 	 */

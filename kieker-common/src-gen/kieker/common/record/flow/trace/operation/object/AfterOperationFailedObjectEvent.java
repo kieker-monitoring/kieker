@@ -18,28 +18,27 @@ package kieker.common.record.flow.trace.operation.object;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-import kieker.common.record.flow.IObjectRecord;
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.6
  */
-public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {			
+public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-			 + TYPE_SIZE_INT; // IObjectRecord.objectId
-	
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // IExceptionRecord.cause
+			+ TYPE_SIZE_INT; // IObjectRecord.objectId
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,7 +48,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,17 +59,17 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		"cause",
 		"objectId",
 	};
-	
+
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
 	private static final long serialVersionUID = -2086826925207912224L;
-	
+
 	/** property declarations. */
 	private final int objectId;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -86,23 +85,23 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
+	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final String cause, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AfterOperationFailedObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +115,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +123,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +131,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +140,6 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,18 +154,9 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AfterOperationFailedObjectEvent castedRecord = (AfterOperationFailedObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
@@ -182,31 +171,31 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		if (this.getObjectId() != castedRecord.getObjectId()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
 		code += this.getOperationSignature().hashCode();
 		code += this.getClassSignature().hashCode();
 		code += this.getCause().hashCode();
-		code += ((int)this.getObjectId());
-		
+		code += (this.getObjectId());
+
 		return code;
 	}
-	
+
 	public final int getObjectId() {
 		return this.objectId;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -215,25 +204,25 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		String result = "AfterOperationFailedObjectEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "operationSignature = ";
 		result += this.getOperationSignature() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "cause = ";
 		result += this.getCause() + ", ";
-		
+
 		result += "objectId = ";
 		result += this.getObjectId() + ", ";
-		
+
 		return result;
 	}
 }

@@ -3,7 +3,6 @@
 package kieker.analysis.model.analysisMetaModel;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -34,7 +33,7 @@ public interface MIView extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Name()
@@ -47,7 +46,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
@@ -63,7 +62,7 @@ public interface MIView extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Description()
@@ -76,7 +75,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Description</em>' attribute.
 	 * @see #getDescription()
@@ -93,7 +92,7 @@ public interface MIView extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Display Connectors</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_DisplayConnectors()
 	 * @model containment="true"
@@ -109,7 +108,7 @@ public interface MIView extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Id()
@@ -122,7 +121,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()

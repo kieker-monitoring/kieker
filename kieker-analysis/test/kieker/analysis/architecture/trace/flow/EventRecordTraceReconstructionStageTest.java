@@ -82,7 +82,7 @@ public class EventRecordTraceReconstructionStageTest { // NOCS test do not need 
 
 			final AbstractTraceEvent[] resultEvents = new AbstractTraceEvent[events.length - 1];
 
-			for (int i = 0; i < events.length - 1; i++) {
+			for (int i = 0; i < (events.length - 1); i++) {
 				elements[i + 1] = events[i];
 				resultEvents[i] = events[i];
 			}
@@ -108,11 +108,11 @@ public class EventRecordTraceReconstructionStageTest { // NOCS test do not need 
 			final AbstractTraceEvent[] traceEvents = new AbstractTraceEvent[NUMBER_OF_EVENTS];
 			final IFlowRecord[] sendTraceEvents = new IFlowRecord[NUMBER_OF_EVENTS + 1];
 			sendTraceEvents[0] = metadata;
-			for (int i = 0; i < NUMBER_OF_EVENTS / 2; i++) {
+			for (int i = 0; i < (NUMBER_OF_EVENTS / 2); i++) {
 				traceEvents[i] = new BeforeOperationEvent(i, 1, i, "op()", "TestClass");
 				sendTraceEvents[i + 1] = traceEvents[i];
-				traceEvents[i + NUMBER_OF_EVENTS / 2] = new AfterOperationEvent(i + NUMBER_OF_EVENTS, 1, i + NUMBER_OF_EVENTS / 2, "op()", "TestClass");
-				sendTraceEvents[i + NUMBER_OF_EVENTS / 2 + 1] = traceEvents[i + NUMBER_OF_EVENTS / 2];
+				traceEvents[i + (NUMBER_OF_EVENTS / 2)] = new AfterOperationEvent(i + NUMBER_OF_EVENTS, 1, i + (NUMBER_OF_EVENTS / 2), "op()", "TestClass");
+				sendTraceEvents[i + (NUMBER_OF_EVENTS / 2) + 1] = traceEvents[i + (NUMBER_OF_EVENTS / 2)];
 			}
 
 			final TraceEventRecords traceEventRecord = new TraceEventRecords(metadata, traceEvents);

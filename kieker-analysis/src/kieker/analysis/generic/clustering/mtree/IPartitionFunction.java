@@ -24,7 +24,7 @@ import kieker.analysis.generic.clustering.mtree.utils.Pair;
  *
  * @param <T>
  *            The type of the data on the sets.
- * 
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

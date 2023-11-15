@@ -4,19 +4,16 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.model.analysismodel.statistics.ScalarMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
 import kieker.model.analysismodel.statistics.VectorMeasurement;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +23,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl#getValues <em>Values</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.VectorMeasurementImpl#getValues <em>Values</em>}</li>
  * </ul>
  *
  * @generated
@@ -36,6 +33,7 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	 * The cached value of the '{@link #getValues() <em>Values</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getValues()
 	 * @generated
 	 * @ordered
@@ -45,6 +43,7 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected VectorMeasurementImpl() {
@@ -54,6 +53,7 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -64,26 +64,28 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<ScalarMeasurement> getValues() {
-		if (values == null) {
-			values = new EObjectContainmentEList<ScalarMeasurement>(ScalarMeasurement.class, this, StatisticsPackage.VECTOR_MEASUREMENT__VALUES);
+		if (this.values == null) {
+			this.values = new EObjectContainmentEList<>(ScalarMeasurement.class, this, StatisticsPackage.VECTOR_MEASUREMENT__VALUES);
 		}
-		return values;
+		return this.values;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
-			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
-				return ((InternalEList<?>)getValues()).basicRemove(otherEnd, msgs);
+		case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+			return ((InternalEList<?>) this.getValues()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -91,13 +93,14 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
-				return getValues();
+		case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+			return this.getValues();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -105,16 +108,17 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
-				getValues().clear();
-				getValues().addAll((Collection<? extends ScalarMeasurement>)newValue);
-				return;
+		case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+			this.getValues().clear();
+			this.getValues().addAll((Collection<? extends ScalarMeasurement>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -122,14 +126,15 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
-				getValues().clear();
-				return;
+		case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+			this.getValues().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -137,15 +142,16 @@ public class VectorMeasurementImpl extends MeasurementImpl implements VectorMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
-				return values != null && !values.isEmpty();
+		case StatisticsPackage.VECTOR_MEASUREMENT__VALUES:
+			return (this.values != null) && !this.values.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //VectorMeasurementImpl
+} // VectorMeasurementImpl

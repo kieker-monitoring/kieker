@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>ESI Unit Type</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getESIUnitType()
  * @model
  * @generated
@@ -22,6 +23,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Meter</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #METER_VALUE
 	 * @generated
 	 * @ordered
@@ -32,6 +34,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Gram</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #GRAM_VALUE
 	 * @generated
 	 * @ordered
@@ -42,6 +45,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Ton</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #TON_VALUE
 	 * @generated
 	 * @ordered
@@ -52,6 +56,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Second</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #SECOND_VALUE
 	 * @generated
 	 * @ordered
@@ -62,6 +67,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Ampere</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #AMPERE_VALUE
 	 * @generated
 	 * @ordered
@@ -72,6 +78,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Kelvin</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #KELVIN_VALUE
 	 * @generated
 	 * @ordered
@@ -82,6 +89,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Mole</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MOLE_VALUE
 	 * @generated
 	 * @ordered
@@ -92,6 +100,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Candela</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #CANDELA_VALUE
 	 * @generated
 	 * @ordered
@@ -102,6 +111,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Pascal</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PASCAL_VALUE
 	 * @generated
 	 * @ordered
@@ -112,6 +122,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Joul</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #JOUL_VALUE
 	 * @generated
 	 * @ordered
@@ -122,6 +133,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Meter</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #METER
 	 * @model name="meter" literal="m"
 	 * @generated
@@ -133,6 +145,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Gram</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #GRAM
 	 * @model name="gram" literal="g"
 	 * @generated
@@ -144,6 +157,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Ton</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #TON
 	 * @model name="ton"
 	 * @generated
@@ -155,6 +169,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Second</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #SECOND
 	 * @model name="second" literal="s"
 	 * @generated
@@ -166,6 +181,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Ampere</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #AMPERE
 	 * @model name="ampere" literal="A"
 	 * @generated
@@ -177,6 +193,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Kelvin</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #KELVIN
 	 * @model name="kelvin" literal="K"
 	 * @generated
@@ -188,6 +205,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Mole</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #MOLE
 	 * @model name="mole" literal="mol"
 	 * @generated
@@ -199,6 +217,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Candela</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #CANDELA
 	 * @model name="candela" literal="ca"
 	 * @generated
@@ -210,6 +229,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Pascal</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #PASCAL
 	 * @model name="pascal" literal="Pa"
 	 * @generated
@@ -221,6 +241,7 @@ public enum ESIUnitType implements Enumerator {
 	 * The '<em><b>Joul</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #JOUL
 	 * @model name="Joul" literal="J"
 	 * @generated
@@ -232,26 +253,27 @@ public enum ESIUnitType implements Enumerator {
 	 * An array of all the '<em><b>ESI Unit Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	private static final ESIUnitType[] VALUES_ARRAY =
-		new ESIUnitType[] {
-			METER,
-			GRAM,
-			TON,
-			SECOND,
-			AMPERE,
-			KELVIN,
-			MOLE,
-			CANDELA,
-			PASCAL,
-			JOUL,
-		};
+	private static final ESIUnitType[] VALUES_ARRAY = new ESIUnitType[] {
+		METER,
+		GRAM,
+		TON,
+		SECOND,
+		AMPERE,
+		KELVIN,
+		MOLE,
+		CANDELA,
+		PASCAL,
+		JOUL,
+	};
 
 	/**
 	 * A public read-only list of all the '<em><b>ESI Unit Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final List<ESIUnitType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
@@ -260,13 +282,14 @@ public enum ESIUnitType implements Enumerator {
 	 * Returns the '<em><b>ESI Unit Type</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param literal the literal.
+	 *
+	 * @param literal
+	 *            the literal.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static ESIUnitType get(String literal) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			ESIUnitType result = VALUES_ARRAY[i];
+	public static ESIUnitType get(final String literal) {
+		for (final ESIUnitType result : VALUES_ARRAY) {
 			if (result.toString().equals(literal)) {
 				return result;
 			}
@@ -278,13 +301,14 @@ public enum ESIUnitType implements Enumerator {
 	 * Returns the '<em><b>ESI Unit Type</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param name the name.
+	 *
+	 * @param name
+	 *            the name.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static ESIUnitType getByName(String name) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			ESIUnitType result = VALUES_ARRAY[i];
+	public static ESIUnitType getByName(final String name) {
+		for (final ESIUnitType result : VALUES_ARRAY) {
 			if (result.getName().equals(name)) {
 				return result;
 			}
@@ -296,22 +320,34 @@ public enum ESIUnitType implements Enumerator {
 	 * Returns the '<em><b>ESI Unit Type</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the integer value.
+	 *
+	 * @param value
+	 *            the integer value.
 	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
-	public static ESIUnitType get(int value) {
+	public static ESIUnitType get(final int value) {
 		switch (value) {
-			case METER_VALUE: return METER;
-			case GRAM_VALUE: return GRAM;
-			case TON_VALUE: return TON;
-			case SECOND_VALUE: return SECOND;
-			case AMPERE_VALUE: return AMPERE;
-			case KELVIN_VALUE: return KELVIN;
-			case MOLE_VALUE: return MOLE;
-			case CANDELA_VALUE: return CANDELA;
-			case PASCAL_VALUE: return PASCAL;
-			case JOUL_VALUE: return JOUL;
+		case METER_VALUE:
+			return METER;
+		case GRAM_VALUE:
+			return GRAM;
+		case TON_VALUE:
+			return TON;
+		case SECOND_VALUE:
+			return SECOND;
+		case AMPERE_VALUE:
+			return AMPERE;
+		case KELVIN_VALUE:
+			return KELVIN;
+		case MOLE_VALUE:
+			return MOLE;
+		case CANDELA_VALUE:
+			return CANDELA;
+		case PASCAL_VALUE:
+			return PASCAL;
+		case JOUL_VALUE:
+			return JOUL;
 		}
 		return null;
 	}
@@ -319,6 +355,7 @@ public enum ESIUnitType implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final int value;
@@ -326,6 +363,7 @@ public enum ESIUnitType implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final String name;
@@ -333,6 +371,7 @@ public enum ESIUnitType implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private final String literal;
@@ -341,9 +380,10 @@ public enum ESIUnitType implements Enumerator {
 	 * Only this class can construct instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
-	private ESIUnitType(int value, String name, String literal) {
+	private ESIUnitType(final int value, final String name, final String literal) {
 		this.value = value;
 		this.name = name;
 		this.literal = literal;
@@ -352,42 +392,46 @@ public enum ESIUnitType implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getValue() {
-	  return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-	  return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getLiteral() {
-	  return literal;
+		return this.literal;
 	}
 
 	/**
 	 * Returns the literal value of the enumerator, which is its string representation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		return literal;
+		return this.literal;
 	}
-	
-} //ESIUnitType
+
+} // ESIUnitType

@@ -15,31 +15,28 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency.monitor;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 
-
 /**
  * @author Jan Waller
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.8
  */
-public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {			
-	
-		
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
+
 	/** default constants. */
 	public static final int LOCK_ID = 0;
 	private static final long serialVersionUID = -5428034537740978080L;
-	
+
 	/** property declarations. */
 	private final int lockId;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -54,20 +51,17 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = lockId;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.lockId = deserializer.getInt();
 	}
-	
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -82,45 +76,36 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || (this.getTraceId() != castedRecord.getTraceId()) || (this.getOrderIndex() != castedRecord.getOrderIndex())) {
 			return false;
 		}
 		if (this.getLockId() != castedRecord.getLockId()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
-		code += ((int)this.getLockId());
-		
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += (this.getOrderIndex());
+		code += (this.getLockId());
+
 		return code;
 	}
-	
+
 	public final int getLockId() {
 		return this.lockId;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,16 +114,16 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		String result = "AbstractMonitorEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "lockId = ";
 		result += this.getLockId() + ", ";
-		
+
 		return result;
 	}
 }

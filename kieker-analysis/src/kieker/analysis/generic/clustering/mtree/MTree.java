@@ -109,8 +109,8 @@ public class MTree<T> {
 
 		if (existingSplitFunction == null) {
 			this.splitFunction = new ComposedSplitFunction<>(
-					new RandomPromotionFunction<T>(),
-					new BalancedPartitionFunction<T>());
+					new RandomPromotionFunction<>(),
+					new BalancedPartitionFunction<>());
 		} else {
 			this.splitFunction = existingSplitFunction;
 		}
@@ -223,7 +223,7 @@ public class MTree<T> {
 	 * @return A {@link Query} object used to iterate on the results.
 	 */
 	public Query<T> getNearest(final T queryData, final double range, final int limit) {
-		return new Query<T>(this, queryData, range, limit);
+		return new Query<>(this, queryData, range, limit);
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class MTree<T> {
 	 * @return A {@link Query} object used to iterate on the results.
 	 */
 	public Query<T> getNearest(final T queryData) {
-		return new Query<T>(this, queryData, Double.POSITIVE_INFINITY, Integer.MAX_VALUE);
+		return new Query<>(this, queryData, Double.POSITIVE_INFINITY, Integer.MAX_VALUE);
 	}
 
 	public int getMaxNodeCapacity() {

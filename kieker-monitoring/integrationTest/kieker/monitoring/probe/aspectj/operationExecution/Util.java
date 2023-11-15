@@ -26,7 +26,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
  * Helper class for aspect integration tests
- * 
+ *
  * @author DaGeRe
  *
  */
@@ -38,7 +38,7 @@ public enum Util {
 	/**
 	 * Creates a temporary project folder, containing the example project (for all
 	 * tests with standard traces)
-	 * 
+	 *
 	 * @param aopXML
 	 * @return
 	 * @throws IOException
@@ -58,16 +58,16 @@ public enum Util {
 
 	/**
 	 * Runs a test case in a generated project
-	 * 
+	 *
 	 * @param projectFolder
 	 * @param testcase
 	 * @return
 	 * @throws IOException
 	 */
 	public static File runTestcase(final File projectFolder, final String testcase) throws IOException {
-		final File logFolder = createLogFolder(projectFolder);
+		final File logFolder = Util.createLogFolder(projectFolder);
 
-		callTest(testcase, projectFolder);
+		Util.callTest(testcase, projectFolder);
 
 		return logFolder;
 	}
@@ -84,7 +84,7 @@ public enum Util {
 
 	/**
 	 * Runs a test case in an individual project
-	 * 
+	 *
 	 * @param projectName
 	 * @param testcase
 	 * @return
@@ -92,9 +92,9 @@ public enum Util {
 	 */
 	public static File runTestcase(final String projectName, final String testcase) throws IOException {
 		final File folder = new File(EXAMPLE_PROJECT_FOLDER, projectName);
-		final File logFolder = createLogFolder(folder);
+		final File logFolder = Util.createLogFolder(folder);
 
-		callTest(testcase, folder);
+		Util.callTest(testcase, folder);
 		return logFolder;
 	}
 

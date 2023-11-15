@@ -19,9 +19,9 @@ package kieker.tools.trace.analysis.systemModel.repository;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public abstract class AbstractSystemSubRepository { // NOPMD (abstract without abstract)
@@ -35,7 +35,7 @@ public abstract class AbstractSystemSubRepository { // NOPMD (abstract without a
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -45,7 +45,7 @@ public abstract class AbstractSystemSubRepository { // NOPMD (abstract without a
 
 	/**
 	 * This method delivers the next ID and increments the ID counter atomically.
-	 * 
+	 *
 	 * @return The next ID.
 	 */
 	protected final int getAndIncrementNextId() {

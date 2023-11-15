@@ -35,10 +35,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Tests the RecordConverter.
- * 
+ *
  * @author Thomas Duellmann
  * @since 1.10
- * 
+ *
  */
 public final class RecordConverterTest extends AbstractKiekerTest {
 
@@ -91,7 +91,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 
 	/**
 	 * Set the values that are used in the test object that will be converted.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@BeforeClass
@@ -109,7 +109,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 	/**
 	 * Sets up a simple test filter structure (SimpleListReader -> RecordConverter -> ListCollectionFilter)
 	 * and creates an OperationExecutionRecord that will be converterd for testing reasons.
-	 * 
+	 *
 	 * @throws Exception
 	 *             throws exceptions that are thrown while setting up the filter structure
 	 */
@@ -141,7 +141,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 
 	/**
 	 * Converts the OperationExecutionRecord using the previously set up filter structure.
-	 * 
+	 *
 	 * @param oer
 	 * @throws IllegalStateException
 	 *             exception that can possibly be thrown by AnalysisController

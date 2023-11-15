@@ -25,7 +25,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.7
  */
 public class TestFSUtils extends AbstractKiekerTest {

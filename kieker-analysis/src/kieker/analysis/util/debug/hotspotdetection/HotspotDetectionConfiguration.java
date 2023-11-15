@@ -31,7 +31,7 @@ import kieker.analysis.architecture.trace.flow.FlowTraceEventMatcher;
 import kieker.analysis.architecture.trace.reconstruction.FlowRecordTraceReconstructionStage;
 import kieker.analysis.generic.ControlledEventReleaseStage;
 import kieker.analysis.generic.source.file.DirectoryReaderStage;
-import kieker.analysis.generic.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.file.KiekerDirectoryScannerStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.model.analysismodel.assembly.AssemblyFactory;
@@ -67,7 +67,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 		final SourceModel sourceModel = SourceFactory.eINSTANCE.createSourceModel();
 
 		// Create the stages
-		final DirectoryScannerStage directoryScannerStage = new DirectoryScannerStage(importDirectory);
+		final KiekerDirectoryScannerStage directoryScannerStage = new KiekerDirectoryScannerStage(importDirectory);
 		final DirectoryReaderStage directoryReaderStage = new DirectoryReaderStage(false, 80860);
 		// BETTER consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
