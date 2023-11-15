@@ -5,6 +5,13 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.15.4 (November 15, 2023)
+- Update dependencies to avoid security issues:
+  - Update jersey-server to 3.0.12 (latest Java 8 release)i
+  - okhttp to 4.12.0
+  - javaassist to 3.29.2-GA 
+  - groovy-all to 4.0.15
+
 * 1.15.3 (November 6, 2023)
 - Fix analysis problem: Allow analysis of multiple files again
 - Fix analysis problem: Correctly interpret timeout for maxTraceDuration
