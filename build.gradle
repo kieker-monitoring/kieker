@@ -2,11 +2,13 @@ buildscript {
   repositories {
     mavenCentral()
     maven { url "https://plugins.gradle.org/m2/" }
+    jcenter()
   }
 
   dependencies {
     classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
     //classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
+    classpath "com.kageiit:ekstazi-gradle-plugin:0.1.0"
   }
 }
 
