@@ -106,7 +106,7 @@ public class KafkaWriter implements IRawDataWriter {
 		properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		properties.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
 
-		this.producer = new KafkaProducer<String, byte[]>(properties);
+		this.producer = new KafkaProducer<>(properties);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class KafkaWriter implements IRawDataWriter {
 		final byte[] rawDataAsBytes = new byte[length];
 		buffer.get(rawDataAsBytes);
 
-		final ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(this.topicName, rawDataAsBytes);
+		final ProducerRecord<String, byte[]> record = new ProducerRecord<>(this.topicName, rawDataAsBytes);
 		this.producer.send(record);
 	}
 

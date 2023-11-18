@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.Value#getTimestamp <em>Timestamp</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.Value#getTimestamp <em>Timestamp</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getValue()
@@ -27,6 +27,7 @@ public interface Value extends EObject {
 	 * Returns the value of the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Timestamp</em>' attribute.
 	 * @see #setTimestamp(Instant)
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#getValue_Timestamp()
@@ -39,7 +40,9 @@ public interface Value extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.statistics.Value#getTimestamp <em>Timestamp</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Timestamp</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Timestamp</em>' attribute.
 	 * @see #getTimestamp()
 	 * @generated
 	 */

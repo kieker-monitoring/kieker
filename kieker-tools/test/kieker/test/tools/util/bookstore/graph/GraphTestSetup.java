@@ -23,16 +23,16 @@ import kieker.test.tools.util.GenericTestSetup;
 /**
  * Data transfer class for a graph test setup. It contains of a prepared analysis controller (which just
  * needs to be run) and a reference to a plugin which allows to access the produced graphs.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class GraphTestSetup extends GenericTestSetup<AbstractGraph<?, ?, ?>, GraphReceiverPlugin> {
 
 	/**
 	 * Creates a new graph test setup with the given data.
-	 * 
+	 *
 	 * @param analysisController
 	 *            The analysis controller to use
 	 * @param resultCollectionPlugin

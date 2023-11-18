@@ -21,7 +21,7 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Tom Frotscher
- * 
+ *
  * @since 1.10
  */
 public final class NamedDoubleRecordFactory implements IRecordFactory<NamedDoubleRecord> {

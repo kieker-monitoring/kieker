@@ -25,19 +25,19 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
  * paper on <i>Self-adaptive workload classification and forecasting for
  * proactive resource provisioning</i>
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
- * 
+ *
  * @since 1.10
  * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
- * 
+ *
  *         Cubic splines are fitted to the univariate time series data to obtain
  *         a trend estimate and linear forecast function.
- * 
+ *
  *         Prediction intervals are constructed by use of a likelihood approach for
  *         estimation of smoothing parameters. The cubic splines method can be mapped to
  *         an ARIMA 022 stochastic process model with a restricted parameter space.
- * 
+ *
  *         Overhead below 100ms for less than 30 values (more values do not sig. improve accuracy)
- * 
+ *
  */
 
 public class CSForecaster extends AbstractRForecaster {
@@ -47,7 +47,7 @@ public class CSForecaster extends AbstractRForecaster {
 
 	// private final static ForecastMethod strategy = ForecastMethod.CS;
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -56,7 +56,7 @@ public class CSForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 * @param confidenceLevel

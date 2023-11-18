@@ -20,27 +20,27 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This is a simple interface for a reader that works on a pipe.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public interface IPipeReader {
 
 	/**
 	 * Called to notify the reader that the pipe is closed.
-	 * 
+	 *
 	 * @since 1.3
 	 */
 	public void notifyPipeClosed();
 
 	/**
 	 * Called for each new record.
-	 * 
+	 *
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);

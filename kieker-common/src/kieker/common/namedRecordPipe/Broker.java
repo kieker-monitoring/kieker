@@ -19,9 +19,9 @@ package kieker.common.namedRecordPipe;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public enum Broker { // Singleton pattern (Effective Java #3)
@@ -31,17 +31,17 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	/**
 	 * Access synchronized through synchronized method {@link #acquirePipe(String)} !
 	 */
-	private final transient ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<String, Pipe>();
+	private final transient ConcurrentHashMap<String, Pipe> pipeMap = new ConcurrentHashMap<>();
 
 	/**
 	 * Returns a connection with name {@code pipeName}. If a connection with this
 	 * name does not exist prior to the call, it is created.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe.
-	 * 
+	 *
 	 * @return The acquired pipe.
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *             If the pipe name is null or empty.
 	 */

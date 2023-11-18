@@ -27,9 +27,9 @@ import java.util.TimeZone;
 
 /**
  * This is a utility class which can be used to convert timestamps, for example by transforming a simple timestamp into a human-readable datetime string.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 public final class LoggingTimestampConversionUtils {
@@ -46,11 +46,11 @@ public final class LoggingTimestampConversionUtils {
 	/**
 	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
 	 * 1970 UTC into a human-readable datetime string given in the UTC timezone.
-	 * 
+	 *
 	 * Note that no guarantees are made about the actual format.
 	 * Particularly, it is not guaranteed that the string can be reconverted
 	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
-	 * 
+	 *
 	 * @param loggingTimestamp
 	 *            The timestamp to be converted in nanoseconds.
 	 * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
@@ -66,11 +66,11 @@ public final class LoggingTimestampConversionUtils {
 	/**
 	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
 	 * 1970 UTC into a human-readable datetime string given in the local timezone.
-	 * 
+	 *
 	 * Note that no guarantees are made about the actual format.
 	 * Particularly, it is not guaranteed that the string can be reconverted
 	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
-	 * 
+	 *
 	 * @param loggingTimestamp
 	 *            The timestamp to be converted.
 	 * @return a human-readable datetime string (local timezone) which represents the passed timestamp
@@ -86,7 +86,7 @@ public final class LoggingTimestampConversionUtils {
 	 * Converts a datetime string of format <i>yyyyMMdd-HHmmss</i> (UTC timezone)
 	 * into a timestamp representing the number of nanoseconds
 	 * since Jan 1, 1970 UTC.
-	 * 
+	 *
 	 * @param utcString
 	 *            The string to be converted.
 	 * @return a timestamp which represents the passed time
@@ -102,7 +102,7 @@ public final class LoggingTimestampConversionUtils {
 	/**
 	 * Converts a datetime string of format <i>yyyyMMdd-HHmmss</i> (UTC timezone)
 	 * into a Date object.
-	 * 
+	 *
 	 * @param utcString
 	 *            The string to be converted.
 	 * @return a Date object which represents the passed time

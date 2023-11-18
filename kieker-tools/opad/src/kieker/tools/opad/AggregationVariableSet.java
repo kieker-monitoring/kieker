@@ -23,10 +23,10 @@ import java.util.List;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 
 /**
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
- * 
+ *
  */
 public class AggregationVariableSet {
 
@@ -43,7 +43,7 @@ public class AggregationVariableSet {
 		this.firstTimestampInCurrentInterval = -1;
 		this.lastTimestampInCurrentInterval = -1;
 		this.firstIntervalStart = -1;
-		this.aggregationList = Collections.synchronizedList(new ArrayList<NamedDoubleTimeSeriesPoint>());
+		this.aggregationList = Collections.synchronizedList(new ArrayList<>());
 	}
 
 	public long getFirstTimestampInCurrentInterval() {

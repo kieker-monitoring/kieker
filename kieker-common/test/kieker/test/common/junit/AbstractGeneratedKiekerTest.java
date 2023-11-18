@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * @author Reiner Jung
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {

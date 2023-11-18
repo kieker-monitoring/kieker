@@ -4,12 +4,25 @@ package kieker.model.analysismodel.statistics.util;
 
 import java.util.Map;
 
-import kieker.model.analysismodel.statistics.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import kieker.model.analysismodel.statistics.ComposedUnit;
+import kieker.model.analysismodel.statistics.CustomUnit;
+import kieker.model.analysismodel.statistics.DoubleMeasurement;
+import kieker.model.analysismodel.statistics.FloatMeasurement;
+import kieker.model.analysismodel.statistics.IntMeasurement;
+import kieker.model.analysismodel.statistics.LongMeasurement;
+import kieker.model.analysismodel.statistics.Measurement;
+import kieker.model.analysismodel.statistics.SIUnit;
+import kieker.model.analysismodel.statistics.ScalarMeasurement;
+import kieker.model.analysismodel.statistics.SimpleUnit;
+import kieker.model.analysismodel.statistics.StatisticRecord;
+import kieker.model.analysismodel.statistics.StatisticsModel;
+import kieker.model.analysismodel.statistics.StatisticsPackage;
+import kieker.model.analysismodel.statistics.Unit;
+import kieker.model.analysismodel.statistics.VectorMeasurement;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +34,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
+ *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage
  * @generated
  */
@@ -29,6 +43,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected static StatisticsPackage modelPackage;
@@ -37,6 +52,7 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public StatisticsSwitch() {
@@ -49,12 +65,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param ePackage the package in question.
+	 *
+	 * @param ePackage
+	 *            the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(EPackage ePackage) {
+	protected boolean isSwitchFor(final EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
@@ -62,124 +80,190 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T doSwitch(final int classifierID, final EObject theEObject) {
 		switch (classifierID) {
-			case StatisticsPackage.STATISTIC_RECORD: {
-				StatisticRecord statisticRecord = (StatisticRecord)theEObject;
-				T result = caseStatisticRecord(statisticRecord);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+		case StatisticsPackage.STATISTIC_RECORD: {
+			final StatisticRecord statisticRecord = (StatisticRecord) theEObject;
+			T result = this.caseStatisticRecord(statisticRecord);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE: {
-				@SuppressWarnings("unchecked") Map.Entry<String, Object> ePropertyTypeToValue = (Map.Entry<String, Object>)theEObject;
-				T result = caseEPropertyTypeToValue(ePropertyTypeToValue);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.EPROPERTY_TYPE_TO_VALUE: {
+			@SuppressWarnings("unchecked")
+			final Map.Entry<String, Object> ePropertyTypeToValue = (Map.Entry<String, Object>) theEObject;
+			T result = this.caseEPropertyTypeToValue(ePropertyTypeToValue);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.MEASUREMENT: {
-				Measurement measurement = (Measurement)theEObject;
-				T result = caseMeasurement(measurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.MEASUREMENT: {
+			final Measurement measurement = (Measurement) theEObject;
+			T result = this.caseMeasurement(measurement);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.SCALAR_MEASUREMENT: {
-				ScalarMeasurement scalarMeasurement = (ScalarMeasurement)theEObject;
-				T result = caseScalarMeasurement(scalarMeasurement);
-				if (result == null) result = caseMeasurement(scalarMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.SCALAR_MEASUREMENT: {
+			final ScalarMeasurement scalarMeasurement = (ScalarMeasurement) theEObject;
+			T result = this.caseScalarMeasurement(scalarMeasurement);
+			if (result == null) {
+				result = this.caseMeasurement(scalarMeasurement);
 			}
-			case StatisticsPackage.VECTOR_MEASUREMENT: {
-				VectorMeasurement vectorMeasurement = (VectorMeasurement)theEObject;
-				T result = caseVectorMeasurement(vectorMeasurement);
-				if (result == null) result = caseMeasurement(vectorMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.INT_MEASUREMENT: {
-				IntMeasurement intMeasurement = (IntMeasurement)theEObject;
-				T result = caseIntMeasurement(intMeasurement);
-				if (result == null) result = caseScalarMeasurement(intMeasurement);
-				if (result == null) result = caseMeasurement(intMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.VECTOR_MEASUREMENT: {
+			final VectorMeasurement vectorMeasurement = (VectorMeasurement) theEObject;
+			T result = this.caseVectorMeasurement(vectorMeasurement);
+			if (result == null) {
+				result = this.caseMeasurement(vectorMeasurement);
 			}
-			case StatisticsPackage.LONG_MEASUREMENT: {
-				LongMeasurement longMeasurement = (LongMeasurement)theEObject;
-				T result = caseLongMeasurement(longMeasurement);
-				if (result == null) result = caseScalarMeasurement(longMeasurement);
-				if (result == null) result = caseMeasurement(longMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.FLOAT_MEASUREMENT: {
-				FloatMeasurement floatMeasurement = (FloatMeasurement)theEObject;
-				T result = caseFloatMeasurement(floatMeasurement);
-				if (result == null) result = caseScalarMeasurement(floatMeasurement);
-				if (result == null) result = caseMeasurement(floatMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.INT_MEASUREMENT: {
+			final IntMeasurement intMeasurement = (IntMeasurement) theEObject;
+			T result = this.caseIntMeasurement(intMeasurement);
+			if (result == null) {
+				result = this.caseScalarMeasurement(intMeasurement);
 			}
-			case StatisticsPackage.DOUBLE_MEASUREMENT: {
-				DoubleMeasurement doubleMeasurement = (DoubleMeasurement)theEObject;
-				T result = caseDoubleMeasurement(doubleMeasurement);
-				if (result == null) result = caseScalarMeasurement(doubleMeasurement);
-				if (result == null) result = caseMeasurement(doubleMeasurement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.caseMeasurement(intMeasurement);
 			}
-			case StatisticsPackage.STATISTICS_MODEL: {
-				StatisticsModel statisticsModel = (StatisticsModel)theEObject;
-				T result = caseStatisticsModel(statisticsModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<EObject, StatisticRecord> eObjectToStatisticsMapEntry = (Map.Entry<EObject, StatisticRecord>)theEObject;
-				T result = caseEObjectToStatisticsMapEntry(eObjectToStatisticsMapEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.LONG_MEASUREMENT: {
+			final LongMeasurement longMeasurement = (LongMeasurement) theEObject;
+			T result = this.caseLongMeasurement(longMeasurement);
+			if (result == null) {
+				result = this.caseScalarMeasurement(longMeasurement);
 			}
-			case StatisticsPackage.UNIT: {
-				Unit unit = (Unit)theEObject;
-				T result = caseUnit(unit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.caseMeasurement(longMeasurement);
 			}
-			case StatisticsPackage.COMPOSED_UNIT: {
-				ComposedUnit composedUnit = (ComposedUnit)theEObject;
-				T result = caseComposedUnit(composedUnit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			case StatisticsPackage.SIMPLE_UNIT: {
-				SimpleUnit simpleUnit = (SimpleUnit)theEObject;
-				T result = caseSimpleUnit(simpleUnit);
-				if (result == null) result = caseUnit(simpleUnit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			return result;
+		}
+		case StatisticsPackage.FLOAT_MEASUREMENT: {
+			final FloatMeasurement floatMeasurement = (FloatMeasurement) theEObject;
+			T result = this.caseFloatMeasurement(floatMeasurement);
+			if (result == null) {
+				result = this.caseScalarMeasurement(floatMeasurement);
 			}
-			case StatisticsPackage.SI_UNIT: {
-				SIUnit siUnit = (SIUnit)theEObject;
-				T result = caseSIUnit(siUnit);
-				if (result == null) result = caseSimpleUnit(siUnit);
-				if (result == null) result = caseUnit(siUnit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.caseMeasurement(floatMeasurement);
 			}
-			case StatisticsPackage.CUSTOM_UNIT: {
-				CustomUnit customUnit = (CustomUnit)theEObject;
-				T result = caseCustomUnit(customUnit);
-				if (result == null) result = caseSimpleUnit(customUnit);
-				if (result == null) result = caseUnit(customUnit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
+			if (result == null) {
+				result = this.defaultCase(theEObject);
 			}
-			default: return defaultCase(theEObject);
+			return result;
+		}
+		case StatisticsPackage.DOUBLE_MEASUREMENT: {
+			final DoubleMeasurement doubleMeasurement = (DoubleMeasurement) theEObject;
+			T result = this.caseDoubleMeasurement(doubleMeasurement);
+			if (result == null) {
+				result = this.caseScalarMeasurement(doubleMeasurement);
+			}
+			if (result == null) {
+				result = this.caseMeasurement(doubleMeasurement);
+			}
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.STATISTICS_MODEL: {
+			final StatisticsModel statisticsModel = (StatisticsModel) theEObject;
+			T result = this.caseStatisticsModel(statisticsModel);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.EOBJECT_TO_STATISTICS_MAP_ENTRY: {
+			@SuppressWarnings("unchecked")
+			final Map.Entry<EObject, StatisticRecord> eObjectToStatisticsMapEntry = (Map.Entry<EObject, StatisticRecord>) theEObject;
+			T result = this.caseEObjectToStatisticsMapEntry(eObjectToStatisticsMapEntry);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.UNIT: {
+			final Unit unit = (Unit) theEObject;
+			T result = this.caseUnit(unit);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.COMPOSED_UNIT: {
+			final ComposedUnit composedUnit = (ComposedUnit) theEObject;
+			T result = this.caseComposedUnit(composedUnit);
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.SIMPLE_UNIT: {
+			final SimpleUnit simpleUnit = (SimpleUnit) theEObject;
+			T result = this.caseSimpleUnit(simpleUnit);
+			if (result == null) {
+				result = this.caseUnit(simpleUnit);
+			}
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.SI_UNIT: {
+			final SIUnit siUnit = (SIUnit) theEObject;
+			T result = this.caseSIUnit(siUnit);
+			if (result == null) {
+				result = this.caseSimpleUnit(siUnit);
+			}
+			if (result == null) {
+				result = this.caseUnit(siUnit);
+			}
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		case StatisticsPackage.CUSTOM_UNIT: {
+			final CustomUnit customUnit = (CustomUnit) theEObject;
+			T result = this.caseCustomUnit(customUnit);
+			if (result == null) {
+				result = this.caseSimpleUnit(customUnit);
+			}
+			if (result == null) {
+				result = this.caseUnit(customUnit);
+			}
+			if (result == null) {
+				result = this.defaultCase(theEObject);
+			}
+			return result;
+		}
+		default:
+			return this.defaultCase(theEObject);
 		}
 	}
 
@@ -189,12 +273,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Statistic Record</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseStatisticRecord(StatisticRecord object) {
+	public T caseStatisticRecord(final StatisticRecord object) {
 		return null;
 	}
 
@@ -204,12 +290,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EProperty Type To Value</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEPropertyTypeToValue(Map.Entry<String, Object> object) {
+	public T caseEPropertyTypeToValue(final Map.Entry<String, Object> object) {
 		return null;
 	}
 
@@ -219,12 +307,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMeasurement(Measurement object) {
+	public T caseMeasurement(final Measurement object) {
 		return null;
 	}
 
@@ -234,12 +324,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Scalar Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseScalarMeasurement(ScalarMeasurement object) {
+	public T caseScalarMeasurement(final ScalarMeasurement object) {
 		return null;
 	}
 
@@ -249,12 +341,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Vector Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseVectorMeasurement(VectorMeasurement object) {
+	public T caseVectorMeasurement(final VectorMeasurement object) {
 		return null;
 	}
 
@@ -264,12 +358,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Int Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseIntMeasurement(IntMeasurement object) {
+	public T caseIntMeasurement(final IntMeasurement object) {
 		return null;
 	}
 
@@ -279,12 +375,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Long Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLongMeasurement(LongMeasurement object) {
+	public T caseLongMeasurement(final LongMeasurement object) {
 		return null;
 	}
 
@@ -294,12 +392,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Float Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFloatMeasurement(FloatMeasurement object) {
+	public T caseFloatMeasurement(final FloatMeasurement object) {
 		return null;
 	}
 
@@ -309,12 +409,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Double Measurement</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDoubleMeasurement(DoubleMeasurement object) {
+	public T caseDoubleMeasurement(final DoubleMeasurement object) {
 		return null;
 	}
 
@@ -324,12 +426,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUnit(Unit object) {
+	public T caseUnit(final Unit object) {
 		return null;
 	}
 
@@ -339,12 +443,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Composed Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseComposedUnit(ComposedUnit object) {
+	public T caseComposedUnit(final ComposedUnit object) {
 		return null;
 	}
 
@@ -354,12 +460,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Simple Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSimpleUnit(SimpleUnit object) {
+	public T caseSimpleUnit(final SimpleUnit object) {
 		return null;
 	}
 
@@ -369,12 +477,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>SI Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSIUnit(SIUnit object) {
+	public T caseSIUnit(final SIUnit object) {
 		return null;
 	}
 
@@ -384,12 +494,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Custom Unit</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCustomUnit(CustomUnit object) {
+	public T caseCustomUnit(final CustomUnit object) {
 		return null;
 	}
 
@@ -399,12 +511,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseStatisticsModel(StatisticsModel object) {
+	public T caseStatisticsModel(final StatisticsModel object) {
 		return null;
 	}
 
@@ -414,12 +528,14 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject To Statistics Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEObjectToStatisticsMapEntry(Map.Entry<EObject, StatisticRecord> object) {
+	public T caseEObjectToStatisticsMapEntry(final Map.Entry<EObject, StatisticRecord> object) {
 		return null;
 	}
 
@@ -429,14 +545,16 @@ public class StatisticsSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 *
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T defaultCase(final EObject object) {
 		return null;
 	}
 
-} //StatisticsSwitch
+} // StatisticsSwitch

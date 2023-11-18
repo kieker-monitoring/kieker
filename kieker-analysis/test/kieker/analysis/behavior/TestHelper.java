@@ -40,7 +40,7 @@ import kieker.analysis.generic.graph.impl.NodeImpl;
  */
 public final class TestHelper {
 
-	private TestHelper() {};
+	private TestHelper() {}
 
 	public static EntryCallEvent createEvent(final int time, final String name, final String[] parameters,
 			final String[] values) {
@@ -125,7 +125,7 @@ public final class TestHelper {
 		// final GraphEditDistance ged = new GraphEditDistance();
 		final BasicCostFunction<INode, IEdge> costFunction = new BasicCostFunction<>(1, 1);
 		final IDistanceFunction<MutableNetwork<INode, IEdge>> distanceFunction = new GraphEditDistance<>(costFunction);
-		final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mtree = new MTree<>(20, 40, new OPTICSDataGED<MutableNetwork<INode, IEdge>>(distanceFunction), null);
+		final MTree<OpticsData<MutableNetwork<INode, IEdge>>> mtree = new MTree<>(20, 40, new OPTICSDataGED<>(distanceFunction), null);
 
 		for (final OpticsData<MutableNetwork<INode, IEdge>> model : models) {
 			mtree.add(model);

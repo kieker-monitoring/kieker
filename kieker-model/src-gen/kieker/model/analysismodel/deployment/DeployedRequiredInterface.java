@@ -2,9 +2,9 @@
  */
 package kieker.model.analysismodel.deployment;
 
-import kieker.model.analysismodel.assembly.AssemblyRequiredInterface;
-
 import org.eclipse.emf.ecore.EObject;
+
+import kieker.model.analysismodel.assembly.AssemblyRequiredInterface;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}</li>
- *   <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedRequiredInterface()
@@ -28,6 +28,7 @@ public interface DeployedRequiredInterface extends EObject {
 	 * Returns the value of the '<em><b>Required Interface</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Required Interface</em>' reference.
 	 * @see #setRequiredInterface(AssemblyRequiredInterface)
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedRequiredInterface_RequiredInterface()
@@ -40,7 +41,9 @@ public interface DeployedRequiredInterface extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequiredInterface <em>Required Interface</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Required Interface</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Required Interface</em>' reference.
 	 * @see #getRequiredInterface()
 	 * @generated
 	 */
@@ -50,6 +53,7 @@ public interface DeployedRequiredInterface extends EObject {
 	 * Returns the value of the '<em><b>Requires</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Requires</em>' reference.
 	 * @see #setRequires(DeployedProvidedInterface)
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeployedRequiredInterface_Requires()
@@ -62,7 +66,9 @@ public interface DeployedRequiredInterface extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.deployment.DeployedRequiredInterface#getRequires <em>Requires</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Requires</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Requires</em>' reference.
 	 * @see #getRequires()
 	 * @generated
 	 */

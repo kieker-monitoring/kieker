@@ -2,15 +2,13 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
-import kieker.analysis.model.analysisMetaModel.MIProperty;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +29,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -42,7 +40,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -53,7 +51,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -64,7 +62,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -74,7 +72,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MProperty() {
@@ -84,7 +82,7 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -95,62 +93,64 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setValue(String newValue) {
-		String oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, value));
+	public void setValue(final String newValue) {
+		final String oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROPERTY__VALUE, oldValue, this.value));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROPERTY__NAME:
-			return getName();
+			return this.getName();
 		case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
-			return getValue();
+			return this.getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,17 +158,17 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROPERTY__NAME:
-			setName((String) newValue);
+			this.setName((String) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
-			setValue((String) newValue);
+			this.setValue((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -177,17 +177,17 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROPERTY__NAME:
-			setName(NAME_EDEFAULT);
+			this.setName(NAME_EDEFAULT);
 			return;
 		case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
-			setValue(VALUE_EDEFAULT);
+			this.setValue(VALUE_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -196,16 +196,16 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROPERTY__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		case MIAnalysisMetaModelPackage.PROPERTY__VALUE:
-			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+			return VALUE_EDEFAULT == null ? this.value != null : !VALUE_EDEFAULT.equals(this.value);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -213,19 +213,20 @@ public class MProperty extends EObjectImpl implements MIProperty {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (this.eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", value: ");
-		result.append(value);
+		result.append(this.value);
 		result.append(')');
 		return result.toString();
 	}

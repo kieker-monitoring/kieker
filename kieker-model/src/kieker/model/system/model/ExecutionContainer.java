@@ -29,7 +29,7 @@ public class ExecutionContainer implements ISystemModelElement { // NOPMD DataCl
 	private final int id;
 	private final String name;
 	private final ExecutionContainer parent;
-	private final Collection<ExecutionContainer> childContainers = Collections.synchronizedList(new ArrayList<ExecutionContainer>());
+	private final Collection<ExecutionContainer> childContainers = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

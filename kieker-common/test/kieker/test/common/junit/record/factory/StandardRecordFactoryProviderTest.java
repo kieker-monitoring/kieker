@@ -30,13 +30,13 @@ import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * Test cases for the standard record factory provider.
- * 
+ *
  * @author Holger Knoche
  * @since 2.0
  */
 public class StandardRecordFactoryProviderTest extends AbstractKiekerTest {
-    
-    private StandardRecordFactoryProvider provider;
+
+	private StandardRecordFactoryProvider provider;
 
 	/** test constructor. */
 	public StandardRecordFactoryProviderTest() {
@@ -48,18 +48,18 @@ public class StandardRecordFactoryProviderTest extends AbstractKiekerTest {
 		this.provider = new StandardRecordFactoryProvider();
 	}
 
-    /**
-     * Test case: The expected factory for a record type with a factory is returned.
-     */
+	/**
+	 * Test case: The expected factory for a record type with a factory is returned.
+	 */
 	@Test
 	public void testRecordWithFactory() {
 		final IRecordFactory<?> recordFactory = this.provider.createFactoryFor(AfterOperationEvent.class);
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 	}
 
-    /**
-     * Test case: No record factory is returned for a record type without an according factory.
-     */
+	/**
+	 * Test case: No record factory is returned for a record type without an according factory.
+	 */
 	@Test
 	public void testRecordWithoutFactory() {
 		final IRecordFactory<?> recordFactory = this.provider.createFactoryFor(TestRecord.class);

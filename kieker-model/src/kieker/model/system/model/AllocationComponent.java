@@ -17,9 +17,9 @@
 package kieker.model.system.model;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AllocationComponent implements ISystemModelElement {

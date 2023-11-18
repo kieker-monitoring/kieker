@@ -14,4 +14,3 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.model.repository;
-

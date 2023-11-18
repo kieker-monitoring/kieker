@@ -37,7 +37,6 @@ public enum VertexType {
 	DEPLOYED_OPERATION("deployed operation"), //
 	DEPLOYED_STORAGE("deployed storage"); //
 
-
 	private final String name;
 
 	private VertexType(final String name) {

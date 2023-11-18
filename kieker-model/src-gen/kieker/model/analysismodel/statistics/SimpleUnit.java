@@ -2,7 +2,6 @@
  */
 package kieker.model.analysismodel.statistics;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Simple Unit</b></em>'.
@@ -12,7 +11,7 @@ package kieker.model.analysismodel.statistics;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.SimpleUnit#getPrefix <em>Prefix</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.SimpleUnit#getPrefix <em>Prefix</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.statistics.StatisticsPackage#getSimpleUnit()
@@ -25,6 +24,7 @@ public interface SimpleUnit extends Unit {
 	 * The literals are from the enumeration {@link kieker.model.analysismodel.statistics.EPrefix}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Prefix</em>' attribute.
 	 * @see kieker.model.analysismodel.statistics.EPrefix
 	 * @see #setPrefix(EPrefix)
@@ -38,7 +38,9 @@ public interface SimpleUnit extends Unit {
 	 * Sets the value of the '{@link kieker.model.analysismodel.statistics.SimpleUnit#getPrefix <em>Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Prefix</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Prefix</em>' attribute.
 	 * @see kieker.model.analysismodel.statistics.EPrefix
 	 * @see #getPrefix()
 	 * @generated

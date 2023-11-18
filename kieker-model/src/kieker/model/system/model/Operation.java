@@ -98,7 +98,7 @@ public class Operation { // NOPMD DataClass
 	@Override
 	public int hashCode() {
 		int hash = 5;
-		hash = 17 * hash + this.id;
+		hash = (17 * hash) + this.id;
 		return hash;
 	}
 

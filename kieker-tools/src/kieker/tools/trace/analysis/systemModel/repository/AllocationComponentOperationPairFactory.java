@@ -25,9 +25,9 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
@@ -35,13 +35,13 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 			OperationRepository.ROOT_OPERATION,
 			AllocationRepository.ROOT_ALLOCATION_COMPONENT);
 
-	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<String, AllocationComponentOperationPair>(); // NOPMD
-	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<Integer, AllocationComponentOperationPair>(); // NOPMD
+	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<>(); // NOPMD
+	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<>(); // NOPMD
 
 	/**
-	 * 
+	 *
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The repository for this component.
 	 */
@@ -51,12 +51,12 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	/**
 	 * Returns a corresponding pair instance (existing or newly created).
-	 * 
+	 *
 	 * @param allocationComponent
 	 *            The first element of the pair (the allocation component).
 	 * @param operation
 	 *            The second element of the pair (the operation).
-	 * 
+	 *
 	 * @return A (possible new) pair containing both elements.
 	 */
 	public final AllocationComponentOperationPair getPairInstanceByPair(final AllocationComponent allocationComponent, final Operation operation) {
@@ -69,12 +69,12 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	/**
 	 * Creates a new pair using both elements and registers it was well.
-	 * 
+	 *
 	 * @param operation
 	 *            The second element of the pair (the operation).
 	 * @param allocationComponent
 	 *            The first element of the pair (the allocation component).
-	 * 
+	 *
 	 * @return The newly created pair.
 	 */
 	private final AllocationComponentOperationPair createAndRegisterPair(final Operation operation, final AllocationComponent allocationComponent) {
@@ -83,10 +83,10 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	/**
 	 * Returns the instance for the passed factory name; null if no instance with this factory name exists.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier to search for.
-	 * 
+	 *
 	 * @return The corresponding pair to the given identifier if it exists, null otherwise.
 	 */
 	private final AllocationComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier) {
@@ -95,10 +95,10 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	/**
 	 * Returns the instance for the passed ID; null if no instance with this ID is available.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of the instance in question.
-	 * 
+	 *
 	 * @return The corresponding pair to the given ID if it exists, null otherwise.
 	 */
 	public final AllocationComponentOperationPair getPairById(final int id) {
@@ -119,7 +119,7 @@ public class AllocationComponentOperationPairFactory extends AbstractSystemSubRe
 
 	/**
 	 * Delivers all available allocation-component-operation pairs.
-	 * 
+	 *
 	 * @return A collection containing all available pairs.
 	 */
 	public final Collection<AllocationComponentOperationPair> getPairs() {

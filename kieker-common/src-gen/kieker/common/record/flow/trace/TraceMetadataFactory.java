@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
-	
 
 	@Override
 	public TraceMetadata create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new TraceMetadata(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

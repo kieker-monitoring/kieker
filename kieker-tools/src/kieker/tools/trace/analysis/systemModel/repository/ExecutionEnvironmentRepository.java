@@ -24,9 +24,9 @@ import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 import kieker.tools.trace.analysis.systemModel.RootExecutionContainer;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
@@ -34,12 +34,12 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	/** The root execution container. */
 	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();
 
-	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<Integer, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, ExecutionContainer> executionContainersById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -50,7 +50,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	/**
 	 * @param namedIdentifier
 	 *            The identifier to search for.
-	 * 
+	 *
 	 * @return The instance for the passed namedIdentifier; null if no instance with this namedIdentifier.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(final String namedIdentifier) {
@@ -60,10 +60,10 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	/**
 	 * Returns the instance for the passed container ID; null if no instance
 	 * with this ID.
-	 * 
+	 *
 	 * @param containerId
 	 *            The ID to search for.
-	 * 
+	 *
 	 * @return The container for the given ID if it exists; null otherwise.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByContainerId(final int containerId) {
@@ -72,12 +72,12 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 
 	/**
 	 * This method creates a new execution container and registers it as well.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier of the new container.
 	 * @param name
 	 *            The name of the new container.
-	 * 
+	 *
 	 * @return The newly created execution container.
 	 */
 	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
@@ -93,7 +93,7 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 
 	/**
 	 * Delivers all available execution containers.
-	 * 
+	 *
 	 * @return A collection containing the available containers.
 	 */
 	public final Collection<ExecutionContainer> getExecutionContainers() {

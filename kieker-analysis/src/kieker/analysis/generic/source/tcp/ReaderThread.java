@@ -143,7 +143,7 @@ final class ReaderThread extends Thread {
 		buffer.flip();
 
 		try {
-			while (buffer.position() + 4 < buffer.limit()) {
+			while ((buffer.position() + 4) < buffer.limit()) {
 				buffer.mark();
 				if (!this.onBufferReceived(connection)) {
 					return;
@@ -174,8 +174,8 @@ final class ReaderThread extends Thread {
 
 	private boolean registerRegistryEntry(final Connection connection) {
 		// identify string identifier and string length
-		if (connection.getBuffer().remaining() < INT_BYTES
-				+ INT_BYTES) {
+		if (connection.getBuffer().remaining() < (INT_BYTES
+				+ INT_BYTES)) {
 			// incomplete record, move back
 			connection.getBuffer().reset();
 			connection.getBuffer().compact();

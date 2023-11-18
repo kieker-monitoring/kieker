@@ -2,6 +2,12 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisComponent;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
@@ -20,25 +26,18 @@ import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.MIView;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysisMetaModelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass projectEClass = null;
@@ -46,7 +45,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass pluginEClass = null;
@@ -54,7 +53,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass portEClass = null;
@@ -62,7 +61,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass inputPortEClass = null;
@@ -70,7 +69,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass outputPortEClass = null;
@@ -78,7 +77,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass propertyEClass = null;
@@ -86,7 +85,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass filterEClass = null;
@@ -94,7 +93,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass readerEClass = null;
@@ -102,7 +101,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass repositoryEClass = null;
@@ -110,7 +109,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass dependencyEClass = null;
@@ -118,7 +117,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass repositoryConnectorEClass = null;
@@ -126,7 +125,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass displayEClass = null;
@@ -134,7 +133,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass viewEClass = null;
@@ -142,7 +141,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass displayConnectorEClass = null;
@@ -150,7 +149,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private EClass analysisComponentEClass = null;
@@ -166,7 +165,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#eNS_URI
 	 * @see #init()
@@ -179,31 +178,32 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>
 	 * This method is used to initialize {@link MIAnalysisMetaModelPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static MIAnalysisMetaModelPackage init() {
-		if (isInited)
+		if (isInited) {
 			return (MIAnalysisMetaModelPackage) EPackage.Registry.INSTANCE.getEPackage(MIAnalysisMetaModelPackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
-		MAnalysisMetaModelPackage theAnalysisMetaModelPackage = (MAnalysisMetaModelPackage) (EPackage.Registry.INSTANCE
+		final MAnalysisMetaModelPackage theAnalysisMetaModelPackage = (MAnalysisMetaModelPackage) (EPackage.Registry.INSTANCE
 				.get(eNS_URI) instanceof MAnalysisMetaModelPackage ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MAnalysisMetaModelPackage());
 
 		isInited = true;
@@ -225,527 +225,527 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getProject() {
-		return projectEClass;
+		return this.projectEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getProject_Plugins() {
-		return (EReference) projectEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.projectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getProject_Name() {
-		return (EAttribute) projectEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.projectEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getProject_Repositories() {
-		return (EReference) projectEClass.getEStructuralFeatures().get(2);
+		return (EReference) this.projectEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getProject_Dependencies() {
-		return (EReference) projectEClass.getEStructuralFeatures().get(3);
+		return (EReference) this.projectEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getProject_Views() {
-		return (EReference) projectEClass.getEStructuralFeatures().get(4);
+		return (EReference) this.projectEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getProject_Properties() {
-		return (EReference) projectEClass.getEStructuralFeatures().get(5);
+		return (EReference) this.projectEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getPlugin() {
-		return pluginEClass;
+		return this.pluginEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getPlugin_Repositories() {
-		return (EReference) pluginEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.pluginEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getPlugin_OutputPorts() {
-		return (EReference) pluginEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.pluginEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getPlugin_Displays() {
-		return (EReference) pluginEClass.getEStructuralFeatures().get(2);
+		return (EReference) this.pluginEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getPort() {
-		return portEClass;
+		return this.portEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getPort_Name() {
-		return (EAttribute) portEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.portEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getPort_EventTypes() {
-		return (EAttribute) portEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.portEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getPort_Id() {
-		return (EAttribute) portEClass.getEStructuralFeatures().get(2);
+		return (EAttribute) this.portEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getInputPort() {
-		return inputPortEClass;
+		return this.inputPortEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getInputPort_Parent() {
-		return (EReference) inputPortEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.inputPortEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getOutputPort() {
-		return outputPortEClass;
+		return this.outputPortEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getOutputPort_Subscribers() {
-		return (EReference) outputPortEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.outputPortEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getOutputPort_Parent() {
-		return (EReference) outputPortEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.outputPortEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getProperty() {
-		return propertyEClass;
+		return this.propertyEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getProperty_Name() {
-		return (EAttribute) propertyEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.propertyEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getProperty_Value() {
-		return (EAttribute) propertyEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.propertyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getFilter() {
-		return filterEClass;
+		return this.filterEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getFilter_InputPorts() {
-		return (EReference) filterEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.filterEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getReader() {
-		return readerEClass;
+		return this.readerEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getRepository() {
-		return repositoryEClass;
+		return this.repositoryEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getDependency() {
-		return dependencyEClass;
+		return this.dependencyEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getDependency_FilePath() {
-		return (EAttribute) dependencyEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.dependencyEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getRepositoryConnector() {
-		return repositoryConnectorEClass;
+		return this.repositoryConnectorEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getRepositoryConnector_Name() {
-		return (EAttribute) repositoryConnectorEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.repositoryConnectorEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getRepositoryConnector_Repository() {
-		return (EReference) repositoryConnectorEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.repositoryConnectorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getRepositoryConnector_Id() {
-		return (EAttribute) repositoryConnectorEClass.getEStructuralFeatures().get(2);
+		return (EAttribute) this.repositoryConnectorEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getDisplay() {
-		return displayEClass;
+		return this.displayEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getDisplay_Name() {
-		return (EAttribute) displayEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.displayEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getDisplay_Parent() {
-		return (EReference) displayEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.displayEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getDisplay_Id() {
-		return (EAttribute) displayEClass.getEStructuralFeatures().get(2);
+		return (EAttribute) this.displayEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getView() {
-		return viewEClass;
+		return this.viewEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getView_Name() {
-		return (EAttribute) viewEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.viewEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getView_Description() {
-		return (EAttribute) viewEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.viewEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getView_DisplayConnectors() {
-		return (EReference) viewEClass.getEStructuralFeatures().get(2);
+		return (EReference) this.viewEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getView_Id() {
-		return (EAttribute) viewEClass.getEStructuralFeatures().get(3);
+		return (EAttribute) this.viewEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getDisplayConnector() {
-		return displayConnectorEClass;
+		return this.displayConnectorEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getDisplayConnector_Name() {
-		return (EAttribute) displayConnectorEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.displayConnectorEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getDisplayConnector_Display() {
-		return (EReference) displayConnectorEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.displayConnectorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getDisplayConnector_Id() {
-		return (EAttribute) displayConnectorEClass.getEStructuralFeatures().get(2);
+		return (EAttribute) this.displayConnectorEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EClass getAnalysisComponent() {
-		return analysisComponentEClass;
+		return this.analysisComponentEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getAnalysisComponent_Name() {
-		return (EAttribute) analysisComponentEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.analysisComponentEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getAnalysisComponent_Classname() {
-		return (EAttribute) analysisComponentEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.analysisComponentEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EReference getAnalysisComponent_Properties() {
-		return (EReference) analysisComponentEClass.getEStructuralFeatures().get(2);
+		return (EReference) this.analysisComponentEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EAttribute getAnalysisComponent_Id() {
-		return (EAttribute) analysisComponentEClass.getEStructuralFeatures().get(3);
+		return (EAttribute) this.analysisComponentEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIAnalysisMetaModelFactory getAnalysisMetaModelFactory() {
-		return (MIAnalysisMetaModelFactory) getEFactoryInstance();
+		return (MIAnalysisMetaModelFactory) this.getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private boolean isCreated = false;
@@ -755,86 +755,87 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated)
+		if (this.isCreated) {
 			return;
-		isCreated = true;
+		}
+		this.isCreated = true;
 
 		// Create classes and their features
-		projectEClass = createEClass(PROJECT);
-		createEReference(projectEClass, PROJECT__PLUGINS);
-		createEAttribute(projectEClass, PROJECT__NAME);
-		createEReference(projectEClass, PROJECT__REPOSITORIES);
-		createEReference(projectEClass, PROJECT__DEPENDENCIES);
-		createEReference(projectEClass, PROJECT__VIEWS);
-		createEReference(projectEClass, PROJECT__PROPERTIES);
+		this.projectEClass = this.createEClass(PROJECT);
+		this.createEReference(this.projectEClass, PROJECT__PLUGINS);
+		this.createEAttribute(this.projectEClass, PROJECT__NAME);
+		this.createEReference(this.projectEClass, PROJECT__REPOSITORIES);
+		this.createEReference(this.projectEClass, PROJECT__DEPENDENCIES);
+		this.createEReference(this.projectEClass, PROJECT__VIEWS);
+		this.createEReference(this.projectEClass, PROJECT__PROPERTIES);
 
-		pluginEClass = createEClass(PLUGIN);
-		createEReference(pluginEClass, PLUGIN__REPOSITORIES);
-		createEReference(pluginEClass, PLUGIN__OUTPUT_PORTS);
-		createEReference(pluginEClass, PLUGIN__DISPLAYS);
+		this.pluginEClass = this.createEClass(PLUGIN);
+		this.createEReference(this.pluginEClass, PLUGIN__REPOSITORIES);
+		this.createEReference(this.pluginEClass, PLUGIN__OUTPUT_PORTS);
+		this.createEReference(this.pluginEClass, PLUGIN__DISPLAYS);
 
-		portEClass = createEClass(PORT);
-		createEAttribute(portEClass, PORT__NAME);
-		createEAttribute(portEClass, PORT__EVENT_TYPES);
-		createEAttribute(portEClass, PORT__ID);
+		this.portEClass = this.createEClass(PORT);
+		this.createEAttribute(this.portEClass, PORT__NAME);
+		this.createEAttribute(this.portEClass, PORT__EVENT_TYPES);
+		this.createEAttribute(this.portEClass, PORT__ID);
 
-		inputPortEClass = createEClass(INPUT_PORT);
-		createEReference(inputPortEClass, INPUT_PORT__PARENT);
+		this.inputPortEClass = this.createEClass(INPUT_PORT);
+		this.createEReference(this.inputPortEClass, INPUT_PORT__PARENT);
 
-		outputPortEClass = createEClass(OUTPUT_PORT);
-		createEReference(outputPortEClass, OUTPUT_PORT__SUBSCRIBERS);
-		createEReference(outputPortEClass, OUTPUT_PORT__PARENT);
+		this.outputPortEClass = this.createEClass(OUTPUT_PORT);
+		this.createEReference(this.outputPortEClass, OUTPUT_PORT__SUBSCRIBERS);
+		this.createEReference(this.outputPortEClass, OUTPUT_PORT__PARENT);
 
-		propertyEClass = createEClass(PROPERTY);
-		createEAttribute(propertyEClass, PROPERTY__NAME);
-		createEAttribute(propertyEClass, PROPERTY__VALUE);
+		this.propertyEClass = this.createEClass(PROPERTY);
+		this.createEAttribute(this.propertyEClass, PROPERTY__NAME);
+		this.createEAttribute(this.propertyEClass, PROPERTY__VALUE);
 
-		filterEClass = createEClass(FILTER);
-		createEReference(filterEClass, FILTER__INPUT_PORTS);
+		this.filterEClass = this.createEClass(FILTER);
+		this.createEReference(this.filterEClass, FILTER__INPUT_PORTS);
 
-		readerEClass = createEClass(READER);
+		this.readerEClass = this.createEClass(READER);
 
-		repositoryEClass = createEClass(REPOSITORY);
+		this.repositoryEClass = this.createEClass(REPOSITORY);
 
-		dependencyEClass = createEClass(DEPENDENCY);
-		createEAttribute(dependencyEClass, DEPENDENCY__FILE_PATH);
+		this.dependencyEClass = this.createEClass(DEPENDENCY);
+		this.createEAttribute(this.dependencyEClass, DEPENDENCY__FILE_PATH);
 
-		repositoryConnectorEClass = createEClass(REPOSITORY_CONNECTOR);
-		createEAttribute(repositoryConnectorEClass, REPOSITORY_CONNECTOR__NAME);
-		createEReference(repositoryConnectorEClass, REPOSITORY_CONNECTOR__REPOSITORY);
-		createEAttribute(repositoryConnectorEClass, REPOSITORY_CONNECTOR__ID);
+		this.repositoryConnectorEClass = this.createEClass(REPOSITORY_CONNECTOR);
+		this.createEAttribute(this.repositoryConnectorEClass, REPOSITORY_CONNECTOR__NAME);
+		this.createEReference(this.repositoryConnectorEClass, REPOSITORY_CONNECTOR__REPOSITORY);
+		this.createEAttribute(this.repositoryConnectorEClass, REPOSITORY_CONNECTOR__ID);
 
-		displayEClass = createEClass(DISPLAY);
-		createEAttribute(displayEClass, DISPLAY__NAME);
-		createEReference(displayEClass, DISPLAY__PARENT);
-		createEAttribute(displayEClass, DISPLAY__ID);
+		this.displayEClass = this.createEClass(DISPLAY);
+		this.createEAttribute(this.displayEClass, DISPLAY__NAME);
+		this.createEReference(this.displayEClass, DISPLAY__PARENT);
+		this.createEAttribute(this.displayEClass, DISPLAY__ID);
 
-		viewEClass = createEClass(VIEW);
-		createEAttribute(viewEClass, VIEW__NAME);
-		createEAttribute(viewEClass, VIEW__DESCRIPTION);
-		createEReference(viewEClass, VIEW__DISPLAY_CONNECTORS);
-		createEAttribute(viewEClass, VIEW__ID);
+		this.viewEClass = this.createEClass(VIEW);
+		this.createEAttribute(this.viewEClass, VIEW__NAME);
+		this.createEAttribute(this.viewEClass, VIEW__DESCRIPTION);
+		this.createEReference(this.viewEClass, VIEW__DISPLAY_CONNECTORS);
+		this.createEAttribute(this.viewEClass, VIEW__ID);
 
-		displayConnectorEClass = createEClass(DISPLAY_CONNECTOR);
-		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__NAME);
-		createEReference(displayConnectorEClass, DISPLAY_CONNECTOR__DISPLAY);
-		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__ID);
+		this.displayConnectorEClass = this.createEClass(DISPLAY_CONNECTOR);
+		this.createEAttribute(this.displayConnectorEClass, DISPLAY_CONNECTOR__NAME);
+		this.createEReference(this.displayConnectorEClass, DISPLAY_CONNECTOR__DISPLAY);
+		this.createEAttribute(this.displayConnectorEClass, DISPLAY_CONNECTOR__ID);
 
-		analysisComponentEClass = createEClass(ANALYSIS_COMPONENT);
-		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__NAME);
-		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__CLASSNAME);
-		createEReference(analysisComponentEClass, ANALYSIS_COMPONENT__PROPERTIES);
-		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__ID);
+		this.analysisComponentEClass = this.createEClass(ANALYSIS_COMPONENT);
+		this.createEAttribute(this.analysisComponentEClass, ANALYSIS_COMPONENT__NAME);
+		this.createEAttribute(this.analysisComponentEClass, ANALYSIS_COMPONENT__CLASSNAME);
+		this.createEReference(this.analysisComponentEClass, ANALYSIS_COMPONENT__PROPERTIES);
+		this.createEAttribute(this.analysisComponentEClass, ANALYSIS_COMPONENT__ID);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	private boolean isInitialized = false;
@@ -844,136 +845,168 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized)
+		if (this.isInitialized) {
 			return;
-		isInitialized = true;
+		}
+		this.isInitialized = true;
 
 		// Initialize package
-		setName(eNAME);
-		setNsPrefix(eNS_PREFIX);
-		setNsURI(eNS_URI);
+		this.setName(eNAME);
+		this.setNsPrefix(eNS_PREFIX);
+		this.setNsURI(eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		pluginEClass.getESuperTypes().add(this.getAnalysisComponent());
-		inputPortEClass.getESuperTypes().add(this.getPort());
-		outputPortEClass.getESuperTypes().add(this.getPort());
-		filterEClass.getESuperTypes().add(this.getPlugin());
-		readerEClass.getESuperTypes().add(this.getPlugin());
-		repositoryEClass.getESuperTypes().add(this.getAnalysisComponent());
+		this.pluginEClass.getESuperTypes().add(this.getAnalysisComponent());
+		this.inputPortEClass.getESuperTypes().add(this.getPort());
+		this.outputPortEClass.getESuperTypes().add(this.getPort());
+		this.filterEClass.getESuperTypes().add(this.getPlugin());
+		this.readerEClass.getESuperTypes().add(this.getPlugin());
+		this.repositoryEClass.getESuperTypes().add(this.getAnalysisComponent());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(projectEClass, MIProject.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getProject_Plugins(), this.getPlugin(), null, "plugins", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEClass(this.projectEClass, MIProject.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getProject_Plugins(), this.getPlugin(), null, "plugins", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProject_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		this.initEAttribute(this.getProject_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE,
 				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProject_Dependencies(), this.getDependency(), null, "dependencies", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getProject_Dependencies(), this.getDependency(), null, "dependencies", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE,
 				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProject_Views(), this.getView(), null, "views", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+		this.initEReference(this.getProject_Views(), this.getView(), null, "views", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				IS_COMPOSITE,
 				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProject_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEReference(this.getProject_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(pluginEClass, MIPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPlugin_Repositories(), this.getRepositoryConnector(), null, "repositories", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.pluginEClass, MIPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getPlugin_Repositories(), this.getRepositoryConnector(), null, "repositories", null, 0, -1, MIPlugin.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPlugin_OutputPorts(), this.getOutputPort(), this.getOutputPort_Parent(), "outputPorts", null, 0, -1, MIPlugin.class, !IS_TRANSIENT,
+		this.initEReference(this.getPlugin_OutputPorts(), this.getOutputPort(), this.getOutputPort_Parent(), "outputPorts", null, 0, -1, MIPlugin.class,
+				!IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPlugin_Displays(), this.getDisplay(), this.getDisplay_Parent(), "displays", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getPlugin_Displays(), this.getDisplay(), this.getDisplay_Parent(), "displays", null, 0, -1, MIPlugin.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(portEClass, MIPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		this.initEClass(this.portEClass, MIPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getPort_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_EventTypes(), ecorePackage.getEString(), "eventTypes", null, 1, -1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEAttribute(this.getPort_EventTypes(), this.ecorePackage.getEString(), "eventTypes", null, 1, -1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID,
+		this.initEAttribute(this.getPort_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, IS_ID,
 				IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(inputPortEClass, MIInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getInputPort_Parent(), this.getFilter(), this.getFilter_InputPorts(), "parent", null, 1, 1, MIInputPort.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.inputPortEClass, MIInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getInputPort_Parent(), this.getFilter(), this.getFilter_InputPorts(), "parent", null, 1, 1, MIInputPort.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(outputPortEClass, MIOutputPort.class, "OutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOutputPort_Subscribers(), this.getInputPort(), null, "subscribers", null, 0, -1, MIOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.outputPortEClass, MIOutputPort.class, "OutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getOutputPort_Subscribers(), this.getInputPort(), null, "subscribers", null, 0, -1, MIOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE,
 				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOutputPort_Parent(), this.getPlugin(), this.getPlugin_OutputPorts(), "parent", null, 1, 1, MIOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getOutputPort_Parent(), this.getPlugin(), this.getPlugin_OutputPorts(), "parent", null, 1, 1, MIOutputPort.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(propertyEClass, MIProperty.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEClass(this.propertyEClass, MIProperty.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getProperty_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIProperty.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 1, 1, MIProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEAttribute(this.getProperty_Value(), this.ecorePackage.getEString(), "value", null, 1, 1, MIProperty.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(filterEClass, MIFilter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFilter_InputPorts(), this.getInputPort(), this.getInputPort_Parent(), "inputPorts", null, 0, -1, MIFilter.class, !IS_TRANSIENT,
+		this.initEClass(this.filterEClass, MIFilter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getFilter_InputPorts(), this.getInputPort(), this.getInputPort_Parent(), "inputPorts", null, 0, -1, MIFilter.class, !IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(readerEClass, MIReader.class, "Reader", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEClass(this.readerEClass, MIReader.class, "Reader", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(repositoryEClass, MIRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEClass(this.repositoryEClass, MIRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(dependencyEClass, MIDependency.class, "Dependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDependency_FilePath(), ecorePackage.getEString(), "filePath", null, 1, 1, MIDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEClass(this.dependencyEClass, MIDependency.class, "Dependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getDependency_FilePath(), this.ecorePackage.getEString(), "filePath", null, 1, 1, MIDependency.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(repositoryConnectorEClass, MIRepositoryConnector.class, "RepositoryConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRepositoryConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.repositoryConnectorEClass, MIRepositoryConnector.class, "RepositoryConnector", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getRepositoryConnector_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRepositoryConnector_Repository(), this.getRepository(), null, "repository", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT,
+		this.initEReference(this.getRepositoryConnector_Repository(), this.getRepository(), null, "repository", null, 1, 1, MIRepositoryConnector.class,
+				!IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRepositoryConnector_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEAttribute(this.getRepositoryConnector_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(displayEClass, MIDisplay.class, "Display", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDisplay_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		this.initEClass(this.displayEClass, MIDisplay.class, "Display", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getDisplay_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDisplay_Parent(), this.getPlugin(), this.getPlugin_Displays(), "parent", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getDisplay_Parent(), this.getPlugin(), this.getPlugin_Displays(), "parent", null, 1, 1, MIDisplay.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDisplay_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		this.initEAttribute(this.getDisplay_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
 				IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(viewEClass, MIView.class, "View", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getView_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		this.initEClass(this.viewEClass, MIView.class, "View", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getView_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getView_Description(), ecorePackage.getEString(), "description", null, 0, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEAttribute(this.getView_Description(), this.ecorePackage.getEString(), "description", null, 0, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getView_DisplayConnectors(), this.getDisplayConnector(), null, "displayConnectors", null, 0, -1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getView_DisplayConnectors(), this.getDisplayConnector(), null, "displayConnectors", null, 0, -1, MIView.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getView_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID,
+		this.initEAttribute(this.getView_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, IS_ID,
 				IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(displayConnectorEClass, MIDisplayConnector.class, "DisplayConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDisplayConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.displayConnectorEClass, MIDisplayConnector.class, "DisplayConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getDisplayConnector_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDisplayConnector_Display(), this.getDisplay(), null, "display", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEReference(this.getDisplayConnector_Display(), this.getDisplay(), null, "display", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDisplayConnector_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEAttribute(this.getDisplayConnector_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(analysisComponentEClass, MIAnalysisComponent.class, "AnalysisComponent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAnalysisComponent_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEClass(this.analysisComponentEClass, MIAnalysisComponent.class, "AnalysisComponent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getAnalysisComponent_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAnalysisComponent_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE,
+		this.initEAttribute(this.getAnalysisComponent_Classname(), this.ecorePackage.getEString(), "classname", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
 				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAnalysisComponent_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIAnalysisComponent.class, !IS_TRANSIENT,
+		this.initEReference(this.getAnalysisComponent_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIAnalysisComponent.class, !IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAnalysisComponent_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+		this.initEAttribute(this.getAnalysisComponent_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
 				!IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		// Create resource
-		createResource(eNS_URI);
+		this.createResource(eNS_URI);
 	}
 
 } // MAnalysisMetaModelPackage

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 KIEKER_DIR="$1"
 OUTDIR="$2"

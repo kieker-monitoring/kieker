@@ -33,7 +33,7 @@ public class ComponentType {
 	private final int id;
 	private final String packageName;
 	private final String typeName;
-	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
+	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * // NOCS requests implementation of equals and hashCode in pairs// NOCS

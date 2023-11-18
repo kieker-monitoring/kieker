@@ -2,20 +2,17 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDisplay;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,7 +34,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -48,7 +45,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -59,7 +56,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -70,7 +67,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getId()
 	 * @generated
 	 * @ordered
@@ -80,7 +77,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MDisplay() {
@@ -90,7 +87,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -101,107 +98,116 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIPlugin getParent() {
-		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.DISPLAY__PARENT)
+		if (this.eContainerFeatureID() != MIAnalysisMetaModelPackage.DISPLAY__PARENT) {
 			return null;
-		return (MIPlugin) eInternalContainer();
+		}
+		return (MIPlugin) this.eInternalContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetParent(MIPlugin newParent, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.DISPLAY__PARENT, msgs);
+	public NotificationChain basicSetParent(final MIPlugin newParent, NotificationChain msgs) {
+		msgs = this.eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.DISPLAY__PARENT, msgs);
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setParent(MIPlugin newParent) {
-		if (newParent != eInternalContainer() || (eContainerFeatureID() != MIAnalysisMetaModelPackage.DISPLAY__PARENT && newParent != null)) {
-			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+	public void setParent(final MIPlugin newParent) {
+		if ((newParent != this.eInternalContainer()) || ((this.eContainerFeatureID() != MIAnalysisMetaModelPackage.DISPLAY__PARENT) && (newParent != null))) {
+			if (EcoreUtil.isAncestor(this, newParent)) {
+				throw new IllegalArgumentException("Recursive containment not allowed for " + this.toString());
+			}
 			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newParent != null)
+			if (this.eInternalContainer() != null) {
+				msgs = this.eBasicRemoveFromContainer(msgs);
+			}
+			if (newParent != null) {
 				msgs = ((InternalEObject) newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS, MIPlugin.class, msgs);
-			msgs = basicSetParent(newParent, msgs);
-			if (msgs != null)
+			}
+			msgs = this.basicSetParent(newParent, msgs);
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__PARENT, newParent, newParent));
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__PARENT, newParent, newParent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setId(String newId) {
-		String oldId = id;
-		id = newId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__ID, oldId, id));
+	public void setId(final String newId) {
+		final String oldId = this.id;
+		this.id = newId;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__ID, oldId, this.id));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			return basicSetParent((MIPlugin) otherEnd, msgs);
+			if (this.eInternalContainer() != null) {
+				msgs = this.eBasicRemoveFromContainer(msgs);
+			}
+			return this.basicSetParent((MIPlugin) otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -209,14 +215,14 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			return basicSetParent(null, msgs);
+			return this.basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -224,14 +230,14 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
+	public NotificationChain eBasicRemoveFromContainerFeature(final NotificationChain msgs) {
+		switch (this.eContainerFeatureID()) {
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS, MIPlugin.class, msgs);
+			return this.eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS, MIPlugin.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -239,18 +245,18 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__NAME:
-			return getName();
+			return this.getName();
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			return getParent();
+			return this.getParent();
 		case MIAnalysisMetaModelPackage.DISPLAY__ID:
-			return getId();
+			return this.getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -258,20 +264,20 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__NAME:
-			setName((String) newValue);
+			this.setName((String) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			setParent((MIPlugin) newValue);
+			this.setParent((MIPlugin) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.DISPLAY__ID:
-			setId((String) newValue);
+			this.setId((String) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -280,20 +286,20 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__NAME:
-			setName(NAME_EDEFAULT);
+			this.setName(NAME_EDEFAULT);
 			return;
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			setParent((MIPlugin) null);
+			this.setParent((MIPlugin) null);
 			return;
 		case MIAnalysisMetaModelPackage.DISPLAY__ID:
-			setId(ID_EDEFAULT);
+			this.setId(ID_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -302,18 +308,18 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.DISPLAY__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
-			return getParent() != null;
+			return this.getParent() != null;
 		case MIAnalysisMetaModelPackage.DISPLAY__ID:
-			return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			return ID_EDEFAULT == null ? this.id != null : !ID_EDEFAULT.equals(this.id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -321,19 +327,20 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (this.eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", id: ");
-		result.append(id);
+		result.append(this.id);
 		result.append(')');
 		return result.toString();
 	}

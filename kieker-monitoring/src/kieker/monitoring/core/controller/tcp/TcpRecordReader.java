@@ -111,7 +111,7 @@ public class TcpRecordReader implements Runnable {
 				final SocketChannel socketChannel = serversocket.accept();
 				try {
 					final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
-					while (socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT && !this.terminated) {
+					while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
 						this.process(buffer);
 					}
 				} finally {
@@ -159,7 +159,7 @@ public class TcpRecordReader implements Runnable {
 
 	private boolean registerEntry(final ByteBuffer buffer) {
 		// identify string identifier and string length
-		if (buffer.remaining() >= AbstractMonitoringRecord.TYPE_SIZE_INT * 2) {
+		if (buffer.remaining() >= (AbstractMonitoringRecord.TYPE_SIZE_INT * 2)) {
 			final int id = buffer.getInt(); // NOPMD (id must be read before stringLength)
 			final int stringLength = buffer.getInt();
 

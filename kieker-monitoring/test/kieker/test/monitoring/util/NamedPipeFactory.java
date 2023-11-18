@@ -111,7 +111,7 @@ public final class NamedPipeFactory {
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {
 		final List<IMonitoringRecord> receivedRecords = Collections
-				.synchronizedList(new ArrayList<IMonitoringRecord>());
+				.synchronizedList(new ArrayList<>());
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
 

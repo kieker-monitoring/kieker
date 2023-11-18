@@ -1,9 +1,10 @@
 plugins {
 	id 'application'
+	id 'eclipse'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 distTar.enabled=false
 distZip.enabled=true
@@ -30,6 +31,20 @@ task uploadArchives {
 task replaceHardCodedVersionNames() {
 	doLast {
 //		regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+	}
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
 	}
 }
 

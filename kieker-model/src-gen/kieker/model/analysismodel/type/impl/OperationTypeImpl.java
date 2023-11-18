@@ -3,23 +3,18 @@
 package kieker.model.analysismodel.type.impl;
 
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.OperationType;
 import kieker.model.analysismodel.type.TypePackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,11 +24,11 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getReturnType <em>Return Type</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getModifiers <em>Modifiers</em>}</li>
- *   <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getParameterTypes <em>Parameter Types</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getSignature <em>Signature</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getReturnType <em>Return Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getModifiers <em>Modifiers</em>}</li>
+ * <li>{@link kieker.model.analysismodel.type.impl.OperationTypeImpl#getParameterTypes <em>Parameter Types</em>}</li>
  * </ul>
  *
  * @generated
@@ -43,6 +38,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -53,6 +49,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -63,6 +60,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -73,6 +71,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -83,6 +82,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The default value of the '{@link #getReturnType() <em>Return Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getReturnType()
 	 * @generated
 	 * @ordered
@@ -93,6 +93,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getReturnType()
 	 * @generated
 	 * @ordered
@@ -103,6 +104,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getModifiers() <em>Modifiers</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getModifiers()
 	 * @generated
 	 * @ordered
@@ -113,6 +115,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * The cached value of the '{@link #getParameterTypes() <em>Parameter Types</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getParameterTypes()
 	 * @generated
 	 * @ordered
@@ -122,6 +125,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected OperationTypeImpl() {
@@ -131,6 +135,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -141,134 +146,147 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getSignature() {
-		return signature;
+		return this.signature;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setSignature(String newSignature) {
-		String oldSignature = signature;
-		signature = newSignature;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__SIGNATURE, oldSignature, signature));
+	public void setSignature(final String newSignature) {
+		final String oldSignature = this.signature;
+		this.signature = newSignature;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__SIGNATURE, oldSignature, this.signature));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String getReturnType() {
-		return returnType;
+		return this.returnType;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setReturnType(String newReturnType) {
-		String oldReturnType = returnType;
-		returnType = newReturnType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__RETURN_TYPE, oldReturnType, returnType));
+	public void setReturnType(final String newReturnType) {
+		final String oldReturnType = this.returnType;
+		this.returnType = newReturnType;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, TypePackage.OPERATION_TYPE__RETURN_TYPE, oldReturnType, this.returnType));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<String> getModifiers() {
-		if (modifiers == null) {
-			modifiers = new EDataTypeUniqueEList<String>(String.class, this, TypePackage.OPERATION_TYPE__MODIFIERS);
+		if (this.modifiers == null) {
+			this.modifiers = new EDataTypeUniqueEList<>(String.class, this, TypePackage.OPERATION_TYPE__MODIFIERS);
 		}
-		return modifiers;
+		return this.modifiers;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EList<String> getParameterTypes() {
-		if (parameterTypes == null) {
-			parameterTypes = new EDataTypeUniqueEList<String>(String.class, this, TypePackage.OPERATION_TYPE__PARAMETER_TYPES);
+		if (this.parameterTypes == null) {
+			this.parameterTypes = new EDataTypeUniqueEList<>(String.class, this, TypePackage.OPERATION_TYPE__PARAMETER_TYPES);
 		}
-		return parameterTypes;
+		return this.parameterTypes;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ComponentType getComponentType() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		final org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			final org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
 			if (containerContainer != null) {
-				return (ComponentType) containerContainer ;
+				return (ComponentType) containerContainer;
 			}
 		}
 		return null;
-		
+
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case TypePackage.OPERATION_TYPE__SIGNATURE:
-				return getSignature();
-			case TypePackage.OPERATION_TYPE__NAME:
-				return getName();
-			case TypePackage.OPERATION_TYPE__RETURN_TYPE:
-				return getReturnType();
-			case TypePackage.OPERATION_TYPE__MODIFIERS:
-				return getModifiers();
-			case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
-				return getParameterTypes();
+		case TypePackage.OPERATION_TYPE__SIGNATURE:
+			return this.getSignature();
+		case TypePackage.OPERATION_TYPE__NAME:
+			return this.getName();
+		case TypePackage.OPERATION_TYPE__RETURN_TYPE:
+			return this.getReturnType();
+		case TypePackage.OPERATION_TYPE__MODIFIERS:
+			return this.getModifiers();
+		case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
+			return this.getParameterTypes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -276,29 +294,30 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case TypePackage.OPERATION_TYPE__SIGNATURE:
-				setSignature((String)newValue);
-				return;
-			case TypePackage.OPERATION_TYPE__NAME:
-				setName((String)newValue);
-				return;
-			case TypePackage.OPERATION_TYPE__RETURN_TYPE:
-				setReturnType((String)newValue);
-				return;
-			case TypePackage.OPERATION_TYPE__MODIFIERS:
-				getModifiers().clear();
-				getModifiers().addAll((Collection<? extends String>)newValue);
-				return;
-			case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
-				getParameterTypes().clear();
-				getParameterTypes().addAll((Collection<? extends String>)newValue);
-				return;
+		case TypePackage.OPERATION_TYPE__SIGNATURE:
+			this.setSignature((String) newValue);
+			return;
+		case TypePackage.OPERATION_TYPE__NAME:
+			this.setName((String) newValue);
+			return;
+		case TypePackage.OPERATION_TYPE__RETURN_TYPE:
+			this.setReturnType((String) newValue);
+			return;
+		case TypePackage.OPERATION_TYPE__MODIFIERS:
+			this.getModifiers().clear();
+			this.getModifiers().addAll((Collection<? extends String>) newValue);
+			return;
+		case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
+			this.getParameterTypes().clear();
+			this.getParameterTypes().addAll((Collection<? extends String>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -306,26 +325,27 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case TypePackage.OPERATION_TYPE__SIGNATURE:
-				setSignature(SIGNATURE_EDEFAULT);
-				return;
-			case TypePackage.OPERATION_TYPE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypePackage.OPERATION_TYPE__RETURN_TYPE:
-				setReturnType(RETURN_TYPE_EDEFAULT);
-				return;
-			case TypePackage.OPERATION_TYPE__MODIFIERS:
-				getModifiers().clear();
-				return;
-			case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
-				getParameterTypes().clear();
-				return;
+		case TypePackage.OPERATION_TYPE__SIGNATURE:
+			this.setSignature(SIGNATURE_EDEFAULT);
+			return;
+		case TypePackage.OPERATION_TYPE__NAME:
+			this.setName(NAME_EDEFAULT);
+			return;
+		case TypePackage.OPERATION_TYPE__RETURN_TYPE:
+			this.setReturnType(RETURN_TYPE_EDEFAULT);
+			return;
+		case TypePackage.OPERATION_TYPE__MODIFIERS:
+			this.getModifiers().clear();
+			return;
+		case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
+			this.getParameterTypes().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -333,21 +353,22 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case TypePackage.OPERATION_TYPE__SIGNATURE:
-				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
-			case TypePackage.OPERATION_TYPE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypePackage.OPERATION_TYPE__RETURN_TYPE:
-				return RETURN_TYPE_EDEFAULT == null ? returnType != null : !RETURN_TYPE_EDEFAULT.equals(returnType);
-			case TypePackage.OPERATION_TYPE__MODIFIERS:
-				return modifiers != null && !modifiers.isEmpty();
-			case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
-				return parameterTypes != null && !parameterTypes.isEmpty();
+		case TypePackage.OPERATION_TYPE__SIGNATURE:
+			return SIGNATURE_EDEFAULT == null ? this.signature != null : !SIGNATURE_EDEFAULT.equals(this.signature);
+		case TypePackage.OPERATION_TYPE__NAME:
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
+		case TypePackage.OPERATION_TYPE__RETURN_TYPE:
+			return RETURN_TYPE_EDEFAULT == null ? this.returnType != null : !RETURN_TYPE_EDEFAULT.equals(this.returnType);
+		case TypePackage.OPERATION_TYPE__MODIFIERS:
+			return (this.modifiers != null) && !this.modifiers.isEmpty();
+		case TypePackage.OPERATION_TYPE__PARAMETER_TYPES:
+			return (this.parameterTypes != null) && !this.parameterTypes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -355,13 +376,14 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case TypePackage.OPERATION_TYPE___GET_COMPONENT_TYPE:
-				return getComponentType();
+		case TypePackage.OPERATION_TYPE___GET_COMPONENT_TYPE:
+			return this.getComponentType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -369,25 +391,28 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (signature: ");
-		result.append(signature);
+		result.append(this.signature);
 		result.append(", name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(", returnType: ");
-		result.append(returnType);
+		result.append(this.returnType);
 		result.append(", modifiers: ");
-		result.append(modifiers);
+		result.append(this.modifiers);
 		result.append(", parameterTypes: ");
-		result.append(parameterTypes);
+		result.append(this.parameterTypes);
 		result.append(')');
 		return result.toString();
 	}
 
-} //OperationTypeImpl
+} // OperationTypeImpl

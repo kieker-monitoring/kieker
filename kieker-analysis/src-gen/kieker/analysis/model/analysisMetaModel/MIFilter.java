@@ -31,7 +31,7 @@ public interface MIFilter extends MIPlugin {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Input Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getFilter_InputPorts()
 	 * @see kieker.analysis.model.analysisMetaModel.MIInputPort#getParent

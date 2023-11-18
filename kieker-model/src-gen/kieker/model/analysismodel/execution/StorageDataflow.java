@@ -2,10 +2,10 @@
  */
 package kieker.model.analysismodel.execution;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeployedStorage;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,9 +16,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getStorage <em>Storage</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getCode <em>Code</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getDirection <em>Direction</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getStorage <em>Storage</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getCode <em>Code</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.StorageDataflow#getDirection <em>Direction</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.execution.ExecutionPackage#getStorageDataflow()
@@ -30,6 +30,7 @@ public interface StorageDataflow extends EObject {
 	 * Returns the value of the '<em><b>Storage</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Storage</em>' reference.
 	 * @see #setStorage(DeployedStorage)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getStorageDataflow_Storage()
@@ -42,7 +43,9 @@ public interface StorageDataflow extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.StorageDataflow#getStorage <em>Storage</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Storage</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Storage</em>' reference.
 	 * @see #getStorage()
 	 * @generated
 	 */
@@ -52,6 +55,7 @@ public interface StorageDataflow extends EObject {
 	 * Returns the value of the '<em><b>Code</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Code</em>' reference.
 	 * @see #setCode(DeployedOperation)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getStorageDataflow_Code()
@@ -64,7 +68,9 @@ public interface StorageDataflow extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.StorageDataflow#getCode <em>Code</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Code</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Code</em>' reference.
 	 * @see #getCode()
 	 * @generated
 	 */
@@ -75,6 +81,7 @@ public interface StorageDataflow extends EObject {
 	 * The literals are from the enumeration {@link kieker.model.analysismodel.execution.EDirection}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Direction</em>' attribute.
 	 * @see kieker.model.analysismodel.execution.EDirection
 	 * @see #setDirection(EDirection)
@@ -88,7 +95,9 @@ public interface StorageDataflow extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.StorageDataflow#getDirection <em>Direction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Direction</em>' attribute.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Direction</em>' attribute.
 	 * @see kieker.model.analysismodel.execution.EDirection
 	 * @see #getDirection()
 	 * @generated

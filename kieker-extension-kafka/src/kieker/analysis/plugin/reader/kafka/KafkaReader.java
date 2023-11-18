@@ -85,7 +85,7 @@ public class KafkaReader extends AbstractRawDataReader {
 
 	/**
 	 * Creates a new Kafka reader using the givend data.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
@@ -139,7 +139,7 @@ public class KafkaReader extends AbstractRawDataReader {
 		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		properties.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
 
-		this.consumer = new KafkaConsumer<String, byte[]>(properties);
+		this.consumer = new KafkaConsumer<>(properties);
 
 		return true;
 	}

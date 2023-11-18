@@ -4,19 +4,16 @@ package kieker.model.analysismodel.execution.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
-import kieker.model.analysismodel.execution.ExecutionPackage;
-import kieker.model.analysismodel.execution.Tuple;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.execution.ExecutionPackage;
+import kieker.model.analysismodel.execution.Tuple;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,8 +23,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.impl.TupleImpl#getFirst <em>First</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.impl.TupleImpl#getSecond <em>Second</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.TupleImpl#getFirst <em>First</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.impl.TupleImpl#getSecond <em>Second</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,6 +34,7 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	 * The cached value of the '{@link #getFirst() <em>First</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getFirst()
 	 * @generated
 	 * @ordered
@@ -47,6 +45,7 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	 * The cached value of the '{@link #getSecond() <em>Second</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getSecond()
 	 * @generated
 	 * @ordered
@@ -56,6 +55,7 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected TupleImpl() {
@@ -65,6 +65,7 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -75,88 +76,99 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public F getFirst() {
-		if (first != null && ((EObject)first).eIsProxy()) {
-			InternalEObject oldFirst = (InternalEObject)first;
-			first = (F)eResolveProxy(oldFirst);
-			if (first != oldFirst) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.TUPLE__FIRST, oldFirst, first));
+		if ((this.first != null) && ((EObject) this.first).eIsProxy()) {
+			final InternalEObject oldFirst = (InternalEObject) this.first;
+			this.first = (F) this.eResolveProxy(oldFirst);
+			if (this.first != oldFirst) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.TUPLE__FIRST, oldFirst, this.first));
+				}
 			}
 		}
-		return first;
+		return this.first;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public F basicGetFirst() {
-		return first;
+		return this.first;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setFirst(F newFirst) {
-		F oldFirst = first;
-		first = newFirst;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.TUPLE__FIRST, oldFirst, first));
+	public void setFirst(final F newFirst) {
+		final F oldFirst = this.first;
+		this.first = newFirst;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.TUPLE__FIRST, oldFirst, this.first));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public S getSecond() {
-		if (second != null && ((EObject)second).eIsProxy()) {
-			InternalEObject oldSecond = (InternalEObject)second;
-			second = (S)eResolveProxy(oldSecond);
-			if (second != oldSecond) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.TUPLE__SECOND, oldSecond, second));
+		if ((this.second != null) && ((EObject) this.second).eIsProxy()) {
+			final InternalEObject oldSecond = (InternalEObject) this.second;
+			this.second = (S) this.eResolveProxy(oldSecond);
+			if (this.second != oldSecond) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.TUPLE__SECOND, oldSecond, this.second));
+				}
 			}
 		}
-		return second;
+		return this.second;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public S basicGetSecond() {
-		return second;
+		return this.second;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setSecond(S newSecond) {
-		S oldSecond = second;
-		second = newSecond;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.TUPLE__SECOND, oldSecond, second));
+	public void setSecond(final S newSecond) {
+		final S oldSecond = this.second;
+		this.second = newSecond;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.TUPLE__SECOND, oldSecond, this.second));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -164,16 +176,16 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 		if (value != null) {
 			if (value instanceof Tuple) {
 				final Tuple<?, ?> key = (Tuple<?, ?>) value;
-		                if (this.first == null && key.getFirst() == null) {
-		                	if (this.second == null && key.getSecond() == null) {
+				if ((this.first == null) && (key.getFirst() == null)) {
+					if ((this.second == null) && (key.getSecond() == null)) {
 						return true;
-					} else if (this.second != null && key.getSecond() != null) {
-		 				return this.second.equals(key.getSecond());
+					} else if ((this.second != null) && (key.getSecond() != null)) {
+						return this.second.equals(key.getSecond());
 					}
-				} else if (this.first != null && key.getFirst() != null) {
-					if (this.second == null && key.getSecond() == null) {
-						return this.first.equals(key.getFirst()) ;
-					} else if (this.second != null && key.getSecond() != null) {
+				} else if ((this.first != null) && (key.getFirst() != null)) {
+					if ((this.second == null) && (key.getSecond() == null)) {
+						return this.first.equals(key.getFirst());
+					} else if ((this.second != null) && (key.getSecond() != null)) {
 						return this.first.equals(key.getFirst()) && this.second.equals(key.getSecond());
 					}
 				}
@@ -185,6 +197,7 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -195,17 +208,22 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.TUPLE__FIRST:
-				if (resolve) return getFirst();
-				return basicGetFirst();
-			case ExecutionPackage.TUPLE__SECOND:
-				if (resolve) return getSecond();
-				return basicGetSecond();
+		case ExecutionPackage.TUPLE__FIRST:
+			if (resolve) {
+				return this.getFirst();
+			}
+			return this.basicGetFirst();
+		case ExecutionPackage.TUPLE__SECOND:
+			if (resolve) {
+				return this.getSecond();
+			}
+			return this.basicGetSecond();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -213,18 +231,19 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.TUPLE__FIRST:
-				setFirst((F)newValue);
-				return;
-			case ExecutionPackage.TUPLE__SECOND:
-				setSecond((S)newValue);
-				return;
+		case ExecutionPackage.TUPLE__FIRST:
+			this.setFirst((F) newValue);
+			return;
+		case ExecutionPackage.TUPLE__SECOND:
+			this.setSecond((S) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -232,17 +251,18 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.TUPLE__FIRST:
-				setFirst((F)null);
-				return;
-			case ExecutionPackage.TUPLE__SECOND:
-				setSecond((S)null);
-				return;
+		case ExecutionPackage.TUPLE__FIRST:
+			this.setFirst((F) null);
+			return;
+		case ExecutionPackage.TUPLE__SECOND:
+			this.setSecond((S) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -250,15 +270,16 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.TUPLE__FIRST:
-				return first != null;
-			case ExecutionPackage.TUPLE__SECOND:
-				return second != null;
+		case ExecutionPackage.TUPLE__FIRST:
+			return this.first != null;
+		case ExecutionPackage.TUPLE__SECOND:
+			return this.second != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -266,17 +287,18 @@ public class TupleImpl<F, S> extends MinimalEObjectImpl.Container implements Tup
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case ExecutionPackage.TUPLE___EQUALS__OBJECT:
-				return equals(arguments.get(0));
-			case ExecutionPackage.TUPLE___HASH_CODE:
-				return hashCode();
+		case ExecutionPackage.TUPLE___EQUALS__OBJECT:
+			return this.equals(arguments.get(0));
+		case ExecutionPackage.TUPLE___HASH_CODE:
+			return this.hashCode();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //TupleImpl
+} // TupleImpl

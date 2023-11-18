@@ -24,6 +24,9 @@
 	<module name="BeforeExecutionExclusionFileFilter">
 		<property name="fileNamePattern" value=".*[/\\]src-gen[/\\].*" />
 	</module>
+	<module name="BeforeExecutionExclusionFileFilter">
+		<property name="fileNamePattern" value=".*[/\\]src[/\\]gen[/\\].*" />
+	</module>
 
 	<module name="BeforeExecutionExclusionFileFilter">
 		<property name="fileNamePattern" value=".*[/\\]test-gen[/\\].*" />

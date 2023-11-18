@@ -24,18 +24,19 @@ import java.util.List;
  * @since 1.16
  */
 public final class CassandraUtils {
-		
+
 	public static final String DEFAULT_HOST = "localhost";
 	public static final int DEFAULT_PORT = 9042;
 
 	private CassandraUtils() {
 		// utility class
 	}
-	
+
 	/**
 	 * Compute the database connections.
 	 *
-	 * @param contactPointSpecs contact point specs
+	 * @param contactPointSpecs
+	 *            contact point specs
 	 * @return socket address
 	 */
 	public static List<InetSocketAddress> computeDatabaseConnections(final String[] contactPointSpecs) {

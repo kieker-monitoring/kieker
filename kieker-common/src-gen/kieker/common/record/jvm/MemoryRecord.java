@@ -18,32 +18,30 @@ package kieker.common.record.jvm;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.10
  */
-public class MemoryRecord extends AbstractJVMRecord  {			
+public class MemoryRecord extends AbstractJVMRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
-			 + TYPE_SIZE_INT; // MemoryRecord.objectPendingFinalizationCount
-	
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
+			+ TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
+			+ TYPE_SIZE_INT; // MemoryRecord.objectPendingFinalizationCount
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
@@ -58,7 +56,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		long.class, // MemoryRecord.nonHeapInitBytes
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -74,9 +72,9 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		"nonHeapInitBytes",
 		"objectPendingFinalizationCount",
 	};
-	
+
 	private static final long serialVersionUID = -9025858519361306011L;
-	
+
 	/** property declarations. */
 	private final long heapMaxBytes;
 	private final long heapUsedBytes;
@@ -87,10 +85,10 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	private final long nonHeapCommittedBytes;
 	private final long nonHeapInitBytes;
 	private final int objectPendingFinalizationCount;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -116,7 +114,9 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 * @param objectPendingFinalizationCount
 	 *            objectPendingFinalizationCount
 	 */
-	public MemoryRecord(final long timestamp, final String hostname, final String vmName, final long heapMaxBytes, final long heapUsedBytes, final long heapCommittedBytes, final long heapInitBytes, final long nonHeapMaxBytes, final long nonHeapUsedBytes, final long nonHeapCommittedBytes, final long nonHeapInitBytes, final int objectPendingFinalizationCount) {
+	public MemoryRecord(final long timestamp, final String hostname, final String vmName, final long heapMaxBytes, final long heapUsedBytes,
+			final long heapCommittedBytes, final long heapInitBytes, final long nonHeapMaxBytes, final long nonHeapUsedBytes, final long nonHeapCommittedBytes,
+			final long nonHeapInitBytes, final int objectPendingFinalizationCount) {
 		super(timestamp, hostname, vmName);
 		this.heapMaxBytes = heapMaxBytes;
 		this.heapUsedBytes = heapUsedBytes;
@@ -129,12 +129,11 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public MemoryRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -148,7 +147,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.nonHeapInitBytes = deserializer.getLong();
 		this.objectPendingFinalizationCount = deserializer.getInt();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,7 +166,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		serializer.putLong(this.getNonHeapInitBytes());
 		serializer.putInt(this.getObjectPendingFinalizationCount());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +174,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,7 +182,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,7 +191,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -207,18 +205,9 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final MemoryRecord castedRecord = (MemoryRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (!this.getHostname().equals(castedRecord.getHostname())) {
-			return false;
-		}
-		if (!this.getVmName().equals(castedRecord.getVmName())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || !this.getHostname().equals(castedRecord.getHostname()) || !this.getVmName().equals(castedRecord.getVmName())) {
 			return false;
 		}
 		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) {
@@ -248,76 +237,68 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getVmName().hashCode();
-		code += ((int)this.getHeapMaxBytes());
-		code += ((int)this.getHeapUsedBytes());
-		code += ((int)this.getHeapCommittedBytes());
-		code += ((int)this.getHeapInitBytes());
-		code += ((int)this.getNonHeapMaxBytes());
-		code += ((int)this.getNonHeapUsedBytes());
-		code += ((int)this.getNonHeapCommittedBytes());
-		code += ((int)this.getNonHeapInitBytes());
-		code += ((int)this.getObjectPendingFinalizationCount());
-		
+		code += ((int) this.getHeapMaxBytes());
+		code += ((int) this.getHeapUsedBytes());
+		code += ((int) this.getHeapCommittedBytes());
+		code += ((int) this.getHeapInitBytes());
+		code += ((int) this.getNonHeapMaxBytes());
+		code += ((int) this.getNonHeapUsedBytes());
+		code += ((int) this.getNonHeapCommittedBytes());
+		code += ((int) this.getNonHeapInitBytes());
+		code += (this.getObjectPendingFinalizationCount());
+
 		return code;
 	}
-	
+
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;
 	}
-	
-	
+
 	public final long getHeapUsedBytes() {
 		return this.heapUsedBytes;
 	}
-	
-	
+
 	public final long getHeapCommittedBytes() {
 		return this.heapCommittedBytes;
 	}
-	
-	
+
 	public final long getHeapInitBytes() {
 		return this.heapInitBytes;
 	}
-	
-	
+
 	public final long getNonHeapMaxBytes() {
 		return this.nonHeapMaxBytes;
 	}
-	
-	
+
 	public final long getNonHeapUsedBytes() {
 		return this.nonHeapUsedBytes;
 	}
-	
-	
+
 	public final long getNonHeapCommittedBytes() {
 		return this.nonHeapCommittedBytes;
 	}
-	
-	
+
 	public final long getNonHeapInitBytes() {
 		return this.nonHeapInitBytes;
 	}
-	
-	
+
 	public final int getObjectPendingFinalizationCount() {
 		return this.objectPendingFinalizationCount;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -326,40 +307,40 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		String result = "MemoryRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "vmName = ";
 		result += this.getVmName() + ", ";
-		
+
 		result += "heapMaxBytes = ";
 		result += this.getHeapMaxBytes() + ", ";
-		
+
 		result += "heapUsedBytes = ";
 		result += this.getHeapUsedBytes() + ", ";
-		
+
 		result += "heapCommittedBytes = ";
 		result += this.getHeapCommittedBytes() + ", ";
-		
+
 		result += "heapInitBytes = ";
 		result += this.getHeapInitBytes() + ", ";
-		
+
 		result += "nonHeapMaxBytes = ";
 		result += this.getNonHeapMaxBytes() + ", ";
-		
+
 		result += "nonHeapUsedBytes = ";
 		result += this.getNonHeapUsedBytes() + ", ";
-		
+
 		result += "nonHeapCommittedBytes = ";
 		result += this.getNonHeapCommittedBytes() + ", ";
-		
+
 		result += "nonHeapInitBytes = ";
 		result += this.getNonHeapInitBytes() + ", ";
-		
+
 		result += "objectPendingFinalizationCount = ";
 		result += this.getObjectPendingFinalizationCount() + ", ";
-		
+
 		return result;
 	}
 }

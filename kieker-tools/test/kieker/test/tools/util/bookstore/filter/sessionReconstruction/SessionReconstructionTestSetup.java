@@ -25,10 +25,10 @@ import kieker.test.tools.util.GenericTestSetup;
 /**
  * Specific test setup for tests of the session reconstruction filter (see
  * {@link kieker.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter}).
- * 
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The concrete type of session used in this setup
  */
@@ -36,7 +36,7 @@ public class SessionReconstructionTestSetup<T extends AbstractSession<?>> extend
 
 	/**
 	 * Creates a new session reconstruction test setup with the given data.
-	 * 
+	 *
 	 * @param analysisController
 	 *            The analysis controller to use
 	 * @param resultCollectionPlugin

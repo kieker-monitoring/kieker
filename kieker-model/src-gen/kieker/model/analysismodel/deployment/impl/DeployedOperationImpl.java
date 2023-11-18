@@ -4,21 +4,17 @@ package kieker.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
-import kieker.model.analysismodel.assembly.AssemblyOperation;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.deployment.DeployedComponent;
 import kieker.model.analysismodel.deployment.DeployedOperation;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.impl.DeployedOperationImpl#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.impl.DeployedOperationImpl#getAssemblyOperation <em>Assembly Operation</em>}</li>
  * </ul>
  *
  * @generated
@@ -38,6 +34,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getAssemblyOperation() <em>Assembly Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getAssemblyOperation()
 	 * @generated
 	 * @ordered
@@ -47,6 +44,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected DeployedOperationImpl() {
@@ -56,6 +54,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -66,72 +65,83 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AssemblyOperation getAssemblyOperation() {
-		if (assemblyOperation != null && assemblyOperation.eIsProxy()) {
-			InternalEObject oldAssemblyOperation = (InternalEObject)assemblyOperation;
-			assemblyOperation = (AssemblyOperation)eResolveProxy(oldAssemblyOperation);
-			if (assemblyOperation != oldAssemblyOperation) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+		if ((this.assemblyOperation != null) && this.assemblyOperation.eIsProxy()) {
+			final InternalEObject oldAssemblyOperation = (InternalEObject) this.assemblyOperation;
+			this.assemblyOperation = (AssemblyOperation) this.eResolveProxy(oldAssemblyOperation);
+			if (this.assemblyOperation != oldAssemblyOperation) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION, oldAssemblyOperation,
+							this.assemblyOperation));
+				}
 			}
 		}
-		return assemblyOperation;
+		return this.assemblyOperation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public AssemblyOperation basicGetAssemblyOperation() {
-		return assemblyOperation;
+		return this.assemblyOperation;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setAssemblyOperation(AssemblyOperation newAssemblyOperation) {
-		AssemblyOperation oldAssemblyOperation = assemblyOperation;
-		assemblyOperation = newAssemblyOperation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+	public void setAssemblyOperation(final AssemblyOperation newAssemblyOperation) {
+		final AssemblyOperation oldAssemblyOperation = this.assemblyOperation;
+		this.assemblyOperation = newAssemblyOperation;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION, oldAssemblyOperation,
+					this.assemblyOperation));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public DeployedComponent getComponent() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		final org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			final org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
 			if (containerContainer != null) {
-				return (DeployedComponent) containerContainer ;
+				return (DeployedComponent) containerContainer;
 			}
 		}
 		return null;
-		
+
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
-				if (resolve) return getAssemblyOperation();
-				return basicGetAssemblyOperation();
+		case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
+			if (resolve) {
+				return this.getAssemblyOperation();
+			}
+			return this.basicGetAssemblyOperation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -139,14 +149,15 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyOperation)newValue);
-				return;
+		case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
+			this.setAssemblyOperation((AssemblyOperation) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -154,14 +165,15 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyOperation)null);
-				return;
+		case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
+			this.setAssemblyOperation((AssemblyOperation) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -169,13 +181,14 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
-				return assemblyOperation != null;
+		case DeploymentPackage.DEPLOYED_OPERATION__ASSEMBLY_OPERATION:
+			return this.assemblyOperation != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -183,15 +196,16 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case DeploymentPackage.DEPLOYED_OPERATION___GET_COMPONENT:
-				return getComponent();
+		case DeploymentPackage.DEPLOYED_OPERATION___GET_COMPONENT:
+			return this.getComponent();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //DeployedOperationImpl
+} // DeployedOperationImpl

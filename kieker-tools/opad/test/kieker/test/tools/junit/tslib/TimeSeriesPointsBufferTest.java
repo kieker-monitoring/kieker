@@ -25,10 +25,10 @@ import kieker.tools.opad.timeseries.TimeSeriesPointsBuffer;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
- * 
+ *
  */
 public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 
@@ -41,7 +41,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 
 	/**
 	 * Test of the bounded buffer version of the time series point buffer.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 * @throws IllegalStateException
@@ -65,7 +65,7 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 
 	/**
 	 * Test of the unbounded buffer version of the time series point buffer.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 * @throws IllegalStateException

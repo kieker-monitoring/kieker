@@ -19,7 +19,7 @@ package kieker.analysis.generic.clustering.mtree;
 import kieker.analysis.exception.InternalErrorException;
 
 /**
- * 
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

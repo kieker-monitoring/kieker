@@ -76,7 +76,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			trace = TRACEREGISTRY.registerTrace();
 			CTRLINST.newMonitoringRecord(trace);
 		}
-		currentStackIndex.get().incrementValue();
+		this.currentStackIndex.get().incrementValue();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		// measure before execution
@@ -95,7 +95,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);
@@ -116,7 +116,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final long traceId = trace.getTraceId();
 		final String clazz = thisJoinPoint.getSignature().getDeclaringTypeName();
 		final int objectId = System.identityHashCode(thisObject);

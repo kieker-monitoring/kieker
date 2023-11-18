@@ -370,14 +370,14 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
-				addSelectIndex(parameters, this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
+				this.addSelectIndex(parameters, this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
 		if (this.assemblyComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
-				addSelectIndex(parameters, this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
+				this.addSelectIndex(parameters, this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
@@ -388,14 +388,14 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
-				addSelectIndex(parameters, this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
+				this.addSelectIndex(parameters, this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 
 		if (this.assemblyOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
-				addSelectIndex(parameters, this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
+				this.addSelectIndex(parameters, this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex());
 			}
 		}
 		if (this.aggregatedDeploymentCallTree.isSelected()) {

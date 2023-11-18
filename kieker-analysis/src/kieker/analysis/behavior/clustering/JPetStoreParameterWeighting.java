@@ -68,7 +68,7 @@ public final class JPetStoreParameterWeighting implements IParameterWeighting {
 				return match;
 			}
 		}
-		return this.DEFAULT_INSERTION_COST;
+		return JPetStoreParameterWeighting.DEFAULT_INSERTION_COST;
 
 	}
 
@@ -81,7 +81,7 @@ public final class JPetStoreParameterWeighting implements IParameterWeighting {
 				return match;
 			}
 		}
-		return this.DEFAULT_DUPLICATION_COST;
+		return JPetStoreParameterWeighting.DEFAULT_DUPLICATION_COST;
 
 	}
 

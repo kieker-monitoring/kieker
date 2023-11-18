@@ -19,13 +19,13 @@ package kieker.tools.opad.model;
 /**
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public interface INamedElement {
 
 	/**
 	 * Returns the name of the element.
-	 * 
+	 *
 	 * @since 1.10
 	 * @return name of the element
 	 */

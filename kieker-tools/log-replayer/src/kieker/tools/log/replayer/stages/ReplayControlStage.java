@@ -56,7 +56,7 @@ public class ReplayControlStage extends AbstractConsumerStage<IMonitoringRecord>
 	protected void execute(final IMonitoringRecord event) {
 		if (this.showRecordCount != null) {
 			this.count++;
-			if (this.count % this.showRecordCount == 0) {
+			if ((this.count % this.showRecordCount) == 0) {
 				this.logger.info("Read {} records.", this.count);
 			}
 		}

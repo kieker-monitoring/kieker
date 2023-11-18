@@ -30,7 +30,7 @@ public class RecordInstantiationException extends RuntimeException {
 
 	/**
 	 * Creates a new instance of a exception.
-	 * 
+	 *
 	 * @param throwable
 	 *            related throwable
 	 */

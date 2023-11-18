@@ -3,19 +3,17 @@
 package kieker.model.collection.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import kieker.model.analysismodel.type.ComponentType;
-
-import kieker.model.collection.CollectionPackage;
-import kieker.model.collection.Coupling;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import kieker.model.analysismodel.type.ComponentType;
+import kieker.model.collection.CollectionPackage;
+import kieker.model.collection.Coupling;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,8 +23,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.collection.impl.CouplingImpl#getCaller <em>Caller</em>}</li>
- *   <li>{@link kieker.model.collection.impl.CouplingImpl#getCallee <em>Callee</em>}</li>
+ * <li>{@link kieker.model.collection.impl.CouplingImpl#getCaller <em>Caller</em>}</li>
+ * <li>{@link kieker.model.collection.impl.CouplingImpl#getCallee <em>Callee</em>}</li>
  * </ul>
  *
  * @generated
@@ -36,6 +34,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	 * The cached value of the '{@link #getCaller() <em>Caller</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getCaller()
 	 * @generated
 	 * @ordered
@@ -46,6 +45,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	 * The cached value of the '{@link #getCallee() <em>Callee</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getCallee()
 	 * @generated
 	 * @ordered
@@ -55,6 +55,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected CouplingImpl() {
@@ -64,6 +65,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -74,86 +76,97 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ComponentType getCaller() {
-		if (caller != null && caller.eIsProxy()) {
-			InternalEObject oldCaller = (InternalEObject)caller;
-			caller = (ComponentType)eResolveProxy(oldCaller);
-			if (caller != oldCaller) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CollectionPackage.COUPLING__CALLER, oldCaller, caller));
+		if ((this.caller != null) && this.caller.eIsProxy()) {
+			final InternalEObject oldCaller = (InternalEObject) this.caller;
+			this.caller = (ComponentType) this.eResolveProxy(oldCaller);
+			if (this.caller != oldCaller) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, CollectionPackage.COUPLING__CALLER, oldCaller, this.caller));
+				}
 			}
 		}
-		return caller;
+		return this.caller;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public ComponentType basicGetCaller() {
-		return caller;
+		return this.caller;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setCaller(ComponentType newCaller) {
-		ComponentType oldCaller = caller;
-		caller = newCaller;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING__CALLER, oldCaller, caller));
+	public void setCaller(final ComponentType newCaller) {
+		final ComponentType oldCaller = this.caller;
+		this.caller = newCaller;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING__CALLER, oldCaller, this.caller));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public ComponentType getCallee() {
-		if (callee != null && callee.eIsProxy()) {
-			InternalEObject oldCallee = (InternalEObject)callee;
-			callee = (ComponentType)eResolveProxy(oldCallee);
-			if (callee != oldCallee) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CollectionPackage.COUPLING__CALLEE, oldCallee, callee));
+		if ((this.callee != null) && this.callee.eIsProxy()) {
+			final InternalEObject oldCallee = (InternalEObject) this.callee;
+			this.callee = (ComponentType) this.eResolveProxy(oldCallee);
+			if (this.callee != oldCallee) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, CollectionPackage.COUPLING__CALLEE, oldCallee, this.callee));
+				}
 			}
 		}
-		return callee;
+		return this.callee;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public ComponentType basicGetCallee() {
-		return callee;
+		return this.callee;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setCallee(ComponentType newCallee) {
-		ComponentType oldCallee = callee;
-		callee = newCallee;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING__CALLEE, oldCallee, callee));
+	public void setCallee(final ComponentType newCallee) {
+		final ComponentType oldCallee = this.callee;
+		this.callee = newCallee;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING__CALLEE, oldCallee, this.callee));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -161,16 +174,16 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 		if (value != null) {
 			if (value instanceof Coupling) {
 				final Coupling coupling = (Coupling) value;
-		                if (this.caller == null && coupling.getCaller() == null) {
-		                	if (this.callee == null && coupling.getCallee() == null) {
+				if ((this.caller == null) && (coupling.getCaller() == null)) {
+					if ((this.callee == null) && (coupling.getCallee() == null)) {
 						return true;
-					} else if (this.callee != null && coupling.getCallee() != null) {
-		 				return this.callee.equals(coupling.getCallee());
+					} else if ((this.callee != null) && (coupling.getCallee() != null)) {
+						return this.callee.equals(coupling.getCallee());
 					}
-				} else if (this.caller != null && coupling.getCaller() != null) {
-					if (this.callee == null && coupling.getCallee() == null) {
-						return this.caller.equals(coupling.getCaller()) ;
-					} else if (this.callee != null && coupling.getCallee() != null) {
+				} else if ((this.caller != null) && (coupling.getCaller() != null)) {
+					if ((this.callee == null) && (coupling.getCallee() == null)) {
+						return this.caller.equals(coupling.getCaller());
+					} else if ((this.callee != null) && (coupling.getCallee() != null)) {
 						return this.caller.equals(coupling.getCaller()) && this.callee.equals(coupling.getCallee());
 					}
 				}
@@ -182,6 +195,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -192,17 +206,22 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case CollectionPackage.COUPLING__CALLER:
-				if (resolve) return getCaller();
-				return basicGetCaller();
-			case CollectionPackage.COUPLING__CALLEE:
-				if (resolve) return getCallee();
-				return basicGetCallee();
+		case CollectionPackage.COUPLING__CALLER:
+			if (resolve) {
+				return this.getCaller();
+			}
+			return this.basicGetCaller();
+		case CollectionPackage.COUPLING__CALLEE:
+			if (resolve) {
+				return this.getCallee();
+			}
+			return this.basicGetCallee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -210,17 +229,18 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case CollectionPackage.COUPLING__CALLER:
-				setCaller((ComponentType)newValue);
-				return;
-			case CollectionPackage.COUPLING__CALLEE:
-				setCallee((ComponentType)newValue);
-				return;
+		case CollectionPackage.COUPLING__CALLER:
+			this.setCaller((ComponentType) newValue);
+			return;
+		case CollectionPackage.COUPLING__CALLEE:
+			this.setCallee((ComponentType) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -228,17 +248,18 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case CollectionPackage.COUPLING__CALLER:
-				setCaller((ComponentType)null);
-				return;
-			case CollectionPackage.COUPLING__CALLEE:
-				setCallee((ComponentType)null);
-				return;
+		case CollectionPackage.COUPLING__CALLER:
+			this.setCaller((ComponentType) null);
+			return;
+		case CollectionPackage.COUPLING__CALLEE:
+			this.setCallee((ComponentType) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -246,15 +267,16 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case CollectionPackage.COUPLING__CALLER:
-				return caller != null;
-			case CollectionPackage.COUPLING__CALLEE:
-				return callee != null;
+		case CollectionPackage.COUPLING__CALLER:
+			return this.caller != null;
+		case CollectionPackage.COUPLING__CALLEE:
+			return this.callee != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -262,17 +284,18 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case CollectionPackage.COUPLING___EQUALS__OBJECT:
-				return equals(arguments.get(0));
-			case CollectionPackage.COUPLING___HASH_CODE:
-				return hashCode();
+		case CollectionPackage.COUPLING___EQUALS__OBJECT:
+			return this.equals(arguments.get(0));
+		case CollectionPackage.COUPLING___HASH_CODE:
+			return this.hashCode();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //CouplingImpl
+} // CouplingImpl

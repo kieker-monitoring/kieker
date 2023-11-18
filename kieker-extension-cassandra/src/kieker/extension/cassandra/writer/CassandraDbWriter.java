@@ -38,12 +38,11 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	public static final String CONFIG_TABLE_PREFIX = PREFIX + "tablePrefix";
 	public static final String CONFIG_OVERWRITE = PREFIX + "dropTables";
 	public static final String CONFIG_BENCHMARK_ID = PREFIX + "benchmarkId";
-	
+
 	private static final String DEFAULT_KEYSPACE = "kieker";
 
 	private static final String DEFAULT_TABLE_PREFIX = "kieker";
 
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDbWriter.class);
 
 	private final CassandraDb database;
@@ -63,7 +62,7 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 		final String tablePrefix = configuration.getStringProperty(CONFIG_TABLE_PREFIX, DEFAULT_TABLE_PREFIX);
 		final boolean dropTables = configuration.getBooleanProperty(CONFIG_OVERWRITE);
 		this.benchmarkId = configuration.getStringProperty(CONFIG_BENCHMARK_ID);
-		
+
 		this.database = new CassandraDb(keyspace, CassandraUtils.computeDatabaseConnections(contactPointParameters), tablePrefix, dropTables);
 	}
 
@@ -75,8 +74,8 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			this.database.insert(record, benchmarkId);
-		} catch (MonitoringRecordException e) {
+			this.database.insert(record, this.benchmarkId);
+		} catch (final MonitoringRecordException e) {
 			LOGGER.error("Error inserting monitoring record: {}", e.getLocalizedMessage());
 		}
 	}
@@ -85,6 +84,5 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	public void onTerminating() {
 		this.database.disconnect();
 	}
-
 
 }

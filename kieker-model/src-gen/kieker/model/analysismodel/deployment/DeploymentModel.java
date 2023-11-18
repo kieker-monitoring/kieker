@@ -3,7 +3,6 @@
 package kieker.model.analysismodel.deployment;
 
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -15,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.deployment.DeploymentModel#getContexts <em>Contexts</em>}</li>
+ * <li>{@link kieker.model.analysismodel.deployment.DeploymentModel#getContexts <em>Contexts</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel()
@@ -29,9 +28,11 @@ public interface DeploymentModel extends EObject {
 	 * and the value is of type {@link kieker.model.analysismodel.deployment.DeploymentContext},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Contexts</em>' map.
 	 * @see kieker.model.analysismodel.deployment.DeploymentPackage#getDeploymentModel_Contexts()
-	 * @model mapType="kieker.model.analysismodel.deployment.EStringToDeploymentContextMapEntry&lt;org.eclipse.emf.ecore.EString, kieker.model.analysismodel.deployment.DeploymentContext&gt;" ordered="false"
+	 * @model mapType="kieker.model.analysismodel.deployment.EStringToDeploymentContextMapEntry&lt;org.eclipse.emf.ecore.EString,
+	 *        kieker.model.analysismodel.deployment.DeploymentContext&gt;" ordered="false"
 	 * @generated
 	 */
 	EMap<String, DeploymentContext> getContexts();

@@ -22,10 +22,10 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
 
 /**
  * An R-based time series forecaster which computes a forecast based on the mean value of the historic values.
- * 
+ *
  * @author Andre van Hoorn
  * @since 1.10
- * 
+ *
  */
 public class MeanForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model
@@ -33,7 +33,7 @@ public class MeanForecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -42,7 +42,7 @@ public class MeanForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 * @param confidenceLevel

@@ -2,19 +2,16 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +30,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MInputPort() {
@@ -43,7 +40,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -54,61 +51,68 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIFilter getParent() {
-		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT)
+		if (this.eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) {
 			return null;
-		return (MIFilter) eInternalContainer();
+		}
+		return (MIFilter) this.eInternalContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetParent(MIFilter newParent, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
+	public NotificationChain basicSetParent(final MIFilter newParent, NotificationChain msgs) {
+		msgs = this.eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setParent(MIFilter newParent) {
-		if (newParent != eInternalContainer() || (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT && newParent != null)) {
-			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+	public void setParent(final MIFilter newParent) {
+		if ((newParent != this.eInternalContainer()) || ((this.eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) && (newParent != null))) {
+			if (EcoreUtil.isAncestor(this, newParent)) {
+				throw new IllegalArgumentException("Recursive containment not allowed for " + this.toString());
+			}
 			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newParent != null)
+			if (this.eInternalContainer() != null) {
+				msgs = this.eBasicRemoveFromContainer(msgs);
+			}
+			if (newParent != null) {
 				msgs = ((InternalEObject) newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
-			msgs = basicSetParent(newParent, msgs);
-			if (msgs != null)
+			}
+			msgs = this.basicSetParent(newParent, msgs);
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, newParent, newParent));
+			}
+		} else if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, newParent, newParent));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(final InternalEObject otherEnd, final int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			return basicSetParent((MIFilter) otherEnd, msgs);
+			if (this.eInternalContainer() != null) {
+				msgs = this.eBasicRemoveFromContainer(msgs);
+			}
+			return this.basicSetParent((MIFilter) otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -116,14 +120,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return basicSetParent(null, msgs);
+			return this.basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -131,14 +135,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
+	public NotificationChain eBasicRemoveFromContainerFeature(final NotificationChain msgs) {
+		switch (this.eContainerFeatureID()) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
+			return this.eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -146,14 +150,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return getParent();
+			return this.getParent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -161,14 +165,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			setParent((MIFilter) newValue);
+			this.setParent((MIFilter) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -177,14 +181,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			setParent((MIFilter) null);
+			this.setParent((MIFilter) null);
 			return;
 		}
 		super.eUnset(featureID);
@@ -193,14 +197,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return getParent() != null;
+			return this.getParent() != null;
 		}
 		return super.eIsSet(featureID);
 	}

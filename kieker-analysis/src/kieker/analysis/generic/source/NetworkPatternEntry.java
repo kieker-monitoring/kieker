@@ -19,7 +19,7 @@ package kieker.analysis.generic.source;
  * POJO for a network pattern consisting of an ip-address and a netmask.
  *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
 public final class NetworkPatternEntry {
 

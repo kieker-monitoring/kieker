@@ -31,7 +31,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getRepositoryConnector_Name()
@@ -44,7 +44,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
@@ -60,7 +60,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Repository</em>' reference.
 	 * @see #setRepository(MIRepository)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getRepositoryConnector_Repository()
@@ -73,7 +73,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getRepository <em>Repository</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Repository</em>' reference.
 	 * @see #getRepository()
@@ -89,7 +89,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getRepositoryConnector_Id()
@@ -102,7 +102,7 @@ public interface MIRepositoryConnector extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()

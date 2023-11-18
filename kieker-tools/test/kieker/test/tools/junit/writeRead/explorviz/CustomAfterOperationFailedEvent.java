@@ -18,7 +18,7 @@ package kieker.test.tools.junit.writeRead.explorviz;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.11
  */
 public class CustomAfterOperationFailedEvent extends CustomAfterOperationEvent {

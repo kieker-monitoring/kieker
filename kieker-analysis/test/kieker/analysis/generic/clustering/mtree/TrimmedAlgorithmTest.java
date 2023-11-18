@@ -26,7 +26,7 @@ public class TrimmedAlgorithmTest {
 	@Test
 	public void testCalculation() {
 		final Integer[] models = { 1, 2, 3, 5 };
-		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<Integer>() {
+		final IDistanceFunction<Integer> distanceFunction = new IDistanceFunction<>() {
 
 			@Override
 			public double calculate(final Integer data1, final Integer data2) {

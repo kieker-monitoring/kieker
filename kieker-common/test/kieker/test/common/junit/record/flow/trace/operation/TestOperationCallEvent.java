@@ -24,6 +24,7 @@ import org.junit.Test;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.record.misc.OperationCallEvent;
 import kieker.common.registry.writer.IWriterRegistry;
 import kieker.common.registry.writer.WriterRegistry;
 

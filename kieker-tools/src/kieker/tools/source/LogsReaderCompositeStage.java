@@ -21,7 +21,7 @@ import java.util.List;
 
 import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.analysis.generic.source.file.DirectoryReaderStage;
-import kieker.analysis.generic.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.file.KiekerDirectoryScannerStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -44,7 +44,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 
 	private static final int DEFAULT_BUFFER_SIZE = 8192;
 
-	private final DirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
+	private final KiekerDirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
 	private final DirectoryReaderStage directoryReaderStage;
 
 	/**
@@ -66,7 +66,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		final int dataBufferSize = configuration.getIntProperty(DATA_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 		final boolean verbose = configuration.getBooleanProperty(VERBOSE, false);
 
-		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryScannerStage = new KiekerDirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, dataBufferSize);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
@@ -85,7 +85,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	public LogsReaderCompositeStage(final List<File> directories, final boolean verbose, final Integer dataBufferSize) {
 		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
 
-		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryScannerStage = new KiekerDirectoryScannerStage(directories);
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
@@ -105,7 +105,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 		final List<File> directories = new ArrayList<>();
 		directories.add(directory);
 
-		this.directoryScannerStage = new DirectoryScannerStage(directories);
+		this.directoryScannerStage = new KiekerDirectoryScannerStage(directories);
 		final int bufferSize = dataBufferSize == null ? DEFAULT_BUFFER_SIZE : dataBufferSize; // NOCS inline conditional
 		this.directoryReaderStage = new DirectoryReaderStage(verbose, bufferSize);
 

@@ -45,19 +45,21 @@ public class RecordFactoryResolver {
 	public RecordFactoryResolver() {
 		this(ServiceLoader.load(IRecordFactoryProvider.class));
 	}
-	
+
 	/**
 	 * Creates a new record factory resolver with the given factory providers.
-	 * @param factoryProviders The factory providers to use
+	 *
+	 * @param factoryProviders
+	 *            The factory providers to use
 	 */
 	public RecordFactoryResolver(final Iterable<IRecordFactoryProvider> factoryProviders) {
 		this.factoryProviders = StreamSupport.stream(factoryProviders.spliterator(), false)
-			.collect(Collectors.toList());
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Obtains a record factory instance fo the given record class name.
-	 * 
+	 *
 	 * @param recordClassName
 	 *            fully qualified class name of a record
 	 * @return a new instance of the record factory belonging to the given <code>recordClassName</code> or <code>null</code> if such a record factory could not
@@ -79,18 +81,18 @@ public class RecordFactoryResolver {
 			// Otherwise, create the factory via the appropriate factory provider
 			final IRecordFactoryProvider factoryProvider = this.determineProviderFor(recordClass);
 			return (IRecordFactory<? extends IMonitoringRecord>) factoryProvider.createFactoryFor(recordClass);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			return null;
-		}		
+		}
 	}
 
 	private IRecordFactoryProvider determineProviderFor(final Class<?> recordClass) {
 		final Optional<IRecordFactoryProvider> applicableProvider = this.factoryProviders.stream()
-			.filter(provider -> provider.isApplicableTo(recordClass))
-			.findFirst();
-			
+				.filter(provider -> provider.isApplicableTo(recordClass))
+				.findFirst();
+
 		return applicableProvider.orElse(this.defaultFactoryProvider);
-	}	
+	}
 
 	private IRecordFactory createFactory(final Class<?> providerClass) {
 		try {

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Whereas ip-address can be IPv4 and IPv6.
  *
  * @author Reiner Jung
- * @since 1.15
+ * @since 2.0.0
  */
 public class NetworkAccessHandler implements IAccessHandler {
 

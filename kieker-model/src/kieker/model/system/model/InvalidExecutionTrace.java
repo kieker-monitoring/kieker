@@ -18,9 +18,9 @@ package kieker.model.system.model;
 
 /**
  * This object represents an somehow invalid trace of executions.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 public class InvalidExecutionTrace {
@@ -29,7 +29,7 @@ public class InvalidExecutionTrace {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param invalidExecutionTrace
 	 *            The execution trace which will be wrapped as invalid.
 	 */
@@ -39,7 +39,7 @@ public class InvalidExecutionTrace {
 
 	/**
 	 * Delivers the wrapped execution trace.
-	 * 
+	 *
 	 * @return The execution trace artifacts.
 	 */
 	public ExecutionTrace getInvalidExecutionTraceArtifacts() {

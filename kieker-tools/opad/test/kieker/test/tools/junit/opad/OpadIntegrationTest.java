@@ -110,8 +110,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 	 *             If wrong configuration
 	 */
 	@Before
-	public void setUp() throws 
-			AnalysisConfigurationException {
+	public void setUp() throws AnalysisConfigurationException {
 		this.controller = new AnalysisController();
 
 		// Start - Read OperationExecutionRecords

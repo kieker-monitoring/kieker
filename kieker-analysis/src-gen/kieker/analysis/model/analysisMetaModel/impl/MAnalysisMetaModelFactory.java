@@ -2,21 +2,32 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
-import kieker.analysis.model.analysisMetaModel.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
+import kieker.analysis.model.analysisMetaModel.MIDependency;
+import kieker.analysis.model.analysisMetaModel.MIDisplay;
+import kieker.analysis.model.analysisMetaModel.MIDisplayConnector;
+import kieker.analysis.model.analysisMetaModel.MIFilter;
+import kieker.analysis.model.analysisMetaModel.MIInputPort;
+import kieker.analysis.model.analysisMetaModel.MIOutputPort;
+import kieker.analysis.model.analysisMetaModel.MIProject;
+import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIReader;
+import kieker.analysis.model.analysisMetaModel.MIRepository;
+import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
+import kieker.analysis.model.analysisMetaModel.MIView;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * 
+ *
  * @generated
  */
 public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysisMetaModelFactory {
@@ -24,17 +35,17 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public static MIAnalysisMetaModelFactory init() {
 		try {
-			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory) EPackage.Registry.INSTANCE
+			final MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory) EPackage.Registry.INSTANCE
 					.getEFactory(MIAnalysisMetaModelPackage.eNS_URI);
 			if (theAnalysisMetaModelFactory != null) {
 				return theAnalysisMetaModelFactory;
 			}
-		} catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MAnalysisMetaModelFactory();
@@ -44,7 +55,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MAnalysisMetaModelFactory() {
@@ -54,36 +65,36 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
+	public EObject create(final EClass eClass) {
 		switch (eClass.getClassifierID()) {
 		case MIAnalysisMetaModelPackage.PROJECT:
-			return createProject();
+			return this.createProject();
 		case MIAnalysisMetaModelPackage.INPUT_PORT:
-			return createInputPort();
+			return this.createInputPort();
 		case MIAnalysisMetaModelPackage.OUTPUT_PORT:
-			return createOutputPort();
+			return this.createOutputPort();
 		case MIAnalysisMetaModelPackage.PROPERTY:
-			return createProperty();
+			return this.createProperty();
 		case MIAnalysisMetaModelPackage.FILTER:
-			return createFilter();
+			return this.createFilter();
 		case MIAnalysisMetaModelPackage.READER:
-			return createReader();
+			return this.createReader();
 		case MIAnalysisMetaModelPackage.REPOSITORY:
-			return createRepository();
+			return this.createRepository();
 		case MIAnalysisMetaModelPackage.DEPENDENCY:
-			return createDependency();
+			return this.createDependency();
 		case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR:
-			return createRepositoryConnector();
+			return this.createRepositoryConnector();
 		case MIAnalysisMetaModelPackage.DISPLAY:
-			return createDisplay();
+			return this.createDisplay();
 		case MIAnalysisMetaModelPackage.VIEW:
-			return createView();
+			return this.createView();
 		case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR:
-			return createDisplayConnector();
+			return this.createDisplayConnector();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -92,149 +103,149 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIProject createProject() {
-		MProject project = new MProject();
+		final MProject project = new MProject();
 		return project;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIInputPort createInputPort() {
-		MInputPort inputPort = new MInputPort();
+		final MInputPort inputPort = new MInputPort();
 		return inputPort;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIOutputPort createOutputPort() {
-		MOutputPort outputPort = new MOutputPort();
+		final MOutputPort outputPort = new MOutputPort();
 		return outputPort;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIProperty createProperty() {
-		MProperty property = new MProperty();
+		final MProperty property = new MProperty();
 		return property;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIFilter createFilter() {
-		MFilter filter = new MFilter();
+		final MFilter filter = new MFilter();
 		return filter;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIReader createReader() {
-		MReader reader = new MReader();
+		final MReader reader = new MReader();
 		return reader;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIRepository createRepository() {
-		MRepository repository = new MRepository();
+		final MRepository repository = new MRepository();
 		return repository;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIDependency createDependency() {
-		MDependency dependency = new MDependency();
+		final MDependency dependency = new MDependency();
 		return dependency;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIRepositoryConnector createRepositoryConnector() {
-		MRepositoryConnector repositoryConnector = new MRepositoryConnector();
+		final MRepositoryConnector repositoryConnector = new MRepositoryConnector();
 		return repositoryConnector;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIDisplay createDisplay() {
-		MDisplay display = new MDisplay();
+		final MDisplay display = new MDisplay();
 		return display;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIView createView() {
-		MView view = new MView();
+		final MView view = new MView();
 		return view;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIDisplayConnector createDisplayConnector() {
-		MDisplayConnector displayConnector = new MDisplayConnector();
+		final MDisplayConnector displayConnector = new MDisplayConnector();
 		return displayConnector;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public MIAnalysisMetaModelPackage getAnalysisMetaModelPackage() {
-		return (MIAnalysisMetaModelPackage) getEPackage();
+		return (MIAnalysisMetaModelPackage) this.getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @deprecated
 	 * @generated
 	 */

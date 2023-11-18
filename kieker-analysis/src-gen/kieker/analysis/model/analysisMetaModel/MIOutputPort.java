@@ -31,7 +31,7 @@ public interface MIOutputPort extends MIPort {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Subscribers</em>' reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getOutputPort_Subscribers()
 	 * @model
@@ -48,7 +48,7 @@ public interface MIOutputPort extends MIPort {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the value of the '<em>Parent</em>' container reference.
 	 * @see #setParent(MIPlugin)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getOutputPort_Parent()
@@ -62,7 +62,7 @@ public interface MIOutputPort extends MIPort {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @param value
 	 *            the new value of the '<em>Parent</em>' container reference.
 	 * @see #getParent()

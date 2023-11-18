@@ -4,22 +4,21 @@ package kieker.model.analysismodel.statistics.impl;
 
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import kieker.model.analysismodel.AnalysismodelPackage;
-
 import kieker.model.analysismodel.assembly.AssemblyPackage;
-
 import kieker.model.analysismodel.assembly.impl.AssemblyPackageImpl;
-
 import kieker.model.analysismodel.deployment.DeploymentPackage;
-
 import kieker.model.analysismodel.deployment.impl.DeploymentPackageImpl;
-
 import kieker.model.analysismodel.execution.ExecutionPackage;
-
 import kieker.model.analysismodel.execution.impl.ExecutionPackageImpl;
-
 import kieker.model.analysismodel.impl.AnalysismodelPackageImpl;
-
 import kieker.model.analysismodel.source.SourcePackage;
 import kieker.model.analysismodel.source.impl.SourcePackageImpl;
 import kieker.model.analysismodel.statistics.ComposedUnit;
@@ -41,30 +40,22 @@ import kieker.model.analysismodel.statistics.StatisticsPackage;
 import kieker.model.analysismodel.statistics.Unit;
 import kieker.model.analysismodel.statistics.VectorMeasurement;
 import kieker.model.analysismodel.trace.TracePackage;
-
 import kieker.model.analysismodel.trace.impl.TracePackageImpl;
-
 import kieker.model.analysismodel.type.TypePackage;
-
 import kieker.model.analysismodel.type.impl.TypePackageImpl;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
+ *
  * @generated
  */
 public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass statisticRecordEClass = null;
@@ -72,6 +63,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass ePropertyTypeToValueEClass = null;
@@ -79,6 +71,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass measurementEClass = null;
@@ -86,6 +79,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass scalarMeasurementEClass = null;
@@ -93,6 +87,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass vectorMeasurementEClass = null;
@@ -100,6 +95,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass intMeasurementEClass = null;
@@ -107,6 +103,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass longMeasurementEClass = null;
@@ -114,6 +111,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass floatMeasurementEClass = null;
@@ -121,6 +119,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass doubleMeasurementEClass = null;
@@ -128,6 +127,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass unitEClass = null;
@@ -135,6 +135,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass composedUnitEClass = null;
@@ -142,6 +143,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass simpleUnitEClass = null;
@@ -149,6 +151,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass siUnitEClass = null;
@@ -156,6 +159,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass customUnitEClass = null;
@@ -163,6 +167,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EEnum esiUnitTypeEEnum = null;
@@ -170,6 +175,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EEnum ePrefixEEnum = null;
@@ -177,6 +183,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass statisticsModelEClass = null;
@@ -184,6 +191,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private EClass eObjectToStatisticsMapEntryEClass = null;
@@ -192,12 +200,14 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>Note: the correct way to create the package is via the static
+	 * <p>
+	 * Note: the correct way to create the package is via the static
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.model.analysismodel.statistics.StatisticsPackage#eNS_URI
 	 * @see #init()
@@ -210,6 +220,7 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -217,39 +228,51 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>This method is used to initialize {@link StatisticsPackage#eINSTANCE} when that field is accessed.
+	 * <p>
+	 * This method is used to initialize {@link StatisticsPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static StatisticsPackage init() {
-		if (isInited) return (StatisticsPackage)EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		if (isInited) {
+			return (StatisticsPackage) EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
-		Object registeredStatisticsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		StatisticsPackageImpl theStatisticsPackage = registeredStatisticsPackage instanceof StatisticsPackageImpl ? (StatisticsPackageImpl)registeredStatisticsPackage : new StatisticsPackageImpl();
+		final Object registeredStatisticsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		final StatisticsPackageImpl theStatisticsPackage = registeredStatisticsPackage instanceof StatisticsPackageImpl
+				? (StatisticsPackageImpl) registeredStatisticsPackage
+				: new StatisticsPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
-		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(registeredPackage instanceof AnalysismodelPackageImpl ? registeredPackage : AnalysismodelPackage.eINSTANCE);
+		final AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl) (registeredPackage instanceof AnalysismodelPackageImpl
+				? registeredPackage
+				: AnalysismodelPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
-		TypePackageImpl theTypePackage = (TypePackageImpl)(registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
+		final TypePackageImpl theTypePackage = (TypePackageImpl) (registeredPackage instanceof TypePackageImpl ? registeredPackage : TypePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
-		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(registeredPackage instanceof AssemblyPackageImpl ? registeredPackage : AssemblyPackage.eINSTANCE);
+		final AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl) (registeredPackage instanceof AssemblyPackageImpl ? registeredPackage
+				: AssemblyPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
-		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(registeredPackage instanceof DeploymentPackageImpl ? registeredPackage : DeploymentPackage.eINSTANCE);
+		final DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl) (registeredPackage instanceof DeploymentPackageImpl ? registeredPackage
+				: DeploymentPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
-		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(registeredPackage instanceof ExecutionPackageImpl ? registeredPackage : ExecutionPackage.eINSTANCE);
+		final ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl) (registeredPackage instanceof ExecutionPackageImpl ? registeredPackage
+				: ExecutionPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
-		TracePackageImpl theTracePackage = (TracePackageImpl)(registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
+		final TracePackageImpl theTracePackage = (TracePackageImpl) (registeredPackage instanceof TracePackageImpl ? registeredPackage : TracePackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(SourcePackage.eNS_URI);
-		SourcePackageImpl theSourcePackage = (SourcePackageImpl)(registeredPackage instanceof SourcePackageImpl ? registeredPackage : SourcePackage.eINSTANCE);
+		final SourcePackageImpl theSourcePackage = (SourcePackageImpl) (registeredPackage instanceof SourcePackageImpl ? registeredPackage
+				: SourcePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theStatisticsPackage.createPackageContents();
@@ -282,586 +305,670 @@ public class StatisticsPackageImpl extends EPackageImpl implements StatisticsPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getStatisticRecord() {
-		return statisticRecordEClass;
+		return this.statisticRecordEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getStatisticRecord_Properties() {
-		return (EReference)statisticRecordEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.statisticRecordEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getEPropertyTypeToValue() {
-		return ePropertyTypeToValueEClass;
+		return this.ePropertyTypeToValueEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getEPropertyTypeToValue_Key() {
-		return (EAttribute)ePropertyTypeToValueEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.ePropertyTypeToValueEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getEPropertyTypeToValue_Value() {
-		return (EAttribute)ePropertyTypeToValueEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.ePropertyTypeToValueEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getMeasurement() {
-		return measurementEClass;
+		return this.measurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getMeasurement_Timestamp() {
-		return (EAttribute)measurementEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.measurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getScalarMeasurement() {
-		return scalarMeasurementEClass;
+		return this.scalarMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getScalarMeasurement_Unit() {
-		return (EReference)scalarMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.scalarMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getVectorMeasurement() {
-		return vectorMeasurementEClass;
+		return this.vectorMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getVectorMeasurement_Values() {
-		return (EReference)vectorMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.vectorMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getIntMeasurement() {
-		return intMeasurementEClass;
+		return this.intMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getIntMeasurement_Value() {
-		return (EAttribute)intMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.intMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getLongMeasurement() {
-		return longMeasurementEClass;
+		return this.longMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getLongMeasurement_Value() {
-		return (EAttribute)longMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.longMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getFloatMeasurement() {
-		return floatMeasurementEClass;
+		return this.floatMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getFloatMeasurement_Value() {
-		return (EAttribute)floatMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.floatMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getDoubleMeasurement() {
-		return doubleMeasurementEClass;
+		return this.doubleMeasurementEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getDoubleMeasurement_Value() {
-		return (EAttribute)doubleMeasurementEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.doubleMeasurementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getUnit() {
-		return unitEClass;
+		return this.unitEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getComposedUnit() {
-		return composedUnitEClass;
+		return this.composedUnitEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getComposedUnit_Units() {
-		return (EReference)composedUnitEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.composedUnitEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getComposedUnit_Exponent() {
-		return (EAttribute)composedUnitEClass.getEStructuralFeatures().get(1);
+		return (EAttribute) this.composedUnitEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getSimpleUnit() {
-		return simpleUnitEClass;
+		return this.simpleUnitEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getSimpleUnit_Prefix() {
-		return (EAttribute)simpleUnitEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.simpleUnitEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getSIUnit() {
-		return siUnitEClass;
+		return this.siUnitEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getSIUnit_UnitType() {
-		return (EAttribute)siUnitEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.siUnitEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getCustomUnit() {
-		return customUnitEClass;
+		return this.customUnitEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EAttribute getCustomUnit_Name() {
-		return (EAttribute)customUnitEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) this.customUnitEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EEnum getESIUnitType() {
-		return esiUnitTypeEEnum;
+		return this.esiUnitTypeEEnum;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EEnum getEPrefix() {
-		return ePrefixEEnum;
+		return this.ePrefixEEnum;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getStatisticsModel() {
-		return statisticsModelEClass;
+		return this.statisticsModelEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getStatisticsModel_Statistics() {
-		return (EReference)statisticsModelEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.statisticsModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getStatisticsModel_Units() {
-		return (EReference)statisticsModelEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.statisticsModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EClass getEObjectToStatisticsMapEntry() {
-		return eObjectToStatisticsMapEntryEClass;
+		return this.eObjectToStatisticsMapEntryEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getEObjectToStatisticsMapEntry_Value() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
+		return (EReference) this.eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public EReference getEObjectToStatisticsMapEntry_Key() {
-		return (EReference)eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference) this.eObjectToStatisticsMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public StatisticsFactory getStatisticsFactory() {
-		return (StatisticsFactory)getEFactoryInstance();
+		return (StatisticsFactory) this.getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package.  This method is
+	 * Creates the meta-model objects for the package. This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) return;
-		isCreated = true;
+		if (this.isCreated) {
+			return;
+		}
+		this.isCreated = true;
 
 		// Create classes and their features
-		statisticRecordEClass = createEClass(STATISTIC_RECORD);
-		createEReference(statisticRecordEClass, STATISTIC_RECORD__PROPERTIES);
+		this.statisticRecordEClass = this.createEClass(STATISTIC_RECORD);
+		this.createEReference(this.statisticRecordEClass, STATISTIC_RECORD__PROPERTIES);
 
-		ePropertyTypeToValueEClass = createEClass(EPROPERTY_TYPE_TO_VALUE);
-		createEAttribute(ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__KEY);
-		createEAttribute(ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__VALUE);
+		this.ePropertyTypeToValueEClass = this.createEClass(EPROPERTY_TYPE_TO_VALUE);
+		this.createEAttribute(this.ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__KEY);
+		this.createEAttribute(this.ePropertyTypeToValueEClass, EPROPERTY_TYPE_TO_VALUE__VALUE);
 
-		measurementEClass = createEClass(MEASUREMENT);
-		createEAttribute(measurementEClass, MEASUREMENT__TIMESTAMP);
+		this.measurementEClass = this.createEClass(MEASUREMENT);
+		this.createEAttribute(this.measurementEClass, MEASUREMENT__TIMESTAMP);
 
-		scalarMeasurementEClass = createEClass(SCALAR_MEASUREMENT);
-		createEReference(scalarMeasurementEClass, SCALAR_MEASUREMENT__UNIT);
+		this.scalarMeasurementEClass = this.createEClass(SCALAR_MEASUREMENT);
+		this.createEReference(this.scalarMeasurementEClass, SCALAR_MEASUREMENT__UNIT);
 
-		vectorMeasurementEClass = createEClass(VECTOR_MEASUREMENT);
-		createEReference(vectorMeasurementEClass, VECTOR_MEASUREMENT__VALUES);
+		this.vectorMeasurementEClass = this.createEClass(VECTOR_MEASUREMENT);
+		this.createEReference(this.vectorMeasurementEClass, VECTOR_MEASUREMENT__VALUES);
 
-		intMeasurementEClass = createEClass(INT_MEASUREMENT);
-		createEAttribute(intMeasurementEClass, INT_MEASUREMENT__VALUE);
+		this.intMeasurementEClass = this.createEClass(INT_MEASUREMENT);
+		this.createEAttribute(this.intMeasurementEClass, INT_MEASUREMENT__VALUE);
 
-		longMeasurementEClass = createEClass(LONG_MEASUREMENT);
-		createEAttribute(longMeasurementEClass, LONG_MEASUREMENT__VALUE);
+		this.longMeasurementEClass = this.createEClass(LONG_MEASUREMENT);
+		this.createEAttribute(this.longMeasurementEClass, LONG_MEASUREMENT__VALUE);
 
-		floatMeasurementEClass = createEClass(FLOAT_MEASUREMENT);
-		createEAttribute(floatMeasurementEClass, FLOAT_MEASUREMENT__VALUE);
+		this.floatMeasurementEClass = this.createEClass(FLOAT_MEASUREMENT);
+		this.createEAttribute(this.floatMeasurementEClass, FLOAT_MEASUREMENT__VALUE);
 
-		doubleMeasurementEClass = createEClass(DOUBLE_MEASUREMENT);
-		createEAttribute(doubleMeasurementEClass, DOUBLE_MEASUREMENT__VALUE);
+		this.doubleMeasurementEClass = this.createEClass(DOUBLE_MEASUREMENT);
+		this.createEAttribute(this.doubleMeasurementEClass, DOUBLE_MEASUREMENT__VALUE);
 
-		statisticsModelEClass = createEClass(STATISTICS_MODEL);
-		createEReference(statisticsModelEClass, STATISTICS_MODEL__STATISTICS);
-		createEReference(statisticsModelEClass, STATISTICS_MODEL__UNITS);
+		this.statisticsModelEClass = this.createEClass(STATISTICS_MODEL);
+		this.createEReference(this.statisticsModelEClass, STATISTICS_MODEL__STATISTICS);
+		this.createEReference(this.statisticsModelEClass, STATISTICS_MODEL__UNITS);
 
-		eObjectToStatisticsMapEntryEClass = createEClass(EOBJECT_TO_STATISTICS_MAP_ENTRY);
-		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE);
-		createEReference(eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY);
+		this.eObjectToStatisticsMapEntryEClass = this.createEClass(EOBJECT_TO_STATISTICS_MAP_ENTRY);
+		this.createEReference(this.eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__VALUE);
+		this.createEReference(this.eObjectToStatisticsMapEntryEClass, EOBJECT_TO_STATISTICS_MAP_ENTRY__KEY);
 
-		unitEClass = createEClass(UNIT);
+		this.unitEClass = this.createEClass(UNIT);
 
-		composedUnitEClass = createEClass(COMPOSED_UNIT);
-		createEReference(composedUnitEClass, COMPOSED_UNIT__UNITS);
-		createEAttribute(composedUnitEClass, COMPOSED_UNIT__EXPONENT);
+		this.composedUnitEClass = this.createEClass(COMPOSED_UNIT);
+		this.createEReference(this.composedUnitEClass, COMPOSED_UNIT__UNITS);
+		this.createEAttribute(this.composedUnitEClass, COMPOSED_UNIT__EXPONENT);
 
-		simpleUnitEClass = createEClass(SIMPLE_UNIT);
-		createEAttribute(simpleUnitEClass, SIMPLE_UNIT__PREFIX);
+		this.simpleUnitEClass = this.createEClass(SIMPLE_UNIT);
+		this.createEAttribute(this.simpleUnitEClass, SIMPLE_UNIT__PREFIX);
 
-		siUnitEClass = createEClass(SI_UNIT);
-		createEAttribute(siUnitEClass, SI_UNIT__UNIT_TYPE);
+		this.siUnitEClass = this.createEClass(SI_UNIT);
+		this.createEAttribute(this.siUnitEClass, SI_UNIT__UNIT_TYPE);
 
-		customUnitEClass = createEClass(CUSTOM_UNIT);
-		createEAttribute(customUnitEClass, CUSTOM_UNIT__NAME);
+		this.customUnitEClass = this.createEClass(CUSTOM_UNIT);
+		this.createEAttribute(this.customUnitEClass, CUSTOM_UNIT__NAME);
 
 		// Create enums
-		esiUnitTypeEEnum = createEEnum(ESI_UNIT_TYPE);
-		ePrefixEEnum = createEEnum(EPREFIX);
+		this.esiUnitTypeEEnum = this.createEEnum(ESI_UNIT_TYPE);
+		this.ePrefixEEnum = this.createEEnum(EPREFIX);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model.  This
+	 * Complete the initialization of the package and its meta-model. This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) return;
-		isInitialized = true;
+		if (this.isInitialized) {
+			return;
+		}
+		this.isInitialized = true;
 
 		// Initialize package
-		setName(eNAME);
-		setNsPrefix(eNS_PREFIX);
-		setNsURI(eNS_URI);
+		this.setName(eNAME);
+		this.setNsPrefix(eNS_PREFIX);
+		this.setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage)EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
+		final AnalysismodelPackage theAnalysismodelPackage = (AnalysismodelPackage) EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		scalarMeasurementEClass.getESuperTypes().add(this.getMeasurement());
-		vectorMeasurementEClass.getESuperTypes().add(this.getMeasurement());
-		intMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
-		longMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
-		floatMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
-		doubleMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
-		simpleUnitEClass.getESuperTypes().add(this.getUnit());
-		siUnitEClass.getESuperTypes().add(this.getSimpleUnit());
-		customUnitEClass.getESuperTypes().add(this.getSimpleUnit());
+		this.scalarMeasurementEClass.getESuperTypes().add(this.getMeasurement());
+		this.vectorMeasurementEClass.getESuperTypes().add(this.getMeasurement());
+		this.intMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
+		this.longMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
+		this.floatMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
+		this.doubleMeasurementEClass.getESuperTypes().add(this.getScalarMeasurement());
+		this.simpleUnitEClass.getESuperTypes().add(this.getUnit());
+		this.siUnitEClass.getESuperTypes().add(this.getSimpleUnit());
+		this.customUnitEClass.getESuperTypes().add(this.getSimpleUnit());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(statisticRecordEClass, StatisticRecord.class, "StatisticRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getStatisticRecord_Properties(), this.getEPropertyTypeToValue(), null, "properties", null, 0, -1, StatisticRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.statisticRecordEClass, StatisticRecord.class, "StatisticRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getStatisticRecord_Properties(), this.getEPropertyTypeToValue(), null, "properties", null, 0, -1, StatisticRecord.class,
+				!IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(ePropertyTypeToValueEClass, Map.Entry.class, "EPropertyTypeToValue", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEPropertyTypeToValue_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEPropertyTypeToValue_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.ePropertyTypeToValueEClass, Map.Entry.class, "EPropertyTypeToValue", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getEPropertyTypeToValue_Key(), this.ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEAttribute(this.getEPropertyTypeToValue_Value(), this.ecorePackage.getEJavaObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(measurementEClass, Measurement.class, "Measurement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMeasurement_Timestamp(), theAnalysismodelPackage.getInstant(), "timestamp", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.measurementEClass, Measurement.class, "Measurement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getMeasurement_Timestamp(), theAnalysismodelPackage.getInstant(), "timestamp", null, 0, 1, Measurement.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(scalarMeasurementEClass, ScalarMeasurement.class, "ScalarMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getScalarMeasurement_Unit(), this.getUnit(), null, "unit", null, 0, 1, ScalarMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.scalarMeasurementEClass, ScalarMeasurement.class, "ScalarMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getScalarMeasurement_Unit(), this.getUnit(), null, "unit", null, 0, 1, ScalarMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(vectorMeasurementEClass, VectorMeasurement.class, "VectorMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVectorMeasurement_Values(), this.getScalarMeasurement(), null, "values", null, 0, -1, VectorMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.vectorMeasurementEClass, VectorMeasurement.class, "VectorMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getVectorMeasurement_Values(), this.getScalarMeasurement(), null, "values", null, 0, -1, VectorMeasurement.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(intMeasurementEClass, IntMeasurement.class, "IntMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIntMeasurement_Value(), ecorePackage.getEInt(), "value", null, 0, 1, IntMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.intMeasurementEClass, IntMeasurement.class, "IntMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getIntMeasurement_Value(), this.ecorePackage.getEInt(), "value", null, 0, 1, IntMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(longMeasurementEClass, LongMeasurement.class, "LongMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLongMeasurement_Value(), ecorePackage.getELong(), "value", null, 0, 1, LongMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.longMeasurementEClass, LongMeasurement.class, "LongMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getLongMeasurement_Value(), this.ecorePackage.getELong(), "value", null, 0, 1, LongMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(floatMeasurementEClass, FloatMeasurement.class, "FloatMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFloatMeasurement_Value(), ecorePackage.getEFloat(), "value", null, 0, 1, FloatMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.floatMeasurementEClass, FloatMeasurement.class, "FloatMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getFloatMeasurement_Value(), this.ecorePackage.getEFloat(), "value", null, 0, 1, FloatMeasurement.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(doubleMeasurementEClass, DoubleMeasurement.class, "DoubleMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDoubleMeasurement_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, DoubleMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.doubleMeasurementEClass, DoubleMeasurement.class, "DoubleMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getDoubleMeasurement_Value(), this.ecorePackage.getEDouble(), "value", null, 0, 1, DoubleMeasurement.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(statisticsModelEClass, StatisticsModel.class, "StatisticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getStatisticsModel_Statistics(), this.getEObjectToStatisticsMapEntry(), null, "statistics", null, 0, -1, StatisticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getStatisticsModel_Units(), this.getUnit(), null, "units", null, 0, -1, StatisticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.statisticsModelEClass, StatisticsModel.class, "StatisticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getStatisticsModel_Statistics(), this.getEObjectToStatisticsMapEntry(), null, "statistics", null, 0, -1, StatisticsModel.class,
+				!IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEReference(this.getStatisticsModel_Units(), this.getUnit(), null, "units", null, 0, -1, StatisticsModel.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(eObjectToStatisticsMapEntryEClass, Map.Entry.class, "EObjectToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEObjectToStatisticsMapEntry_Value(), this.getStatisticRecord(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEObjectToStatisticsMapEntry_Key(), ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.eObjectToStatisticsMapEntryEClass, Map.Entry.class, "EObjectToStatisticsMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+				!IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getEObjectToStatisticsMapEntry_Value(), this.getStatisticRecord(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEReference(this.getEObjectToStatisticsMapEntry_Key(), this.ecorePackage.getEObject(), null, "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE,
+				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(unitEClass, Unit.class, "Unit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEClass(this.unitEClass, Unit.class, "Unit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(composedUnitEClass, ComposedUnit.class, "ComposedUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getComposedUnit_Units(), this.getUnit(), null, "units", null, 0, -1, ComposedUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getComposedUnit_Exponent(), ecorePackage.getELong(), "exponent", null, 1, 1, ComposedUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.composedUnitEClass, ComposedUnit.class, "ComposedUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEReference(this.getComposedUnit_Units(), this.getUnit(), null, "units", null, 0, -1, ComposedUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEAttribute(this.getComposedUnit_Exponent(), this.ecorePackage.getELong(), "exponent", null, 1, 1, ComposedUnit.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(simpleUnitEClass, SimpleUnit.class, "SimpleUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSimpleUnit_Prefix(), this.getEPrefix(), "prefix", null, 0, 1, SimpleUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.simpleUnitEClass, SimpleUnit.class, "SimpleUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getSimpleUnit_Prefix(), this.getEPrefix(), "prefix", null, 0, 1, SimpleUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(siUnitEClass, SIUnit.class, "SIUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSIUnit_UnitType(), this.getESIUnitType(), "unitType", null, 1, 1, SIUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.siUnitEClass, SIUnit.class, "SIUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getSIUnit_UnitType(), this.getESIUnitType(), "unitType", null, 1, 1, SIUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(customUnitEClass, CustomUnit.class, "CustomUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCustomUnit_Name(), ecorePackage.getEString(), "name", null, 1, 1, CustomUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		this.initEClass(this.customUnitEClass, CustomUnit.class, "CustomUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		this.initEAttribute(this.getCustomUnit_Name(), this.ecorePackage.getEString(), "name", null, 1, 1, CustomUnit.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
-		initEEnum(esiUnitTypeEEnum, ESIUnitType.class, "ESIUnitType");
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.METER);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.GRAM);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.TON);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.SECOND);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.AMPERE);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.KELVIN);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.MOLE);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.CANDELA);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.PASCAL);
-		addEEnumLiteral(esiUnitTypeEEnum, ESIUnitType.JOUL);
+		this.initEEnum(this.esiUnitTypeEEnum, ESIUnitType.class, "ESIUnitType");
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.METER);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.GRAM);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.TON);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.SECOND);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.AMPERE);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.KELVIN);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.MOLE);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.CANDELA);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.PASCAL);
+		this.addEEnumLiteral(this.esiUnitTypeEEnum, ESIUnitType.JOUL);
 
-		initEEnum(ePrefixEEnum, EPrefix.class, "EPrefix");
-		addEEnumLiteral(ePrefixEEnum, EPrefix.NO_P);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.YOTTA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.ZETTA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.EXA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.PETA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.TERA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.GIGA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.MEGA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.KILO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.HECTO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.DECA);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.DECI);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.CENTI);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.MILI);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.MICRO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.NANO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.PICO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.FEMTO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.ATTO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.ZEPTO);
-		addEEnumLiteral(ePrefixEEnum, EPrefix.YOCTO);
+		this.initEEnum(this.ePrefixEEnum, EPrefix.class, "EPrefix");
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.NO_P);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.YOTTA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.ZETTA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.EXA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.PETA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.TERA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.GIGA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.MEGA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.KILO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.HECTO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.DECA);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.DECI);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.CENTI);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.MILI);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.MICRO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.NANO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.PICO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.FEMTO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.ATTO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.ZEPTO);
+		this.addEEnumLiteral(this.ePrefixEEnum, EPrefix.YOCTO);
 	}
 
-} //StatisticsPackageImpl
+} // StatisticsPackageImpl

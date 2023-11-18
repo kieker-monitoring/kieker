@@ -17,9 +17,9 @@
 package kieker.model.system.model;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AssemblyComponent implements ISystemModelElement {
@@ -29,7 +29,7 @@ public class AssemblyComponent implements ISystemModelElement {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this assembly component.
 	 * @param name
@@ -78,7 +78,7 @@ public class AssemblyComponent implements ISystemModelElement {
 
 	/**
 	 * Denotes whether this assembly component is a root component.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public boolean isRootComponent() {

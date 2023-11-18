@@ -4,6 +4,16 @@ package kieker.analysis.model.analysisMetaModel.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
@@ -11,20 +21,6 @@ import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIView;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,7 +45,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getPlugins() <em>Plugins</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getPlugins()
 	 * @generated
 	 * @ordered
@@ -60,7 +56,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -71,7 +67,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -82,7 +78,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getRepositories()
 	 * @generated
 	 * @ordered
@@ -93,7 +89,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getDependencies()
 	 * @generated
 	 * @ordered
@@ -104,7 +100,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getViews() <em>Views</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getViews()
 	 * @generated
 	 * @ordered
@@ -115,7 +111,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getProperties()
 	 * @generated
 	 * @ordered
@@ -125,7 +121,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	protected MProject() {
@@ -135,7 +131,7 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
@@ -146,110 +142,111 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIPlugin> getPlugins() {
-		if (plugins == null) {
-			plugins = new EObjectContainmentEList<MIPlugin>(MIPlugin.class, this, MIAnalysisMetaModelPackage.PROJECT__PLUGINS);
+		if (this.plugins == null) {
+			this.plugins = new EObjectContainmentEList<>(MIPlugin.class, this, MIAnalysisMetaModelPackage.PROJECT__PLUGINS);
 		}
-		return plugins;
+		return this.plugins;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROJECT__NAME, oldName, name));
+	public void setName(final String newName) {
+		final String oldName = this.name;
+		this.name = newName;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PROJECT__NAME, oldName, this.name));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIRepository> getRepositories() {
-		if (repositories == null) {
-			repositories = new EObjectContainmentEList<MIRepository>(MIRepository.class, this, MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES);
+		if (this.repositories == null) {
+			this.repositories = new EObjectContainmentEList<>(MIRepository.class, this, MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES);
 		}
-		return repositories;
+		return this.repositories;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIDependency> getDependencies() {
-		if (dependencies == null) {
-			dependencies = new EObjectContainmentEList<MIDependency>(MIDependency.class, this, MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES);
+		if (this.dependencies == null) {
+			this.dependencies = new EObjectContainmentEList<>(MIDependency.class, this, MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES);
 		}
-		return dependencies;
+		return this.dependencies;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIView> getViews() {
-		if (views == null) {
-			views = new EObjectContainmentEList<MIView>(MIView.class, this, MIAnalysisMetaModelPackage.PROJECT__VIEWS);
+		if (this.views == null) {
+			this.views = new EObjectContainmentEList<>(MIView.class, this, MIAnalysisMetaModelPackage.PROJECT__VIEWS);
 		}
-		return views;
+		return this.views;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	public EList<MIProperty> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<MIProperty>(MIProperty.class, this, MIAnalysisMetaModelPackage.PROJECT__PROPERTIES);
+		if (this.properties == null) {
+			this.properties = new EObjectContainmentEList<>(MIProperty.class, this, MIAnalysisMetaModelPackage.PROJECT__PROPERTIES);
 		}
-		return properties;
+		return this.properties;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROJECT__PLUGINS:
-			return ((InternalEList<?>) getPlugins()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getPlugins()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
-			return ((InternalEList<?>) getRepositories()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getRepositories()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
-			return ((InternalEList<?>) getDependencies()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getDependencies()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
-			return ((InternalEList<?>) getViews()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getViews()).basicRemove(otherEnd, msgs);
 		case MIAnalysisMetaModelPackage.PROJECT__PROPERTIES:
-			return ((InternalEList<?>) getProperties()).basicRemove(otherEnd, msgs);
+			return ((InternalEList<?>) this.getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -257,24 +254,24 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROJECT__PLUGINS:
-			return getPlugins();
+			return this.getPlugins();
 		case MIAnalysisMetaModelPackage.PROJECT__NAME:
-			return getName();
+			return this.getName();
 		case MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
-			return getRepositories();
+			return this.getRepositories();
 		case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
-			return getDependencies();
+			return this.getDependencies();
 		case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
-			return getViews();
+			return this.getViews();
 		case MIAnalysisMetaModelPackage.PROJECT__PROPERTIES:
-			return getProperties();
+			return this.getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -282,35 +279,35 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROJECT__PLUGINS:
-			getPlugins().clear();
-			getPlugins().addAll((Collection<? extends MIPlugin>) newValue);
+			this.getPlugins().clear();
+			this.getPlugins().addAll((Collection<? extends MIPlugin>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__NAME:
-			setName((String) newValue);
+			this.setName((String) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
-			getRepositories().clear();
-			getRepositories().addAll((Collection<? extends MIRepository>) newValue);
+			this.getRepositories().clear();
+			this.getRepositories().addAll((Collection<? extends MIRepository>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
-			getDependencies().clear();
-			getDependencies().addAll((Collection<? extends MIDependency>) newValue);
+			this.getDependencies().clear();
+			this.getDependencies().addAll((Collection<? extends MIDependency>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
-			getViews().clear();
-			getViews().addAll((Collection<? extends MIView>) newValue);
+			this.getViews().clear();
+			this.getViews().addAll((Collection<? extends MIView>) newValue);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__PROPERTIES:
-			getProperties().clear();
-			getProperties().addAll((Collection<? extends MIProperty>) newValue);
+			this.getProperties().clear();
+			this.getProperties().addAll((Collection<? extends MIProperty>) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -319,29 +316,29 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROJECT__PLUGINS:
-			getPlugins().clear();
+			this.getPlugins().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__NAME:
-			setName(NAME_EDEFAULT);
+			this.setName(NAME_EDEFAULT);
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
-			getRepositories().clear();
+			this.getRepositories().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
-			getDependencies().clear();
+			this.getDependencies().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
-			getViews().clear();
+			this.getViews().clear();
 			return;
 		case MIAnalysisMetaModelPackage.PROJECT__PROPERTIES:
-			getProperties().clear();
+			this.getProperties().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -350,24 +347,24 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case MIAnalysisMetaModelPackage.PROJECT__PLUGINS:
-			return plugins != null && !plugins.isEmpty();
+			return (this.plugins != null) && !this.plugins.isEmpty();
 		case MIAnalysisMetaModelPackage.PROJECT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
 		case MIAnalysisMetaModelPackage.PROJECT__REPOSITORIES:
-			return repositories != null && !repositories.isEmpty();
+			return (this.repositories != null) && !this.repositories.isEmpty();
 		case MIAnalysisMetaModelPackage.PROJECT__DEPENDENCIES:
-			return dependencies != null && !dependencies.isEmpty();
+			return (this.dependencies != null) && !this.dependencies.isEmpty();
 		case MIAnalysisMetaModelPackage.PROJECT__VIEWS:
-			return views != null && !views.isEmpty();
+			return (this.views != null) && !this.views.isEmpty();
 		case MIAnalysisMetaModelPackage.PROJECT__PROPERTIES:
-			return properties != null && !properties.isEmpty();
+			return (this.properties != null) && !this.properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -375,17 +372,18 @@ public class MProject extends EObjectImpl implements MIProject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (this.eIsProxy()) {
 			return super.toString();
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		final StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		result.append(this.name);
 		result.append(')');
 		return result.toString();
 	}

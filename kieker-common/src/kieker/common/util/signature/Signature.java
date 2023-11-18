@@ -20,9 +20,9 @@ import java.util.Arrays;
 
 /**
  * A signature for a software operation. Note that this is just an operation signature declaration which is not bound to an implementing class or interface.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class Signature {
@@ -39,9 +39,9 @@ public class Signature {
 	private final String[] paramTypeList;
 
 	/**
-	 * 
+	 *
 	 * Please use the constant {@link #NO_RETURN_TYPE} to indicate that the Signature contains no return type.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the operation.
 	 * @param modifierList
@@ -80,7 +80,7 @@ public class Signature {
 
 	/**
 	 * Tells whether the current signature has a return type or not.
-	 * 
+	 *
 	 * @return true if and only if the signature has a return type.
 	 */
 	public final boolean hasReturnType() {

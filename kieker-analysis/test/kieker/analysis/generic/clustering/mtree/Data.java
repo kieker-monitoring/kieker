@@ -32,7 +32,7 @@ class Data implements IEuclideanCoordinate, Comparable<Data> {
 
 		int hashCode = 1;
 		for (final int value : values) {
-			hashCode = 31 * hashCode + value;
+			hashCode = (31 * hashCode) + value;
 		}
 		this.hashCodeValue = hashCode;
 	}

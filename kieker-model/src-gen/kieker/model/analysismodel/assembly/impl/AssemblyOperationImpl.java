@@ -4,21 +4,17 @@ package kieker.model.analysismodel.assembly.impl;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import kieker.model.analysismodel.assembly.AssemblyComponent;
 import kieker.model.analysismodel.assembly.AssemblyOperation;
 import kieker.model.analysismodel.assembly.AssemblyPackage;
-
 import kieker.model.analysismodel.type.OperationType;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
+ * <li>{@link kieker.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -38,6 +34,7 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getOperationType() <em>Operation Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getOperationType()
 	 * @generated
 	 * @ordered
@@ -47,6 +44,7 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected AssemblyOperationImpl() {
@@ -56,6 +54,7 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -66,72 +65,82 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public OperationType getOperationType() {
-		if (operationType != null && operationType.eIsProxy()) {
-			InternalEObject oldOperationType = (InternalEObject)operationType;
-			operationType = (OperationType)eResolveProxy(oldOperationType);
-			if (operationType != oldOperationType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
+		if ((this.operationType != null) && this.operationType.eIsProxy()) {
+			final InternalEObject oldOperationType = (InternalEObject) this.operationType;
+			this.operationType = (OperationType) this.eResolveProxy(oldOperationType);
+			if (this.operationType != oldOperationType) {
+				if (this.eNotificationRequired()) {
+					this.eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType,
+							this.operationType));
+				}
 			}
 		}
-		return operationType;
+		return this.operationType;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public OperationType basicGetOperationType() {
-		return operationType;
+		return this.operationType;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setOperationType(OperationType newOperationType) {
-		OperationType oldOperationType = operationType;
-		operationType = newOperationType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
+	public void setOperationType(final OperationType newOperationType) {
+		final OperationType oldOperationType = this.operationType;
+		this.operationType = newOperationType;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, this.operationType));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AssemblyComponent getComponent() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		final org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			final org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
 			if (containerContainer != null) {
-				return (AssemblyComponent) containerContainer ;
+				return (AssemblyComponent) containerContainer;
 			}
 		}
 		return null;
-		
+
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-				if (resolve) return getOperationType();
-				return basicGetOperationType();
+		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+			if (resolve) {
+				return this.getOperationType();
+			}
+			return this.basicGetOperationType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -139,14 +148,15 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-				setOperationType((OperationType)newValue);
-				return;
+		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+			this.setOperationType((OperationType) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -154,14 +164,15 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-				setOperationType((OperationType)null);
-				return;
+		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+			this.setOperationType((OperationType) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -169,13 +180,14 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
-				return operationType != null;
+		case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+			return this.operationType != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -183,15 +195,16 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(final int operationID, final EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION___GET_COMPONENT:
-				return getComponent();
+		case AssemblyPackage.ASSEMBLY_OPERATION___GET_COMPONENT:
+			return this.getComponent();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
 
-} //AssemblyOperationImpl
+} // AssemblyOperationImpl

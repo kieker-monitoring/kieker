@@ -23,11 +23,11 @@ import java.io.StringWriter;
 /**
  * This simple helper class wraps a given {@link OutputStream} but intercepts everything that is written to this instance via
  * {@link StringTeeOutputStream#write(int)}. The written content can later be accessed.
- * 
+ *
  * @see StringTeePrintStream
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class StringTeeOutputStream extends OutputStream {
@@ -37,7 +37,7 @@ public class StringTeeOutputStream extends OutputStream {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param teeStream
 	 *            The stream to be intercepted.
 	 */
@@ -53,7 +53,7 @@ public class StringTeeOutputStream extends OutputStream {
 
 	/**
 	 * Delivers a string representation of the stream's content.
-	 * 
+	 *
 	 * @return The written content.
 	 */
 	public String getString() {

@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.generic.source.file.DirectoryScannerStage;
+import kieker.analysis.generic.source.file.KiekerDirectoryScannerStage;
 
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
@@ -125,7 +125,7 @@ public class DirectoryScannerStageIntegrationTest {
 	 */
 	@Test
 	public void testEmptyArrayOfDirectories() {
-		final DirectoryScannerStage producer = new DirectoryScannerStage((List<File>) null);
+		final KiekerDirectoryScannerStage producer = new KiekerDirectoryScannerStage((List<File>) null);
 		StageTester.test(producer).start();
 
 		Assert.assertThat(producer.getOutputPort(), StageTester.producesNothing());
@@ -138,7 +138,7 @@ public class DirectoryScannerStageIntegrationTest {
 	 */
 	@Test
 	public void testPopulatedArrayOfDirectories() {
-		final DirectoryScannerStage producer = new DirectoryScannerStage(this.directories);
+		final KiekerDirectoryScannerStage producer = new KiekerDirectoryScannerStage(this.directories);
 
 		StageTester.test(producer).start();
 

@@ -15,24 +15,21 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class CallConstructorObjectEventFactory implements IRecordFactory<CallConstructorObjectEvent> {
-	
 
 	@Override
 	public CallConstructorObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CallConstructorObjectEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

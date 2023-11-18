@@ -32,7 +32,7 @@ import kieker.tools.trace.analysis.StringConstants;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class AdditionalFiltersStep extends AbstractStep {

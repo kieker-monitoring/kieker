@@ -37,7 +37,7 @@ import kieker.analysis.generic.clustering.mtree.query.ResultItem;
 public class OPTICS<T> {
 	// This comparator, checks from which model the reachability distance is bigger.
 	// It is used, to keep the priority queue in order
-	private final Comparator<OpticsData<T>> reachComparator = new Comparator<OpticsData<T>>() {
+	private final Comparator<OpticsData<T>> reachComparator = new Comparator<>() {
 
 		@Override
 		public int compare(final OpticsData<T> model1, final OpticsData<T> model2) {

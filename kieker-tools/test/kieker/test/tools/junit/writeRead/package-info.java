@@ -14,4 +14,3 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.test.tools.junit.writeRead;
-

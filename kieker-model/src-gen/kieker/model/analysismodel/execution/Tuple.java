@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.execution.Tuple#getFirst <em>First</em>}</li>
- *   <li>{@link kieker.model.analysismodel.execution.Tuple#getSecond <em>Second</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.Tuple#getFirst <em>First</em>}</li>
+ * <li>{@link kieker.model.analysismodel.execution.Tuple#getSecond <em>Second</em>}</li>
  * </ul>
  *
  * @see kieker.model.analysismodel.execution.ExecutionPackage#getTuple()
@@ -26,6 +26,7 @@ public interface Tuple<F, S> extends EObject {
 	 * Returns the value of the '<em><b>First</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>First</em>' reference.
 	 * @see #setFirst(Object)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getTuple_First()
@@ -38,7 +39,9 @@ public interface Tuple<F, S> extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.Tuple#getFirst <em>First</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>First</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>First</em>' reference.
 	 * @see #getFirst()
 	 * @generated
 	 */
@@ -48,6 +51,7 @@ public interface Tuple<F, S> extends EObject {
 	 * Returns the value of the '<em><b>Second</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @return the value of the '<em>Second</em>' reference.
 	 * @see #setSecond(Object)
 	 * @see kieker.model.analysismodel.execution.ExecutionPackage#getTuple_Second()
@@ -60,7 +64,9 @@ public interface Tuple<F, S> extends EObject {
 	 * Sets the value of the '{@link kieker.model.analysismodel.execution.Tuple#getSecond <em>Second</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Second</em>' reference.
+	 *
+	 * @param value
+	 *            the new value of the '<em>Second</em>' reference.
 	 * @see #getSecond()
 	 * @generated
 	 */
@@ -69,6 +75,7 @@ public interface Tuple<F, S> extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @model
 	 * @generated
 	 */
@@ -77,6 +84,7 @@ public interface Tuple<F, S> extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @model
 	 * @generated
 	 */

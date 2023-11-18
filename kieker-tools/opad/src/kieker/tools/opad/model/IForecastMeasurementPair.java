@@ -21,13 +21,13 @@ import kieker.tools.opad.timeseries.ITimeSeriesPoint;
 /**
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
 
 	/**
 	 * Returns the forecasted Double value.
-	 * 
+	 *
 	 * @since 1.10
 	 * @return forecasted Double value
 	 */

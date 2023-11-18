@@ -33,7 +33,7 @@ import kieker.tools.trace.analysis.gui.util.FileChooserActionListener;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class WelcomeStep extends AbstractStep {

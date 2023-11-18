@@ -26,9 +26,9 @@ import javax.swing.text.JTextComponent;
 
 /**
  * An action listener which can be used to choose a file or a directory for a given text component.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public final class FileChooserActionListener implements ActionListener {

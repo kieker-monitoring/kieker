@@ -25,9 +25,9 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 /**
  * A plugin which receives one or more graphs and stores them for later access. This plugin is primarily
  * intended for unit tests of graph-producing plugins.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 @Plugin(description = "A plugin that receives one or more graphs and provides access them via methods.")
@@ -40,7 +40,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 
 	/**
 	 * Creates a new receiver plugin with the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
@@ -52,7 +52,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 
 	/**
 	 * Returns the number of graphs received so far.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public int getNumberOfReceivedGraphs() {
@@ -61,9 +61,9 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 
 	/**
 	 * Returns the first received graph, if any.
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @param <T>
 	 *            The type of the graph.
 	 */
@@ -73,11 +73,11 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 
 	/**
 	 * Returns the ({@code index} + 1)th received graph, if any.
-	 * 
+	 *
 	 * @param index
 	 *            The (zero-based) index of the desired graph
 	 * @return See above
-	 * 
+	 *
 	 * @param <T>
 	 *            The type of the graph.
 	 */

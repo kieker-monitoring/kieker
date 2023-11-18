@@ -92,7 +92,7 @@ public class OperationAndCallGeneratorStage extends AbstractConsumerStage<IFlowR
 	}
 
 	private void processTraceMetadata(final TraceMetadata traceMetadata) {
-		this.traceDataMap.put(traceMetadata.getTraceId(), new TraceData(traceMetadata, new Stack<OperationEvent>()));
+		this.traceDataMap.put(traceMetadata.getTraceId(), new TraceData(traceMetadata, new Stack<>()));
 	}
 
 	private void processBeforeOperationEvent(final BeforeOperationEvent beforeOperationEvent) {

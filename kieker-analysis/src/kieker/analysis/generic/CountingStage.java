@@ -89,7 +89,7 @@ public final class CountingStage<T> extends AbstractConsumerStage<T> {
 	@Override
 	protected void execute(final T event) {
 		final Long count = this.counter.incrementAndGet();
-		if (this.echo && count % this.modulo == 0) {
+		if (this.echo && ((count % this.modulo) == 0)) {
 			this.logger.info("Processed {} events: {}", this.label, count);
 		}
 

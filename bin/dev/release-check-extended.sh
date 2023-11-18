@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
@@ -163,27 +163,28 @@ change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 
-information "Binary ZIP"
-BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
-extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
+#information "Binary ZIP"
+#BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
+#extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
 
 information "Binary TGZ"
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
-diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
-DIFF_BIN_RESULT=$?
+#diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
+#DIFF_BIN_RESULT=$?
 
 # cleanup temporary folders we created for the comparison
-rm -rf "${TMP_BINZIP_DIR}" "${TMP_GZ_DIR}"
+rm -rf "${TMP_BINZIP_DIR}"
+# "${TMP_GZ_DIR}"
 
-if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
-  information "The content of both binary archives is identical."
-  check_bin_archive "${BINTGZ}"
-else
-  error "The content of both binary archives is NOT identical."
-  exit 1
-fi
+#if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
+#  information "The content of both binary archives is identical."
+check_bin_archive "${BINTGZ}"
+#else
+#  error "The content of both binary archives is NOT identical."
+#  exit 1
+#fi
 #rm -rf "${DIR}"
 
 # end

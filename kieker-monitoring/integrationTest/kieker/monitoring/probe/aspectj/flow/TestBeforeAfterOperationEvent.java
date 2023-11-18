@@ -29,7 +29,7 @@ import kieker.monitoring.probe.aspectj.operationExecution.Util;
  * Tests whether instrumented execution with beforeafteroperationevent creates the
  * expected records. Since this tests uses an individual method order, an individual test project
  * is used.
- * 
+ *
  * @author DaGeRe
  *
  */

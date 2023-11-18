@@ -35,7 +35,7 @@ import kieker.analysis.generic.clustering.mtree.MTree;
  * result is fetched, the next result may still not be known, and the
  * resources allocated were only the necessary to identify the <i>n</i>
  * first results.
- * 
+ *
  * @param <T>
  *            data type of the values in the query result
  *
@@ -58,7 +58,7 @@ public final class Query<T> implements Iterable<ResultItem<T>> {
 
 	@Override
 	public Iterator<ResultItem<T>> iterator() {
-		return new ResultsIterator<T>(this);
+		return new ResultsIterator<>(this);
 	}
 
 	public T getData() {

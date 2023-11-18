@@ -413,14 +413,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// check whether dst is a reader
 		if (dst instanceof IReaderPlugin) {
-			throw new AnalysisConfigurationException(createCannotConnectToReader(dst));
+			throw new AnalysisConfigurationException(this.createCannotConnectToReader(dst));
 		}
 		// Make sure that the plugins are registered. */
 		if (!(this.filters.contains(src) || this.readers.contains(src))) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(src));
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(src));
 		}
 		if (!this.filters.contains(dst)) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(dst));
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(dst));
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connection.
@@ -440,12 +440,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", plugin.getName(), plugin.getPluginName()));
 		}
 		// Make sure that the plugin is registered.
-		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));
-		}
 		// Make sure that the repository is registered.
-		if (!this.repos.contains(repository)) {
-			throw new AnalysisConfigurationException(createPluginNotRegisteredMessage(plugin));		
+		if (!(this.filters.contains(plugin) || this.readers.contains(plugin)) || !this.repos.contains(repository)) {
+			throw new AnalysisConfigurationException(this.createPluginNotRegisteredMessage(plugin));
 		}
 		// Use the method of AbstractPlugin (This should be the only allowed call to
 		// this method) to check the connections.
@@ -484,7 +481,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!reader.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Reader '%s' (%s) has unconnected repositories.", reader.getName(), reader.getPluginName()));
+					throw new AnalysisConfigurationException(
+							String.format("Reader '%s' (%s) has unconnected repositories.", reader.getName(), reader.getPluginName()));
 				}
 				if (!reader.start()) {
 					this.terminate(true);
@@ -495,7 +493,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				// Make also sure that all repository ports of all plugins are connected.
 				if (!filter.areAllRepositoryPortsConnected()) {
 					this.terminate(true);
-					throw new AnalysisConfigurationException(String.format("Plugin '%s' (%s) has unconnected repositories.", filter.getName(), filter.getPluginName()));
+					throw new AnalysisConfigurationException(
+							String.format("Plugin '%s' (%s) has unconnected repositories.", filter.getName(), filter.getPluginName()));
 				}
 				if (!filter.start()) {
 					this.terminate(true);
@@ -794,7 +793,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	public boolean tryRegisterComponentName(final String name) {
 		return this.registeredComponentNames.add(name);
 	}
-	
 
 	private String createCannotConnectToReader(final AbstractPlugin plugin) {
 		return String.format("The plugin '%s' (%s) is a reader and can not be connected to.", plugin.getName(), plugin.getPluginName());

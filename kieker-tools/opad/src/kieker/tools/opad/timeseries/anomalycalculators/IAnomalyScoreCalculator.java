@@ -21,11 +21,11 @@ import kieker.tools.opad.timeseries.forecast.IForecastResult;
 
 /**
  * Classes implementing this interface calculate anomaly scores based on a forecasted and an actual value.
- * 
+ *
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the calculator.
  */
@@ -33,14 +33,14 @@ public interface IAnomalyScoreCalculator<T> {
 
 	/**
 	 * Calculates an anomaly score based on the given values.
-	 * 
+	 *
 	 * @param forecast
 	 *            The forecasted value.
 	 * @param current
 	 *            The actual value.
-	 * 
+	 *
 	 * @return An anomaly score for the given values.
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	public AnomalyScore calculateAnomalyScore(IForecastResult forecast, ITimeSeriesPoint<T> current);

@@ -21,11 +21,13 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * @author Christian Wulf
  *
- * @since 1.14
+ * @since 2.0.0
  */
 public interface IRecordReceivedListener {
 
 	/**
+	 * @param record
+	 *            record to be processed by the listener
 	 * @since 1.14
 	 */
 	void onRecordReceived(IMonitoringRecord record);

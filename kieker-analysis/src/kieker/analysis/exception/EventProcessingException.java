@@ -17,9 +17,9 @@
 package kieker.analysis.exception;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 public class EventProcessingException extends Exception {
@@ -28,7 +28,7 @@ public class EventProcessingException extends Exception {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param message
 	 *            The message of the exception.
 	 * @param cause
@@ -40,7 +40,7 @@ public class EventProcessingException extends Exception {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param message
 	 *            The message of the exception.
 	 */

@@ -19,27 +19,29 @@ package kieker.common.record.factory;
 /**
  * Interface for record factory providers which allow to implement a particular strategy for selecting
  * the appropriate record factory for a given record type.
- * 
+ *
  * @author Holger Knoche
  * @since 2.0
  */
 public interface IRecordFactoryProvider {
-    
-    /**
-     * Denotes whether this factory provider is applicable to the given record class.
-     * 
-     * @param recordClass The record class in question
-     * @return {@code True} when this provider is applicable for the given class, {@code false} otherwise
-     */
-    boolean isApplicableTo(Class<?> recordClass);
 
-    /**
-     * Creates a factory for the given record class. This method may only be called if {@link #isApplicableTo(Class)} returns
-     * {@code true} for the respective record class.
-     * 
-     * @param recordClass The record class to create a factory for
-     * @return The created factory instance
-     */
-    IRecordFactory<?> createFactoryFor(Class<?> recordClass);
+	/**
+	 * Denotes whether this factory provider is applicable to the given record class.
+	 *
+	 * @param recordClass
+	 *            The record class in question
+	 * @return {@code True} when this provider is applicable for the given class, {@code false} otherwise
+	 */
+	boolean isApplicableTo(Class<?> recordClass);
+
+	/**
+	 * Creates a factory for the given record class. This method may only be called if {@link #isApplicableTo(Class)} returns
+	 * {@code true} for the respective record class.
+	 *
+	 * @param recordClass
+	 *            The record class to create a factory for
+	 * @return The created factory instance
+	 */
+	IRecordFactory<?> createFactoryFor(Class<?> recordClass);
 
 }

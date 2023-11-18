@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
@@ -138,7 +138,6 @@ function assert_files_exist_common {
 	    # Don't ask why results not dumped to stdout above
 	    warning "Found old version string. Add/correct replacement regexp in Gradle file?"
 	    error "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
-	    pwd
 	    exit 1
 	fi
 	information OK
@@ -207,6 +206,14 @@ function assert_files_exist_bin {
 #	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
 #	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
 
+##      Removed Eclipse rubbish
+#	information "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."
+#	for d in $(find -name ".project" -exec dirname {} \;); do
+#	    assert_file_exists_regular $d/.classpath
+#	    assert_file_exists_regular $d/.settings/org.eclipse.jdt.core.prefs
+#	done
+#	information OK
+
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "bin/dev/release-check*"
@@ -259,13 +266,14 @@ assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
 
-information "Check zip"
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
-check_bin_archive "${BINZIP}"
-rm -rf "${DIR}"
+# deactivated as distribution is too big
+#information "Check zip"
+#change_dir "${BASE_TMP_DIR_ABS}"
+#create_subdir_n_cd
+#DIR=$(pwd)
+#BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
+#check_bin_archive "${BINZIP}"
+#rm -rf "${DIR}"
 
 information "Check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"

@@ -22,10 +22,10 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
 
 /**
  * An R-based time series forecaster which computes a forecast based on exponential smoothing.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn
- * 
+ *
  */
 public class ETSForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
@@ -33,7 +33,7 @@ public class ETSForecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            Time Series
 	 */
@@ -42,7 +42,7 @@ public class ETSForecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            Time Series
 	 * @param confidenceLevel

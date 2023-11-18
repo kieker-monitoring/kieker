@@ -26,45 +26,45 @@ import kieker.model.analysismodel.execution.EDirection;
  */
 public class DataflowEvent {
 
-    private final GenericElementEvent source;
-    private final GenericElementEvent target;
-    private final EDirection direction;
-    private final Duration duration;
+	private final GenericElementEvent source;
+	private final GenericElementEvent target;
+	private final EDirection direction;
+	private final Duration duration;
 
-    /**
-     * Create a new dataflow event between two operations or between one operation and one storage.
-     *
-     * @param source
-     *            source element, either an operation or a storage
-     * @param target
-     *            target element, either an operation or a storage
-     * @param direction
-     *            dataflow direction
-     * @param duration
-     *            duration of the dataflow (is zero in static analysis)
-     */
-    public DataflowEvent(final GenericElementEvent source, final GenericElementEvent target,
-            final EDirection direction, final Duration duration) {
-        this.source = source;
-        this.target = target;
-        this.direction = direction;
-        this.duration = duration;
-    }
+	/**
+	 * Create a new dataflow event between two operations or between one operation and one storage.
+	 *
+	 * @param source
+	 *            source element, either an operation or a storage
+	 * @param target
+	 *            target element, either an operation or a storage
+	 * @param direction
+	 *            dataflow direction
+	 * @param duration
+	 *            duration of the dataflow (is zero in static analysis)
+	 */
+	public DataflowEvent(final GenericElementEvent source, final GenericElementEvent target,
+			final EDirection direction, final Duration duration) {
+		this.source = source;
+		this.target = target;
+		this.direction = direction;
+		this.duration = duration;
+	}
 
-    public GenericElementEvent getSource() {
-        return this.source;
-    }
+	public GenericElementEvent getSource() {
+		return this.source;
+	}
 
-    public GenericElementEvent getTarget() {
-        return this.target;
-    }
+	public GenericElementEvent getTarget() {
+		return this.target;
+	}
 
-    public EDirection getDirection() {
-        return this.direction;
-    }
+	public EDirection getDirection() {
+		return this.direction;
+	}
 
-    public Duration getDuration() {
-        return this.duration;
-    }
+	public Duration getDuration() {
+		return this.duration;
+	}
 
 }

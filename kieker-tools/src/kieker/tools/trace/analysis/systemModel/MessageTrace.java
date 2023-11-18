@@ -17,7 +17,6 @@
 package kieker.tools.trace.analysis.systemModel;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -98,9 +97,7 @@ public class MessageTrace extends AbstractTrace {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder("Trace " + this.getTraceId() + ":\n");
-		final Iterator<AbstractMessage> it = this.messages.iterator();
-		while (it.hasNext()) {
-			final AbstractMessage m = it.next();
+		for (AbstractMessage m : this.messages) {
 			strBuild.append('<');
 			strBuild.append(m.toString());
 			strBuild.append(">\n");

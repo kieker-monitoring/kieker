@@ -2,14 +2,12 @@
  */
 package kieker.model.analysismodel.statistics.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import kieker.model.analysismodel.statistics.IntMeasurement;
 import kieker.model.analysismodel.statistics.StatisticsPackage;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,7 +17,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.model.analysismodel.statistics.impl.IntMeasurementImpl#getValue <em>Value</em>}</li>
+ * <li>{@link kieker.model.analysismodel.statistics.impl.IntMeasurementImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -29,6 +27,7 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -39,6 +38,7 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -48,6 +48,7 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected IntMeasurementImpl() {
@@ -57,6 +58,7 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -67,36 +69,40 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public int getValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setValue(int newValue) {
-		int oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.INT_MEASUREMENT__VALUE, oldValue, value));
+	public void setValue(final int newValue) {
+		final int oldValue = this.value;
+		this.value = newValue;
+		if (this.eNotificationRequired()) {
+			this.eNotify(new ENotificationImpl(this, Notification.SET, StatisticsPackage.INT_MEASUREMENT__VALUE, oldValue, this.value));
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.INT_MEASUREMENT__VALUE:
-				return getValue();
+		case StatisticsPackage.INT_MEASUREMENT__VALUE:
+			return this.getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -104,14 +110,15 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.INT_MEASUREMENT__VALUE:
-				setValue((Integer)newValue);
-				return;
+		case StatisticsPackage.INT_MEASUREMENT__VALUE:
+			this.setValue((Integer) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -119,14 +126,15 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.INT_MEASUREMENT__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
+		case StatisticsPackage.INT_MEASUREMENT__VALUE:
+			this.setValue(VALUE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -134,13 +142,14 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.INT_MEASUREMENT__VALUE:
-				return value != VALUE_EDEFAULT;
+		case StatisticsPackage.INT_MEASUREMENT__VALUE:
+			return this.value != VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -148,17 +157,20 @@ public class IntMeasurementImpl extends ScalarMeasurementImpl implements IntMeas
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (this.eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: ");
-		result.append(value);
+		result.append(this.value);
 		result.append(')');
 		return result.toString();
 	}
 
-} //IntMeasurementImpl
+} // IntMeasurementImpl

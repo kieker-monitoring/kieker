@@ -25,9 +25,9 @@ import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
@@ -35,12 +35,12 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 			AssemblyRepository.ROOT_ASSEMBLY_COMPONENT,
 			ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER);
 
-	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -50,10 +50,10 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 
 	/**
 	 * Returns the instance for the passed factoryIdentifier; null if no instance with this factoryIdentifier.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier to search for.
-	 * 
+	 *
 	 * @return The corresponding instance if it exists.
 	 */
 	public final AllocationComponent lookupAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier) {

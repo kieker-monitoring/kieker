@@ -18,26 +18,24 @@ package kieker.common.record.jvm;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 2.0.0
- * 
+ *         API compatibility: Kieker 1.15.0
+ *
  * @since 1.10
  */
-public class GCRecord extends AbstractJVMRecord  {			
+public class GCRecord extends AbstractJVMRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_STRING // GCRecord.gcName
-			 + TYPE_SIZE_LONG // GCRecord.collectionCount
-			 + TYPE_SIZE_LONG; // GCRecord.collectionTimeMS
-	
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_STRING // GCRecord.gcName
+			+ TYPE_SIZE_LONG // GCRecord.collectionCount
+			+ TYPE_SIZE_LONG; // GCRecord.collectionTimeMS
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
@@ -46,7 +44,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionCount
 		long.class, // GCRecord.collectionTimeMS
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -56,19 +54,19 @@ public class GCRecord extends AbstractJVMRecord  {
 		"collectionCount",
 		"collectionTimeMS",
 	};
-	
+
 	/** default constants. */
 	public static final String GC_NAME = "";
 	private static final long serialVersionUID = -314644197119857213L;
-	
+
 	/** property declarations. */
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTimeMS;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -84,17 +82,16 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTimeMS) {
 		super(timestamp, hostname, vmName);
-		this.gcName = gcName == null?"":gcName;
+		this.gcName = gcName == null ? "" : gcName;
 		this.collectionCount = collectionCount;
 		this.collectionTimeMS = collectionTimeMS;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public GCRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -102,7 +99,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		this.collectionCount = deserializer.getLong();
 		this.collectionTimeMS = deserializer.getLong();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +112,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		serializer.putLong(this.getCollectionCount());
 		serializer.putLong(this.getCollectionTimeMS());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +120,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,7 +128,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +137,6 @@ public class GCRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,18 +151,9 @@ public class GCRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final GCRecord castedRecord = (GCRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (!this.getHostname().equals(castedRecord.getHostname())) {
-			return false;
-		}
-		if (!this.getVmName().equals(castedRecord.getVmName())) {
+		if ((this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) || (this.getTimestamp() != castedRecord.getTimestamp()) || !this.getHostname().equals(castedRecord.getHostname()) || !this.getVmName().equals(castedRecord.getVmName())) {
 			return false;
 		}
 		if (!this.getGcName().equals(castedRecord.getGcName())) {
@@ -178,40 +165,38 @@ public class GCRecord extends AbstractJVMRecord  {
 		if (this.getCollectionTimeMS() != castedRecord.getCollectionTimeMS()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getVmName().hashCode();
 		code += this.getGcName().hashCode();
-		code += ((int)this.getCollectionCount());
-		code += ((int)this.getCollectionTimeMS());
-		
+		code += ((int) this.getCollectionCount());
+		code += ((int) this.getCollectionTimeMS());
+
 		return code;
 	}
-	
+
 	public final String getGcName() {
 		return this.gcName;
 	}
-	
-	
+
 	public final long getCollectionCount() {
 		return this.collectionCount;
 	}
-	
-	
+
 	public final long getCollectionTimeMS() {
 		return this.collectionTimeMS;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -220,22 +205,22 @@ public class GCRecord extends AbstractJVMRecord  {
 		String result = "GCRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "vmName = ";
 		result += this.getVmName() + ", ";
-		
+
 		result += "gcName = ";
 		result += this.getGcName() + ", ";
-		
+
 		result += "collectionCount = ";
 		result += this.getCollectionCount() + ", ";
-		
+
 		result += "collectionTimeMS = ";
 		result += this.getCollectionTimeMS() + ", ";
-		
+
 		return result;
 	}
 }

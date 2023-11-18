@@ -20,7 +20,7 @@ package kieker.analysis.generic.clustering.mtree.query;
  *
  * @param <T>
  *            data type of the result item
- * 
+ *
  * @author Eduardo R. D'Avila
  * @since 2.0.0
  */

@@ -32,7 +32,7 @@ import kieker.analysis.generic.graph.mapping.SimpleFileNameMapper;
  *            node type
  * @param <E>
  *            edge type
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14

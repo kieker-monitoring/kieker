@@ -82,7 +82,7 @@ public final class MTreeUtils {
 		final List<T> sample = new ArrayList<>(numberOfElements);
 		final Random random = new Random();
 		int count = numberOfElements;
-		while (count > 0 && !list.isEmpty()) {
+		while ((count > 0) && !list.isEmpty()) {
 			final int index = random.nextInt(list.size());
 			sample.add(list.get(index));
 			final int indexLast = list.size() - 1;

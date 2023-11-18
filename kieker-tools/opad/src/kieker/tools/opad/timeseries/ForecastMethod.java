@@ -73,7 +73,7 @@ public enum ForecastMethod {
 	 * @throws UnsupportedOperationException
 	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) { 
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
 		switch (this) {
 		case ARIMA:
 			return new ARIMAForecaster(history);

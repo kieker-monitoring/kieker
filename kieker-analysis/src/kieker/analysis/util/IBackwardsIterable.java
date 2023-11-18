@@ -49,7 +49,7 @@ public interface IBackwardsIterable<T> {
 	 * @since 1.14
 	 */
 	public default Iterable<T> backwards() {
-		return new Iterable<T>() {
+		return new Iterable<>() {
 			@Override
 			public Iterator<T> iterator() {
 				return IBackwardsIterable.this.backwardsIterator();
