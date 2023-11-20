@@ -51,7 +51,7 @@ dependencies {
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 
-	testImplementation 'org.mockito:mockito-core:2.21.0'
+	testImplementation 'org.mockito:mockito-core:5.7.0'
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
 }
 
