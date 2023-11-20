@@ -38,7 +38,7 @@ dependencies {
 	implementation 'org.csveed:csveed:0.7.4'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
