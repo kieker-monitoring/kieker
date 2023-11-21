@@ -61,7 +61,7 @@ dependencies {
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	// Use JUnit test framework
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
 
 	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
