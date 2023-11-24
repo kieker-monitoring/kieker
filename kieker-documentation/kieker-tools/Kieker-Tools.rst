@@ -36,7 +36,7 @@ parameters and options to a tool.
 -  :ref:`kieker-tools-irl`
 -  :ref:`kieker-tools-dot-pic-file-converter`
 
--  :ref:`kieker-tools-allen-upper-limit.rst`
+-  :ref:`kieker-tools-allen-upper-limit`
 -  :ref:`kieker-tools-cmi`
 -  :ref:`kieker-tools-dar`
 -  :ref:`kieker-tools-delta`
