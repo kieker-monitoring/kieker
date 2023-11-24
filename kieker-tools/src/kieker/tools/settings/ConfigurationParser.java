@@ -37,6 +37,7 @@ import kieker.tools.settings.converters.ShortConverter;
 
 /**
  * Parse configuration settings and fill them into a settings object.
+ * This parser is the counterpart to JCommander working on kieker configuration files.
  *
  * @author Reiner Jung
  * @since 2.0.0
