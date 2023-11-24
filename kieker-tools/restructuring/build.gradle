@@ -33,7 +33,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
-	implementation 'org.csveed:csveed:0.7.4'
+	implementation 'org.csveed:csveed:0.7.5'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 
