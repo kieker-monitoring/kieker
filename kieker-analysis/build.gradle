@@ -64,7 +64,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
 
-	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
+	testRuntimeOnly 'org.apache.derby:derby:10.17.1.0'	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }
 
 // This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
