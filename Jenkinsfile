@@ -16,7 +16,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME == 'master' ? '@daily' : '')
+    cron(env.BRANCH_NAME == 'main' ? '@daily' : '')
   }
 
   stages {
@@ -25,7 +25,7 @@ pipeline {
         changeRequest target: 'stable'
       }
       steps {
-        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'main' branch please."
       }
     }
     stage('Default Docker Stages') {
@@ -136,9 +136,9 @@ pipeline {
           when {
             beforeAgent true
             anyOf {
-              branch 'master';
+              branch 'main';
               branch '*-RC';
-              changeRequest target: 'master'
+              changeRequest target: 'main'
             }
           }
           steps {
@@ -176,10 +176,10 @@ pipeline {
       }
     }
 
-    stage('Master Specific Stages') {
+    stage('Main Specific Stages') {
       when {
         beforeAgent true
-        branch 'master'
+        branch 'main'
       }
       parallel {
         stage('Push to Stable') {
