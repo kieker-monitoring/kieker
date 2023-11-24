@@ -99,6 +99,7 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
+            sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'build/architecture-recovery.tgz', name: 'architecture-recovery'
