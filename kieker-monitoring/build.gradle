@@ -123,7 +123,7 @@ dependencies {
 
 	testImplementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
 	testImplementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
-	testImplementation 'org.eclipse.jetty:apache-jsp:9.4.28.v20200408'
+	testImplementation 'org.eclipse.jetty:apache-jsp:11.0.18'
 
 	testImplementation 'commons-io:commons-io:2.11.0'
 
