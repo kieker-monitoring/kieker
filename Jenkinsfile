@@ -101,6 +101,7 @@ pipeline {
             sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'build/architecture-recovery.tgz', name: 'architecture-recovery'
           }
         }
       }
@@ -164,6 +165,7 @@ pipeline {
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
+        unstash 'architecture-recovery'
         archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
             fingerprint: true,
             onlyIfSuccessful: true
