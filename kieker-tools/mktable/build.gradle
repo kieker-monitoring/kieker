@@ -30,7 +30,7 @@ dependencies {
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
 	implementation 'org.apache.commons:commons-compress:1.20'
 
-	implementation 'org.csveed:csveed:0.7.4'
+	implementation 'org.csveed:csveed:0.7.5'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')

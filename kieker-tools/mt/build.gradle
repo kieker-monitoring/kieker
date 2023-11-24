@@ -34,7 +34,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-text
 	implementation 'org.apache.commons:commons-text:1.11.0'
 
-	implementation 'org.csveed:csveed:0.7.4'
+	implementation 'org.csveed:csveed:0.7.5'
 
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')

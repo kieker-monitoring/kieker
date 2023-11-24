@@ -38,7 +38,7 @@ dependencies {
 	implementation project(':kieker-analysis')
 	implementation project(':kieker-tools')
 
-	implementation 'org.csveed:csveed:0.7.4'
+	implementation 'org.csveed:csveed:0.7.5'
 
 	implementation 'org.apache.commons:commons-csv:1.9.0'
 	implementation 'org.apache.commons:commons-collections4:4.4'
