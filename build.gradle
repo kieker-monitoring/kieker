@@ -609,7 +609,7 @@ def licence = {
 }
 
 def aopxml = {
-  from(file('kieker-examples/aop.example.xml')) {
+  from(file('examples/aop.example.xml')) {
     into 'META-INF'
   }
 }
@@ -802,7 +802,7 @@ def libraryContent = project.copySpec {
 /** collect example content for the binary distribution. */
 def exampleContent = project.copySpec {
 
-  from('kieker-examples') {
+  from('examples') {
     include '**'
 
     exclude '**/JavaEEServletContainerExample/build.xml'
@@ -820,7 +820,7 @@ def exampleContent = project.copySpec {
   into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
 
   with {
-    from('kieker-examples') {
+    from('examples') {
       include '**/build/libs/**'
     }
     includeEmptyDirs = false
@@ -837,7 +837,7 @@ def exampleJavaEEContent = project.copySpec {
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
-  'kieker-examples:buildStandaloneExamples',
+  'examples:buildStandaloneExamples',
   ':tools:restructuring:distZip',
   ':tools:behavior-analysis:distZip',
   ':tools:cmi:distZip',
@@ -859,8 +859,8 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   ':tools:sar:distZip',
   ':tools:trace-analysis:distZip',
   ':tools:trace-analysis-gui:distZip',
-  ':kieker-examples:jar',
-  ':kieker-examples:spotlessMisc' ]) {
+  ':examples:jar',
+  ':examples:spotlessMisc' ]) {
   archiveClassifier = 'binaries'
   with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
@@ -879,12 +879,12 @@ def sourceContent = project.copySpec {
 
     exclude 'README'
     exclude 'javadoc/**'
-    exclude 'kieker-examples/analysis/**/.classpath'
-    exclude 'kieker-examples/monitoring/**/.classpath'
-    exclude 'kieker-examples/userguide/**/.classpath'
-    exclude 'kieker-examples/analysis/**/.settings'
-    exclude 'kieker-examples/monitoring/**/.settings'
-    exclude 'kieker-examples/userguide/**/.settings'
+    exclude 'examples/analysis/**/.classpath'
+    exclude 'examples/monitoring/**/.classpath'
+    exclude 'examples/userguide/**/.classpath'
+    exclude 'examples/analysis/**/.settings'
+    exclude 'examples/monitoring/**/.settings'
+    exclude 'examples/userguide/**/.settings'
     exclude '**/build/**'
     exclude 'build-eclipse/'
     exclude '**/.gradle/**'
@@ -892,10 +892,10 @@ def sourceContent = project.copySpec {
     exclude 'caches/**'
     exclude 'docs/**'
   exclude '**/?/**'
-    // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
+    // Exclude all JAR-files in the 'examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
     exclude {
       jars ->
-        jars.file.path.contains('kieker-examples') &&
+        jars.file.path.contains('examples') &&
             jars.file.name.endsWith('.jar') &&
             !jars.file.name.startsWith('opencsv-') &&
             !jars.file.path.contains('JavaEEServletContainerExample')

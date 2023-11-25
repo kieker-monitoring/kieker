@@ -25,7 +25,7 @@ dependencies {
   implementation 'org.slf4j:slf4j-api:1.7.30'
   implementation 'org.codehaus.groovy:groovy-all:3.0.2'
   
-  implementation 'net.monitoring:${kiekerVersion}'
+  implementation 'net.kieker-monitoring:${kiekerVersion}'
   
   implementation fileTree('livedemo-source/lib') {
     include '*.jar'

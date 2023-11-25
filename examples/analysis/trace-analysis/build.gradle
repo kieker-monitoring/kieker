@@ -16,7 +16,7 @@ dependencies {
         implementation "com.beust:jcommander:1.72"
 
         implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
-        implementation "net.monitoring:kieker:${kiekerVersion}"
+        implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
 
 distTar.enabled=false

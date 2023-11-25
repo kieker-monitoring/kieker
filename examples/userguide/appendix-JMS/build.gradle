@@ -11,7 +11,7 @@ dependencies {
         implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation 'org.slf4j:slf4j-api:1.7.30'
 	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
-	implementation 'net.monitoring:kieker:1.15'
+	implementation 'net.kieker-monitoring:kieker:1.15'
 }
 
 

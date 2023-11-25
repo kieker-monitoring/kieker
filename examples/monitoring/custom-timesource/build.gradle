@@ -12,7 +12,7 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
     // you need to ensure by yourself that the following jars are in the lib folder
-    // This might be replaced by implementation "net.monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
+    // This might be replaced by implementation "net.kieker-monitoring:kieker:${kiekerVersion}" if the jar is in the local maven repository
     implementation fileTree('lib') {
         include "kieker-${kiekerVersion}-aspectj.jar"
     }

@@ -12,7 +12,7 @@ dependencies {
         implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation 'org.slf4j:slf4j-api:1.7.30'
 	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
-	implementation "net.monitoring:kieker:${kiekerVersion}:emf"
+	implementation "net.kieker-monitoring:kieker:${kiekerVersion}:emf"
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 	implementation 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
