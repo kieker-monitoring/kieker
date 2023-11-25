@@ -167,7 +167,7 @@ pipeline {
         unstash 'jarArtifacts'
         unstash 'distributions'
         unstash 'architecture-recovery'
-        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar,build/architecture-recovery*.tgz',
             fingerprint: true,
             onlyIfSuccessful: true
       }
