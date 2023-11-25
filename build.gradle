@@ -837,36 +837,6 @@ def exampleJavaEEContent = project.copySpec {
   into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
-/** binary distribution in zip format. */
-//task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
-//  'kieker-examples:buildStandaloneExamples',
-//  ':kieker-tools:restructuring:distZip',
-//  ':kieker-tools:behavior-analysis:distZip',
-//  ':kieker-tools:cmi:distZip',
-//  ':kieker-tools:collector:distZip',
-//  ':kieker-tools:convert-logging-timestamp:distZip',
-//  ':kieker-tools:dar:distZip',
-//  ':kieker-tools:delta:distZip',
-//  ':kieker-tools:fxca:distZip',
-//  ':kieker-tools:log-replayer:distZip',
-//  ':kieker-tools:maa:distZip',
-//  ':kieker-tools:mktable:distZip',
-//  ':kieker-tools:mop:distZip',
-//  ':kieker-tools:mt:distZip',
-//  ':kieker-tools:mvis:distZip',
-//  ':kieker-tools:relabel:distZip',
-//  ':kieker-tools:resource-monitor:distZip',
-//  ':kieker-tools:rewrite-log-entries:distZip',
-//  ':kieker-tools:runtime-analysis:distZip',
-//  ':kieker-tools:sar:distZip',
-//  ':kieker-tools:trace-analysis:distZip',
-//  ':kieker-tools:trace-analysis-gui:distZip',
-//  ':kieker-examples:jar',
-//  ':kieker-examples:spotlessMisc' ]) {
-//  archiveClassifier = 'binaries'
-//  with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
-//}
-
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
@@ -939,23 +909,6 @@ def sourceContent = project.copySpec {
   }
   into kiekerPackagenamebase + "-" + kiekerVersion
 }
-
-//task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-//  'kieker-examples:buildStandaloneExamples']) {
-//  description = 'Distributes source archive.'
-//  archiveClassifier = 'sources'
-//  with sourceContent
-//}
-
-//task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar,
-//  'kieker-examples:buildStandaloneExamples']) {
-//  description = 'Distributes source archive.'
-//  archiveClassifier = 'sources'
-//  with sourceContent
-//
-//  compression = Compression.GZIP
-//  archiveExtension = 'tar.gz'
-//}
 
 task startRServe() {
   doLast {
@@ -1094,8 +1047,8 @@ publishing {
       }
 
       // for local tests:
-      //def releasesRepoUrl = "file:///tmp/myRepo/releases"
-      //def snapshotsRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+      //def releasesRepoUrl = "/tmp/myRepo/releases"
+      //def snapshotsRepoUrl = "/tmp/myRepo/snapshots"
       // Maven central:
       def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
       def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'

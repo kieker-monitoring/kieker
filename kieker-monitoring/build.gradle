@@ -11,7 +11,11 @@ plugins {
 	id 'java'
 	id 'java-library'
 	id 'eclipse'
+	id 'maven-publish'
 }
+
+sourceCompatibility = 8
+targetCompatibility = 8
 
 // TODO Why must this be applied, while others get included via plugins?
 apply plugin: "io.freefair.aspectj.post-compile-weaving"
@@ -46,9 +50,6 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
-sourceCompatibility = 8
-targetCompatibility = 8
 
 dependencies {
 	implementation project(':kieker-common')
@@ -130,6 +131,42 @@ dependencies {
 	testImplementation project(':kieker-common').sourceSets.test.output
 
 	integrationTestImplementation "junit:junit:$libJunitVersion"
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'monitoring'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
 }
 
 task iajc(dependsOn: classes) {

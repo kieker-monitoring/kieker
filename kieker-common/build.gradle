@@ -1,6 +1,8 @@
 plugins {
 	id 'java'
+	id 'java-library'
 	id 'eclipse'
+	id 'maven-publish'
 }
 
 sourceCompatibility = 1.8
@@ -27,6 +29,41 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 }
 
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'common'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
 
 task replaceHardCodedVersionNames() {
 	doLast {
@@ -36,6 +73,7 @@ task replaceHardCodedVersionNames() {
 
 compileJava.dependsOn replaceHardCodedVersionNames
 
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
 eclipse {
 	classpath {
 		containsTestFixtures = true
