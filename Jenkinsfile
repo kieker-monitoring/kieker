@@ -170,6 +170,7 @@ pipeline {
         unstash 'distributions'
         unstash 'architecture-recovery'
         unstash 'tools'
+        unstash 'trace-analysis'
         archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar,build/architecture-recovery*.*,build/tools/*,build/trace-analysis*.*',
             fingerprint: true,
             onlyIfSuccessful: true
