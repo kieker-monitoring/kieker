@@ -1,12 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
-BASE_DIR=$(cd "$(dirname "$0")"; pwd)
+BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
+BASE_DIR="${BIN_DIR}/../.."
 VERSION="2.0.0-SNAPSHOT"
 
 PACKAGE_NAME=architecture-recovery
-BUILD_PATH="${BASE_DIR}/../../build/${PACKAGE_NAME}"
-KIEKER_TOOLS="${BASE_DIR}/../../kieker-tools/"
+BUILD_PATH="${BASE_DIR}/build/${PACKAGE_NAME}"
+KIEKER_TOOLS="${BASE_DIR}/kieker-tools/"
 
 if [ -d "${BUILD_PATH}" ] ; then
 	rm -rf "{BUILD_PATH}"
