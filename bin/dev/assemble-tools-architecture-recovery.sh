@@ -7,7 +7,7 @@ VERSION="2.0.0-SNAPSHOT"
 
 PACKAGE_NAME=architecture-recovery
 BUILD_PATH="${BASE_DIR}/build/${PACKAGE_NAME}"
-KIEKER_TOOLS="${BASE_DIR}/kieker-tools/"
+KIEKER_TOOLS="${BASE_DIR}/tools/"
 
 if [ -d "${BUILD_PATH}" ] ; then
 	rm -rf "{BUILD_PATH}"

@@ -9,7 +9,7 @@ VERSION="2.0.0-SNAPSHOT"
 
 mkdir "${BASE_DIR}/build/tools"
 for I in behavior-analysis collector convert-logging-timestamp log-replayer rewrite-log-entries ; do
-	cp "${BASE_DIR}/kieker-tools/$I/build/distributions/$I-${VERSION}.zip" "${BASE_DIR}/build/tools"
+	cp "${BASE_DIR}/tools/$I/build/distributions/$I-${VERSION}.zip" "${BASE_DIR}/build/tools"
 done
 
 "${BIN_DIR}/assemble-tools-trace-analysis.sh"
