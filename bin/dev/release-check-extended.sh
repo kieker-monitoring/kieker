@@ -131,7 +131,7 @@ function check_bin_archive {
 	    cd ${ARCHDIR}
 	done
 
-	EXAMPLE_RUN_SCRIPT_SH="${BIN_DIR}/../../kieker-examples/runAllExamples.sh"
+	EXAMPLE_RUN_SCRIPT_SH="${BIN_DIR}/../../examples/runAllExamples.sh"
 	information "Running all examples"
 	if ! (cd examples && $EXAMPLE_RUN_SCRIPT_SH); then
 		error "Examples where not successful"

@@ -1,0 +1,52 @@
+plugins {
+   id 'application'
+}
+
+repositories {
+    mavenLocal()
+	mavenCentral() 
+}
+
+dependencies {
+        implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation 'net.monitoring:kieker:1.15'
+}
+
+
+def monitoringConfigurationActiveMQ = 'src-resources/META-INF/kieker.monitoring.properties-activemq'
+
+distTar.enabled=false
+
+// Simplify the JAR's file name
+archivesBaseName = 'JMSMonitoringAnalysis'
+version = ''
+	
+sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
+
+def monitoringConfiguration = {
+  main = 'kieker.examples.userguide.appendixJMS.BookstoreStarter'
+  classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties', '-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*']
+}
+
+task runMonitoringActiveMQ(type: JavaExec) {
+  configure monitoringConfiguration
+  jvmArgs += "-Dkieker.monitoring.configuration=${monitoringConfigurationActiveMQ}"
+}
+
+def analysisConfiguration = {
+  main = 'kieker.examples.userguide.appendixJMS.JMSAnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties', '-Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*']
+}
+
+task runAnalysisActiveMQ(type: JavaExec) {
+  configure analysisConfiguration
+	args = ['org.apache.activemq.jndi.ActiveMQInitialContextFactory', 'tcp://127.0.0.1:61616/', 'queue1']
+}
+

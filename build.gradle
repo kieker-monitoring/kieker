@@ -54,12 +54,12 @@ dependencies {
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
   project(':common'),
-  project(':kieker-monitoring'),
-  project(':kieker-model'),
-  project(':kieker-analysis'),
-  project(':kieker-tools'),
-  project(':kieker-extension-kafka'),
-  project(':kieker-extension-cassandra')
+  project(':monitoring'),
+  project(':model'),
+  project(':analysis'),
+  project(':tools'),
+  project(':extension-kafka'),
+  project(':extension-cassandra')
 ]
 
 allprojects {
@@ -243,8 +243,6 @@ subprojects {
 
   // Those are some dependencies which are needed by all subprojects
   dependencies {
-    // checkstyle project(':kieker-checkstyle-extension')
-
     // compile-time dependency due to the annotation SuppressFBWarnings()
     //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
@@ -350,34 +348,34 @@ def parsePmdReport(File reportFile) {
 
 def checkSubprojects = [
   project(':common'),
-  project(':kieker-monitoring'),
-  project(':kieker-model'),
-  project(':kieker-analysis'),
-  project(':kieker-tools'),
-  project(':kieker-tools:restructuring'),
-  project(':kieker-tools:behavior-analysis'),
-  project(':kieker-tools:cmi'),
-  project(':kieker-tools:collector'),
-  project(':kieker-tools:convert-logging-timestamp'),
-  project(':kieker-tools:dar'),
-  project(':kieker-tools:delta'),
-  project(':kieker-tools:fxca'),
-  project(':kieker-tools:log-replayer'),
-  project(':kieker-tools:maa'),
-  project(':kieker-tools:mktable'),
-  project(':kieker-tools:mop'),
-  project(':kieker-tools:mt'),
-  project(':kieker-tools:mvis'),
-  project(':kieker-tools:opad'),
-  project(':kieker-tools:relabel'),
-  project(':kieker-tools:resource-monitor'),
-  project(':kieker-tools:rewrite-log-entries'),
-  project(':kieker-tools:runtime-analysis'),
-  project(':kieker-tools:sar'),
-  project(':kieker-tools:trace-analysis'),
-  project(':kieker-tools:trace-analysis-gui'),
-  project(':kieker-extension-kafka'),
-  project(':kieker-extension-cassandra')
+  project(':monitoring'),
+  project(':model'),
+  project(':analysis'),
+  project(':tools'),
+  project(':tools:restructuring'),
+  project(':tools:behavior-analysis'),
+  project(':tools:cmi'),
+  project(':tools:collector'),
+  project(':tools:convert-logging-timestamp'),
+  project(':tools:dar'),
+  project(':tools:delta'),
+  project(':tools:fxca'),
+  project(':tools:log-replayer'),
+  project(':tools:maa'),
+  project(':tools:mktable'),
+  project(':tools:mop'),
+  project(':tools:mt'),
+  project(':tools:mvis'),
+  project(':tools:opad'),
+  project(':tools:relabel'),
+  project(':tools:resource-monitor'),
+  project(':tools:rewrite-log-entries'),
+  project(':tools:runtime-analysis'),
+  project(':tools:sar'),
+  project(':tools:trace-analysis'),
+  project(':tools:trace-analysis-gui'),
+  project(':extension-kafka'),
+  project(':extension-cassandra')
 ]
 
 checkSubprojects.each { project ->
@@ -450,7 +448,7 @@ checkSubprojects.each { project ->
         println("  Info: " + pmdInfos)
         println()
 
-        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
+        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/monitoring/kieker#eclipse-setup-for-contributors"
 
         // Fail build if Checkstyle thresholds are violated
         if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
@@ -511,20 +509,20 @@ task updateLicenseHeaderYear() {
 task replaceHardCodedVersionNames() {
   doLast {
     regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-    regexpReplaceInFiles(project.file("kieker-monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-    regexpReplaceInFiles(project.file("kieker-monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-    regexpReplaceInFiles(project.file("kieker-monitoring/integrationTest-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
-    regexpReplaceInFiles(project.file("kieker-documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
-    regexpReplaceInFiles(project.file("kieker-documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
-    regexpReplaceInFiles(project.file("kieker-documentation/conf.py"), "release = '.*'", "release = '${version}'")
+    regexpReplaceInFiles(project.file("documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*-SNAPSHOT-emf.jar", "${rootProject.emfJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT.jar", "${rootProject.mainJar.archiveFileName}")
+    regexpReplaceInFiles(project.file("documentation/getting-started/Manual-Monitoring-with-Kieker.rst"), "kieker-.*/build/libs/", "kieker-${version}/build/libs/")
+    regexpReplaceInFiles(project.file("documentation/getting-started/Download-and-Extract-Tutorial.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
+    regexpReplaceInFiles(project.file("documentation/kieker-tools/Kieker-Tools.rst"), "kieker-.*-binaries", "kieker-${version}-binaries")
+    regexpReplaceInFiles(project.file("documentation/conf.py"), "release = '.*'", "release = '${version}'")
   }
 }
 compileJava.dependsOn replaceHardCodedVersionNames
@@ -576,7 +574,7 @@ task apidoc(type: Javadoc) {
   title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
   options.header = "Kieker $kiekerVersion"
   options.footer = "Kieker $kiekerVersion"
-  options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://kieker-monitoring.net\">http://kieker-monitoring.net</a>"
+  options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://monitoring.net\">http://monitoring.net</a>"
   options.author = "true"
   options.version = "false"
   options.use = "true"
@@ -783,19 +781,19 @@ def tools = [
 /** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
   tools.each {
-    from("kieker-tools/${it}/build/distributions") {
+    from("tools/${it}/build/distributions") {
       include "**"
     }
   }
-  from("kieker-tools") {
+  from("tools") {
     include "README.md"
   }
   into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
 }
 
-/** collect all libraries in kieker-tools. */
+/** collect all libraries in tools. */
 def libraryContent = project.copySpec {
-  from('kieker-tools/**/build/libs') {
+  from('tools/**/build/libs') {
   include '**jar'
   }
   into kiekerPackagenamebase + "-" + kiekerVersion + "/build/libs"
@@ -815,7 +813,7 @@ def exampleContent = project.copySpec {
     exclude '**/*.log'
   }
 
-  from('kieker-monitoring/src-resources/META-INF') {
+  from('monitoring/src-resources/META-INF') {
     include 'kieker.monitoring.default.properties'
     rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
   }
@@ -830,7 +828,7 @@ def exampleContent = project.copySpec {
 }
 
 def exampleJavaEEContent = project.copySpec {
-  from('kieker-monitoring/src-resources/META-INF') {
+  from('monitoring/src-resources/META-INF') {
     include 'kieker.monitoring.default.properties'
     rename 'kieker.monitoring.default.properties', 'kieker.monitoring.properties'
   }
@@ -840,27 +838,27 @@ def exampleJavaEEContent = project.copySpec {
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
   'kieker-examples:buildStandaloneExamples',
-  ':kieker-tools:restructuring:distZip',
-  ':kieker-tools:behavior-analysis:distZip',
-  ':kieker-tools:cmi:distZip',
-  ':kieker-tools:collector:distZip',
-  ':kieker-tools:convert-logging-timestamp:distZip',
-  ':kieker-tools:dar:distZip',
-  ':kieker-tools:delta:distZip',
-  ':kieker-tools:fxca:distZip',
-  ':kieker-tools:log-replayer:distZip',
-  ':kieker-tools:maa:distZip',
-  ':kieker-tools:mktable:distZip',
-  ':kieker-tools:mop:distZip',
-  ':kieker-tools:mt:distZip',
-  ':kieker-tools:mvis:distZip',
-  ':kieker-tools:relabel:distZip',
-  ':kieker-tools:resource-monitor:distZip',
-  ':kieker-tools:rewrite-log-entries:distZip',
-  ':kieker-tools:runtime-analysis:distZip',
-  ':kieker-tools:sar:distZip',
-  ':kieker-tools:trace-analysis:distZip',
-  ':kieker-tools:trace-analysis-gui:distZip',
+  ':tools:restructuring:distZip',
+  ':tools:behavior-analysis:distZip',
+  ':tools:cmi:distZip',
+  ':tools:collector:distZip',
+  ':tools:convert-logging-timestamp:distZip',
+  ':tools:dar:distZip',
+  ':tools:delta:distZip',
+  ':tools:fxca:distZip',
+  ':tools:log-replayer:distZip',
+  ':tools:maa:distZip',
+  ':tools:mktable:distZip',
+  ':tools:mop:distZip',
+  ':tools:mt:distZip',
+  ':tools:mvis:distZip',
+  ':tools:relabel:distZip',
+  ':tools:resource-monitor:distZip',
+  ':tools:rewrite-log-entries:distZip',
+  ':tools:runtime-analysis:distZip',
+  ':tools:sar:distZip',
+  ':tools:trace-analysis:distZip',
+  ':tools:trace-analysis-gui:distZip',
   ':kieker-examples:jar',
   ':kieker-examples:spotlessMisc' ]) {
   archiveClassifier = 'binaries'
@@ -984,12 +982,12 @@ publishing {
       }
 
       pom {
-        groupId = 'net.kieker-monitoring'
+        groupId = 'net.monitoring'
         artifactId = 'kieker'
         version = version
         name = 'Kieker Monitoring and Analysis Framework'
         description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
-        url = 'http://kieker-monitoring.net'
+        url = 'http://monitoring.net'
 
         licenses {
           license {
@@ -1022,9 +1020,9 @@ publishing {
         }
 
         scm {
-          connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
-          developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
-          url = 'https://github.com/kieker-monitoring/kieker'
+          connection = 'scm:git:https://github.com/monitoring/kieker.git'
+          developerConnection = 'scm:git:git@github.com:monitoring/kieker.git'
+          url = 'https://github.com/monitoring/kieker'
         }
       }
 

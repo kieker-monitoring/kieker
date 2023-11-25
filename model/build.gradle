@@ -5,9 +5,6 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 // The following lines are necessay to create a test jar
 project.configurations {
 	testArchives.extendsFrom (testCompile)
@@ -22,11 +19,15 @@ project.artifacts {
 	testArchives project.jarTest
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
-	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
-	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+	api project(':common')
+
+	api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 }
 
 // publishing
@@ -34,7 +35,7 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			groupId = 'net.monitoring'
-			artifactId = 'common'
+			artifactId = 'model'
 			version = version
 
 			from components.java
@@ -64,14 +65,6 @@ publishing {
 		}
 	}
 }
-
-task replaceHardCodedVersionNames() {
-	doLast {
-		regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
-	}
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames
 
 // This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
 eclipse {
