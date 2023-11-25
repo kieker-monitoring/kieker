@@ -23,7 +23,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-	api project(':kieker-common')
+	api project(':common')
 
 	api 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
 	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'

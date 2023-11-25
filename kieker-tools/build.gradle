@@ -23,7 +23,7 @@ project.artifacts {
 }
 
 dependencies {
-	implementation project(':kieker-common')
+	implementation project(':common')
 	api project(':kieker-analysis')
 	api project(':kieker-model')
 	api project(':kieker-monitoring')
@@ -58,7 +58,7 @@ dependencies {
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation project(':common').sourceSets.test.output
 	testImplementation project(':kieker-analysis').sourceSets.test.output
 }
 
@@ -104,7 +104,7 @@ eclipse {
 			whenMerged { classpath ->
 				classpath.entries.removeAll { entry ->
 					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& entry.path == '/kieker-common'
+						&& entry.path == '/common'
 						&& entry.entryAttributes['test']
 				}
 			}

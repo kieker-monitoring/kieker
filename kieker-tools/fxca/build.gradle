@@ -34,7 +34,7 @@ jar {
 }
 
 dependencies {
-	implementation project(':kieker-common')
+	implementation project(':common')
 	implementation project(':kieker-analysis')
 	implementation project(':kieker-tools')
 
@@ -54,7 +54,7 @@ dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 
-	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 
 	testImplementation 'org.mockito:mockito-core:5.7.0'
@@ -72,7 +72,7 @@ eclipse {
 			whenMerged { classpath ->
 				classpath.entries.removeAll { entry ->
 					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& ['/kieker-common', '/kieker-tools'].contains(entry.path)
+						&& ['/common', '/kieker-tools'].contains(entry.path)
 						&& entry.entryAttributes['test']
 				}
 			}

@@ -23,7 +23,7 @@ project.artifacts {
 }
 
 dependencies {
-	api project(':kieker-common')
+	api project(':common')
 	api project(':kieker-monitoring')
 	api project(':kieker-model')
 
@@ -58,8 +58,8 @@ dependencies {
 
 	api 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 
-	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
+	testImplementation project (path: ':common', configuration: 'testArchives')
 	// Use JUnit test framework
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
@@ -111,7 +111,7 @@ eclipse {
 			whenMerged { classpath ->
 				classpath.entries.removeAll { entry ->
 					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& entry.path == '/kieker-common'
+						&& entry.path == '/common'
 						&& entry.entryAttributes['test']
 				}
 			}

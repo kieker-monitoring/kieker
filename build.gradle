@@ -53,7 +53,7 @@ dependencies {
 // FIXME the jar tasks should handle this requirement instead.
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
-  project(':kieker-common'),
+  project(':common'),
   project(':kieker-monitoring'),
   project(':kieker-model'),
   project(':kieker-analysis'),
@@ -349,7 +349,7 @@ def parsePmdReport(File reportFile) {
 }
 
 def checkSubprojects = [
-  project(':kieker-common'),
+  project(':common'),
   project(':kieker-monitoring'),
   project(':kieker-model'),
   project(':kieker-analysis'),
@@ -504,7 +504,7 @@ task updateLicenseHeaderYear() {
     tree.each { File file ->
       regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2022 Kieker Project')
     }
-    regexpReplaceInFiles(project.file("kieker-common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
+    regexpReplaceInFiles(project.file("common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
   }
 }
 
