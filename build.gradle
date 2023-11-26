@@ -746,7 +746,7 @@ def binaryContent = project.copySpec {
     exclude 'bin/dev/release-check*'
     exclude 'caches/**'
   }
-  from('kieker-documentation') {
+  from('documentation') {
     include 'README-bin'
     rename 'README-bin', 'README'
   }
@@ -901,7 +901,7 @@ def sourceContent = project.copySpec {
             !jars.file.path.contains('JavaEEServletContainerExample')
     }
   }
-  from('kieker-documentation') {
+  from('documentation') {
     include 'README-src'
     rename 'README-src', 'README'
   }
