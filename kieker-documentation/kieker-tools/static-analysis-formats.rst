@@ -1,4 +1,4 @@
-.. _kieker-tools-analysis-formats:
+.. _kieker-tools-static-analysis-formats:
 
 File Formats
 ============
