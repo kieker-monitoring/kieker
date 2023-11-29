@@ -112,9 +112,9 @@ dependencies {
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation 'org.objenesis:objenesis:3.2'
+	testImplementation 'org.objenesis:objenesis:3.3'
 
-	testImplementation 'org.easymock:easymock:4.3'
+	testImplementation 'org.easymock:easymock:5.2.0'
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
