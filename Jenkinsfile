@@ -99,8 +99,12 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
+            sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'build/architecture-recovery*.*', name: 'architecture-recovery'
+            stash includes: 'build/tools/*', name: 'tools'
+            stash includes: 'build/trace-analysis*.*', name: 'trace-analysis'
           }
         }
       }
@@ -164,7 +168,10 @@ pipeline {
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
+        unstash 'architecture-recovery'
+        unstash 'tools'
+        unstash 'trace-analysis'
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar,build/architecture-recovery*.*,build/tools/*,build/trace-analysis*.*',
             fingerprint: true,
             onlyIfSuccessful: true
       }

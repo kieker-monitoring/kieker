@@ -185,34 +185,6 @@ function assert_files_exist_bin {
 
 	information "Checking examples' configuration and setup"
 	warning "Currently deactivated"
-#	assert_dir_exists "examples/"
-#	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
-#	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
-#	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"-emf.jar"
-#	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"-emf.jar"
-#	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"-aspectj.jar"
-#	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"-emf.jar"
-#	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
-#
-#	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
-#	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
-#	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
-#	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
-#	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
-#
-#	assert_file_exists_regular "examples/JavaEEServletContainerExample/build.gradle"
-#	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
-#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
-#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
-#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
-
-##      Removed Eclipse rubbish
-#	information "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."
-#	for d in $(find -name ".project" -exec dirname {} \;); do
-#	    assert_file_exists_regular $d/.classpath
-#	    assert_file_exists_regular $d/.settings/org.eclipse.jdt.core.prefs
-#	done
-#	information OK
 
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
@@ -227,8 +199,8 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists ".checkstyle"
 	assert_file_NOT_exists ".pmd"
 	assert_file_NOT_exists ".settings/"
-	assert_file_NOT_exists "kieker-documentation/README-bin"
-	assert_file_NOT_exists "kieker-documentation/README-src"
+	assert_file_NOT_exists "documentation/README-bin"
+	assert_file_NOT_exists "documentation/README-src"
 }
 
 
