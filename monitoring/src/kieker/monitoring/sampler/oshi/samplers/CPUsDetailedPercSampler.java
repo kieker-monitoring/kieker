@@ -87,7 +87,7 @@ public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
 				final double idle = converter.getIdlePerc();
 				final double user = converter.getUserPerc();
 				final double irq = converter.getIrqPerc();
-				final double combined = centralProcessor.getProcessorCpuLoadBetweenTicks()[i];
+				final double combined = centralProcessor.getProcessorCpuLoad(10)[i];
 
 				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(),
 						monitoringController.getHostname(), Integer.toString(i), user, system, wait, nice, irq,

@@ -16,6 +16,7 @@
 
 package kieker.monitoring.sampler.oshi.samplers;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -64,7 +65,7 @@ public final class NetworkUtilizationSampler extends AbstractOshiSampler {
 		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createNetworkUtilizationSignature())) {
 			return;
 		}
-		final NetworkIF[] networkInterfaces = this.hardwareAbstractionLayer.getNetworkIFs();
+		final List<NetworkIF> networkInterfaces = this.hardwareAbstractionLayer.getNetworkIFs();
 		for (final NetworkIF networkIF : networkInterfaces) {
 
 			final String interfaceName = networkIF.getName();
