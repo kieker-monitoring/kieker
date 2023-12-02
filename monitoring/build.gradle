@@ -62,7 +62,7 @@ dependencies {
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
-	implementation 'com.github.oshi:oshi-core:3.12.2'
+	implementation 'com.github.oshi:oshi-core:6.4.8'
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation 'org.influxdb:influxdb-java:2.23'
