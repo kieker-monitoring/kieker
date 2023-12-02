@@ -16,6 +16,7 @@
 
 package kieker.monitoring.sampler.oshi.samplers;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -63,7 +64,7 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createDiskUsageSignature())) {
 			return;
 		}
-		final HWDiskStore[] hwDistStores = this.hardwareAbstractionLayer.getDiskStores();
+		final List<HWDiskStore> hwDistStores = this.hardwareAbstractionLayer.getDiskStores();
 		for (final HWDiskStore hwDistStore : hwDistStores) {
 			final String deviceName = hwDistStore.getName();
 			final ITimeSource timesource = monitoringController.getTimeSource();

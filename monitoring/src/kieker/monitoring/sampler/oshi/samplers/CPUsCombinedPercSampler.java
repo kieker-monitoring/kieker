@@ -64,7 +64,7 @@ public class CPUsCombinedPercSampler extends AbstractOshiSampler {
 			return;
 		}
 		final CentralProcessor centralProcessor = this.hardwareAbstractionLayer.getProcessor();
-		final double[] cpuLoads = centralProcessor.getProcessorCpuLoadBetweenTicks();
+		final double[] cpuLoads = centralProcessor.getProcessorCpuLoad(10);
 		final ITimeSource timesource = monitoringController.getTimeSource();
 
 		for (int i = 0; i < cpuLoads.length; i++) {

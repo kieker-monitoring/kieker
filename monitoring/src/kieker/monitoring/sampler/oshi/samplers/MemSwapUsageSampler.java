@@ -63,8 +63,8 @@ public class MemSwapUsageSampler extends AbstractOshiSampler {
 		final long memoryTotal = globalMemory.getTotal();
 		final long memoryAvailable = globalMemory.getAvailable();
 		final long memoryUsed = memoryTotal - memoryAvailable;
-		final long swapTotal = globalMemory.getSwapTotal();
-		final long swapUsed = globalMemory.getSwapUsed();
+		final long swapTotal = globalMemory.getVirtualMemory().getSwapTotal();
+		final long swapUsed = globalMemory.getVirtualMemory().getSwapUsed();
 		final long swapFree = swapTotal - swapUsed;
 
 		final MemSwapUsageRecord r = new MemSwapUsageRecord(monitoringCtr.getTimeSource().getTime(),
