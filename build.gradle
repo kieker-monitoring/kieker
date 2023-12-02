@@ -982,12 +982,12 @@ publishing {
       }
 
       pom {
-        groupId = 'net.monitoring'
+        groupId = 'net.kieker-monitoring'
         artifactId = 'kieker'
         version = version
         name = 'Kieker Monitoring and Analysis Framework'
         description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
-        url = 'http://monitoring.net'
+        url = 'http://kieker-monitoring.net'
 
         licenses {
           license {

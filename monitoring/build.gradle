@@ -137,7 +137,7 @@ dependencies {
 publishing {
 	publications {
 		maven(MavenPublication) {
-			groupId = 'net.monitoring'
+			groupId = 'net.kieker-monitoring'
 			artifactId = 'monitoring'
 			version = version
 
