@@ -80,7 +80,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
 	implementation 'org.glassfish.jersey.core:jersey-common:3.0.2'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
-	implementation 'org.glassfish.jersey.core:jersey-client:3.0.2'
+	implementation 'org.glassfish.jersey.core:jersey-client:3.1.4'
 
 	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
