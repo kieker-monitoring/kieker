@@ -1,0 +1,9 @@
+11:08:41.161 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]
+15:09:16.870 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]
+15:16:37.046 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]
+15:17:39.577 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]
+15:57:13.898 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]
+23:53:48.742 [main] ERROR TraceAnalysisToolMain - Was passed main parameter '-n' but no main parameter was defined in your arg class
+23:59:47.464 [main] ERROR TraceAnalysisToolMain - Was passed main parameter '-n' but no main parameter was defined in your arg class
+00:02:15.223 [main] ERROR TraceAnalysisToolMain - Was passed main parameter '-3' but no main parameter was defined in your arg class
+00:02:48.614 [main] ERROR TraceAnalysisToolMain - The following option is required: [-o | --outputdir]

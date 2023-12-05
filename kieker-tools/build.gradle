@@ -54,6 +54,21 @@ dependencies {
 
 	// Some dependencies for the HTTP connector of the KDB
 	api fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+	
+	//OpenTelemetry dependency
+	implementation("org.springframework.boot:spring-boot-starter-web");
+    implementation("io.opentelemetry:opentelemetry-api:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk-metrics:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-exporter-logging:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-semconv:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk-trace:1.32.0") // Trace SDK
+	implementation("io.opentelemetry:opentelemetry-exporter-otlp-http:1.32.0") 
+	implementation('io.opentelemetry:opentelemetry-exporter-otlp-common:1.7.0-alpha')
+	
+	
+	implementation('io.opentelemetry:opentelemetry-exporter-zipkin:1.7.0-alpha')
+	
 
 	testImplementation "junit:junit:$libJunitVersion"
 

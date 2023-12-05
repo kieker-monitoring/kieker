@@ -47,6 +47,31 @@ dependencies {
 
   aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
   aspectJarConfig "com.rabbitmq:amqp-client:5.13.0"
+  
+   // dependencies for the OpenTelemetry SDK.
+	implementation "io.opentelemetry:opentelemetry-api:1.32.0"
+    implementation "io.opentelemetry:opentelemetry-sdk:1.32.0" 
+    implementation "io.opentelemetry:opentelemetry-sdk-metrics:1.32.0"
+    implementation "io.opentelemetry:opentelemetry-exporter-logging:1.32.0"
+    implementation "io.opentelemetry:opentelemetry-semconv:1.32.0-alpha"
+    implementation 'io.opentelemetry:opentelemetry-api:1.10.0'
+    implementation 'io.opentelemetry:opentelemetry-sdk:1.10.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http-trace'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http:1.7.0'
+    
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
+    
+    implementation 'io.opentelemetry:opentelemetry-exporter-zipkin:1.10.0'
+    implementation "io.opentelemetry:opentelemetry-exporter-zipkin"
+    
+    implementation "io.opentelemetry:opentelemetry-api"
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
+    
+  	implementation platform("io.opentelemetry:opentelemetry-bom:1.32.0")
+  	implementation platform('io.opentelemetry:opentelemetry-bom:1.7.0')
+     
+     implementation 'io.opentelemetry:opentelemetry-exporter-zipkin'
+  
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -249,7 +274,8 @@ subprojects {
     //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
     implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-
+    
+   
     // enable logging for test runs
     testImplementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 
@@ -1054,3 +1080,25 @@ signing {
   required { isReleaseVersion }
   sign publishing.publications.mavenJava
 }
+
+/*dependencies {
+    implementation("io.opentelemetry:opentelemetry-api:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk-metrics:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-exporter-logging:1.32.0");
+    implementation("io.opentelemetry.semconv:opentelemetry-semconv:1.23.1-alpha")
+    implementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:1.32.0");
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web");
+    implementation("io.opentelemetry:opentelemetry-api:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-sdk-metrics:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-exporter-logging:1.32.0");
+    implementation("io.opentelemetry:opentelemetry-semconv:1.32.0-alpha");
+}*/
+
+
+

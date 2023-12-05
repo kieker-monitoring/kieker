@@ -21,6 +21,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.log.replayer.stages.AdjustTimeStage;
+import kieker.tools.log.replayer.stages.OpenTelemetryStage;
 import kieker.tools.log.replayer.stages.ReplayControlStage;
 import kieker.tools.log.replayer.stages.time.adjuster.BranchingRecordTimeAdjuster;
 import kieker.tools.log.replayer.stages.time.adjuster.FlowEventTimeAdjuster;
@@ -40,7 +41,7 @@ import teetime.stage.Counter;
  */
 public class TeetimeConfiguration extends Configuration {
 
-	private final Counter<IMonitoringRecord> counter;
+	private Counter<IMonitoringRecord> counter = new Counter<IMonitoringRecord>();
 
 	/**
 	 * Construct the replayer configuration.
@@ -51,6 +52,8 @@ public class TeetimeConfiguration extends Configuration {
 	public TeetimeConfiguration(final Settings parameter) {
 		final LogsReaderCompositeStage reader = new LogsReaderCompositeStage(parameter.getDataLocation(), parameter.isVerbose(), 8192);
 		OutputPort<IMonitoringRecord> outputPort = reader.getOutputPort();
+		
+
 
 		if ((parameter.getIgnoreBeforeDate() != null) || (parameter.getIgnoreAfterDate() != null)) {
 			final long ignoreBeforeDate = parameter.getIgnoreBeforeDate() != null ? parameter.getIgnoreBeforeDate() : Long.MIN_VALUE; // NOCS
@@ -76,6 +79,9 @@ public class TeetimeConfiguration extends Configuration {
 
 		this.counter = new Counter<>();
 		this.connectPorts(outputPort, this.counter.getInputPort());
+		
+		OpenTelemetryStage stage = new OpenTelemetryStage();
+		this.connectPorts(this.counter.getOutputPort(), stage.getInputPort());
 
 		final kieker.common.configuration.Configuration configuration;
 		if (parameter.getKiekerMonitoringProperties() != null) {
@@ -87,7 +93,7 @@ public class TeetimeConfiguration extends Configuration {
 		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, parameter.isTimeRelative());
 
 		final AbstractConsumerStage<IMonitoringRecord> consumer = new DataSink(configuration);
-		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
+//		this.connectPorts(this.counter.getOutputPort(), consumer.getInputPort());
 	}
 
 	public Counter<IMonitoringRecord> getCounter() {
