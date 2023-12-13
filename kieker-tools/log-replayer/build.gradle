@@ -22,6 +22,30 @@ dependencies {
 	testImplementation project(':kieker-tools').sourceSets.test.output
 
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+	
+	   // dependencies for the OpenTelemetry SDK.
+	implementation "io.opentelemetry:opentelemetry-api:1.32.0"
+	implementation "io.opentelemetry:opentelemetry-sdk:1.32.0" 
+	implementation "io.opentelemetry:opentelemetry-sdk-metrics:1.32.0"
+	implementation "io.opentelemetry:opentelemetry-exporter-logging:1.32.0"
+	implementation "io.opentelemetry:opentelemetry-semconv:1.32.0-alpha"
+	implementation 'io.opentelemetry:opentelemetry-api:1.10.0'
+	implementation 'io.opentelemetry:opentelemetry-sdk:1.10.0'
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http-trace'
+	//implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http:1.7.0'
+	
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
+	implementation "io.opentelemetry:opentelemetry-api"
+	
+	implementation platform("io.opentelemetry:opentelemetry-bom:1.32.0")	 
+	implementation 'io.opentelemetry:opentelemetry-exporter-zipkin'
+	implementation 'io.zipkin.reporter2:zipkin-sender-okhttp3:2.16.2'
+	 
+	 //implementation 'io.opentelemetry:opentelemetry-exporter-zipkin:1.10.0'
+	//implementation "io.opentelemetry:opentelemetry-exporter-zipkin"
+	// implementation 'io.opentelemetry:opentelemetry-exporter-zipkin:1.33.0-alpha'
+		//implementation platform('io.opentelemetry:opentelemetry-bom:1.7.0')
+		//implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
 }
 
 task uploadArchives {

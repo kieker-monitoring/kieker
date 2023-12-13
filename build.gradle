@@ -48,29 +48,7 @@ dependencies {
   aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
   aspectJarConfig "com.rabbitmq:amqp-client:5.13.0"
   
-   // dependencies for the OpenTelemetry SDK.
-	implementation "io.opentelemetry:opentelemetry-api:1.32.0"
-    implementation "io.opentelemetry:opentelemetry-sdk:1.32.0" 
-    implementation "io.opentelemetry:opentelemetry-sdk-metrics:1.32.0"
-    implementation "io.opentelemetry:opentelemetry-exporter-logging:1.32.0"
-    implementation "io.opentelemetry:opentelemetry-semconv:1.32.0-alpha"
-    implementation 'io.opentelemetry:opentelemetry-api:1.10.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk:1.10.0'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http-trace'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp-http:1.7.0'
-    
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
-    
-    implementation 'io.opentelemetry:opentelemetry-exporter-zipkin:1.10.0'
-    implementation "io.opentelemetry:opentelemetry-exporter-zipkin"
-    
-    implementation "io.opentelemetry:opentelemetry-api"
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.32.0'
-    
-  	implementation platform("io.opentelemetry:opentelemetry-bom:1.32.0")
-  	implementation platform('io.opentelemetry:opentelemetry-bom:1.7.0')
-     
-     implementation 'io.opentelemetry:opentelemetry-exporter-zipkin'
+
   
 }
 
