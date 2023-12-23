@@ -5,14 +5,20 @@ Kieker Architecture Model
 
 The Kieker Analysis Model (KAM) provides different metamodels for
 - Types of Components, Interfaces, Operations and Data/Storage
+
 - General architecture of a software, alias Assembly which contains instances of
   the Component-types, Operation-types and Storage-types of the Types model
+
 - Deployed architecture of a software, alias Deployment model which contains
   instances of the Assmbly-model elements.
+
 - Information calls within the architecture are stored in the Execution model
+
 - Statistical information, e.g., number of calls, response time etc. are stored
   in the Statistics model
+
 - The Trace model can contain information of call traces
+
 - Source model is a hash map that maps objects of all previous models to
   source labels. Each element can have different sources, as they can be derived
   from information from different sources.
