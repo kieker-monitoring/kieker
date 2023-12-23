@@ -17,6 +17,7 @@ Table of Contents
    :maxdepth: 1
 
    introduction
+   quick-start-guide
    getting-started/Getting-Started.rst
    tutorials/Tutorials.rst
    instrumenting-software/Instrumenting-Software.rst
