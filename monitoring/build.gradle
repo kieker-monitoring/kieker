@@ -87,7 +87,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
 	implementation 'javax.jms:javax.jms-api:2.0.1'
 
-	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
 	implementation 'javax.jws:javax.jws-api:1.1'
 
 	// https://mvnrepository.com/artifact/aopalliance/aopalliance
