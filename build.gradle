@@ -41,7 +41,7 @@ dependencies {
   resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
   resultJar "org.jctools:jctools-core:$libJctoolsVersion"
 
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.22.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.24.0'
 
