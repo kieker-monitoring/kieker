@@ -21,7 +21,7 @@ dependencies {
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
-	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
 
 //    runtime 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
