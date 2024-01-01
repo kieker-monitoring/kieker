@@ -73,7 +73,7 @@ dependencies {
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
 	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
-	implementation 'org.apache.commons:commons-compress:1.21'
+	implementation 'org.apache.commons:commons-compress:1.25.0'
 
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
 	implementation 'org.glassfish.jersey.core:jersey-server:3.1.3'
