@@ -24,7 +24,7 @@ dependencies {
 
 //    runtime 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
 
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
 
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
 	implementation 'com.sun.xml.bind:jaxb-impl:4.0.4'
