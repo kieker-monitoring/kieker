@@ -713,6 +713,29 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
   }
 }
 
+task dislJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the probes that are usable for instrumentation with DiSL."
+) {
+  archiveClassifier = 'disl'
+  
+  configure allArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.aspectJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        'DiSL-Classes'   : "kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDiSL"
+    )
+  }
+}
+
 task sourcesJar(type: Jar, dependsOn: classes) {
   archiveClassifier = 'sources'
   from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
