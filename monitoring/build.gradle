@@ -90,8 +90,6 @@ dependencies {
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.1'
 	implementation 'javax.jws:javax.jws-api:1.1'
 
-	// https://mvnrepository.com/artifact/aopalliance/aopalliance
-	implementation 'aopalliance:aopalliance:1.0'
 	// https://mvnrepository.com/artifact/org.springframework
 	implementation "org.springframework:spring-beans:$springVersion"
 	implementation "org.springframework:spring-context:$springVersion"
