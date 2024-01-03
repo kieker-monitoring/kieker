@@ -42,6 +42,7 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/com.github.yannrichet/Rsession
 	implementation 'com.github.yannrichet:Rsession:3.1.8'
+	implementation 'org.renjin:renjin-script-engine:3.5-beta76'
 
 	// https://mvnrepository.com/artifact/org.rosuda.REngine/Rserve
 	implementation 'org.rosuda.REngine:Rserve:1.8.1'
