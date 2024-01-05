@@ -12,13 +12,11 @@ plugins {
 	id 'java-library'
 	id 'eclipse'
 	id 'maven-publish'
+	id("io.freefair.aspectj.post-compile-weaving") version "8.4"
 }
 
 sourceCompatibility = 8
 targetCompatibility = 8
-
-// TODO Why must this be applied, while others get included via plugins?
-apply plugin: "io.freefair.aspectj.post-compile-weaving"
 
 // The following lines are necessay to create a test jar
 project.configurations {
@@ -49,6 +47,15 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+
+
+compileJava {
+	ajc {
+		enabled = true
+        // The classpath needs to be defined here
+	}
 }
 
 dependencies {
