@@ -45,12 +45,6 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
-
-
 compileJava {
 	ajc {
 		enabled = true
