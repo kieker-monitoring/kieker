@@ -41,4 +41,4 @@ jobs:
     - name: Build Kieker fully
       run: ./gradlew clean assemble mainJar aspectJJar -x check -x test
     - name: Execute integration tests
-      run: cd monitoring && ./gradlew monitoring:jarIntegrationTest -x check -x test
+      run: ./gradlew monitoring:jarIntegrationTest -x check -x test
