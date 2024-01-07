@@ -38,3 +38,7 @@ jobs:
       with:
         name: Unit Test Results (Java ${{ matrix.java }} OS ${{ matrix.os }})
         path: '**/build/test-results/test/TEST-*.xml'
+    - name: Build Kieker fully
+      run: ./gradlew clean assemble mainJar aspectJJar dislJar -x check -x test
+    - name: Execute integration tests
+      run: cd monitoring && ./gradlew monitoring:jarIntegrationTest -x check -x test
