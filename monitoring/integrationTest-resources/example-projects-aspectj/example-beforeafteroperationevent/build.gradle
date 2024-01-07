@@ -41,7 +41,7 @@ sourceSets.test {
 }
 
 tasks.test {
-	jvmArgs=[ "-javaagent:../../../../build/libs/kieker-${kiekerVersion}-aspectj.jar',
+	jvmArgs=[ '-javaagent:../../../../build/libs/kieker-2.0.0-aspectj.jar',
 			  '-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs',
 			  '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			  '-Daj.weaving.verbose=true' ]
