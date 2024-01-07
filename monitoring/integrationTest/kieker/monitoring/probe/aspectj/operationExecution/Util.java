@@ -99,7 +99,10 @@ public enum Util {
 	}
 
 	private static void callTest(final String testcase, final File folder) throws IOException {
-		final ProcessBuilder processBuilder = new ProcessBuilder("gradle", "clean", "test", "--tests", testcase);
+		File home = new File("../");
+		String wrapper = home.getAbsolutePath() + File.separator + "gradlew";
+		System.out.println(wrapper);
+		final ProcessBuilder processBuilder = new ProcessBuilder(wrapper, "clean", "test", "--tests", testcase);
 		processBuilder.directory(folder);
 		StreamGobbler.showFullProcess(processBuilder.start());
 	}
