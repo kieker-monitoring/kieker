@@ -44,9 +44,14 @@ configurations {
 compileJava {
 	ajc {
 		enabled = true
-		// The classpath needs to be defined here
-		classpath.setFrom project.configurations.aspectJCompileTime
+		classpath.setFrom configurations.aspectJCompileTime
 	}
+}
+
+compileTestJava {
+    ajc {
+        classpath.setFrom configurations.aspectJCompileTime
+    }
 }
 
 dependencies {
