@@ -38,22 +38,14 @@ repositories {
 
 configurations {
 	ajc
-	aspects
-	aspectCompile
-	compile {
-		extendsFrom aspects
-	}
+	aspectJCompileTime
 }
 
 compileJava {
 	ajc {
 		enabled = true
 		// The classpath needs to be defined here
-		dependencies {
-		   ajc "org.aspectj:aspectjtools:1.9.20.1"
-		   implementation "org.aspectj:aspectjrt:1.9.20.1"
-		   implementation "org.aspectj:aspectjweaver:1.9.20.1"
-        }
+		classpath.setFrom project.configurations.aspectJCompileTime
 	}
 }
 
@@ -64,7 +56,7 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	ajc "org.aspectj:aspectjtools:$aspectjVersion"
+	aspectJCompileTime "org.aspectj:aspectjtools:1.9.20.1"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
