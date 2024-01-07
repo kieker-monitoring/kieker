@@ -1,4 +1,4 @@
-name: Java CI with Gradle (PR)
+name: Integration Test Execution (PR)
 
 on: pull_request
 
@@ -23,11 +23,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: Run Unit Tests
-      run: ./gradlew test
-    - name: Upload Unit Test Results
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: Unit Test Results (Java ${{ matrix.java }} OS ${{ matrix.os }})
-        path: '**/build/test-results/test/TEST-*.xml'
+    - name: Build Kieker fully
+      run: ./gradlew clean assemble mainJar aspectJJar -x check -x test
+    - name: Execute integration tests
+      run: ./gradlew monitoring:jarIntegrationTest -x check -x test
