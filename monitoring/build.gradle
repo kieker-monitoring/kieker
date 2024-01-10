@@ -49,9 +49,9 @@ compileJava {
 }
 
 compileTestJava {
-    ajc {
-        classpath.setFrom configurations.aspectJCompileTime
-    }
+	ajc {
+		classpath.setFrom configurations.aspectJCompileTime
+	}
 }
 
 dependencies {
@@ -224,9 +224,9 @@ task jarIntegrationTest(type: Test) {
 }
 
 compileJarIntegrationTestJava {
-    ajc {
-        classpath.setFrom configurations.aspectJCompileTime
-    }
+	ajc {
+		classpath.setFrom configurations.aspectJCompileTime
+	}
 }
 
 def resolveLibrary(String library) {
