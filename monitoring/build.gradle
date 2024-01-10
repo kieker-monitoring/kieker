@@ -223,6 +223,12 @@ task jarIntegrationTest(type: Test) {
 	dependsOn rootProject.aspectJJar
 }
 
+compileJarIntegrationTestJava {
+    ajc {
+        classpath.setFrom configurations.aspectJCompileTime
+    }
+}
+
 def resolveLibrary(String library) {
 def libraryDir = rootProject.file(dirLib)
 return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
