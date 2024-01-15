@@ -1,0 +1,121 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+dependencies {
+	api project(':common')
+	api project(':monitoring')
+	api project(':model')
+
+	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
+
+	api 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
+
+	api "com.rabbitmq:amqp-client:$libAmqpVersion"
+	api 'nz.ac.waikato.cms.weka:weka-stable:3.6.13' // used by behavior analysis
+
+	api 'de.cau.cs.se.teetime:teetime:3.1.0'
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	api 'javax.jms:javax.jms-api:2.0.1'
+	api 'javax.servlet:javax.servlet-api:4.0.1'
+
+	api "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
+	api 'org.apache.commons:commons-compress:1.25.0'
+	api 'org.nanohttpd:nanohttpd:2.3.1'
+	api 'com.carrotsearch:hppc:0.9.1'
+	api 'org.csveed:csveed:0.7.5'
+	api 'org.yaml:snakeyaml:2.2'
+	api 'org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4'
+
+	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
+	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+
+	api 'javax.xml.bind:jaxb-api:2.3.1'
+
+	api 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+
+	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	// Use JUnit test framework
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+
+	testRuntimeOnly 'org.apache.derby:derby:10.17.1.0'	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'analysis'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+		containsTestFixtures = true
+	}
+}
