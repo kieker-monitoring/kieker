@@ -74,4 +74,7 @@ dependencies {
 
 	testImplementation project(':kieker-common').sourceSets.test.output
 	testImplementation project(':kieker-analysis').sourceSets.test.output
+	
+	implementation 'net.kieker-monitoring:kieker:1.14' 
+    implementation 'net.kieker-monitoring:komm:1.14'   
 }
