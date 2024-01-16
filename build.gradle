@@ -23,6 +23,7 @@ configurations {
   resultJar
   emfJarConfig
   aspectJarConfig
+  javassistJarConfig
 }
 
 spotless {
@@ -47,6 +48,8 @@ dependencies {
 
   aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
+  
+  javassistJarConfig "org.javassist:javassist:3.30.2-GA"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -55,11 +58,18 @@ dependencies {
 def mainSubprojects = [
   project(':common'),
   project(':monitoring'),
+  project(':monitoring-probe-javassist'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
   project(':extension-kafka'),
   project(':extension-cassandra')
+]
+
+def javassistSubprojects = [
+  project(':common'),
+  project(':monitoring'),
+  project(':monitoring-probe-javassist')
 ]
 
 allprojects {
@@ -349,6 +359,7 @@ def parsePmdReport(File reportFile) {
 def checkSubprojects = [
   project(':common'),
   project(':monitoring'),
+  project(':monitoring-probe-javassist'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
@@ -604,6 +615,14 @@ def allArtifacts = {
   }
 }
 
+def javassistArtifacts = {
+  javassistSubprojects.each { subproject ->
+    from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
 def licence = {
   from file('LICENSE')
 }
@@ -642,6 +661,8 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
   configure allArtifacts
   configure licence
   configure aopxml
+  
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
   manifest = project.manifest {
     from sharedManifest
@@ -709,6 +730,30 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
         "Can-Redefine-Classes": "true",
         "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
         "org/aspectj/weaver/" // The section name
+    )
+  }
+}
+
+/** Kieker jar with aspectJ tooling. */
+task javassistJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javaassist agent. The resulting jar can directly be used for monitoring as javaagent."
+) {
+  archiveClassifier = 'javassist'
+  configure allArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.javassistJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": "true",
+        "Can-Retransform-Classes": "true",
+	    "Premain-Class": "kieker.monitoring.probe.javassist.PremainClass"
     )
   }
 }
@@ -957,6 +1002,7 @@ artifacts {
   archives mainJar
   archives emfJar
   archives aspectJJar
+  archives javassistJar
   archives sourcesJar
   archives javadocJar
 }
