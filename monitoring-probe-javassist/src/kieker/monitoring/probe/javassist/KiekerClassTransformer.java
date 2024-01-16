@@ -49,11 +49,27 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 						method.insertBefore("sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();");
 						
 						method.addLocalVariable("traceId", CtClass.longType);
-						method.insertBefore("traceId = CFREGISTRY.recallThreadLocalTraceId();");
 
 						method.addLocalVariable("entrypoint", CtClass.booleanType);
 						method.addLocalVariable("eoi", CtClass.intType);
 						method.addLocalVariable("ess", CtClass.intType);
+						
+						method.insertBefore("traceId = CFREGISTRY.recallThreadLocalTraceId();if (traceId == -1) {\n"
+								+ "			entrypoint = true;\n"
+								+ "			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();\n"
+								+ "			CFREGISTRY.storeThreadLocalEOI(0);\n"
+								+ "			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1\n"
+								+ "			eoi = 0;\n"
+								+ "			ess = 0;\n"
+								+ "		} else {\n"
+								+ "			entrypoint = false;\n"
+								+ "			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1\n"
+								+ "			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0\n"
+								+ "			if ((eoi == -1) || (ess == -1)) {\n"
+								+ "				System.out.println(\"eoi and/or ess have invalid values: eoi == \"+eoi+\" ess == \"+ess);\n"
+								+ "				CTRLINST.terminateMonitoring();\n"
+								+ "			}\n"
+								+ "		}");
 						
 						method.addLocalVariable("tin", CtClass.longType);
 						method.insertBefore("tin = TIME.getTime();");
@@ -68,15 +84,15 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		                
 		                endBlock.append("CTRLINST.newMonitoringRecord(\n"
 		                		+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
-		                		+ "						traceId, tin, tout, VMNAME, 0, 0));");
+		                		+ "						traceId, tin, tout, VMNAME, eoi, ess));");
 		                
 		                method.insertAfter(endBlock.toString());
-		                
-		                byte[] byteCode = cc.toBytecode();
-		                cc.detach();
-		                return byteCode;
 					}
 					
+					byte[] byteCode = cc.toBytecode();
+	                cc.detach();
+					
+					return byteCode;
 				} catch (NotFoundException | CannotCompileException | IOException e) {
 					e.printStackTrace();
 				}
