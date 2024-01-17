@@ -15,7 +15,6 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 
 public class KiekerClassTransformer implements ClassFileTransformer {
 	
@@ -39,54 +38,7 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 					addStaticFields(cp, cc);
 					
 					for (CtMethod method : cc.getDeclaredMethods()) {
-						String signature = buildSignature(method);
-						System.out.println("Signature: " + signature);
-						
-						method.addLocalVariable("operationSignature", cp.get("java.lang.String"));
-						method.insertBefore("operationSignature = \"" + signature + "\";");
-						
-						method.addLocalVariable("sessionId", cp.get("java.lang.String"));
-						method.insertBefore("sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();");
-						
-						method.addLocalVariable("traceId", CtClass.longType);
-
-						method.addLocalVariable("entrypoint", CtClass.booleanType);
-						method.addLocalVariable("eoi", CtClass.intType);
-						method.addLocalVariable("ess", CtClass.intType);
-						
-						method.insertBefore("traceId = CFREGISTRY.recallThreadLocalTraceId();if (traceId == -1) {\n"
-								+ "			entrypoint = true;\n"
-								+ "			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();\n"
-								+ "			CFREGISTRY.storeThreadLocalEOI(0);\n"
-								+ "			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1\n"
-								+ "			eoi = 0;\n"
-								+ "			ess = 0;\n"
-								+ "		} else {\n"
-								+ "			entrypoint = false;\n"
-								+ "			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1\n"
-								+ "			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0\n"
-								+ "			if ((eoi == -1) || (ess == -1)) {\n"
-								+ "				System.out.println(\"eoi and/or ess have invalid values: eoi == \"+eoi+\" ess == \"+ess);\n"
-								+ "				CTRLINST.terminateMonitoring();\n"
-								+ "			}\n"
-								+ "		}");
-						
-						method.addLocalVariable("tin", CtClass.longType);
-						method.insertBefore("tin = TIME.getTime();");
-						
-						StringBuilder endBlock = new StringBuilder();
-						method.addLocalVariable("tout", CtClass.longType);
-						method.addLocalVariable("opTime", CtClass.longType);
-		                endBlock.append("tout = TIME.getTime();");
-		                endBlock.append("opTime = tout-tin;");
-		                
-		                endBlock.append("System.out.println(\"Time: \" + operationSignature + \": \" + opTime);");
-		                
-		                endBlock.append("CTRLINST.newMonitoringRecord(\n"
-		                		+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
-		                		+ "						traceId, tin, tout, VMNAME, eoi, ess));");
-		                
-		                method.insertAfter(endBlock.toString());
+						instrumentMethod(cp, method);
 					}
 					
 					byte[] byteCode = cc.toBytecode();
@@ -100,6 +52,54 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 			}
 		}
 		return null;
+	}
+
+	private void instrumentMethod(ClassPool cp, CtMethod method) throws NotFoundException, CannotCompileException {
+		String signature = buildSignature(method);
+		System.out.println("Signature: " + signature);
+		
+		method.addLocalVariable("operationSignature", cp.get("java.lang.String"));
+		method.insertBefore("operationSignature = \"" + signature + "\";");
+		
+		method.addLocalVariable("sessionId", cp.get("java.lang.String"));
+		method.insertBefore("sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();");
+		
+		method.addLocalVariable("traceId", CtClass.longType);
+
+		method.addLocalVariable("entrypoint", CtClass.booleanType);
+		method.addLocalVariable("eoi", CtClass.intType);
+		method.addLocalVariable("ess", CtClass.intType);
+		
+		method.insertBefore("traceId = CFREGISTRY.recallThreadLocalTraceId();if (traceId == -1) {\n"
+				+ "			entrypoint = true;\n"
+				+ "			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();\n"
+				+ "			CFREGISTRY.storeThreadLocalEOI(0);\n"
+				+ "			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1\n"
+				+ "			eoi = 0;\n"
+				+ "			ess = 0;\n"
+				+ "		} else {\n"
+				+ "			entrypoint = false;\n"
+				+ "			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1\n"
+				+ "			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0\n"
+				+ "			if ((eoi == -1) || (ess == -1)) {\n"
+				+ "				System.out.println(\"eoi and/or ess have invalid values: eoi == \"+eoi+\" ess == \"+ess);\n"
+				+ "				CTRLINST.terminateMonitoring();\n"
+				+ "			}\n"
+				+ "		}");
+		
+		method.addLocalVariable("tin", CtClass.longType);
+		method.insertBefore("tin = TIME.getTime();");
+		
+		StringBuilder endBlock = new StringBuilder();
+		method.addLocalVariable("tout", CtClass.longType);
+		method.addLocalVariable("opTime", CtClass.longType);
+		endBlock.append("tout = TIME.getTime();");
+		
+		endBlock.append("CTRLINST.newMonitoringRecord(\n"
+				+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
+				+ "						traceId, tin, tout, VMNAME, eoi, ess));");
+		
+		method.insertAfter(endBlock.toString());
 	}
 
 	private void addStaticFields(ClassPool cp, CtClass cc) throws CannotCompileException, NotFoundException {
