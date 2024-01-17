@@ -21,20 +21,27 @@ import teetime.framework.AbstractConsumerStage;
 public class OpenTelemetryStage extends AbstractConsumerStage<IMonitoringRecord> {
     
     private final Tracer tracer;
+
     
 
     public OpenTelemetryStage() {
     	 
+    	// Create a tracer provider and register it globally
         SdkTracerProvider tracerProvider = createTracerProvider();
         
         OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
                 .setTracerProvider(tracerProvider)
                 .buildAndRegisterGlobal();
-
+        
+        
+     // Get a tracer instance for instrumentation
         this.tracer = openTelemetry.getTracer("kieker-instrumentation");
+        
+        
     }
     
     private OtlpHttpSpanExporter createSpanExporter() {
+    	 // Create an OTLP HTTP Span Exporter
         return OtlpHttpSpanExporter.builder()
                 .setEndpoint("http://localhost:55681/v1/traces") //55681
                 
@@ -43,9 +50,12 @@ public class OpenTelemetryStage extends AbstractConsumerStage<IMonitoringRecord>
     
 
     private SdkTracerProvider createTracerProvider() {
+    	
+    	// Define resource information, such as service name
         Resource resource = Resource.getDefault().merge(
                 Resource.create(Attributes.builder().put(AttributeKey.stringKey("service.name"), "kieker-data").build()));
-
+        
+     // Create a tracer provider with a BatchSpanProcessor for exporting spans to Zipkin
         return SdkTracerProvider.builder()
                 .setResource(resource)
                 .addSpanProcessor(BatchSpanProcessor.builder(ZipkinSpanExporter.builder().setEndpoint("http://localhost:9411/api/v2/spans").build()).build())
@@ -59,6 +69,8 @@ public class OpenTelemetryStage extends AbstractConsumerStage<IMonitoringRecord>
             System.out.println("OER: " + oer);
 
             Instant startTime = Instant.ofEpochMilli(oer.getTin());
+            
+         // Start a new span for the operation
             Span span = tracer.spanBuilder(oer.getOperationSignature())
             		.setStartTimestamp(startTime)
                     .startSpan();
@@ -69,6 +81,8 @@ public class OpenTelemetryStage extends AbstractConsumerStage<IMonitoringRecord>
             } finally {
             	Instant endTime = Instant.ofEpochMilli(oer.getTout());
                 span.end(endTime);
+                
+
             }
         }
     }
