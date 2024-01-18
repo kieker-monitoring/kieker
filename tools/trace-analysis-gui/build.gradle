@@ -1,0 +1,42 @@
+plugins {
+	id 'application'
+	id 'eclipse'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
+
+mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+dependencies {
+	implementation project(":tools")
+	implementation project(":tools:trace-analysis")
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	testImplementation project (path: ':tools', configuration: 'testArchives')
+}
+
+task uploadArchives {
+	println 'trace-analysis-gui skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/tools'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}

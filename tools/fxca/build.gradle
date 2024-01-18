@@ -1,0 +1,81 @@
+plugins {
+//	id 'com.github.johnrengelman.shadow' version '7.1.1'
+	id 'application'
+	id 'eclipse'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+distTar.enabled=false
+distZip.enabled=true
+
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+// decativated zip file too large
+//shadowJar {
+//archiveBaseName.set('shadow')
+//archiveClassifier.set('')
+//archiveVersion.set('')
+//}
+
+mainClassName = 'kieker.tools.fxca.FxcaMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+jar {
+	manifest {
+		attributes "Main-Class": mainClassName
+	}
+}
+
+dependencies {
+	implementation project(':common')
+	implementation project(':analysis')
+	implementation project(':tools')
+
+	implementation 'org.csveed:csveed:0.7.5'
+
+	implementation 'org.apache.commons:commons-csv:1.9.0'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
+	implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
+
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	testImplementation project (path: ':tools', configuration: 'testArchives')
+
+	testImplementation 'org.mockito:mockito-core:5.7.0'
+	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+}
+
+
+task uploadArchives {
+	println 'fxca skipped'
+}
+
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& ['/common', '/tools'].contains(entry.path)
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}

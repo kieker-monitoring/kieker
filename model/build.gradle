@@ -1,0 +1,74 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	api project(':common')
+
+	api 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'model'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		containsTestFixtures = true
+	}
+}
