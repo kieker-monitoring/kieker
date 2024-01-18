@@ -16,7 +16,7 @@ pipeline {
   }
 
   triggers {
-    cron(env.BRANCH_NAME == 'master' ? '@daily' : '')
+    cron(env.BRANCH_NAME == 'main' ? '@daily' : '')
   }
 
   stages {
@@ -25,13 +25,13 @@ pipeline {
         changeRequest target: 'stable'
       }
       steps {
-        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'main' branch please."
       }
     }
     stage('Default Docker Stages') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           alwaysPull false
           args env.DOCKER_ARGS
         }
@@ -98,9 +98,13 @@ pipeline {
 
         stage('Distribution Build') {
           steps {
-            sh './gradlew -x test -x sign build publishToMavenLocal distribute'
+            sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
+            sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'build/architecture-recovery*.*', name: 'architecture-recovery'
+            stash includes: 'build/tools/*', name: 'tools'
+            stash includes: 'build/trace-analysis*.*', name: 'trace-analysis'
           }
         }
       }
@@ -111,7 +115,7 @@ pipeline {
         stage('Release Check Short') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
@@ -129,16 +133,16 @@ pipeline {
         stage('Release Check Extended') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
           when {
             beforeAgent true
             anyOf {
-              branch 'master';
+              branch 'main';
               branch '*-RC';
-              changeRequest target: 'master'
+              changeRequest target: 'main'
             }
           }
           steps {
@@ -157,14 +161,17 @@ pipeline {
     stage('Archive Artifacts') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           args env.DOCKER_ARGS
         }
       }
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
+        unstash 'architecture-recovery'
+        unstash 'tools'
+        unstash 'trace-analysis'
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar,build/architecture-recovery*.*,build/tools/*,build/trace-analysis*.*',
             fingerprint: true,
             onlyIfSuccessful: true
       }
@@ -176,10 +183,10 @@ pipeline {
       }
     }
 
-    stage('Master Specific Stages') {
+    stage('Main Specific Stages') {
       when {
         beforeAgent true
-        branch 'master'
+        branch 'main'
       }
       parallel {
         stage('Push to Stable') {
@@ -205,7 +212,7 @@ pipeline {
         stage('Upload Snapshot Version') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk8'
+              image 'kieker/kieker-build:openjdk11'
               args env.DOCKER_ARGS
             }
           }
@@ -238,7 +245,7 @@ pipeline {
       
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image 'kieker/kieker-build:openjdk11'
           args env.DOCKER_ARGS
         }
       }
