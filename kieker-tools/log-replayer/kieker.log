@@ -4126,3 +4126,67 @@ Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: 
 22:58:08.160 [Thread-1] INFO  k.m.c.c.MonitoringController - ShutdownHook notifies controller to initiate shutdown.
 22:58:08.161 [Thread-1] INFO  k.m.c.c.MonitoringController - Terminating monitoring...
 22:58:08.161 [Thread-1] INFO  k.m.c.c.MonitoringController - Shutting down Monitoring Controller (KIEKER)
+11:38:27.866 [main] INFO  k.m.core.controller.TCPController - Could not parse port for the TCPController, deactivating this option. Received string was: 
+11:38:28.511 [main] INFO  k.m.core.controller.StateController - Enabling monitoring
+11:38:28.548 [main] INFO  k.m.c.c.MonitoringController - Current State of kieker.monitoring (2.0.0-SNAPSHOT) Status: 'enabled'
+	Name: 'KIEKER'; Hostname: 'COLLIN'; experimentID: '1'
+JMXController: JMX disabled
+TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
+	Time in nanoseconds (with nanoseconds precision) since Thu Jan 01 01:00:00 CET 1970'
+ProbeController: disabled
+WriterController:
+	Queue type: class kieker.monitoring.queue.BlockingQueueDecorator
+	Queue capacity: 10000
+	Insert behavior (a.k.a. QueueFullBehavior): class kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior
+		numBlocked: 0
+Writer: 'kieker.monitoring.writer.filesystem.FileWriter'
+	Configuration:
+		kieker.monitoring.writer.filesystem.FileWriter.logFilePoolHandler='kieker.monitoring.writer.filesystem.RotatingLogFilePoolHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.charsetName='UTF-8'
+		kieker.monitoring.writer.filesystem.FileWriter.logStreamHandler='kieker.monitoring.writer.filesystem.TextLogStreamHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.maxEntriesInFile='25000'
+		kieker.monitoring.writer.filesystem.FileWriter.maxLogFiles='-1'
+		kieker.monitoring.writer.filesystem.FileWriter.maxLogSize='-1'
+		kieker.monitoring.writer.filesystem.FileWriter.mapFileHandler='kieker.monitoring.writer.filesystem.TextMapFileHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.flush='false'
+		kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=''
+		kieker.monitoring.writer.filesystem.FileWriter.actualStoragePath='C:\Users\TINOTE~1\AppData\Local\Temp\kieker-20240118-103828-302494822415800-UTC--KIEKER'
+
+	Automatic assignment of logging timestamps: 'false'
+Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: '0'
+11:38:28.576 [main] INFO  teetime.framework.Execution - Using scheduler: teetime.framework.scheduling.pushpullmodel.PushPullScheduling@294e5088
+11:39:27.475 [Thread-1] INFO  k.m.c.c.MonitoringController - ShutdownHook notifies controller to initiate shutdown.
+11:39:27.475 [Thread-1] INFO  k.m.c.c.MonitoringController - Terminating monitoring...
+11:39:27.475 [Thread-1] INFO  k.m.c.c.MonitoringController - Shutting down Monitoring Controller (KIEKER)
+11:48:33.698 [main] INFO  k.m.core.controller.TCPController - Could not parse port for the TCPController, deactivating this option. Received string was: 
+11:48:33.788 [main] INFO  k.m.core.controller.StateController - Enabling monitoring
+11:48:33.810 [main] INFO  k.m.c.c.MonitoringController - Current State of kieker.monitoring (2.0.0-SNAPSHOT) Status: 'enabled'
+	Name: 'KIEKER'; Hostname: 'COLLIN'; experimentID: '1'
+JMXController: JMX disabled
+TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
+	Time in nanoseconds (with nanoseconds precision) since Thu Jan 01 01:00:00 CET 1970'
+ProbeController: disabled
+WriterController:
+	Queue type: class kieker.monitoring.queue.BlockingQueueDecorator
+	Queue capacity: 10000
+	Insert behavior (a.k.a. QueueFullBehavior): class kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior
+		numBlocked: 0
+Writer: 'kieker.monitoring.writer.filesystem.FileWriter'
+	Configuration:
+		kieker.monitoring.writer.filesystem.FileWriter.logFilePoolHandler='kieker.monitoring.writer.filesystem.RotatingLogFilePoolHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.charsetName='UTF-8'
+		kieker.monitoring.writer.filesystem.FileWriter.logStreamHandler='kieker.monitoring.writer.filesystem.TextLogStreamHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.maxEntriesInFile='25000'
+		kieker.monitoring.writer.filesystem.FileWriter.maxLogFiles='-1'
+		kieker.monitoring.writer.filesystem.FileWriter.maxLogSize='-1'
+		kieker.monitoring.writer.filesystem.FileWriter.mapFileHandler='kieker.monitoring.writer.filesystem.TextMapFileHandler'
+		kieker.monitoring.writer.filesystem.FileWriter.flush='false'
+		kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=''
+		kieker.monitoring.writer.filesystem.FileWriter.actualStoragePath='C:\Users\TINOTE~1\AppData\Local\Temp\kieker-20240118-104833-303100471558900-UTC--KIEKER'
+
+	Automatic assignment of logging timestamps: 'false'
+Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: '0'
+11:48:33.851 [main] INFO  teetime.framework.Execution - Using scheduler: teetime.framework.scheduling.pushpullmodel.PushPullScheduling@294e5088
+11:49:16.456 [Thread-1] INFO  k.m.c.c.MonitoringController - ShutdownHook notifies controller to initiate shutdown.
+11:49:16.457 [Thread-1] INFO  k.m.c.c.MonitoringController - Terminating monitoring...
+11:49:16.457 [Thread-1] INFO  k.m.c.c.MonitoringController - Shutting down Monitoring Controller (KIEKER)

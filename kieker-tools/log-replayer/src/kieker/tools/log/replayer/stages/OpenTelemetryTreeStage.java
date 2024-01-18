@@ -38,25 +38,18 @@ import kieker.visualization.trace.call.tree.TraceCallTreeNode;
 public class OpenTelemetryTreeStage extends AbstractTraceProcessingStage<ExecutionTrace> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OpenTelemetryTreeStage.class);
-
-
     private AbstractCallTreeNode root;
     private Measurement measurementConfig;
     private final TestMethod test;
     private final boolean ignoreEOIs;
     private final NoClassMapping mapping;
     private final Tracer tracer;
-    
     private int lastStackSize = 1;
     private AbstractCallTreeNode lastParent;
     private AbstractCallTreeNode lastAdded;
     private long testTraceId = -1;
     private ExecutionTrace lastExecutionTrace;
     
-
-
-
-
     public OpenTelemetryTreeStage(final SystemModelRepository systemModelRepository, final TestMethod test,
             final boolean ignoreEOIs, final Measurement config, final NoClassMapping mapping) {
         super(systemModelRepository);
@@ -103,7 +96,7 @@ public class OpenTelemetryTreeStage extends AbstractTraceProcessingStage<Executi
                 final String call = fullClassname + "#" + methodname;
 
                 // Convert the Operation to an AbstractMessage
-             // Assuming there is a different method for converting Operation to AbstractMessage
+           
                 AbstractMessage operationAsMessage = convertOperationToAbstractMessage(execution.getOperation());
 
                 
@@ -183,7 +176,6 @@ public class OpenTelemetryTreeStage extends AbstractTraceProcessingStage<Executi
             for (Object candidateObj : lastParent.getChildEdges()) {
                 AbstractCallTreeNode<T> candidate = (AbstractCallTreeNode<T>) candidateObj;
                 
-                // Assuming equals() method is appropriately overridden in AbstractCallTreeNode
                 if (candidate.getEntity().equals(kiekerPattern)) {
                     hasEqualNode = true;
                     lastAdded = candidate;
@@ -247,10 +239,9 @@ public class OpenTelemetryTreeStage extends AbstractTraceProcessingStage<Executi
      }
 
      private void readRoot(final Execution execution, final String call, final MessageTrace kiekerPattern) {
-    	    // Assuming AllocationComponentOperationPair has a constructor that takes necessary parameters
     	    AllocationComponentOperationPair allocationComponentOperationPair =
     	            new AllocationComponentOperationPair(lastStackSize, null, null);
-
+    	    
     	    // Convert the call string to an int using hashCode
     	    int callId = call.hashCode();
 
