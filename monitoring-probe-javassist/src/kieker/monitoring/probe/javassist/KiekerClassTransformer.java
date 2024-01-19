@@ -35,17 +35,19 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 				ClassPool cp = ClassPool.getDefault();
 				try {
 					CtClass cc = cp.get(realClassName);
-					
-					addStaticFields(cp, cc);
-					
-					for (CtMethod method : cc.getDeclaredMethods()) {
-						instrumentMethod(cp, method);
+					if (!cc.isInterface()) {
+						// TODO: Interfaces would also require instrumentation of default method; this is left out for now because of the experimental structure
+						addStaticFields(cp, cc);
+						
+						for (CtMethod method : cc.getDeclaredMethods()) {
+							instrumentMethod(cp, method);
+						}
+						
+						byte[] byteCode = cc.toBytecode();
+		                cc.detach();
+						
+						return byteCode;
 					}
-					
-					byte[] byteCode = cc.toBytecode();
-	                cc.detach();
-					
-					return byteCode;
 				} catch (NotFoundException | CannotCompileException | IOException e) {
 					e.printStackTrace();
 				}
