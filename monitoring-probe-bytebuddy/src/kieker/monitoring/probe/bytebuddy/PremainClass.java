@@ -1,14 +1,30 @@
 package kieker.monitoring.probe.bytebuddy;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Modifier;
+import java.security.ProtectionDomain;
 import java.util.List;
 
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.registry.ControlFlowRegistry;
+import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.DynamicType.Builder;
+import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional.Valuable;
+import net.bytebuddy.dynamic.Transformer;
+import net.bytebuddy.implementation.MethodCall;
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
+import net.bytebuddy.implementation.bytecode.StackManipulation;
+import net.bytebuddy.implementation.bytecode.member.FieldAccess;
+import net.bytebuddy.implementation.bytecode.member.MethodInvocation;
+import net.bytebuddy.implementation.bytecode.member.MethodReturn;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
 
@@ -74,6 +90,51 @@ public class PremainClass {
 	                        },
 	                        OperationExecutionAdvice.class.getName()
 	                ))
+	        .transform(new AgentBuilder.Transformer() {
+
+				@Override
+				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
+						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					Valuable<?> definedField = builder.defineField("CTRLINST", IMonitoringController.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+					return definedField;
+				}
+	        })
+	        .transform(new AgentBuilder.Transformer() {
+
+				@Override
+				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
+						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					Valuable<?> definedField = builder.defineField("TIME", ITimeSource.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+					return definedField;
+				}
+	        })
+	        .transform(new AgentBuilder.Transformer() {
+
+				@Override
+				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
+						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					Valuable<?> definedField = builder.defineField("VMNAME", String.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+					return definedField;
+				}
+	        })
+	        .transform(new AgentBuilder.Transformer() {
+
+				@Override
+				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
+						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					Valuable<?> definedField = builder.defineField("CFREGISTRY", ControlFlowRegistry.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+					return definedField;
+				}
+	        })
+	        .transform(new AgentBuilder.Transformer() {
+
+				@Override
+				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
+						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					Valuable<?> definedField = builder.defineField("SESSIONREGISTRY", SessionRegistry.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+					return definedField;
+				}
+	        })
 	        .installOn(inst);
 		} else {
 			System.err.println("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");

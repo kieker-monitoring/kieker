@@ -1,16 +1,10 @@
 package kieker.monitoring.probe.bytebuddy;
 
-import java.util.Stack;
-
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.operationExecution.OperationStartData;
 import kieker.monitoring.timer.ITimeSource;
 import net.bytebuddy.asm.Advice;
@@ -18,12 +12,20 @@ import net.bytebuddy.asm.Advice;
 public class OperationExecutionAdvice {
 	
 	@Advice.OnMethodEnter
-    public static OperationStartData enter(@Advice.Origin String operationSignature) {
-		final IMonitoringController CTRLINST = MonitoringController.getInstance();
-		final ITimeSource TIME = CTRLINST.getTimeSource();
-		final String VMNAME = CTRLINST.getHostname();
-		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-		final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+    public static OperationStartData enter(
+    		@Advice.Origin String operationSignature,
+    		@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
+    		@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
+    		@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
+    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY,
+    		@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
+		if (CTRLINST == null) {
+			CTRLINST = MonitoringController.getInstance();
+			TIME = CTRLINST.getTimeSource();
+			VMNAME = CTRLINST.getHostname();
+			CFREGISTRY = ControlFlowRegistry.INSTANCE;
+			SESSIONREGISTRY = SessionRegistry.INSTANCE;
+		}
 		
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
@@ -63,11 +65,10 @@ public class OperationExecutionAdvice {
 	@Advice.OnMethodExit
     public static void exit(
     		@Advice.Enter OperationStartData startData,
-    		@Advice.Origin String operationSignature) {
-		final IMonitoringController CTRLINST = MonitoringController.getInstance();
-		final ITimeSource TIME = CTRLINST.getTimeSource();
-		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-		
+    		@Advice.Origin String operationSignature,
+    		@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
+    		@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
+    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
 		if (startData == null) {
 			return;
 		}
