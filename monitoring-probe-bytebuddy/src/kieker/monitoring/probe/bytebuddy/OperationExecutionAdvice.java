@@ -2,6 +2,7 @@ package kieker.monitoring.probe.bytebuddy;
 
 import java.util.Stack;
 
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -16,43 +17,60 @@ import net.bytebuddy.asm.Advice;
 
 public class OperationExecutionAdvice {
 	
-	private static final ThreadLocal<Stack<OperationStartData>> stack = new ThreadLocal<Stack<OperationStartData>>() {
-		@Override
-		protected Stack<OperationStartData> initialValue() {
-			return new Stack<>();
-		}
-	};
-	
 	@Advice.OnMethodEnter
-    public static void enter(@Advice.Origin String operationSignature) {
+    public static OperationStartData enter(@Advice.Origin String operationSignature) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
-		final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
+		final String VMNAME = CTRLINST.getHostname();
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 		
 		if (!CTRLINST.isMonitoringEnabled()) {
-			return;
+			return null;
 		}
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
-			return;
+			return null;
 		}
-		// common fields
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
-		final boolean newTrace = trace == null;
-		if (newTrace) {
-			trace = TRACEREGISTRY.registerTrace();
-			CTRLINST.newMonitoringRecord(trace);
+		final boolean entrypoint;
+		final String hostname = VMNAME;
+		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		final int eoi; // this is executionOrderIndex-th execution in this trace
+		final int ess; // this is the height in the dynamic call tree of this execution
+		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
+		if (traceId == -1) {
+			entrypoint = true;
+			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();
+			CFREGISTRY.storeThreadLocalEOI(0);
+			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
+			eoi = 0;
+			ess = 0;
+		} else {
+			entrypoint = false;
+			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			if ((eoi == -1) || (ess == -1)) {
+				System.err.println("eoi and/or ess have invalid values: eoi == "+eoi+" ess == " +ess);
+				CTRLINST.terminateMonitoring();
+			}
 		}
-		final long traceId = trace.getTraceId();
-//		final String clazz = thisObject.getClass().getName();
-		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, null));
+		// measure before
+		final long tin = TIME.getTime();
+
+		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+		return data;
     }
 	
 	@Advice.OnMethodExit
-    public static void exit(@Advice.Origin String operationSignature) {
+    public static void exit(
+    		@Advice.Enter OperationStartData startData,
+    		@Advice.Origin String operationSignature) {
 		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		final ITimeSource TIME = CTRLINST.getTimeSource();
-		final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		
+		if (startData == null) {
+			return;
+		}
 		
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
@@ -60,11 +78,19 @@ public class OperationExecutionAdvice {
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		// common fields
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
-		final long traceId = trace.getTraceId();
 		
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, null));
+		final long tout = TIME.getTime();
+		CTRLINST.newMonitoringRecord(
+				new OperationExecutionRecord(operationSignature, startData.getSessionId(),
+						startData.getTraceId(), startData.getTin(), tout, startData.getHostname(), startData.getEoi(), startData.getEss()));
+		// cleanup
+		if (startData.isEntrypoint()) {
+			CFREGISTRY.unsetThreadLocalTraceId();
+			CFREGISTRY.unsetThreadLocalEOI();
+			CFREGISTRY.unsetThreadLocalESS();
+		} else {
+			CFREGISTRY.storeThreadLocalESS(startData.getEss()); // next operation is ess
+		}
 	}
     		
 	
