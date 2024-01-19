@@ -34,4 +34,13 @@ public class KiekerPatternUtil {
 		}
 		return false;
 	}
+	
+	public static boolean methodIsContained(List<KiekerPattern> patternObjects, String signature) {
+		for (KiekerPattern pattern : patternObjects) {
+			if (pattern.getFullPattern().matcher(signature).matches()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
