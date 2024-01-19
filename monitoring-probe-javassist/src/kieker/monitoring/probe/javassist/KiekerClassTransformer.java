@@ -15,6 +15,7 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
+import kieker.monitoring.util.KiekerPattern;
 
 public class KiekerClassTransformer implements ClassFileTransformer {
 	
