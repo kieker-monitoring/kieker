@@ -36,7 +36,7 @@ dependencies {
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api 'nz.ac.waikato.cms.weka:weka-stable:3.6.13' // used by behavior analysis
 
-	api 'de.cau.cs.se.teetime:teetime:3.1.0'
+	api "de.cau.cs.se.teetime:teetime:${libTeetimeVersionVersion}"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
@@ -63,7 +63,7 @@ dependencies {
 	// Use JUnit test framework
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
-	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
 	testRuntimeOnly 'org.apache.derby:derby:10.17.1.0'	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }

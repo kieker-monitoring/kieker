@@ -53,33 +53,78 @@ public class FindDistinctCollectionsStage extends
 	protected void execute(final ModelRepository repository) throws Exception {
 		final Connections connections = repository.getModel(CollectionPackage.Literals.CONNECTIONS);
 
-		final Map<ComponentType, Set<OperationType>> providedOperationsMap = this
+		final Map<ComponentType, Set<OperationType>> providedComponentToCallerMap = this
 				.createProvidedComponentToCallerOperationsMap(connections);
 
 		final Map<OperationType, Set<ComponentType>> calleeToCallerComponentSetMap = this
 				.createCalleeOperationToCallerComponentSetMap(connections);
 
 		final Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> protointerfaceSourceGroupedOperations = this
-				.groupCalleesByCallerComponentSet(providedOperationsMap, calleeToCallerComponentSetMap);
+				.groupCalleesByCallerComponentSet(providedComponentToCallerMap, calleeToCallerComponentSetMap);
 
 		this.outputPort.send(new Tuple<>(repository, protointerfaceSourceGroupedOperations));
+	}
+
+	/**
+	 * Create a map for all callers to the respective called component (provided)
+	 *
+	 * @param connections
+	 * @return
+	 */
+	private Map<ComponentType, Set<OperationType>> createProvidedComponentToCallerOperationsMap(
+			final Connections connections) {
+		final Map<ComponentType, Set<OperationType>> providedComponentToCallerOperationsMap = new HashMap<>();
+		for (final OperationCollection connection : connections.getConnections().values()) {
+			Set<OperationType> callerSet = providedComponentToCallerOperationsMap.get(connection.getProvided());
+			if (callerSet == null) {
+				callerSet = new HashSet<>();
+				providedComponentToCallerOperationsMap.put(connection.getProvided(), callerSet);
+			}
+			for (final OperationType caller : connection.getCallers().values()) {
+				callerSet.add(caller);
+			}
+		}
+		return providedComponentToCallerOperationsMap;
+	}
+
+	/**
+	 * Generate a map for callee operations to their set of caller components.
+	 *
+	 * @param connections
+	 *            all cross module connections
+	 * @return callee to caller component set map
+	 */
+	private Map<OperationType, Set<ComponentType>> createCalleeOperationToCallerComponentSetMap(
+			final Connections connections) {
+		final Map<OperationType, Set<ComponentType>> calleeOperationToCallerComponentSetMap = new HashMap<>();
+		for (final OperationCollection connection : connections.getConnections().values()) {
+			for (final OperationType callee : connection.getCallees().values()) {
+				Set<ComponentType> callerComponentSet = calleeOperationToCallerComponentSetMap.get(callee);
+				if (callerComponentSet == null) {
+					callerComponentSet = new HashSet<>();
+					calleeOperationToCallerComponentSetMap.put(callee, callerComponentSet);
+				}
+				callerComponentSet.add(connection.getRequired());
+			}
+		}
+		return calleeOperationToCallerComponentSetMap;
 	}
 
 	/**
 	 * Creates a map of callee component to caller component set and the respective
 	 * callee?-operation set.
 	 *
-	 * @param providedOperationsMap
+	 * @param providedComponentToCallerMap
 	 * @param calleeToCallerComponentSetMap
 	 * @return returns map
 	 */
 	private Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> groupCalleesByCallerComponentSet(
-			final Map<ComponentType, Set<OperationType>> providedOperationsMap,
+			final Map<ComponentType, Set<OperationType>> providedComponentToCallerMap,
 			final Map<OperationType, Set<ComponentType>> calleeToCallerComponentSetMap) {
 		final Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> protointerfaceSourceGroupedOperations = new HashMap<>();
-		providedOperationsMap.entrySet().forEach(entry -> {
+		providedComponentToCallerMap.entrySet().forEach(entry -> {
 			protointerfaceSourceGroupedOperations.put(entry.getKey(), // callee component
-					this.createSourceGroupedOperations(entry.getValue(), // callee operation
+					this.createSourceGroupedOperations(entry.getValue(), // callee operations
 							calleeToCallerComponentSetMap));
 		});
 		return protointerfaceSourceGroupedOperations;
@@ -100,69 +145,48 @@ public class FindDistinctCollectionsStage extends
 		final Map<Set<ComponentType>, Set<OperationType>> callerComponentsToCalleesMap = new HashMap<>();
 		providedOperations.forEach(providedOperation -> {
 			final Set<ComponentType> callerComponentSet = calleeToCallerComponentSetMap.get(providedOperation);
-			final Set<OperationType> operationTypeSet = this.findOperationSetByCallerComponentSet(callerComponentSet,
+			final Optional<Entry<Set<ComponentType>, Set<OperationType>>> element = this.findOperationSetByCallerComponentSet(callerComponentSet,
 					callerComponentsToCalleesMap);
+
+			// create and add or insert into existing operation set
+			final Set<OperationType> operationTypeSet;
+			if (element.isEmpty()) {
+				operationTypeSet = new HashSet<>();
+				callerComponentsToCalleesMap.put(callerComponentSet, operationTypeSet);
+			} else {
+				operationTypeSet = element.get().getValue();
+			}
 			operationTypeSet.add(providedOperation);
 		});
 
 		return callerComponentsToCalleesMap;
 	}
 
-	private Set<OperationType> findOperationSetByCallerComponentSet(final Set<ComponentType> callerComponentSet,
-			final Map<Set<ComponentType>, Set<OperationType>> callerComponentsToCalleesMap) {
-		final Optional<Entry<Set<ComponentType>, Set<OperationType>>> element = callerComponentsToCalleesMap.entrySet()
-				.stream().filter(entry -> this.compareSets(entry.getKey(), callerComponentSet)).findFirst();
-		if (element.isEmpty()) {
-			final Set<OperationType> operationTypeSet = new HashSet<>();
-			callerComponentsToCalleesMap.put(callerComponentSet, operationTypeSet);
-			return operationTypeSet;
-		} else {
-			return element.get().getValue();
-		}
+	/**
+	 * Search for an existing entry in the component type to callee type set and return it.
+	 *
+	 * @param requiringComponentSet
+	 *            set of requiring components for the given callee operation
+	 * @param requiringComponentsToCalleesMap
+	 *            the map to be search for
+	 * @return returns either a set entry on success or an empty optional element
+	 */
+	private Optional<Entry<Set<ComponentType>, Set<OperationType>>> findOperationSetByCallerComponentSet(final Set<ComponentType> requiringComponentSet,
+			final Map<Set<ComponentType>, Set<OperationType>> requiringComponentsToCalleesMap) {
+		return requiringComponentsToCalleesMap.entrySet()
+				.stream().filter(entry -> this.compareSets(entry.getKey(), requiringComponentSet)).findFirst();
 	}
 
 	/**
-	 * Generate a map for callee operationa to their set of caller components.
+	 * Compare two sets of an existingSet with a callerSet.
 	 *
-	 * @param connections
-	 *            all cross module connections
-	 * @return callee to caller component set map
+	 * @param existingSet
+	 * @param callerSet
+	 * @return
 	 */
-	private Map<OperationType, Set<ComponentType>> createCalleeOperationToCallerComponentSetMap(
-			final Connections connections) {
-		final Map<OperationType, Set<ComponentType>> calleeOperationToCallerComponentSetMap = new HashMap<>();
-		for (final OperationCollection connection : connections.getConnections().values()) {
-			for (final OperationType callee : connection.getOperations().values()) {
-				Set<ComponentType> callerSet = calleeOperationToCallerComponentSetMap.get(callee);
-				if (callerSet == null) {
-					callerSet = new HashSet<>();
-					calleeOperationToCallerComponentSetMap.put(callee, callerSet);
-				}
-				callerSet.add(connection.getCaller());
-			}
-		}
-		return calleeOperationToCallerComponentSetMap;
-	}
-
-	private Map<ComponentType, Set<OperationType>> createProvidedComponentToCallerOperationsMap(
-			final Connections connections) {
-		final Map<ComponentType, Set<OperationType>> providedComponentToCallerOperationsMap = new HashMap<>();
-		for (final OperationCollection connection : connections.getConnections().values()) {
-			for (final OperationType caller : connection.getOperations().values()) {
-				Set<OperationType> callerSet = providedComponentToCallerOperationsMap.get(connection.getCallee());
-				if (callerSet == null) {
-					callerSet = new HashSet<>();
-					providedComponentToCallerOperationsMap.put(connection.getCallee(), callerSet);
-				}
-				callerSet.add(caller);
-			}
-		}
-		return providedComponentToCallerOperationsMap;
-	}
-
 	private boolean compareSets(final Set<ComponentType> existingSet, final Set<ComponentType> callerSet) {
 		if (existingSet.size() == callerSet.size()) {
-			return existingSet.stream().anyMatch(existingComponentType -> callerSet.contains(existingComponentType));
+			return existingSet.stream().allMatch(existingComponentType -> callerSet.contains(existingComponentType));
 		} else {
 			return false;
 		}

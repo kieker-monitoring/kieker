@@ -19,7 +19,7 @@ dependencies {
 	implementation project(':tools')
 	implementation project(':tools:restructuring')
 
-	implementation 'de.cau.cs.se.teetime:teetime:3.1.0'
+	implementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.23.0'
@@ -44,7 +44,7 @@ dependencies {
 	testImplementation project (path: ':tools', configuration: 'testArchives')
 
 	testImplementation 'org.mockito:mockito-core:5.7.0'
-	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
 }
 

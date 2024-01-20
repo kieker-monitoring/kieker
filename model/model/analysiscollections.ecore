@@ -7,9 +7,11 @@
         eType="#//CouplingToOperationMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperationCollection">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="required" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provided" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callees" upperBound="-1"
+        eType="#//NameToOperationMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callers" upperBound="-1"
         eType="#//NameToOperationMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CouplingToOperationMap" instanceClassName="java.util.Map$Entry">
@@ -34,7 +36,7 @@
         <details key="body" value="return (this.caller == null ? 0 : this.caller.hashCode()) ^ (this.callee == null ? 0 : this.callee.hashCode());"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="required" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provided" eType="ecore:EClass analysismodel.ecore#//type/ComponentType"/>
   </eClassifiers>
 </ecore:EPackage>
