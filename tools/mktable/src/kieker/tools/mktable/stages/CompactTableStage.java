@@ -20,6 +20,12 @@ import kieker.analysis.generic.data.MoveOperationEntry;
 
 import teetime.stage.basic.AbstractFilter;
 
+/**
+ * Receives a source to target component table and searches for identical rows, merge them and increase the counter for that row.
+ *
+ * @author Reiner Jung
+ * @since 2.0.0 
+ */
 public class CompactTableStage extends AbstractFilter<Table<String, MoveOperationEntry>> {
 
 	@Override

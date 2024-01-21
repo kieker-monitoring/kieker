@@ -159,17 +159,17 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 		if (value != null) {
 			if (value instanceof Coupling) {
 				final Coupling coupling = (Coupling) value;
-		                if (this.caller == null && coupling.getCaller() == null) {
-		                	if (this.callee == null && coupling.getCallee() == null) {
+		                if (this.required == null && coupling.getRequired() == null) {
+		                	if (this.provided == null && coupling.getProvided() == null) {
 						return true;
-					} else if (this.callee != null && coupling.getCallee() != null) {
-		 				return this.callee.equals(coupling.getCallee());
+					} else if (this.provided != null && coupling.getProvided() != null) {
+		 				return this.provided.equals(coupling.getProvided());
 					}
-				} else if (this.caller != null && coupling.getCaller() != null) {
-					if (this.callee == null && coupling.getCallee() == null) {
-						return this.caller.equals(coupling.getCaller()) ;
-					} else if (this.callee != null && coupling.getCallee() != null) {
-						return this.caller.equals(coupling.getCaller()) && this.callee.equals(coupling.getCallee());
+				} else if (this.required != null && coupling.getRequired() != null) {
+					if (this.provided == null && coupling.getProvided() == null) {
+						return this.required.equals(coupling.getRequired()) ;
+					} else if (this.provided != null && coupling.getProvided() != null) {
+						return this.required.equals(coupling.getRequired()) && this.provided.equals(coupling.getProvided());
 					}
 				}
 			}
@@ -184,7 +184,7 @@ public class CouplingImpl extends MinimalEObjectImpl.Container implements Coupli
 	 */
 	@Override
 	public int hashCode() {
-		return (this.caller == null ? 0 : this.caller.hashCode()) ^ (this.callee == null ? 0 : this.callee.hashCode());
+		return (this.required == null ? 0 : this.required.hashCode()) ^ (this.provided == null ? 0 : this.provided.hashCode());
 	}
 
 	/**

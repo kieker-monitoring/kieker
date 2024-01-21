@@ -11,8 +11,8 @@ repositories {
 
 dependencies {
         implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
-        implementation 'org.slf4j:slf4j-api:1.7.30'
-        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation "org.slf4j:slf4j-api:1.7.30"
+        implementation "org.codehaus.groovy:groovy-all:3.0.2"
         implementation "com.beust:jcommander:1.72"
 
         implementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
