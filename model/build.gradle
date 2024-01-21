@@ -25,9 +25,9 @@ targetCompatibility = 1.8
 dependencies {
 	api project(':common')
 
-	api "org.eclipse.emf:org.eclipse.emf.common:2.22.0"
+	api "org.eclipse.emf:org.eclipse.emf.common:2.29.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore:2.24.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
 }
 
 // publishing

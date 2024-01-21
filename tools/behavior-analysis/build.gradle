@@ -20,8 +20,8 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	implementation "com.edwardraff:JSAT:0.0.9"
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.12.3"
-	implementation "com.fasterxml.jackson.core:jackson-core:2.12.3"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
+	implementation "com.fasterxml.jackson.core:jackson-core:2.16.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
