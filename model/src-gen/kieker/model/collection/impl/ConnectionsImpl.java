@@ -24,7 +24,7 @@ import kieker.model.collection.OperationCollection;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.collection.impl.ConnectionsImpl#getConnections <em>Connections</em>}</li>
+ *   <li>{@link kieker.model.collection.impl.ConnectionsImpl#getConnections <em>Connections</em>}</li>
  * </ul>
  *
  * @generated
@@ -34,7 +34,6 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	 * The cached value of the '{@link #getConnections() <em>Connections</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getConnections()
 	 * @generated
 	 * @ordered
@@ -44,7 +43,6 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected ConnectionsImpl() {
@@ -54,7 +52,6 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -65,30 +62,26 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EMap<Coupling, OperationCollection> getConnections() {
-		if (this.connections == null) {
-			this.connections = new EcoreEMap<>(CollectionPackage.Literals.COUPLING_TO_OPERATION_MAP, CouplingToOperationMapImpl.class,
-					this,
-					CollectionPackage.CONNECTIONS__CONNECTIONS);
+		if (connections == null) {
+			connections = new EcoreEMap<Coupling,OperationCollection>(CollectionPackage.Literals.COUPLING_TO_OPERATION_MAP, CouplingToOperationMapImpl.class, this, CollectionPackage.CONNECTIONS__CONNECTIONS);
 		}
-		return this.connections;
+		return connections;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case CollectionPackage.CONNECTIONS__CONNECTIONS:
-			return ((InternalEList<?>) this.getConnections()).basicRemove(otherEnd, msgs);
+			case CollectionPackage.CONNECTIONS__CONNECTIONS:
+				return ((InternalEList<?>)getConnections()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -96,18 +89,14 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case CollectionPackage.CONNECTIONS__CONNECTIONS:
-			if (coreType) {
-				return this.getConnections();
-			} else {
-				return this.getConnections().map();
-			}
+			case CollectionPackage.CONNECTIONS__CONNECTIONS:
+				if (coreType) return getConnections();
+				else return getConnections().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -115,15 +104,14 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case CollectionPackage.CONNECTIONS__CONNECTIONS:
-			((EStructuralFeature.Setting) this.getConnections()).set(newValue);
-			return;
+			case CollectionPackage.CONNECTIONS__CONNECTIONS:
+				((EStructuralFeature.Setting)getConnections()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -131,15 +119,14 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case CollectionPackage.CONNECTIONS__CONNECTIONS:
-			this.getConnections().clear();
-			return;
+			case CollectionPackage.CONNECTIONS__CONNECTIONS:
+				getConnections().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -147,14 +134,13 @@ public class ConnectionsImpl extends MinimalEObjectImpl.Container implements Con
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case CollectionPackage.CONNECTIONS__CONNECTIONS:
-			return (this.connections != null) && !this.connections.isEmpty();
+			case CollectionPackage.CONNECTIONS__CONNECTIONS:
+				return connections != null && !connections.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

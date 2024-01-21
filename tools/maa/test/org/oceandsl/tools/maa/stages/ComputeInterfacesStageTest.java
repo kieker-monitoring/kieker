@@ -30,7 +30,7 @@ import kieker.model.analysismodel.deployment.DeploymentModel;
 import kieker.model.analysismodel.deployment.DeploymentPackage;
 import kieker.model.analysismodel.type.ComponentType;
 import kieker.model.analysismodel.type.ProvidedInterfaceType;
-import kieker.tools.maa.stages.CollectConnectionsStage;
+import kieker.tools.maa.stages.CollectInterModuleCallsStage;
 
 import teetime.framework.test.StageTester;
 
@@ -46,7 +46,7 @@ class ComputeInterfacesStageTest {
 		final ModelRepository modelRepository = TestModelRepositoryUtils.createThreeComponentModel();
 		TestModelInvocationUtils.addInvocations(modelRepository);
 
-		final CollectConnectionsStage stage = new CollectConnectionsStage();
+		final CollectInterModuleCallsStage stage = new CollectInterModuleCallsStage();
 		StageTester.test(stage).send(modelRepository).to(stage.getInputPort()).start();
 		final DeploymentModel deploymentModel = modelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL);
 		for (final DeploymentContext context : deploymentModel.getContexts().values()) {
@@ -137,7 +137,7 @@ class ComputeInterfacesStageTest {
 		TestModelInvocationUtils.addProvidedInterfaces(modelRepository);
 		TestModelInvocationUtils.addInvocations(modelRepository);
 
-		final CollectConnectionsStage stage = new CollectConnectionsStage();
+		final CollectInterModuleCallsStage stage = new CollectInterModuleCallsStage();
 		StageTester.test(stage).send(modelRepository).to(stage.getInputPort()).start();
 		final DeploymentModel deploymentModel = modelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL);
 		for (final DeploymentContext context : deploymentModel.getContexts().values()) {
@@ -163,7 +163,7 @@ class ComputeInterfacesStageTest {
 		TestModelInvocationUtils.addRequiredInterfaces(modelRepository);
 		TestModelInvocationUtils.addInvocations(modelRepository);
 
-		final CollectConnectionsStage stage = new CollectConnectionsStage();
+		final CollectInterModuleCallsStage stage = new CollectInterModuleCallsStage();
 		StageTester.test(stage).send(modelRepository).to(stage.getInputPort()).start();
 		final DeploymentModel deploymentModel = modelRepository.getModel(DeploymentPackage.Literals.DEPLOYMENT_MODEL);
 		for (final DeploymentContext context : deploymentModel.getContexts().values()) {
