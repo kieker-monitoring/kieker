@@ -15,6 +15,7 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
+import javassist.bytecode.LineNumberAttribute;
 import kieker.monitoring.util.KiekerPattern;
 
 public class KiekerClassTransformer implements ClassFileTransformer {
@@ -64,9 +65,6 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		method.addLocalVariable("operationSignature", cp.get("java.lang.String"));
 		method.insertBefore("operationSignature = \"" + signature + "\";");
 		
-		method.addLocalVariable("sessionId", cp.get("java.lang.String"));
-		method.insertBefore("sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();");
-		
 		method.addLocalVariable("traceId", CtClass.longType);
 
 		method.addLocalVariable("entrypoint", CtClass.booleanType);
@@ -96,8 +94,9 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		
 		StringBuilder endBlock = new StringBuilder();
 		
-		endBlock.append("if (CTRLINST.isMonitoringEnabled() ) {"
+		endBlock.append("if (CTRLINST.isMonitoringEnabled() && CTRLINST.isProbeActivated(operationSignature)) {"
 				+ "   long tout = TIME.getTime();"
+				+ "   java.lang.String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();"
 				+ "   CTRLINST.newMonitoringRecord(\n"
 				+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
 				+ "						traceId, tin, tout, VMNAME, eoi, ess));"
