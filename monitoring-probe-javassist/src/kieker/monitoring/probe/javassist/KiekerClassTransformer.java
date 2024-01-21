@@ -73,7 +73,8 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		method.addLocalVariable("eoi", CtClass.intType);
 		method.addLocalVariable("ess", CtClass.intType);
 		
-		method.insertBefore("traceId = CFREGISTRY.recallThreadLocalTraceId();if (traceId == -1) {\n"
+		method.insertBefore("   traceId = CFREGISTRY.recallThreadLocalTraceId();"
+				+ "  if (traceId == -1) {\n"
 				+ "			entrypoint = true;\n"
 				+ "			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();\n"
 				+ "			CFREGISTRY.storeThreadLocalEOI(0);\n"
@@ -94,13 +95,13 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		method.insertBefore("tin = TIME.getTime();");
 		
 		StringBuilder endBlock = new StringBuilder();
-		method.addLocalVariable("tout", CtClass.longType);
-		method.addLocalVariable("opTime", CtClass.longType);
-		endBlock.append("tout = TIME.getTime();");
 		
-		endBlock.append("CTRLINST.newMonitoringRecord(\n"
+		endBlock.append("if (CTRLINST.isMonitoringEnabled() ) {"
+				+ "   long tout = TIME.getTime();"
+				+ "   CTRLINST.newMonitoringRecord(\n"
 				+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
-				+ "						traceId, tin, tout, VMNAME, eoi, ess));");
+				+ "						traceId, tin, tout, VMNAME, eoi, ess));"
+				+ "} ");
 		
 		method.insertAfter(endBlock.toString());
 	}
