@@ -1,1 +1,2 @@
 * text=auto
+kieker-tools/test-resources/kieker.monitoring.probe.aspectj.flow.operationExecution/zipkin-server-3.0.4-exec.jar filter=lfs diff=lfs merge=lfs -text
