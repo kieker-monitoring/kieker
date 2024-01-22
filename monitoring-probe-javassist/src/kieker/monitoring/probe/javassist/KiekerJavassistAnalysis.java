@@ -14,20 +14,20 @@ import kieker.monitoring.timer.ITimeSource;
 public class KiekerJavassistAnalysis {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerJavassistAnalysis.class);
 	
-	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final String VMNAME = CTRLINST.getHostname();
-	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
-	
 	public static DiSLOperationStartData operationStart(final String operationSignature) {
-
+		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return null;
 		}
+		
+		final ITimeSource TIME = CTRLINST.getTimeSource();
+		final String VMNAME = CTRLINST.getHostname();
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+		
 		// common fields
 		final boolean entrypoint;
 		final String hostname = VMNAME;
@@ -59,7 +59,7 @@ public class KiekerJavassistAnalysis {
 	}
 
 	public static void operationEnd(DiSLOperationStartData startData) {
-		
+		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -68,6 +68,9 @@ public class KiekerJavassistAnalysis {
 			return;
 		}
 
+		final ITimeSource TIME = CTRLINST.getTimeSource();
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		
 		final long tout = TIME.getTime();
 		OperationExecutionRecord record = new OperationExecutionRecord(startData.getOperationSignature(), startData.getSessionId(),
 				startData.getTraceId(), startData.getTin(), tout, startData.getHostname(), startData.getEoi(), startData.getEss());
