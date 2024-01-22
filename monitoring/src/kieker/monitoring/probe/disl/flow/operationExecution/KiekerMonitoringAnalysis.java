@@ -10,9 +10,9 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
-public class KiekerDiSLAnalysis {
+public class KiekerMonitoringAnalysis {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerDiSLAnalysis.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerMonitoringAnalysis.class);
 	
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -20,13 +20,7 @@ public class KiekerDiSLAnalysis {
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
-	public static DiSLOperationStartData operationStart(final String operationSignature) {
-		final IMonitoringController CTRLINST = MonitoringController.getInstance();
-		final ITimeSource TIME = CTRLINST.getTimeSource();
-		final String VMNAME = CTRLINST.getHostname();
-		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-		final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
-
+	public static FullOperationStartData operationStart(final String operationSignature) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
@@ -59,11 +53,11 @@ public class KiekerDiSLAnalysis {
 		// measure before
 		final long tin = TIME.getTime();
 
-		final DiSLOperationStartData data = new DiSLOperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess, operationSignature);
+		final FullOperationStartData data = new FullOperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess, operationSignature);
 		return data;
 	}
 
-	public static void operationEnd(DiSLOperationStartData startData) {
+	public static void operationEnd(FullOperationStartData startData) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}

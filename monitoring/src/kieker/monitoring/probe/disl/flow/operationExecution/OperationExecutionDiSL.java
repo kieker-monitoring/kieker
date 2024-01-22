@@ -14,11 +14,11 @@ public class OperationExecutionDiSL {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractOperationExecutionAspect.class);
 
 	@SyntheticLocal
-	static DiSLOperationStartData data;
+	static FullOperationStartData data;
 
 	@Before(marker = BodyMarker.class, scope = "MonitoredClass*.*")
 	public static void beforemain(final KiekerStaticContext c) {
-		data = KiekerDiSLAnalysis.operationStart(c.operationSignature());
+		data = KiekerMonitoringAnalysis.operationStart(c.operationSignature());
 	}
 
 	@After(marker = BodyMarker.class, scope = "MonitoredClass*.*")
@@ -29,7 +29,7 @@ public class OperationExecutionDiSL {
 		// was enabled and we should complete it by calling "operationEnd".
 		//
 		if (data != null) {
-			KiekerDiSLAnalysis.operationEnd(data);
+			KiekerMonitoringAnalysis.operationEnd(data);
 		}
 	}
 }

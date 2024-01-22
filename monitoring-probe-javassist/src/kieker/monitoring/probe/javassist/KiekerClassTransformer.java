@@ -57,12 +57,12 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		String signature = buildSignature(method);
 		System.out.println("Signature: " + signature);
 		
-		method.addLocalVariable("operationStartData", cp.get("kieker.monitoring.probe.disl.flow.operationExecution.DiSLOperationStartData"));
-		method.insertBefore("operationStartData = kieker.monitoring.probe.javassist.KiekerJavassistAnalysis.operationStart(\"" + signature + "\");");
+		method.addLocalVariable("operationStartData", cp.get("kieker.monitoring.probe.disl.flow.operationExecution.FullOperationStartData"));
+		method.insertBefore("operationStartData = kieker.monitoring.probe.disl.flow.operationExecution.KiekerMonitoringAnalysis.operationStart(\"" + signature + "\");");
 		
 		StringBuilder endBlock = new StringBuilder();
 		endBlock.append("if (operationStartData != null) {"
-				+ "   kieker.monitoring.probe.javassist.KiekerJavassistAnalysis.operationEnd(operationStartData);"
+				+ "   kieker.monitoring.probe.disl.flow.operationExecution.KiekerMonitoringAnalysis.operationEnd(operationStartData);"
 				+ "} ");
 		
 		method.insertAfter(endBlock.toString());

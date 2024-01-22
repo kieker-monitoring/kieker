@@ -1,12 +1,12 @@
-package kieker.monitoring.probe.javassist;
+package kieker.monitoring.probe.disl.flow.operationExecution;
 
 import kieker.monitoring.probe.aspectj.operationExecution.OperationStartData;
 
-public class JavassistOperationStart extends OperationStartData {
+public final class FullOperationStartData extends OperationStartData {
 
 	private final String operationSignature;
 
-	public JavassistOperationStart(boolean entrypoint, String sessionId, long traceId, long tin, String hostname,
+	public FullOperationStartData(boolean entrypoint, String sessionId, long traceId, long tin, String hostname,
 			int eoi, int ess, String signature) {
 		super(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
 		this.operationSignature = signature;
