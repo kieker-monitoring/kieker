@@ -14,23 +14,20 @@ public class KiekerMonitoringAnalysis {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerMonitoringAnalysis.class);
 	
-	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final String VMNAME = CTRLINST.getHostname();
-	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
-
 	public static FullOperationStartData operationStart(final String operationSignature) {
+		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return null;
 		}
+		final ITimeSource TIME = CTRLINST.getTimeSource();
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		
 		// common fields
 		final boolean entrypoint;
-		final String hostname = VMNAME;
-		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
@@ -53,11 +50,12 @@ public class KiekerMonitoringAnalysis {
 		// measure before
 		final long tin = TIME.getTime();
 
-		final FullOperationStartData data = new FullOperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess, operationSignature);
+		final FullOperationStartData data = new FullOperationStartData(entrypoint, traceId, tin, eoi, ess, operationSignature);
 		return data;
 	}
 
 	public static void operationEnd(FullOperationStartData startData) {
+		final IMonitoringController CTRLINST = MonitoringController.getInstance();
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -66,9 +64,16 @@ public class KiekerMonitoringAnalysis {
 			return;
 		}
 
+		final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
+		final ITimeSource TIME = CTRLINST.getTimeSource();
+		final String VMNAME = CTRLINST.getHostname();
+		final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+		
 		final long tout = TIME.getTime();
-		OperationExecutionRecord record = new OperationExecutionRecord(startData.getOperationSignature(), startData.getSessionId(),
-				startData.getTraceId(), startData.getTin(), tout, startData.getHostname(), startData.getEoi(), startData.getEss());
+		
+		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		OperationExecutionRecord record = new OperationExecutionRecord(startData.getOperationSignature(), sessionId,
+				startData.getTraceId(), startData.getTin(), tout, VMNAME, startData.getEoi(), startData.getEss());
 		CTRLINST.newMonitoringRecord(record);
 		// cleanup
 		if (startData.isEntrypoint()) {

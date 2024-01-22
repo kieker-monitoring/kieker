@@ -16,15 +16,11 @@ public class OperationExecutionAdvice {
     		@Advice.Origin String operationSignature,
     		@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
     		@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
-    		@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
-    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY,
-    		@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
+    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
 		if (CTRLINST == null) {
 			CTRLINST = MonitoringController.getInstance();
 			TIME = CTRLINST.getTimeSource();
-			VMNAME = CTRLINST.getHostname();
 			CFREGISTRY = ControlFlowRegistry.INSTANCE;
-			SESSIONREGISTRY = SessionRegistry.INSTANCE;
 		}
 		
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -34,8 +30,6 @@ public class OperationExecutionAdvice {
 			return null;
 		}
 		final boolean entrypoint;
-		final String hostname = VMNAME;
-		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
@@ -58,7 +52,7 @@ public class OperationExecutionAdvice {
 		// measure before
 		final long tin = TIME.getTime();
 
-		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+		final OperationStartData data = new OperationStartData(entrypoint, traceId, tin, eoi, ess);
 		return data;
     }
 	
@@ -66,9 +60,11 @@ public class OperationExecutionAdvice {
     public static void exit(
     		@Advice.Enter OperationStartData startData,
     		@Advice.Origin String operationSignature,
-    		@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
-    		@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
-    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
+    		@Advice.FieldValue(value = "CTRLINST", readOnly = true) IMonitoringController CTRLINST,
+    		@Advice.FieldValue(value = "TIME", readOnly = true) ITimeSource TIME,
+    		@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
+    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) ControlFlowRegistry CFREGISTRY,
+    		@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
 		if (startData == null) {
 			return;
 		}
@@ -80,10 +76,17 @@ public class OperationExecutionAdvice {
 			return;
 		}
 		
+		if (VMNAME == null) {
+			VMNAME = CTRLINST.getHostname();
+			SESSIONREGISTRY = SessionRegistry.INSTANCE;
+		}
+		
+		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		
 		final long tout = TIME.getTime();
 		CTRLINST.newMonitoringRecord(
-				new OperationExecutionRecord(operationSignature, startData.getSessionId(),
-						startData.getTraceId(), startData.getTin(), tout, startData.getHostname(), startData.getEoi(), startData.getEss()));
+				new OperationExecutionRecord(operationSignature, sessionId,
+						startData.getTraceId(), startData.getTin(), tout, VMNAME, startData.getEoi(), startData.getEss()));
 		// cleanup
 		if (startData.isEntrypoint()) {
 			CFREGISTRY.unsetThreadLocalTraceId();

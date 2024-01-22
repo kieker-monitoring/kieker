@@ -6,9 +6,8 @@ public final class FullOperationStartData extends OperationStartData {
 
 	private final String operationSignature;
 
-	public FullOperationStartData(boolean entrypoint, String sessionId, long traceId, long tin, String hostname,
-			int eoi, int ess, String signature) {
-		super(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+	public FullOperationStartData(boolean entrypoint, long traceId, long tin, int eoi, int ess, String signature) {
+		super(entrypoint, traceId, tin, eoi, ess);
 		this.operationSignature = signature;
 	}
 
