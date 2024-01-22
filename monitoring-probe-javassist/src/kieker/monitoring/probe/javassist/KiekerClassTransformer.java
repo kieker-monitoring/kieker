@@ -4,18 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 import java.util.List;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
-import javassist.bytecode.LineNumberAttribute;
 import kieker.monitoring.util.KiekerPattern;
 
 public class KiekerClassTransformer implements ClassFileTransformer {
@@ -38,7 +35,6 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 					CtClass cc = cp.get(realClassName);
 					if (!cc.isInterface()) {
 						// TODO: Interfaces would also require instrumentation of default method; this is left out for now because of the experimental structure
-						addStaticFields(cp, cc);
 						
 						for (CtMethod method : cc.getDeclaredMethods()) {
 							instrumentMethod(cp, method);
@@ -52,7 +48,6 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 				} catch (NotFoundException | CannotCompileException | IOException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		}
 		return null;
@@ -62,69 +57,15 @@ public class KiekerClassTransformer implements ClassFileTransformer {
 		String signature = buildSignature(method);
 		System.out.println("Signature: " + signature);
 		
-		method.addLocalVariable("operationSignature", cp.get("java.lang.String"));
-		method.insertBefore("operationSignature = \"" + signature + "\";");
-		
-		method.addLocalVariable("traceId", CtClass.longType);
-
-		method.addLocalVariable("entrypoint", CtClass.booleanType);
-		method.addLocalVariable("eoi", CtClass.intType);
-		method.addLocalVariable("ess", CtClass.intType);
-		
-		method.insertBefore("   traceId = CFREGISTRY.recallThreadLocalTraceId();"
-				+ "  if (traceId == -1) {\n"
-				+ "			entrypoint = true;\n"
-				+ "			traceId = CFREGISTRY.getAndStoreUniqueThreadLocalTraceId();\n"
-				+ "			CFREGISTRY.storeThreadLocalEOI(0);\n"
-				+ "			CFREGISTRY.storeThreadLocalESS(1); // next operation is ess + 1\n"
-				+ "			eoi = 0;\n"
-				+ "			ess = 0;\n"
-				+ "		} else {\n"
-				+ "			entrypoint = false;\n"
-				+ "			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1\n"
-				+ "			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0\n"
-				+ "			if ((eoi == -1) || (ess == -1)) {\n"
-				+ "				System.out.println(\"eoi and/or ess have invalid values: eoi == \"+eoi+\" ess == \"+ess);\n"
-				+ "				CTRLINST.terminateMonitoring();\n"
-				+ "			}\n"
-				+ "		}");
-		
-		method.addLocalVariable("tin", CtClass.longType);
-		method.insertBefore("tin = TIME.getTime();");
+		method.addLocalVariable("operationStartData", cp.get("kieker.monitoring.probe.disl.flow.operationExecution.DiSLOperationStartData"));
+		method.insertBefore("operationStartData = kieker.monitoring.probe.javassist.KiekerJavassistAnalysis.operationStart(\"" + signature + "\");");
 		
 		StringBuilder endBlock = new StringBuilder();
-		
-		endBlock.append("if (CTRLINST.isMonitoringEnabled() && CTRLINST.isProbeActivated(operationSignature)) {"
-				+ "   long tout = TIME.getTime();"
-				+ "   java.lang.String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();"
-				+ "   CTRLINST.newMonitoringRecord(\n"
-				+ "				new kieker.common.record.controlflow.OperationExecutionRecord(operationSignature, sessionId,\n"
-				+ "						traceId, tin, tout, VMNAME, eoi, ess));"
+		endBlock.append("if (operationStartData != null) {"
+				+ "   kieker.monitoring.probe.javassist.KiekerJavassistAnalysis.operationEnd(operationStartData);"
 				+ "} ");
 		
 		method.insertAfter(endBlock.toString());
-	}
-
-	private void addStaticFields(ClassPool cp, CtClass cc) throws CannotCompileException, NotFoundException {
-		CtField controller = new CtField(cp.get("kieker.monitoring.core.controller.IMonitoringController"), "CTRLINST", cc);
-		controller.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-		cc.addField(controller, CtField.Initializer.byExpr("kieker.monitoring.core.controller.MonitoringController.getInstance()"));
-		
-		CtField time = new CtField(cp.get("kieker.monitoring.timer.ITimeSource"), "TIME", cc);
-		time.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-		cc.addField(time, CtField.Initializer.byExpr("CTRLINST.getTimeSource()"));
-		
-		CtField vmname = new CtField(cp.get("java.lang.String"), "VMNAME", cc);
-		vmname.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-		cc.addField(vmname, "CTRLINST.getHostname()");
-		
-		CtField cfregistry = new CtField(cp.get("kieker.monitoring.core.registry.ControlFlowRegistry"), "CFREGISTRY", cc);
-		cfregistry.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-		cc.addField(cfregistry, "kieker.monitoring.core.registry.ControlFlowRegistry.INSTANCE");
-		
-		CtField sessionRegistry = new CtField(cp.get("kieker.monitoring.core.registry.SessionRegistry"), "SESSIONREGISTRY", cc);
-		sessionRegistry.setModifiers(Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-		cc.addField(sessionRegistry, "kieker.monitoring.core.registry.SessionRegistry.INSTANCE");
 	}
 
 	private String buildSignature(CtMethod method) throws NotFoundException {
