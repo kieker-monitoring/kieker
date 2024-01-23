@@ -38,14 +38,14 @@ spotless {
 }
 
 dependencies {
-  resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-  resultJar "org.jctools:jctools-core:$libJctoolsVersion"
+  resultJar "org.slf4j:slf4j-api:${libSlf4jApiVersion}"
+  resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
 
-  aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
+  aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
 }
 

@@ -15,8 +15,8 @@ import kieker.model.analysismodel.type.ComponentType;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.collection.Coupling#getCaller <em>Caller</em>}</li>
- * <li>{@link kieker.model.collection.Coupling#getCallee <em>Callee</em>}</li>
+ *   <li>{@link kieker.model.collection.Coupling#getRequired <em>Required</em>}</li>
+ *   <li>{@link kieker.model.collection.Coupling#getProvided <em>Provided</em>}</li>
  * </ul>
  *
  * @see kieker.model.collection.CollectionPackage#getCoupling()
@@ -25,59 +25,52 @@ import kieker.model.analysismodel.type.ComponentType;
  */
 public interface Coupling extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Caller</b></em>' reference.
+	 * Returns the value of the '<em><b>Required</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the value of the '<em>Caller</em>' reference.
-	 * @see #setCaller(ComponentType)
-	 * @see kieker.model.collection.CollectionPackage#getCoupling_Caller()
+	 * @return the value of the '<em>Required</em>' reference.
+	 * @see #setRequired(ComponentType)
+	 * @see kieker.model.collection.CollectionPackage#getCoupling_Required()
 	 * @model
 	 * @generated
 	 */
-	ComponentType getCaller();
+	ComponentType getRequired();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.collection.Coupling#getCaller <em>Caller</em>}' reference.
+	 * Sets the value of the '{@link kieker.model.collection.Coupling#getRequired <em>Required</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @param value
-	 *            the new value of the '<em>Caller</em>' reference.
-	 * @see #getCaller()
+	 * @param value the new value of the '<em>Required</em>' reference.
+	 * @see #getRequired()
 	 * @generated
 	 */
-	void setCaller(ComponentType value);
+	void setRequired(ComponentType value);
 
 	/**
-	 * Returns the value of the '<em><b>Callee</b></em>' reference.
+	 * Returns the value of the '<em><b>Provided</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the value of the '<em>Callee</em>' reference.
-	 * @see #setCallee(ComponentType)
-	 * @see kieker.model.collection.CollectionPackage#getCoupling_Callee()
+	 * @return the value of the '<em>Provided</em>' reference.
+	 * @see #setProvided(ComponentType)
+	 * @see kieker.model.collection.CollectionPackage#getCoupling_Provided()
 	 * @model
 	 * @generated
 	 */
-	ComponentType getCallee();
+	ComponentType getProvided();
 
 	/**
-	 * Sets the value of the '{@link kieker.model.collection.Coupling#getCallee <em>Callee</em>}' reference.
+	 * Sets the value of the '{@link kieker.model.collection.Coupling#getProvided <em>Provided</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @param value
-	 *            the new value of the '<em>Callee</em>' reference.
-	 * @see #getCallee()
+	 * @param value the new value of the '<em>Provided</em>' reference.
+	 * @see #getProvided()
 	 * @generated
 	 */
-	void setCallee(ComponentType value);
+	void setProvided(ComponentType value);
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @model valueRequired="true"
 	 * @generated
 	 */
@@ -86,7 +79,6 @@ public interface Coupling extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @model
 	 * @generated
 	 */

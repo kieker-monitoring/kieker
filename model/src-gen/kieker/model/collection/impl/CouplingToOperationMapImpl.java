@@ -24,18 +24,17 @@ import kieker.model.collection.OperationCollection;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link kieker.model.collection.impl.CouplingToOperationMapImpl#getTypedKey <em>Key</em>}</li>
- * <li>{@link kieker.model.collection.impl.CouplingToOperationMapImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link kieker.model.collection.impl.CouplingToOperationMapImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link kieker.model.collection.impl.CouplingToOperationMapImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Coupling, OperationCollection> {
+public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Coupling,OperationCollection> {
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -46,7 +45,6 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -56,7 +54,6 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected CouplingToOperationMapImpl() {
@@ -66,7 +63,6 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -77,29 +73,23 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	public Coupling getTypedKey() {
-		return this.key;
+		return key;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedKey(final Coupling newKey, NotificationChain msgs) {
-		final Coupling oldKey = this.key;
-		this.key = newKey;
-		if (this.eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, oldKey, newKey);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+	public NotificationChain basicSetTypedKey(Coupling newKey, NotificationChain msgs) {
+		Coupling oldKey = key;
+		key = newKey;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, oldKey, newKey);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -107,54 +97,42 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
-	public void setTypedKey(final Coupling newKey) {
-		if (newKey != this.key) {
+	public void setTypedKey(Coupling newKey) {
+		if (newKey != key) {
 			NotificationChain msgs = null;
-			if (this.key != null) {
-				msgs = ((InternalEObject) this.key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, null, msgs);
-			}
-			if (newKey != null) {
-				msgs = ((InternalEObject) newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, null, msgs);
-			}
-			msgs = this.basicSetTypedKey(newKey, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
-		} else if (this.eNotificationRequired()) {
-			this.eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, newKey, newKey));
+			if (key != null)
+				msgs = ((InternalEObject)key).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, null, msgs);
+			if (newKey != null)
+				msgs = ((InternalEObject)newKey).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, null, msgs);
+			msgs = basicSetTypedKey(newKey, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY, newKey, newKey));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	public OperationCollection getTypedValue() {
-		return this.value;
+		return value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(final OperationCollection newValue, NotificationChain msgs) {
-		final OperationCollection oldValue = this.value;
-		this.value = newValue;
-		if (this.eNotificationRequired()) {
-			final ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, oldValue,
-					newValue);
-			if (msgs == null) {
-				msgs = notification;
-			} else {
-				msgs.add(notification);
-			}
+	public NotificationChain basicSetTypedValue(OperationCollection newValue, NotificationChain msgs) {
+		OperationCollection oldValue = value;
+		value = newValue;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, oldValue, newValue);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -162,40 +140,34 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
-	public void setTypedValue(final OperationCollection newValue) {
-		if (newValue != this.value) {
+	public void setTypedValue(OperationCollection newValue) {
+		if (newValue != value) {
 			NotificationChain msgs = null;
-			if (this.value != null) {
-				msgs = ((InternalEObject) this.value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
-			}
-			if (newValue != null) {
-				msgs = ((InternalEObject) newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
-			}
-			msgs = this.basicSetTypedValue(newValue, msgs);
-			if (msgs != null) {
-				msgs.dispatch();
-			}
-		} else if (this.eNotificationRequired()) {
-			this.eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, newValue, newValue));
+			if (value != null)
+				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
+			if (newValue != null)
+				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, null, msgs);
+			msgs = basicSetTypedValue(newValue, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE, newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID, final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
-			return this.basicSetTypedKey(null, msgs);
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-			return this.basicSetTypedValue(null, msgs);
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
+				return basicSetTypedKey(null, msgs);
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
+				return basicSetTypedValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -203,16 +175,15 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
-			return this.getTypedKey();
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-			return this.getTypedValue();
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
+				return getTypedKey();
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
+				return getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -220,18 +191,17 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
-			this.setTypedKey((Coupling) newValue);
-			return;
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-			this.setTypedValue((OperationCollection) newValue);
-			return;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
+				setTypedKey((Coupling)newValue);
+				return;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
+				setTypedValue((OperationCollection)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -239,18 +209,17 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
-			this.setTypedKey((Coupling) null);
-			return;
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-			this.setTypedValue((OperationCollection) null);
-			return;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
+				setTypedKey((Coupling)null);
+				return;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
+				setTypedValue((OperationCollection)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -258,16 +227,15 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
-			return this.key != null;
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
-			return this.value != null;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__KEY:
+				return key != null;
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP__VALUE:
+				return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -275,7 +243,6 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -283,85 +250,78 @@ public class CouplingToOperationMapImpl extends MinimalEObjectImpl.Container imp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public int getHash() {
-		if (this.hash == -1) {
-			final Object theKey = this.getKey();
-			this.hash = (theKey == null ? 0 : theKey.hashCode());
+		if (hash == -1) {
+			Object theKey = getKey();
+			hash = (theKey == null ? 0 : theKey.hashCode());
 		}
-		return this.hash;
+		return hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setHash(final int hash) {
+	public void setHash(int hash) {
 		this.hash = hash;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Coupling getKey() {
-		return this.getTypedKey();
+		return getTypedKey();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setKey(final Coupling key) {
-		this.setTypedKey(key);
+	public void setKey(Coupling key) {
+		setTypedKey(key);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public OperationCollection getValue() {
-		return this.getTypedValue();
+		return getTypedValue();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public OperationCollection setValue(final OperationCollection value) {
-		final OperationCollection oldValue = this.getValue();
-		this.setTypedValue(value);
+	public OperationCollection setValue(OperationCollection value) {
+		OperationCollection oldValue = getValue();
+		setTypedValue(value);
 		return oldValue;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<Coupling, OperationCollection> getEMap() {
-		final EObject container = this.eContainer();
-		return container == null ? null : (EMap<Coupling, OperationCollection>) container.eGet(this.eContainmentFeature());
+		EObject container = eContainer();
+		return container == null ? null : (EMap<Coupling, OperationCollection>)container.eGet(eContainmentFeature());
 	}
 
 } // CouplingToOperationMapImpl
