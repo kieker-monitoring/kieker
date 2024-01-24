@@ -68,6 +68,9 @@ public class PremainClass {
 	        .type(new ElementMatcher<TypeDescription>() {
 				@Override
 				public boolean matches(TypeDescription target) {
+					if (target.isInterface()) {
+						return false;
+					}
 					String typeName = target.getTypeName();
 					return KiekerPatternUtil.classIsContained(patternObjects, typeName);
 				}
@@ -104,6 +107,7 @@ public class PremainClass {
 				@Override
 				public Builder<?> transform(Builder<?> builder, TypeDescription typeDescription,
 						ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+					System.out.println("Instrumenting: " + typeDescription.getActualName());
 					Valuable<?> definedField = builder.defineField("CTRLINST", IMonitoringController.class, Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 					return definedField;
 				}
