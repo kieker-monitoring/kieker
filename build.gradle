@@ -182,7 +182,7 @@ subprojects {
     toolVersion = pmdVersion
     ignoreFailures = true
     consoleOutput = true
-    threads = 17
+    threads = 4
     incrementalAnalysis = false
 
     // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
