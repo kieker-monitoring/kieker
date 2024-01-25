@@ -89,4 +89,3 @@ dependencies {
     implementation 'io.opentelemetry:opentelemetry-exporter-zipkin:1.32.0'
     implementation 'io.zipkin.reporter2:zipkin-sender-okhttp3:2.16.2'
 }
-}
