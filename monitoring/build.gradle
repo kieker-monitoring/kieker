@@ -110,7 +110,7 @@ dependencies {
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
 
-	testImplementation "org.javassist:javassist:3.29.2-GA"
+	testImplementation "org.javassist:javassist:3.30.2-GA"
 
 	testImplementation "junit:junit:$libJunitVersion"
 
