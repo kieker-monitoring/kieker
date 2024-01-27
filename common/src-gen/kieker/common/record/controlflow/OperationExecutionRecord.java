@@ -81,14 +81,14 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
 	private static final long serialVersionUID = -7768272829642950711L;
 
 	/** property declarations. */
-	private final String operationSignature;
-	private final String sessionId;
-	private final long traceId;
+	private String operationSignature;
+	private String sessionId;
+	private long traceId;
 	private long tin;
 	private long tout;
-	private final String hostname;
-	private final int eoi;
-	private final int ess;
+	private String hostname;
+	private int eoi;
+	private int ess;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -272,6 +272,30 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord {
 
 	public final int getEss() {
 		return this.ess;
+	}
+	
+	public void setOperationSignature(String operationSignature) {
+		this.operationSignature = operationSignature;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public void setTraceId(long traceId) {
+		this.traceId = traceId;
+	}
+
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+
+	public void setEoi(int eoi) {
+		this.eoi = eoi;
+	}
+
+	public void setEss(int ess) {
+		this.ess = ess;
 	}
 
 	/**

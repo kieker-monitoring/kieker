@@ -15,8 +15,8 @@ plugins {
 	id("io.freefair.aspectj.post-compile-weaving") version "8.4"
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 // The following lines are necessay to create a test jar
 project.configurations {
@@ -78,6 +78,8 @@ dependencies {
 	implementation 'org.ow2.asm:asm-analysis:9.5'
 	implementation 'org.ow2.asm:asm-commons:9.5'
 	implementation 'org.ow2.asm:asm-util:9.5'
+	
+	implementation 'com.lmax:disruptor:4.0.0'
 
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 

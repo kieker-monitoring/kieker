@@ -316,6 +316,14 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		return this.writerController.newMonitoringRecord(record);
 	}
+	
+	public boolean newOperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostname, final int eoi, final int ess) {
+		if (!this.isMonitoringEnabled()) { // enabled and not terminated
+			return false;
+		}
+		return this.writerController.newOperationExecutionRecord(operationSignature, sessionId, traceId, tin, tout, hostname, eoi, ess);
+	}
 
 	@Override
 	public void waitForTermination(final long timeoutInMs) throws InterruptedException {

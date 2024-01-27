@@ -19,14 +19,25 @@ package kieker.monitoring.core.controller;
 import java.lang.Thread.State;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
+import org.opensaml.samlext.idpdisco.DiscoveryResponseUnmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.EventTranslator;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.util.DaemonThreadFactory;
+
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.controlflow.OperationExecutionRecordFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
@@ -86,12 +97,8 @@ public final class WriterController extends AbstractController implements IWrite
 
 	private InsertBehavior<IMonitoringRecord> insertBehavior; // NOPMD (so far, cannot be made final due to the
 																// MonitoringController)
-
-	// private Disruptor<IMonitoringRecordEvent> disruptor;
-
-	// private RingBuffer<IMonitoringRecordEvent> ringBuffer;
-
-	// private int numInsertedRecords;
+	
+	private final RingBuffer<OperationExecutionRecord> buffer;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -107,97 +114,94 @@ public final class WriterController extends AbstractController implements IWrite
 		final String queueFqn = configuration
 				.getStringProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN);
 
-		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
-		if (queue instanceof BlockingQueue) {
-			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
-		} else {
-			final String takeStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_TAKE_STRATEGY,
-					"kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy");
-			final TakeStrategy takeStrategy = this.newTakeStrategy(takeStrategyFqn);
-			final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY, "kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
-			final PutStrategy putStrategy = this.newPutStrategy(putStrategyFqn);
-			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
-		}
-
 		final String writerClassName = configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
 		if (this.monitoringWriter == null) {
 			this.terminate();
-			return; // TODO should throw an exception! and then monitoringWriter can be declared
-					// final
-			// throw new IllegalStateException("monitoringWriter may not be null");
+//			return; // TODO should throw an exception! and then monitoringWriter can be declared
+//					// final
+			throw new IllegalStateException("monitoringWriter may not be null");
 		}
+		
+		if (queueFqn.equals("com.lmax.disruptor.dsl.Disruptor")) {
+			int size = (int) Math.pow(2, 15);
+			System.out.println("Size: " + size);
+			Disruptor<OperationExecutionRecord> disruptor = new Disruptor<OperationExecutionRecord>(new EventFactory<OperationExecutionRecord>() {
 
-		this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
+				@Override
+				public OperationExecutionRecord newInstance() {
+					return new OperationExecutionRecord("", "", -1, -1, -1, "", -1, -1);
+				}
+			}, size, DaemonThreadFactory.INSTANCE);
 
-		int recordQueueInsertBehavior = configuration
-				.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
-		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
-			WriterController.LOGGER.warn("Unknown value '{}' for {}{}; using default value 0",
-					recordQueueInsertBehavior, WriterController.PREFIX, WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
-			recordQueueInsertBehavior = 0;
+			disruptor.handleEventsWith(new EventHandler<OperationExecutionRecord>() {
+
+				@Override
+				public void onEvent(OperationExecutionRecord event, long sequence, boolean endOfBatch)
+						throws Exception {
+					monitoringWriter.writeMonitoringRecord(event);
+				}
+			});
+			
+			buffer = disruptor.start();
+			
+			writerQueue = null;
+			insertBehavior = null;
+		} else {
+			buffer = null;
+			
+			final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
+			if (queue instanceof BlockingQueue) {
+				this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
+			} else {
+				final String takeStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_TAKE_STRATEGY,
+						"kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy");
+				final TakeStrategy takeStrategy = this.newTakeStrategy(takeStrategyFqn);
+				final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY, "kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
+				final PutStrategy putStrategy = this.newPutStrategy(putStrategyFqn);
+				this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
+			}
+
+			this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
+
+			int recordQueueInsertBehavior = configuration
+					.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
+			if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
+				WriterController.LOGGER.warn("Unknown value '{}' for {}{}; using default value 0",
+						recordQueueInsertBehavior, WriterController.PREFIX, WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
+				recordQueueInsertBehavior = 0;
+			}
+
+			switch (recordQueueInsertBehavior) {
+			case 1:
+				this.insertBehavior = new BlockOnFailedInsertBehavior<>(this.writerQueue);
+				break;
+			case 2:
+				this.insertBehavior = new CountOnFailedInsertBehavior<>(this.writerQueue);
+				break;
+			case 3:
+				this.insertBehavior = new DoNotInsertBehavior<>();
+				break;
+			case 4:
+				// try {
+				// this.initDisruptor(configuration);
+				// } catch (final IOException e) {
+				// throw new IllegalStateException(e);
+				// }
+				// this.insertBehavior = new
+				// DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
+				break;
+			case 5:
+				this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);
+				break;
+			default:
+				this.insertBehavior = new TerminateOnFailedInsertBehavior<>(this.writerQueue);
+				break;
+			}
 		}
-
-		switch (recordQueueInsertBehavior) {
-		case 1:
-			this.insertBehavior = new BlockOnFailedInsertBehavior<>(this.writerQueue);
-			break;
-		case 2:
-			this.insertBehavior = new CountOnFailedInsertBehavior<>(this.writerQueue);
-			break;
-		case 3:
-			this.insertBehavior = new DoNotInsertBehavior<>();
-			break;
-		case 4:
-			// try {
-			// this.initDisruptor(configuration);
-			// } catch (final IOException e) {
-			// throw new IllegalStateException(e);
-			// }
-			// this.insertBehavior = new
-			// DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
-			break;
-		case 5:
-			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);
-			break;
-		default:
-			this.insertBehavior = new TerminateOnFailedInsertBehavior<>(this.writerQueue);
-			break;
-		}
+		
 	}
-
-	// private void initDisruptor(final Configuration configuration) throws
-	// IOException {
-	// final EventFactory<IMonitoringRecordEvent> eventFactory = new
-	// NewRecordEventFactory();
-	// final int bufferSize = 1024;
-	// final ThreadFactory threadFactory = new ThreadFactory() {
-	// @Override
-	// public Thread newThread(final Runnable r) {
-	// final Thread thread = new Thread(r);
-	// thread.setDaemon(true);
-	// return thread;
-	// }
-	// };
-	//
-	// this.disruptor = new Disruptor<IMonitoringRecordEvent>(eventFactory,
-	// bufferSize, threadFactory);
-	//
-	// final SharedConnection connection = new SharedConnection(configuration);
-	// final EventHandler<? super IMonitoringRecordEvent> handler1 = new
-	// DisruptorTcpWriter(configuration, connection);
-	// // allowing more than one consumes breaks the assumptions that the records
-	// are sent in order of occurrence
-	// // final EventHandler<? super IMonitoringRecordEvent> handler2 = new
-	// DisruptorTcpWriter(configuration,
-	// connection);
-	//
-	// this.disruptor.handleEventsWith(handler1);
-	// this.disruptor.start();
-	//
-	// this.ringBuffer = this.disruptor.getRingBuffer();
-	// }
 
 	private TakeStrategy newTakeStrategy(final String strategyName) {
 		try {
@@ -270,10 +274,6 @@ public final class WriterController extends AbstractController implements IWrite
 			this.monitoringWriterThread.terminate();
 		}
 
-		// if (this.disruptor != null) {
-		// this.disruptor.shutdown();
-		// }
-
 		// LOG.info("block durations: {}" + this.insertBehavior.toString());
 		// System.out.println("block durations: " + this.insertBehavior.toString());
 	}
@@ -281,9 +281,9 @@ public final class WriterController extends AbstractController implements IWrite
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
-				.append("WriterController:").append("\n\tQueue type: ").append(this.writerQueue.getClass())
+				.append("WriterController:").append("\n\tQueue type: ").append(writerQueue != null ? this.writerQueue.getClass() : null)
 				.append("\n\tQueue capacity: ").append(this.queueCapacity)
-				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ").append(this.insertBehavior.toString())
+				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ").append(insertBehavior != null ? this.insertBehavior.toString() : null)
 				.append('\n');
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
@@ -296,6 +296,10 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		if (insertBehavior == null) {
+			monitoringWriter.writeMonitoringRecord(record);
+			return true;
+		}
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
 			WriterController.LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
@@ -303,6 +307,25 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 
 		return recordSent;
+	}
+	
+	public boolean newOperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostname, final int eoi, final int ess) {
+		long sequenceId = buffer.next();
+		try {
+			OperationExecutionRecord record = buffer.get(sequenceId);
+			record.setOperationSignature(operationSignature);
+			record.setSessionId(sessionId);
+			record.setTraceId(traceId);
+			record.setTin(tin);
+			record.setTout(tout);
+			record.setHostname(hostname);
+			record.setEoi(eoi);
+			record.setEss(ess);
+		} finally {
+			buffer.publish(sequenceId);
+		}
+		return true;
 	}
 
 	@Override
