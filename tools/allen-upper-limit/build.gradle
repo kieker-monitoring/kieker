@@ -22,7 +22,7 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0"
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
 
