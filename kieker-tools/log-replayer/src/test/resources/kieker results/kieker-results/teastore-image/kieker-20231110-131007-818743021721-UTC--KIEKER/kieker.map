@@ -1,0 +1,4 @@
+$0=kieker.common.record.misc.KiekerMetadataRecord
+$1=kieker.common.record.flow.trace.ApplicationTraceMetadata
+$2=kieker.common.record.flow.trace.operation.BeforeOperationEvent
+$3=kieker.common.record.flow.trace.operation.AfterOperationEvent

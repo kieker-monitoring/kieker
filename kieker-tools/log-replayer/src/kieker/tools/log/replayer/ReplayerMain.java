@@ -42,7 +42,7 @@ public final class ReplayerMain extends AbstractService<TeetimeConfiguration, Se
 	/**
 	 * This is a simple main class which does not need to be instantiated.
 	 */
-	private ReplayerMain() {
+	public ReplayerMain() {
 
 	}
 

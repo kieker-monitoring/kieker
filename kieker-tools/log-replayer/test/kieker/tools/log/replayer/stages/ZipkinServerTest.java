@@ -6,10 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.tools.log.replayer.ReplayerMain;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class ZipkinServerTest {
 	
@@ -17,12 +20,14 @@ public class ZipkinServerTest {
 
 	private static final String jarPath = "src/test/resources/zipkin-server-3.0.4-exec.jar";
 	
+	private static final String kiekerDataPath = "src/test/resources/kieker results";
+	
 	private Process process;
 	
     @BeforeEach
     public void startZipkinServer() throws IOException {
     	LOGGER.info("Starting zipking");
-        
+    	
         String command = String.format("java -jar %s", jarPath);
 
         try {
@@ -53,7 +58,18 @@ public class ZipkinServerTest {
     @Test
     public void Test() {
     	try {
-			Thread.sleep(1000);
+    		
+    		ReplayerMain replayerMain = new ReplayerMain();
+    		
+    		//Get list of file in keieker-data directory
+    		String[] kiekerDataFiles = Objects.requireNonNull(new java.io.File(kiekerDataPath).listFiles()).toString().split(" ");
+    		
+    		for (String kiekerDataFile : kiekerDataFiles ) {
+    		
+    		 replayerMain.run("Replayer", "replayer", new String[] { "-d", "1", "-i", kiekerDataPath });
+    		
+			Thread.sleep(1000);}
+    		
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
