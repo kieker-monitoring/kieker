@@ -8,10 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import kieker.tools.log.replayer.ReplayerMain;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Objects;
 
 public class ZipkinServerTest {
@@ -20,7 +26,7 @@ public class ZipkinServerTest {
 
 	private static final String jarPath = "src/test/resources/zipkin-server-3.0.4-exec.jar";
 	
-	private static final String kiekerDataPath = "src/test/resources/kieker results";
+	private static final String kiekerDataPath = "src/test/resources/kieker results/kieker-results";
 	
 	private Process process;
 	
@@ -56,24 +62,41 @@ public class ZipkinServerTest {
 	}
 
     @Test
-    public void Test() {
+    public void Test() throws IOException {
     	try {
     		
     		ReplayerMain replayerMain = new ReplayerMain();
     		
     		//Get list of file in keieker-data directory
-    		String[] kiekerDataFiles = Objects.requireNonNull(new java.io.File(kiekerDataPath).listFiles()).toString().split(" ");
-    		
-    		for (String kiekerDataFile : kiekerDataFiles ) {
-    		
-    		 replayerMain.run("Replayer", "replayer", new String[] { "-d", "1", "-i", kiekerDataPath });
-    		
-			Thread.sleep(1000);}
-    		
+            File[] kiekerDataFiles = Objects.requireNonNull(new java.io.File(kiekerDataPath).listFiles());
+
+            for (File kiekerDataFile : kiekerDataFiles) {
+            	
+            	 // Replay each Kieker data file
+                replayerMain.run("Replayer", "replayer", new String[]{"--delay", "1", "-i", kiekerDataFile.getAbsolutePath()});
+
+                Thread.sleep(1000);
+			}
+            
+    		//Check Zipkin API for spans
+            boolean spansCreated = checkZipkinForSpans();
+            assertTrue(spansCreated, "Spans should be created in Zipkin");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
     }
+    
+    private boolean checkZipkinForSpans() throws IOException {
+    	
+        // Zipkin API to check if spans were created
+        URL url = new URL("http://localhost:9411/api/v2/spans");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        int responseCode = connection.getResponseCode();
+        return responseCode == HttpURLConnection.HTTP_OK;
+    }
+
     
     @AfterEach
     public void stopZipkinServer() {
