@@ -42,7 +42,7 @@ dependencies {
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
-	testImplementation "org.mockito:mockito-core:5.7.0"
+	testImplementation "org.mockito:mockito-core:5.10.0"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 }
 
