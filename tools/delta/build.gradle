@@ -23,7 +23,7 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0"
 
 	implementation "org.csveed:csveed:0.7.5"
 
@@ -36,13 +36,13 @@ dependencies {
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.1"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.1"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.2"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
 
-	testImplementation "org.mockito:mockito-core:5.7.0"
+	testImplementation "org.mockito:mockito-core:5.10.0"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
 }

@@ -65,7 +65,7 @@ dependencies {
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
-	implementation "com.github.oshi:oshi-core:6.4.10"
+	implementation "com.github.oshi:oshi-core:6.4.11"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.24"
@@ -124,7 +124,7 @@ dependencies {
 	testImplementation "org.springframework:spring-beans:$springVersion"
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
-	testImplementation "org.eclipse.jetty:jetty-server:9.4.28.v20200408"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.5"
 	testImplementation "org.eclipse.jetty:jetty-webapp:9.4.28.v20200408"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.19"
 
