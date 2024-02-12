@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -24,16 +25,39 @@ public class BuildTimeAdaption {
 		
 		System.out.println("Writing to: " + tempDir.getAbsolutePath());
 		
-		ProcessBuilder builder = new ProcessBuilder(new String[] {"jar", "xf", instrumentJar.getAbsolutePath() });
-		builder.directory(tempDir);
-		
-		builder.start();
+		extractJar(instrumentJar, tempDir);
 		
 		ClassPool pool = ClassPool.getDefault();
 		pool.insertClassPath(instrumentJar.getAbsolutePath());
 		
 		String className = "moobench.application.MonitoredClassSimple";
 		instrumentClass(tempDir, pool, className);
+		
+		createJar(instrumentJar, tempDir);
+	}
+
+	private static void extractJar(File instrumentJar, File tempDir) throws IOException {
+		ProcessBuilder builder = new ProcessBuilder(new String[] {"jar", "xf", instrumentJar.getAbsolutePath() });
+		builder.directory(tempDir);
+		builder.inheritIO();
+		builder.start();
+	}
+	
+	private static void createJar(File instrumentJar, File tempDir) throws IOException {
+		ProcessBuilder builder = new ProcessBuilder(new String[] {"jar", "cf",
+				instrumentJar.getAbsolutePath(),
+				"." });
+		builder.directory(tempDir);
+		
+		builder.inheritIO();
+		
+		Process start = builder.start();
+		
+		try {
+			start.waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void instrumentClass(File tempDir, ClassPool pool, String className)
