@@ -82,21 +82,12 @@ public class PremainClass {
 								public boolean matches(MethodDescription target) {
 									if (target.isMethod()) {
 										// TODO: Here, we would need the signature. This would require building it from target and target.getType
-										// So for now, just instrument everything
+										// So for now, just instrument every method (and type is checked before already)
 										// KiekerPatternUtil.classIsContained(patternObjects, target.getName())
 										return true;
 									} else {
 										return true;
 									}
-									
-//									String typeName = target.getDeclaringType().getTypeName();
-//									if (typeName.startsWith("java.net.") || typeName.startsWith("org.junit.")) {
-//										return false;
-//									} else if (typeName.startsWith("example.kieker")) {
-//										System.out.println("Instrumenting: " + typeName);
-//										return true;
-//									}
-//									return false;
 								}
 	                        	
 	                        },
