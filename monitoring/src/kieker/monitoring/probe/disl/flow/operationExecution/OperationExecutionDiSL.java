@@ -5,10 +5,13 @@ import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.marker.BodyMarker;
 
+/**
+ * The default instrumentation class for DiSL
+ */
 public class OperationExecutionDiSL {
 
 	@SyntheticLocal
-	static FullOperationStartData data;
+	private static FullOperationStartData data;
 
 	@Before(marker = BodyMarker.class, scope = "MonitoredClass*.*")
 	public static void beforemain(final KiekerStaticContext c) {

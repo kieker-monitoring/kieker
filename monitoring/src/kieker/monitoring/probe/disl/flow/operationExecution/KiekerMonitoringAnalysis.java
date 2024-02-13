@@ -10,16 +10,19 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
-public class KiekerMonitoringAnalysis {
-	
+/**
+ * This class contains the monitoring logic that can be used by different frameworks, especially DiSL and Javassist.
+ */
+public abstract class KiekerMonitoringAnalysis {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerMonitoringAnalysis.class);
-	
+
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
-	
+
 	public static FullOperationStartData operationStart(final String operationSignature) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
@@ -30,7 +33,7 @@ public class KiekerMonitoringAnalysis {
 
 		// common fields
 		final boolean entrypoint;
-		
+
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
@@ -53,11 +56,10 @@ public class KiekerMonitoringAnalysis {
 		// measure before
 		final long tin = TIME.getTime();
 
-		final FullOperationStartData data = new FullOperationStartData(entrypoint, traceId, tin, eoi, ess, operationSignature);
-		return data;
+		return new FullOperationStartData(entrypoint, traceId, tin, eoi, ess, operationSignature);
 	}
 
-	public static void operationEnd(FullOperationStartData startData) {
+	public static void operationEnd(final FullOperationStartData startData) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -65,11 +67,11 @@ public class KiekerMonitoringAnalysis {
 		if (!CTRLINST.isProbeActivated(startData.getOperationSignature())) {
 			return;
 		}
-		
+
 		final long tout = TIME.getTime();
-		
+
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
-		OperationExecutionRecord record = new OperationExecutionRecord(startData.getOperationSignature(), sessionId,
+		final OperationExecutionRecord record = new OperationExecutionRecord(startData.getOperationSignature(), sessionId,
 				startData.getTraceId(), startData.getTin(), tout, VMNAME, startData.getEoi(), startData.getEss());
 		CTRLINST.newMonitoringRecord(record);
 		// cleanup

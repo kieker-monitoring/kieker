@@ -34,7 +34,6 @@ public class KiekerStaticContext extends AbstractStaticContext {
             __formatMethodParameters(methodType)
         );
 
-        System.out.println(result);
         return result;
     }
 
