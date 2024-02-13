@@ -1,17 +1,11 @@
 package kieker.monitoring.probe.disl.flow.operationExecution;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.marker.BodyMarker;
-import kieker.monitoring.probe.aspectj.operationExecution.AbstractOperationExecutionAspect;
 
 public class OperationExecutionDiSL {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractOperationExecutionAspect.class);
 
 	@SyntheticLocal
 	static FullOperationStartData data;
