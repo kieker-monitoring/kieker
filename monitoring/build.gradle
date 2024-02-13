@@ -71,7 +71,13 @@ dependencies {
 	implementation "org.influxdb:influxdb-java:2.24"
 
 	// disl not available via maven
-	implementation resolveLibrary('disl-2.0/disl-server.jar')
+	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
+	// DiSLs dependencies need to be added manually
+	implementation 'org.ow2.asm:asm:9.5'
+	implementation 'org.ow2.asm:asm-tree:9.5'
+	implementation 'org.ow2.asm:asm-analysis:9.5'
+	implementation 'org.ow2.asm:asm-commons:9.5'
+	implementation 'org.ow2.asm:asm-util:9.5'
 
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
