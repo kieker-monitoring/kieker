@@ -19,8 +19,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 
 import kieker.common.exception.ConfigurationException;
 import kieker.common.record.IMonitoringRecord;
@@ -61,7 +61,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 
 			// index table
 			final ResultSet rs = database.select(new ArrayList<>(), this.tablePrefix, null);
-			for (Row r : rs) {
+			for (final Row r : rs) {
 				final String tablename = r.getString(1);
 				final String classname = r.getString(2);
 
@@ -94,7 +94,7 @@ public class CassandraSourceStage extends AbstractProducerStage<IMonitoringRecor
 
 		for (final Row row : rs) {
 			if ((rs.getAvailableWithoutFetching() == 10000) && !rs.isFullyFetched()) {
-				rs.fetchMoreResults();
+				// rs. .fetchMoreResults();
 			}
 
 			if (row != null) {

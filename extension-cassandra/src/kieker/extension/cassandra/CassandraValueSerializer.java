@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.extension.cassandra;
 
-import com.datastax.driver.core.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
 
 import kieker.common.record.io.IValueSerializer;
 
@@ -35,7 +35,7 @@ public class CassandraValueSerializer implements IValueSerializer { // NOPMD Too
 
 	@Override
 	public void putBoolean(final boolean value) {
-		this.boundStatement.setBool(this.column++, value);
+		this.boundStatement.setBoolean(this.column++, value);
 	}
 
 	@Override

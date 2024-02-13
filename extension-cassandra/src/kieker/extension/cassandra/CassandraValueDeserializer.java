@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.extension.cassandra;
 
-import com.datastax.driver.core.Row;
+import com.datastax.oss.driver.api.core.cql.Row;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.io.AbstractValueDeserializer;
@@ -38,7 +38,7 @@ public class CassandraValueDeserializer extends AbstractValueDeserializer implem
 
 	@Override
 	public boolean getBoolean() {
-		return this.row.getBool(this.column++);
+		return this.row.getBoolean(this.column++);
 	}
 
 	@Override
