@@ -15,8 +15,8 @@ plugins {
 	id("io.freefair.aspectj.post-compile-weaving") version "8.4"
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 // The following lines are necessay to create a test jar
 project.configurations {
