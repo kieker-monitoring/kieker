@@ -9,7 +9,8 @@ source "${BIN_DIR}/release-check-common.sh"
 # 51=Java 1.7
 # 52=Java 1.8
 # 53=Java 1.9
-javaVersion="major version: 52"
+# 55=Java 11
+javaVersion="major version: 55"
 
 # build with ant (target may be passed as $1)
 function run_gradle {
