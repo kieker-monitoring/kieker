@@ -5,22 +5,26 @@ import java.io.IOException;
 
 public class BuildTimeAdaptionUtil {
 	public static void extractJar(File instrumentJar, File tempDir) throws IOException {
-		ProcessBuilder builder = new ProcessBuilder(new String[] {"jar", "xf", instrumentJar.getAbsolutePath() });
+		ProcessBuilder builder = new ProcessBuilder(new String[] { "jar", "xf", instrumentJar.getAbsolutePath() });
 		builder.directory(tempDir);
 		builder.inheritIO();
-		builder.start();
+		try {
+			builder.start().waitFor();
+		} catch (InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static void createJar(File instrumentJar, File tempDir) throws IOException {
-		ProcessBuilder builder = new ProcessBuilder(new String[] {"jar", "cf",
-				instrumentJar.getAbsolutePath(),
-				"." });
+		ProcessBuilder builder = new ProcessBuilder(new String[] { "jar", "cf",
+			instrumentJar.getAbsolutePath(),
+			"." });
 		builder.directory(tempDir);
-		
+
 		builder.inheritIO();
-		
+
 		Process start = builder.start();
-		
+
 		try {
 			start.waitFor();
 		} catch (InterruptedException e) {
