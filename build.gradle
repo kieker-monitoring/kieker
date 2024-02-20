@@ -16,7 +16,7 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'jacoco'
-  id "com.diffplug.spotless" version "5.17.1"
+  id "com.diffplug.spotless" version "6.25.0"
 }
 
 configurations {
@@ -40,14 +40,14 @@ spotless {
 }
 
 dependencies {
-  resultJar "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-  resultJar "org.jctools:jctools-core:$libJctoolsVersion"
+  resultJar "org.slf4j:slf4j-api:${libSlf4jApiVersion}"
+  resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
 
-  aspectJarConfig "org.aspectj:aspectjweaver:$aspectjVersion"
+  aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
   
   javassistJarConfig "org.javassist:javassist:3.30.2-GA"
@@ -195,8 +195,8 @@ subprojects {
     toolVersion = pmdVersion
     ignoreFailures = true
     consoleOutput = true
-    threads = 8
-    incrementalAnalysis = true
+    threads = 4
+    incrementalAnalysis = false
 
     // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
     ruleSets = []

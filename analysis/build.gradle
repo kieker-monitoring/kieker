@@ -29,43 +29,43 @@ dependencies {
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
-	api 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
-	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
-	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
+	api "org.eclipse.emf:org.eclipse.emf.common:2.29.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
-	api 'nz.ac.waikato.cms.weka:weka-stable:3.6.13' // used by behavior analysis
+	api "nz.ac.waikato.cms.weka:weka-stable:3.8.6" // used by behavior analysis
 
-	api 'de.cau.cs.se.teetime:teetime:3.1.0'
+	api "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	api 'javax.jms:javax.jms-api:2.0.1'
-	api 'javax.servlet:javax.servlet-api:4.0.1'
+	api "javax.jms:javax.jms-api:2.0.1"
+	api "javax.servlet:javax.servlet-api:4.0.1"
 
 	api "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
-	api 'org.apache.commons:commons-compress:1.25.0'
-	api 'org.nanohttpd:nanohttpd:2.3.1'
-	api 'com.carrotsearch:hppc:0.9.1'
-	api 'org.csveed:csveed:0.7.5'
-	api 'org.yaml:snakeyaml:2.2'
-	api 'org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4'
+	api "org.apache.commons:commons-compress:1.25.0"
+	api "org.nanohttpd:nanohttpd:2.3.1"
+	api "com.carrotsearch:hppc:0.9.1"
+	api "org.csveed:csveed:0.7.5"
+	api "org.yaml:snakeyaml:2.2"
+	api "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
-	api 'javax.xml.bind:jaxb-api:2.3.1'
+	api "javax.xml.bind:jaxb-api:2.3.1"
 
-	api 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+	api "com.tinkerpop.blueprints:blueprints-core:2.6.0"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	// Use JUnit test framework
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
-	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.2"
+	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
-	testRuntimeOnly 'org.apache.derby:derby:10.17.1.0'	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
+	testRuntimeOnly "org.apache.derby:derby:10.17.1.0"	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)
 }
 
 // publishing

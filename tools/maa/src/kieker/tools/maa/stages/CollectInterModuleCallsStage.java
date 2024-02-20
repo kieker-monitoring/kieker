@@ -53,7 +53,7 @@ import teetime.stage.basic.AbstractTransformation;
  * @author Reiner Jung
  * @since 2.0.0
  */
-public class CollectConnectionsStage extends AbstractTransformation<ModelRepository, ModelRepository> {
+public class CollectInterModuleCallsStage extends AbstractTransformation<ModelRepository, ModelRepository> {
 
 	@Override
 	protected void execute(final ModelRepository repository) throws Exception {
@@ -75,22 +75,26 @@ public class CollectConnectionsStage extends AbstractTransformation<ModelReposit
 																										// inter-component
 																										// edges
 				final Coupling key = CollectionFactory.eINSTANCE.createCoupling();
-				key.setCaller(invocation.getCaller().getComponent().getAssemblyComponent().getComponentType());
-				key.setCallee(invocation.getCallee().getComponent().getAssemblyComponent().getComponentType());
+				key.setRequired(invocation.getCaller().getComponent().getAssemblyComponent().getComponentType());
+				key.setProvided(invocation.getCallee().getComponent().getAssemblyComponent().getComponentType());
 
-				OperationCollection calleeOperationCollection = interconnections.getConnections().get(key);
+				OperationCollection operationCollection = interconnections.getConnections().get(key);
 
-				if (calleeOperationCollection == null) {
-					calleeOperationCollection = CollectionFactory.eINSTANCE.createOperationCollection();
-					calleeOperationCollection.setCaller(key.getCaller());
-					calleeOperationCollection.setCallee(key.getCallee());
-					interconnections.getConnections().put(key, calleeOperationCollection);
+				if (operationCollection == null) {
+					operationCollection = CollectionFactory.eINSTANCE.createOperationCollection();
+					operationCollection.setRequired(key.getRequired());
+					operationCollection.setProvided(key.getProvided());
+					interconnections.getConnections().put(key, operationCollection);
 				}
 
 				final OperationType calleeOperation = invocation.getCallee().getAssemblyOperation().getOperationType();
-				calleeOperationCollection.getOperations().put(calleeOperation.getSignature(), calleeOperation);
+				operationCollection.getCallees().put(calleeOperation.getSignature(), calleeOperation);
+				final OperationType callerOperation = invocation.getCaller().getAssemblyOperation().getOperationType();
+				operationCollection.getCallers().put(callerOperation.getSignature(), callerOperation);
 			}
 		}
+
+		// TODO also add dataflow here
 
 		return interconnections;
 	}

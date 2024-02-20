@@ -26,7 +26,7 @@ import kieker.analysis.architecture.ModelSink;
 import kieker.analysis.architecture.repository.ModelRepository;
 import kieker.analysis.generic.sink.TableCsvSink;
 import kieker.tools.maa.stages.CallEntry;
-import kieker.tools.maa.stages.CollectConnectionsStage;
+import kieker.tools.maa.stages.CollectInterModuleCallsStage;
 import kieker.tools.maa.stages.ComponentStatistics;
 import kieker.tools.maa.stages.ComponentStatisticsStage;
 import kieker.tools.maa.stages.FindDistinctCollectionsStage;
@@ -64,14 +64,14 @@ public class TeetimeConfiguration extends Configuration {
 
 		OutputPort<ModelRepository> outputPort = modelReader.getOutputPort();
 		if (settings.isComputeInterfaces()) {
-			final CollectConnectionsStage computeInterfaces = new CollectConnectionsStage();
+			final CollectInterModuleCallsStage collectInterModuleCalls = new CollectInterModuleCallsStage();
 			final FindDistinctCollectionsStage findDistinctCollectionsStage = new FindDistinctCollectionsStage();
 			final GenerateProvidedInterfacesStage generateProvidedInterfacesStage = new GenerateProvidedInterfacesStage();
 			// final AbstractMergeInterfaceStage mergeInterfaceStage = new
 			// SimilarMethodSuffixMergeInterfaceStage(0.4);
 
-			this.connectPorts(outputPort, computeInterfaces.getInputPort());
-			this.connectPorts(computeInterfaces.getOutputPort(), findDistinctCollectionsStage.getInputPort());
+			this.connectPorts(outputPort, collectInterModuleCalls.getInputPort());
+			this.connectPorts(collectInterModuleCalls.getOutputPort(), findDistinctCollectionsStage.getInputPort());
 			this.connectPorts(findDistinctCollectionsStage.getOutputPort(),
 					generateProvidedInterfacesStage.getInputPort());
 			// this.connectPorts(generateProvidedInterfacesStage.getOutputPort(),

@@ -24,7 +24,6 @@ import kieker.model.collection.OperationCollection;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- *
  * @see kieker.model.collection.CollectionPackage
  * @generated
  */
@@ -33,7 +32,6 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected static CollectionPackage modelPackage;
@@ -42,7 +40,6 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	public CollectionSwitch() {
@@ -55,14 +52,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @param ePackage
-	 *            the package in question.
+	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(final EPackage ePackage) {
+	protected boolean isSwitchFor(EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
@@ -70,57 +65,43 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(final int classifierID, final EObject theEObject) {
+	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-		case CollectionPackage.CONNECTIONS: {
-			final Connections connections = (Connections) theEObject;
-			T result = this.caseConnections(connections);
-			if (result == null) {
-				result = this.defaultCase(theEObject);
+			case CollectionPackage.CONNECTIONS: {
+				Connections connections = (Connections)theEObject;
+				T result = caseConnections(connections);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
 			}
-			return result;
-		}
-		case CollectionPackage.OPERATION_COLLECTION: {
-			final OperationCollection operationCollection = (OperationCollection) theEObject;
-			T result = this.caseOperationCollection(operationCollection);
-			if (result == null) {
-				result = this.defaultCase(theEObject);
+			case CollectionPackage.OPERATION_COLLECTION: {
+				OperationCollection operationCollection = (OperationCollection)theEObject;
+				T result = caseOperationCollection(operationCollection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
 			}
-			return result;
-		}
-		case CollectionPackage.COUPLING_TO_OPERATION_MAP: {
-			@SuppressWarnings("unchecked")
-			final Map.Entry<Coupling, OperationCollection> couplingToOperationMap = (Map.Entry<Coupling, OperationCollection>) theEObject;
-			T result = this.caseCouplingToOperationMap(couplingToOperationMap);
-			if (result == null) {
-				result = this.defaultCase(theEObject);
+			case CollectionPackage.COUPLING_TO_OPERATION_MAP: {
+				@SuppressWarnings("unchecked") Map.Entry<Coupling, OperationCollection> couplingToOperationMap = (Map.Entry<Coupling, OperationCollection>)theEObject;
+				T result = caseCouplingToOperationMap(couplingToOperationMap);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
 			}
-			return result;
-		}
-		case CollectionPackage.NAME_TO_OPERATION_MAP: {
-			@SuppressWarnings("unchecked")
-			final Map.Entry<String, OperationType> nameToOperationMap = (Map.Entry<String, OperationType>) theEObject;
-			T result = this.caseNameToOperationMap(nameToOperationMap);
-			if (result == null) {
-				result = this.defaultCase(theEObject);
+			case CollectionPackage.NAME_TO_OPERATION_MAP: {
+				@SuppressWarnings("unchecked") Map.Entry<String, OperationType> nameToOperationMap = (Map.Entry<String, OperationType>)theEObject;
+				T result = caseNameToOperationMap(nameToOperationMap);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
 			}
-			return result;
-		}
-		case CollectionPackage.COUPLING: {
-			final Coupling coupling = (Coupling) theEObject;
-			T result = this.caseCoupling(coupling);
-			if (result == null) {
-				result = this.defaultCase(theEObject);
+			case CollectionPackage.COUPLING: {
+				Coupling coupling = (Coupling)theEObject;
+				T result = caseCoupling(coupling);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
 			}
-			return result;
-		}
-		default:
-			return this.defaultCase(theEObject);
+			default: return defaultCase(theEObject);
 		}
 	}
 
@@ -130,14 +111,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Connections</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseConnections(final Connections object) {
+	public T caseConnections(Connections object) {
 		return null;
 	}
 
@@ -147,14 +126,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Operation Collection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOperationCollection(final OperationCollection object) {
+	public T caseOperationCollection(OperationCollection object) {
 		return null;
 	}
 
@@ -164,14 +141,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Coupling To Operation Map</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCouplingToOperationMap(final Map.Entry<Coupling, OperationCollection> object) {
+	public T caseCouplingToOperationMap(Map.Entry<Coupling, OperationCollection> object) {
 		return null;
 	}
 
@@ -181,14 +156,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Name To Operation Map</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNameToOperationMap(final Map.Entry<String, OperationType> object) {
+	public T caseNameToOperationMap(Map.Entry<String, OperationType> object) {
 		return null;
 	}
 
@@ -198,14 +171,12 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Coupling</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCoupling(final Coupling object) {
+	public T caseCoupling(Coupling object) {
 		return null;
 	}
 
@@ -215,15 +186,13 @@ public class CollectionSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 *
-	 * @param object
-	 *            the target of the switch.
+	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(final EObject object) {
+	public T defaultCase(EObject object) {
 		return null;
 	}
 

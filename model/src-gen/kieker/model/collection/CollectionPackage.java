@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.EReference;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- *
  * @see kieker.model.collection.CollectionFactory
  * @model kind="package"
  * @generated
@@ -30,7 +29,6 @@ public interface CollectionPackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	String eNAME = "collection";
@@ -39,7 +37,6 @@ public interface CollectionPackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	String eNS_URI = "http://kieker-monitoring.net/collection";
@@ -48,7 +45,6 @@ public interface CollectionPackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "collection";
@@ -57,7 +53,6 @@ public interface CollectionPackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	CollectionPackage eINSTANCE = kieker.model.collection.impl.CollectionPackageImpl.init();
@@ -66,7 +61,6 @@ public interface CollectionPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.collection.impl.ConnectionsImpl <em>Connections</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see kieker.model.collection.impl.ConnectionsImpl
 	 * @see kieker.model.collection.impl.CollectionPackageImpl#getConnections()
 	 * @generated
@@ -77,7 +71,6 @@ public interface CollectionPackage extends EPackage {
 	 * The feature id for the '<em><b>Connections</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -87,7 +80,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of structural features of the '<em>Connections</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -97,7 +89,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of operations of the '<em>Connections</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -107,7 +98,6 @@ public interface CollectionPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.collection.impl.OperationCollectionImpl <em>Operation Collection</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see kieker.model.collection.impl.OperationCollectionImpl
 	 * @see kieker.model.collection.impl.CollectionPackageImpl#getOperationCollection()
 	 * @generated
@@ -115,50 +105,54 @@ public interface CollectionPackage extends EPackage {
 	int OPERATION_COLLECTION = 1;
 
 	/**
-	 * The feature id for the '<em><b>Caller</b></em>' reference.
+	 * The feature id for the '<em><b>Required</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_COLLECTION__CALLER = 0;
+	int OPERATION_COLLECTION__REQUIRED = 0;
 
 	/**
-	 * The feature id for the '<em><b>Callee</b></em>' reference.
+	 * The feature id for the '<em><b>Provided</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_COLLECTION__CALLEE = 1;
+	int OPERATION_COLLECTION__PROVIDED = 1;
 
 	/**
-	 * The feature id for the '<em><b>Operations</b></em>' map.
+	 * The feature id for the '<em><b>Callees</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_COLLECTION__OPERATIONS = 2;
+	int OPERATION_COLLECTION__CALLEES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Callers</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_COLLECTION__CALLERS = 3;
 
 	/**
 	 * The number of structural features of the '<em>Operation Collection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_COLLECTION_FEATURE_COUNT = 3;
+	int OPERATION_COLLECTION_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Operation Collection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -168,7 +162,6 @@ public interface CollectionPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.collection.impl.CouplingToOperationMapImpl <em>Coupling To Operation Map</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see kieker.model.collection.impl.CouplingToOperationMapImpl
 	 * @see kieker.model.collection.impl.CollectionPackageImpl#getCouplingToOperationMap()
 	 * @generated
@@ -179,7 +172,6 @@ public interface CollectionPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -189,7 +181,6 @@ public interface CollectionPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -199,7 +190,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of structural features of the '<em>Coupling To Operation Map</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -209,7 +199,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of operations of the '<em>Coupling To Operation Map</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -219,7 +208,6 @@ public interface CollectionPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.collection.impl.NameToOperationMapImpl <em>Name To Operation Map</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see kieker.model.collection.impl.NameToOperationMapImpl
 	 * @see kieker.model.collection.impl.CollectionPackageImpl#getNameToOperationMap()
 	 * @generated
@@ -230,7 +218,6 @@ public interface CollectionPackage extends EPackage {
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -240,7 +227,6 @@ public interface CollectionPackage extends EPackage {
 	 * The feature id for the '<em><b>Value</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -250,7 +236,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of structural features of the '<em>Name To Operation Map</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -260,7 +245,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of operations of the '<em>Name To Operation Map</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -270,7 +254,6 @@ public interface CollectionPackage extends EPackage {
 	 * The meta object id for the '{@link kieker.model.collection.impl.CouplingImpl <em>Coupling</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @see kieker.model.collection.impl.CouplingImpl
 	 * @see kieker.model.collection.impl.CollectionPackageImpl#getCoupling()
 	 * @generated
@@ -278,30 +261,27 @@ public interface CollectionPackage extends EPackage {
 	int COUPLING = 4;
 
 	/**
-	 * The feature id for the '<em><b>Caller</b></em>' reference.
+	 * The feature id for the '<em><b>Required</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int COUPLING__CALLER = 0;
+	int COUPLING__REQUIRED = 0;
 
 	/**
-	 * The feature id for the '<em><b>Callee</b></em>' reference.
+	 * The feature id for the '<em><b>Provided</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
-	int COUPLING__CALLEE = 1;
+	int COUPLING__PROVIDED = 1;
 
 	/**
 	 * The number of structural features of the '<em>Coupling</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -311,7 +291,6 @@ public interface CollectionPackage extends EPackage {
 	 * The operation id for the '<em>Equals</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -321,7 +300,6 @@ public interface CollectionPackage extends EPackage {
 	 * The operation id for the '<em>Hash Code</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -331,7 +309,6 @@ public interface CollectionPackage extends EPackage {
 	 * The number of operations of the '<em>Coupling</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -341,7 +318,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.collection.Connections <em>Connections</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for class '<em>Connections</em>'.
 	 * @see kieker.model.collection.Connections
 	 * @generated
@@ -352,7 +328,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the map '{@link kieker.model.collection.Connections#getConnections <em>Connections</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the map '<em>Connections</em>'.
 	 * @see kieker.model.collection.Connections#getConnections()
 	 * @see #getConnections()
@@ -364,7 +339,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.collection.OperationCollection <em>Operation Collection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for class '<em>Operation Collection</em>'.
 	 * @see kieker.model.collection.OperationCollection
 	 * @generated
@@ -372,46 +346,53 @@ public interface CollectionPackage extends EPackage {
 	EClass getOperationCollection();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.collection.OperationCollection#getCaller <em>Caller</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.collection.OperationCollection#getRequired <em>Required</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Caller</em>'.
-	 * @see kieker.model.collection.OperationCollection#getCaller()
+	 * @return the meta object for the reference '<em>Required</em>'.
+	 * @see kieker.model.collection.OperationCollection#getRequired()
 	 * @see #getOperationCollection()
 	 * @generated
 	 */
-	EReference getOperationCollection_Caller();
+	EReference getOperationCollection_Required();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.collection.OperationCollection#getCallee <em>Callee</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.collection.OperationCollection#getProvided <em>Provided</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Callee</em>'.
-	 * @see kieker.model.collection.OperationCollection#getCallee()
+	 * @return the meta object for the reference '<em>Provided</em>'.
+	 * @see kieker.model.collection.OperationCollection#getProvided()
 	 * @see #getOperationCollection()
 	 * @generated
 	 */
-	EReference getOperationCollection_Callee();
+	EReference getOperationCollection_Provided();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.model.collection.OperationCollection#getOperations <em>Operations</em>}'.
+	 * Returns the meta object for the map '{@link kieker.model.collection.OperationCollection#getCallees <em>Callees</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the map '<em>Operations</em>'.
-	 * @see kieker.model.collection.OperationCollection#getOperations()
+	 * @return the meta object for the map '<em>Callees</em>'.
+	 * @see kieker.model.collection.OperationCollection#getCallees()
 	 * @see #getOperationCollection()
 	 * @generated
 	 */
-	EReference getOperationCollection_Operations();
+	EReference getOperationCollection_Callees();
+
+	/**
+	 * Returns the meta object for the map '{@link kieker.model.collection.OperationCollection#getCallers <em>Callers</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Callers</em>'.
+	 * @see kieker.model.collection.OperationCollection#getCallers()
+	 * @see #getOperationCollection()
+	 * @generated
+	 */
+	EReference getOperationCollection_Callers();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Coupling To Operation Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for class '<em>Coupling To Operation Map</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyType="kieker.model.collection.Coupling" keyContainment="true"
@@ -424,7 +405,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the containment reference '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getCouplingToOperationMap()
@@ -436,7 +416,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the containment reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getCouplingToOperationMap()
@@ -448,7 +427,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Name To Operation Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for class '<em>Name To Operation Map</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
@@ -461,7 +439,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getNameToOperationMap()
@@ -473,7 +450,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the reference '<em>Value</em>'.
 	 * @see java.util.Map.Entry
 	 * @see #getNameToOperationMap()
@@ -485,7 +461,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for class '{@link kieker.model.collection.Coupling <em>Coupling</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for class '<em>Coupling</em>'.
 	 * @see kieker.model.collection.Coupling
 	 * @generated
@@ -493,34 +468,31 @@ public interface CollectionPackage extends EPackage {
 	EClass getCoupling();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.collection.Coupling#getCaller <em>Caller</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.collection.Coupling#getRequired <em>Required</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Caller</em>'.
-	 * @see kieker.model.collection.Coupling#getCaller()
+	 * @return the meta object for the reference '<em>Required</em>'.
+	 * @see kieker.model.collection.Coupling#getRequired()
 	 * @see #getCoupling()
 	 * @generated
 	 */
-	EReference getCoupling_Caller();
+	EReference getCoupling_Required();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.model.collection.Coupling#getCallee <em>Callee</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.model.collection.Coupling#getProvided <em>Provided</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Callee</em>'.
-	 * @see kieker.model.collection.Coupling#getCallee()
+	 * @return the meta object for the reference '<em>Provided</em>'.
+	 * @see kieker.model.collection.Coupling#getProvided()
 	 * @see #getCoupling()
 	 * @generated
 	 */
-	EReference getCoupling_Callee();
+	EReference getCoupling_Provided();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#equals(java.lang.Object) <em>Equals</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the '<em>Equals</em>' operation.
 	 * @see kieker.model.collection.Coupling#equals(java.lang.Object)
 	 * @generated
@@ -531,7 +503,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the meta object for the '{@link kieker.model.collection.Coupling#hashCode() <em>Hash Code</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the '<em>Hash Code</em>' operation.
 	 * @see kieker.model.collection.Coupling#hashCode()
 	 * @generated
@@ -542,7 +513,6 @@ public interface CollectionPackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -559,7 +529,6 @@ public interface CollectionPackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	interface Literals {
@@ -567,7 +536,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.collection.impl.ConnectionsImpl <em>Connections</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @see kieker.model.collection.impl.ConnectionsImpl
 		 * @see kieker.model.collection.impl.CollectionPackageImpl#getConnections()
 		 * @generated
@@ -578,7 +546,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Connections</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EReference CONNECTIONS__CONNECTIONS = eINSTANCE.getConnections_Connections();
@@ -587,7 +554,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.collection.impl.OperationCollectionImpl <em>Operation Collection</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @see kieker.model.collection.impl.OperationCollectionImpl
 		 * @see kieker.model.collection.impl.CollectionPackageImpl#getOperationCollection()
 		 * @generated
@@ -595,37 +561,41 @@ public interface CollectionPackage extends EPackage {
 		EClass OPERATION_COLLECTION = eINSTANCE.getOperationCollection();
 
 		/**
-		 * The meta object literal for the '<em><b>Caller</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Required</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
-		EReference OPERATION_COLLECTION__CALLER = eINSTANCE.getOperationCollection_Caller();
+		EReference OPERATION_COLLECTION__REQUIRED = eINSTANCE.getOperationCollection_Required();
 
 		/**
-		 * The meta object literal for the '<em><b>Callee</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Provided</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
-		EReference OPERATION_COLLECTION__CALLEE = eINSTANCE.getOperationCollection_Callee();
+		EReference OPERATION_COLLECTION__PROVIDED = eINSTANCE.getOperationCollection_Provided();
 
 		/**
-		 * The meta object literal for the '<em><b>Operations</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Callees</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
-		EReference OPERATION_COLLECTION__OPERATIONS = eINSTANCE.getOperationCollection_Operations();
+		EReference OPERATION_COLLECTION__CALLEES = eINSTANCE.getOperationCollection_Callees();
+
+		/**
+		 * The meta object literal for the '<em><b>Callers</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPERATION_COLLECTION__CALLERS = eINSTANCE.getOperationCollection_Callers();
 
 		/**
 		 * The meta object literal for the '{@link kieker.model.collection.impl.CouplingToOperationMapImpl <em>Coupling To Operation Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @see kieker.model.collection.impl.CouplingToOperationMapImpl
 		 * @see kieker.model.collection.impl.CollectionPackageImpl#getCouplingToOperationMap()
 		 * @generated
@@ -636,7 +606,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EReference COUPLING_TO_OPERATION_MAP__KEY = eINSTANCE.getCouplingToOperationMap_Key();
@@ -645,7 +614,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EReference COUPLING_TO_OPERATION_MAP__VALUE = eINSTANCE.getCouplingToOperationMap_Value();
@@ -654,7 +622,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.collection.impl.NameToOperationMapImpl <em>Name To Operation Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @see kieker.model.collection.impl.NameToOperationMapImpl
 		 * @see kieker.model.collection.impl.CollectionPackageImpl#getNameToOperationMap()
 		 * @generated
@@ -665,7 +632,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EAttribute NAME_TO_OPERATION_MAP__KEY = eINSTANCE.getNameToOperationMap_Key();
@@ -674,7 +640,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Value</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EReference NAME_TO_OPERATION_MAP__VALUE = eINSTANCE.getNameToOperationMap_Value();
@@ -683,7 +648,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '{@link kieker.model.collection.impl.CouplingImpl <em>Coupling</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @see kieker.model.collection.impl.CouplingImpl
 		 * @see kieker.model.collection.impl.CollectionPackageImpl#getCoupling()
 		 * @generated
@@ -691,28 +655,25 @@ public interface CollectionPackage extends EPackage {
 		EClass COUPLING = eINSTANCE.getCoupling();
 
 		/**
-		 * The meta object literal for the '<em><b>Caller</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Required</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
-		EReference COUPLING__CALLER = eINSTANCE.getCoupling_Caller();
+		EReference COUPLING__REQUIRED = eINSTANCE.getCoupling_Required();
 
 		/**
-		 * The meta object literal for the '<em><b>Callee</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Provided</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
-		EReference COUPLING__CALLEE = eINSTANCE.getCoupling_Callee();
+		EReference COUPLING__PROVIDED = eINSTANCE.getCoupling_Provided();
 
 		/**
 		 * The meta object literal for the '<em><b>Equals</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EOperation COUPLING___EQUALS__OBJECT = eINSTANCE.getCoupling__Equals__Object();
@@ -721,7 +682,6 @@ public interface CollectionPackage extends EPackage {
 		 * The meta object literal for the '<em><b>Hash Code</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
 		 * @generated
 		 */
 		EOperation COUPLING___HASH_CODE = eINSTANCE.getCoupling__HashCode();

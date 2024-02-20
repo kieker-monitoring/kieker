@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link kieker.model.collection.Connections#getConnections <em>Connections</em>}</li>
+ *   <li>{@link kieker.model.collection.Connections#getConnections <em>Connections</em>}</li>
  * </ul>
  *
  * @see kieker.model.collection.CollectionPackage#getConnections()
@@ -28,7 +28,6 @@ public interface Connections extends EObject {
 	 * and the value is of type {@link kieker.model.collection.OperationCollection},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the value of the '<em>Connections</em>' map.
 	 * @see kieker.model.collection.CollectionPackage#getConnections_Connections()
 	 * @model mapType="kieker.model.collection.CouplingToOperationMap&lt;kieker.model.collection.Coupling, kieker.model.collection.OperationCollection&gt;"

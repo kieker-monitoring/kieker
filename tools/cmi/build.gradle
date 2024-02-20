@@ -20,13 +20,13 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	implementation "com.edwardraff:JSAT:0.0.9"
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
-	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
+	implementation "com.fasterxml.jackson.core:jackson-core:2.16.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
-	testImplementation 'org.mockito:mockito-core:5.7.0'
-	testImplementation 'de.cau.cs.se.teetime:teetime:3.1.0:test'
+	testImplementation "org.mockito:mockito-core:5.10.0"
+	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 }
 
 task uploadArchives {

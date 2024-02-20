@@ -19,15 +19,15 @@ project.artifacts {
 	testArchives project.jarTest
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 dependencies {
 	api project(':common')
 
-	api 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
-	api 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.16.0'
-	api 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
+	api "org.eclipse.emf:org.eclipse.emf.common:2.29.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
 }
 
 // publishing
