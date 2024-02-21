@@ -1,9 +1,9 @@
-package kieker.monitoring.probe.javassist;
+package kieker.monitoring.buildtime;
 
 import java.io.File;
 import java.io.IOException;
 
-public class BuildTimeAdaptionUtil {
+public class BuildTimeInstrumentationUtil {
 	public static void extractJar(File instrumentJar, File tempDir) throws IOException {
 		ProcessBuilder builder = new ProcessBuilder(new String[] { "jar", "xf", instrumentJar.getAbsolutePath() });
 		builder.directory(tempDir);

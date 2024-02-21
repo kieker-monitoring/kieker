@@ -10,9 +10,9 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
-public class KiekerMonitoringAnalysis {
+public class OperationExecutionDataGatherer {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerMonitoringAnalysis.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionDataGatherer.class);
 	
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();

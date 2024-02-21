@@ -1,4 +1,4 @@
-package kieker.monitoring.probe.aspectj;
+package kieker.monitoring.buildtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +13,7 @@ import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.MessageHandler;
 import org.aspectj.tools.ajc.Main;
 
-import kieker.monitoring.probe.javassist.BuildTimeAdaptionUtil;
-
-public class BuildTimeInstrumenterAspectJ {
+public class BuildTimeInstrumentationAspectJ {
 
 	private static final List<String> CLASSES_TO_INSTRUMENT = Arrays.asList(new String[] { "moobench.application.MonitoredClassSimple" });
 
@@ -50,11 +48,11 @@ public class BuildTimeInstrumenterAspectJ {
 
 		File instrumentedJarDirectory = new File(currentTempDirectory.toFile(), "instrumented");
 		instrumentedJarDirectory.mkdir();
-		BuildTimeAdaptionUtil.extractJar(new File(instrumentedTempJarName), instrumentedJarDirectory);
+		BuildTimeInstrumentationUtil.extractJar(new File(instrumentedTempJarName), instrumentedJarDirectory);
 
 		File instrumentedAndMergedJarDirectory = new File(currentTempDirectory.toFile(), "instrumentedAndMerged");
 		instrumentedAndMergedJarDirectory.mkdir();
-		BuildTimeAdaptionUtil.extractJar(instrumentJar, instrumentedAndMergedJarDirectory);
+		BuildTimeInstrumentationUtil.extractJar(instrumentJar, instrumentedAndMergedJarDirectory);
 
 		for (String classname : CLASSES_TO_INSTRUMENT) {
 			String classFileName = classname.replace('.', File.separatorChar) + ".class";
@@ -64,7 +62,7 @@ public class BuildTimeInstrumenterAspectJ {
 			System.out.println("Moving " + instrumentedClassFile + " to " + instrumentedJarClassFile);
 		}
 
-		BuildTimeAdaptionUtil.createJar(instrumentJar, instrumentedAndMergedJarDirectory);
+		BuildTimeInstrumentationUtil.createJar(instrumentJar, instrumentedAndMergedJarDirectory);
 
 	}
 
@@ -72,7 +70,7 @@ public class BuildTimeInstrumenterAspectJ {
 		File instrumentDir = new File(currentTempDirectory.toFile(), "instrumentable");
 		instrumentDir.mkdir();
 
-		BuildTimeAdaptionUtil.extractJar(instrumentJar, instrumentDir);
+		BuildTimeInstrumentationUtil.extractJar(instrumentJar, instrumentDir);
 
 		for (File classFile : FileUtils.listFiles(instrumentDir, null, true)) {
 			String classFileName = classFile.toString();

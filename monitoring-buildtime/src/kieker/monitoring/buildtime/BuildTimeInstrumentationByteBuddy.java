@@ -1,4 +1,4 @@
-package kieker.monitoring.probe.bytebuddy;
+package kieker.monitoring.buildtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.javassist.BuildTimeAdaptionUtil;
+import kieker.monitoring.probe.bytebuddy.OperationExecutionAdvice;
 import kieker.monitoring.timer.ITimeSource;
 
 import net.bytebuddy.ByteBuddy;
@@ -20,7 +20,7 @@ import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.DynamicType.Unloaded;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class BuildTimeAdaption {
+public class BuildTimeInstrumentationByteBuddy {
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 
 		File instrumentJar = new File(args[0]);
@@ -32,7 +32,7 @@ public class BuildTimeAdaption {
 
 		try (URLClassLoader urlClassLoader = new URLClassLoader(urls)) {
 
-			BuildTimeAdaptionUtil.extractJar(instrumentJar, tempDir);
+			BuildTimeInstrumentationUtil.extractJar(instrumentJar, tempDir);
 
 			Class<?> classUnderMonitoring = urlClassLoader.loadClass("moobench.application.MonitoredClassSimple");
 
@@ -50,7 +50,7 @@ public class BuildTimeAdaption {
 			Path classFile = tempDirectory.resolve("moobench/application/MonitoredClassSimple.class");
 			Files.write(classFile, unloaded.getBytes());
 
-			BuildTimeAdaptionUtil.createJar(instrumentJar, tempDir);
+			BuildTimeInstrumentationUtil.createJar(instrumentJar, tempDir);
 		} catch (MalformedURLException e) {
 			throw e;
 		} catch (IOException e) {

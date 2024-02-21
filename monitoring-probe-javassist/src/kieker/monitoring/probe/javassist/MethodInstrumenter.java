@@ -10,22 +10,20 @@ import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 
 public class MethodInstrumenter {
-	
+
 	private final ClassPool cp;
-	
-	
-	
+
 	public MethodInstrumenter(ClassPool pool) {
 		super();
 		this.cp = pool;
 	}
-	
+
 	public void instrumentAllMethods(CtClass cc) throws NotFoundException, CannotCompileException {
 		for (CtConstructor constructor : cc.getConstructors()) {
 			String signature = buildSignature(constructor);
 			instrumentMethod(constructor, signature);
 		}
-		
+
 		for (CtMethod method : cc.getDeclaredMethods()) {
 			String signature = buildSignature(method);
 			instrumentMethod(method, signature);
@@ -34,18 +32,19 @@ public class MethodInstrumenter {
 
 	private void instrumentMethod(CtBehavior method, String signature) throws NotFoundException, CannotCompileException {
 		System.out.println("Signature: " + signature);
-		
+
 		method.addLocalVariable("operationStartData", cp.get("kieker.monitoring.probe.disl.flow.operationExecution.FullOperationStartData"));
-		method.insertBefore("operationStartData = kieker.monitoring.probe.disl.flow.operationExecution.KiekerMonitoringAnalysis.operationStart(\"" + signature + "\");");
-		
+		method.insertBefore(
+				"operationStartData = kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDataGatherer.operationStart(\"" + signature + "\");");
+
 		StringBuilder endBlock = new StringBuilder();
 		endBlock.append("if (operationStartData != null) {"
-				+ "   kieker.monitoring.probe.disl.flow.operationExecution.KiekerMonitoringAnalysis.operationEnd(operationStartData);"
+				+ "   kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDataGatherer.operationEnd(operationStartData);"
 				+ "} ");
-		
+
 		method.insertAfter(endBlock.toString());
 	}
-	
+
 	private String buildSignature(CtConstructor method) {
 		StringBuilder builder = new StringBuilder();
 		if (AccessFlag.isPublic(method.getModifiers())) {
@@ -75,7 +74,7 @@ public class MethodInstrumenter {
 		builder.append(method.getLongName());
 		return builder.toString();
 	}
-	
+
 	private String buildSignature(CtMethod method) throws NotFoundException {
 		StringBuilder builder = new StringBuilder();
 		if (AccessFlag.isPublic(method.getModifiers())) {
