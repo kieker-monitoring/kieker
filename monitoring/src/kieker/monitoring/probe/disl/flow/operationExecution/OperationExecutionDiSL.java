@@ -15,7 +15,7 @@ public class OperationExecutionDiSL {
 
 	@Before(marker = BodyMarker.class, scope = "MonitoredClass*.*")
 	public static void beforemain(final KiekerStaticContext c) {
-		data = KiekerMonitoringAnalysis.operationStart(c.operationSignature());
+		data = OperationExecutionDataGatherer.operationStart(c.operationSignature());
 	}
 
 	@After(marker = BodyMarker.class, scope = "MonitoredClass*.*")
@@ -26,7 +26,7 @@ public class OperationExecutionDiSL {
 		// was enabled and we should complete it by calling "operationEnd".
 		//
 		if (data != null) {
-			KiekerMonitoringAnalysis.operationEnd(data);
+			OperationExecutionDataGatherer.operationEnd(data);
 		}
 	}
 }

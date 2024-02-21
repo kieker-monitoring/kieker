@@ -13,9 +13,9 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * This class contains the monitoring logic that can be used by different frameworks, especially DiSL and Javassist.
  */
-public abstract class KiekerMonitoringAnalysis {
+public abstract class OperationExecutionDataGatherer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KiekerMonitoringAnalysis.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionDataGatherer.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
