@@ -62,18 +62,11 @@ def mainSubprojects = [
   project(':monitoring'),
   project(':monitoring-probe-javassist'),
   project(':monitoring-probe-bytebuddy'),
-  project(':monitoring-buildtime'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
   project(':extension-kafka'),
   project(':extension-cassandra')
-]
-
-def javassistSubprojects = [
-  project(':common'),
-  project(':monitoring'),
-  project(':monitoring-probe-javassist')
 ]
 
 allprojects {
