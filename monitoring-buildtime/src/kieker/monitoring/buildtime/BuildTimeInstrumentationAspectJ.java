@@ -27,6 +27,36 @@ public class BuildTimeInstrumentationAspectJ {
 		Path currentTempDirectory = Files.createTempDirectory("kieker-instrumentation-");
 		File instrumentableDir = buildInstrumentableDirectory(instrumentJar, currentTempDirectory);
 
+		String instrumentedTempJarName = classAspectJ(instrumentJar, aopXmlFile, instrumentableDir);
+
+		File instrumentedAndMergedJarDirectory = mergeInstrumentedClasses(instrumentJar, currentTempDirectory,
+				instrumentedTempJarName);
+
+		BuildTimeInstrumentationUtil.createJar(instrumentJar, instrumentedAndMergedJarDirectory);
+
+	}
+
+	private static File mergeInstrumentedClasses(File instrumentJar, Path currentTempDirectory,
+			String instrumentedTempJarName) throws IOException {
+		File instrumentedJarDirectory = new File(currentTempDirectory.toFile(), "instrumented");
+		instrumentedJarDirectory.mkdir();
+		BuildTimeInstrumentationUtil.extractJar(new File(instrumentedTempJarName), instrumentedJarDirectory);
+
+		File instrumentedAndMergedJarDirectory = new File(currentTempDirectory.toFile(), "instrumentedAndMerged");
+		instrumentedAndMergedJarDirectory.mkdir();
+		BuildTimeInstrumentationUtil.extractJar(instrumentJar, instrumentedAndMergedJarDirectory);
+
+		for (String classname : CLASSES_TO_INSTRUMENT) {
+			String classFileName = classname.replace('.', File.separatorChar) + ".class";
+			File instrumentedClassFile = new File(instrumentedJarDirectory, classFileName);
+			File instrumentedJarClassFile = new File(instrumentedAndMergedJarDirectory, classFileName);
+			instrumentedClassFile.renameTo(instrumentedJarClassFile);
+			System.out.println("Moving " + instrumentedClassFile + " to " + instrumentedJarClassFile);
+		}
+		return instrumentedAndMergedJarDirectory;
+	}
+
+	private static String classAspectJ(File instrumentJar, String aopXmlFile, File instrumentableDir) {
 		Main compiler = new Main();
 
 		String instrumentedTempJarName = instrumentJar.getParent() + File.separator + "instrumented.jar";
@@ -45,25 +75,7 @@ public class BuildTimeInstrumentationAspectJ {
 		compiler.run(ajcArguments, m);
 		IMessage[] ms = m.getMessages(null, true);
 		System.out.println("messages: " + Arrays.asList(ms));
-
-		File instrumentedJarDirectory = new File(currentTempDirectory.toFile(), "instrumented");
-		instrumentedJarDirectory.mkdir();
-		BuildTimeInstrumentationUtil.extractJar(new File(instrumentedTempJarName), instrumentedJarDirectory);
-
-		File instrumentedAndMergedJarDirectory = new File(currentTempDirectory.toFile(), "instrumentedAndMerged");
-		instrumentedAndMergedJarDirectory.mkdir();
-		BuildTimeInstrumentationUtil.extractJar(instrumentJar, instrumentedAndMergedJarDirectory);
-
-		for (String classname : CLASSES_TO_INSTRUMENT) {
-			String classFileName = classname.replace('.', File.separatorChar) + ".class";
-			File instrumentedClassFile = new File(instrumentedJarDirectory, classFileName);
-			File instrumentedJarClassFile = new File(instrumentedAndMergedJarDirectory, classFileName);
-			instrumentedClassFile.renameTo(instrumentedJarClassFile);
-			System.out.println("Moving " + instrumentedClassFile + " to " + instrumentedJarClassFile);
-		}
-
-		BuildTimeInstrumentationUtil.createJar(instrumentJar, instrumentedAndMergedJarDirectory);
-
+		return instrumentedTempJarName;
 	}
 
 	private static File buildInstrumentableDirectory(File instrumentJar, Path currentTempDirectory) throws IOException {
