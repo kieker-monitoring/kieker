@@ -35,7 +35,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.25.0"
 
 	implementation "ch.qos.logback:logback-classic:1.4.14"
-	implementation "ch.qos.logback:logback-core:1.4.14"
+	implementation "ch.qos.logback:logback-core:1.5.2"
 	implementation "ch.qos.logback:logback-access:1.4.14"
 
 	implementation "org.csveed:csveed:0.7.5"
