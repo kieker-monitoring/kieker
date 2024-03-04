@@ -23,17 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.exceptions.AuthenticationException;
-import com.datastax.driver.core.exceptions.InvalidQueryException;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
-import com.datastax.driver.core.exceptions.QueryExecutionException;
-import com.datastax.driver.core.exceptions.QueryValidationException;
-import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
-import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.internal.core.cql.DefaultBoundStatement;
 
 import kieker.common.exception.ConfigurationException;
 import kieker.common.exception.MonitoringRecordException;
@@ -74,8 +67,7 @@ public class CassandraDb {
 
 	private final ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement> classes = new ConcurrentHashMap<>();
 
-	private Cluster cluster;
-	private Session session;
+	private CqlSession session;
 
 	/**
 	 * Creates a new instance of this class using the given parameter.
@@ -101,15 +93,10 @@ public class CassandraDb {
 	 */
 	public boolean connect() {
 		try {
-			this.cluster = Cluster.builder().addContactPointsWithPorts(this.contactPoints)
-					.withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
-					.withMaxSchemaAgreementWaitSeconds(60)
-					.build();
-
-			this.session = this.cluster.connect(this.keyspace);
+			this.session = CqlSession.builder().build();
 			this.createIndexTable();
 			return true;
-		} catch (final NoHostAvailableException | AuthenticationException | InvalidQueryException | IllegalStateException exc) {
+		} catch (final Exception exc) {
 			LOGGER.error("Opening Connection to Database failed. {}", exc.getLocalizedMessage());
 			return false;
 		}
@@ -120,7 +107,6 @@ public class CassandraDb {
 	 */
 	public void disconnect() {
 		this.session.close();
-		this.cluster.close();
 	}
 
 	/**
@@ -221,7 +207,8 @@ public class CassandraDb {
 	 * @return
 	 */
 	private BoundStatement getBoundStatement(final String statement) {
-		return new BoundStatement(this.session.prepare(statement));
+		return new DefaultBoundStatement(this.session.prepare(statement), null, null, statement, null, null, null, null, null, this.dropTables, this.dropTables, 0,
+				null, 0, null, null, null, null, null, null);
 	}
 
 	/**
@@ -231,7 +218,8 @@ public class CassandraDb {
 	 * @return bound statement
 	 */
 	public BoundStatement getBoundStatement(final PreparedStatement statement) {
-		return new BoundStatement(statement);
+		return new DefaultBoundStatement(statement, null, null, this.keyspace, null, null, null, null, null, this.dropTables, this.dropTables, 0, null, 0, null,
+				null, null, null, null, null);
 	}
 
 	/**
@@ -254,7 +242,7 @@ public class CassandraDb {
 		final BoundStatement boundStatement = this.getBoundStatement(dropStatement);
 		try {
 			this.session.execute(boundStatement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			LOGGER.warn("Dropping table {} failed.", tableName);
 		}
 	}
@@ -266,7 +254,7 @@ public class CassandraDb {
 
 		try {
 			this.session.execute(boundStatement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			LOGGER.error("Creating index table {} failed!", this.tablePrefix);
 		}
 	}
@@ -276,7 +264,7 @@ public class CassandraDb {
 		final BoundStatement boundStatement = this.getBoundStatement(selectStatement);
 		try {
 			return this.session.execute(boundStatement) != null;
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			return false;
 		}
 	}
@@ -312,7 +300,7 @@ public class CassandraDb {
 
 		try {
 			this.session.execute(boundStatement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			throw new MonitoringRecordException(String.format("Creating table %s failed!", tableName), exc);
 		}
 
@@ -321,7 +309,7 @@ public class CassandraDb {
 
 		try {
 			this.session.execute(index);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			throw new MonitoringRecordException(String.format("Adding table %s to index failed!", tableName), exc);
 		}
 	}
