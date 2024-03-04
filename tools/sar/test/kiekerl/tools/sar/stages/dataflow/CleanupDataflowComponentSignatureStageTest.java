@@ -16,6 +16,7 @@
 package kiekerl.tools.sar.stages.dataflow;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Test;
  */
 class CleanupDataflowComponentSignatureStageTest {
 
+	@Disabled
 	@Test
 	void test() {
 		Assertions.fail("Not yet implemented");
