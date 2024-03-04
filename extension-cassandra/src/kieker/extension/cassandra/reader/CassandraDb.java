@@ -23,18 +23,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.exceptions.AuthenticationException;
-import com.datastax.driver.core.exceptions.InvalidQueryException;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
-import com.datastax.driver.core.exceptions.QueryExecutionException;
-import com.datastax.driver.core.exceptions.QueryValidationException;
-import com.datastax.driver.core.exceptions.UnsupportedFeatureException;
-import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.internal.core.cql.DefaultBoundStatement;
 
 import kieker.common.exception.ConfigurationException;
 
@@ -47,10 +40,9 @@ public class CassandraDb {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraDb.class);
 
-	private Cluster cluster;
 	private final List<InetSocketAddress> contactPoints;
 	private final String keyspace;
-	private Session session;
+	private CqlSession session;
 	private final Map<String, PreparedStatement> preparedStatements = new ConcurrentHashMap<>();
 
 	/**
@@ -71,13 +63,8 @@ public class CassandraDb {
 	 */
 	public void connect() {
 		try {
-			this.cluster = Cluster.builder().addContactPointsWithPorts(this.contactPoints)
-					.withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
-					.withMaxSchemaAgreementWaitSeconds(60)
-					.build();
-
-			this.session = this.cluster.connect(this.keyspace);
-		} catch (final NoHostAvailableException | AuthenticationException | InvalidQueryException | IllegalStateException exc) {
+			this.session = CqlSession.builder().build();
+		} catch (final Exception exc) {
 			LOGGER.error("Opening Connection to Database failed. {}", exc.getLocalizedMessage());
 		}
 	}
@@ -87,7 +74,6 @@ public class CassandraDb {
 	 */
 	public void disconnect() {
 		this.session.close();
-		this.cluster.close();
 	}
 
 	/**
@@ -137,8 +123,8 @@ public class CassandraDb {
 			this.preparedStatements.put(statement, preparedStatement);
 		}
 
-		final BoundStatement boundStatement = new BoundStatement(preparedStatement);
-		boundStatement.setFetchSize(10000);
+		final BoundStatement boundStatement = new DefaultBoundStatement(preparedStatement, null, null, statement, null, null, null, null, null, null, false, 0, null,
+				0, null, null, null, null, null, null);
 
 		return boundStatement;
 	}
@@ -155,7 +141,7 @@ public class CassandraDb {
 		ResultSet resultSet = null;
 		try {
 			resultSet = this.session.execute(statement);
-		} catch (final NoHostAvailableException | QueryExecutionException | QueryValidationException | UnsupportedFeatureException exc) {
+		} catch (final Exception exc) {
 			LOGGER.error("Error executing statement: {}", exc.getLocalizedMessage());
 		}
 

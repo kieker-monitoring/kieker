@@ -60,7 +60,7 @@ public class FindDistinctCollectionsStage extends
 				.createCalleeOperationToCallerComponentSetMap(connections);
 
 		final Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> protointerfaceSourceGroupedOperations = this
-				.groupCalleesByCallerComponentSet(providedComponentToCallerMap, calleeToCallerComponentSetMap);
+				.groupProvidedOperationByRequiringComponentSet(providedComponentToCallerMap, calleeToCallerComponentSetMap);
 
 		this.outputPort.send(new Tuple<>(repository, protointerfaceSourceGroupedOperations));
 	}
@@ -115,36 +115,36 @@ public class FindDistinctCollectionsStage extends
 	 * callee?-operation set.
 	 *
 	 * @param providedComponentToCallerMap
-	 * @param calleeToCallerComponentSetMap
+	 * @param providedOperationToRequiringComponentSetMap
 	 * @return returns map
 	 */
-	private Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> groupCalleesByCallerComponentSet(
+	private Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> groupProvidedOperationByRequiringComponentSet(
 			final Map<ComponentType, Set<OperationType>> providedComponentToCallerMap,
-			final Map<OperationType, Set<ComponentType>> calleeToCallerComponentSetMap) {
+			final Map<OperationType, Set<ComponentType>> providedOperationToRequiringComponentSetMap) {
 		final Map<ComponentType, Map<Set<ComponentType>, Set<OperationType>>> protointerfaceSourceGroupedOperations = new HashMap<>();
 		providedComponentToCallerMap.entrySet().forEach(entry -> {
 			protointerfaceSourceGroupedOperations.put(entry.getKey(), // callee component
-					this.createSourceGroupedOperations(entry.getValue(), // callee operations
-							calleeToCallerComponentSetMap));
+					this.createSourceGroupedOperations(entry.getValue(),
+							providedOperationToRequiringComponentSetMap));
 		});
 		return protointerfaceSourceGroupedOperations;
 	}
 
 	/**
-	 * Find all operations that have the same source set of ComponentType.
+	 * Find all provided operations that have the same source set of ComponentType.
 	 *
-	 * @param providedOperations
-	 *            set containing all relevant providing operations
-	 * @param calleeToCallerComponentSetMap
+	 * @param requiredOperations
+	 *            set containing all relevant required operations
+	 * @param providedOperationToRequiringComponentSetMap
 	 *            map containing provided operations to ComponentType set representing callers.
 	 * @return map containing ComponentType source sets with their OperationTypes
 	 */
 	private Map<Set<ComponentType>, Set<OperationType>> createSourceGroupedOperations(
-			final Set<OperationType> providedOperations,
-			final Map<OperationType, Set<ComponentType>> calleeToCallerComponentSetMap) {
+			final Set<OperationType> requiredOperations,
+			final Map<OperationType, Set<ComponentType>> providedOperationToRequiringComponentSetMap) {
 		final Map<Set<ComponentType>, Set<OperationType>> callerComponentsToCalleesMap = new HashMap<>();
-		providedOperations.forEach(providedOperation -> {
-			final Set<ComponentType> callerComponentSet = calleeToCallerComponentSetMap.get(providedOperation);
+		requiredOperations.forEach(providedOperation -> {
+			final Set<ComponentType> callerComponentSet = providedOperationToRequiringComponentSetMap.get(providedOperation);
 			final Optional<Entry<Set<ComponentType>, Set<OperationType>>> element = this.findOperationSetByCallerComponentSet(callerComponentSet,
 					callerComponentsToCalleesMap);
 

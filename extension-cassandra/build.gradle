@@ -21,6 +21,6 @@ dependencies {
 	api project(':analysis')
 
 	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
-	implementation "com.datastax.cassandra:cassandra-driver-core:3.11.0"
+	implementation "com.datastax.cassandra:cassandra-driver-core:4.0.0"
 
 }
