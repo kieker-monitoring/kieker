@@ -42,7 +42,7 @@ dependencies {
   resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.29.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0'
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.35.0'
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
