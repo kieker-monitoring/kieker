@@ -46,18 +46,18 @@ public class KiekerStaticContext extends AbstractStaticContext {
 
 		final String result = String.format("%s %s%s(%s)",
 				formatMethodReturnType(methodType),
-				__formatClassName(classNode.name),
-				__formatMethodName(methodNode.name),
+				formatClassName(classNode.name),
+				formatMethodName(methodNode.name),
 				formatMethodParameters(methodType));
 
 		return result;
 	}
 
-	private String __formatClassName(final String className) {
+	private String formatClassName(final String className) {
 		return JavaNames.internalToType(className);
 	}
 
-	private String __formatMethodName(final String methodName) {
+	private String formatMethodName(final String methodName) {
 		if (JavaNames.isConstructorName(methodName)) {
 			return "";
 		} else {
@@ -66,15 +66,15 @@ public class KiekerStaticContext extends AbstractStaticContext {
 	}
 
 	private String formatMethodReturnType(final Type methodType) {
-		return __formatType(methodType.getReturnType());
+		return formatASMType(methodType.getReturnType());
 	}
 
 	private String formatMethodParameters(final Type methodType) {
 		return Arrays.stream(methodType.getArgumentTypes())
-				.map(t -> __formatType(t)).collect(Collectors.joining(","));
+				.map(t -> formatASMType(t)).collect(Collectors.joining(","));
 	}
 
-	private String __formatType(final Type type) {
+	private String formatASMType(final Type type) {
 		if (type.getSort() != Type.METHOD) {
 			return type.getClassName().replace("java.lang.", "");
 		} else {
