@@ -509,9 +509,9 @@ task updateLicenseHeaderYear() {
 task replaceHardCodedVersionNames() {
   doLast {
     regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
-    regexpReplaceInFiles(project.file("monitoring/integrationTest-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
+    regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-operationexecutionrecord/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
 
     regexpReplaceInFiles(project.file("documentation/getting-started/AspectJ-Instrumentation-Example.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
     regexpReplaceInFiles(project.file("documentation/tutorials/How-to-apply-Kieker-in-Java-EE-Environments.rst"), "kieker-.*-SNAPSHOT-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
