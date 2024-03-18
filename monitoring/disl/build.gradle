@@ -12,7 +12,6 @@ plugins {
 	id 'java-library'
 	id 'eclipse'
 	id 'maven-publish'
-	id("io.freefair.aspectj.post-compile-weaving") version "8.4"
 }
 
 sourceCompatibility = 11
@@ -36,44 +35,18 @@ repositories {
 	mavenCentral()
 }
 
-configurations {
-	ajc
-	aspectJCompileTime
-}
-
-compileJava {
-	ajc {
-		enabled = true
-		classpath.setFrom configurations.aspectJCompileTime
-	}
-}
-
-compileTestJava {
-	ajc {
-		classpath.setFrom configurations.aspectJCompileTime
-	}
-}
-
 dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
-	aspectJCompileTime "org.aspectj:aspectjtools:1.9.20.1"
-	implementation "org.aspectj:aspectjrt:$aspectjVersion"
-	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
-
-	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-client:3.1.5"
-
-	implementation "javax.servlet:javax.servlet-api:4.0.1"
-	implementation "javax.jms:javax.jms-api:2.0.1"
-
-	implementation "org.springframework:spring-beans:$springVersion"
-	implementation "org.springframework:spring-context:$springVersion"
-	implementation "org.springframework:spring-core:$springVersion"
-	implementation "org.springframework:spring-web:$springVersion"
-	implementation "org.springframework:spring-webmvc:$springVersion"
+	// disl not available via maven
+	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
+	// DiSLs dependencies need to be added manually
+	implementation 'org.ow2.asm:asm:9.5'
+	implementation 'org.ow2.asm:asm-tree:9.5'
+	implementation 'org.ow2.asm:asm-analysis:9.5'
+	implementation 'org.ow2.asm:asm-commons:9.5'
+	implementation 'org.ow2.asm:asm-util:9.5'
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
@@ -136,65 +109,6 @@ publishing {
 
 			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 		}
-	}
-}
-
-task iajc(dependsOn: classes) {
-	doLast {
-		ant.taskdef(
-			resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
-			classpath: configurations.ajc.asPath
-		)
-		ant.iajc(
-			XlintFile: 'aspectjXlint.properties',
-			X: 'joinpoints:synchronization',
-			source: sourceCompatibility,
-			target: targetCompatibility,
-			debug: 'true',
-			destdir: sourceSets.main.output.classesDir) {
-			classpath {
-				pathElement(location: configurations.compile.asPath)
-				pathElement(location: sourceSets.main.output.classesDir)
-			}
-
-			sourceroots {
-				pathElement(location: 'src/kieker/monitoring/probe/aspectj')
-			}
-		}
-	}
-}
-
-sourceSets {
-	jarIntegrationTest {
-		compileClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.main.output
-
-		compileClasspath += sourceSets.test.output
-		runtimeClasspath += sourceSets.test.output
-
-		java {
-			srcDirs = [ 'integrationTest' ]
-		}
-	}
-}
-
-configurations {
-	jarIntegrationTestImplementation.extendsFrom testImplementation
-	jarIntegrationTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
-task jarIntegrationTest(type: Test) {
-	description = 'Runs integration tests.'
-	group = 'verification'
-
-	testClassesDirs = sourceSets.jarIntegrationTest.output.classesDirs
-	classpath = sourceSets.jarIntegrationTest.runtimeClasspath
-	dependsOn rootProject.aspectJJar
-}
-
-compileJarIntegrationTestJava {
-	ajc {
-		classpath.setFrom configurations.aspectJCompileTime
 	}
 }
 
