@@ -61,7 +61,7 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	aspectJCompileTime "org.aspectj:aspectjtools:1.9.20.1"
+	aspectJCompileTime "org.aspectj:aspectjtools:1.9.21.2"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
