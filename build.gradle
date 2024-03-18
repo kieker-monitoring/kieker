@@ -54,7 +54,7 @@ dependencies {
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
   project(':common'),
-  project(':monitoring'),
+  project(':monitoring:core'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
@@ -348,7 +348,9 @@ def parsePmdReport(File reportFile) {
 
 def checkSubprojects = [
   project(':common'),
-  project(':monitoring'),
+  project(':monitoring:core'),
+  project(':monitoring:aspectj'),
+  project(':monitoring:disl'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
