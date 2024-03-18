@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.disl.flow.operationExecution;
+package kieker.monitoring.probe.utilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

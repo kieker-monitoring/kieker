@@ -20,6 +20,8 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.marker.BodyMarker;
+import kieker.monitoring.probe.utilities.FullOperationStartData;
+import kieker.monitoring.probe.utilities.OperationExecutionDataGatherer;
 
 /**
  * The default instrumentation class for DiSL.

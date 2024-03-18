@@ -14,9 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.disl.flow.operationExecution;
-
-import kieker.monitoring.probe.aspectj.operationExecution.OperationStartData;
+package kieker.monitoring.probe.utilities;
 
 public final class FullOperationStartData extends OperationStartData {
 

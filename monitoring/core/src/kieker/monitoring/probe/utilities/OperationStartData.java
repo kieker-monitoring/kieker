@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.operationExecution;
+package kieker.monitoring.probe.utilities;
 
 public class OperationStartData {
 	private final boolean entrypoint;
