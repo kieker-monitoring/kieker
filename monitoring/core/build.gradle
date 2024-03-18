@@ -14,15 +14,6 @@ plugins {
 // TODO I don't know why this needs to be specified, as this is already specified in the parent build.gradle (as is apply plugin: 'java')
 // 	however, it seems to be ignored by this subproject, both in eclipse and on Jenkins
 sourceSets {
-	main {
-	java {
-		srcDir 'src'
-		srcDir 'src-gen'
-	}
-	resources {
-		srcDirs = ['src-resources']
-	}
-	}
 	test {
 	java {
 		srcDir 'test'
