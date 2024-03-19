@@ -22,12 +22,12 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.35.0"
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.36.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0"
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.1"
-	implementation "com.sun.xml.bind:jaxb-impl:4.0.4"
+	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
 	implementation "org.apache.commons:commons-compress:1.25.0"
 	implementation "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
