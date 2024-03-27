@@ -14,24 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.operationExecution;
+package kieker.monitoring.probe.utilities;
 
-final class OperationStartData {
+public class OperationStartData {
 	private final boolean entrypoint;
-	private final String sessionId;
 	private final long traceId;
 	private final long tin;
-	private final String hostname;
 	private final int eoi;
 	private final int ess;
 
-	public OperationStartData(final boolean entrypoint, final String sessionId, final long traceId, final long tin, final String hostname,
-			final int eoi, final int ess) {
+	public OperationStartData(final boolean entrypoint, final long traceId, final long tin, final int eoi, final int ess) {
 		this.entrypoint = entrypoint;
-		this.sessionId = sessionId;
 		this.traceId = traceId;
 		this.tin = tin;
-		this.hostname = hostname;
 		this.eoi = eoi;
 		this.ess = ess;
 	}
@@ -40,20 +35,12 @@ final class OperationStartData {
 		return this.entrypoint;
 	}
 
-	public String getSessionId() {
-		return this.sessionId;
-	}
-
 	public long getTraceId() {
 		return this.traceId;
 	}
 
 	public long getTin() {
 		return this.tin;
-	}
-
-	public String getHostname() {
-		return this.hostname;
 	}
 
 	public int getEoi() {

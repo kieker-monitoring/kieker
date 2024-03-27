@@ -1,0 +1,133 @@
+buildscript {
+	repositories {
+		maven {url "https://plugins.gradle.org/m2/"}
+	}
+	dependencies {
+		classpath "io.freefair.gradle:aspectj-plugin:8.4"
+	}
+}
+
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':common')
+	implementation project(':monitoring:core')
+
+	// disl not available via maven
+	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
+	// DiSLs dependencies need to be added manually
+	implementation 'org.ow2.asm:asm:9.5'
+	implementation 'org.ow2.asm:asm-tree:9.5'
+	implementation 'org.ow2.asm:asm-analysis:9.5'
+	implementation 'org.ow2.asm:asm-commons:9.5'
+	implementation 'org.ow2.asm:asm-util:9.5'
+
+	// testing
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+
+	testImplementation "org.javassist:javassist:3.30.2-GA"
+
+	testImplementation "junit:junit:$libJunitVersion"
+
+	testImplementation "org.objenesis:objenesis:3.3"
+
+	testImplementation "org.easymock:easymock:5.2.0"
+	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+
+	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	testImplementation "org.springframework:spring-beans:$springVersion"
+	testImplementation "org.springframework:spring-expression:3.$springVersion"
+
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.5"
+	testImplementation "org.eclipse.jetty:jetty-webapp:9.4.28.v20200408"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.19"
+
+	testImplementation "commons-io:commons-io:2.11.0"
+
+	testImplementation project(':common').sourceSets.test.output
+
+	integrationTestImplementation "junit:junit:$libJunitVersion"
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'monitoring'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+
+def resolveLibrary(String library) {
+def libraryDir = rootProject.file(dirLib)
+return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}
