@@ -1,0 +1,171 @@
+buildscript {
+	repositories {
+		maven {url "https://plugins.gradle.org/m2/"}
+	}
+}
+
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+// TODO I don't know why this needs to be specified, as this is already specified in the parent build.gradle (as is apply plugin: 'java')
+// 	however, it seems to be ignored by this subproject, both in eclipse and on Jenkins
+sourceSets {
+	test {
+	java {
+		srcDir 'test'
+		srcDir 'test-gen'
+	}
+	resources {
+		srcDirs = ['test-resources']
+	}
+	}
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':common')
+
+	implementation "com.rabbitmq:amqp-client:$libAmqpVersion"
+
+	implementation "org.jctools:jctools-core:$libJctoolsVersion"
+
+	implementation "com.github.oshi:oshi-core:6.4.12"
+
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation "org.influxdb:influxdb-java:2.24"
+
+	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
+
+	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
+	implementation "org.apache.commons:commons-compress:1.25.0"
+
+	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-client:3.1.5"
+
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+	implementation "javax.servlet:javax.servlet-api:4.0.1"
+	// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
+	implementation "javax.jms:javax.jms-api:2.0.1"
+
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.1"
+	implementation "javax.jws:javax.jws-api:1.1"
+
+	implementation "org.springframework:spring-beans:$springVersion"
+	implementation "org.springframework:spring-context:$springVersion"
+	implementation "org.springframework:spring-core:$springVersion"
+	implementation "org.springframework:spring-web:$springVersion"
+	implementation "org.springframework:spring-webmvc:$springVersion"
+
+	// influxdb
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation "org.influxdb:influxdb-java:2.24"
+
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	implementation "com.squareup.okhttp3:okhttp:4.12.0"
+
+	// testing
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+
+	testImplementation "org.javassist:javassist:3.30.2-GA"
+
+	testImplementation "junit:junit:$libJunitVersion"
+
+	testImplementation "org.objenesis:objenesis:3.3"
+
+	testImplementation "org.easymock:easymock:5.2.0"
+	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+
+	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	testImplementation "org.springframework:spring-beans:$springVersion"
+	testImplementation "org.springframework:spring-expression:3.$springVersion"
+
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.5"
+	testImplementation "org.eclipse.jetty:jetty-webapp:9.4.28.v20200408"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.19"
+
+	testImplementation "commons-io:commons-io:2.11.0"
+
+	testImplementation project(':common').sourceSets.test.output
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'monitoring'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+
+def resolveLibrary(String library) {
+def libraryDir = rootProject.file(dirLib)
+return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}

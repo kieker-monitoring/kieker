@@ -24,7 +24,7 @@ project.artifacts {
 
 dependencies {
 	api project(':common')
-	api project(':monitoring')
+	api project(':monitoring:core')
 	api project(':model')
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle

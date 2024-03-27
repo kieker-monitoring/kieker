@@ -2,7 +2,9 @@ rootProject.name = 'kieker'
 
 // Kieker's subprojects:
 include 'common'
-include 'monitoring'
+include 'monitoring:core'
+include 'monitoring:aspectj'
+include 'monitoring:disl'
 include 'analysis'
 include 'model'
 include 'tools'

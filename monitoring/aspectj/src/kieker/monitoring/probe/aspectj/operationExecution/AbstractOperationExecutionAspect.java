@@ -32,6 +32,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
+import kieker.monitoring.probe.utilities.OperationStartData;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -75,8 +76,6 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		}
 		// common fields
 		final boolean entrypoint;
-		final String hostname = VMNAME;
-		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		long traceId = CFREGISTRY.recallThreadLocalTraceId(); // traceId, -1 if entry point
@@ -99,7 +98,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		// measure before
 		final long tin = TIME.getTime();
 
-		final OperationStartData data = new OperationStartData(entrypoint, sessionId, traceId, tin, hostname, eoi, ess);
+		final OperationStartData data = new OperationStartData(entrypoint, traceId, tin, eoi, ess);
 		this.stack.get().push(data);
 	}
 
@@ -117,9 +116,12 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final OperationStartData data = this.stack.get().pop();
 
 		final long tout = TIME.getTime();
+		
+		final String hostname = VMNAME;
+		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		CTRLINST.newMonitoringRecord(
-				new OperationExecutionRecord(operationSignature, data.getSessionId(),
-						data.getTraceId(), data.getTin(), tout, data.getHostname(), data.getEoi(), data.getEss()));
+				new OperationExecutionRecord(operationSignature, sessionId,
+						data.getTraceId(), data.getTin(), tout, hostname, data.getEoi(), data.getEss()));
 		// cleanup
 		if (data.isEntrypoint()) {
 			CFREGISTRY.unsetThreadLocalTraceId();
