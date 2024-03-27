@@ -29,6 +29,8 @@ import ch.usi.dag.disl.util.JavaNames;
 /**
  * Provides static context information for the method being
  * instrumented tailored to Kieker records.
+ * 
+ * @author Lubomir Bulej, David Georg Reichelt
  */
 public class KiekerStaticContext extends AbstractStaticContext {
 
@@ -50,7 +52,7 @@ public class KiekerStaticContext extends AbstractStaticContext {
 				formatMethodName(methodNode.name),
 				formatMethodParameters(methodType));
 
-		return result;
+		return result; // NOPMD (result storing makes it more readable)
 	}
 
 	private String formatClassName(final String className) {
