@@ -529,18 +529,6 @@ task replaceHardCodedVersionNames() {
 }
 compileJava.dependsOn replaceHardCodedVersionNames
 
-
-def reportingCompatibleJavaVersionPresent() {
-  switch (JavaVersion.current()) {
-    case JavaVersion.VERSION_1_7:
-    case JavaVersion.VERSION_1_8:
-      return true;
-    default:
-      println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
-      return false;
-  }
-}
-
 def resolveRelativeToParent(String directory, String file) {
   return rootProject.file(directory + '/' + file)
 }
