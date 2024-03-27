@@ -5,7 +5,7 @@ Kiekers monitoring component offers the core monitoring code (including monitori
 For instrumentation, there are different variants:
 * The AspectJ jar can be used with `-javaagent`
 * The DiSL instrumentation can be used starting the DiSL script.
-* Additionally, the contents from `:monitoring:core` can be weaved directly using kieker-source-instrumentation or the bytecode (compile-time) instrumentation. 
+* Additionally, the contents from `:monitoring:core` can be weaved directly using kieker-source-instrumentation or the bytecode (compile-time) instrumentation.
 
 ```mermaid
 graph TD;
