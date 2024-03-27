@@ -8,12 +8,7 @@ buildscript {
 
 plugins {
 	id 'java'
-	id 'java-library'
 	id 'eclipse'
-}
-
-repositories {
-    mavenCentral()
 }
 
 repositories {
