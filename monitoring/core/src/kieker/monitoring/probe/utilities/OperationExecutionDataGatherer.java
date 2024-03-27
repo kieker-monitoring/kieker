@@ -28,6 +28,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * This class contains the monitoring logic that can be used by different frameworks, especially DiSL and Javassist.
+ * 
+ * @author Lubomir Bulej, David Georg Reichelt
  */
 public abstract class OperationExecutionDataGatherer {
 

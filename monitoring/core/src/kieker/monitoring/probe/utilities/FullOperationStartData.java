@@ -16,6 +16,11 @@
 
 package kieker.monitoring.probe.utilities;
 
+/**
+ * Stores the *full* data of an operation start, to later on produce an execution record
+ * 
+ * @author Lubomir Bulej, David Georg Reichelt
+ */
 public final class FullOperationStartData extends OperationStartData {
 
 	private final String operationSignature;
