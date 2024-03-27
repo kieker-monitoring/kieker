@@ -631,7 +631,6 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
   // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
   configure allArtifacts
   configure licence
-  configure aopxml
 
   manifest = project.manifest {
     from sharedManifest
@@ -646,7 +645,6 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
   archiveClassifier = 'emf'
   configure allArtifacts
   configure licence
-  configure aopxml
 
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
