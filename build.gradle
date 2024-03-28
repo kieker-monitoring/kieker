@@ -535,18 +535,6 @@ task replaceHardCodedVersionNames() {
 }
 compileJava.dependsOn replaceHardCodedVersionNames
 
-
-def reportingCompatibleJavaVersionPresent() {
-  switch (JavaVersion.current()) {
-    case JavaVersion.VERSION_1_7:
-    case JavaVersion.VERSION_1_8:
-      return true;
-    default:
-      println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
-      return false;
-  }
-}
-
 def resolveRelativeToParent(String directory, String file) {
   return rootProject.file(directory + '/' + file)
 }
@@ -657,7 +645,6 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
   // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
   configure allArtifacts
   configure licence
-  configure aopxml
 
   manifest = project.manifest {
     from sharedManifest
@@ -672,7 +659,6 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
   archiveClassifier = 'emf'
   configure allArtifacts
   configure licence
-  configure aopxml
 
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 

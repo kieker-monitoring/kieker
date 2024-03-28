@@ -8,8 +8,6 @@ buildscript {
 }
 
 plugins {
-	id 'java'
-	id 'java-library'
 	id 'eclipse'
 	id 'maven-publish'
 	id("io.freefair.aspectj.post-compile-weaving") version "8.6"
@@ -96,7 +94,7 @@ dependencies {
 	testImplementation "org.eclipse.jetty:jetty-webapp:9.4.28.v20200408"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.19"
 
-	testImplementation "commons-io:commons-io:2.11.0"
+	testImplementation "commons-io:commons-io:2.15.1"
 
 	testImplementation project(':common').sourceSets.test.output
 
