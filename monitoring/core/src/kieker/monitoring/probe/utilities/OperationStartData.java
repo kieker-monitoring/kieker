@@ -16,6 +16,11 @@
 
 package kieker.monitoring.probe.utilities;
 
+/**
+ * Stores the data of an operation start, to later on produce an execution record
+ * 
+ * @author David Georg Reichelt
+ */
 public class OperationStartData {
 	private final boolean entrypoint;
 	private final long traceId;
