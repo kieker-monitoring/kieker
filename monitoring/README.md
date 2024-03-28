@@ -10,8 +10,13 @@ For instrumentation, there are different variants:
 ```mermaid
 graph TD;
 	:monitoring:core-->:monitoring:aspectj;
+	:monitoring:core-->:monitoring:bytebuddy;
 	:monitoring:core-->:monitoring:disl;
+	:monitoring:core-->:monitoring:javassist;
 	:monitoring:aspectj-- -javaagent -->SuT;
+	:monitoring:bytebuddy-- -javaagent -->SuT;
+	:monitoring:disl-- -javaagent -->SuT;
+	:monitoring:javassist-- -javaagent -->SuT;
 	:monitoring:disl-- instrumentation -->SuT;
 	SuT-->id1[Kieker Traces];
 ```
