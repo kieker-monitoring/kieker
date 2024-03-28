@@ -22,25 +22,30 @@ import java.util.List;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternParser;
 
-public class KiekerPatternUtil {
+/**
+ * Helper class for checking whether a signature is contained in KIEKER_PATTERNS
+ * 
+ * @author David Georg Reichelt
+ */
+public final class KiekerPatternUtil {
 
 	private KiekerPatternUtil() {
 
 	}
 
 	public static List<KiekerPattern> getPatterns(final String instrumentables) {
-		List<KiekerPattern> patternObjects = new LinkedList<KiekerPattern>();
-		String[] patterns = instrumentables.split(";");
-		for (String pattern : patterns) {
-			String clazzMethodAndPrefix = pattern.substring(0, pattern.indexOf('('));
-			String clazzAndPrefix = clazzMethodAndPrefix.substring(0, pattern.lastIndexOf('.'));
-			String onlyClazz = clazzAndPrefix.contains(" ")
-					? clazzAndPrefix.substring(clazzAndPrefix.lastIndexOf(" ") + 1)
+		final List<KiekerPattern> patternObjects = new LinkedList<KiekerPattern>();
+		final String[] patterns = instrumentables.split(";");
+		for (final String pattern : patterns) {
+			final String clazzMethodAndPrefix = pattern.substring(0, pattern.indexOf('('));
+			final String clazzAndPrefix = clazzMethodAndPrefix.substring(0, pattern.lastIndexOf('.'));
+			final String onlyClazz = clazzAndPrefix.contains(" ")
+					? clazzAndPrefix.substring(clazzAndPrefix.lastIndexOf(' ') + 1)
 					: clazzAndPrefix;
 			try {
-				KiekerPattern patternObject = new KiekerPattern(onlyClazz, PatternParser.parseToPattern(pattern));
+				final KiekerPattern patternObject = new KiekerPattern(onlyClazz, PatternParser.parseToPattern(pattern));
 				patternObjects.add(patternObject);
-			} catch (InvalidPatternException e) {
+			} catch (final InvalidPatternException e) {
 				e.printStackTrace();
 			}
 		}
@@ -48,7 +53,7 @@ public class KiekerPatternUtil {
 	}
 
 	public static boolean classIsContained(final List<KiekerPattern> patternObjects, final String clazz) {
-		for (KiekerPattern pattern : patternObjects) {
+		for (final KiekerPattern pattern : patternObjects) {
 			if (clazz.equals(pattern.getOnlyClass())) {
 				return true;
 			}
@@ -57,7 +62,7 @@ public class KiekerPatternUtil {
 	}
 
 	public static boolean methodIsContained(final List<KiekerPattern> patternObjects, final String signature) {
-		for (KiekerPattern pattern : patternObjects) {
+		for (final KiekerPattern pattern : patternObjects) {
 			if (pattern.getFullPattern().matcher(signature).matches()) {
 				return true;
 			}
