@@ -357,6 +357,7 @@ def checkSubprojects = [
   project(':monitoring:core'),
   project(':monitoring:aspectj'),
   project(':monitoring:disl'),
+  project(':monitoring:javassist'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
