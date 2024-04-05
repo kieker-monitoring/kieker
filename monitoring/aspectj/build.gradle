@@ -8,8 +8,6 @@ buildscript {
 }
 
 plugins {
-	id 'java'
-	id 'java-library'
 	id 'eclipse'
 	id 'maven-publish'
 	id("io.freefair.aspectj.post-compile-weaving") version "8.6"
