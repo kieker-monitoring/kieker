@@ -71,7 +71,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
 	implementation "javax.jms:javax.jms-api:2.0.1"
 
-	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.1"
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "javax.jws:javax.jws-api:1.1"
 
 	implementation "org.springframework:spring-beans:$springVersion"
