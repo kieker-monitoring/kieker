@@ -42,7 +42,7 @@ archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources', '../../resources' ]
+sourceSets.main.resources.srcDirs = ['src-resources' ]
 
 mainClassName = 'kieker.examples.monitoring.spring.BookstoreStarter'
 
