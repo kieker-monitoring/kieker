@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = 11
 targetCompatibility = 11
 
-def springVersion = '5.3.1'
+def springVersion = '5.3.33'
 
 repositories {
 	mavenLocal()
@@ -18,7 +18,7 @@ dependencies {
         implementation "org.slf4j:slf4j-api:1.7.30"
         implementation "org.codehaus.groovy:groovy-all:3.0.2"
 
-        implementation "org.jctools:jctools-core:2.1.0"
+        implementation "org.jctools:jctools-core:4.0.3"
 
 	// https://mvnrepository.com/artifact/org.springframework/spring-expression
 	implementation "org.springframework:spring-aop:${springVersion}"
@@ -29,14 +29,8 @@ dependencies {
 	implementation "org.springframework:spring-web:${springVersion}"
 	implementation "org.springframework:spring-webmvc:${springVersion}"
 
-	// https://mvnrepository.com/artifact/aopalliance/aopalliance
-	implementation "aopalliance:aopalliance:1.0"
-
 	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
-	runtimeOnly "org.aspectj:aspectjweaver:1.9.7"
-
-	// https://mvnrepository.com/artifact/commons-logging/commons-logging
-	runtimeOnly "commons-logging:commons-logging:1.2"
+	runtimeOnly "org.aspectj:aspectjweaver:1.9.22"
 
         implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
 }
