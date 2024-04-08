@@ -64,7 +64,7 @@ dependencies {
 
 	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
 	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-client:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-client:3.1.6"
 
 	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
