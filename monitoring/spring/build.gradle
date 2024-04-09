@@ -43,6 +43,8 @@ dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
+	implementation "javax.servlet:javax.servlet-api:4.0.1"
+
 	implementation "org.springframework:spring-beans:$springVersion"
 	implementation "org.springframework:spring-context:$springVersion"
 	implementation "org.springframework:spring-core:$springVersion"
