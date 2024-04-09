@@ -74,12 +74,6 @@ dependencies {
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "javax.jws:javax.jws-api:1.1"
 
-	implementation "org.springframework:spring-beans:$springVersion"
-	implementation "org.springframework:spring-context:$springVersion"
-	implementation "org.springframework:spring-core:$springVersion"
-	implementation "org.springframework:spring-web:$springVersion"
-	implementation "org.springframework:spring-webmvc:$springVersion"
-
 	// influxdb
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.24"
