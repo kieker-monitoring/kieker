@@ -1,0 +1,130 @@
+plugins {
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+// TODO I don't know why this needs to be specified, as this is already specified in the parent build.gradle (as is apply plugin: 'java')
+// 	however, it seems to be ignored by this subproject, both in eclipse and on Jenkins
+sourceSets {
+	test {
+	java {
+		srcDir 'test'
+		srcDir 'test-gen'
+	}
+	resources {
+		srcDirs = ['test-resources']
+	}
+	}
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':common')
+	implementation project(':monitoring:core')
+
+	implementation "org.springframework:spring-beans:$springVersion"
+	implementation "org.springframework:spring-context:$springVersion"
+	implementation "org.springframework:spring-core:$springVersion"
+	implementation "org.springframework:spring-web:$springVersion"
+	implementation "org.springframework:spring-webmvc:$springVersion"
+
+	// testing
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+
+	testImplementation "junit:junit:$libJunitVersion"
+
+	testImplementation "org.objenesis:objenesis:3.3"
+
+	testImplementation "org.easymock:easymock:5.2.0"
+	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
+
+	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
+	testImplementation project (path: ':common', configuration: 'testArchives')
+	testImplementation "org.springframework:spring-beans:$springVersion"
+	testImplementation "org.springframework:spring-expression:3.$springVersion"
+
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.5"
+	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.20"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
+
+	testImplementation "commons-io:commons-io:2.16.0"
+
+	testImplementation project(':common').sourceSets.test.output
+}
+
+// publishing
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'net.kieker-monitoring'
+			artifactId = 'monitoring'
+			version = version
+
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			def mavenUser = "NoMavenUser"
+			if (System.env.kiekerMavenUser != null) {
+				mavenUser = System.env.kiekerMavenUser
+			}
+			def mavenPassword = "NoMavenPassword"
+			if (System.env.kiekerMavenPassword != null) {
+				mavenPassword = System.env.kiekerMavenPassword
+			}
+			credentials {
+				username = mavenUser
+				password = mavenPassword
+			}
+
+			// Maven central:
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+		}
+	}
+}
+
+def resolveLibrary(String library) {
+def libraryDir = rootProject.file(dirLib)
+return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}
