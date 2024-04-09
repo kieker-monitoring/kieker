@@ -73,6 +73,7 @@ dependencies {
 	testImplementation "commons-io:commons-io:2.16.0"
 
 	testImplementation project(':common').sourceSets.test.output
+	testImplementation project(':monitoring:core').sourceSets.test.output
 }
 
 // publishing
