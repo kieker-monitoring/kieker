@@ -30,7 +30,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
 	runtimeOnly "org.aspectj:aspectjweaver:1.9.22"
 
-        implementation "net.kieker-monitoring:kieker:${kiekerVersion}"
+        implementation "net.kieker-monitoring:kieker:${kiekerVersion}:spring"
 }
 
 distTar.enabled=false
