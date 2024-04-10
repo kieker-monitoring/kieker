@@ -12,15 +12,6 @@ source "${BIN_DIR}/release-check-common.sh"
 # 55=Java 11
 javaVersion="major version: 55"
 
-# build with ant (target may be passed as $1)
-function run_gradle {
-	information "Trying to invoke gradle with target '$1' ..."
-	if ! ./gradlew -S $1; then
-		error "Gradle build failed"
-		exit 1
-	fi
-}
-
 # extract archive to a specific location
 function extract_archive_to {
 	if [ -z "$1" ]; then
