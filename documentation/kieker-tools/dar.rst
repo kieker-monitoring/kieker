@@ -39,12 +39,9 @@ Currently **dar** supports five different modes to modularize the architecture.
 Each module is seen as a component of the architecture.
 - **file-mode** all functions within a file are put in the same component
 - **map-mode**  a separate map file sorts functions into a component
-- **module-mode** Fortran module definitions are used to place a function into a
-  component
-- **java-class-mode** The simple class name is used for component names and to
-  group functions/methods
-- **java-class-long-mode** The full qualified name of classes is used for
-  component names and to group functions/methods
+- **module-mode** Fortran module definitions are used to place a function into a component
+- **java-class-mode** The simple class name is used for component names and to group functions/methods
+- **java-class-long-mode** The full qualified name of classes is used for component names and to group functions/methods
   
 In principle, it is possible to specify multiple modes. This is helpful when
 for example not all parts of a program use, e.g., Fortran modules, then the
