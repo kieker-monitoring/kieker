@@ -146,6 +146,7 @@ pipeline {
             }
           }
           steps {
+            sh './gradlew publishToMavenLocal'
             unstash 'distributions'
             sh 'bin/dev/release-check-extended.sh'
           }
