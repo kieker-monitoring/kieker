@@ -54,8 +54,8 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh './gradlew compileJava'
-            sh './gradlew compileTestJava'
+            sh './gradlew -x signMavenJavaPublication compileJava'
+            sh './gradlew -x signMavenJavaPublication compileTestJava'
             sh 'df'
           }
         }
@@ -64,7 +64,7 @@ pipeline {
           steps {
             sh './gradlew -x check -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
             sh 'bin/dev/assemble-tools.sh'
-            stash includes: 'build/libs/*.jar,build/libs/*.asc', name: 'jarArtifacts'
+            stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'build/architecture-recovery*.*', name: 'architecture-recovery'
             stash includes: 'build/tools/*', name: 'tools'
@@ -84,9 +84,9 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
-          options {
-            skipDefaultCheckout()
-          }
+//          options {
+//            skipDefaultCheckout()
+//          }
           steps {
             unstash 'distributions'
             unstash 'bin-dev'
@@ -106,9 +106,9 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
-          options {
-            skipDefaultCheckout()
-          }
+//          options {
+//            skipDefaultCheckout()
+//          }
           when {
             beforeAgent true
             anyOf {
