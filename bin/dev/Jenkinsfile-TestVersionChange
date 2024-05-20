@@ -65,7 +65,7 @@ pipeline {
             sh './gradlew -x check -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
             sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
-            stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'build/libs/*.asc', name: 'jarArtifacts'            stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'build/architecture-recovery*.*', name: 'architecture-recovery'
             stash includes: 'build/tools/*', name: 'tools'
             stash includes: 'build/trace-analysis*.*', name: 'trace-analysis'
