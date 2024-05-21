@@ -23,6 +23,7 @@ configurations {
   resultJar
   emfJarConfig
   aspectJarConfig
+  bytebuddyJarConfig
 }
 
 spotless {
@@ -47,6 +48,8 @@ dependencies {
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
+
+  bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.11"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -55,6 +58,7 @@ dependencies {
 def mainSubprojects = [
   project(':common'),
   project(':monitoring:core'),
+  project(':monitoring-probe-bytebuddy'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
@@ -356,6 +360,7 @@ def checkSubprojects = [
   project(':common'),
   project(':monitoring:core'),
   project(':monitoring:aspectj'),
+  project(':monitoring:bytebuddy'),
   project(':monitoring:disl'),
   project(':model'),
   project(':analysis'),
@@ -711,6 +716,30 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
         "Can-Redefine-Classes": "true",
         "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
         "org/aspectj/weaver/" // The section name
+    )
+  }
+}
+
+/** Kieker jar with bytebuddy tooling. */
+task bytebuddyJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring as javaagent."
+) {
+  archiveClassifier = 'bytebuddy'
+  configure allArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.bytebuddyJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": "true",
+        "Can-Retransform-Classes": "true",
+	    "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
     )
   }
 }
