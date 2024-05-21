@@ -30,7 +30,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
 	runtimeOnly "org.aspectj:aspectjweaver:1.9.22"
 
-        implementation "net.kieker-monitoring:kieker:${kiekerVersion}:spring"
+	implementation fileTree('lib') {
+		include "lib/kieker-${kiekerVersion}-spring.jar"
+	}
         //implementation files("../../../build/libs/kieker-${kiekerVersion}-spring.jar")
 }
 
