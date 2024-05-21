@@ -10,6 +10,7 @@ For instrumentation, there are different variants:
 ```mermaid
 graph TD;
 	:monitoring:core-->:monitoring:aspectj;
+	:monitoring:core-->:monitoring:bytebuddy;
 	:monitoring:core-->:monitoring:disl;
 	:monitoring:aspectj-- -javaagent -->SuT;
 	:monitoring:disl-- instrumentation -->SuT;
