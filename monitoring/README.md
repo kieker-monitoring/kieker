@@ -11,8 +11,10 @@ For instrumentation, there are different variants:
 graph TD;
 	:monitoring:core-->:monitoring:aspectj;
 	:monitoring:core-->:monitoring:bytebuddy;
+	:monitoring:core-->:monitoring:javassist;
 	:monitoring:core-->:monitoring:disl;
 	:monitoring:aspectj-- -javaagent -->SuT;
+	:monitoring:javassist-- -javaagent -->SuT;
 	:monitoring:disl-- instrumentation -->SuT;
 	SuT-->id1[Kieker Traces];
 ```

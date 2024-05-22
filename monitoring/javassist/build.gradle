@@ -1,0 +1,44 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':common')
+	implementation project(':monitoring')
+
+	implementation 'org.javassist:javassist:3.30.2-GA'
+
+	// testing
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+	testImplementation "junit:junit:$libJunitVersion"
+}
+
+def resolveLibrary(String library) {
+def libraryDir = rootProject.file(dirLib)
+return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}

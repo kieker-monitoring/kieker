@@ -23,6 +23,7 @@ configurations {
   resultJar
   emfJarConfig
   aspectJarConfig
+  javassistJarConfig
 }
 
 spotless {
@@ -47,6 +48,8 @@ dependencies {
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
+
+  javassistJarConfig "org.javassist:javassist:3.30.2-GA"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -66,6 +69,12 @@ def aspectJSubprojects = [
   project(':common'),
   project(':monitoring:core'),
   project(':monitoring:aspectj')
+]
+
+def javassistSubprojects = [
+  project(':common'),
+  project(':monitoring:core'),
+  project(':monitoring:javassist')
 ]
 
 allprojects {
@@ -356,6 +365,7 @@ def checkSubprojects = [
   project(':common'),
   project(':monitoring:core'),
   project(':monitoring:aspectj'),
+  project(':monitoring:javassist'),
   project(':monitoring:disl'),
   project(':model'),
   project(':analysis'),
@@ -608,6 +618,14 @@ def aspectJArtifacts = {
   }
 }
 
+def javassistArtifacts = {
+  javassistSubprojects.each { subproject ->
+    from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
 def licence = {
   from file('LICENSE')
 }
@@ -711,6 +729,30 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
         "Can-Redefine-Classes": "true",
         "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
         "org/aspectj/weaver/" // The section name
+    )
+  }
+}
+
+/** Kieker jar with javassist tooling. */
+task javassistJar(type: Jar, dependsOn: javassistSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javaassist agent. The resulting jar can directly be used for monitoring as javaagent."
+) {
+  archiveClassifier = 'javassist'
+  configure javassistArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.javassistJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": "true",
+        "Can-Retransform-Classes": "true",
+	    "Premain-Class": "kieker.monitoring.probe.javassist.PremainClass"
     )
   }
 }
