@@ -18,7 +18,6 @@ dependencies {
 
         implementation "org.jctools:jctools-core:4.0.3"
 
-	// https://mvnrepository.com/artifact/org.springframework/spring-expression
 	implementation "org.springframework:spring-aop:${libSpringVersion}"
 	implementation "org.springframework:spring-beans:${libSpringVersion}"
 	implementation "org.springframework:spring-context:${libSpringVersion}"
@@ -27,13 +26,9 @@ dependencies {
 	implementation "org.springframework:spring-web:${libSpringVersion}"
 	implementation "org.springframework:spring-webmvc:${libSpringVersion}"
 
-	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
 	runtimeOnly "org.aspectj:aspectjweaver:1.9.22"
 
-	implementation fileTree('lib') {
-		include "lib/kieker-${kiekerVersion}-spring.jar"
-	}
-        //implementation files("../../../build/libs/kieker-${kiekerVersion}-spring.jar")
+	implementation files("lib/kieker-${kiekerVersion}-spring.jar")
 }
 
 distTar.enabled=false
