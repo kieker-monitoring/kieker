@@ -5,24 +5,25 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
-import kieker.monitoring.probe.aspectj.operationExecution.OperationStartData;
+import kieker.monitoring.probe.OperationStartData;
 import kieker.monitoring.timer.ITimeSource;
+
 import net.bytebuddy.asm.Advice;
 
 public class OperationExecutionAdvice {
-	
+
 	@Advice.OnMethodEnter
-    public static OperationStartData enter(
-    		@Advice.Origin String operationSignature,
-    		@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
-    		@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
-    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
+	public static OperationStartData enter(
+			@Advice.Origin final String operationSignature,
+			@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
+			@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
+			@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
 		if (CTRLINST == null) {
 			CTRLINST = MonitoringController.getInstance();
 			TIME = CTRLINST.getTimeSource();
 			CFREGISTRY = ControlFlowRegistry.INSTANCE;
 		}
-		
+
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
@@ -45,7 +46,7 @@ public class OperationExecutionAdvice {
 			eoi = CFREGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
 			ess = CFREGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			if ((eoi == -1) || (ess == -1)) {
-				System.err.println("eoi and/or ess have invalid values: eoi == "+eoi+" ess == " +ess);
+				System.err.println("eoi and/or ess have invalid values: eoi == " + eoi + " ess == " + ess);
 				CTRLINST.terminateMonitoring();
 			}
 		}
@@ -54,35 +55,35 @@ public class OperationExecutionAdvice {
 
 		final OperationStartData data = new OperationStartData(entrypoint, traceId, tin, eoi, ess);
 		return data;
-    }
-	
+	}
+
 	@Advice.OnMethodExit
-    public static void exit(
-    		@Advice.Enter OperationStartData startData,
-    		@Advice.Origin String operationSignature,
-    		@Advice.FieldValue(value = "CTRLINST", readOnly = true) IMonitoringController CTRLINST,
-    		@Advice.FieldValue(value = "TIME", readOnly = true) ITimeSource TIME,
-    		@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
-    		@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) ControlFlowRegistry CFREGISTRY,
-    		@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
+	public static void exit(
+			@Advice.Enter final OperationStartData startData,
+			@Advice.Origin final String operationSignature,
+			@Advice.FieldValue(value = "CTRLINST", readOnly = true) final IMonitoringController CTRLINST,
+			@Advice.FieldValue(value = "TIME", readOnly = true) final ITimeSource TIME,
+			@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
+			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) final ControlFlowRegistry CFREGISTRY,
+			@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
 		if (startData == null) {
 			return;
 		}
-		
+
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
-		
+
 		if (VMNAME == null) {
 			VMNAME = CTRLINST.getHostname();
 			SESSIONREGISTRY = SessionRegistry.INSTANCE;
 		}
-		
+
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
-		
+
 		final long tout = TIME.getTime();
 		CTRLINST.newMonitoringRecord(
 				new OperationExecutionRecord(operationSignature, sessionId,
@@ -96,18 +97,17 @@ public class OperationExecutionAdvice {
 			CFREGISTRY.storeThreadLocalESS(startData.getEss()); // next operation is ess
 		}
 	}
-    		
-	
-//	@RuntimeType
-//	public static Object intercept(@Origin Method method, @SuperCall Callable<?> callable) {
-//		System.out.println("Intercepting...");
-//		long start = System.currentTimeMillis();
-//		try {
-//			return callable.call();
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		} finally {
-//			System.out.println(method + " took " + (System.currentTimeMillis() - start));
-//		}
-//	}
+
+	// @RuntimeType
+	// public static Object intercept(@Origin Method method, @SuperCall Callable<?> callable) {
+	// System.out.println("Intercepting...");
+	// long start = System.currentTimeMillis();
+	// try {
+	// return callable.call();
+	// } catch (Exception e) {
+	// throw new RuntimeException(e);
+	// } finally {
+	// System.out.println(method + " took " + (System.currentTimeMillis() - start));
+	// }
+	// }
 }
