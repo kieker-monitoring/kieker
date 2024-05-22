@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
 	implementation project(':common')
-	implementation project(':monitoring')
+	implementation project(':monitoring:core')
 
 	implementation 'net.bytebuddy:byte-buddy:1.14.11'
 
