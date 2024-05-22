@@ -21,13 +21,15 @@ import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
-
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -37,7 +39,13 @@ import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional.Valuab
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
 
+/**
+ * Premain class that allows load-time instrumentation using ByteBuddy
+ */
 public class PremainClass {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PremainClass.class);
+
 	private static final AgentBuilder.Listener ONLY_ERROR_LOGGER = new AgentBuilder.Listener() {
 		@Override
 		public void onDiscovery(final String typeName, final ClassLoader classLoader, final JavaModule module,
@@ -69,7 +77,7 @@ public class PremainClass {
 	};
 
 	public static void premain(final String agentArgs, final Instrumentation inst) {
-		System.out.println("Starting instrumentation...");
+		LOGGER.info("Starting instrumentation...");
 
 		final String instrumentables = System.getenv("KIEKER_SIGNATURES");
 		if (instrumentables != null) {
@@ -104,7 +112,7 @@ public class PremainClass {
 				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
 						final ClassLoader classLoader, final JavaModule module,
 						final ProtectionDomain protectionDomain) {
-					System.out.println("Instrumenting: " + typeDescription.getActualName());
+					LOGGER.info("Instrumenting: {}", typeDescription.getActualName());
 					final Valuable<?> definedField = builder.defineField("CTRLINST", IMonitoringController.class,
 							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
 					return definedField;
@@ -151,7 +159,7 @@ public class PremainClass {
 				}
 			}).installOn(inst);
 		} else {
-			System.err.println("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");
+			LOGGER.error("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");
 		}
 	}
 }
