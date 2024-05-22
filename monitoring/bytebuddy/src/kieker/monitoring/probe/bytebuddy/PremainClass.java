@@ -30,6 +30,7 @@ import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
+
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -40,7 +41,9 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
 
 /**
- * Premain class that allows load-time instrumentation using ByteBuddy
+ * Premain class that allows load-time instrumentation using ByteBuddy.
+ * 
+ * @author David Georg Reichelt
  */
 public class PremainClass {
 

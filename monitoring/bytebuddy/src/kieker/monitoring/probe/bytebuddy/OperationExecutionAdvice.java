@@ -26,6 +26,11 @@ import kieker.monitoring.timer.ITimeSource;
 
 import net.bytebuddy.asm.Advice;
 
+/**
+ * Advice for bytebuddy instrumentation for the OperationExecutionRecord.
+ * 
+ * @author David Georg Reichelt
+ */
 public class OperationExecutionAdvice {
 
 	@Advice.OnMethodEnter
