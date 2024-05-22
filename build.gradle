@@ -71,6 +71,13 @@ def aspectJSubprojects = [
   project(':monitoring:aspectj')
 ]
 
+def bytebuddySubprojects = [
+  project(':common'),
+  project(':monitoring:core'),
+  project(':monitoring:bytebuddy')
+]
+
+
 allprojects {
   version = kiekerVersion
 
@@ -612,6 +619,14 @@ def aspectJArtifacts = {
   }
 }
 
+def bytebuddyArtifacts = {
+  bytebuddySubprojects.each { subproject ->
+    from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
 def licence = {
   from file('LICENSE')
 }
@@ -720,11 +735,11 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
 }
 
 /** Kieker jar with bytebuddy tooling. */
-task bytebuddyJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], group: "build",
     description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring as javaagent."
 ) {
   archiveClassifier = 'bytebuddy'
-  configure allArtifacts
+  configure bytebuddyArtifacts
   configure licence
 
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
