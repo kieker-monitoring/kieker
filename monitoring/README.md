@@ -13,6 +13,7 @@ graph TD;
 	:monitoring:core-->:monitoring:bytebuddy;
 	:monitoring:core-->:monitoring:disl;
 	:monitoring:aspectj-- -javaagent -->SuT;
+	:monitoring:bytebuddy-- -javaagent -->SuT;
 	:monitoring:disl-- instrumentation -->SuT;
 	SuT-->id1[Kieker Traces];
 ```
