@@ -58,7 +58,6 @@ dependencies {
 def mainSubprojects = [
   project(':common'),
   project(':monitoring:core'),
-  project(':monitoring-probe-bytebuddy'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
