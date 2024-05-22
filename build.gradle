@@ -753,7 +753,7 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
     attributes(
         "Can-Redefine-Classes": "true",
         "Can-Retransform-Classes": "true",
-	    "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
+      "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
     )
   }
 }
