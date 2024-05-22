@@ -190,7 +190,7 @@ task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLib
 }
 
 // Spring tutorial example
-task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
+task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.springJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-spring.jar"
 	}
