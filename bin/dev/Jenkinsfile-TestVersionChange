@@ -54,8 +54,8 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh './gradlew -x signMavenJavaPublication compileJava'
-            sh './gradlew -x signMavenJavaPublication compileTestJava'
+            sh './gradlew compileJava'
+            sh './gradlew compileTestJava'
             sh 'df'
           }
         }
