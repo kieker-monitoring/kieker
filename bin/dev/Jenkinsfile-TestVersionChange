@@ -62,7 +62,7 @@ pipeline {
 
         stage('Distribution Build') {
           steps {
-            sh './gradlew -x check -x test build publishToMavenLocal distribute'
+            sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
             sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
@@ -84,9 +84,6 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
-//          options {
-//            skipDefaultCheckout()
-//          }
           steps {
             unstash 'distributions'
             unstash 'bin-dev'
@@ -106,9 +103,6 @@ pipeline {
               args env.DOCKER_ARGS
             }
           }
-//          options {
-//            skipDefaultCheckout()
-//          }
           when {
             beforeAgent true
             anyOf {
@@ -138,13 +132,13 @@ pipeline {
           args env.DOCKER_ARGS
         }
       }
-      options {
-         skipDefaultCheckout()
-      }
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
+        unstash 'architecture-recovery'
+        unstash 'tools'
+        unstash 'trace-analysis'
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar,build/architecture-recovery*.*,build/tools/*,build/trace-analysis*.*',
             fingerprint: true,
             onlyIfSuccessful: true
       }
