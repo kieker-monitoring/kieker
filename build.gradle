@@ -78,6 +78,12 @@ def bytebuddySubprojects = [
 ]
 
 
+def springSubprojects = [
+  project(':common'),
+  project(':monitoring:core'),
+  project(':monitoring:spring')
+]
+
 allprojects {
   version = kiekerVersion
 
@@ -368,6 +374,7 @@ def checkSubprojects = [
   project(':monitoring:aspectj'),
   project(':monitoring:bytebuddy'),
   project(':monitoring:disl'),
+  project(':monitoring:spring'),
   project(':model'),
   project(':analysis'),
   project(':tools'),
@@ -621,6 +628,14 @@ def aspectJArtifacts = {
 
 def bytebuddyArtifacts = {
   bytebuddySubprojects.each { subproject ->
+      from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
+def springArtifacts = {
+  springSubprojects.each { subproject ->
     from subproject.configurations.archives.allArtifacts.files.collect {
       zipTree(it)
     }
@@ -756,6 +771,17 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
       "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
     )
   }
+}
+
+/** Kieker jar with spring tooling. */
+task springJar(type: Jar, dependsOn: springSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the spring framework. The resulting jar can directly be used for monitoring a spring application."
+) {
+  archiveClassifier = 'spring'
+  configure springArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -1014,6 +1040,7 @@ publishing {
       artifact aspectJJar
       artifact sourcesJar
       artifact javadocJar
+      artifact springJar
 
       pom.withXml {
         def dependenciesNode = asNode().appendNode('dependencies')

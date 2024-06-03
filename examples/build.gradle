@@ -177,7 +177,7 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 
 // JVM sampler example
 // added more dependencies, but I am not sure that this is a good solution. Looks ugly
-task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar, rootProject.aspectJJar, rootProject.javadocJar, rootProject.emfJar, rootProject.sourcesJar]) {
+task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar, rootProject.aspectJJar, rootProject.springJar, rootProject.javadocJar, rootProject.emfJar, rootProject.sourcesJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}*.jar"
 	}
@@ -190,9 +190,9 @@ task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLib
 }
 
 // Spring tutorial example
-task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
+task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.springJar]) {
 	from ('../build/libs') {
-		include "kieker-${version}.jar"
+		include "kieker-${version}-spring.jar"
 	}
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
