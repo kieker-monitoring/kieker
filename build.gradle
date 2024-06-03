@@ -49,7 +49,7 @@ dependencies {
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.20.0"
 
-  bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.11"
+  bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.17"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
