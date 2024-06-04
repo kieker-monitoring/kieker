@@ -88,7 +88,7 @@ dependencies {
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation "org.objenesis:objenesis:3.3"
+	testImplementation "org.objenesis:objenesis:3.4"
 
 	testImplementation "org.easymock:easymock:5.2.0"
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
