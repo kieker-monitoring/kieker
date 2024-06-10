@@ -37,7 +37,7 @@ dependencies {
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0,1"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
-	implementation "org.apache.commons:commons-compress:1.25.0"
+	implementation "org.apache.commons:commons-compress:1.26.2"
 	implementation "org.apache.commons:commons-lang3:3.14.0"
 
 	// https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core

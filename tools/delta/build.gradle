@@ -31,7 +31,7 @@ dependencies {
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
-	implementation "org.apache.commons:commons-compress:1.25.0"
+	implementation "org.apache.commons:commons-compress:1.26.2"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
