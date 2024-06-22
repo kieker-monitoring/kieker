@@ -1,0 +1,53 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'eclipse'
+	id 'maven-publish'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// The following lines are necessay to create a test jar
+project.configurations {
+	testArchives.extendsFrom (testCompile)
+}
+
+project.task ('jarTest', type:Jar, dependsOn: project.testClasses, description: 'create a jar from the test source set') {
+	from project.sourceSets.test.output
+	archiveClassifier = 'test'
+}
+
+project.artifacts {
+	testArchives project.jarTest
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':common')
+	implementation project(':monitoring:core')
+
+	implementation 'org.javassist:javassist:3.30.2-GA'
+
+	// testing
+	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
+	testImplementation "junit:junit:$libJunitVersion"
+}
+
+// This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
+eclipse {
+	classpath {
+		file {
+			whenMerged { classpath ->
+				classpath.entries.removeAll { entry ->
+					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
+						&& entry.path == '/common'
+						&& entry.entryAttributes['test']
+				}
+			}
+		}
+	}
+}
