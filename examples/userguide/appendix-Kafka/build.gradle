@@ -8,10 +8,10 @@ repositories {
 
 dependencies {
         implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	compile fileTree('lib') {
+	implementation fileTree('lib') {
 		include "*.jar"
         }
 }
