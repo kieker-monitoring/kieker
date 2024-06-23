@@ -12,6 +12,16 @@ authors:
     family-names: "van Hoorn"
     given-names: "Andre"
     orcid: "https://orcid.org/0000-0003-2567-6077"
+  -
+    affiliation: "Kiel University"
+    family-names: Jung
+    given-names: Reiner
+    orcid: "https://orcid.org/0000-0002-5464-8561"
+  -
+    affiliation: "Lancester University"
+    family-names: Reichelt
+    given-names: David Georg
+    orcid: "https://orcid.org/0000-0002-1772-1416"
 cff-version: "1.1.0"
 doi: "10.1016/j.simpa.2020.100019"
 keywords: 
@@ -22,4 +32,4 @@ license: "Apache-2.0"
 message: "If you use this software, please cite https://doi.org/10.1016/j.simpa.2020.100019"
 repository-code: "https://github.com/kieker-monitoring/kieker"
 title: Kieker
-version: "2.0.0-SNAPSHOT"
+version: "2.0.0"
