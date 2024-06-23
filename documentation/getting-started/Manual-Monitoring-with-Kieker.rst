@@ -16,7 +16,7 @@ the instrumentation of the application, and the actual monitoring.
 
 The first step is to copy the **Kieker** jar-file
 kieker-1.15.1-emf.jar to the lib/ directory of the example directory.
-The file is located in the ``kieker-2.0.0-SNAPSHOT/build/libs/`` directory of the
+The file is located in the ``kieker-2.0.0/build/libs/`` directory of the
 extracted **Kieker** archive (see download instructions). In the example
 directory for this section, this file is already included, as
 illustrated below.

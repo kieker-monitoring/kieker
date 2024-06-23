@@ -5,6 +5,57 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 2.0.0 (June 23, 2024)
+- Improved Build System
+  - Working local build with docker container
+  - Rework Gradle build script
+  - Improve Pipeline Speed
+  - Jenkins optimization and issue fixing
+  - Introduce timeouts for stages
+  - Update to Gradle 8.6
+- Release
+  - Migrated releases to GitHub
+  - Created check for source and javadoc jars into check script
+  - Moved Moobench and other Kieker repositories to github
+- Refactoring
+  - Major API changes
+  - Replaced all the different graph libraries with one graph library
+  - Created comprehensive and stable package structure
+  - Improved code quality: hardcoded time unit values
+  - Removed oboslete code: DbWriter and deprecated classes
+  - Update dependencies and provide more modular jars
+  - Renamed master branch to main to align with git defaults
+  - Update all builds To source level Java 11
+  - Fixed inconsistent naming of reader and writer tests
+  - Replaced old tools with new ones using TeeTime
+  - Separated Moobench from Kieker
+- Features
+  - Many improvements to the Kieker Architecture Model, including nested components, dataflow
+  - Improve component and operation processing in Kieker
+  - Support for user behavior modeling and clustering
+  - Support for Java 11
+  - Separate string registration from serialization in records
+  - Switch to new TeeTime based pipe and filter framework
+  - Inclusion of dynamic and static architecture analysis tools from the OceanDSL project
+- Removed Feature
+  - Deprecation of KaxRun and KaxViz
+  - DbWrite
+- Documentation
+  - Moved documentation to readthedocs
+  - Improved documentation for use of IRL
+  - Updated introduction
+- Library updates
+  - Update Teetime to 3.1.0 release
+  - Update AspectJ to 1.9.19 to support Java 19
+  - Remove aopalliance dependency
+  - Updated to new OSHI library to support systems monitoring
+  - Updated many different library versions
+* 1.15.4
+- Security fixes
+
+* 1.15.3
+- Security fixes 
+
 * 1.15.2 (July 6, 2022)
 - Fix security vulnerability sonatype-2020-0926 by update to guava 31.1-jre
 
