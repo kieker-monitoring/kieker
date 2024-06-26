@@ -24,6 +24,7 @@ configurations {
   emfJarConfig
   aspectJarConfig
   bytebuddyJarConfig
+  javassistJarConfig
 }
 
 spotless {
@@ -50,6 +51,8 @@ dependencies {
   aspectJarConfig "com.rabbitmq:amqp-client:5.21.0"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.17"
+  
+  javassistJarConfig "org.javassist:javassist:3.30.2-GA"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -75,6 +78,12 @@ def bytebuddySubprojects = [
   project(':common'),
   project(':monitoring:core'),
   project(':monitoring:bytebuddy')
+]
+
+def javassistSubprojects = [
+  project(':common'),
+  project(':monitoring:core'),
+  project(':monitoring:javassist')
 ]
 
 
@@ -374,6 +383,7 @@ def checkSubprojects = [
   project(':monitoring:aspectj'),
   project(':monitoring:bytebuddy'),
   project(':monitoring:disl'),
+  project(':monitoring:javassist'),
   project(':monitoring:spring'),
   project(':model'),
   project(':analysis'),
@@ -634,6 +644,14 @@ def bytebuddyArtifacts = {
   }
 }
 
+def javassistArtifacts = {
+  javassistSubprojects.each { subproject ->
+      from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
 def springArtifacts = {
   springSubprojects.each { subproject ->
     from subproject.configurations.archives.allArtifacts.files.collect {
@@ -769,6 +787,30 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
         "Can-Redefine-Classes": "true",
         "Can-Retransform-Classes": "true",
       "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
+    )
+  }
+}
+
+/** Kieker jar with javassist tooling. */
+task javassistJar(type: Jar, dependsOn: javassistSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javassist agent. The resulting jar can directly be used for monitoring as javaagent."
+) {
+  archiveClassifier = 'javassist'
+  configure javassistArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.javassistJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": "true",
+        "Can-Retransform-Classes": "true",
+      "Premain-Class": "kieker.monitoring.probe.javassist.PremainClass"
     )
   }
 }
