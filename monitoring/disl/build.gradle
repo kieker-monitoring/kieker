@@ -42,7 +42,7 @@ dependencies {
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.0.9"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.20"
+	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.21"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
 
 	testImplementation "commons-io:commons-io:2.16.0"
