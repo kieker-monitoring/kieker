@@ -34,7 +34,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-text
 	implementation "org.apache.commons:commons-text:1.11.0"
 
-	implementation "org.csveed:csveed:0.7.5"
+	implementation "org.csveed:csveed:0.8.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
