@@ -38,7 +38,7 @@ dependencies {
 	implementation project(':analysis')
 	implementation project(':tools')
 
-	implementation "org.csveed:csveed:0.7.5"
+	implementation "org.csveed:csveed:0.8.1"
 
 	implementation "org.apache.commons:commons-csv:1.10.0"
 	implementation "org.apache.commons:commons-collections4:4.4"

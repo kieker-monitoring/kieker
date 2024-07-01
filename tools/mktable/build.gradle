@@ -30,7 +30,7 @@ dependencies {
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
 	implementation "org.apache.commons:commons-compress:1.26.2"
 
-	implementation "org.csveed:csveed:0.7.5"
+	implementation "org.csveed:csveed:0.8.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
