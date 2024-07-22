@@ -60,6 +60,10 @@ dependencies {
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
+	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-client:3.1.7"
+
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
 	implementation "javax.jms:javax.jms-api:2.0.1"
 
