@@ -62,23 +62,18 @@ dependencies {
 	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
 	implementation "org.apache.commons:commons-compress:1.26.2"
 
-	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
+	implementation "org.glassfish.jersey.core:jersey-server:3.1.7"
+	implementation "org.glassfish.jersey.core:jersey-common:3.1.7"
 	implementation "org.glassfish.jersey.core:jersey-client:3.1.7"
 
-	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
-	// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
 	implementation "javax.jms:javax.jms-api:2.0.1"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "javax.jws:javax.jws-api:1.1"
 
-	// influxdb
-	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.24"
 
-	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 	implementation "com.squareup.okhttp3:okhttp:4.12.0"
 
 	// testing
@@ -96,8 +91,8 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.9"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.22"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.11"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.0.11"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
 
 	testImplementation "commons-io:commons-io:2.16.0"
