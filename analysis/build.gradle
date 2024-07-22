@@ -46,7 +46,7 @@ dependencies {
 	api "org.apache.commons:commons-compress:1.26.2"
 	api "org.nanohttpd:nanohttpd:2.3.1"
 	api "com.carrotsearch:hppc:0.9.1"
-	api "org.csveed:csveed:0.7.5"
+	api "org.csveed:csveed:0.8.1"
 	api "org.yaml:snakeyaml:2.2"
 	api "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 

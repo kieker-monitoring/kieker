@@ -31,7 +31,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.26.2"
 	implementation "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
-	implementation "org.csveed:csveed:0.7.5"
+	implementation "org.csveed:csveed:0.8.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
