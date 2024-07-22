@@ -196,11 +196,6 @@ compileJarIntegrationTestJava {
 	}
 }
 
-def resolveLibrary(String library) {
-def libraryDir = rootProject.file(dirLib)
-return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
-}
-
 // This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency
 eclipse {
 	classpath {
