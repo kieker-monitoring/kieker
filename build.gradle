@@ -907,7 +907,7 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in tar.gz format. */
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, bytebuddyJar, sourcesJar, javadocJar,
   'examples:buildStandaloneExamples',
   ':tools:restructuring:distZip',
   ':tools:behavior-analysis:distZip',
@@ -1028,6 +1028,7 @@ artifacts {
   archives mainJar
   archives emfJar
   archives aspectJJar
+  archives bytebuddyJar
   archives sourcesJar
   archives javadocJar
 }
@@ -1038,6 +1039,7 @@ publishing {
       artifact mainJar
       artifact emfJar
       artifact aspectJJar
+      artifact bytebuddyJar
       artifact sourcesJar
       artifact javadocJar
       artifact springJar
