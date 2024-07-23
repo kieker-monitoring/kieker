@@ -3,7 +3,7 @@
 BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
 BASE_DIR="${BIN_DIR}/../.."
-VERSION="2.0.0-SNAPSHOT"
+KIEKER_VERSION="2.0.0-SNAPSHOT"
 
 PACKAGE_NAME=trace-analysis
 BUILD_PATH="${BASE_DIR}/build/${PACKAGE_NAME}"
