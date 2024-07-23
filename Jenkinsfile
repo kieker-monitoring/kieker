@@ -187,7 +187,7 @@ pipeline {
     stage('Main Specific Stages') {
       when {
         beforeAgent true
-        branch 'main'
+        branch 'KIEKER-1988-Fix-Snapshot-Upload'
       }
       parallel {
         stage('Push to Stable') {
@@ -221,7 +221,7 @@ pipeline {
             unstash 'jarArtifacts'
             withCredentials([
               usernamePassword(
-                credentialsId: 'artifactupload', 
+                credentialsId: 'OSSRH-Token',
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
               )
