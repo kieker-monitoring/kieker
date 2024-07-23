@@ -20,15 +20,15 @@ mkdir bin
 mkdir lib
 
 for I in trace-analysis trace-analysis-gui ; do
-	unzip "${KIEKER_TOOLS}/$I/build/distributions/$I-$VERSION.zip"
-	mv "$I-$VERSION/lib/"* lib/
-	mv "$I-$VERSION/bin/"* bin/
-	rm -rf "$I-$VERSION"
+	unzip "${KIEKER_TOOLS}/$I/build/distributions/$I-$KIEKER_VERSION.zip"
+	mv "$I-$KIEKER_VERSION/lib/"* lib/
+	mv "$I-$KIEKER_VERSION/bin/"* bin/
+	rm -rf "$I-$KIEKER_VERSION"
 done
 
 cd ..
-tar -cvzpf "${BUILD_PATH}-${VERSION}.tgz" "${PACKAGE_NAME}"
-zip -r "${BUILD_PATH}-${VERSION}.zip" "${PACKAGE_NAME}"
+tar -cvzpf "${BUILD_PATH}-${KIEKER_VERSION}.tgz" "${PACKAGE_NAME}"
+zip -r "${BUILD_PATH}-${KIEKER_VERSION}.zip" "${PACKAGE_NAME}"
 
 rm -rf "${BUILD_PATH}"
 
