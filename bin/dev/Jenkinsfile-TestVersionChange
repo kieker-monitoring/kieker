@@ -48,6 +48,7 @@ pipeline {
         stage('Change Version Number') {
           steps {
             sh "sed -i 's/kiekerVersion = .*/kiekerVersion = 99.9/g' gradle.properties"
+            sh "sed -i 's/KIEKER_VERSION=\".*\"/KIEKER_VERSION=\"99.9\"/g' bin/dev/*.sh"
             sh 'cat gradle.properties'
           }
         }
@@ -62,7 +63,7 @@ pipeline {
 
         stage('Distribution Build') {
           steps {
-            sh './gradlew -x test -x signMavenJavaPublication build distribute publishToMavenLocal -Pskip.signing'
+            sh './gradlew -x test -x signMavenJavaPublication build distribute'
             sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
