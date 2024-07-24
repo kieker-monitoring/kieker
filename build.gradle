@@ -1083,6 +1083,7 @@ publishing {
       artifact emfJar
       artifact aspectJJar
       artifact bytebuddyJar
+      artifact javassistJar
       artifact sourcesJar
       artifact javadocJar
       artifact springJar
