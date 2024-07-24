@@ -1,32 +1,48 @@
+/***************************************************************************
+ * Copyright 2024 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.probe.javassist;
 
 import java.lang.instrument.Instrumentation;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import kieker.monitoring.core.signaturePattern.InvalidPatternException;
-import kieker.monitoring.core.signaturePattern.PatternParser;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
 
+/**
+ * PremainClass for javassist package, so this can be used as -javaagent; since
+ * it needs to be initialized, no constructor is created.
+ * 
+ * @author DaGeRe
+ */
 public class PremainClass {
 
 	private static Instrumentation currentInstrumentation;
 
-	public static void premain(String agentArgs, Instrumentation inst) {
+	public static void premain(final String agentArgs, final Instrumentation inst) {
 		currentInstrumentation = inst;
-		
 
-		String instrumentables = System.getenv("KIEKER_SIGNATURES");
+		final String instrumentables = System.getenv("KIEKER_SIGNATURES");
 		if (instrumentables != null) {
-			List<KiekerPattern> patternObjects = KiekerPatternUtil.getPatterns(instrumentables);
-			KiekerClassTransformer kiekerTransformer = new KiekerClassTransformer(patternObjects);
+			final List<KiekerPattern> patternObjects = KiekerPatternUtil.getPatterns(instrumentables);
+			final KiekerClassTransformer kiekerTransformer = new KiekerClassTransformer(patternObjects);
 			currentInstrumentation.addTransformer(kiekerTransformer);
 		} else {
 			System.err.println("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");
 		}
 	}
 
-	
 }

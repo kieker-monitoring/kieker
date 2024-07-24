@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2024 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.probe.javassist;
 
 import javassist.CannotCompileException;
@@ -13,31 +29,34 @@ public class MethodInstrumenter {
 
 	private final ClassPool cp;
 
-	public MethodInstrumenter(ClassPool pool) {
+	public MethodInstrumenter(final ClassPool pool) {
 		super();
 		this.cp = pool;
 	}
 
-	public void instrumentAllMethods(CtClass cc) throws NotFoundException, CannotCompileException {
-		for (CtConstructor constructor : cc.getConstructors()) {
-			String signature = buildSignature(constructor);
+	public void instrumentAllMethods(final CtClass cc) throws NotFoundException, CannotCompileException {
+		for (final CtConstructor constructor : cc.getConstructors()) {
+			final String signature = buildSignature(constructor);
 			instrumentMethod(constructor, signature);
 		}
 
-		for (CtMethod method : cc.getDeclaredMethods()) {
-			String signature = buildSignature(method);
+		for (final CtMethod method : cc.getDeclaredMethods()) {
+			final String signature = buildSignature(method);
 			instrumentMethod(method, signature);
 		}
 	}
 
-	private void instrumentMethod(CtBehavior method, String signature) throws NotFoundException, CannotCompileException {
+	private void instrumentMethod(final CtBehavior method, final String signature)
+			throws NotFoundException, CannotCompileException {
 		System.out.println("Signature: " + signature);
 
-		method.addLocalVariable("operationStartData", cp.get("kieker.monitoring.probe.disl.flow.operationExecution.FullOperationStartData"));
+		method.addLocalVariable("operationStartData",
+				cp.get("kieker.monitoring.probe.disl.flow.operationExecution.FullOperationStartData"));
 		method.insertBefore(
-				"operationStartData = kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDataGatherer.operationStart(\"" + signature + "\");");
+				"operationStartData = kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDataGatherer.operationStart(\""
+						+ signature + "\");");
 
-		StringBuilder endBlock = new StringBuilder();
+		final StringBuilder endBlock = new StringBuilder();
 		endBlock.append("if (operationStartData != null) {"
 				+ "   kieker.monitoring.probe.disl.flow.operationExecution.OperationExecutionDataGatherer.operationEnd(operationStartData);"
 				+ "} ");
@@ -45,8 +64,8 @@ public class MethodInstrumenter {
 		method.insertAfter(endBlock.toString());
 	}
 
-	private String buildSignature(CtConstructor method) {
-		StringBuilder builder = new StringBuilder();
+	private String buildSignature(final CtConstructor method) {
+		final StringBuilder builder = new StringBuilder();
 		if (AccessFlag.isPublic(method.getModifiers())) {
 			builder.append("public ");
 		}
@@ -75,8 +94,8 @@ public class MethodInstrumenter {
 		return builder.toString();
 	}
 
-	private String buildSignature(CtMethod method) throws NotFoundException {
-		StringBuilder builder = new StringBuilder();
+	private String buildSignature(final CtMethod method) throws NotFoundException {
+		final StringBuilder builder = new StringBuilder();
 		if (AccessFlag.isPublic(method.getModifiers())) {
 			builder.append("public ");
 		}
