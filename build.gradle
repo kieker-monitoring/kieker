@@ -1080,6 +1080,7 @@ publishing {
       artifact mainJar
       artifact emfJar
       artifact aspectJJar
+      artifact javassistJar
       artifact sourcesJar
       artifact javadocJar
       artifact springJar
