@@ -57,7 +57,7 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			groupId = 'net.kieker-monitoring'
-			artifactId = 'monitoring'
+			artifactId = 'monitoring-disl'
 			version = version
 
 			from components.java
