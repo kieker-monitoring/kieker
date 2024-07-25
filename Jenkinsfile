@@ -187,7 +187,7 @@ pipeline {
     stage('Main Specific Stages') {
       when {
         beforeAgent true
-        branch 'KIEKER-1988-Fix-Snapshot-Upload'
+        branch 'main'
       }
       parallel {
         stage('Push to Stable') {
