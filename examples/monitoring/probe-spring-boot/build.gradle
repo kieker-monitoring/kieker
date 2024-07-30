@@ -7,11 +7,8 @@ plugins {
 group = 'net.kieker-monitoring.springBootExample'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(11)
-	}
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
 	mavenCentral()
