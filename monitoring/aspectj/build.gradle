@@ -56,7 +56,7 @@ dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
-	aspectJCompileTime "org.aspectj:aspectjtools:1.9.20.1"
+	aspectJCompileTime "org.aspectj:aspectjtools:1.9.22.1"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
