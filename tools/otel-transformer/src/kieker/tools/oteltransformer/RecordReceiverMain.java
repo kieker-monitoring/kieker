@@ -24,7 +24,7 @@ public class RecordReceiverMain extends AbstractService<OpenTelemetryExportConfi
 
 	public static void main(final String[] args) {
 		final RecordReceiverMain main = new RecordReceiverMain();
-		System.exit(main.run("Replayer", "replayer", args));
+		System.exit(main.run("OpenTelemetry Transformer", "transformer", args));
 	}
 
 	public int run(final String title, final String label, final String[] args) {
