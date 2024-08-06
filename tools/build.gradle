@@ -32,8 +32,8 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	implementation "javax.jms:javax.jms-api:2.0.1"
-	implementation "javax.servlet:javax.servlet-api:4.0.1"
+	implementation "jakarta.jms:jakarta.jms-api:2.0.3"
+	implementation "jakarta.servlet:jakarta.servlet-api:4.0.4"
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
