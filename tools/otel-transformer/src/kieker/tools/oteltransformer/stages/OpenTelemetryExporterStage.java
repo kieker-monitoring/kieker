@@ -62,14 +62,26 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	public OpenTelemetryExporterStage(final Configuration configuration) {
 
 		final String typeParameter = configuration.getStringProperty(EXPORT_TYPE);
-		if ("zipkin".equals(typeParameter)) {
-			exportType = ExportType.ZIPKIN;
-		} else if ("GRPC".equals(typeParameter)) {
+		if ("GRPC".equals(typeParameter) || typeParameter == null || typeParameter.isEmpty()) {
 			exportType = ExportType.GRPC;
+		} else if ("zipkin".equals(typeParameter)) {
+			exportType = ExportType.ZIPKIN;
 		} else {
 			throw new RuntimeException("Please specifiy accepted " + EXPORT_TYPE + " parameter, was " + typeParameter);
 		}
-		exportUrl = configuration.getStringProperty(EXPORT_URL);
+
+		final String urlParameter = configuration.getStringProperty(EXPORT_URL);
+		if (urlParameter == null || urlParameter.isEmpty()) {
+			if (exportType.equals(ExportType.GRPC)) {
+				exportUrl = "http://localhost:4317";
+			} else if (exportType.equals(ExportType.ZIPKIN)) {
+				exportUrl = "http://localhost:9411/api/v2/";
+			} else {
+				exportUrl = null;
+			}
+		} else {
+			exportUrl = urlParameter;
+		}
 
 		synchronized (OpenTelemetryExporterStage.class) {
 			if (!initialized) {
