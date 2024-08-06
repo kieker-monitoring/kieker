@@ -28,7 +28,7 @@ jobs:
       run: ./gradlew test
     - name: Publish Test Report ${{ matrix.java }} OS ${{ matrix.os }}
       if: ${{ always() }}
-      uses: scacap/action-surefire-report@v1
+      uses: scacap/action-surefire-report@v1.8.0
       with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
          report_paths: '**/build/test-results/test/TEST-*.xml'
