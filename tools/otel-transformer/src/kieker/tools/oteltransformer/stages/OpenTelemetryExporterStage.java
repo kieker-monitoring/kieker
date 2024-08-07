@@ -13,7 +13,6 @@ import kieker.model.system.model.ExecutionTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
@@ -55,6 +54,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	private static boolean initialized = false;
 	private int lastEss;
 	private final Stack<Span> lastSpan = new Stack<Span>();
+	private SdkTracerProvider tracerProvider;
 
 	private final ExportType exportType;
 	private final String exportUrl;
@@ -83,11 +83,9 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			exportUrl = urlParameter;
 		}
 
-		synchronized (OpenTelemetryExporterStage.class) {
-			if (!initialized) {
-				createTracerProvider("kieker-data");
-				initialized = true;
-			}
+		if (!initialized) {
+			tracerProvider = createTracerProvider("kieker-data");
+			initialized = true;
 		}
 	}
 
@@ -101,6 +99,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 				.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build()).build();
 
 		OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider).buildAndRegisterGlobal();
+
 		return sdkTracerProvider;
 	}
 
@@ -125,13 +124,13 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 
 	@Override
 	protected void execute(final ExecutionTrace trace) throws Exception {
+		final Tracer tracer = tracerProvider.get("kieker-import");
+
 		for (final Execution execution : trace.getTraceAsSortedExecutionSet()) {
 			final String fullClassname = execution.getOperation().getComponentType().getFullQualifiedName().intern();
 
 			final String operationSignature = ClassOperationSignaturePair.createOperationSignatureString(fullClassname,
 					execution.getOperation().getSignature());
-
-			final Tracer tracer = GlobalOpenTelemetry.getTracer("kieker-import");
 
 			final SpanBuilder spanBuilder1 = tracer.spanBuilder(operationSignature);
 			final SpanBuilder spanBuilder = spanBuilder1.setStartTimestamp(execution.getTin(), TimeUnit.NANOSECONDS);
