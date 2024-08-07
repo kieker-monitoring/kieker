@@ -15,7 +15,7 @@ function tryRegularRun() {
 
 	curl localhost:8080
 
-	pkill -P $$
+	pkill -P $!
 }
 
 function tryInstrumentedRun() {
@@ -42,7 +42,7 @@ function tryInstrumentedRun() {
 	echo
 	echo
 	echo "Killing background process..."
-	pkill -P $$
+	pkill -P $!
 	sleep 1 # Increases the probability that killing is finished and the following output is correct
 
 	logCount=$(cat monitoring-logs/kieker-*/kieker-*.dat | wc -l)
