@@ -10,6 +10,7 @@ import kieker.analysis.generic.IEventMatcher;
 import kieker.analysis.generic.ImplementsEventMatcher;
 import kieker.analysis.generic.source.rewriter.NoneTraceMetadataRewriter;
 import kieker.analysis.generic.source.tcp.MultipleConnectionTcpSourceStage;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.model.repository.SystemModelRepository;
 import kieker.tools.oteltransformer.stages.OpenTelemetryExporterStage;
@@ -21,7 +22,7 @@ public class OpenTelemetryExportConfiguration extends Configuration {
 	public OpenTelemetryExportConfiguration(final int inputPort, final int bufferSize, final kieker.common.configuration.Configuration configuration) {
 		final MultipleConnectionTcpSourceStage source = new MultipleConnectionTcpSourceStage(inputPort, bufferSize, new NoneTraceMetadataRewriter());
 
-		final CountingStage counter = new CountingStage(false, 10000);
+		final CountingStage<IMonitoringRecord> counter = new CountingStage<>(true, 1000);
 
 		connectPorts(source.getOutputPort(), counter.getInputPort());
 
