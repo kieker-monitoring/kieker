@@ -51,10 +51,9 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
-	private static boolean initialized = false;
 	private int lastEss;
 	private final Stack<Span> lastSpan = new Stack<Span>();
-	private SdkTracerProvider tracerProvider;
+	private final SdkTracerProvider tracerProvider;
 
 	private final ExportType exportType;
 	private final String exportUrl;
@@ -83,10 +82,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			exportUrl = urlParameter;
 		}
 
-		if (!initialized) {
-			tracerProvider = createTracerProvider("kieker-data");
-			initialized = true;
-		}
+		tracerProvider = createTracerProvider("kieker-data");
 	}
 
 	private SdkTracerProvider createTracerProvider(final String serviceName) {
