@@ -177,7 +177,7 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 
 // JVM sampler example
 // added more dependencies, but I am not sure that this is a good solution. Looks ugly
-task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar, rootProject.aspectJJar, rootProject.springJar, rootProject.javadocJar, rootProject.emfJar, rootProject.sourcesJar]) {
+task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar, rootProject.aspectJJar, rootProject.springJar, rootProject.javadocJar, rootProject.emfJar, rootProject.sourcesJar, rootProject.bytebuddyJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}*.jar"
 	}
