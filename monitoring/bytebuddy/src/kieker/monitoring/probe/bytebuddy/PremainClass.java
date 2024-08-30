@@ -19,10 +19,8 @@ package kieker.monitoring.probe.bytebuddy;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
+import java.util.LinkedList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -30,6 +28,9 @@ import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.method.MethodDescription;
@@ -52,18 +53,15 @@ public class PremainClass {
 	private static final AgentBuilder.Listener ONLY_ERROR_LOGGER = new AgentBuilder.Listener() {
 		@Override
 		public void onDiscovery(final String typeName, final ClassLoader classLoader, final JavaModule module,
-				final boolean loaded) {
-		}
+				final boolean loaded) {}
 
 		@Override
 		public void onTransformation(final TypeDescription typeDescription, final ClassLoader classLoader,
-				final JavaModule module, final boolean loaded, final DynamicType dynamicType) {
-		}
+				final JavaModule module, final boolean loaded, final DynamicType dynamicType) {}
 
 		@Override
 		public void onIgnored(final TypeDescription typeDescription, final ClassLoader classLoader,
-				final JavaModule module, final boolean loaded) {
-		}
+				final JavaModule module, final boolean loaded) {}
 
 		@Override
 		public void onError(final String typeName, final ClassLoader classLoader, final JavaModule module,
@@ -82,9 +80,10 @@ public class PremainClass {
 	public static void premain(final String agentArgs, final Instrumentation inst) {
 		LOGGER.info("Starting instrumentation...");
 
-		final String instrumentables = System.getenv("KIEKER_SIGNATURES");
+		final String instrumentables = System.getenv(InstrumentationEnvironmentVariables.KIEKER_SIGNATURES_INCLUDE);
 		if (instrumentables != null) {
-			final List<KiekerPattern> patternObjects = KiekerPatternUtil.getPatterns(instrumentables);
+			final List<KiekerPattern> excludePatterns = getExcludedPatterns();
+			final List<KiekerPattern> includePatterns = KiekerPatternUtil.getPatterns(instrumentables);
 			new AgentBuilder.Default().with(ONLY_ERROR_LOGGER).type(new ElementMatcher<TypeDescription>() {
 				@Override
 				public boolean matches(final TypeDescription target) {
@@ -92,7 +91,9 @@ public class PremainClass {
 						return false;
 					}
 					final String typeName = target.getTypeName();
-					return KiekerPatternUtil.classIsContained(patternObjects, typeName);
+					final boolean included = KiekerPatternUtil.classIsContained(includePatterns, typeName);
+					final boolean excluded = KiekerPatternUtil.classIsContained(excludePatterns, typeName);
+					return included && !excluded;
 				}
 			}).transform(new AgentBuilder.Transformer.ForAdvice().advice(new ElementMatcher<MethodDescription>() {
 
@@ -164,5 +165,16 @@ public class PremainClass {
 		} else {
 			LOGGER.error("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");
 		}
+	}
+
+	private static List<KiekerPattern> getExcludedPatterns() {
+		final List<KiekerPattern> excludePatterns;
+		final String exclusions = System.getenv(InstrumentationEnvironmentVariables.KIEKER_SIGNATURES_EXCLUDE);
+		if (exclusions != null) {
+			excludePatterns = KiekerPatternUtil.getPatterns(exclusions);
+		} else {
+			excludePatterns = new LinkedList<KiekerPattern>();
+		}
+		return excludePatterns;
 	}
 }
