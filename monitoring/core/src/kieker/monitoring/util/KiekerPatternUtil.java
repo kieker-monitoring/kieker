@@ -19,6 +19,8 @@ package kieker.monitoring.util;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
+
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternParser;
 
@@ -30,24 +32,39 @@ public class KiekerPatternUtil {
 		final List<KiekerPattern> patternObjects = new LinkedList<>();
 		final String[] patterns = instrumentables.split(";");
 		for (final String pattern : patterns) {
-			final String clazzMethodAndPrefix = pattern.substring(0, pattern.indexOf('('));
-			final String clazzAndPrefix = clazzMethodAndPrefix.substring(0, pattern.lastIndexOf('.'));
-			final String onlyClazz = clazzAndPrefix.contains(" ")
-					? clazzAndPrefix.substring(clazzAndPrefix.lastIndexOf(' ') + 1)
-					: clazzAndPrefix;
-			try {
-				final KiekerPattern patternObject = new KiekerPattern(onlyClazz, PatternParser.parseToPattern(pattern));
+			if (pattern.contains("(")) {
+				parseMethodPattern(patternObjects, pattern);
+			} else {
+				// In case there is something like * my.package.Class, we need to get rid of everything before the last space
+				final String clazzName = pattern.substring(pattern.lastIndexOf(" ") + 1);
+				final KiekerPattern patternObject = new KiekerPattern(clazzName, null);
 				patternObjects.add(patternObject);
-			} catch (final InvalidPatternException e) {
-				e.printStackTrace();
 			}
+
 		}
 		return patternObjects;
+	}
+
+	private static void parseMethodPattern(final List<KiekerPattern> patternObjects, final String pattern) {
+		final String clazzMethodAndPrefix = pattern.substring(0, pattern.indexOf('('));
+		final String clazzAndPrefix = clazzMethodAndPrefix.substring(0, pattern.lastIndexOf('.'));
+		final String onlyClazz = clazzAndPrefix.contains(" ")
+				? clazzAndPrefix.substring(clazzAndPrefix.lastIndexOf(' ') + 1)
+				: clazzAndPrefix;
+		try {
+			final KiekerPattern patternObject = new KiekerPattern(onlyClazz, PatternParser.parseToPattern(pattern));
+			patternObjects.add(patternObject);
+		} catch (final InvalidPatternException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean classIsContained(final List<KiekerPattern> patternObjects, final String clazz) {
 		for (final KiekerPattern pattern : patternObjects) {
 			if (clazz.equals(pattern.getOnlyClass())) {
+				return true;
+			}
+			if (FilenameUtils.wildcardMatch(clazz, pattern.getOnlyClass())) {
 				return true;
 			}
 		}
