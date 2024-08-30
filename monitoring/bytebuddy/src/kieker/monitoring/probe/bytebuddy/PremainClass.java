@@ -22,15 +22,15 @@ import java.security.ProtectionDomain;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.method.MethodDescription;
