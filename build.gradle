@@ -50,6 +50,7 @@ dependencies {
   aspectJarConfig "com.rabbitmq:amqp-client:5.21.0"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.17"
+  bytebuddyJarConfig "commons-io:commons-io:2.16.0"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
