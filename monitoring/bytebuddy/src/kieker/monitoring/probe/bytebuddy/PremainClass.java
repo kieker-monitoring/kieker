@@ -93,6 +93,10 @@ public class PremainClass {
 					final String typeName = target.getTypeName();
 					final boolean included = KiekerPatternUtil.classIsContained(includePatterns, typeName);
 					final boolean excluded = KiekerPatternUtil.classIsContained(excludePatterns, typeName);
+					if (included) {
+						LOGGER.debug("Checked " + typeName);
+						LOGGER.debug("Included: " + included + " Excluded: " + excluded);
+					}
 					return included && !excluded;
 				}
 			}).transform(new AgentBuilder.Transformer.ForAdvice().advice(new ElementMatcher<MethodDescription>() {
@@ -138,7 +142,7 @@ public class PremainClass {
 						final ClassLoader classLoader, final JavaModule module,
 						final ProtectionDomain protectionDomain) {
 					final Valuable<?> definedField = builder.defineField("VMNAME", String.class,
-							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+							Modifier.STATIC | Modifier.PRIVATE);
 					return definedField;
 				}
 			}).transform(new AgentBuilder.Transformer() {
@@ -158,7 +162,7 @@ public class PremainClass {
 						final ClassLoader classLoader, final JavaModule module,
 						final ProtectionDomain protectionDomain) {
 					final Valuable<?> definedField = builder.defineField("SESSIONREGISTRY", SessionRegistry.class,
-							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+							Modifier.STATIC | Modifier.PRIVATE);
 					return definedField;
 				}
 			}).installOn(inst);
