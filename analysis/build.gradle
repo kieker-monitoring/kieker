@@ -43,7 +43,7 @@ dependencies {
 	api "javax.servlet:javax.servlet-api:4.0.1"
 
 	api "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
-	api "org.apache.commons:commons-compress:1.26.2"
+	api "org.apache.commons:commons-compress:1.27.1"
 	api "org.nanohttpd:nanohttpd:2.3.1"
 	api "com.carrotsearch:hppc:0.10.0"
 	api "org.csveed:csveed:0.8.1"
