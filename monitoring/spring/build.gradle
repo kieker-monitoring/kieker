@@ -70,7 +70,7 @@ dependencies {
 	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.22"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.23"
 
-	testImplementation "commons-io:commons-io:2.16.0"
+	testImplementation "commons-io:commons-io:2.16.1"
 
 	testImplementation project(':common').sourceSets.test.output
 	testImplementation project(':monitoring:core').sourceSets.test.output
