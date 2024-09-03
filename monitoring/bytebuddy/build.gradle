@@ -21,7 +21,7 @@ dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
-	implementation 'net.bytebuddy:byte-buddy:$libBytebuddyVersion'
+	implementation "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
