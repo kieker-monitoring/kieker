@@ -92,7 +92,6 @@ public class PremainClass {
 					.type(new ElementMatcher<TypeDescription>() {
 						@Override
 						public boolean matches(final TypeDescription target) {
-							LOGGER.info("Type: " + target);
 							if (target.isInterface()) {
 								return false;
 							}
@@ -188,7 +187,7 @@ public class PremainClass {
 		if (exclusions != null) {
 			excludePatterns = KiekerPatternUtil.getPatterns(exclusions);
 		} else {
-			excludePatterns = new LinkedList<KiekerPattern>();
+			excludePatterns = new LinkedList<>();
 		}
 		return excludePatterns;
 	}
