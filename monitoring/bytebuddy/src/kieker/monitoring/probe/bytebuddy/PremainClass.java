@@ -87,7 +87,8 @@ public class PremainClass {
 			final List<KiekerPattern> includePatterns = KiekerPatternUtil.getPatterns(instrumentables);
 			final Extendable basicAgentBuilder = new AgentBuilder.Default()
 					.with(ONLY_ERROR_LOGGER)
-					.with(AgentBuilder.LambdaInstrumentationStrategy.ENABLED)
+					// .with(AgentBuilder.LambdaInstrumentationStrategy.ENABLED)
+					// Instrumenting Lambdas results in strange errors as soon as java.util.regex is needed, but not loaded yet
 					.type(new ElementMatcher<TypeDescription>() {
 						@Override
 						public boolean matches(final TypeDescription target) {
