@@ -33,6 +33,7 @@ import kieker.monitoring.util.KiekerPattern;
 import kieker.monitoring.util.KiekerPatternUtil;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.AgentBuilder.Identified.Extendable;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -84,91 +85,100 @@ public class PremainClass {
 		if (instrumentables != null) {
 			final List<KiekerPattern> excludePatterns = getExcludedPatterns();
 			final List<KiekerPattern> includePatterns = KiekerPatternUtil.getPatterns(instrumentables);
-			new AgentBuilder.Default().with(ONLY_ERROR_LOGGER).type(new ElementMatcher<TypeDescription>() {
-				@Override
-				public boolean matches(final TypeDescription target) {
-					if (target.isInterface()) {
-						return false;
-					}
-					final String typeName = target.getTypeName();
-					final boolean included = KiekerPatternUtil.classIsContained(includePatterns, typeName);
-					final boolean excluded = KiekerPatternUtil.classIsContained(excludePatterns, typeName);
-					if (included) {
-						LOGGER.debug("Checked " + typeName);
-						LOGGER.debug("Included: " + included + " Excluded: " + excluded);
-					}
-					return included && !excluded;
-				}
-			}).transform(new AgentBuilder.Transformer.ForAdvice().advice(new ElementMatcher<MethodDescription>() {
+			final Extendable basicAgentBuilder = new AgentBuilder.Default()
+					.with(ONLY_ERROR_LOGGER)
+					.with(AgentBuilder.LambdaInstrumentationStrategy.ENABLED)
+					.type(new ElementMatcher<TypeDescription>() {
+						@Override
+						public boolean matches(final TypeDescription target) {
+							LOGGER.info("Type: " + target);
+							if (target.isInterface()) {
+								return false;
+							}
+							final String typeName = target.getTypeName();
+							final boolean included = KiekerPatternUtil.classIsContained(includePatterns, typeName);
+							final boolean excluded = KiekerPatternUtil.classIsContained(excludePatterns, typeName);
+							if (included) {
+								LOGGER.debug("Checked " + typeName);
+								LOGGER.debug("Included: " + included + " Excluded: " + excluded);
+							}
+							return included && !excluded;
+						}
+					}).transform(new AgentBuilder.Transformer.ForAdvice().advice(new ElementMatcher<MethodDescription>() {
 
-				@Override
-				public boolean matches(final MethodDescription target) {
-					if (target.isMethod()) {
-						// TODO: Here, we would need the signature. This would require building it from
-						// target and target.getType
-						// So for now, just instrument every method (and type is checked before already)
-						// KiekerPatternUtil.classIsContained(patternObjects, target.getName())
-						return true;
-					} else {
-						return true;
-					}
-				}
+						@Override
+						public boolean matches(final MethodDescription target) {
+							if (target.isMethod()) {
+								// TODO: Here, we would need the signature. This would require building it from
+								// target and target.getType
+								// So for now, just instrument every method (and type is checked before already)
+								// KiekerPatternUtil.classIsContained(patternObjects, target.getName())
+								return true;
+							} else {
+								return true;
+							}
+						}
 
-			}, OperationExecutionAdvice.class.getName())).transform(new AgentBuilder.Transformer() {
-
-				@Override
-				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
-						final ClassLoader classLoader, final JavaModule module,
-						final ProtectionDomain protectionDomain) {
-					LOGGER.info("Instrumenting: {}", typeDescription.getActualName());
-					final Valuable<?> definedField = builder.defineField("CTRLINST", IMonitoringController.class,
-							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-					return definedField;
-				}
-			}).transform(new AgentBuilder.Transformer() {
-
-				@Override
-				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
-						final ClassLoader classLoader, final JavaModule module,
-						final ProtectionDomain protectionDomain) {
-					final Valuable<?> definedField = builder.defineField("TIME", ITimeSource.class,
-							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-					return definedField;
-				}
-			}).transform(new AgentBuilder.Transformer() {
-
-				@Override
-				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
-						final ClassLoader classLoader, final JavaModule module,
-						final ProtectionDomain protectionDomain) {
-					final Valuable<?> definedField = builder.defineField("VMNAME", String.class,
-							Modifier.STATIC | Modifier.PRIVATE);
-					return definedField;
-				}
-			}).transform(new AgentBuilder.Transformer() {
-
-				@Override
-				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
-						final ClassLoader classLoader, final JavaModule module,
-						final ProtectionDomain protectionDomain) {
-					final Valuable<?> definedField = builder.defineField("CFREGISTRY", ControlFlowRegistry.class,
-							Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
-					return definedField;
-				}
-			}).transform(new AgentBuilder.Transformer() {
-
-				@Override
-				public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
-						final ClassLoader classLoader, final JavaModule module,
-						final ProtectionDomain protectionDomain) {
-					final Valuable<?> definedField = builder.defineField("SESSIONREGISTRY", SessionRegistry.class,
-							Modifier.STATIC | Modifier.PRIVATE);
-					return definedField;
-				}
-			}).installOn(inst);
+					}, OperationExecutionAdvice.class.getName()));
+			addFields(basicAgentBuilder).installOn(inst);
 		} else {
-			LOGGER.error("Environment variable KIEKER_SIGNATURES not defined - not instrumenting anything!");
+			LOGGER.error("Environment variable " + InstrumentationEnvironmentVariables.KIEKER_SIGNATURES_INCLUDE + " not defined - not instrumenting anything!");
 		}
+	}
+
+	private static Extendable addFields(final Extendable basicAgentBuilder) {
+		return basicAgentBuilder.transform(new AgentBuilder.Transformer() {
+
+			@Override
+			public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
+					final ClassLoader classLoader, final JavaModule module,
+					final ProtectionDomain protectionDomain) {
+				LOGGER.info("Instrumenting: {}", typeDescription.getActualName());
+				final Valuable<?> definedField = builder.defineField("CTRLINST", IMonitoringController.class,
+						Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+				return definedField;
+			}
+		}).transform(new AgentBuilder.Transformer() {
+
+			@Override
+			public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
+					final ClassLoader classLoader, final JavaModule module,
+					final ProtectionDomain protectionDomain) {
+				final Valuable<?> definedField = builder.defineField("TIME", ITimeSource.class,
+						Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+				return definedField;
+			}
+		}).transform(new AgentBuilder.Transformer() {
+
+			@Override
+			public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
+					final ClassLoader classLoader, final JavaModule module,
+					final ProtectionDomain protectionDomain) {
+				final Valuable<?> definedField = builder.defineField("VMNAME", String.class,
+						Modifier.STATIC | Modifier.PRIVATE);
+				return definedField;
+			}
+		}).transform(new AgentBuilder.Transformer() {
+
+			@Override
+			public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
+					final ClassLoader classLoader, final JavaModule module,
+					final ProtectionDomain protectionDomain) {
+				final Valuable<?> definedField = builder.defineField("CFREGISTRY", ControlFlowRegistry.class,
+						Modifier.STATIC | Modifier.FINAL | Modifier.PRIVATE);
+				return definedField;
+			}
+		}).transform(new AgentBuilder.Transformer() {
+
+			@Override
+			public Builder<?> transform(final Builder<?> builder, final TypeDescription typeDescription,
+					final ClassLoader classLoader, final JavaModule module,
+					final ProtectionDomain protectionDomain) {
+				final Valuable<?> definedField = builder.defineField("SESSIONREGISTRY", SessionRegistry.class,
+						Modifier.STATIC | Modifier.PRIVATE);
+				return definedField;
+			}
+		});
 	}
 
 	private static List<KiekerPattern> getExcludedPatterns() {
