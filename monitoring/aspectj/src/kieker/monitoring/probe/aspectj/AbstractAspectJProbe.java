@@ -135,7 +135,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe { // NOPM
 				if (first) {
 					first = false;
 				} else {
-					sb.append(", ");
+					sb.append(",");
 				}
 				this.addType(sb, clazz);
 			}
