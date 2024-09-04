@@ -3,7 +3,7 @@ buildscript {
 		maven {url "https://plugins.gradle.org/m2/"}
 	}
 	dependencies {
-		classpath "io.freefair.gradle:aspectj-plugin:8.6"
+		classpath "io.freefair.gradle:aspectj-plugin:8.10"
 	}
 }
 
@@ -60,9 +60,9 @@ dependencies {
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
-	implementation "org.glassfish.jersey.core:jersey-server:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-common:3.1.5"
-	implementation "org.glassfish.jersey.core:jersey-client:3.1.6"
+	implementation "org.glassfish.jersey.core:jersey-server:3.1.7"
+	implementation "org.glassfish.jersey.core:jersey-common:3.1.8"
+	implementation "org.glassfish.jersey.core:jersey-client:3.1.7"
 
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
 	implementation "javax.jms:javax.jms-api:2.0.1"
@@ -82,7 +82,7 @@ dependencies {
 
 	testImplementation "org.objenesis:objenesis:3.4"
 
-	testImplementation "org.easymock:easymock:5.2.0"
+	testImplementation "org.easymock:easymock:5.4.0"
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
@@ -91,10 +91,10 @@ dependencies {
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.0.9"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.20"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
+	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.22"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.23"
 
-	testImplementation "commons-io:commons-io:2.16.0"
+	testImplementation "commons-io:commons-io:2.16.1"
 
 	testImplementation project(':common').sourceSets.test.output
 
@@ -106,7 +106,7 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			groupId = 'net.kieker-monitoring'
-			artifactId = 'monitoring'
+			artifactId = 'monitoring-aspectj'
 			version = version
 
 			from components.java
@@ -194,11 +194,6 @@ compileJarIntegrationTestJava {
 	ajc {
 		classpath.setFrom configurations.aspectJCompileTime
 	}
-}
-
-def resolveLibrary(String library) {
-def libraryDir = rootProject.file(dirLib)
-return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
 }
 
 // This is necessary to avoid eclipse problems; eclipse does not allow the same project to be imported twice as dependency

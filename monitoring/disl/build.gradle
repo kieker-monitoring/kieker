@@ -17,39 +17,12 @@ dependencies {
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
 	// DiSLs dependencies need to be added manually
-	implementation 'org.ow2.asm:asm:9.5'
-	implementation 'org.ow2.asm:asm-tree:9.5'
+	implementation 'org.ow2.asm:asm:9.7'
+	implementation 'org.ow2.asm:asm-tree:9.7'
 	implementation 'org.ow2.asm:asm-analysis:9.7'
-	implementation 'org.ow2.asm:asm-commons:9.5'
+	implementation 'org.ow2.asm:asm-commons:9.7'
 
 	implementation 'org.ow2.asm:asm-util:9.7'
-
-	// testing
-	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
-
-	testImplementation "org.javassist:javassist:3.30.2-GA"
-
-	testImplementation "junit:junit:$libJunitVersion"
-
-	testImplementation "org.objenesis:objenesis:3.4"
-
-	testImplementation "org.easymock:easymock:5.2.0"
-	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
-
-	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project (path: ':common', configuration: 'testArchives')
-	testImplementation "org.springframework:spring-beans:$springVersion"
-	testImplementation "org.springframework:spring-expression:3.$springVersion"
-
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.9"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.20"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
-
-	testImplementation "commons-io:commons-io:2.16.0"
-
-	testImplementation project(':common').sourceSets.test.output
-
-	integrationTestImplementation "junit:junit:$libJunitVersion"
 }
 
 // publishing
@@ -57,7 +30,7 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			groupId = 'net.kieker-monitoring'
-			artifactId = 'monitoring'
+			artifactId = 'monitoring-disl'
 			version = version
 
 			from components.java

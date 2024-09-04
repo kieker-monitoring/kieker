@@ -37,7 +37,7 @@ dependencies {
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
-	implementation "org.apache.groovy:groovy-all:4.0.21"
+	implementation "org.apache.groovy:groovy-all:4.0.22"
 
 	// https://mvnrepository.com/artifact/com.github.yannrichet/Rsession
 	implementation "com.github.yannrichet:Rsession:1.8.3"

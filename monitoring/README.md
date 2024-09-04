@@ -19,3 +19,11 @@ graph TD;
 	:monitoring:javassist-- -javaagent -->SuT;
 	SuT-->id1[Kieker Traces];
 ```
+
+## Choosing an Agent
+
+The agents capabilities are mostly defined by the underlying instrumentation framework. There are some things to consider:
+- There are subtle differences in the created monitoring logs, since the definition of signatures slightly differs (the constructor of `ClassA` would be called `ClassA.<init>()` in AspectJ, but `ClassA()` in ByteBuddy, ByteBuddy does not yet support monitoring lambda expressions, ...). All will give you valid logs representing your system behavior, but replacing them by one another might not exactly produce the same output (depending on which Java features you are using).
+- If you are using Spring, AspectJ with its native spring capabilities might be the best choice. Furthermore, if you'd prefer to configure your agent via an XML file (`aop.xml`), AspectJ is supporting this.
+- If you prefer a very basic configuration using only the environment variables `KIEKER_SIGNATURES_INCLUDE` and `KIEKER_SIGNATURES_EXCLUDE`, our ByteBuddy agent might be the way to go for you.
+- According to our measurements, ByteBuddy, Javassist and DiSL produce the lowest overhead. However, this might change with updated versions and it might also be different in your setup.

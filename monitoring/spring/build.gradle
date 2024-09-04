@@ -58,7 +58,7 @@ dependencies {
 
 	testImplementation "org.objenesis:objenesis:3.4"
 
-	testImplementation "org.easymock:easymock:5.2.0"
+	testImplementation "org.easymock:easymock:5.4.0"
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
@@ -67,10 +67,10 @@ dependencies {
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.0.5"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.20"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.20"
+	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.22"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.23"
 
-	testImplementation "commons-io:commons-io:2.16.0"
+	testImplementation "commons-io:commons-io:2.16.1"
 
 	testImplementation project(':common').sourceSets.test.output
 	testImplementation project(':monitoring:core').sourceSets.test.output
@@ -81,7 +81,7 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			groupId = 'net.kieker-monitoring'
-			artifactId = 'monitoring'
+			artifactId = 'monitoring-spring'
 			version = version
 
 			from components.java

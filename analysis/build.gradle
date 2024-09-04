@@ -28,7 +28,7 @@ dependencies {
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
-	api "org.eclipse.emf:org.eclipse.emf.common:2.30.0"
+	api "org.eclipse.emf:org.eclipse.emf.common:2.31.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore:2.36.0"
 
@@ -43,11 +43,11 @@ dependencies {
 	api "javax.servlet:javax.servlet-api:4.0.1"
 
 	api "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
-	api "org.apache.commons:commons-compress:1.25.0"
+	api "org.apache.commons:commons-compress:1.27.1"
 	api "org.nanohttpd:nanohttpd:2.3.1"
-	api "com.carrotsearch:hppc:0.9.1"
-	api "org.csveed:csveed:0.7.5"
-	api "org.yaml:snakeyaml:2.2"
+	api "com.carrotsearch:hppc:0.10.0"
+	api "org.csveed:csveed:0.8.1"
+	api "org.yaml:snakeyaml:2.3"
 	api "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
