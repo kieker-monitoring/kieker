@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2023 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public final class Version {
 	// The VERSION string is updated by the Ant build file, which looks for the pattern: VERSION = <quote>.*<quote>
 	private static final String VERSION = "2.0.0"; // NOPMD (name equals classname)
 
-	private static final String COPYRIGHT = "Copyright (c) 2006-2022 Kieker Project";
+	private static final String COPYRIGHT = "Copyright (c) 2006-2023 Kieker Project";
 
 	/**
 	 * Private constructor to avoid instantiation.
