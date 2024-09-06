@@ -1034,6 +1034,22 @@ artifacts {
   archives javadocJar
 }
 
+// This is necessary for the RC call, since in the regular non-RC stage, no signatory is configured in Jenkins, but for release-versions, Gradle still requires .asc files
+task createDummyAscFiles {
+    doLast {
+        if (isReleaseVersion) {
+            file('build/libs').listFiles().each { file ->
+                if (file.name.endsWith('.jar')) {
+                    new File(file.path + '.asc').text = 'dummy'
+                }
+            }
+            new File('build/publications/mavenJava/pom-default.xml.asc').text = 'dummy'
+        }
+    }
+}
+
+publishToMavenLocal.dependsOn createDummyAscFiles
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
