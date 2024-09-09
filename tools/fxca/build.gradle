@@ -43,7 +43,7 @@ dependencies {
 	implementation "org.apache.commons:commons-csv:1.11.0"
 	implementation "org.apache.commons:commons-collections4:4.4"
 	implementation "org.apache.commons:commons-lang3:3.14.0"
-	implementation "commons-io:commons-io:2.16.0"
+	implementation "commons-io:commons-io:2.16.1"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.36.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0"
 	implementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
