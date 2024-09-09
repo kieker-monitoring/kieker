@@ -85,8 +85,9 @@ pipeline {
           steps {
             sh './gradlew --parallel test jacocoTestReport'
             jacoco(
-               sourcePattern: '**/src/**',
-               exclusionPattern: '**/test/**'
+               sourcePattern: '**/src/',
+               classPattern: '**/kieker/',
+               exclusionPattern: '**/test/'
             )
           }
           post {
