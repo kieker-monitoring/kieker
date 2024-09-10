@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright (C) 2024 Kieker Project (https://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.oteltransformer.stages;
 
 import java.util.HashMap;
@@ -5,13 +21,13 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.system.model.Execution;
 import kieker.model.system.model.ExecutionTrace;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -29,6 +45,11 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import teetime.framework.AbstractConsumerStage;
 
+/**
+ * A stage for exporting Kieker traces to OpenTelemetry
+ * 
+ * @author DaGeRe
+ */
 public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionTrace> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenTelemetryExporterStage.class);
@@ -40,7 +61,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	public static final String PREFIX = OpenTelemetryExporterStage.class.getName() + ".";
 
 	/**
-	 * The type of the export, currently supported: Zipkin and GRPC
+	 * The type of the export, currently supported: Zipkin and GRPC.
 	 */
 	public static final String EXPORT_TYPE = PREFIX + "ExportType";
 
@@ -52,11 +73,15 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
 	private int lastEss;
-	private final Stack<Span> lastSpan = new Stack<Span>();
+	private final Stack<Span> lastSpan = new Stack<>();
 	private final SdkTracerProvider tracerProvider;
 
 	private final ExportType exportType;
 	private final String exportUrl;
+
+	private int spanIndex = 0;
+	private int serviceIndex = 0;
+	private final Map<String, String> serviceIndexMap = new HashMap<>();
 
 	public OpenTelemetryExporterStage(final Configuration configuration) {
 
@@ -114,10 +139,6 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		return spanExporter;
 	}
 
-	private int i = 0;
-	private int serviceIndex = 0;
-	private final Map<String, String> serviceIndexMap = new HashMap<>();
-
 	@Override
 	protected void execute(final ExecutionTrace trace) throws Exception {
 		final Tracer tracer = tracerProvider.get("kieker-import");
@@ -141,7 +162,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 
 			final Span span = createSpan(execution, fullClassname, spanBuilder);
 
-			LOGGER.debug("Spans added: " + ++i);
+			LOGGER.debug("Spans added: " + ++spanIndex);
 
 			if (execution.getEss() >= lastEss) {
 				lastEss++;
