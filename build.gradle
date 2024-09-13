@@ -1075,6 +1075,7 @@ artifacts {
   archives bytebuddyJar
   archives sourcesJar
   archives javadocJar
+  archives springJar
 }
 
 // This is necessary for the RC call, since in the regular non-RC stage, no signatory is configured in Jenkins, but for release-versions, Gradle still requires .asc files
