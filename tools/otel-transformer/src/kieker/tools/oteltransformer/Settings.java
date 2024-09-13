@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright (C) 2024 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.explorviz;
+package kieker.tools.oteltransformer;
 
-/**
- * @author Micky Singh Multani
- *
- * @since 1.11
- */
-public class CustomAfterOperationFailedEvent extends CustomAfterOperationEvent {
-	private static final long serialVersionUID = 903748521115122813L;
+import java.nio.file.Path;
 
-	private final String cause;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.PathConverter;
 
-	public CustomAfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String cause) {
-		super(timestamp, traceId, orderIndex);
-		this.cause = cause;
+public class Settings {
+	@Parameter(names = { "-lp",
+		"--listenPort" }, required = true, description = "Port where the otel-transformer listens for traces")
+	private int listenPort;
+
+	@Parameter(names = { "-c",
+		"--configuration" }, required = false, description = "Configuration file.", converter = PathConverter.class)
+	private Path configurationPath;
+
+	public int getListenPort() {
+		return listenPort;
 	}
 
-	public String getCause() {
-		return this.cause;
+	public Path getKiekerMonitoringProperties() {
+		return this.configurationPath;
 	}
-
 }

@@ -404,6 +404,7 @@ def checkSubprojects = [
   project(':tools:mt'),
   project(':tools:mvis'),
   project(':tools:opad'),
+  project(':tools:otel-transformer'),
   project(':tools:relabel'),
   project(':tools:resource-monitor'),
   project(':tools:rewrite-log-entries'),
@@ -1083,6 +1084,7 @@ publishing {
       artifact emfJar
       artifact aspectJJar
       artifact bytebuddyJar
+      artifact javassistJar
       artifact sourcesJar
       artifact javadocJar
       artifact springJar
