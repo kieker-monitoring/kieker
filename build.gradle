@@ -1088,6 +1088,7 @@ task createDummyAscFiles {
           new File(file.path + '.asc').text = 'dummy'
         }
       }
+      println 'Created build/: ' + new File('build/').mkdir()
       println 'Created build/publications/: ' + new File('build/publications/').mkdir()
       println 'Created build/publications/mavenJava/: ' + new File('build/publications/mavenJava/').mkdir()
       new File('build/publications/mavenJava/pom-default.xml.asc').text = 'dummy'
