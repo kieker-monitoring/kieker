@@ -195,4 +195,3 @@ compileJarIntegrationTestJava {
 		classpath.setFrom configurations.aspectJCompileTime
 	}
 }
-
