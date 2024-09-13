@@ -256,7 +256,7 @@ pipeline {
             unstash 'jarArtifacts'
             withCredentials([
               usernamePassword(
-                credentialsId: 'artifactupload', 
+                credentialsId: 'OSSRH-Token', 
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
               ),
