@@ -48,17 +48,3 @@ testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
 task uploadArchives {
 	println 'maa skipped'
 }
-
-eclipse {
-	classpath {
-		file {
-			whenMerged { classpath ->
-				classpath.entries.removeAll { entry ->
-					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& ['/common', '/tools'].contains(entry.path)
-						&& entry.entryAttributes['test']
-				}
-			}
-		}
-	}
-}

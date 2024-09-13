@@ -34,18 +34,4 @@ task replaceHardCodedVersionNames() {
 	}
 }
 
-eclipse {
-	classpath {
-		file {
-			whenMerged { classpath ->
-				classpath.entries.removeAll { entry ->
-					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& ['/common', '/tools'].contains(entry.path)
-						&& entry.entryAttributes['test']
-				}
-			}
-		}
-	}
-}
-
 compileJava.dependsOn replaceHardCodedVersionNames

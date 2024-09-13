@@ -26,17 +26,3 @@ dependencies {
 task uploadArchives {
 	println 'trace-analysis-gui skipped'
 }
-
-eclipse {
-	classpath {
-		file {
-			whenMerged { classpath ->
-				classpath.entries.removeAll { entry ->
-					entry instanceof org.gradle.plugins.ide.eclipse.model.ProjectDependency
-						&& entry.path == '/tools'
-						&& entry.entryAttributes['test']
-				}
-			}
-		}
-	}
-}
