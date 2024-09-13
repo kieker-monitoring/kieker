@@ -1073,6 +1073,7 @@ artifacts {
   archives emfJar
   archives aspectJJar
   archives bytebuddyJar
+  archives javassistJar
   archives sourcesJar
   archives javadocJar
   archives springJar
