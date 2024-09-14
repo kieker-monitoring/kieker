@@ -167,7 +167,7 @@ subprojects {
       println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
   }
-  
+
   task javadocJar(type: Jar) {
     archiveClassifier.set('javadoc')
     from javadoc
