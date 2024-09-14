@@ -486,7 +486,7 @@ checkSubprojects.each { project ->
         println("  Info: " + pmdInfos)
         println()
 
-        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/monitoring/kieker#eclipse-setup-for-contributors"
+        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
 
         // Fail build if Checkstyle thresholds are violated
         if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
@@ -1161,9 +1161,9 @@ publishing {
         }
 
         scm {
-          connection = 'scm:git:https://github.com/monitoring/kieker.git'
-          developerConnection = 'scm:git:git@github.com:monitoring/kieker.git'
-          url = 'https://github.com/monitoring/kieker'
+          connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+          developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+          url = 'https://github.com/kieker-monitoring/kieker'
         }
       }
 
