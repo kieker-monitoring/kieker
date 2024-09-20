@@ -713,6 +713,8 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
   configure allArtifacts
   configure licence
 
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
   manifest = project.manifest {
     from sharedManifest
   }
