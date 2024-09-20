@@ -168,6 +168,12 @@ subprojects {
       println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
   }
+  
+  ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+  signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+  }
 
   publishing {
     publications {
