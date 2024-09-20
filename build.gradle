@@ -225,6 +225,11 @@ subprojects {
       }
     }
   }
+  
+  java {
+    withSourcesJar()
+    withJavadocJar()
+  }
 
   javadoc {
     failOnError=false
