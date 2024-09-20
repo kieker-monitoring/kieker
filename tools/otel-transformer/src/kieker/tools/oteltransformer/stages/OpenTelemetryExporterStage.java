@@ -64,6 +64,16 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	 * The type of the export, currently supported: Zipkin and GRPC.
 	 */
 	public static final String EXPORT_TYPE = PREFIX + "ExportType";
+	
+	/**
+	 * The type of the export, currently supported: Zipkin and GRPC.
+	 */
+	public static final String EXPLORVIZ_TOKEN_VALUE = PREFIX + "ExplorVizTokenValue";
+	
+	/**
+	 * The type of the export, currently supported: Zipkin and GRPC.
+	 */
+	public static final String EXPLORVIZ_TOKEN_SECRET = PREFIX + "ExplorVizTokenSecret";
 
 	/**
 	 * The url, for example http://localhost:417/
@@ -78,14 +88,23 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 
 	private final ExportType exportType;
 	private final String exportUrl;
+	
+	private final String explorVizTokenValue;
+	private final String explorVizTokenSecret;
 
 	private int spanIndex = 0;
 	private int serviceIndex = 0;
 	private final Map<String, String> serviceIndexMap = new HashMap<>();
 
 	public OpenTelemetryExporterStage(final Configuration configuration) {
-
-		final String typeParameter = configuration.getStringProperty(EXPORT_TYPE);
+		this(configuration.getStringProperty(EXPORT_TYPE), 
+				configuration.getStringProperty(EXPORT_URL), 
+				"kieker-data",
+				configuration.getStringProperty(EXPLORVIZ_TOKEN_VALUE),
+				configuration.getStringProperty(EXPLORVIZ_TOKEN_SECRET));
+	}
+	
+	public OpenTelemetryExporterStage(String typeParameter, String url, String serviceName, String explorVizTokenValue, String explorVizTokenSecret) {
 		if ("GRPC".equals(typeParameter) || typeParameter == null || typeParameter.isEmpty()) {
 			exportType = ExportType.GRPC;
 		} else if ("zipkin".equals(typeParameter)) {
@@ -93,9 +112,9 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		} else {
 			throw new RuntimeException("Please specifiy accepted " + EXPORT_TYPE + " parameter, was " + typeParameter);
 		}
-
-		final String urlParameter = configuration.getStringProperty(EXPORT_URL);
-		if (urlParameter == null || urlParameter.isEmpty()) {
+		
+		
+		if (url == null) {
 			if (exportType.equals(ExportType.GRPC)) {
 				exportUrl = "http://localhost:4317";
 			} else if (exportType.equals(ExportType.ZIPKIN)) {
@@ -104,10 +123,11 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 				exportUrl = null;
 			}
 		} else {
-			exportUrl = urlParameter;
+			exportUrl = url;
 		}
-
 		tracerProvider = createTracerProvider("kieker-data");
+		this.explorVizTokenValue = (explorVizTokenValue != null ? explorVizTokenValue : "mytokenvalue");
+		this.explorVizTokenSecret = (explorVizTokenSecret != null ? explorVizTokenSecret : "mytokensecret");
 	}
 
 	private SdkTracerProvider createTracerProvider(final String serviceName) {
@@ -193,8 +213,8 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			span.setAttribute("code.namespace", fullClassname);
 			span.setAttribute("code.function", execution.getOperation().getSignature().getName());
 			span.setAttribute("telemetry.sdk.language", "java");
-			span.setAttribute("explorviz.token.id", "mytokenvalue");
-			span.setAttribute("explorviz.token.secret", "mytokensecret");
+			span.setAttribute("explorviz.token.id", explorVizTokenValue);
+			span.setAttribute("explorviz.token.secret", explorVizTokenSecret);
 		} finally {
 			span.end(execution.getTout(), TimeUnit.NANOSECONDS);
 		}
