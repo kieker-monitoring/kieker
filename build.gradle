@@ -990,6 +990,7 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   ':tools:trace-analysis:distZip',
   ':tools:trace-analysis-gui:distZip',
   ':examples:jar',
+  ':examples:javadocJar',
   ':examples:spotlessMisc' ]) {
   archiveClassifier = 'binaries'
   with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
