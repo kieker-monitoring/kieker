@@ -66,12 +66,12 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	public static final String EXPORT_TYPE = PREFIX + "ExportType";
 	
 	/**
-	 * The type of the export, currently supported: Zipkin and GRPC.
+	 * Value of the ExplorViz token (if required).
 	 */
 	public static final String EXPLORVIZ_TOKEN_VALUE = PREFIX + "ExplorVizTokenValue";
 	
 	/**
-	 * The type of the export, currently supported: Zipkin and GRPC.
+	 * Secret of ExplorViz (if required).
 	 */
 	public static final String EXPLORVIZ_TOKEN_SECRET = PREFIX + "ExplorVizTokenSecret";
 
@@ -126,8 +126,8 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			exportUrl = url;
 		}
 		tracerProvider = createTracerProvider("kieker-data");
-		this.explorVizTokenValue = (explorVizTokenValue != null ? explorVizTokenValue : "mytokenvalue");
-		this.explorVizTokenSecret = (explorVizTokenSecret != null ? explorVizTokenSecret : "mytokensecret");
+		this.explorVizTokenValue = explorVizTokenValue;
+		this.explorVizTokenSecret = explorVizTokenSecret;
 	}
 
 	private SdkTracerProvider createTracerProvider(final String serviceName) {
@@ -213,8 +213,12 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			span.setAttribute("code.namespace", fullClassname);
 			span.setAttribute("code.function", execution.getOperation().getSignature().getName());
 			span.setAttribute("telemetry.sdk.language", "java");
-			span.setAttribute("explorviz.token.id", explorVizTokenValue);
-			span.setAttribute("explorviz.token.secret", explorVizTokenSecret);
+			if (explorVizTokenValue != null) {
+				span.setAttribute("explorviz.token.id", explorVizTokenValue);
+			}
+			if (explorVizTokenSecret != null) {
+				span.setAttribute("explorviz.token.secret", explorVizTokenSecret);
+			}
 		} finally {
 			span.end(execution.getTout(), TimeUnit.NANOSECONDS);
 		}
