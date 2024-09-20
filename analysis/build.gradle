@@ -21,6 +21,10 @@ project.artifacts {
 	testArchives project.jarTest
 }
 
+javadoc {
+	exclude 'kieker/analysis/model/analysisMetaModel/**'
+}
+
 dependencies {
 	api project(':common')
 	api project(':monitoring:core')
