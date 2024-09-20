@@ -1026,6 +1026,7 @@ def exampleJavaEEContent = project.copySpec {
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, bytebuddyJar, sourcesJar, javadocJar,
   'examples:buildStandaloneExamples',
+  ':examples:sourcesJar',
   ':tools:restructuring:distZip',
   ':tools:behavior-analysis:distZip',
   ':tools:cmi:distZip',
@@ -1056,7 +1057,6 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'
 }
-
 
 /** collect all sources. */
 def sourceContent = project.copySpec {
@@ -1270,6 +1270,15 @@ publishing {
     }
   }
 }
+
+tasks.named('jar') {
+    enabled = false // Disable the default jar task
+}
+
+tasks.named('publishMavenJavaPublicationToMavenLocal') {
+    dependsOn mainJar
+}
+
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
