@@ -46,7 +46,7 @@ import io.opentelemetry.sdk.trace.export.SpanExporter;
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * A stage for exporting Kieker traces to OpenTelemetry
+ * A stage for exporting Kieker traces to OpenTelemetry.
  * 
  * @author DaGeRe
  */
@@ -64,12 +64,12 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	 * The type of the export, currently supported: Zipkin and GRPC.
 	 */
 	public static final String EXPORT_TYPE = PREFIX + "ExportType";
-	
+
 	/**
 	 * Value of the ExplorViz token (if required).
 	 */
 	public static final String EXPLORVIZ_TOKEN_VALUE = PREFIX + "ExplorVizTokenValue";
-	
+
 	/**
 	 * Secret of ExplorViz (if required).
 	 */
@@ -88,7 +88,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 
 	private final ExportType exportType;
 	private final String exportUrl;
-	
+
 	private final String explorVizTokenValue;
 	private final String explorVizTokenSecret;
 
@@ -97,14 +97,15 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	private final Map<String, String> serviceIndexMap = new HashMap<>();
 
 	public OpenTelemetryExporterStage(final Configuration configuration) {
-		this(configuration.getStringProperty(EXPORT_TYPE), 
-				configuration.getStringProperty(EXPORT_URL), 
+		this(configuration.getStringProperty(EXPORT_TYPE),
+				configuration.getStringProperty(EXPORT_URL),
 				"kieker-data",
 				configuration.getStringProperty(EXPLORVIZ_TOKEN_VALUE),
 				configuration.getStringProperty(EXPLORVIZ_TOKEN_SECRET));
 	}
-	
-	public OpenTelemetryExporterStage(String typeParameter, String url, String serviceName, String explorVizTokenValue, String explorVizTokenSecret) {
+
+	public OpenTelemetryExporterStage(final String typeParameter, final String url, final String serviceName, final String explorVizTokenValue,
+			final String explorVizTokenSecret) {
 		if ("GRPC".equals(typeParameter) || typeParameter == null || typeParameter.isEmpty()) {
 			exportType = ExportType.GRPC;
 		} else if ("zipkin".equals(typeParameter)) {
@@ -112,8 +113,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		} else {
 			throw new RuntimeException("Please specifiy accepted " + EXPORT_TYPE + " parameter, was " + typeParameter);
 		}
-		
-		
+
 		if (url == null) {
 			if (exportType.equals(ExportType.GRPC)) {
 				exportUrl = "http://localhost:4317";
