@@ -108,6 +108,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'jacoco'
   apply plugin: 'com.diffplug.spotless'
+  apply plugin: 'maven-publish'
 
   sourceCompatibility = sourceVersion
   targetCompatibility = targetVersion
@@ -165,6 +166,57 @@ subprojects {
 
     afterTest { desc, result ->
       println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+  }
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        pom {
+          groupId = 'net.kieker-monitoring'
+          artifactId = project.name // Use the subproject's name
+          version = project.version
+          name = "${project.name} - Kieker Monitoring and Analysis Framework"
+          description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+          url = 'http://kieker-monitoring.net'
+
+          licenses {
+            license {
+              name = 'The Apache Software License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+
+          developers {
+            developer {
+              id = 'thomas.duellmann'
+              name = 'Thomas F. Duellmann'
+              email = 'duellmann@hitec-hamburg.de'
+            }
+            developer {
+              id = 'andre.van.hoorn'
+              name = 'Andre van Hoorn'
+              email = 'andre.van.hoorn@uni-hamburg.de'
+            }
+            developer {
+              id = 'reiner.jung'
+              name = 'Reiner Jung'
+              email = 'reiner.jung@email.uni-kiel.de'
+            }
+            developer {
+              id = 'david.georg.reichelt'
+              name = 'David Georg Reichelt'
+              email = 'd.g.reichelt@lancaster.ac.uk'
+            }
+          }
+
+          scm {
+            connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+            developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+            url = 'https://github.com/kieker-monitoring/kieker'
+            }
+        }
+      }
     }
   }
 
