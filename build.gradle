@@ -1136,6 +1136,11 @@ publishing {
             name = 'David Georg Reichelt'
             email = 'd.g.reichelt@lancaster.ac.uk'
           }
+          developer {
+            id = 'shinhyung.yang'
+            name = 'Shinhyung Yang'
+            email = 'shinhyung.yang@email.uni-kiel.de'
+          }
         }
 
         scm {
