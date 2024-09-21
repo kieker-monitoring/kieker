@@ -106,6 +106,7 @@ allprojects {
 
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'signing'
   apply plugin: 'jacoco'
   apply plugin: 'com.diffplug.spotless'
   apply plugin: 'maven-publish'
