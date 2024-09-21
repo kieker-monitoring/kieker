@@ -169,10 +169,24 @@ subprojects {
     }
   }
 
+  java {
+    withSourcesJar()
+    withJavadocJar()
+  }
+
+  javadoc {
+    failOnError=false
+  }
+
+  artifacts {
+    archives javadocJar
+  }
+
   ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
   signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
+    println 'Going to sign subproject for releasing: ' + isReleaseVersion
   }
 
   publishing {
@@ -224,19 +238,6 @@ subprojects {
         }
       }
     }
-  }
-
-  java {
-    withSourcesJar()
-    withJavadocJar()
-  }
-
-  javadoc {
-    failOnError=false
-  }
-
-  artifacts {
-    archives javadocJar
   }
 
   jacoco {
