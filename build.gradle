@@ -186,7 +186,6 @@ subprojects {
   publishing {
     publications {
       maven(MavenPublication) {
-        artifact javadocJar
         pom {
           groupId = 'net.kieker-monitoring'
           artifactId = project.name // Use the subproject's name
