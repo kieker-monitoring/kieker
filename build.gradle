@@ -183,16 +183,11 @@ subprojects {
     archives javadocJar
   }
 
-  ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-  signing {
-    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
-    println 'Going to sign subproject for releasing: ' + isReleaseVersion
-  }
-
   publishing {
     publications {
       maven(MavenPublication) {
+        artifact javadocJar
+        artifact sourcesJar
         pom {
           groupId = 'net.kieker-monitoring'
           artifactId = project.name // Use the subproject's name
@@ -239,6 +234,13 @@ subprojects {
         }
       }
     }
+  }
+  
+  ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+  signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign publishing.publications.maven
+    println 'Going to sign subproject ' + project.name + ' for releasing: ' + isReleaseVersion
   }
 
   jacoco {
