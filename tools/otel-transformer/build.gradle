@@ -24,3 +24,25 @@ dependencies {
 	implementation "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryJavaVersion}"
 	implementation "io.opentelemetry:opentelemetry-exporter-zipkin:${opentelemetryJavaVersion}"
 }
+
+
+jar {
+    zip64 true
+    manifest {
+        attributes 'Implementation-Title': 'Otel-Transformer',
+                   'Implementation-Version': '2.0.0-SNAPSHOT',
+                   'Main-Class': 'kieker.tools.oteltransformer.RecordReceiverMain'
+    }
+    
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll{ 
+          it.name.endsWith('jar') && 
+          !it.name.contains('influxdb-java-2.24') &&
+          !it.name.contains('jetty') &&
+          !it.name.contains('springframework') &&
+          !it.name.contains('weka')
+        }.collect { zipTree(it) }
+    }
+}
