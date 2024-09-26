@@ -76,7 +76,6 @@ public class CassandraDb {
 	 * @param contactPoints
 	 * @param tablePrefix
 	 * @param dropTables
-	 * @throws Exception
 	 */
 	public CassandraDb(final String keyspace, final List<InetSocketAddress> contactPoints, final String tablePrefix, final boolean dropTables) {
 		this.initializeDatabaseTypeMapping();
