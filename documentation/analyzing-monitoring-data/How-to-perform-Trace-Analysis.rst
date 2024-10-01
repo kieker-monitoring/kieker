@@ -391,7 +391,7 @@ To run the JPetStore:
 -  Now you can access the JPetStore from your browser with
    http://localhost:8080/jpetstore:
 
-.. figure:: images/jpetstore-example-FFscrsh.png
+.. figure:: ../images/jpetstore-example-FFscrsh.png
    :width: 600
    :alt: MyBatis JPetStore
 .. `http://localhost:8080/jpetstore <https://kieker-monitoring.atlassian.net/wiki/spaces/DOC/pages/655950052/Instrumentation+with+CXF+Interceptors>`__
