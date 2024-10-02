@@ -17,15 +17,16 @@ The instrumentation of Spring Boot requires 3 steps:
 
 .. code-block:: java
    :linenos:
+
    @Configuration
    @EnableLoadTimeWeaving
    public class AppConfig implements LoadTimeWeavingConfigurer {
    
-   	@Override
-   	public LoadTimeWeaver getLoadTimeWeaver() {
-   		return new InstrumentationLoadTimeWeaver();
-   	}
-}
+       @Override
+       public LoadTimeWeaver getLoadTimeWeaver() {
+       	return new InstrumentationLoadTimeWeaver();
+       }
+   }
 
 -  Configuring the CLI call: While regular applications are called using `java -javaagent:kieker-$KIEKERVERSION-aspectj.jar`, Spring Boot applications should not be instrumented directly, but instead, the things loaded by the Spring Boot classloader should be instrumented. Therefore, `spring-instrument-$SPRINGVERSION.jar` needs to be added as an agent **before** the Kieker agent. Furthermore, the default aop configuration should be disabled for multi-classloader environments, using `-Dkieker.monitoring.skipDefaultAOPConfiguration=true`. Overall, the call will look like `java -Dkieker.monitoring.skipDefaultAOPConfiguration=true -javaagent:spring-instrument-$SPRINGVERSION.jar -javaagent:lib/kieker-$KIEKERVERSION-aspectj.jar -jar MyJar.jar`
 
