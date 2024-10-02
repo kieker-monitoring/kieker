@@ -12,8 +12,8 @@ Instrumenting Spring Boot Applications
 ======================================
 
 The instrumentation of Spring Boot requires 3 steps:
-- Specification of the instrumentation aspects in the `aop.xml` (equivalent to :ref:`gt-aspectj-instrumentation-example`)
-- Adaption of the configuration: To adapt the configuration, the annotation `@EnableLoadTimeWeaving` needs to be added to the spring config. Furthermore, it needs to be specified that the `InstrumentationLoadTimeWeaver` is used. Therefore, an example configuration can look like this:
+- Specification of the instrumentation aspects in the ``aop.xml`` (equivalent to :ref:`gt-aspectj-instrumentation-example`)
+- Adaption of the configuration: To adapt the configuration, the annotation ``@EnableLoadTimeWeaving`` needs to be added to the spring config. Furthermore, it needs to be specified that the ``InstrumentationLoadTimeWeaver`` is used. Therefore, an example configuration can look like this:
 
 .. code-block:: java
    :linenos:
@@ -28,6 +28,6 @@ The instrumentation of Spring Boot requires 3 steps:
        }
    }
 
--  Configuring the CLI call: While regular applications are called using `java -javaagent:kieker-$KIEKERVERSION-aspectj.jar`, Spring Boot applications should not be instrumented directly, but instead, the things loaded by the Spring Boot classloader should be instrumented. Therefore, `spring-instrument-$SPRINGVERSION.jar` needs to be added as an agent **before** the Kieker agent. Furthermore, the default aop configuration should be disabled for multi-classloader environments, using `-Dkieker.monitoring.skipDefaultAOPConfiguration=true`. Overall, the call will look like `java -Dkieker.monitoring.skipDefaultAOPConfiguration=true -javaagent:spring-instrument-$SPRINGVERSION.jar -javaagent:lib/kieker-$KIEKERVERSION-aspectj.jar -jar MyJar.jar`
+-  Configuring the CLI call: While regular applications are called using ``java -javaagent:kieker-$KIEKERVERSION-aspectj.jar``, Spring Boot applications should not be instrumented directly, but instead, the things loaded by the Spring Boot classloader should be instrumented. Therefore, ``spring-instrument-$SPRINGVERSION.jar`` needs to be added as an agent **before** the Kieker agent. Furthermore, the default aop configuration should be disabled for multi-classloader environments, using ``-Dkieker.monitoring.skipDefaultAOPConfiguration=true``. Overall, the call will look like ``java -Dkieker.monitoring.skipDefaultAOPConfiguration=true -javaagent:spring-instrument-$SPRINGVERSION.jar -javaagent:lib/kieker-$KIEKERVERSION-aspectj.jar -jar MyJar.jar``
 
 A full example can be found in https://github.com/kieker-monitoring/kieker/tree/main/examples/monitoring/probe-spring-boot
