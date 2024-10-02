@@ -4,15 +4,15 @@ Instrumentation of Spring Applications
 ======================================
 
 Depending on the circumstances, spring applications can be monitored with different configurations:
-- Spring interceptors can be used if solely spring endpoints should be monitored. This is described in :ref:`_tutorial-servlet-example`
-- Spring applications **without** Sprinng Boot can be instrumented as any other Java application. This is described in :ref:`_gt-aspectj-instrumentation-example`
+- Spring interceptors can be used if solely spring endpoints should be monitored. This is described in :ref:`tutorial-servlet-example`
+- Spring applications **without** Sprinng Boot can be instrumented as any other Java application. This is described in :ref:`gt-aspectj-instrumentation-example`
 - Spring applications **with** Spring Boot use a different classloader. Therefore, their instrumentation is described here.
 
 Instrumenting Spring Boot Applications
 ======================================
 
 The instrumentation of Spring Boot requires 3 steps:
-- Specification of the instrumentation aspects in the `aop.xml` (equivalent to :ref:`_gt-aspectj-instrumentation-example`)
+- Specification of the instrumentation aspects in the `aop.xml` (equivalent to :ref:`gt-aspectj-instrumentation-example`)
 - Adaption of the configuration: To adapt the configuration, the annotation `@EnableLoadTimeWeaving` needs to be added to the spring config. Furthermore, it needs to be specified that the `InstrumentationLoadTimeWeaver` is used. Therefore, an example configuration can look like this:
 
 .. code-block:: java
