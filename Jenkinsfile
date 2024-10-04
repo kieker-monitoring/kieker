@@ -227,7 +227,7 @@ pipeline {
                 passwordVariable: 'kiekerMavenPassword'
               )
             ]) {
-              sh './gradlew -x signArchives publish'
+              sh './gradlew -x signMavenJavaPublication -x signArchives publish'
             }
           }
           post {
