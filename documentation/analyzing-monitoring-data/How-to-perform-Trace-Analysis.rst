@@ -267,8 +267,7 @@ should contain the following information and must be placed in
 	## Enable monitoring after startup
 	kieker.monitoring.enabled=true
 
-	## The name of the VM running Kieker or empty (will automatically be
-	resolved)
+	## The name of the VM running Kieker or empty (will automatically be resolved)
 	kieker.monitoring.hostname=
 
 	## Automatically add a metadata record
@@ -391,8 +390,10 @@ To run the JPetStore:
 -  Now you can access the JPetStore from your browser with
    http://localhost:8080/jpetstore:
 
-.. image:: ../images/jpetstore-example-FFscrsh.png
-   :width: 600
+.. figure:: ../images/jpetstore-example-FFscrsh.png
+   :width: 600px
+   :align: center
+
 .. `http://localhost:8080/jpetstore <https://kieker-monitoring.atlassian.net/wiki/spaces/DOC/pages/655950052/Instrumentation+with+CXF+Interceptors>`__
 
 -  While you are using the application logging information appears in a
