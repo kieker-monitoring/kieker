@@ -46,7 +46,7 @@ AspectJ in JavaEE environments. We recommend to use URIs instead.
 JBoss
 -----
 
--  Needs documentation but ` NovaTec's blog
+-  Needs documentation but `NovaTec's blog
    post <http://blog.novatec-gmbh.de/analysing-kieker-with-jboss-dvdstore-sample-application/>`__
    may serve as a starting point
 
