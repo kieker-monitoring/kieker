@@ -30,8 +30,8 @@ As the tool is a web application, it is developed as a JavaEE
 application using JavaServer Faces for the most part. For advanced
 visual components and themes the open source component framework
 `Primefaces <http://primefaces.org>`_ is used.
-`Spring <http://www.springsource.org/>`_ is
-used as a dependency framework. `Spring security <http://static.springsource.org/spring-security/site/index.html>`_
+`Spring <https://spring.io/>`_ is
+used as a dependency framework. `Spring security <https://spring.io/projects/spring-security>`_
 is the security framework to check authentications and authorizations.
 In order to provide human-readable URLs, the URL Rewrite Filter
 `PrettyFaces <http://ocpsoft.org/prettyfaces/>`_

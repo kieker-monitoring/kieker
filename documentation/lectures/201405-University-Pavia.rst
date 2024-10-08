@@ -8,8 +8,8 @@ Information
 
 The tutorial was held on May 21, 2014 as a 3-hour guest lecture in the
 `course "Enterprise Digital
-Infrastructure" <http://eecs.unipv.it/degrees/computer-engineering/enterprise-digital-infrastructure/>`_,
-`University of Pavia <http://eecs.unipv.it/>`_, Pavia, Italy.
+Infrastructure" <https://peg.unipv.it/EDI>`_,
+`University of Pavia <https://iii.dip.unipv.it>`_, Pavia, Italy.
 
 Title: Dynamic Analysis of Software Systems with Kieker: A Hands-On
 Lecture
@@ -88,7 +88,7 @@ Quick Start
       annotations)
 
       1. (Partially workaround due to
-         `#1292 <http://kieker.uni-kiel.de/trac/ticket/1292>`_)
+         `#1292 <https://kieker-monitoring.atlassian.net/jira/software/c/projects/KIEKER/issues/KIEKER-1119>`_)
       2. Copy lib/ folder (including kieker-1.9_aspectj.jar) from
          ch5--trace-monitoring-aspectj/ to ch2--bookstore-application
       3. Create directory src/META-INF
