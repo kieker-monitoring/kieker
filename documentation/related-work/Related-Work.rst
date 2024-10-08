@@ -7,7 +7,7 @@ Monitoring Tools (commercial / non-research)
 --------------------------------------------
 
 -  `AppDynamics <http://www.appdynamics.com/>`_
--  `Btrace <https://kenai.com/projects/btrace>`_
+-  `Btrace <https://github.com/btraceio/btrace>`_
 -  `CA Wily Introscope <http://www.ca.com/us/application-management.aspx>`_
 -  `DynaTrace <http://www.dynatrace.com/de/>`_
 -  `Foglight <http://www.questsoftware.de/foglight/>`_
