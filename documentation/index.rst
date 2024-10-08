@@ -1,9 +1,11 @@
+.. _kieker-documentation:
+
 Kieker Documentation
 ====================
 
 **Kieker** is a Java-based application performance monitoring and
 dynamic software analysis framework. Monitoring adapters for other
-platforms, such as C, C++, Visual Basic~6~(VB6), .NET, and COBOL, exist
+platforms, such as C, C++, Visual Basic 6 (VB6), .NET, and COBOL, exist
 as well
 (`Contact <http://kieker-monitoring.net/support/Contact>`__ us
 directly if you are interested in Kieker support for other platforms).
@@ -36,11 +38,13 @@ Licensing
 obtain a copy of the license at <http://www.apache.org/licenses/LICENSE-2.0>
 
 The **Kieker** source and binary release archives include a number of
-third-party libraries. Appendix~\ref{appendix:libraries} lists these
-libraries along with information on the licenses. 
+third-party libraries.
 The ``lib/`` directory of the release archives contains a ``.LICENSE``
 file for each third-party library, pointing to the respective license
 text.
+
+.. Appendix~\ref{appendix:libraries} lists these
+.. libraries along with information on the licenses. 
 
 Citing Kieker
 -------------
