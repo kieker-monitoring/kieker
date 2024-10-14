@@ -34,7 +34,7 @@ dependencies {
 	implementation "org.csveed:csveed:0.8.1"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
+testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.2"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.2"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')

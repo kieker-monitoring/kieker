@@ -64,7 +64,7 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	// Use JUnit test framework
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.2"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.2"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
