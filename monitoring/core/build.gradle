@@ -52,7 +52,7 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	implementation "com.github.oshi:oshi-core:6.4.12"
+	implementation "com.github.oshi:oshi-core:6.6.5"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.24"
