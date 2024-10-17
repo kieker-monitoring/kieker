@@ -35,7 +35,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.27.1"
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 
-	implementation "org.csveed:csveed:0.8.1"
+	implementation "org.csveed:csveed:0.8.2"
 
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.2"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.2"
