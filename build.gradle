@@ -191,7 +191,7 @@ subprojects {
           artifactId = project.name // Use the subproject's name
           version = project.version
           name = "${project.name} - Kieker Observability Framework"
-          description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+          description = 'Kieker: Application Performance Observability and Software Analysis'
           url = 'http://kieker-monitoring.net'
 
           licenses {
