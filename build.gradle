@@ -190,8 +190,8 @@ subprojects {
           groupId = 'net.kieker-monitoring'
           artifactId = project.name // Use the subproject's name
           version = project.version
-          name = "${project.name} - Kieker Monitoring and Analysis Framework"
-          description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+          name = "${project.name} - Kieker Observability Framework"
+          description = 'Kieker: Application Performance Observability and Software Analysis'
           url = 'http://kieker-monitoring.net'
 
           licenses {
@@ -670,7 +670,7 @@ task apidoc(type: Javadoc) {
 
   failOnError = false
 
-  title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
+  title = "Kieker Observability Framework, Vers. $kiekerVersion<br/>API Documentation"
   options.header = "Kieker $kiekerVersion"
   options.footer = "Kieker $kiekerVersion"
   options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://monitoring.net\">http://monitoring.net</a>"
@@ -807,7 +807,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 
 /** Kieker jar with aspectJ tooling. */
 task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring and tracing as javaagent."
 ) {
   // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
   archiveClassifier = 'aspectj'
@@ -846,7 +846,7 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
 
 /** Kieker jar with bytebuddy tooling. */
 task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring as javaagent."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring and tracing as javaagent."
 ) {
   archiveClassifier = 'bytebuddy'
   configure bytebuddyArtifacts
@@ -870,7 +870,7 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
 
 /** Kieker jar with javassist tooling. */
 task javassistJar(type: Jar, dependsOn: javassistSubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javassist agent. The resulting jar can directly be used for monitoring as javaagent."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javassist agent. The resulting jar can directly be used for monitoring and tracing as javaagent."
 ) {
   archiveClassifier = 'javassist'
   configure javassistArtifacts
@@ -894,7 +894,7 @@ task javassistJar(type: Jar, dependsOn: javassistSubprojects.tasks["build"], gro
 
 /** Kieker jar with spring tooling. */
 task springJar(type: Jar, dependsOn: springSubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the spring framework. The resulting jar can directly be used for monitoring a spring application."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the spring framework. The resulting jar can directly be used for monitoring and tracing a spring application."
 ) {
   archiveClassifier = 'spring'
   configure springArtifacts
@@ -1202,7 +1202,7 @@ publishing {
         groupId = 'net.kieker-monitoring'
         artifactId = 'kieker'
         version = version
-        name = 'Kieker Monitoring and Analysis Framework'
+        name = 'Kieker Observability Framework'
         description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
         url = 'http://kieker-monitoring.net'
 
