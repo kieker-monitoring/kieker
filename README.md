@@ -1,10 +1,10 @@
-# Kieker Monitoring Framework
+# Kieker Observability Framework
 
 The internal behavior of large-scale software systems cannot be determined on the
 basis of static (e.g., source code) analysis alone. Kieker provides complementary
-dynamic analysis capabilities, i.e., monitoring and analyzing a software system’s
-runtime behavior — enabling application performance monitoring and architecture
-discovery.
+dynamic analysis capabilities, i.e., tracing, monitoring and analyzing a software
+system’s runtime behavior — enabling application performance monitoring and
+architecture discovery.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 and its documentation site https://kieker-monitoring.readthedocs.io/en/latest/

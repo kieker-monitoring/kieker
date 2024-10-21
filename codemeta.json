@@ -6,7 +6,7 @@
     "dateModified": "2024-07-23",
     "issueTracker": "https://kieker-monitoring.atlassian.net/",
     "name": "Kieker",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Application-level monitoring and dynamic analysis of software systems are a basis for various tasks in software engineering research, such as performance evaluation and reverse engineering. The Kieker framework provides monitoring, analysis, and visualization support for these purposes.",
     "referencePublication": "https://doi.org/10.1016/j.simpa.2020.100019",
     "programmingLanguage": [
@@ -57,7 +57,7 @@
             "email": "d.g.reichelt@lancaster.ac.uk",
             "affiliation": {
                 "@type": "Organization",
-                "name": "Lancester University, Leipzig"
+                "name": "Lancaster University, Leipzig"
             }
         }
     ]

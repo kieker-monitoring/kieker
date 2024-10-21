@@ -5,6 +5,37 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 2.0.1 (October 19, 2024)
+- Rebranding: Name Kieker an obserability tool and mention tracing where necessary (since Kieker always did method execution tracing, but was calling this monitoring)
+- Minor fixes
+ - Only pass ExplorViz token to OpenTelemetry if necessary
+- Version updates
+  - Bump org.apache.kafka:kafka-clients from 3.7.0 to 3.8.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/635
+  - Bump org.apache.commons:commons-lang3 from 3.14.0 to 3.17.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/631
+  - Bump org.apache.groovy:groovy-all from 4.0.22 to 4.0.23 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/634
+  - Bump org.junit.jupiter:junit-jupiter from 5.10.2 to 5.11.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/632
+  - Bump org.eclipse.jetty.ee10:jetty-ee10-webapp from 12.0.11 to 12.0.13 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/633
+  - Bump ch.qos.logback:logback-classic from 1.4.14 to 1.5.8 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/642
+  - Bump io.freefair.aspectj.post-compile-weaving from 8.6 to 8.10 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/640
+  - Bump org.tukaani:xz from 1.9 to 1.10 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/646
+  - Bump org.junit.jupiter:junit-jupiter-engine from 5.10.2 to 5.11.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/644
+  - Bump com.rabbitmq:amqp-client from 5.21.0 to 5.22.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/645
+  - Bump commons-io:commons-io from 2.16.1 to 2.17.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/639
+  - Bump org.eclipse.jetty:jetty-server from 12.0.5 to 12.0.13 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/638
+  - Bump org.eclipse.jetty:jetty-server from 12.0.13 to 12.0.14 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/650
+  - Bump org.junit.jupiter:junit-jupiter-engine from 5.11.1 to 5.11.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/651
+  - Bump io.freefair.aspectj.post-compile-weaving from 8.10 to 8.10.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/652
+  - Bump org.ow2.asm:asm from 9.7 to 9.7.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/649
+  - Bump org.springframework:spring-web from 6.0.19 to 6.0.23 in /examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/META-INF/maven/org.mybatis/jpetstore by @dependabot in https://github.com/kieker-monitoring/kieker/pull/643
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.10.2 to 5.11.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/654
+  - Bump org.mockito:mockito-core from 5.13.0 to 5.14.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/655
+  - Bump org.eclipse.emf:org.eclipse.emf.ecore.xmi from 2.37.0 to 2.38.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/656
+  - Bump io.freefair.gradle:aspectj-plugin from 8.10 to 8.10.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/661
+  - Bump org.csveed:csveed from 0.8.1 to 0.8.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/658
+  - Bump ch.qos.logback:logback-access from 1.5.8 to 1.5.11 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/659
+  - Bump org.glassfish.jersey.core:jersey-server from 3.1.8 to 3.1.9 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/660
+  - Bump com.github.oshi:oshi-core from 6.4.12 to 6.6.5 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/657
+
 * 2.0.0 (June 23, 2024)
 - Refactoring
   - Major API changes
