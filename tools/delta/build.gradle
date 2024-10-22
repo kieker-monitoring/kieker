@@ -36,7 +36,7 @@ dependencies {
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.2"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.3"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.2"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
