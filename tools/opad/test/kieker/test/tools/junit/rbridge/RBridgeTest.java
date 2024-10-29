@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.tools.util.InvalidREvaluationResultException;
+import kieker.tools.opad.timeseries.forecast.InvalidREvaluationResultException;
 import kieker.tools.util.RBridgeControl;
 
 import kieker.test.tools.junit.opad.util.AbstractKiekerRTest;
