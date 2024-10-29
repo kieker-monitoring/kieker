@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.tools.util;
+package kieker.tools.opad.timeseries.forecast;
 
 import java.io.OutputStream;
 import java.io.PrintStream;

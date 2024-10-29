@@ -39,14 +39,6 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 	implementation "org.apache.groovy:groovy-all:4.0.23"
 
-	// https://mvnrepository.com/artifact/com.github.yannrichet/Rsession
-	implementation "com.github.yannrichet:Rsession:1.8.3"
-
-	// https://mvnrepository.com/artifact/org.rosuda.REngine/Rserve
-	implementation "org.rosuda.REngine:Rserve:1.8.1"
-
-	// https://mvnrepository.com/artifact/org.rosuda.REngine/REngine
-	implementation "org.rosuda.REngine:REngine:2.1.0"
 
 	// https://mvnrepository.com/artifact/org.apache.activemq/activemq-core
 	api "org.apache.activemq:activemq-core:5.7.0"
