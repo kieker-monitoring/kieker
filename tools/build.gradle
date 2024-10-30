@@ -36,8 +36,6 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
 
-	// https://mvnrepository.com/artifact/org.apache.activemq/activemq-core
-	api "org.apache.activemq:activemq-core:5.7.0"
 
 
 	// Some dependencies for the HTTP connector of the KDB
