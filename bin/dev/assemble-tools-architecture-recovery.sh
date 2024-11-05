@@ -3,7 +3,7 @@
 BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
 BASE_DIR="${BIN_DIR}/../.."
-KIEKER_VERSION="2.0.2-SNAPSHOT"
+KIEKER_VERSION="2.0.2"
 
 PACKAGE_NAME=architecture-recovery
 BUILD_PATH="${BASE_DIR}/build/${PACKAGE_NAME}"
