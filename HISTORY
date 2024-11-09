@@ -5,6 +5,9 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 2.0.2 (October 5, 2024)
+- TODO
+
 * 2.0.1 (October 19, 2024)
 - Rebranding: Name Kieker an obserability tool and mention tracing where necessary (since Kieker always did method execution tracing, but was calling this monitoring)
 - Minor fixes
