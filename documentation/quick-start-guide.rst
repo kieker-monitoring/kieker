@@ -12,7 +12,7 @@ Monitoring
 
 - For this tutorial, we assume your program is storad in ``MyJar.jar``
 
-- Download Kieker complete archive https://github.com/kieker-monitoring/kieker/releases/download/2.0.2/kieker-2.0.2-binaries.zip
+- Download Kieker complete archive https://github.com/kieker-monitoring/kieker/releases/download/2.0.2/kieker-2.0.2-binaries.tar.gz
 - Extract the package
 - Copy ``kieker-2.0.2-aspectj.jar`` from the ``build/libs/ directory`` into the same directory as your jar file.
 - Execute ``java -javaagent:kieker-2.0.2-aspectj.jar -jar MyJar.jar``
