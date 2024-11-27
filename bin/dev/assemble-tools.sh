@@ -3,7 +3,7 @@
 BIN_DIR=$(cd "$(dirname "$0")"; pwd)
 
 BASE_DIR="${BIN_DIR}/../.."
-KIEKER_VERSION="2.0.2-SNAPSHOT"
+KIEKER_VERSION="2.0.3-SNAPSHOT"
 
 "${BIN_DIR}/assemble-tools-architecture-recovery.sh"
 

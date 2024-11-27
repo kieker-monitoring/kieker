@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.util;
+package kieker.tools.opad.timeseries.forecast;
 
 /**
  * Exception that states, that the results from a R evaluation are invalid.

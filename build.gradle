@@ -48,7 +48,7 @@ dependencies {
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.37.0'
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
-  aspectJarConfig "com.rabbitmq:amqp-client:5.22.0"
+  aspectJarConfig "com.rabbitmq:amqp-client:5.23.0"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
   bytebuddyJarConfig "commons-io:commons-io:2.17.0"
@@ -619,6 +619,9 @@ task updateLicenseHeaderYear() {
 
 task replaceHardCodedVersionNames() {
   doLast {
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools-architecture-recovery.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools-trace-analysis.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
     regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
     regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
     regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")

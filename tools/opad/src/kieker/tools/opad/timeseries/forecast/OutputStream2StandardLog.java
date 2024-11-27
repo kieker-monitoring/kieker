@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.util;
+package kieker.tools.opad.timeseries.forecast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

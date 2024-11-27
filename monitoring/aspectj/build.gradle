@@ -61,7 +61,7 @@ dependencies {
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
 	implementation "org.glassfish.jersey.core:jersey-server:3.1.9"
-	implementation "org.glassfish.jersey.core:jersey-common:3.1.8"
+	implementation "org.glassfish.jersey.core:jersey-common:3.1.9"
 	implementation "org.glassfish.jersey.core:jersey-client:3.1.9"
 
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
@@ -82,7 +82,7 @@ dependencies {
 
 	testImplementation "org.objenesis:objenesis:3.4"
 
-	testImplementation "org.easymock:easymock:5.4.0"
+	testImplementation "org.easymock:easymock:5.5.0"
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
@@ -90,7 +90,7 @@ dependencies {
 	testImplementation "org.springframework:spring-beans:$springVersion"
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.14"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.15"
 	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.24"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.24"
 
