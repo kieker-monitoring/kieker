@@ -34,7 +34,7 @@ dependencies {
 
 	api "org.eclipse.emf:org.eclipse.emf.common:2.31.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.38.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore:2.37.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api "nz.ac.waikato.cms.weka:weka-stable:3.8.6" // used by behavior analysis
