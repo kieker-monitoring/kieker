@@ -32,7 +32,7 @@ dependencies {
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
-	api "org.eclipse.emf:org.eclipse.emf.common:2.31.0"
+	api "org.eclipse.emf:org.eclipse.emf.common:2.40.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.38.0"
 	api "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
 
