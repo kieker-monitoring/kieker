@@ -34,8 +34,8 @@ dependencies {
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
 	implementation "org.apache.commons:commons-compress:1.27.1"
 
-	implementation "ch.qos.logback:logback-classic:1.5.15"
-	implementation "ch.qos.logback:logback-core:1.5.12"
+	implementation "ch.qos.logback:logback-classic:1.5.12"
+	implementation "ch.qos.logback:logback-core:1.5.15"
 	implementation "ch.qos.logback:logback-access:1.5.12"
 
 	implementation "org.csveed:csveed:0.8.2"
