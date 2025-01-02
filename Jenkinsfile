@@ -84,11 +84,9 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh './gradlew --parallel test jacocoTestReport'
-            jacoco(
-               sourcePattern: '**/src/',
-               classPattern: '**/kieker/',
-               exclusionPattern: '**/test/'
-            )
+            recordCoverage(tools: [[parser: 'JACOCO']],
+              id: 'jacoco', name: 'JaCoCo Coverage',
+              sourceCodeRetention: 'EVERY_BUILD')
           }
           post {
             always {
