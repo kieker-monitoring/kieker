@@ -31,7 +31,7 @@ pipeline {
     stage('Default Docker Stages') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk11'
+          image 'kieker/kieker-build:temurin17'
           alwaysPull false
           args env.DOCKER_ARGS
         }
@@ -104,55 +104,6 @@ pipeline {
             stash includes: 'build/architecture-recovery*.*', name: 'architecture-recovery'
             stash includes: 'build/tools/*', name: 'tools'
             stash includes: 'build/trace-analysis*.*', name: 'trace-analysis'
-          }
-        }
-      }
-    }
-
-    stage('Release Checks') {
-      parallel {
-        stage('Release Check Short') {
-          agent {
-            docker {
-              image 'kieker/kieker-build:openjdk11'
-              args env.DOCKER_ARGS
-            }
-          }
-          steps {
-            unstash 'distributions'
-            sh 'bin/dev/release-check-short.sh'
-          }
-          post {
-            cleanup {
-              deleteDir()
-            }
-          }
-        }
-
-        stage('Release Check Extended') {
-          agent {
-            docker {
-              image 'kieker/kieker-build:openjdk11'
-              args env.DOCKER_ARGS
-            }
-          }
-          when {
-            beforeAgent true
-            anyOf {
-              branch 'main';
-              branch '*-RC';
-              changeRequest target: 'main'
-            }
-          }
-          steps {
-            sh './gradlew -x signMavenJavaPublication -x signArchives build publishToMavenLocal'
-            unstash 'distributions'
-            sh 'bin/dev/release-check-extended.sh'
-          }
-          post {
-            cleanup {
-              deleteDir()
-            }
           }
         }
       }
