@@ -84,9 +84,16 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh 'export JAVA_OPTS="-Djava.util.prefs.systemRoot=$WORKSPACE/.java -Djava.util.prefs.userRoot=$WORKSPACE/.java/.userPrefs"; ./gradlew --info --parallel test jacocoTestReport'
-            recordCoverage(tools: [[parser: 'JACOCO']],
+            recordCoverage(tools: [[parser: 'JACOCO', pattern: '**/jacocoTestReport.xml']],
               id: 'jacoco', name: 'JaCoCo Coverage',
-              sourceCodeRetention: 'EVERY_BUILD')
+              sourceCodeRetention: 'EVERY_BUILD',
+              sourceDirectories: [[path: 'tools/src'], 
+                [path: 'analysis/src'],
+                [path: 'common/src'], 
+                [path: 'tools/mop/src'], 
+                [path: 'common/src-gen'],
+                [path: 'analysis/src-gen'],
+                [path: 'monitoring/core/src']])
           }
           post {
             always {
