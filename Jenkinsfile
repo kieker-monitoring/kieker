@@ -83,7 +83,7 @@ pipeline {
         
         stage('Unit Test') {
           steps {
-            sh './gradlew --parallel test jacocoTestReport'
+            sh 'export JAVA_OPTS="-Djava.util.prefs.systemRoot=$WORKSPACE/.java -Djava.util.prefs.userRoot=$WORKSPACE/.java/.userPrefs"; ./gradlew --info --parallel test jacocoTestReport'
             recordCoverage(tools: [[parser: 'JACOCO']],
               id: 'jacoco', name: 'JaCoCo Coverage',
               sourceCodeRetention: 'EVERY_BUILD')
