@@ -23,34 +23,29 @@ dependencies {
 	implementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.36.0"
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.38.0"
 
-	compileOnly "org.projectlombok:lombok:1.18.34"
-	testCompileOnly "org.projectlombok:lombok:1.18.34"
-	annotationProcessor "org.projectlombok:lombok:1.18.34"
-	testAnnotationProcessor "org.projectlombok:lombok:1.18.34"
+	implementation "org.csveed:csveed:0.8.2"
 
-	implementation "org.csveed:csveed:0.8.1"
-
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.17.2"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.18.2"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0,1"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
 	implementation "org.apache.commons:commons-compress:1.27.1"
-	implementation "org.apache.commons:commons-lang3:3.14.0"
+	implementation "org.apache.commons:commons-lang3:3.17.0"
 
 	// https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core
 	implementation "org.jgrapht:jgrapht-core:1.5.2"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.2"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.3"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.3"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
 
-	testImplementation "org.mockito:mockito-core:5.12.0"
+	testImplementation "org.mockito:mockito-core:5.14.2"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 }
 

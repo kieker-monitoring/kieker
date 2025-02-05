@@ -52,8 +52,6 @@ public class CassandraDbWriter extends AbstractMonitoringWriter { // NOPMD DataC
 	 * Creates a new instance of this class using the given parameter.
 	 *
 	 * @param configuration
-	 * @throws ConfigurationException
-	 * @throws Exception
 	 */
 	public CassandraDbWriter(final Configuration configuration) {
 		super(configuration);

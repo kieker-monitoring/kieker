@@ -21,6 +21,10 @@ project.artifacts {
 	testArchives project.jarTest
 }
 
+javadoc {
+	exclude 'kieker/analysis/model/analysisMetaModel/**'
+}
+
 dependencies {
 	api project(':common')
 	api project(':monitoring:core')
@@ -28,9 +32,9 @@ dependencies {
 
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
-	api "org.eclipse.emf:org.eclipse.emf.common:2.31.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore:2.36.0"
+	api "org.eclipse.emf:org.eclipse.emf.common:2.40.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.38.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api "nz.ac.waikato.cms.weka:weka-stable:3.8.6" // used by behavior analysis
@@ -46,7 +50,7 @@ dependencies {
 	api "org.apache.commons:commons-compress:1.27.1"
 	api "org.nanohttpd:nanohttpd:2.3.1"
 	api "com.carrotsearch:hppc:0.10.0"
-	api "org.csveed:csveed:0.8.1"
+	api "org.csveed:csveed:0.8.2"
 	api "org.yaml:snakeyaml:2.3"
 	api "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
@@ -60,8 +64,8 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	// Use JUnit test framework
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.2"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.2"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.3"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.3"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
 	testRuntimeOnly "org.apache.derby:derby:10.17.1.0"	// (10.17.1.0 and above require Java 8, 10.15.2.0 requires Java 11+ and should therefore currently not be used)

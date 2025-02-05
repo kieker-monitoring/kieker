@@ -59,7 +59,6 @@ public class CassandraDb {
 	/**
 	 * Establishes a connection to the database.
 	 *
-	 * @return
 	 */
 	public void connect() {
 		try {
