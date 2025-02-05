@@ -157,6 +157,55 @@ pipeline {
       }
     }
 
+    stage('Release Checks') {
+      parallel {
+        stage('Release Check Short') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk11'
+              args env.DOCKER_ARGS
+            }
+          }
+          steps {
+            unstash 'distributions'
+            sh 'bin/dev/release-check-short.sh'
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
+        }
+
+        stage('Release Check Extended') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk11'
+              args env.DOCKER_ARGS
+            }
+          }
+          when {
+            beforeAgent true
+            anyOf {
+              branch 'main';
+              branch '*-RC';
+              changeRequest target: 'main'
+            }
+          }
+          steps {
+            sh './gradlew -x signMavenJavaPublication -x signArchives build publishToMavenLocal'
+            unstash 'distributions'
+            sh 'bin/dev/release-check-extended.sh'
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
+        }
+      }
+    }
+
     stage('Archive Artifacts') {
       agent {
         docker {
