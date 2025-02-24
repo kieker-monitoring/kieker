@@ -62,9 +62,9 @@ dependencies {
 	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
 	implementation "org.apache.commons:commons-compress:1.27.1"
 
-	implementation "org.glassfish.jersey.core:jersey-server:3.1.9"
-	implementation "org.glassfish.jersey.core:jersey-common:3.1.9"
-	implementation "org.glassfish.jersey.core:jersey-client:3.1.9"
+	implementation "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
+	implementation "org.glassfish.jersey.core:jersey-common:$jerseyVersion"
+	implementation "org.glassfish.jersey.core:jersey-client:$jerseyVersion"
 
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
 	implementation "javax.jms:javax.jms-api:2.0.1"
