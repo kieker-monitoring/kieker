@@ -9,7 +9,7 @@ The adapter has been developed as a part of the
 `DynaMod <http://kosse-sh.de/dynamod>`_ research project. It has been
 tested particularly with C#.
 
-..note::
+.. note::
   
   This adapter has not been used for some time.
 
@@ -19,14 +19,14 @@ Installation of Kieker4NET
 Requirements
 ~~~~~~~~~~~~
 
-1. ` JNBridgePro <http://www.jnbridge.com/>`__ license
+1. `JNBridgePro <http://www.jnbridge.com/>`__ license
 2. PostSharp license
 
 JNBridge Download and Licensing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 JNBridePro can be downloaded from
-` http://www.jnbridge.com/bin/downloads.php?pr=1&id=0 <http://www.jnbridge.com/bin/downloads.php?pr=1&id=0>`__.
+`https://jnbridge.com/download?pr=1&id=0 <https://jnbridge.com/download?pr=1&id=0>`__.
 You'll receive an evaluation version with a trial license. which will
 remain functional for 30 days. After having submitted a registration
 form, JNBridgePro is available for 32-bit and 64-bit (untested with
@@ -41,18 +41,18 @@ The following JNBridePro license types are available:
    (default) and OEM licenses are available.
 
 For details on the JNBridgePro licensing, see
-` http://www.jnbridge.com/store.htm <http://www.jnbridge.com/store.htm>`__.
+`https://jnbridge.com/purchase <https://jnbridge.com/purchase>`__.
 
 Installing the JNBridge License
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Having registered via the ` JNBridge download
+Having registered via the `JNBridge download
 page <http://www.jnbridge.com/bin/downloads.php?pr=1&id=0>`__, you
 should receive an e-mail with more information on the product, including
 the *activation key*.
 
 Install JNBridgePro by running the setup wizard provided by the
-downloaded JNBSetup6_0_x86.msi file. During the setup wizard, you'll
+downloaded ``JNBSetup6_0_x86.msi`` file. During the setup wizard, you'll
 have to select one of the following configurations:
 
 1. *Development configuration*: deployment configuration + proxy
@@ -63,6 +63,6 @@ have to select one of the following configurations:
 The installer installs two JNBridgePro versions, one for .NET
 2.0/3.0/3.5 and a second for .NET 4.0. The development configuration is
 required on the machine creating the .NET proxy for the
-kieker-<version>.jar. It also include the JNBridePro plugins for Visual
+``kieker-<version>.jar``. It also include the JNBridePro plugins for Visual
 Studio 2005, 2008, and 2010.
 
