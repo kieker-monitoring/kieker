@@ -51,7 +51,7 @@ dependencies {
 	api "org.nanohttpd:nanohttpd:2.3.1"
 	api "com.carrotsearch:hppc:0.10.0"
 	api "org.csveed:csveed:0.8.2"
-	api "org.yaml:snakeyaml:2.3"
+	api "org.yaml:snakeyaml:2.4"
 	api "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
@@ -64,7 +64,7 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	// Use JUnit test framework
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.3"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.4"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.3"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 

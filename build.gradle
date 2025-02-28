@@ -48,7 +48,7 @@ dependencies {
   emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.38.0'
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
-  aspectJarConfig "com.rabbitmq:amqp-client:5.23.0"
+  aspectJarConfig "com.rabbitmq:amqp-client:5.25.0"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
   bytebuddyJarConfig "commons-io:commons-io:2.18.0"
