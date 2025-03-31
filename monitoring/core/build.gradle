@@ -55,7 +55,7 @@ dependencies {
 	implementation "com.github.oshi:oshi-core:6.7.1"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
-	implementation "org.influxdb:influxdb-java:2.24"
+	implementation "org.influxdb:influxdb-java:2.25"
 
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
@@ -72,7 +72,7 @@ dependencies {
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "javax.jws:javax.jws-api:1.1"
 
-	implementation "org.influxdb:influxdb-java:2.24"
+	implementation "org.influxdb:influxdb-java:2.25"
 
 	implementation "com.squareup.okhttp3:okhttp:4.12.0"
 
