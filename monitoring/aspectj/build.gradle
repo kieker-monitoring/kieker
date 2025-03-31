@@ -10,7 +10,7 @@ buildscript {
 plugins {
 	id 'eclipse'
 	id 'maven-publish'
-	id("io.freefair.aspectj.post-compile-weaving") version "8.13"
+	id("io.freefair.aspectj.post-compile-weaving") version "8.13.1"
 }
 
 sourceCompatibility = 11
