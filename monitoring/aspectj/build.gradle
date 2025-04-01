@@ -3,14 +3,14 @@ buildscript {
 		maven {url "https://plugins.gradle.org/m2/"}
 	}
 	dependencies {
-		classpath "io.freefair.gradle:aspectj-plugin:8.12.1"
+		classpath "io.freefair.gradle:aspectj-plugin:8.13.1"
 	}
 }
 
 plugins {
 	id 'eclipse'
 	id 'maven-publish'
-	id("io.freefair.aspectj.post-compile-weaving") version "8.11"
+	id("io.freefair.aspectj.post-compile-weaving") version "8.13.1"
 }
 
 sourceCompatibility = 11
@@ -90,8 +90,8 @@ dependencies {
 	testImplementation "org.springframework:spring-beans:$springVersion"
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.15"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.24"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.18"
+	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.25"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.24"
 
 	testImplementation "commons-io:commons-io:2.18.0"

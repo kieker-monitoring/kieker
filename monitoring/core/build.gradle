@@ -52,10 +52,10 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	implementation "com.github.oshi:oshi-core:6.6.5"
+	implementation "com.github.oshi:oshi-core:6.7.1"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
-	implementation "org.influxdb:influxdb-java:2.24"
+	implementation "org.influxdb:influxdb-java:2.25"
 
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
@@ -72,7 +72,7 @@ dependencies {
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
 	implementation "javax.jws:javax.jws-api:1.1"
 
-	implementation "org.influxdb:influxdb-java:2.24"
+	implementation "org.influxdb:influxdb-java:2.25"
 
 	implementation "com.squareup.okhttp3:okhttp:4.12.0"
 
@@ -91,8 +91,8 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.15"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.0.16"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.18"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.0.18"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.24"
 
 	testImplementation "commons-io:commons-io:2.18.0"
