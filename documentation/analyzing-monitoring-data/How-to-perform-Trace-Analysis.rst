@@ -30,12 +30,12 @@ The ``OperationExecutionRecord`` attributes ``operationName``, ``tin``,
 and ``tout`` represent the full qualified name of the operation
 including the class name, the time before execution of the operation and
 the time after the execution, respectively (see JavaDoc
-`OperationExecutionRecord <http://api.kieker-monitoring.org/1.15/kieker/common/record/controlflow/OperationExecutionRecord.html>`__).
+`OperationExecutionRecord <http://api.kieker-monitoring.org/2.0.2/kieker/common/record/controlflow/OperationExecutionRecord.html>`__).
 The attributes ``traceId`` and ``sessionId`` are used to store trace and
 session information; ``eoi`` and ``ess`` contain control-flow
 information needed to reconstruct traces from monitoring data. For
 details please refer to the technical report and
-`JavaDoc <http://api.kieker-monitoring.org/1.15/kieker/common/record/controlflow/OperationExecutionRecord.html>`__.
+`JavaDoc <http://api.kieker-monitoring.org/2.0.2/kieker/common/record/controlflow/OperationExecutionRecord.html>`__.
 
 Prerequisites
 -------------
