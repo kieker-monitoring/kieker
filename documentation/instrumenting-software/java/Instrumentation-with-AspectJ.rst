@@ -24,7 +24,7 @@ Load-time weaving
 References
 ----------
 
-- `AspectJ probes <http://api.kieker-monitoring.org/1.15/>`_ 
+- `AspectJ probes <http://api.kieker-monitoring.org/2.0.2/>`_ 
 
 
 
