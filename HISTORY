@@ -5,6 +5,51 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 2.0.3 (April 1, 2025)
+- Version updates of dependencies, to stay up-to-date with third party modules (includes support of Java 23 for AspectJ monitoring)
+- Kieker-1991 Fix URLs in the Kieker documentation by @shinhyungyang in https://github.com/kieker-monitoring/kieker/pull/653
+- Bump org.eclipse.jetty:jetty-server from 12.0.14 to 12.0.15 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/837
+- Bump org.easymock:easymock from 5.4.0 to 5.5.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2843
+- Bump org.projectlombok:lombok from 1.18.34 to 1.18.36 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2842
+- Bump com.rabbitmq:amqp-client from 5.22.0 to 5.23.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2848
+- Remove unused lombok by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/2846
+- Bump io.freefair.aspectj.post-compile-weaving from 8.10.2 to 8.11 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2844
+- Bump org.eclipse.emf:org.eclipse.emf.common from 2.31.0 to 2.40.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2849
+- Bump org.apache.kafka:kafka-clients from 3.8.1 to 3.9.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/836
+- Bump org.eclipse.emf:org.eclipse.emf.ecore from 2.37.0 to 2.38.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2847
+- Bump org.springframework:spring-jdbc from 4.0.1.RELEASE to 6.1.14 in /examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/META-INF/maven/org.mybatis/jpetstore by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2851
+- Bump commons-io:commons-io from 2.17.0 to 2.18.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2852
+- Bump org.eclipse.jetty.ee10:jetty-ee10-webapp from 12.0.14 to 12.0.16 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2853
+- Bump org.junit.jupiter:junit-jupiter from 5.11.3 to 5.11.4 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2860
+- Bump ch.qos.logback:logback-core from 1.5.12 to 1.5.15 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2856
+- Bump com.fasterxml.jackson.core:jackson-databind from 2.18.1 to 2.18.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2859
+- Bump ch.qos.logback:logback-classic from 1.5.12 to 1.5.15 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2858
+- Bump org.apache.commons:commons-text from 1.12.0 to 1.13.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2857
+- Replace jacoco Jenkins plugin by new plugin by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/2867
+- Bump com.rabbitmq:amqp-client from 5.23.0 to 5.25.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2874
+- Bump org.junit.jupiter:junit-jupiter-api from 5.11.3 to 5.11.4 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2865
+- Bump io.freefair.gradle:aspectj-plugin from 8.10.2 to 8.12.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2873
+- Gh 7 Unique Jersey Version by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/2880
+- Bump org.yaml:snakeyaml from 2.3 to 2.4 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2882
+- Bump com.diffplug.spotless from 6.25.0 to 7.0.2 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2878
+- Bump org.eclipse.jetty:jetty-server from 12.0.15 to 12.0.17 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2889
+- Bump org.apache.commons:commons-csv from 1.12.0 to 1.13.0 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2885
+- Bump io.freefair.aspectj.post-compile-weaving from 8.11 to 8.12.2.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2888
+- Bump io.freefair.gradle:aspectj-plugin from 8.12.1 to 8.13 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2893
+- Bump com.fasterxml.jackson.core:jackson-databind from 2.18.2 to 2.18.3 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2891
+- Bump com.github.oshi:oshi-core from 6.6.5 to 6.7.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2894
+- Bump org.eclipse.jetty.ee10:jetty-ee10-webapp from 12.0.16 to 12.0.18 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2898
+- Bump io.freefair.aspectj.post-compile-weaving from 8.12.2.1 to 8.13 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2899
+- Bump org.eclipse.jetty:jetty-webapp from 11.0.24 to 11.0.25 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2896
+- Bump org.mockito:mockito-core from 5.14.2 to 5.16.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2897
+- Bump org.eclipse.jetty:jetty-server from 12.0.17 to 12.0.18 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2901
+- Bump io.freefair.gradle:aspectj-plugin from 8.13 to 8.13.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2902
+- Update to AspectJ 1.9.23 at runtime by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/2905
+- Bump org.junit.jupiter:junit-jupiter from 5.11.4 to 5.12.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2895
+- Bump io.freefair.aspectj.post-compile-weaving from 8.13 to 8.13.1 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2906
+- Bump org.influxdb:influxdb-java from 2.24 to 2.25 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2907
+- Bump org.ow2.asm:asm-analysis from 9.7.1 to 9.8 by @dependabot in https://github.com/kieker-monitoring/kieker/pull/2908
+
 * 2.0.2 (October 5, 2024)
 - Removing unused tool dependencies to reduce release size
   - Kieker 2006 r dependencies to opad by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/683
