@@ -94,7 +94,7 @@ dependencies {
 	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.25"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.24"
 
-	testImplementation "commons-io:commons-io:2.18.0"
+	testImplementation "commons-io:commons-io:2.19.0"
 
 	testImplementation project(':common').sourceSets.test.output
 
