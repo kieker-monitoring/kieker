@@ -14,11 +14,17 @@ import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
+import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.AsyncService;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
 
-public class OtlpGrpcReceiver extends TraceServiceGrpc.TraceServiceImplBase {
+public class OtlpGrpcReceiver implements io.grpc.BindableService, AsyncService {
+
+	@java.lang.Override
+	public final io.grpc.ServerServiceDefinition bindService() {
+		return TraceServiceGrpc.bindService(this);
+	}
 
 	@Override
 	public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
@@ -34,51 +40,51 @@ public class OtlpGrpcReceiver extends TraceServiceGrpc.TraceServiceImplBase {
 		responseObserver.onNext(ExportTraceServiceResponse.getDefaultInstance());
 		responseObserver.onCompleted();
 	}
-	
+
 	private final Map<String, Integer> threadLocalEoi = new HashMap<>();
-    private final Map<String, Integer> threadLocalEss = new HashMap<>();
-	
+	private final Map<String, Integer> threadLocalEss = new HashMap<>();
+
 	public OperationExecutionRecord convert(Span span) {
 		ByteString traceIdBytes = span.getTraceId();
 		String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
-        final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
-        final String parentSpanId = BaseEncoding.base16().lowerCase().encode(span.getParentSpanId().toByteArray());
+		final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
+		final String parentSpanId = BaseEncoding.base16().lowerCase().encode(span.getParentSpanId().toByteArray());
 
-        final String sessionId = traceIdHex;
-        final String operationSignature = span.getName();
-        final String hostname = "localhost";
+		final String sessionId = traceIdHex;
+		final String operationSignature = span.getName();
+		final String hostname = "localhost";
 
-        final long tin = toUnixNanos(span.getStartTimeUnixNano());
-        final long tout = toUnixNanos(span.getEndTimeUnixNano());
+		final long tin = toUnixNanos(span.getStartTimeUnixNano());
+		final long tout = toUnixNanos(span.getEndTimeUnixNano());
 
-        int eoi;
-        int ess;
+		int eoi;
+		int ess;
 
-        if (parentSpanId == null || parentSpanId.isEmpty() || parentSpanId.equals("0000000000000000")) {
-            // root span
-            eoi = 0;
-            ess = 0;
-        } else {
-            int parentEoi = threadLocalEoi.getOrDefault(parentSpanId, -1);
-            int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
+		if (parentSpanId == null || parentSpanId.isEmpty() || parentSpanId.equals("0000000000000000")) {
+			// root span
+			eoi = 0;
+			ess = 0;
+		} else {
+			int parentEoi = threadLocalEoi.getOrDefault(parentSpanId, -1);
+			int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
 
-            ess = parentEss + 1;
-            eoi = parentEoi + 1;
-        }
+			ess = parentEss + 1;
+			eoi = parentEoi + 1;
+		}
 
-        threadLocalEoi.put(spanId, eoi);
-        threadLocalEss.put(spanId, ess);
+		threadLocalEoi.put(spanId, eoi);
+		threadLocalEss.put(spanId, ess);
 
-        System.out.println(traceIdHex);
-        long traceIdAsLong = traceIdAsLong(traceIdHex);
+		System.out.println(traceIdHex);
+		long traceIdAsLong = traceIdAsLong(traceIdHex);
 		return new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi, ess);
-    }
+	}
 
-    private long traceIdAsLong(String traceIdHex) {
-        return new BigInteger(traceIdHex.substring(16), 16).longValue();
-    }
+	private long traceIdAsLong(String traceIdHex) {
+		return new BigInteger(traceIdHex.substring(16), 16).longValue();
+	}
 
-    private long toUnixNanos(long nanosSinceEpoch) {
-        return nanosSinceEpoch;
-    }
+	private long toUnixNanos(long nanosSinceEpoch) {
+		return nanosSinceEpoch;
+	}
 }
