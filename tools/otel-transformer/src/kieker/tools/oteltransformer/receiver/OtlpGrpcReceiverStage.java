@@ -1,5 +1,6 @@
 package kieker.tools.oteltransformer.receiver;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import com.google.protobuf.ByteString;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
@@ -18,13 +21,21 @@ import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.AsyncService;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
+import teetime.framework.AbstractProducerStage;
 
-public class OtlpGrpcReceiver implements io.grpc.BindableService, AsyncService {
+public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecutionRecord> implements io.grpc.BindableService, AsyncService {
 
 	@java.lang.Override
 	public final io.grpc.ServerServiceDefinition bindService() {
 		return TraceServiceGrpc.bindService(this);
 	}
+	
+	private final int port;
+	
+	public OtlpGrpcReceiverStage(int port) {
+		this.port = port;
+	}
+
 
 	@Override
 	public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
@@ -34,6 +45,7 @@ public class OtlpGrpcReceiver implements io.grpc.BindableService, AsyncService {
 				for (Span span : ss.getSpansList()) {
 					OperationExecutionRecord record = convert(span);
 					System.out.println(record);
+					getOutputPort().send(record);
 				}
 			}
 		}
@@ -86,5 +98,26 @@ public class OtlpGrpcReceiver implements io.grpc.BindableService, AsyncService {
 
 	private long toUnixNanos(long nanosSinceEpoch) {
 		return nanosSinceEpoch;
+	}
+
+	@Override
+	protected void execute() throws Exception {
+		startServer();
+	}
+	
+	
+	public void startServer() {
+		Server server = ServerBuilder
+				.forPort(port)
+				.addService(this)
+				.build();
+
+		try {
+			server.start();
+			System.out.println("OTLP gRPC Receiver läuft auf Port " + port);
+			server.awaitTermination();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
