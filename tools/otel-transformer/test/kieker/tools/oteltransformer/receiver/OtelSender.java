@@ -27,18 +27,14 @@ public class OtelSender {
 	@Before
 	public void startServer() {
 		Thread serverBackgroundThread = new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				try {
-					OtlpReceiverStarter.startServer(OTEL_PORT);
-				} catch (IOException | InterruptedException e) {
-					e.printStackTrace();
-				}
+				new OtlpGrpcReceiverStage(OTEL_PORT).startServer();
 			}
 		});
 		serverBackgroundThread.start();
-		
+
 		try {
 			// Should wait some time until server is up
 			Thread.sleep(1000);
@@ -46,7 +42,7 @@ public class OtelSender {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testSpanSending() {
 		OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
@@ -67,7 +63,7 @@ public class OtelSender {
 
 		// Generate test spans
 		Tracer tracer = GlobalOpenTelemetry.getTracer("abcd");
-		
+
 		for (int i = 0; i < 5; i++) {
 			LOG.info("Sending " + i);
 
@@ -80,7 +76,7 @@ public class OtelSender {
 			span2.end();
 
 			span.end();
-			
+
 			LOG.info("TraceId für child" + i + ": " + span2.getSpanContext().getTraceId());
 		}
 
