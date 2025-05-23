@@ -11,16 +11,9 @@ import org.junit.Test;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanBuilder;
-import io.opentelemetry.api.trace.SpanContext;
-import io.opentelemetry.api.trace.TraceFlags;
-import io.opentelemetry.api.trace.TraceState;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Context;
-import io.opentelemetry.context.ContextStorage;
-import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
-import io.opentelemetry.exporter.zipkin.ZipkinSpanExporterBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
@@ -74,7 +67,7 @@ public class OtelSender {
 
 		// Generate test spans
 		Tracer tracer = GlobalOpenTelemetry.getTracer("abcd");
-
+		
 		for (int i = 0; i < 5; i++) {
 			LOG.info("Sending " + i);
 
@@ -87,6 +80,8 @@ public class OtelSender {
 			span2.end();
 
 			span.end();
+			
+			LOG.info("TraceId für child" + i + ": " + span2.getSpanContext().getTraceId());
 		}
 
 		System.out.println("Waiting");
