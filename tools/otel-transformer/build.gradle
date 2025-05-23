@@ -24,7 +24,7 @@ dependencies {
 	implementation "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryJavaVersion}"
 	implementation "io.opentelemetry:opentelemetry-exporter-zipkin:${opentelemetryJavaVersion}"
 	
-  implementation 'io.opentelemetry.proto:opentelemetry-proto:1.0.0-alpha'
+  implementation 'io.opentelemetry.proto:opentelemetry-proto:1.7.0-alpha'
 	
   implementation 'com.google.protobuf:protobuf-java:3.25.1'
 
