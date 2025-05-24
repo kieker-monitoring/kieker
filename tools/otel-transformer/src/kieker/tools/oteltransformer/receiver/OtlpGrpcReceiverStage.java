@@ -3,6 +3,7 @@ package kieker.tools.oteltransformer.receiver;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.AsyncService;
+import io.opentelemetry.proto.common.v1.KeyValue;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
@@ -43,9 +45,8 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		for (ResourceSpans rs : resourceSpansList) {
 			for (ScopeSpans ss : rs.getScopeSpansList()) {
 				for (Span span : ss.getSpansList()) {
-					OperationExecutionRecord record = convert(span);
-					System.out.println(record);
-					getOutputPort().send(record);
+					convert(span);
+//					System.out.println(record);
 				}
 			}
 		}
@@ -55,41 +56,89 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 
 	private final Map<String, Integer> threadLocalEoi = new HashMap<>();
 	private final Map<String, Integer> threadLocalEss = new HashMap<>();
+	
+	private final UnprocessedSpanHandler spanHandler = new UnprocessedSpanHandler();
 
-	public OperationExecutionRecord convert(Span span) {
+	public void convert(Span span) {
 		ByteString traceIdBytes = span.getTraceId();
-		String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
+		final String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
 		final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
 		final String parentSpanId = BaseEncoding.base16().lowerCase().encode(span.getParentSpanId().toByteArray());
 
-		final String sessionId = traceIdHex;
-		final String operationSignature = span.getName();
-		final String hostname = "localhost";
-
-		final long tin = toUnixNanos(span.getStartTimeUnixNano());
-		final long tout = toUnixNanos(span.getEndTimeUnixNano());
-
-		int eoi;
-		int ess;
+		final int eoi;
+		final int ess;
 
 		if (parentSpanId == null || parentSpanId.isEmpty() || parentSpanId.equals("0000000000000000")) {
 			// root span
 			eoi = 0;
 			ess = 0;
 		} else {
-			int parentEoi = threadLocalEoi.getOrDefault(parentSpanId, -1);
+			if (threadLocalEoi.get(traceIdHex) == null || threadLocalEss.get(parentSpanId) == null) {
+				spanHandler.addUnprocessedSpan(span);
+				return;
+			}
+			
+			int parentEoi = threadLocalEoi.getOrDefault(traceIdHex, -1);
 			int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
 
 			ess = parentEss + 1;
 			eoi = parentEoi + 1;
+			
+			threadLocalEoi.put(traceIdHex, eoi);
 		}
 
-		threadLocalEoi.put(spanId, eoi);
+		threadLocalEoi.put(traceIdHex, eoi);
 		threadLocalEss.put(spanId, ess);
+		
+		final String sessionId = traceIdHex;
+		final String operationSignature = span.getName();
+		final String hostname = getHostname(span);
 
-		System.out.println(traceIdHex);
+		final long tin = toUnixNanos(span.getStartTimeUnixNano());
+		final long tout = toUnixNanos(span.getEndTimeUnixNano());
+		
 		long traceIdAsLong = traceIdAsLong(traceIdHex);
-		return new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi, ess);
+		OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi, ess);
+		getOutputPort().send(operationExecutionRecord);
+		
+		convertMissingSpans(spanId);
+	}
+
+	private String getHostname(Span span) {
+		String hostname = "localhost";
+		String peer = null;
+		for (KeyValue key : span.getAttributesList()) {
+			System.out.println(key + " -- " + key.getValue());
+			if (key.getKey().equals("rpc.service")) {
+				hostname = key.getValue().getStringValue();
+			}
+			if (key.getKey().equals("net.peer.name")) {
+				peer = key.getValue().getStringValue();
+			}
+			if (key.getKey().equals("net.sock.peer.addr")) {
+				hostname = key.getValue().getStringValue();
+			}
+			if (key.getKey().equals("peer.address")) {
+				hostname = key.getValue().getStringValue();
+			}
+		}
+		if (peer != null) {
+			hostname = hostname + "-" + peer;
+		}
+		return hostname;
+	}
+
+
+	private void convertMissingSpans(final String spanId) {
+		List<Span> unprocessedSpans = spanHandler.getUnprocessedSpans(spanId);
+		if (unprocessedSpans != null) {
+			System.out.println("Handling unprocessed: " + spanId + " " + unprocessedSpans.size());
+			for (Span child : unprocessedSpans) {
+				convert(child);
+			}
+		} else {
+			System.out.println("No unprocessed spans for " + spanId);
+		}
 	}
 
 	private long traceIdAsLong(String traceIdHex) {
