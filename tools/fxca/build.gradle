@@ -41,7 +41,7 @@ dependencies {
 	implementation "org.csveed:csveed:0.8.2"
 
 	implementation "org.apache.commons:commons-csv:1.14.0"
-	implementation "org.apache.commons:commons-collections4:4.4"
+	implementation "org.apache.commons:commons-collections4:4.5.0"
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 	implementation "commons-io:commons-io:2.19.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
