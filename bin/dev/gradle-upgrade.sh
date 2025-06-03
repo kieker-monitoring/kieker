@@ -16,7 +16,7 @@ KIEKER_ROOT_FULL=`pwd`
 cd $KIEKER_ROOT_FULL
 for gw in `find $KIEKER_ROOT_FULL -name "gradlew" -type f`; do
 	cd $(dirname $gw)
-	gradle wrapper --gradle-version $GTV --distribution-type=bin
+	./gradlew wrapper --gradle-version $GTV && ./gradlew wrapper
 	cd $KIEKER_ROOT_FULL
 done
 
