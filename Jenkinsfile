@@ -162,7 +162,7 @@ pipeline {
         stage('Release Check Short') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk11'
+              image 'kieker/kieker-build:temurin17'
               args env.DOCKER_ARGS
             }
           }
@@ -180,7 +180,7 @@ pipeline {
         stage('Release Check Extended') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk11'
+              image 'kieker/kieker-build:temurin17'
               args env.DOCKER_ARGS
             }
           }
@@ -209,7 +209,7 @@ pipeline {
     stage('Archive Artifacts') {
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk11'
+          image 'kieker/kieker-build:temurin17'
           args env.DOCKER_ARGS
         }
       }
@@ -260,7 +260,7 @@ pipeline {
         stage('Upload Snapshot Version') {
           agent {
             docker {
-              image 'kieker/kieker-build:openjdk11'
+              image 'kieker/kieker-build:temurin17'
               args env.DOCKER_ARGS
             }
           }
@@ -293,7 +293,7 @@ pipeline {
       
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk11'
+          image 'kieker/kieker-build:temurin17'
           args env.DOCKER_ARGS
         }
       }
