@@ -22,7 +22,7 @@ dependencies {
 	implementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}"
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.38.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
 
 	implementation "org.csveed:csveed:0.8.2"
