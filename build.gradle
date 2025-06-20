@@ -16,7 +16,7 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'jacoco'
-  id "com.diffplug.spotless" version "7.0.2"
+  id "com.diffplug.spotless" version "7.0.4"
 }
 
 configurations {
