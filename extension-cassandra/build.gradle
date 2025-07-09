@@ -23,3 +23,7 @@ dependencies {
 	implementation "com.datastax.cassandra:cassandra-driver-core:4.0.0"
 
 }
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.extension.cassandra=ALL-UNNAMED"]
+}

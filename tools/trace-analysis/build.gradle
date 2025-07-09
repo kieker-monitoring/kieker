@@ -49,3 +49,10 @@ eclipse {
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools.trace.analysis=ALL-UNNAMED",
+	]
+}
