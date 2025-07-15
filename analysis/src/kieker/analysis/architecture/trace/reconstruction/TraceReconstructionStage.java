@@ -172,7 +172,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
-				executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
+				executionTrace = new ExecutionTrace(traceId, execution.getSessionId(), asynchronousTrace);
 				this.pendingTraces.put(traceId, executionTrace);
 			}
 			try {
