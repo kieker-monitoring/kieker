@@ -149,7 +149,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final ExecutionRecordTransformationStage executionRecordTransformationStage = new ExecutionRecordTransformationStage(systemRepository);
 		executionRecordTransformationStage.declareActive();
 		this.traceReconstructionStage = new TraceReconstructionStage(systemRepository, TimeUnit.MILLISECONDS,
-				parameters.isIgnoreInvalidTraces(), parameters.getMaxTraceDuration());
+				parameters.isIgnoreInvalidTraces(), parameters.isAsynchronousTrace(), parameters.getMaxTraceDuration());
 
 		/** Event trace. */
 		final EventRecordTraceReconstructionStage eventRecordTraceReconstructionStage = new EventRecordTraceReconstructionStage(TimeUnit.MILLISECONDS,

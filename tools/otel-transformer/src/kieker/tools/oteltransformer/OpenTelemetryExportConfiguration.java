@@ -57,7 +57,7 @@ public class OpenTelemetryExportConfiguration extends Configuration {
 
 		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(), executionRecordTransformationStage.getInputPort());
 
-		final TraceReconstructionStage traceReconstructionStage = new TraceReconstructionStage(repository, TimeUnit.MILLISECONDS, true, 10000L);
+		final TraceReconstructionStage traceReconstructionStage = new TraceReconstructionStage(repository, TimeUnit.MILLISECONDS, true, false, 10000L);
 		this.connectPorts(executionRecordTransformationStage.getOutputPort(), traceReconstructionStage.getInputPort());
 
 		final OpenTelemetryExporterStage otstage = new OpenTelemetryExporterStage(configuration);
