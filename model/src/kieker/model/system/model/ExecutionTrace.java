@@ -44,6 +44,7 @@ import kieker.model.system.model.exceptions.InvalidTraceException;
 public class ExecutionTrace extends AbstractTrace {
 
 	private final AtomicReference<MessageTrace> messageTraceReference = new AtomicReference<>();
+	private final boolean asynchronousTrace;
 	private int minEoi = -1;
 	private int maxEoi = -1;
 	private long minTin = -1;
@@ -60,6 +61,7 @@ public class ExecutionTrace extends AbstractTrace {
 	 */
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
+		asynchronousTrace = false;
 	}
 
 	/**
@@ -72,6 +74,20 @@ public class ExecutionTrace extends AbstractTrace {
 	 */
 	public ExecutionTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
+		asynchronousTrace = false;
+	}
+	
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 *
+	 * @param traceId
+	 *            The ID of this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
+	 */
+	public ExecutionTrace(final long traceId, final String sessionId, boolean asynchronousTrace) {
+		super(traceId, sessionId);
+		this.asynchronousTrace = asynchronousTrace;
 	}
 
 	/**
@@ -203,14 +219,28 @@ public class ExecutionTrace extends AbstractTrace {
 		} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and
 			// receiverComponentName
 			message = new SynchronousCallMessage(curE.getTin(), prevE, curE);
+		} else if (asynchronousTrace) {
+			Execution parentCandidate = null;
+			for (Execution somePreviousExecution : trace) {
+				if (somePreviousExecution.getEss() + 1 == curE.getEss()) {
+					parentCandidate = somePreviousExecution;
+				}
+
+				if (somePreviousExecution.getEoi() == curE.getEoi()) {
+					break;
+				}
+			}
+			message = new SynchronousCallMessage(curE.getTin(), parentCandidate, curE);
 		} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
 			final InvalidTraceException ex = new InvalidTraceException(
 					"Ess are only allowed to increment by 1 --" + "but found sequence <" + prevE.getEss() + ","
 							+ curE.getEss() + ">" + "(Execution: " + curE + ")");
+
 			// don't log and throw
 			// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
 			// trace here
 			throw ex;
+
 		} else {
 			final String errorMessage = "Unexpected trace: " + prevE + " and " + curE;
 			throw new IllegalStateException(errorMessage);
