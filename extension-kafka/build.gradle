@@ -10,7 +10,7 @@ repositories {
 	// Use mavenCentral for resolving your dependencies.
 	// You can declare any Maven/Ivy/file repository here.
 	mavenCentral()
-	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+	maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
 }
 
 dependencies {
