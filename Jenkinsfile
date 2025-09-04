@@ -268,7 +268,7 @@ pipeline {
             unstash 'jarArtifacts'
             withCredentials([
               usernamePassword(
-                credentialsId: 'OSSRH-Token',
+                credentialsId: 'Central-Portal-Token',
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
               )
@@ -302,7 +302,7 @@ pipeline {
             unstash 'jarArtifacts'
             withCredentials([
               usernamePassword(
-                credentialsId: 'OSSRH-Token', 
+                credentialsId: 'Central-Portal-Token',
                 usernameVariable: 'kiekerMavenUser', 
                 passwordVariable: 'kiekerMavenPassword'
               ),
@@ -318,6 +318,14 @@ pipeline {
                 variable: 'KEY_ID')
               ]) {
               sh './gradlew signMavenJavaPublication publish -Psigning.secretKeyRingFile=${KEY_FILE} -Psigning.password=${PASSPHRASE} -Psigning.keyId=${KEY_ID}'
+            }
+            withCredentials([
+              string(
+                credentialsId: 'Central-Portal-Token_base64',
+                variable: 'CENTRAL_PORTAL_TOKEN_BASE64'
+              )
+              ]) {
+              sh 'curl -H "Authorization: Bearer ${CENTRAL_PORTAL_TOKEN_BASE64}" -i -X POST https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/net.kieker-monitoring'
             }
       }
       
