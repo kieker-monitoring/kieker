@@ -1,7 +1,7 @@
 # YAML 1.2
 ---
 abstract: "Application-level monitoring and dynamic analysis of software systems are a basis for various tasks in software engineering research, such as performance evaluation and reverse engineering. The Kieker framework provides monitoring, analysis, and visualization support for these purposes."
-authors: 
+authors:
   -
     affiliation: "Kiel University"
     family-names: Hasselbring
@@ -22,14 +22,26 @@ authors:
     family-names: Reichelt
     given-names: David Georg
     orcid: "https://orcid.org/0000-0002-1772-1416"
+  -
+    affiliation: "Kiel University"
+    family-names: Yang
+    given-names: Shinhyung
+    orcid: "https://orcid.org/0000-0002-8997-9942"
+  -
+    affiliation: "Kiel University"
+    family-names: Hansson
+    given-names: Marcel
+    orcid: "https://orcid.org/0009-0000-6524-037X"
 cff-version: "1.1.0"
-doi: "10.1016/j.simpa.2020.100019"
-keywords: 
+doi: "10.1145/3680256.3721972"
+keywords:
   - "Application Performance Monitoring"
   - "Architecture Discovery"
   - "Monitoring Framework"
+  - "Observability Engineering"
+  - "Tracing"
 license: "Apache-2.0"
-message: "If you use this software, please cite https://doi.org/10.1016/j.simpa.2020.100019"
+message: "If you use this software, please cite https://doi.org/10.1145/3680256.3721972"
 repository-code: "https://github.com/kieker-monitoring/kieker"
 title: Kieker
 version: "2.0.2"
