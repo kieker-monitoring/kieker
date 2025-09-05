@@ -3,12 +3,12 @@
     "@type": "SoftwareSourceCode",
     "license": "https://spdx.org/licenses/Apache-2.0",
     "codeRepository": "https://github.com/kieker-monitoring/kieker",
-    "dateModified": "2024-07-23",
-    "issueTracker": "https://kieker-monitoring.atlassian.net/",
+    "dateModified": "2025-09-04",
+    "issueTracker": "https://github.com/kieker-monitoring/kieker/issues",
     "name": "Kieker",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "Application-level monitoring and dynamic analysis of software systems are a basis for various tasks in software engineering research, such as performance evaluation and reverse engineering. The Kieker framework provides monitoring, analysis, and visualization support for these purposes.",
-    "referencePublication": "https://doi.org/10.1016/j.simpa.2020.100019",
+    "referencePublication": "https://doi.org/10.1145/3680256.3721972",
     "programmingLanguage": [
         "Java"
     ],
@@ -58,6 +58,28 @@
             "affiliation": {
                 "@type": "Organization",
                 "name": "Lancaster University, Leipzig"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-8997-9942",
+            "givenName": "Shinhyung",
+            "familyName": "Yang",
+            "email": "shinhyung.yang@email.uni-kiel.de",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Kiel University"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0009-0000-6524-037X",
+            "givenName": "Marcel",
+            "familyName": "Hansson",
+            "email": "marcel.hansson@uni-hamburg.de",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "University of Hamburg"
             }
         }
     ]

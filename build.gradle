@@ -225,6 +225,16 @@ subprojects {
               name = 'David Georg Reichelt'
               email = 'd.g.reichelt@lancaster.ac.uk'
             }
+            developer {
+              id = 'shinhyung.yang'
+              name = 'Shinhyung Yang'
+              email = 'shinhyung.yang@email.uni-kiel.de'
+            }
+            developer {
+              id = 'marcel.hansson'
+              name = 'Marcel Hansson'
+              email = 'marcel.hansson@uni-hamburg.de'
+            }
           }
 
           scm {
@@ -1234,6 +1244,11 @@ publishing {
             id = 'shinhyung.yang'
             name = 'Shinhyung Yang'
             email = 'shinhyung.yang@email.uni-kiel.de'
+          }
+          developer {
+            id = 'marcel.hansson'
+            name = 'Marcel Hansson'
+            email = 'marcel.hansson@uni-hamburg.de'
           }
         }
 
