@@ -13,6 +13,8 @@ and its documentation site https://kieker-monitoring.readthedocs.io/en/latest/
 
 If you use this software, please cite
 
+- Shinhyung Yang, David Georg Reichelt, Reiner Jung, Marcel Hansson, and Wilhelm Hasselbring (2025) "The Kieker Observability Framework Version 2". In: Companion of the 16th ACM/SPEC International Conference on Performance Engineering (ICPE '25), May 5-9, 2025, Toronto, ON, Canada. https://doi.org/10.1145/3680256.3721972
+
 - Wilhelm Hasselbring and André van Hoorn (2020) "Kieker: A monitoring framework for software engineering research". Software Impacts, 5. https://doi.org/10.1016/j.simpa.2020.100019
 
 - André van Hoorn, Jan Waller, and Wilhelm Hasselbring (2012) "Kieker: A Framework for Application Performance Monitoring and Dynamic Software Analysis". In: 3rd joint ACM/SPEC International Conference on Performance Engineering (ICPE 2012), April 22-25, 2012, Boston, Massachusetts, USA. https://doi.org/10.1145/2188286.2188326
