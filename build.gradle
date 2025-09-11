@@ -16,7 +16,7 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'jacoco'
-  id "com.diffplug.spotless" version "7.0.4"
+  id "com.diffplug.spotless" version "7.2.1"
 }
 
 configurations {
@@ -100,7 +100,10 @@ allprojects {
   repositories {    // must be above subprojects {}
     mavenLocal()
     mavenCentral()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven {
+        name = 'ossrh-staging-api'
+        url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+    }
   }
 }
 
@@ -221,6 +224,16 @@ subprojects {
               id = 'david.georg.reichelt'
               name = 'David Georg Reichelt'
               email = 'd.g.reichelt@lancaster.ac.uk'
+            }
+            developer {
+              id = 'shinhyung.yang'
+              name = 'Shinhyung Yang'
+              email = 'shinhyung.yang@email.uni-kiel.de'
+            }
+            developer {
+              id = 'marcel.hansson'
+              name = 'Marcel Hansson'
+              email = 'marcel.hansson@uni-hamburg.de'
             }
           }
 
@@ -1232,6 +1245,11 @@ publishing {
             name = 'Shinhyung Yang'
             email = 'shinhyung.yang@email.uni-kiel.de'
           }
+          developer {
+            id = 'marcel.hansson'
+            name = 'Marcel Hansson'
+            email = 'marcel.hansson@uni-hamburg.de'
+          }
         }
 
         scm {
@@ -1263,8 +1281,8 @@ publishing {
       //def releasesRepoUrl = "/tmp/myRepo/releases"
       //def snapshotsRepoUrl = "/tmp/myRepo/snapshots"
       // Maven central:
-      def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-      def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+      def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+      def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
 
       url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
     }
