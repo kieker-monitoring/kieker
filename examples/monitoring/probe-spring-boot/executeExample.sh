@@ -29,7 +29,7 @@ function tryInstrumentedRun() {
 	java -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs \
 		-Dkieker.monitoring.skipDefaultAOPConfiguration=true \
 		-javaagent:spring-instrument-5.3.37.jar \
-		-javaagent:lib/kieker-2.0.0-SNAPSHOT-aspectj.jar \
+		-javaagent:lib/kieker-2.0.3-SNAPSHOT-aspectj.jar \
 		-jar build/libs/demo-spring-boot-0.0.1-SNAPSHOT.jar &
 
 	sleep 5
