@@ -52,7 +52,7 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	implementation "com.github.oshi:oshi-core:6.8.1"
+	implementation "com.github.oshi:oshi-core:6.8.2"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.25"
@@ -74,7 +74,7 @@ dependencies {
 
 	implementation "org.influxdb:influxdb-java:2.25"
 
-	implementation "com.squareup.okhttp3:okhttp:4.12.0"
+	implementation "com.squareup.okhttp3:okhttp:5.1.0"
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
@@ -85,15 +85,15 @@ dependencies {
 
 	testImplementation "org.objenesis:objenesis:3.4"
 
-	testImplementation "org.easymock:easymock:5.5.0"
+	testImplementation "org.easymock:easymock:5.6.0"
 	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
 
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.21"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.0.18"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.24"
+	testImplementation "org.eclipse.jetty:jetty-server:12.0.23"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.0.23"
+	testImplementation "org.eclipse.jetty:apache-jsp:11.0.25"
 
 	testImplementation "commons-io:commons-io:2.19.0"
 
@@ -128,8 +128,8 @@ publishing {
 			}
 
 			// Maven central:
-			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+			def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
 
 			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 		}
