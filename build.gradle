@@ -50,8 +50,6 @@ dependencies {
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
   aspectJarConfig "com.rabbitmq:amqp-client:5.26.0"
-  aspectJarConfig "ch.qos.logback:logback-classic:$libLogbackVersion"
-  aspectJarConfig "ch.qos.logback:logback-core:$libLogbackVersion"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
   bytebuddyJarConfig "commons-io:commons-io:2.19.0"
