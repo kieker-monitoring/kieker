@@ -23,6 +23,8 @@ import org.junit.Test;
 
 import kieker.common.util.dataformat.VariableLengthEncoding;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Tests for the variable-length encoding of integers.
  *
@@ -30,7 +32,7 @@ import kieker.common.util.dataformat.VariableLengthEncoding;
  *
  * @since 1.13
  */
-public class VariableLengthEncodingTest {
+public class VariableLengthEncodingTest extends AbstractKiekerTest {
 
 	/**
 	 * create test.

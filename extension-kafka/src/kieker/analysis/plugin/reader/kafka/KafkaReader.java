@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.plugin.reader.kafka;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -150,7 +151,7 @@ public class KafkaReader extends AbstractRawDataReader {
 
 		try {
 			while (!this.terminated) {
-				final ConsumerRecords<String, byte[]> records = this.consumer.poll(100);
+				final ConsumerRecords<String, byte[]> records = this.consumer.poll(Duration.ofMillis(100));
 
 				this.processRecords(records);
 			}

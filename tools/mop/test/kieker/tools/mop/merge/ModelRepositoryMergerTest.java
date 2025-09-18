@@ -17,8 +17,8 @@ package kieker.tools.mop.merge;
 
 import java.util.Map.Entry;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import kieker.analysis.architecture.repository.ArchitectureModelUtils;
 import kieker.analysis.architecture.repository.ModelRepository;

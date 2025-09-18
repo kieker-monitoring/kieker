@@ -16,7 +16,7 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'jacoco'
-  id "com.diffplug.spotless" version "6.25.0"
+  id "com.diffplug.spotless" version "7.2.1"
 }
 
 configurations {
@@ -43,16 +43,16 @@ dependencies {
   resultJar "org.slf4j:slf4j-api:${libSlf4jApiVersion}"
   resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.40.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.38.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.38.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.43.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.39.0'
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
-  aspectJarConfig "com.rabbitmq:amqp-client:5.23.0"
+  aspectJarConfig "com.rabbitmq:amqp-client:5.26.0"
   aspectJarConfig "ch.qos.logback:logback-classic:$libLogbackVersion"
 
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
-  bytebuddyJarConfig "commons-io:commons-io:2.18.0"
+  bytebuddyJarConfig "commons-io:commons-io:2.19.0"
 
   javassistJarConfig "org.javassist:javassist:3.30.2-GA"
 }
@@ -101,7 +101,10 @@ allprojects {
   repositories {    // must be above subprojects {}
     mavenLocal()
     mavenCentral()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven {
+        name = 'ossrh-staging-api'
+        url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+    }
   }
 }
 
@@ -222,6 +225,16 @@ subprojects {
               id = 'david.georg.reichelt'
               name = 'David Georg Reichelt'
               email = 'd.g.reichelt@lancaster.ac.uk'
+            }
+            developer {
+              id = 'shinhyung.yang'
+              name = 'Shinhyung Yang'
+              email = 'shinhyung.yang@email.uni-kiel.de'
+            }
+            developer {
+              id = 'marcel.hansson'
+              name = 'Marcel Hansson'
+              email = 'marcel.hansson@uni-hamburg.de'
             }
           }
 
@@ -1148,16 +1161,6 @@ signing {
   sign configurations.archives
 }
 
-artifacts {
-  archives mainJar
-  archives emfJar
-  archives aspectJJar
-  archives bytebuddyJar
-  archives javassistJar
-  archives sourcesJar
-  archives javadocJar
-  archives springJar
-}
 
 // This is necessary for the RC call, since in the regular non-RC stage, no signatory is configured in Jenkins, but for release-versions, Gradle still requires .asc files
 task createDummyAscFiles {
@@ -1243,6 +1246,11 @@ publishing {
             name = 'Shinhyung Yang'
             email = 'shinhyung.yang@email.uni-kiel.de'
           }
+          developer {
+            id = 'marcel.hansson'
+            name = 'Marcel Hansson'
+            email = 'marcel.hansson@uni-hamburg.de'
+          }
         }
 
         scm {
@@ -1274,8 +1282,8 @@ publishing {
       //def releasesRepoUrl = "/tmp/myRepo/releases"
       //def snapshotsRepoUrl = "/tmp/myRepo/snapshots"
       // Maven central:
-      def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-      def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+      def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+      def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
 
       url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
     }
