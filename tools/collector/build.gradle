@@ -20,7 +20,7 @@ dependencies {
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 	implementation "org.tukaani:xz:$libXzVersion"	// decompression algorithms used by the readers
-	implementation "org.apache.commons:commons-compress:1.26.2"
+	implementation "org.apache.commons:commons-compress:1.27.1"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')

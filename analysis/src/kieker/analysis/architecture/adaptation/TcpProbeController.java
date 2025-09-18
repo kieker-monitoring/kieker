@@ -64,7 +64,7 @@ public class TcpProbeController implements IProbeController {
 	}
 
 	/**
-	 * Convenience method for {@link AbstractControlEvent control events}.
+	 * Convenience method for {@link BasicTcpControlEvent} control events.
 	 *
 	 * @param event
 	 *            The event that contains the information for remote control

@@ -17,39 +17,12 @@ dependencies {
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
 	// DiSLs dependencies need to be added manually
-	implementation 'org.ow2.asm:asm:9.5'
-	implementation 'org.ow2.asm:asm-tree:9.5'
-	implementation 'org.ow2.asm:asm-analysis:9.7'
-	implementation 'org.ow2.asm:asm-commons:9.7'
+	implementation 'org.ow2.asm:asm:9.8'
+	implementation 'org.ow2.asm:asm-tree:9.8'
+	implementation 'org.ow2.asm:asm-analysis:9.8'
+	implementation 'org.ow2.asm:asm-commons:9.8'
 
-	implementation 'org.ow2.asm:asm-util:9.7'
-
-	// testing
-	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
-
-	testImplementation "org.javassist:javassist:3.30.2-GA"
-
-	testImplementation "junit:junit:$libJunitVersion"
-
-	testImplementation "org.objenesis:objenesis:3.4"
-
-	testImplementation "org.easymock:easymock:5.3.0"
-	testImplementation "org.mockito:mockito-core:$libMockitoVersion"
-
-	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project (path: ':common', configuration: 'testArchives')
-	testImplementation "org.springframework:spring-beans:$springVersion"
-	testImplementation "org.springframework:spring-expression:3.$springVersion"
-
-	testImplementation "org.eclipse.jetty:jetty-server:12.0.9"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.22"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.22"
-
-	testImplementation "commons-io:commons-io:2.16.0"
-
-	testImplementation project(':common').sourceSets.test.output
-
-	integrationTestImplementation "junit:junit:$libJunitVersion"
+	implementation 'org.ow2.asm:asm-util:9.8'
 }
 
 // publishing
@@ -80,8 +53,8 @@ publishing {
 			}
 
 			// Maven central:
-			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+			def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
 
 			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 		}

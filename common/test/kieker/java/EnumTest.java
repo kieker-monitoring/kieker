@@ -19,13 +19,15 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Tests which checks Java's enum behavior.
  *
  * @author Christian Wulf
  * @since 1.14
  */
-public class EnumTest {
+public class EnumTest extends AbstractKiekerTest {
 
 	/**
 	 * @author Christian Wulf

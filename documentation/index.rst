@@ -1,11 +1,13 @@
+.. _kieker-documentation:
+
 Kieker Documentation
 ====================
 
 **Kieker** is a Java-based application performance monitoring and
 dynamic software analysis framework. Monitoring adapters for other
-platforms, such as C, C++, Visual Basic~6~(VB6), .NET, and COBOL, exist
+platforms, such as C, C++, Visual Basic 6 (VB6), .NET, and COBOL, exist
 as well
-(`Contact <http://kieker-monitoring.net/support/%7D%7BContact>`__ us
+(`Contact <http://kieker-monitoring.net/support/Contact>`__ us
 directly if you are interested in Kieker support for other platforms).
 
 A general introduction can be found in :ref:`introduction`.
@@ -36,11 +38,13 @@ Licensing
 obtain a copy of the license at <http://www.apache.org/licenses/LICENSE-2.0>
 
 The **Kieker** source and binary release archives include a number of
-third-party libraries. Appendix~\ref{appendix:libraries} lists these
-libraries along with information on the licenses. 
+third-party libraries.
 The ``lib/`` directory of the release archives contains a ``.LICENSE``
 file for each third-party library, pointing to the respective license
 text.
+
+.. Appendix~\ref{appendix:libraries} lists these
+.. libraries along with information on the licenses. 
 
 Citing Kieker
 -------------
@@ -48,8 +52,8 @@ Citing Kieker
 When referencing Kieker resources in your publications, we would be
 happy if you respected the following guidelines:
 
-- When referencing the Kieker project, please cite our `IPCE-2012 <references/kieker-ipce-2012.bib>`_
-  paper and/or our 2009 technical report [`TR-0921 <references/tr-0921.bib>`_]. Also, you might
+- When referencing the Kieker project, please cite our `ICPE-2012 <https://github.com/kieker-monitoring/kieker/blob/main/documentation/references/kieker-ipce-2012.bib>`_
+  paper and/or our 2009 technical report [`TR-0921 <https://github.com/kieker-monitoring/kieker/blob/main/documentation/references/kieker-tr-0921.bib>`_]. Also, you might
   want to add a reference to our web site
   (<http://kieker-monitoring.net/>) like
   ::

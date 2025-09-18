@@ -205,10 +205,10 @@ In case you have a separate settings class:
   }
 
 The tool 
-`behavior-analysis <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/behavior-analysis/src/kieker/tools/behavior/analysis>`_ 
+`behavior-analysis <https://github.com/kieker-monitoring/kieker/tree/master/tools/behavior-analysis/src/kieker/tools/behavior/analysis>`_ 
 is a good example in code how to use a configuration file with a
 separate settings class, while the 
-`collector <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/collector/src/kieker/tools/collector>'_
+`collector <https://github.com/kieker-monitoring/kieker/tree/master/tools/collector/src/kieker/tools/collector>'_
 is a good example for a tool that uses the main class also to store the
 settings.
 
@@ -229,7 +229,7 @@ in the main class.
        return true; // only if every configuration file option checks out
     }
 
-The class `ParameterEvaluationUtils <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/common/ParameterEvaluationUtils.java>`_
+The class `ParameterEvaluationUtils <https://github.com/kieker-monitoring/kieker/blob/master/tools/src/kieker/tools/common/ParameterEvaluationUtils.java>`_
 can be used to check whether files and directories, are readable and
 perform conversion operation.
 

@@ -10,7 +10,7 @@ repositories {
 	// Use mavenCentral for resolving your dependencies.
 	// You can declare any Maven/Ivy/file repository here.
 	mavenCentral()
-	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+	maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
 }
 
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
 	// api "net.monitoring:kieker:1.13-SNAPSHOT"
 
 	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
-	implementation "org.apache.kafka:kafka-clients:3.7.0"
+	implementation "org.apache.kafka:kafka-clients:4.0.0"
 
 	// Use JUnit test framework
 	// testImplementation "junit:junit:4.12"

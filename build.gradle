@@ -17,7 +17,7 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'jacoco'
-  id "com.diffplug.spotless" version "6.25.0"
+  id "com.diffplug.spotless" version "7.2.1"
 }
 
 configurations {
@@ -25,6 +25,7 @@ configurations {
   emfJarConfig
   aspectJarConfig
   bytebuddyJarConfig
+  javassistJarConfig
 }
 
 spotless {
@@ -43,16 +44,19 @@ dependencies {
   resultJar "org.slf4j:slf4j-api:${libSlf4jApiVersion}"
   resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.30.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.37.0'
-  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.36.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.43.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0'
+  emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.39.0'
 
   aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
-  aspectJarConfig "com.rabbitmq:amqp-client:5.21.0"
+  aspectJarConfig "com.rabbitmq:amqp-client:5.26.0"
   aspectJarConfig "ch.qos.logback:logback-classic:$libLogbackVersion"
   aspectJarConfig "ch.qos.logback:logback-core:$libLogbackVersion"
 
-  bytebuddyJarConfig "net.bytebuddy:byte-buddy:1.14.17"
+  bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
+  bytebuddyJarConfig "commons-io:commons-io:2.19.0"
+
+  javassistJarConfig "org.javassist:javassist:3.30.2-GA"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -80,6 +84,12 @@ def bytebuddySubprojects = [
   project(':monitoring:bytebuddy')
 ]
 
+def javassistSubprojects = [
+  project(':common'),
+  project(':monitoring:core'),
+  project(':monitoring:javassist')
+]
+
 
 def springSubprojects = [
   project(':common'),
@@ -93,14 +103,19 @@ allprojects {
   repositories {    // must be above subprojects {}
     mavenLocal()
     mavenCentral()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven {
+        name = 'ossrh-staging-api'
+        url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+    }
   }
 }
 
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'signing'
   apply plugin: 'jacoco'
   apply plugin: 'com.diffplug.spotless'
+  apply plugin: 'maven-publish'
 
   sourceCompatibility = sourceVersion
   targetCompatibility = targetVersion
@@ -161,6 +176,87 @@ subprojects {
     }
   }
 
+  java {
+    withSourcesJar()
+    withJavadocJar()
+  }
+
+  javadoc {
+    failOnError=false
+  }
+
+  artifacts {
+    archives javadocJar
+  }
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        pom {
+          groupId = 'net.kieker-monitoring'
+          artifactId = project.name // Use the subproject's name
+          version = project.version
+          name = "${project.name} - Kieker Observability Framework"
+          description = 'Kieker: Application Performance Observability and Software Analysis'
+          url = 'http://kieker-monitoring.net'
+
+          licenses {
+            license {
+              name = 'The Apache Software License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+
+          developers {
+            developer {
+              id = 'thomas.duellmann'
+              name = 'Thomas F. Duellmann'
+              email = 'duellmann@hitec-hamburg.de'
+            }
+            developer {
+              id = 'andre.van.hoorn'
+              name = 'Andre van Hoorn'
+              email = 'andre.van.hoorn@uni-hamburg.de'
+            }
+            developer {
+              id = 'reiner.jung'
+              name = 'Reiner Jung'
+              email = 'reiner.jung@email.uni-kiel.de'
+            }
+            developer {
+              id = 'david.georg.reichelt'
+              name = 'David Georg Reichelt'
+              email = 'd.g.reichelt@lancaster.ac.uk'
+            }
+            developer {
+              id = 'shinhyung.yang'
+              name = 'Shinhyung Yang'
+              email = 'shinhyung.yang@email.uni-kiel.de'
+            }
+            developer {
+              id = 'marcel.hansson'
+              name = 'Marcel Hansson'
+              email = 'marcel.hansson@uni-hamburg.de'
+            }
+          }
+
+          scm {
+            connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+            developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+            url = 'https://github.com/kieker-monitoring/kieker'
+            }
+        }
+      }
+    }
+  }
+
+  ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+  signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign publishing.publications.maven
+    println 'Going to sign subproject ' + project.name + ' for releasing: ' + isReleaseVersion
+  }
+
   jacoco {
     toolVersion = '0.8.6'
   }
@@ -168,7 +264,7 @@ subprojects {
   jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
-      xml.required = false
+      xml.required = true
       csv.required = false
       html.required = true
     }
@@ -377,6 +473,7 @@ def checkSubprojects = [
   project(':monitoring:aspectj'),
   project(':monitoring:bytebuddy'),
   project(':monitoring:disl'),
+  project(':monitoring:javassist'),
   project(':monitoring:spring'),
   project(':model'),
   project(':analysis'),
@@ -396,6 +493,7 @@ def checkSubprojects = [
   project(':tools:mt'),
   project(':tools:mvis'),
   project(':tools:opad'),
+  project(':tools:otel-transformer'),
   project(':tools:relabel'),
   project(':tools:resource-monitor'),
   project(':tools:rewrite-log-entries'),
@@ -477,7 +575,7 @@ checkSubprojects.each { project ->
         println("  Info: " + pmdInfos)
         println()
 
-        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/monitoring/kieker#eclipse-setup-for-contributors"
+        def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
 
         // Fail build if Checkstyle thresholds are violated
         if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
@@ -537,6 +635,9 @@ task updateLicenseHeaderYear() {
 
 task replaceHardCodedVersionNames() {
   doLast {
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools-architecture-recovery.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/assemble-tools-trace-analysis.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
     regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
     regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafteroperationevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
     regexpReplaceInFiles(project.file("monitoring/aspectj/integrationTest-resources/example-projects-aspectj/example-beforeafterconstructorevent/gradle.properties"), "kiekerVersion=.*", "kiekerVersion=${version}")
@@ -588,7 +689,7 @@ task apidoc(type: Javadoc) {
 
   failOnError = false
 
-  title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
+  title = "Kieker Observability Framework, Vers. $kiekerVersion<br/>API Documentation"
   options.header = "Kieker $kiekerVersion"
   options.footer = "Kieker $kiekerVersion"
   options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://monitoring.net\">http://monitoring.net</a>"
@@ -631,6 +732,14 @@ def aspectJArtifacts = {
 
 def bytebuddyArtifacts = {
   bytebuddySubprojects.each { subproject ->
+      from subproject.configurations.archives.allArtifacts.files.collect {
+      zipTree(it)
+    }
+  }
+}
+
+def javassistArtifacts = {
+  javassistSubprojects.each { subproject ->
       from subproject.configurations.archives.allArtifacts.files.collect {
       zipTree(it)
     }
@@ -683,6 +792,8 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
   configure allArtifacts
   configure licence
 
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
   manifest = project.manifest {
     from sharedManifest
   }
@@ -715,7 +826,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 
 /** Kieker jar with aspectJ tooling. */
 task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring and tracing as javaagent."
 ) {
   // default archiveFileName is [baseName]-[appendix]-[version]-[classifier].[extension]
   archiveClassifier = 'aspectj'
@@ -754,7 +865,7 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
 
 /** Kieker jar with bytebuddy tooling. */
 task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring as javaagent."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a bytebuddy agent. The resulting jar can directly be used for monitoring and tracing as javaagent."
 ) {
   archiveClassifier = 'bytebuddy'
   configure bytebuddyArtifacts
@@ -776,9 +887,33 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
   }
 }
 
+/** Kieker jar with javassist tooling. */
+task javassistJar(type: Jar, dependsOn: javassistSubprojects.tasks["build"], group: "build",
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the a javassist agent. The resulting jar can directly be used for monitoring and tracing as javaagent."
+) {
+  archiveClassifier = 'javassist'
+  configure javassistArtifacts
+  configure licence
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from configurations.resultJar.asFileTree.files.collect { zipTree(it) }
+  from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
+  from configurations.javassistJarConfig.asFileTree.files.collect { zipTree(it) }
+
+  manifest = project.manifest {
+    from sharedManifest
+    attributes(
+        "Can-Redefine-Classes": "true",
+        "Can-Retransform-Classes": "true",
+      "Premain-Class": "kieker.monitoring.probe.javassist.PremainClass"
+    )
+  }
+}
+
 /** Kieker jar with spring tooling. */
 task springJar(type: Jar, dependsOn: springSubprojects.tasks["build"], group: "build",
-    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the spring framework. The resulting jar can directly be used for monitoring a spring application."
+    description: "Assembles a jar archive containing the contents of the mainJar task and additionally the spring framework. The resulting jar can directly be used for monitoring and tracing a spring application."
 ) {
   archiveClassifier = 'spring'
   configure springArtifacts
@@ -910,8 +1045,9 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in tar.gz format. */
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, bytebuddyJar, sourcesJar, javadocJar,
   'examples:buildStandaloneExamples',
+  ':examples:sourcesJar',
   ':tools:restructuring:distZip',
   ':tools:behavior-analysis:distZip',
   ':tools:cmi:distZip',
@@ -934,6 +1070,7 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   ':tools:trace-analysis:distZip',
   ':tools:trace-analysis-gui:distZip',
   ':examples:jar',
+  ':examples:javadocJar',
   ':examples:spotlessMisc' ]) {
   archiveClassifier = 'binaries'
   with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
@@ -941,7 +1078,6 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   compression = Compression.GZIP
   archiveExtension = 'tar.gz'
 }
-
 
 /** collect all sources. */
 def sourceContent = project.copySpec {
@@ -1027,13 +1163,26 @@ signing {
   sign configurations.archives
 }
 
-artifacts {
-  archives mainJar
-  archives emfJar
-  archives aspectJJar
-  archives sourcesJar
-  archives javadocJar
+
+// This is necessary for the RC call, since in the regular non-RC stage, no signatory is configured in Jenkins, but for release-versions, Gradle still requires .asc files
+task createDummyAscFiles {
+  doLast {
+    if (isReleaseVersion) {
+      file('build/libs').listFiles().each { file ->
+        if (file.name.endsWith('.jar')) {
+          new File(file.path + '.asc').text = 'dummy'
+        }
+      }
+      println 'Created build/: ' + new File('build/').mkdir()
+      println 'Created build/publications/: ' + new File('build/publications/').mkdir()
+      println 'Created build/publications/mavenJava/: ' + new File('build/publications/mavenJava/').mkdir()
+      new File('build/publications/mavenJava/pom-default.xml.asc').text = 'dummy'
+    }
+  }
 }
+
+publishToMavenLocal.dependsOn createDummyAscFiles
+
 
 publishing {
   publications {
@@ -1041,6 +1190,8 @@ publishing {
       artifact mainJar
       artifact emfJar
       artifact aspectJJar
+      artifact bytebuddyJar
+      artifact javassistJar
       artifact sourcesJar
       artifact javadocJar
       artifact springJar
@@ -1060,7 +1211,7 @@ publishing {
         groupId = 'net.kieker-monitoring'
         artifactId = 'kieker'
         version = version
-        name = 'Kieker Monitoring and Analysis Framework'
+        name = 'Kieker Observability Framework'
         description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
         url = 'http://kieker-monitoring.net'
 
@@ -1092,12 +1243,22 @@ publishing {
             name = 'David Georg Reichelt'
             email = 'd.g.reichelt@lancaster.ac.uk'
           }
+          developer {
+            id = 'shinhyung.yang'
+            name = 'Shinhyung Yang'
+            email = 'shinhyung.yang@email.uni-kiel.de'
+          }
+          developer {
+            id = 'marcel.hansson'
+            name = 'Marcel Hansson'
+            email = 'marcel.hansson@uni-hamburg.de'
+          }
         }
 
         scm {
-          connection = 'scm:git:https://github.com/monitoring/kieker.git'
-          developerConnection = 'scm:git:git@github.com:monitoring/kieker.git'
-          url = 'https://github.com/monitoring/kieker'
+          connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+          developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+          url = 'https://github.com/kieker-monitoring/kieker'
         }
       }
 
@@ -1123,13 +1284,22 @@ publishing {
       //def releasesRepoUrl = "/tmp/myRepo/releases"
       //def snapshotsRepoUrl = "/tmp/myRepo/snapshots"
       // Maven central:
-      def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-      def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+      def releasesRepoUrl = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+      def snapshotsRepoUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
 
       url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
     }
   }
 }
+
+tasks.named('jar') {
+    enabled = false // Disable the default jar task
+}
+
+tasks.named('publishMavenJavaPublicationToMavenLocal') {
+    dependsOn mainJar
+}
+
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {

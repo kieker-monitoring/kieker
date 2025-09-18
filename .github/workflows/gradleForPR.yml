@@ -28,7 +28,7 @@ jobs:
       run: ./gradlew test
     - name: Upload Unit Test Results
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: Unit Test Results (Java ${{ matrix.java }} OS ${{ matrix.os }})
         path: '**/build/test-results/test/TEST-*.xml'

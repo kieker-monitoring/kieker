@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import kieker.tools.opad.timeseries.ForecastMethod;
 import kieker.tools.opad.timeseries.ITimeSeries;
-import kieker.tools.util.InvalidREvaluationResultException;
-import kieker.tools.util.RBridgeControl;
 
 /**
  * Convenience class to implement an {@link IForecaster} with R.

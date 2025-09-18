@@ -15,8 +15,8 @@ the instrumentation of the application, and the actual monitoring.
    detail, the quick start example uses manual instrumentation.
 
 The first step is to copy the **Kieker** jar-file
-kieker-1.15.1-emf.jar to the lib/ directory of the example directory.
-The file is located in the ``kieker-2.0.0-SNAPSHOT/build/libs/`` directory of the
+kieker-2.0.2-emf.jar to the lib/ directory of the example directory.
+The file is located in the ``kieker-2.0.3-SNAPSHOT/build/libs/`` directory of the
 extracted **Kieker** archive (see download instructions). In the example
 directory for this section, this file is already included, as
 illustrated below.
@@ -37,12 +37,15 @@ The Java sources and pre-compiled binaries of the manually instrumented
 Bookstore application described in this section can be found in
 the\ ``examples/userguide/ch2-manual-instrumentation/``\ directory.
 
-**Kieker** maintains monitoring data as so-called monitoring records.
-Section 3.3 describes how to define and use custom monitoring record
-types. The monitoring record type used in this example is an
-*OperationExecutionRecord* which is included in the **Kieker**
-distribution. The next figure shows the attributes which are relevant to
-this example. The record type definition can be found here.
+**Kieker** maintains monitoring data as so-called monitoring records.  Refer to
+``MyResponseTimeRecord.java`` in the
+``examples/userguide/ch3-4--custom-components/`` directory as an example for
+defining and using custom monitoring record types. The monitoring record type
+used in this example is an *OperationExecutionRecord* which is included in the
+**Kieker** distribution. The next figure shows the attributes which are
+relevant to this example. The record type definition can be found here.
+
+.. Section 3.3 describes how to define and use custom monitoring record types.
 
 .. figure:: ../images/records-class-diagram.svg
    :width: 200px
@@ -60,11 +63,10 @@ instantiated. It provides the monitoring service for the
 instrumentation.
 
 .. code-block:: Java
-	:linenos:
+	:lineno-start: 25
 		
 	private static final IMonitoringController MONITORING_CONTROLLER =
 		MonitoringController.getInstance();
-	
 	private final Catalog catalog = new Catalog();
 	private final CRM crm = new CRM(this.catalog);
 
@@ -95,8 +97,8 @@ passing the method signature, the hostname, and the two time values as
 arguments. Finally, the record is handed over to the monitoring
 controller (line 43) which calls a monitoring writer to persist the
 record. In this example, the filesystem writer is used -- **Kieker** uses
-this writer by default when no other writer is specified, as detailed in
-Section `3.5. In <http://3.5.In>`__ addition to the instrumentation in
+this writer by default when no other writer is specified.
+In addition to the instrumentation in
 the ``Bookstore`` class, the ``getOffers()`` method of
 the ``CRM`` class is instrumented as well. Similar to the Listing
 above, measurements are taken before and after the call of
@@ -111,21 +113,21 @@ stored by calling the monitoring controller (see line 47).
    Fix section references
 
 .. code-block:: Java
-	:linenos:
+	:lineno-start: 34
 	
 	public void getOffers() {
 		// 1.) Call Catalog.getBook() and log its entry and exit timestamps.
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false); // <-- the monitored execution
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();
+
 		final OperationExecutionRecord e = new OperationExecutionRecord(
-			"public void " + this.catalog.getClass().getName() +
-			".getBook(boolean)",
-			OperationExecutionRecord.NO_SESSION_ID,
-			OperationExecutionRecord.NO_TRACE_ID,
-			tin, tout, "myHost",
-			OperationExecutionRecord.NO_EOI_ESS,
-			OperationExecutionRecord.NO_EOI_ESS);
+		  "public void " + this.catalog.getClass().getName() + ".getBook(boolean)",
+		  OperationExecutionRecord.NO_SESSION_ID,
+		  OperationExecutionRecord.NO_TRACE_ID,
+		  tin, tout, "myHost",
+		  OperationExecutionRecord.NO_EOI_ESS,
+		  OperationExecutionRecord.NO_EOI_ESS);
 		MONITORING_CONTROLLER.newMonitoringRecord(e);
 	}
 
@@ -138,9 +140,9 @@ i.e. ``examples/userguide/ch2-manual-instrumentation/``.
 .. code:: shell
 	
 	javac src/kieker/examples/userguide/ch2bookstore/manual/∗.java \
-		-classpath lib/kieker-1.15.1-emf.jar -d build/
+		-classpath lib/kieker-2.0.2-emf.jar -d build/
 	
-	java -classpath build/:lib/kieker-1.15.1-emf.jar \
+	java -classpath build/:lib/kieker-2.0.2-emf.jar \
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Under Windows it is necessary to separate the classpath elements by a
@@ -151,9 +153,9 @@ for the Windows PowerShell. Also input each command on one line
 .. code:: shell
 	
 	javac src\kieker\examples\userguide\ch2bookstore\manual\∗.java
-		-classpath lib\kieker-1.15.1-emf.jar -d build\
+		-classpath lib\kieker-2.0.2-emf.jar -d build\
 	
-	java -classpath build\;lib\kieker-1.15.1-emf.jar
+	java -classpath build\;lib\kieker-2.0.2-emf.jar
 		kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 If everything worked correctly, a new directory for the monitoring data
