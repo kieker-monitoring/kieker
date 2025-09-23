@@ -25,7 +25,7 @@ dependencies {
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
 
-	implementation "org.csveed:csveed:0.8.2"
+	implementation "org.csveed:csveed:0.8.3"
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 

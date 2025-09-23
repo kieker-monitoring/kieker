@@ -26,14 +26,14 @@ dependencies {
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
 
-	implementation "org.csveed:csveed:0.8.2"
+	implementation "org.csveed:csveed:0.8.3"
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0,1"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
 	implementation "org.apache.commons:commons-compress:1.27.1"
-	implementation "org.apache.commons:commons-lang3:3.17.0"
+	implementation "org.apache.commons:commons-lang3:3.18.0"
 
 	// https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core
 	implementation "org.jgrapht:jgrapht-core:1.5.2"
