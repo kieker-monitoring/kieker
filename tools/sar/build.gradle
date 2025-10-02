@@ -31,14 +31,14 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
-	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
+	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
 	implementation "org.apache.commons:commons-compress:1.27.1"
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "ch.qos.logback:logback-core:$libLogbackVersion"
 	implementation "ch.qos.logback:logback-access:$libLogbackVersion"
 
-	implementation "org.csveed:csveed:0.8.2"
+	implementation "org.csveed:csveed:0.8.3"
 
 	testImplementation "org.junit.jupiter:junit-jupiter-api:5.13.4"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.13.4"
@@ -46,7 +46,7 @@ dependencies {
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
-	testImplementation "org.mockito:mockito-core:5.18.0"
+	testImplementation "org.mockito:mockito-core:5.20.0"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 
 	testImplementation "org.hamcrest:hamcrest-all:1.3"
