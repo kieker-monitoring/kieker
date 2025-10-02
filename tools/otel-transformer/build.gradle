@@ -7,8 +7,8 @@ application {
 	mainClass = 'kieker.tools.oteltransformer.RecordReceiverMain'
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 dependencies {
 	implementation project(":tools")
