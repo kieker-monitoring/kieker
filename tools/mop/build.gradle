@@ -31,7 +31,7 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
-	implementation "com.sun.xml.bind:jaxb-impl:4.0.5"
+	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
 	implementation "org.apache.commons:commons-compress:1.27.1"
 	implementation "org.apache.commons:commons-lang3:3.18.0"
 
@@ -43,7 +43,7 @@ dependencies {
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
-	testImplementation "org.mockito:mockito-core:5.18.0"
+	testImplementation "org.mockito:mockito-core:5.20.0"
 	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 }
 
