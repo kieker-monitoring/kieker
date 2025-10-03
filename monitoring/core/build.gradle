@@ -69,7 +69,7 @@ dependencies {
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
 	implementation "javax.jms:javax.jms-api:2.0.1"
 
-	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4"
 	implementation "javax.jws:javax.jws-api:1.1"
 
 	implementation "org.influxdb:influxdb-java:2.25"
