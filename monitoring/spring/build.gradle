@@ -18,8 +18,8 @@ sourceSets {
 	}
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 // The following lines are necessay to create a test jar
 project.configurations {
