@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import kieker.tools.common.TraceAnalysisParameters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

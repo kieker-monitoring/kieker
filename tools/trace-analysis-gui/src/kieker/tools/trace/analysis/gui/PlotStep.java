@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kieker.tools.trace.analysis.StringConstants;
+import kieker.tools.common.StringConstants;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.gui.util.AllSelectionBindingItemListener;
 import kieker.tools.trace.analysis.gui.util.SelectionBindingItemListener;
