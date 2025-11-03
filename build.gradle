@@ -494,7 +494,6 @@ def checkSubprojects = [
   project(':tools:relabel'),
   project(':tools:resource-monitor'),
   project(':tools:rewrite-log-entries'),
-  project(':tools:runtime-analysis'),
   project(':tools:sar'),
   project(':tools:trace-analysis'),
   project(':tools:trace-analysis-gui'),
@@ -978,7 +977,6 @@ def tools = [
   'relabel',
   'resource-monitor',
   'rewrite-log-entries',
-  'runtime-analysis',
   'sar',
   'trace-analysis',
   'trace-analysis-gui'
@@ -1062,7 +1060,6 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
   ':tools:relabel:distZip',
   ':tools:resource-monitor:distZip',
   ':tools:rewrite-log-entries:distZip',
-  ':tools:runtime-analysis:distZip',
   ':tools:sar:distZip',
   ':tools:trace-analysis:distZip',
   ':tools:trace-analysis-gui:distZip',

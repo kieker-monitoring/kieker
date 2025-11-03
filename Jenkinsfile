@@ -109,7 +109,6 @@ pipeline {
                 [path: './tools/trace-analysis-gui/src'],
                 [path: './tools/relabel/src'],
                 [path: './tools/collector/src'],
-                [path: './tools/runtime-analysis/src'],
                 [path: './tools/log-replayer/src'],
                 [path: './tools/dar/src'],
                 [path: './extension-kafka/src'],
