@@ -1171,6 +1171,16 @@ task createDummyAscFiles {
       println 'Created build/publications/: ' + new File('build/publications/').mkdir()
       println 'Created build/publications/mavenJava/: ' + new File('build/publications/mavenJava/').mkdir()
       new File('build/publications/mavenJava/pom-default.xml.asc').text = 'dummy'
+
+      def mavenJavaDir = new File('build/publications/mavenJava/')
+      if (mavenJavaDir.exists()) {
+        println "Contents of build/publications/mavenJava/:"
+        mavenJavaDir.listFiles().each { f ->
+          println " - ${f.name}"
+        }
+      } else {
+        println "Error: build/publications/mavenJava/ does not exist"
+      }
     }
   }
 }
