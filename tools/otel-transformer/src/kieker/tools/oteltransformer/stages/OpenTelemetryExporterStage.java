@@ -16,7 +16,6 @@
 
 package kieker.tools.oteltransformer.stages;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,11 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import kieker.common.configuration.Configuration;
-import kieker.common.util.signature.ClassOperationSignaturePair;
-import kieker.model.system.model.Execution;
-import kieker.model.system.model.ExecutionTrace;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -44,6 +38,10 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
+import kieker.common.configuration.Configuration;
+import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.model.system.model.Execution;
+import kieker.model.system.model.ExecutionTrace;
 import teetime.framework.AbstractConsumerStage;
 
 /**
@@ -134,7 +132,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		final Resource resource = Resource.getDefault().merge(
 				Resource.create(Attributes.builder().put(AttributeKey.stringKey("service.name"), serviceName).build()));
 
-		final SpanExporter spanExporter = getSpanExporter(); //NOPMD
+		final SpanExporter spanExporter = getSpanExporter(); // NOPMD
 
 		final SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().setResource(resource)
 				.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build()).build();

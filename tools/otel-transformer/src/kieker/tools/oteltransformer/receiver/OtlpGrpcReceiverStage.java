@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.BaseEncoding;
 import com.google.protobuf.ByteString;
 
-import kieker.common.record.controlflow.OperationExecutionRecord;
-
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -25,6 +23,7 @@ import io.opentelemetry.proto.common.v1.KeyValue;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import teetime.framework.AbstractProducerStage;
 
 /**
@@ -43,19 +42,17 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 
 	private final UnprocessedSpanHandler spanHandler = new UnprocessedSpanHandler();
 
-	
 	@Override
 	public final io.grpc.ServerServiceDefinition bindService() {
 		return TraceServiceGrpc.bindService(this);
 	}
 
-	
 	public OtlpGrpcReceiverStage(final int port) {
 		this.port = port;
 	}
 
 	@Override
-	public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
+	public void export(final ExportTraceServiceRequest request, final StreamObserver<ExportTraceServiceResponse> responseObserver) {
 		final List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
 		for (final ResourceSpans rs : resourceSpansList) {
 			for (final ScopeSpans ss : rs.getScopeSpansList()) {
@@ -69,7 +66,7 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		responseObserver.onCompleted();
 	}
 
-	public void convert(Span span) {
+	public void convert(final Span span) {
 		final ByteString traceIdBytes = span.getTraceId();
 		final String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
 		final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
@@ -88,8 +85,8 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 				return;
 			}
 
-			int parentEoi = threadLocalEoi.getOrDefault(traceIdHex, -1);
-			int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
+			final int parentEoi = threadLocalEoi.getOrDefault(traceIdHex, -1);
+			final int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
 
 			ess = parentEss + 1;
 			eoi = parentEoi + 1;
@@ -108,17 +105,17 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		final long tout = toUnixNanos(span.getEndTimeUnixNano());
 
 		final long traceIdAsLong = traceIdAsLong(traceIdHex);
-		OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi,
+		final OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi,
 				ess);
 		getOutputPort().send(operationExecutionRecord);
 
 		convertMissingSpans(spanId);
 	}
 
-	private String getHostname(Span span) {
+	private String getHostname(final Span span) {
 		String hostname = "localhost";
 		String peer = null;
-		for (KeyValue key : span.getAttributesList()) {
+		for (final KeyValue key : span.getAttributesList()) {
 
 			if (key.getKey().equals("rpc.service")) {
 				hostname = key.getValue().getStringValue();
@@ -143,10 +140,10 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 	}
 
 	private void convertMissingSpans(final String spanId) {
-		List<Span> unprocessedSpans = spanHandler.getUnprocessedSpans(spanId);
+		final List<Span> unprocessedSpans = spanHandler.getUnprocessedSpans(spanId);
 		if (unprocessedSpans != null) {
 			LOGGER.trace("Handling unprocessed: " + spanId + " " + unprocessedSpans.size());
-			for (Span child : unprocessedSpans) {
+			for (final Span child : unprocessedSpans) {
 				convert(child);
 			}
 		} else {
@@ -154,11 +151,11 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		}
 	}
 
-	private long traceIdAsLong(String traceIdHex) {
+	private long traceIdAsLong(final String traceIdHex) {
 		return new BigInteger(traceIdHex.substring(16), 16).longValue();
 	}
 
-	private long toUnixNanos(long nanosSinceEpoch) {
+	private long toUnixNanos(final long nanosSinceEpoch) {
 		return nanosSinceEpoch;
 	}
 
@@ -168,7 +165,7 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 	}
 
 	public void startServer() {
-		Server server = ServerBuilder
+		final Server server = ServerBuilder
 				.forPort(port)
 				.addService(this)
 				.build();
