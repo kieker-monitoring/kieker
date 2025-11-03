@@ -19,6 +19,7 @@ package kieker.tools.oteltransformer.stages;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -92,19 +93,18 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	private final String explorVizTokenValue;
 	private final String explorVizTokenSecret;
 
-	private int spanIndex = 0;
-	private int serviceIndex = 0;
-	private final Map<String, String> serviceIndexMap = new HashMap<>();
+	private int spanIndex;
+	private int serviceIndex;
+	private final Map<String, String> serviceIndexMap = new ConcurrentHashMap<>();
 
 	public OpenTelemetryExporterStage(final Configuration configuration) {
 		this(configuration.getStringProperty(EXPORT_TYPE),
 				configuration.getStringProperty(EXPORT_URL),
-				"kieker-data",
 				configuration.getStringProperty(EXPLORVIZ_TOKEN_VALUE),
 				configuration.getStringProperty(EXPLORVIZ_TOKEN_SECRET));
 	}
 
-	public OpenTelemetryExporterStage(final String typeParameter, final String url, final String serviceName, final String explorVizTokenValue,
+	public OpenTelemetryExporterStage(final String typeParameter, final String url, final String explorVizTokenValue,
 			final String explorVizTokenSecret) {
 		if ("GRPC".equals(typeParameter) || typeParameter == null || typeParameter.isEmpty()) {
 			exportType = ExportType.GRPC;
@@ -134,7 +134,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		final Resource resource = Resource.getDefault().merge(
 				Resource.create(Attributes.builder().put(AttributeKey.stringKey("service.name"), serviceName).build()));
 
-		final SpanExporter spanExporter = getSpanExporter();
+		final SpanExporter spanExporter = getSpanExporter(); //NOPMD
 
 		final SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().setResource(resource)
 				.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build()).build();
@@ -173,7 +173,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			final SpanBuilder spanBuilder = spanBuilder1.setStartTimestamp(execution.getTin(), TimeUnit.NANOSECONDS);
 			if (lastSpan != null && execution.getEss() > 0) {
 
-				LOGGER.debug("Parent: " + execution.getEss() + " " + execution.getEoi());
+				LOGGER.debug("Parent: {} {}", execution.getEss(), execution.getEoi());
 
 				spanBuilder.setParent(Context.current().with(lastSpan.peek()));
 			} else {
@@ -182,7 +182,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 
 			final Span span = createSpan(execution, fullClassname, spanBuilder);
 
-			LOGGER.debug("Spans added: " + ++spanIndex);
+			LOGGER.debug("Spans added: {}", ++spanIndex);
 
 			if (execution.getEss() >= lastEss) {
 				lastEss++;

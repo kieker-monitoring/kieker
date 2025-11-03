@@ -27,27 +27,39 @@ import io.opentelemetry.proto.trace.v1.ScopeSpans;
 import io.opentelemetry.proto.trace.v1.Span;
 import teetime.framework.AbstractProducerStage;
 
+/**
+ * Stage for receiving OpenTelemetry records and transforming them into Kieker records
+ * 
+ * @author DaGeRe
+ */
 public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecutionRecord> implements io.grpc.BindableService, AsyncService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OtlpGrpcReceiverStage.class);
 
-	@java.lang.Override
+	private final int port;
+
+	private final Map<String, Integer> threadLocalEoi = new HashMap<>();
+	private final Map<String, Integer> threadLocalEss = new HashMap<>();
+
+	private final UnprocessedSpanHandler spanHandler = new UnprocessedSpanHandler();
+
+	
+	@Override
 	public final io.grpc.ServerServiceDefinition bindService() {
 		return TraceServiceGrpc.bindService(this);
 	}
 
-	private final int port;
-
-	public OtlpGrpcReceiverStage(int port) {
+	
+	public OtlpGrpcReceiverStage(final int port) {
 		this.port = port;
 	}
 
 	@Override
 	public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
-		List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
-		for (ResourceSpans rs : resourceSpansList) {
-			for (ScopeSpans ss : rs.getScopeSpansList()) {
-				for (Span span : ss.getSpansList()) {
+		final List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
+		for (final ResourceSpans rs : resourceSpansList) {
+			for (final ScopeSpans ss : rs.getScopeSpansList()) {
+				for (final Span span : ss.getSpansList()) {
 					convert(span);
 					// System.out.println(record);
 				}
@@ -57,13 +69,8 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		responseObserver.onCompleted();
 	}
 
-	private final Map<String, Integer> threadLocalEoi = new HashMap<>();
-	private final Map<String, Integer> threadLocalEss = new HashMap<>();
-
-	private final UnprocessedSpanHandler spanHandler = new UnprocessedSpanHandler();
-
 	public void convert(Span span) {
-		ByteString traceIdBytes = span.getTraceId();
+		final ByteString traceIdBytes = span.getTraceId();
 		final String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
 		final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
 		final String parentSpanId = BaseEncoding.base16().lowerCase().encode(span.getParentSpanId().toByteArray());
@@ -100,7 +107,7 @@ public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecut
 		final long tin = toUnixNanos(span.getStartTimeUnixNano());
 		final long tout = toUnixNanos(span.getEndTimeUnixNano());
 
-		long traceIdAsLong = traceIdAsLong(traceIdHex);
+		final long traceIdAsLong = traceIdAsLong(traceIdHex);
 		OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi,
 				ess);
 		getOutputPort().send(operationExecutionRecord);
