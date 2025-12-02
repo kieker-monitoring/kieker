@@ -142,7 +142,7 @@ public class TestConfigurationFactoryMethods extends kieker.test.common.junit.Ab
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_JMX));
 		// Writer controller
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationConstants.META_DATA));
-		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertThat(configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME),
 				CoreMatchers.is(FileWriter.class.getName()));
 		// TimeSource controller
