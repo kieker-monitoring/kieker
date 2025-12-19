@@ -10,7 +10,8 @@ source "${BIN_DIR}/release-check-common.sh"
 # 52=Java 1.8
 # 53=Java 1.9
 # 55=Java 11
-javaVersion="major version: 55"
+# 61=Java 17
+javaVersion="major version: 61"
 
 # extract archive to a specific location
 function extract_archive_to {
