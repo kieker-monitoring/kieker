@@ -18,8 +18,8 @@ project.artifacts {
 	testArchives project.jarTest
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 dependencies {
 	api project(':common')
