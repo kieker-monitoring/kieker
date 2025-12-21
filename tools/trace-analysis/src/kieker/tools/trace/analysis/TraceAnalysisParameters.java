@@ -33,6 +33,7 @@ import kieker.tools.settings.converters.DateConverter;
 
 /**
  * @author Reiner Jung
+ * @author Yorrick Josuttis
  *
  * @since 1.15
  */
@@ -56,40 +57,52 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = { "-p", "--output-filename-prefix" }, description = "Prefix for output filenames")
 	private String prefix;
 
-	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams (.pic)")
+	@Parameter(names = "--graphics-engine", description = "Choose graphics engine")
+	private GraphicsEngineType graphicsEngine;
+
+	@Parameter(names = "--png", description = "Generate PNG images (only for PlantUML graphics engine)")
+	private boolean png;
+
+	@Parameter(names = "--svg", description = "Generate SVG images (only for PlantUML graphics engine)")
+	private boolean svg;
+
+	@Parameter(names = "--pdf", description = "Generate PDF documents (only for PlantUML graphics engine)")
+	private boolean pdf;
+
+	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams")
 	private boolean plotDeploymentSequenceDiagrams;
 
-	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams (.pic)")
+	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams")
 	private boolean plotAssemblySequenceDiagrams;
 
 	@Parameter(names = "--plot-Deployment-Component-Dependency-Graph", validateWith = DecoratorValidator.class,
-			description = "Generate and store a deployment-level component dependency graph (.dot)")
+			description = "Generate and store a deployment-level component dependency graph")
 	private List<String> plotDeploymentComponentDependencyGraph;
 
 	@Parameter(names = "--plot-Assembly-Component-Dependency-Graph", validateWith = DecoratorValidator.class,
-			description = "Generate and store an assembly-level component dependency graph (.dot)")
+			description = "Generate and store an assembly-level component dependency graph")
 	private List<String> plotAssemblyComponentDependencyGraph;
 
-	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph (.dot file)")
+	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph")
 	private boolean plotContainerDependencyGraph;
 
 	@Parameter(names = "--plot-Deployment-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class,
-			description = "Generate and store a deployment-level operation dependency graph (.dot)")
+			description = "Generate and store a deployment-level operation dependency graph")
 	private List<String> plotDeploymentOperationDependencyGraph;
 
 	@Parameter(names = "--plot-Assembly-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class,
-			description = "Generate and store an assembly-level operation dependency graph (.dot)")
+			description = "Generate and store an assembly-level operation dependency graph")
 	private List<String> plotAssemblyOperationDependencyGraph;
 
 	@Parameter(names = "--plot-Aggregated-Deployment-Call-Tree",
-			description = "Generate and store an aggregated deployment-level call tree (.dot)")
+			description = "Generate and store an aggregated deployment-level call tree")
 	private boolean plotAggregatedDeploymentCallTree;
 
 	@Parameter(names = "--plot-Aggregated-Assembly-Call-Tree",
-			description = "Generate and store an aggregated assembly-level call tree (.dot)")
+			description = "Generate and store an aggregated assembly-level call tree")
 	private boolean plotAggregatedAssemblyCallTree;
 
-	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces (.dot)")
+	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces")
 	private boolean plotCallTrees;
 
 	@Parameter(names = "--print-Message-Traces", description = "Save message trace representations of valid traces (.txt)")
@@ -201,6 +214,22 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 
 	public String getPrefix() {
 		return this.prefix;
+	}
+
+	public GraphicsEngineType getGraphicsEngineType() {
+		return this.graphicsEngine;
+	}
+
+	public boolean isPng() {
+		return this.png;
+	}
+
+	public boolean isSvg() {
+		return this.svg;
+	}
+
+	public boolean isPdf() {
+		return this.pdf;
 	}
 
 	public boolean isPlotDeploymentSequenceDiagrams() {
