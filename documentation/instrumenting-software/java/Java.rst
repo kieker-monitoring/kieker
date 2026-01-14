@@ -13,6 +13,7 @@ topics.
    Configuring-Kieker.rst   
    Manual-Instrumentation.rst
    Instrumentation-with-AspectJ.rst
+   Instrumentation-with-ByteBuddy.rst
    Servlet-Instrumentation.rst
    Instrumentation-with-CXF-Interceptors.rst
    Instrumentation-with-DISL.rst
