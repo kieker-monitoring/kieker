@@ -15,7 +15,7 @@ Engineering (pp. 249-256).)
 Weaving using ByteBuddy requires three steps: Getting the latest Kieker ByteBuddy release, configuring
 the ByteBuddy weaving, and adding Kieker to the  SuT start.
 
-Downloading Kieker
+Downloading Kieker ByteBuddy Agent
 ~~~~~~~~~~~~~~~~~~~~
 
 To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.2/kieker-2.0.2-bytebuddy.jar`
