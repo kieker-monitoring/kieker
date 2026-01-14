@@ -1,18 +1,18 @@
 .. _instrumenting-software-bytebuddy:
 
-Instrumentation with ByteBuddy 
+Instrumentation with ByteBuddy
 ============================
 
 ByteBuddy Configuration
 ---------------------
 
-The easiest way to configure ByteBuddy with Kieker is by weaving the ByteBuddy probes into the SuT. 
+The easiest way to configure ByteBuddy with Kieker is by weaving the ByteBuddy probes into the SuT.
 ByteBuddy is nown to produce the lowest overhead among the contemporary instrumentation frameworks
-(see Reichelt, D. G., Bulej, L., Jung, R., & Van Hoorn, A. (2024, May): Overhead comparison of 
-instrumentation frameworks. In Companion of the 15th ACM/SPEC International Conference on Performance 
+(see Reichelt, D. G., Bulej, L., Jung, R., & Van Hoorn, A. (2024, May): Overhead comparison of
+instrumentation frameworks. In Companion of the 15th ACM/SPEC International Conference on Performance
 Engineering (pp. 249-256).)
 
-Weaving using ByteBuddy requires three steps: Getting the latest Kieker ByteBuddy release, configuring 
+Weaving using ByteBuddy requires three steps: Getting the latest Kieker ByteBuddy release, configuring
 the ByteBuddy weaving, and adding Kieker to the  SuT start.
 
 ## Downloading Kieker
@@ -46,7 +46,7 @@ Please note that Kieker relies on a logging backend that is compatible with log4
 References
 ----------
 
-- `AspectJ probes <http://api.kieker-monitoring.org/2.0.2/>`_ 
+- `AspectJ probes <http://api.kieker-monitoring.org/2.0.2/>`_
 
 
 
