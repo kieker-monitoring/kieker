@@ -15,12 +15,12 @@ Engineering (pp. 249-256).)
 Weaving using ByteBuddy requires three steps: Getting the latest Kieker ByteBuddy release, configuring
 the ByteBuddy weaving, and adding Kieker to the  SuT start.
 
-## Downloading Kieker
+Downloading Kieker
 ~~~~~~~~~~~~~~~~~~~~
 
 To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.2/kieker-2.0.2-bytebuddy.jar`
 
-## Configuring the ByteBuddy Weaving
+Configuring the ByteBuddy Weaving
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, ByteBuddy does not offer any syntax to specify which methods are woven. Therefore, Kieker contains a custom syntax in environment variables. This can be done using ``export KIEKER_SIGNATURES_INCLUDE="my.application.*"`` ; to exclude certain packages, use ``export KIEKER_SIGNATURES_EXCLUDE="my.application.subpackage.*"`` . It is also possible to define multiple patterns that are split by semicolons (e.g., ``KIEKER_SIGNATURES_INCLUDE="my.application.*;org.importedlibrary.*"`` ).
