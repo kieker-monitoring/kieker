@@ -13,7 +13,7 @@ The easiest way to configure AspectJ with Kieker is by weaving the AspectJ probe
 This requires three steps: Getting the latest Kieker AspectJ release, configuring the AspectJ
 weaving, and adding Kieker to the  SuT start.
 
-Downloading Kieker
+Downloading Kieker AspectJ Agent
 ~~~~~~~~~~~~~~~~~~
 
 To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.2/kieker-2.0.2-aspectj.jar`
