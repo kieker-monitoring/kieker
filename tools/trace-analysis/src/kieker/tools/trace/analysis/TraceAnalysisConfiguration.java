@@ -211,46 +211,12 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 		this.connectPorts(validTracesDistributor.getNewOutputPort(), this.traceEventRecords2ExecutionAndMessageTraceStage.getInputPort());
 
-		final Distributor<ExecutionTrace> executionTraceFromReconstructionDistributor = new Distributor<>(new CopyByReferenceStrategy());
-		executionTraceFromReconstructionDistributor.declareActive();
-		this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), executionTraceFromReconstructionDistributor.getInputPort());
-
-		try {
-			final ExecutionTraceWriterFilter execFromReconstructionWriter = 
-				new ExecutionTraceWriterFilter(
-					systemRepository,
-					new File(pathPrefix + "executionTraces.fromReconstruction.txt")
-				);
-			this.connectPorts(executionTraceFromReconstructionDistributor.getNewOutputPort(), execFromReconstructionWriter.getInputPort());
-		} catch (final IOException e) {
-			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
-				TraceAnalysisConfiguration.LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
-			}
-		}
-
-		try {
-			final ExecutionTraceWriterFilter execFromEventStageWriter = 
-				new ExecutionTraceWriterFilter(
-					systemRepository,
-					new File(pathPrefix + "executionTraces.fromEventTraceStage.txt")
-				);
-			this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), execFromEventStageWriter.getInputPort());
-		} catch (final IOException e) {
-			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
-				TraceAnalysisConfiguration.LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
-			}
-		}
-
-		final Distributor<ExecutionTrace> executionTraceFromEventStageDistributor = new Distributor<>(new CopyByReferenceStrategy());
-		executionTraceFromEventStageDistributor.declareActive();
-		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), executionTraceFromEventStageDistributor.getInputPort());
-
-		this.connectPorts(executionTraceFromReconstructionDistributor.getNewOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
 
 		/** prepare the connection of reporting sinks. */
-		this.connectPorts(executionTraceFromEventStageDistributor.getNewOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
 
