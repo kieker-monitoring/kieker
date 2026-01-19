@@ -193,11 +193,13 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 		this.connectPorts(timestampFilter.getRecordsWithinTimePeriodOutputPort(), traceIdFilter.getInputPort());
 
-		if (parameters.isInvertTraceIdFilter()) {
+/* 		if (parameters.isInvertTraceIdFilter()) {
 			this.connectPorts(traceIdFilter.getMismatchingTraceIdOutputPort(), dispatcher.getInputPort());
 		} else {
 			this.connectPorts(traceIdFilter.getOutputPort(), dispatcher.getInputPort());
-		}
+		} */
+
+		this.connectPorts(traceIdFilter.getOutputPort(), dispatcher.getInputPort());
 
 		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(), executionRecordTransformationStage.getInputPort());
 		this.connectPorts(executionRecordTransformationStage.getOutputPort(), this.traceReconstructionStage.getInputPort());
