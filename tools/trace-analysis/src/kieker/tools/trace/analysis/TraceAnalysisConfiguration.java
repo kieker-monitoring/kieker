@@ -241,12 +241,16 @@ public class TraceAnalysisConfiguration extends Configuration {
 			}
 		}
 
+		final Distributor<ExecutionTrace> executionTraceFromEventStageDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		executionTraceFromEventStageDistributor.declareActive();
+		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), executionTraceFromEventStageDistributor.getInputPort());
+
 		this.connectPorts(executionTraceFromReconstructionDistributor.getNewOutputPort(), executionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
 
 		/** prepare the connection of reporting sinks. */
-		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(executionTraceFromEventStageDistributor.getNewOutputPort(), executionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
 
