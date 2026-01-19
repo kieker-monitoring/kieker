@@ -211,13 +211,17 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 		this.connectPorts(validTracesDistributor.getNewOutputPort(), this.traceEventRecords2ExecutionAndMessageTraceStage.getInputPort());
 
+		final Distributor<ExecutionTrace> executionTraceFromReconstructionDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		executionTraceFromReconstructionDistributor.declareActive();
+		this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), executionTraceFromReconstructionDistributor.getInputPort());
+
 		try {
 			final ExecutionTraceWriterFilter execFromReconstructionWriter = 
 				new ExecutionTraceWriterFilter(
 					systemRepository,
 					new File(pathPrefix + "executionTraces.fromReconstruction.txt")
 				);
-			this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), execFromReconstructionWriter.getInputPort());
+			this.connectPorts(executionTraceFromReconstructionDistributor.getNewOutputPort(), execFromReconstructionWriter.getInputPort());
 		} catch (final IOException e) {
 			if (TraceAnalysisConfiguration.LOGGER.isErrorEnabled()) {
 				TraceAnalysisConfiguration.LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
@@ -237,7 +241,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 			}
 		}
 
-		this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(executionTraceFromReconstructionDistributor.getNewOutputPort(), executionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
 		this.connectPorts(this.traceReconstructionStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
 
