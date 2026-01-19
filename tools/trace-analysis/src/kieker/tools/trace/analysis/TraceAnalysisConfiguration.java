@@ -140,6 +140,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
 
 		final TraceIdFilter traceIdFilter = new TraceIdFilter(parameters.getSelectedTraces().isEmpty(), parameters.getSelectedTraces());
+		if (parameters.getSelectTraces().isEmpty()) {
+			System.err.println("No trace ID filter applied, all traces are accepted.");
+		}
 
 		final DynamicEventDispatcher dispatcher = new DynamicEventDispatcher(null, false, true, false);
 		final IEventMatcher<? extends IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
