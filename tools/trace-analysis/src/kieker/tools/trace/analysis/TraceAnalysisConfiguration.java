@@ -141,8 +141,12 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
 		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
 
-		Set<Long> selectedTraces = new TreeSet<>(parameters.getSelectedTraces());
+		Set<Long> selectedTraces = new TreeSet<>(parameters.getSelectTraces());
 		final TraceIdFilter traceIdFilter = new TraceIdFilter(selectedTraces.isEmpty(), selectedTraces);
+
+		System.err.println("TRACEIDFILTER selectedTraces.size=" + selectedTraces.size());
+		System.err.println("TRACEIDFILTER acceptAllTraces=" + selectedTraces.isEmpty());
+		System.err.println("TRACEIDFILTER selectedTraces=" + selectedTraces);
 
 		final DynamicEventDispatcher dispatcher = new DynamicEventDispatcher(null, false, true, false);
 		final IEventMatcher<? extends IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
