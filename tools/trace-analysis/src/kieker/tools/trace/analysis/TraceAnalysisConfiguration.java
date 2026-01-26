@@ -22,7 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import kieker.tools.common.TraceAnalysisParameters;
@@ -139,7 +141,8 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
 		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
 
-		final TraceIdFilter traceIdFilter = new TraceIdFilter(parameters.getSelectedTraces().isEmpty(), parameters.getSelectedTraces());
+		Set<Long> selectedTraces = new TreeSet<>(parameters.getSelectedTraces());
+		final TraceIdFilter traceIdFilter = new TraceIdFilter(selectedTraces.isEmpty(), selectedTraces);
 
 		final DynamicEventDispatcher dispatcher = new DynamicEventDispatcher(null, false, true, false);
 		final IEventMatcher<? extends IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
