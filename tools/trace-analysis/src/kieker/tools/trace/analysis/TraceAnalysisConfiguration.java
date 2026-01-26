@@ -141,7 +141,8 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
 		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
 
-		Set<Long> selectedTraces = new TreeSet<>(parameters.getSelectTraces());
+		final List<Long> select = parameters.getSelectTraces();
+		Set<Long> selectedTraces = (select == null) ? new TreeSet<>() : new TreeSet<>(select);
 		final TraceIdFilter traceIdFilter = new TraceIdFilter(selectedTraces.isEmpty(), selectedTraces);
 
 		System.err.println("TRACEIDFILTER selectedTraces.size=" + selectedTraces.size());
