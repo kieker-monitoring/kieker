@@ -81,6 +81,9 @@ import kieker.tools.trace.analysis.repository.TraceColorRepository;
 import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
+import kieker.tools.common.TraceAnalysisParameters;
+import kieker.tools.common.StringConstants;
+
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
  * monitoring data that comes from the instrumented system, or from a file that contains Kieker monitoring data. The
