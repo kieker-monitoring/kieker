@@ -19,45 +19,45 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import kieker.tools.common.TraceAnalysisParameters;
-
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.MessageTrace;
+import kieker.tools.common.TraceAnalysisParameters;
 import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
-import kieker.visualization.trace.GraphWriterPlugin;
-import kieker.visualization.trace.SequenceDiagramFilter;
 import kieker.visualization.trace.SequenceDiagramFilter.SDModes;
-import kieker.visualization.trace.call.tree.dot.AggregatedAllocationComponentOperationCallTreeFilter;
-import kieker.visualization.trace.call.tree.dot.AggregatedAssemblyComponentOperationCallTreeFilter;
-import kieker.visualization.trace.call.tree.dot.TraceCallTreeFilter;
+import kieker.visualization.trace.call.tree.plantuml.PlantUMLAggregatedAllocationComponentOperationCallTreeFilter;
+import kieker.visualization.trace.call.tree.plantuml.PlantUMLAggregatedAssemblyComponentOperationCallTreeFilter;
+import kieker.visualization.trace.call.tree.plantuml.PlantUMLTraceCallTreeFilter;
 import kieker.visualization.trace.dependency.graph.ComponentDependencyGraphAllocationFilter;
 import kieker.visualization.trace.dependency.graph.ComponentDependencyGraphAssemblyFilter;
 import kieker.visualization.trace.dependency.graph.ContainerDependencyGraphFilter;
 import kieker.visualization.trace.dependency.graph.OperationDependencyGraphAllocationFilter;
 import kieker.visualization.trace.dependency.graph.OperationDependencyGraphAssemblyFilter;
-
+import kieker.visualization.trace.plantuml.PlantUMLFileGenerator;
+import kieker.visualization.trace.plantuml.PlantUMLGraphWriterPlugin;
+import kieker.visualization.trace.plantuml.PlantUMLSequenceDiagramFilter;
 import teetime.stage.basic.distributor.Distributor;
 
-/**
- * Central teetime pipe and filter configuration for trace analysis.
- *
- * @author Reiner Jung
- * @author Yorrick Josuttis
- * @since 1.15
- *
- */
-public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfiguration {
 
-	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
+/**
+ * Configuration for PlantUML-based trace analysis visualizations.
+ * 
+ * @author Yorrick Josuttis
+ */
+public class PlantUMLTraceAnalysisConfiguration extends AbstractTraceAnalysisConfiguration {
+
+	public PlantUMLTraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
 		super(parameters, systemRepository);
 	}
 
 	@Override
 	protected void createPlotSequenceDiagrams(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final String outputFilename, final SDModes sequenceDiagramMode, final boolean shortLabels) {
-		final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(systemRepository, sequenceDiagramMode,
+		final PlantUMLSequenceDiagramFilter.SDModes plantMode = PlantUMLSequenceDiagramFilter.SDModes.valueOf(sequenceDiagramMode.name());
+		final PlantUMLSequenceDiagramFilter plantUMLSequenceDiagramFilter = new PlantUMLSequenceDiagramFilter(systemRepository, plantMode,
 				pathPrefix + File.separator + outputFilename, shortLabels);
-		this.connectPorts(messageTraceDistributor.getNewOutputPort(), sequenceDiagramFilter.getInputPort());
+		final PlantUMLFileGenerator plantUMLFileGenerator = new PlantUMLFileGenerator(this.parameters);
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), plantUMLSequenceDiagramFilter.getInputPort());
+		this.connectPorts(plantUMLSequenceDiagramFilter.getOutputPort(), plantUMLFileGenerator.getInputPort());
 	}
 
 	@Override
@@ -67,10 +67,12 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 		final ComponentDependencyGraphAllocationFilter graphFilter = new ComponentDependencyGraphAllocationFilter(systemRepository,
 				TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
-		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLGraphWriterPlugin writerStage = new PlantUMLGraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
 		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
+		this.connectPorts(writerStage.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
@@ -79,20 +81,24 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 			final boolean plotLoops) {
 		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
-		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLGraphWriterPlugin writerStage = new PlantUMLGraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
 		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
+		this.connectPorts(writerStage.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
 	protected void createPlotContainerDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
 		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.NANOSECONDS);
-		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLGraphWriterPlugin writerStage = new PlantUMLGraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
 		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
+		this.connectPorts(writerStage.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
@@ -102,10 +108,12 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 			final boolean plotLoops) {
 		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
-		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLGraphWriterPlugin writerStage = new PlantUMLGraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
 		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
+		this.connectPorts(writerStage.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
@@ -115,34 +123,42 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 			final boolean plotLoops) {
 		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
-		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLGraphWriterPlugin writerStage = new PlantUMLGraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
 		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
+		this.connectPorts(writerStage.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
 	protected void createTraceCallTreeFilter(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean shortLabels) {
-		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(systemRepository, shortLabels,
+		final PlantUMLTraceCallTreeFilter componentPlotTraceCallTrees = new PlantUMLTraceCallTreeFilter(systemRepository, shortLabels,
 				pathPrefix + AbstractTraceAnalysisConfiguration.CALL_TREE_FN_PREFIX);
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotTraceCallTrees.getInputPort());
+		this.connectPorts(componentPlotTraceCallTrees.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
 	protected void createPlotAggregatedDeploymentCallTree(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
-		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
-				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
+		final PlantUMLAggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new PlantUMLAggregatedAllocationComponentOperationCallTreeFilter(
+				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".puml");
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAggregatedCallTree.getInputPort());
+		this.connectPorts(componentPlotAggregatedCallTree.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 	@Override
 	protected void createAggrAssemblyCompOpCallTreeFilter(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
-		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(
-				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
+		final PlantUMLAggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new PlantUMLAggregatedAssemblyComponentOperationCallTreeFilter(
+				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".puml");
+		final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAssemblyCallTree.getInputPort());
+		this.connectPorts(componentPlotAssemblyCallTree.getOutputPort(), fileGenerator.getInputPort());
 	}
 
 }

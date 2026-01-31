@@ -17,11 +17,14 @@ package kieker.visualization.trace.call.tree;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.MessageTrace;
 import kieker.model.system.model.SynchronousCallMessage;
 import kieker.tools.trace.analysis.filter.traceReconstruction.TraceProcessingException;
+
+import teetime.framework.OutputPort;
 
 /**
  * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
@@ -29,6 +32,7 @@ import kieker.tools.trace.analysis.filter.traceReconstruction.TraceProcessingExc
  * @param <T>
  *
  * @author Andre van Hoorn
+ * @author Yorrick Josuttis
  *
  * @since 1.1
  */
@@ -38,7 +42,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	private final String dotOutputFile;
 	private final boolean includeWeights;
 	private final boolean shortLabels;
+	private final GraphFormat format;
 	private int numGraphsSaved; // no need for volatile, only used in synchronized blocks
+	private final Optional<OutputPort<File>> outputPort;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -54,11 +60,36 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 */
 	public AbstractAggregatedCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
 			final String dotOutputFile) {
+		this(repository, includeWeights, shortLabels, dotOutputFile, GraphFormat.DOT);
+	}
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 *
+	 * @param repository
+	 *            system model repository
+	 * @param includeWeights
+	 *            include weights ingraph
+	 * @param shortLabels
+	 *            use short labels
+	 * @param dotOutputFile
+	 *            output file name
+	 * @param format
+	 *            the output format strategy
+	 */
+	public AbstractAggregatedCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
+			final String dotOutputFile, final GraphFormat format) {
 		super(repository);
 
 		this.includeWeights = includeWeights;
 		this.shortLabels = shortLabels;
 		this.dotOutputFile = dotOutputFile;
+		this.format = format;
+		if (format.hasOutputPort()) {
+			this.outputPort = Optional.of(this.createOutputPort());
+		} else {
+			this.outputPort = Optional.empty();
+		}
 	}
 
 	/**
@@ -81,15 +112,31 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 *             If something went wrong during the converting.
 	 */
 	public void saveTreeToDotFile() throws IOException {
+		saveTreeToDotFile(this.format);
+	}
+
+	/**
+	 * This method tries to convert the current tree into the specified file using the given format.
+	 *
+	 * @param outputFormat
+	 *            the output format strategy
+	 * @throws IOException
+	 *             If something went wrong during the converting.
+	 */
+	protected void saveTreeToDotFile(final GraphFormat outputFormat) throws IOException {
 		synchronized (this) {
-			final String outputFn = new File(this.dotOutputFile).getCanonicalPath();
+			final File outputFile = new File(this.dotOutputFile);
+			final String outputFn = outputFile.getCanonicalPath();
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include
 					// EOIs
-					this.shortLabels);
+					this.shortLabels, outputFormat);
 			this.numGraphsSaved++;
 			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'",
 				"Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
+			if (outputFormat.hasOutputPort()) {
+				this.outputPort.ifPresent(port -> port.send(outputFile));
+			}
 		}
 	}
 
@@ -140,6 +187,17 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * @return The actual pair.
 	 */
 	protected abstract T concreteCreatePair(SynchronousCallMessage callMsg);
+
+	/**
+	 * Get the output port for sending generated files (if format requires it).
+	 * 
+	 * @author Yorrick Josuttis
+	 *
+	 * @return the output port, or null if format does not require output port
+	 */
+	public OutputPort<File> getOutputPort() {
+		return this.outputPort.orElse(null);
+	}
 
 	/**
 	 * @author Christian Wulf
