@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 
 import kieker.analysis.architecture.trace.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.ConstructionEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
@@ -161,8 +160,6 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 				// SplitEvent
 			} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
 				this.logger.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
-			} else if (ConstructionEvent.class.isAssignableFrom(event.getClass())) {
-				this.logger.warn("Events of type 'ConstructionEvent' are currently not handled and ignored."); // Intentionally ignored
 			} else {
 				this.logger.warn("Events of type '{}' are currently not handled and ignored.",
 						event.getClass().getName());
@@ -362,7 +359,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceStage extends AbstractTra
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent,
 				final AbstractTraceEvent prevEvent, final Class<? extends CallOperationEvent> callClass) {
 			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass())
-					&& (prevEvent.getOrderIndex() < (beforeOperationEvent.getOrderIndex()))) {
+					&& (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
 				if (this.callsReferencedOperationOf((CallOperationEvent) prevEvent, beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
