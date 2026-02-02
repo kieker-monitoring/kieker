@@ -119,6 +119,10 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final String filePrefix = (parameters.getPrefix() != null) ? parameters.getPrefix() : "";
 		final String pathPrefix = outputPath + filePrefix;
 
+		System.err.println("Output path: " + outputPath);
+		System.err.println("File prefix: " + filePrefix);
+		System.err.println("Path prefix: " + pathPrefix);
+
 		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		if (parameters.getIgnoreExecutionsBeforeDate() == null) {
