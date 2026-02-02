@@ -115,7 +115,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private final TraceEventRecords2ExecutionAndMessageTraceStage traceEventRecords2ExecutionAndMessageTraceStage;
 
 	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
-		final String pathPrefix = this.computePrefix(parameters);
+		final String outputPath = (parameters.getOutputDir() != null) ? parameters.getOutputDir().toString() + File.separator : "";
+		final String filePrefix = (parameters.getPrefix() != null) ? parameters.getPrefix() : "";
+		final String pathPrefix = outputPath + filePrefix;
 
 		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -270,27 +272,27 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 		if (parameters.getPlotDeploymentComponentDependencyGraph() != null) {
 			this.createPlotDeploymentComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentComponentDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotAssemblyComponentDependencyGraph() != null) {
 			this.createPlotAssemblyComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyComponentDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.isPlotContainerDependencyGraph()) {
-			this.createPlotContainerDependencyGraph(systemRepository, messageTraceDistributor, pathPrefix, "", true, parameters.isShortLabels(),
+			this.createPlotContainerDependencyGraph(systemRepository, messageTraceDistributor, outputPath, filePrefix, true, parameters.isShortLabels(),
 					parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotDeploymentOperationDependencyGraph() != null) {
 			this.createPlotDeploymentOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentOperationDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotAssemblyOperationDependencyGraph() != null) {
 			this.createPlotAssemblyOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyOperationDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.isPlotCallTrees()) {
