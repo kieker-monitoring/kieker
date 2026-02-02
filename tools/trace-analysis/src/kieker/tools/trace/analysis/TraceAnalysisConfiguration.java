@@ -176,7 +176,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		validTracesDistributor.declareActive();
 
 		this.traceEventRecords2ExecutionAndMessageTraceStage = new TraceEventRecords2ExecutionAndMessageTraceStage(
-				systemRepository, false, false, parameters.isIgnoreAssumedCalls());
+				systemRepository, true, true, parameters.isIgnoreAssumedCalls());
 
 		this.validEventRecordTraceCounter = new ValidEventRecordTraceCounter();
 		this.invalidEventRecordTraceCounter = new InvalidEventRecordTraceCounter(parameters.isIgnoreInvalidTraces());
