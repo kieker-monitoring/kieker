@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -121,11 +122,12 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	}
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
-		if (this.outputFileName.length() == 0) { // outputFileName cannot be null
-			return formatter.getDefaultFileName();
-		} else {
-			return this.outputFileName;
+		final String defaultName = formatter.getDefaultFileName();
+		final String prefix = Objects.toString(this.outputFileName, "");
+		if (prefix.isEmpty()) {
+			return defaultName;
 		}
+		return prefix + defaultName;
 	}
 
 	/**
