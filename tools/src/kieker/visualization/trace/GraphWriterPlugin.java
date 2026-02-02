@@ -60,7 +60,7 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new ConcurrentHashMap<>();
 
 	private final String outputPathName;
-	private final String outputFileName;
+	private final String outputFileNamePrefix;
 	private final boolean includeWeights;
 	private final boolean useShortLabels;
 	private final boolean plotLoops;
@@ -78,8 +78,8 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 *
 	 * @param outputPathName
 	 *            base path name for the output directory
-	 * @param outputFileName
-	 *            filename to be used within the directory
+	 * @param outputFileNamePrefix
+	 *            a file-name-prefix prepended to the filename
 	 * @param includeWeights
 	 *            include weights in plotting
 	 * @param useShortLabels
@@ -87,12 +87,12 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 * @param plotLoops
 	 *            plot loops
 	 */
-	public GraphWriterPlugin(final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean useShortLabels,
+	public GraphWriterPlugin(final String outputPathName, final String outputFileNamePrefix, final boolean includeWeights, final boolean useShortLabels,
 			final boolean plotLoops) {
 		super();
 
 		this.outputPathName = outputPathName;
-		this.outputFileName = outputFileName;
+		this.outputFileNamePrefix = outputFileNamePrefix;
 		this.includeWeights = includeWeights;
 		this.useShortLabels = useShortLabels;
 		this.plotLoops = plotLoops;
@@ -123,11 +123,11 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
 		final String defaultName = formatter.getDefaultFileName();
-		final String prefix = Objects.toString(this.outputFileName, "");
-		if (prefix.isEmpty()) {
+		final String fileNamePrefix = Objects.toString(this.outputFileNamePrefix, "");
+		if (fileNamePrefix.isEmpty()) {
 			return defaultName;
 		}
-		return prefix + defaultName;
+		return fileNamePrefix + defaultName;
 	}
 
 	/**

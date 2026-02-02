@@ -457,20 +457,6 @@ public class TraceAnalysisConfiguration extends Configuration {
 		}
 	}
 
-	private String computePrefix(final TraceAnalysisParameters parameters) {
-		if (parameters.getOutputDir() != null) {
-			if (parameters.getPrefix() != null) {
-				return parameters.getOutputDir() + File.separator + parameters.getPrefix();
-			} else {
-				return parameters.getOutputDir() + File.separator;
-			}
-		} else if (parameters.getPrefix() != null) {
-			return parameters.getPrefix();
-		} else {
-			return "";
-		}
-	}
-
 	/**
 	 *
 	 * @param decoratorList
