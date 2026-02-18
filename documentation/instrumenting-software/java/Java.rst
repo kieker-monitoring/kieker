@@ -1,6 +1,6 @@
 .. _instrumenting-software-java:
 
-Instrumenting Java 
+Instrumenting Java
 ==================
 
 This section comprises information on instrumenting Java application
@@ -10,9 +10,10 @@ topics.
 .. toctree::
    :maxdepth: 1
 
-   Configuring-Kieker.rst   
+   Configuring-Kieker.rst
    Manual-Instrumentation.rst
    Instrumentation-with-AspectJ.rst
+   Instrumentation-with-ByteBuddy.rst
    Servlet-Instrumentation.rst
    Instrumentation-with-CXF-Interceptors.rst
    Instrumentation-with-DISL.rst

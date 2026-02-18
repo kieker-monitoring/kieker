@@ -3,8 +3,8 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
 	mavenCentral()
@@ -17,12 +17,12 @@ dependencies {
 	// disl not available via maven
 	implementation resolveLibrary('disl-2.0/disl-1.0-SNAPSHOT.jar')
 	// DiSLs dependencies need to be added manually
-	implementation 'org.ow2.asm:asm:9.8'
-	implementation 'org.ow2.asm:asm-tree:9.8'
-	implementation 'org.ow2.asm:asm-analysis:9.8'
-	implementation 'org.ow2.asm:asm-commons:9.8'
+	implementation 'org.ow2.asm:asm:9.9.1'
+	implementation 'org.ow2.asm:asm-tree:9.9.1'
+	implementation 'org.ow2.asm:asm-analysis:9.9.1'
+	implementation 'org.ow2.asm:asm-commons:9.9.1'
 
-	implementation 'org.ow2.asm:asm-util:9.8'
+	implementation 'org.ow2.asm:asm-util:9.9.1'
 }
 
 // publishing

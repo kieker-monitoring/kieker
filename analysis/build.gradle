@@ -4,7 +4,7 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 11
+sourceCompatibility = 17
 
 // The following lines are necessay to create a test jar
 project.configurations {
