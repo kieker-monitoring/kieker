@@ -92,7 +92,7 @@ dependencies {
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.1.2"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.2"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.6"
 	testImplementation "org.eclipse.jetty:apache-jsp:11.0.26"
 
 	testImplementation "commons-io:commons-io:2.19.0"
