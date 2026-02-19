@@ -42,7 +42,7 @@ dependencies {
 
 	implementation "org.apache.commons:commons-csv:1.14.1"
 	implementation "org.apache.commons:commons-collections4:4.5.0"
-	implementation "org.apache.commons:commons-lang3:3.18.0"
+	implementation "org.apache.commons:commons-lang3:3.20.0"
 	implementation "commons-io:commons-io:2.19.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
