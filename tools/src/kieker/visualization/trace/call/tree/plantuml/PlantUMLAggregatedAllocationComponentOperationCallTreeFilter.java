@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace.call.tree;
+package kieker.visualization.trace.call.tree.plantuml;
 
 import kieker.model.repository.AllocationComponentOperationPairFactory;
 import kieker.model.repository.SystemModelRepository;
@@ -25,13 +25,18 @@ import kieker.model.system.model.util.AllocationComponentOperationPair;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeFilter;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeNode;
+import kieker.visualization.trace.call.tree.AbstractCallTreeNode;
+import kieker.visualization.trace.call.tree.GraphFormat;
+import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
 
 /**
- * @author Andre van Hoorn
- *
- * @since 1.1
+ * PlantUML call tree filter aggregating by allocation component-operation pairs.
+ * 
+ * @author Yorrick Josuttis
  */
-public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
+public class PlantUMLAggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -45,11 +50,11 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	 * @param dotOutputFile
 	 *            output file name
 	 */
-	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
+	public PlantUMLAggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
 			final boolean shortLabels, final String dotOutputFile) {
-		super(repository, includeWeights, shortLabels, dotOutputFile);
+		super(repository, includeWeights, shortLabels, dotOutputFile, GraphFormat.PLANTUML);
 
-		this.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+		this.setRoot(new PlantUMLAggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
 	}
 
@@ -58,19 +63,19 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
 
-		return AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemModelRepository()
+		return PlantUMLAggregatedAllocationComponentOperationCallTreeFilter.this.getSystemModelRepository()
 				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
 	}
 }
 
 /**
- * @author Andre van Hoorn
- *
- * @since 1.1
+ * Used to generate "aggregatedAllocationCallTree.dot".
+ * 
+ * @author Yorrick Josuttis
  */
-class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
+class PlantUMLAggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
-	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode,
+	public PlantUMLAggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode,
 			final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);
 	}
@@ -86,7 +91,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 			originPolicy.handleOrigin(e, origin);
 			originPolicy.handleOrigin(n, origin);
 		} else {
-			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !
+			n = new PlantUMLAggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !
 			// rootNode
 			e = new WeightedDirectedCallTreeEdge<>(this, n, origin, originPolicy);
 			this.childMap.put(destination.getId(), e);
