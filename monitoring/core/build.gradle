@@ -60,7 +60,7 @@ dependencies {
 	implementation "org.tukaani:xz:$libXzVersion"	// compression algorithms used by the file writers
 
 	implementation "org.apache.cxf:cxf-bundle-minimal:$libCxfVersion"
-	implementation "org.apache.commons:commons-compress:1.27.1"
+	implementation "org.apache.commons:commons-compress:1.28.0"
 
 	implementation "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
 	implementation "org.glassfish.jersey.core:jersey-common:$jerseyVersion"
@@ -69,7 +69,7 @@ dependencies {
 	implementation "javax.servlet:javax.servlet-api:4.0.1"
 	implementation "javax.jms:javax.jms-api:2.0.1"
 
-	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4"
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
 	implementation "javax.jws:javax.jws-api:1.1"
 
 	implementation "org.influxdb:influxdb-java:2.25"
@@ -92,8 +92,8 @@ dependencies {
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.1.2"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.2"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.26"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.6"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:12.1.6"
 
 	testImplementation "commons-io:commons-io:2.19.0"
 

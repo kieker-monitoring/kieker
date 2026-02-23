@@ -24,16 +24,16 @@ dependencies {
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
-	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4"
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
-	implementation "org.apache.commons:commons-compress:1.27.1"
+	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.tukaani:xz:1.10"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation "org.junit.jupiter:junit-jupiter-api:5.13.4"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.13.4"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:6.0.0"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.0.0"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')

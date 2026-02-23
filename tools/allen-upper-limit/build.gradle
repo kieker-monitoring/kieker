@@ -26,9 +26,9 @@ dependencies {
 
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
-	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4"
+	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
-	implementation "org.apache.commons:commons-compress:1.27.1"
+	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.mosim.refactorlizar:architecture-evaluation-tool:0.0.4"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')

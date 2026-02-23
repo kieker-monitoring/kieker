@@ -10,7 +10,7 @@ buildscript {
 plugins {
 	id 'eclipse'
 	id 'maven-publish'
-	id("io.freefair.aspectj.post-compile-weaving") version "9.0.0"
+	id("io.freefair.aspectj.post-compile-weaving") version "9.2.0"
 }
 
 sourceCompatibility = 17
@@ -56,7 +56,7 @@ dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
-	aspectJCompileTime "org.aspectj:aspectjtools:1.9.20.1"
+	aspectJCompileTime "org.aspectj:aspectjtools:1.9.25.1"
 	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
@@ -91,8 +91,8 @@ dependencies {
 	testImplementation "org.springframework:spring-expression:3.$springVersion"
 
 	testImplementation "org.eclipse.jetty:jetty-server:12.1.2"
-	testImplementation "org.eclipse.jetty:jetty-webapp:11.0.26"
-	testImplementation "org.eclipse.jetty:apache-jsp:11.0.26"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.6"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:12.1.6"
 
 	testImplementation "commons-io:commons-io:2.19.0"
 
