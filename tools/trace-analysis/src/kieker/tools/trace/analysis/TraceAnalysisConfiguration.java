@@ -116,7 +116,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private final TraceEventRecords2ExecutionAndMessageTraceStage traceEventRecords2ExecutionAndMessageTraceStage;
 
 	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
-		final String outputPath = (parameters.getOutputDir() != null) ? parameters.getOutputDir().toString() : "";
+		final String outputPath = (parameters.getOutputDir() != null) ? parameters.getOutputDir().toString() + File.separator : "";
 		final String filePrefix = (parameters.getPrefix() != null) ? parameters.getPrefix() : "";
 		final String pathPrefix = outputPath + filePrefix;
 
