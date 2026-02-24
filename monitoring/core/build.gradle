@@ -74,7 +74,7 @@ dependencies {
 
 	implementation "org.influxdb:influxdb-java:2.25"
 
-	implementation "com.squareup.okhttp3:okhttp:5.1.0"
+	implementation "com.squareup.okhttp3:okhttp:5.3.2"
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
