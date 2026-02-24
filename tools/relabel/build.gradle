@@ -24,7 +24,7 @@ dependencies {
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
 
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.21.1"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
