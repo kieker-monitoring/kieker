@@ -32,8 +32,8 @@ dependencies {
 	api "org.apache.cxf:cxf:$libCxfVersion"			// cxf-bundle
 
 	api "org.eclipse.emf:org.eclipse.emf.common:2.44.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
-	api "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.42.0"
+	api "org.eclipse.emf:org.eclipse.emf.ecore:2.42.0"
 
 	api "com.rabbitmq:amqp-client:$libAmqpVersion"
 	api "nz.ac.waikato.cms.weka:weka-stable:3.8.6" // used by behavior analysis
