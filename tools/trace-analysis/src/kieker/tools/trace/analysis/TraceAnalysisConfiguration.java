@@ -132,7 +132,7 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 			final List<String> decoratorList, final String outputPathName, final String outputFileName,
 			final boolean includeWeights, final boolean shortLabels,
 			final boolean plotLoops) {
-		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(
+		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(
 				systemRepository, TimeUnit.NANOSECONDS);
 		this.addDecorators(decoratorList, graphFilter);
 		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights,
