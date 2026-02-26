@@ -12,10 +12,10 @@ Monitoring
 
 - For this tutorial, we assume your program is storad in ``MyJar.jar``
 
-- Download Kieker complete archive https://github.com/kieker-monitoring/kieker/releases/download/2.0.2/kieker-2.0.2-binaries.tar.gz
+- Download Kieker complete archive https://github.com/kieker-monitoring/kieker/releases/download/2.0.3/kieker-2.0.3-binaries.tar.gz
 - Extract the package
-- Copy ``kieker-2.0.2-aspectj.jar`` from the ``build/libs/ directory`` into the same directory as your jar file.
-- Execute ``java -javaagent:kieker-2.0.2-aspectj.jar -jar MyJar.jar``
+- Copy ``kieker-2.0.3-aspectj.jar`` from the ``build/libs/ directory`` into the same directory as your jar file.
+- Execute ``java -javaagent:kieker-2.0.3-aspectj.jar -jar MyJar.jar``
 
 Kieker writes the monitoring log files into the system’s default temporary 
 directory (e.g. ``/tmp/``) in a directory named ``kieker-<date>-<timestamp>-UTC.``
@@ -24,7 +24,7 @@ The precise path can be found in the console output.
 Alternatively, you can specify the path to the kieker property file
 ``kieker.properties`` and the AspectJ file ``aop.xml`` as follows:
 
-``java -javaagent:kieker-2.0.2-aspectj.jar -Dkieker.monitoring.configuration=file://path/to/kieker.properties -Dorg.aspectj.weaver.loadtime.configuration=file://path/to/aop.xml -jar MyJar.jar``
+``java -javaagent:kieker-2.0.3-aspectj.jar -Dkieker.monitoring.configuration=file://path/to/kieker.properties -Dorg.aspectj.weaver.loadtime.configuration=file://path/to/aop.xml -jar MyJar.jar``
 
 Analysis
 --------
