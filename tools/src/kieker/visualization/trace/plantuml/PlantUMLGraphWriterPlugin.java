@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace;
+package kieker.visualization.trace.plantuml;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +22,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -41,30 +40,31 @@ import kieker.visualization.trace.dependency.graph.OperationAssemblyDependencyGr
 import kieker.visualization.trace.dependency.graph.OperationAssemblyDependencyGraphFormatter;
 
 import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
 
 /**
  * Generic graph writer plugin to generate graph specifications and save them to disk. This plugin uses
  * a formatter registry (see {@link #FORMATTER_REGISTRY}) to determine the appropriate formatter for a
  * given graph.
  *
- * @author Holger Knoche
  * @author Yorrick Josuttis
- *
- * @since 1.6
  */
-public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?, ?>> {
+public class PlantUMLGraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?, ?>> {
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
 	private static final String WRITE_ERROR_MESSAGE_TEMPLATE = "Graph could not be written to file %s.";
 
-	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>,
+			Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new ConcurrentHashMap<>();
 
 	private final String outputPathName;
-	private final String outputFileNamePrefix;
+	private final String outputFileName;
 	private final boolean includeWeights;
 	private final boolean useShortLabels;
 	private final boolean plotLoops;
+
+    private final OutputPort<File> outputPort = this.createOutputPort();
 
 	static {
 		FORMATTER_REGISTRY.put(ComponentAllocationDependencyGraph.class, ComponentAllocationDependencyGraphFormatter.class);
@@ -79,8 +79,8 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 *
 	 * @param outputPathName
 	 *            base path name for the output directory
-	 * @param outputFileNamePrefix
-	 *            a file-name-prefix prepend to the filename
+	 * @param outputFileName
+	 *            filename to be used within the directory
 	 * @param includeWeights
 	 *            include weights in plotting
 	 * @param useShortLabels
@@ -88,12 +88,12 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 * @param plotLoops
 	 *            plot loops
 	 */
-	public GraphWriterPlugin(final String outputPathName, final String outputFileNamePrefix, final boolean includeWeights, final boolean useShortLabels,
+	public PlantUMLGraphWriterPlugin(final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean useShortLabels,
 			final boolean plotLoops) {
 		super();
 
 		this.outputPathName = outputPathName;
-		this.outputFileNamePrefix = outputFileNamePrefix;
+		this.outputFileName = outputFileName;
 		this.includeWeights = includeWeights;
 		this.useShortLabels = useShortLabels;
 		this.plotLoops = plotLoops;
@@ -115,7 +115,7 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 			return constructor.newInstance();
 		} catch (final SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException
 				| InvocationTargetException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
+			PlantUMLGraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
 		}
 
 		// This should never happen, because all catch clauses indirectly throw exceptions
@@ -123,12 +123,11 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	}
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
-		final String defaultName = formatter.getDefaultFileName();
-		final String fileNamePrefix = Objects.toString(this.outputFileNamePrefix, "");
-		if (fileNamePrefix.isEmpty()) {
-			return defaultName;
+		if (this.outputFileName.length() == 0) { // outputFileName cannot be null
+			return formatter.getDefaultFileName();
+		} else {
+			return this.outputFileName;
 		}
-		return fileNamePrefix + defaultName;
 	}
 
 	/**
@@ -140,15 +139,27 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 */
 	@Override
 	protected void execute(final AbstractGraph<?, ?, ?> graph) throws Exception {
-		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
+		final AbstractGraphFormatter<?> graphFormatter = PlantUMLGraphWriterPlugin.createFormatter(graph);
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.includeWeights, this.useShortLabels, this.plotLoops);
-		final String fileName = this.outputPathName + File.separator + this.getOutputFileName(graphFormatter);
+		// replace .dot suffix with .puml
+        final String fileName = (this.outputPathName + File.separator + this.getOutputFileName(graphFormatter)).replaceAll("\\.dot$", ".puml");
+		final StringBuilder sb = new StringBuilder();
+		sb.append(PlantUMLUtils.START_PUML).append(System.lineSeparator())
+				.append(specification).append(System.lineSeparator())
+				.append(PlantUMLUtils.END_PUML);
+        final String pumlSource = sb.toString();
+            
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
-			writer.write(specification);
+			writer.write(pumlSource);
 			writer.flush();
+			this.outputPort.send(new File(fileName));
 		} catch (final IOException e) {
 			throw new GraphFormattingException(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
 		}
 	}
+
+    public OutputPort<File> getOutputPort() {
+        return this.outputPort;
+    }
 
 }

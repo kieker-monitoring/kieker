@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import kieker.tools.trace.analysis.StringConstants;
+import kieker.tools.common.StringConstants;
 import kieker.tools.trace.analysis.gui.util.FileChooserActionListener;
 
 /**

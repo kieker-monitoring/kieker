@@ -35,8 +35,11 @@ dependencies {
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
-
-
+	// PlantUML for generating diagrams / Dependencies for PDF generation
+	implementation 'net.sourceforge.plantuml:plantuml:1.2025.2'
+	implementation 'org.apache.pdfbox:pdfbox:2.0.27'
+	implementation 'org.apache.xmlgraphics:batik-all:1.17' // Complete Batik for PlantUML PDF support
+	implementation 'org.apache.xmlgraphics:fop:2.9'
 
 	// Some dependencies for the HTTP connector of the KDB
 	api fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
