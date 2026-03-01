@@ -67,6 +67,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	private volatile long maxTout = -1;
 	private volatile boolean terminated;
 	private final boolean ignoreInvalidTraces; // false
+	private final boolean asynchronousTrace;
 	private final long maxTraceDurationMillis;
 
 	private boolean traceProcessingErrorOccured; // false
@@ -108,13 +109,14 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 	 *            Long.MAX_VALUE
 	 */
 	public TraceReconstructionStage(final SystemModelRepository repository, final TimeUnit timeunit,
-			final boolean ignoreInvalidTraces, final Long maxTraceDuration) {
+			final boolean ignoreInvalidTraces, final boolean asynchronousTrace, final Long maxTraceDuration) {
 		super(repository);
 
 		this.timeunit = timeunit;
 		this.maxTraceDurationMillis = this.timeunit.convert(maxTraceDuration == null ? Long.MAX_VALUE : maxTraceDuration, // NOCS
 				timeunit);
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
+		this.asynchronousTrace = asynchronousTrace;
 
 		if (this.maxTraceDurationMillis < 0) {
 			throw new IllegalArgumentException(
@@ -170,7 +172,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
-				executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
+				executionTrace = new ExecutionTrace(traceId, execution.getSessionId(), asynchronousTrace);
 				this.pendingTraces.put(traceId, executionTrace);
 			}
 			try {

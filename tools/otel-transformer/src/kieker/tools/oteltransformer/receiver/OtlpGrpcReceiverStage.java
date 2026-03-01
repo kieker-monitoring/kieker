@@ -1,0 +1,181 @@
+package kieker.tools.oteltransformer.receiver;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.io.BaseEncoding;
+import com.google.protobuf.ByteString;
+
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
+import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
+import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.AsyncService;
+import io.opentelemetry.proto.common.v1.KeyValue;
+import io.opentelemetry.proto.trace.v1.ResourceSpans;
+import io.opentelemetry.proto.trace.v1.ScopeSpans;
+import io.opentelemetry.proto.trace.v1.Span;
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import teetime.framework.AbstractProducerStage;
+
+/**
+ * Stage for receiving OpenTelemetry records and transforming them into Kieker records
+ * 
+ * @author DaGeRe
+ */
+public class OtlpGrpcReceiverStage extends AbstractProducerStage<OperationExecutionRecord> implements io.grpc.BindableService, AsyncService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(OtlpGrpcReceiverStage.class);
+
+	private final int port;
+
+	private final Map<String, Integer> threadLocalEoi = new HashMap<>();
+	private final Map<String, Integer> threadLocalEss = new HashMap<>();
+
+	private final UnprocessedSpanHandler spanHandler = new UnprocessedSpanHandler();
+
+	@Override
+	public final io.grpc.ServerServiceDefinition bindService() {
+		return TraceServiceGrpc.bindService(this);
+	}
+
+	public OtlpGrpcReceiverStage(final int port) {
+		this.port = port;
+	}
+
+	@Override
+	public void export(final ExportTraceServiceRequest request, final StreamObserver<ExportTraceServiceResponse> responseObserver) {
+		final List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
+		for (final ResourceSpans rs : resourceSpansList) {
+			for (final ScopeSpans ss : rs.getScopeSpansList()) {
+				for (final Span span : ss.getSpansList()) {
+					convert(span);
+					// System.out.println(record);
+				}
+			}
+		}
+		responseObserver.onNext(ExportTraceServiceResponse.getDefaultInstance());
+		responseObserver.onCompleted();
+	}
+
+	public void convert(final Span span) {
+		final ByteString traceIdBytes = span.getTraceId();
+		final String traceIdHex = BaseEncoding.base16().lowerCase().encode(traceIdBytes.toByteArray());
+		final String spanId = BaseEncoding.base16().lowerCase().encode(span.getSpanId().toByteArray());
+		final String parentSpanId = BaseEncoding.base16().lowerCase().encode(span.getParentSpanId().toByteArray());
+
+		final int eoi;
+		final int ess;
+
+		if (parentSpanId == null || parentSpanId.isEmpty() || parentSpanId.equals("0000000000000000")) {
+			// root span
+			eoi = 0;
+			ess = 0;
+		} else {
+			if (threadLocalEoi.get(traceIdHex) == null || threadLocalEss.get(parentSpanId) == null) {
+				spanHandler.addUnprocessedSpan(span);
+				return;
+			}
+
+			final int parentEoi = threadLocalEoi.getOrDefault(traceIdHex, -1);
+			final int parentEss = threadLocalEss.getOrDefault(parentSpanId, -1);
+
+			ess = parentEss + 1;
+			eoi = parentEoi + 1;
+
+			threadLocalEoi.put(traceIdHex, eoi);
+		}
+
+		threadLocalEoi.put(traceIdHex, eoi);
+		threadLocalEss.put(spanId, ess);
+
+		final String sessionId = traceIdHex;
+		final String operationSignature = span.getName().replaceAll("/", ".");
+		final String hostname = getHostname(span);
+
+		final long tin = toUnixNanos(span.getStartTimeUnixNano());
+		final long tout = toUnixNanos(span.getEndTimeUnixNano());
+
+		final long traceIdAsLong = traceIdAsLong(traceIdHex);
+		final OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord(operationSignature, sessionId, traceIdAsLong, tin, tout, hostname, eoi,
+				ess);
+		getOutputPort().send(operationExecutionRecord);
+
+		convertMissingSpans(spanId);
+	}
+
+	private String getHostname(final Span span) {
+		String hostname = "localhost";
+		String peer = null;
+		for (final KeyValue key : span.getAttributesList()) {
+
+			if (key.getKey().equals("rpc.service")) {
+				hostname = key.getValue().getStringValue();
+			} else if (key.getKey().equals("net.peer.name") || key.getKey().equals("network.peer.address")) {
+				peer = key.getValue().getStringValue();
+			} else if (key.getKey().equals("net.sock.peer.addr")) {
+				hostname = key.getValue().getStringValue();
+			} else if (key.getKey().equals("peer.address")) {
+				hostname = key.getValue().getStringValue();
+			}
+			if (span.getName().contains("flagd")) {
+				System.out.println(key + " -- " + key.getValue());
+			}
+		}
+		if (peer != null) {
+			hostname = hostname + "-" + peer;
+		}
+		if (span.getName().contains("flagd")) {
+			System.out.println("Hostname: " + hostname);
+		}
+		return hostname;
+	}
+
+	private void convertMissingSpans(final String spanId) {
+		final List<Span> unprocessedSpans = spanHandler.getUnprocessedSpans(spanId);
+		if (unprocessedSpans != null) {
+			LOGGER.trace("Handling unprocessed: " + spanId + " " + unprocessedSpans.size());
+			for (final Span child : unprocessedSpans) {
+				convert(child);
+			}
+		} else {
+			LOGGER.trace("No unprocessed spans for " + spanId);
+		}
+	}
+
+	private long traceIdAsLong(final String traceIdHex) {
+		return new BigInteger(traceIdHex.substring(16), 16).longValue();
+	}
+
+	private long toUnixNanos(final long nanosSinceEpoch) {
+		return nanosSinceEpoch;
+	}
+
+	@Override
+	protected void execute() throws Exception {
+		startServer();
+	}
+
+	public void startServer() {
+		final Server server = ServerBuilder
+				.forPort(port)
+				.addService(this)
+				.build();
+
+		try {
+			server.start();
+			System.out.println("OTLP gRPC Receiver läuft auf Port " + port);
+			server.awaitTermination();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}

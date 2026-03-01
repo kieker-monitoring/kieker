@@ -22,6 +22,10 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.PathConverter;
 
 public class Settings {
+	enum ReceivingStandard {
+		KIEKER, OPENTELEMETRY
+	}
+	
 	@Parameter(names = { "-lp",
 		"--listenPort" }, required = true, description = "Port where the otel-transformer listens for traces")
 	private int listenPort;
@@ -29,6 +33,10 @@ public class Settings {
 	@Parameter(names = { "-c",
 		"--configuration" }, required = false, description = "Configuration file.", converter = PathConverter.class)
 	private Path configurationPath;
+	
+	@Parameter(names = { "-standard",
+		"--standard" }, required = true, description = "Standard to wait for (either KIEKER or OPENTELEMETRY")
+	private ReceivingStandard standard;
 
 	public int getListenPort() {
 		return listenPort;
@@ -36,5 +44,9 @@ public class Settings {
 
 	public Path getKiekerMonitoringProperties() {
 		return this.configurationPath;
+	}
+	
+	public ReceivingStandard getStandard() {
+		return standard;
 	}
 }
