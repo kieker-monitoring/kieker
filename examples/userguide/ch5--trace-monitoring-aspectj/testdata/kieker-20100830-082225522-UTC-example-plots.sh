@@ -59,7 +59,8 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Aggregated-Assembly-Call-Tree \
     --print-Deployment-Equivalence-Classes \
     --print-Assembly-Equivalence-Classes \
-    --short-labels
+    --short-labels \
+    --print-System-Model
 
 # Dependency graphs with responseTimes
 ${TRACE_ANALYSIS_SH} \
@@ -70,7 +71,8 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
     --plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
     --plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
-    --short-labels
+    --short-labels \
+    --print-System-Model
 
 # Deployment-level representatives: 6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131
 # Assembly-level representative:    6488138950668976129
@@ -84,7 +86,8 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Call-Trees \
     --print-Message-Traces \
     --print-Execution-Traces  \
-    --short-labels
+    --short-labels \
+    --print-System-Model
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
 #${FILE_CONVERTER_SH} "./${OUTDIR}" pdf

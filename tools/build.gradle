@@ -35,7 +35,7 @@ dependencies {
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
 
-
+	implementation 'net.sourceforge.plantuml:plantuml:1.2025.2'
 
 
 	// Some dependencies for the HTTP connector of the KDB
