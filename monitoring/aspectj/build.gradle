@@ -57,7 +57,6 @@ dependencies {
 	implementation project(':monitoring:core')
 
 	aspectJCompileTime "org.aspectj:aspectjtools:1.9.25.1"
-	implementation "org.aspectj:aspectjrt:$aspectjVersion"
 	implementation "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
 
 	implementation "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
@@ -209,4 +208,8 @@ eclipse {
 			}
 		}
 	}
+}
+
+tasks.named("compileJava") {
+    options.compilerArgs += ['--add-reads', "kieker.monitoring.aspectj=ALL-UNNAMED"]
 }
