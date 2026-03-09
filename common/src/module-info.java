@@ -44,6 +44,10 @@ module kieker.common {
     exports kieker.common.util.signature;
     exports kieker.common.util.thread;
 
+    //Services
+    uses kieker.common.record.factory.IRecordFactoryProvider;
+
+
     //Java Dependencies
     requires java.logging;
 
