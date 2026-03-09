@@ -19,21 +19,21 @@ dependencies {
 	implementation project(':tools')
 
 	// https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.39.0"
-	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.39.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.42.0"
+	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.40.0"
 
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.21.1"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
 	implementation "com.sun.xml.bind:jaxb-impl:4.0.6"
 	implementation "org.apache.commons:commons-compress:1.28.0"
-	implementation "org.tukaani:xz:1.10"
+	implementation "org.tukaani:xz:1.11"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation "org.junit.jupiter:junit-jupiter-api:6.0.0"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.0.0"
+	testImplementation "org.junit.jupiter:junit-jupiter-api:6.0.3"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.0.3"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')

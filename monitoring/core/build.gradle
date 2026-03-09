@@ -52,7 +52,7 @@ dependencies {
 
 	implementation "org.jctools:jctools-core:$libJctoolsVersion"
 
-	implementation "com.github.oshi:oshi-core:6.9.0"
+	implementation "com.github.oshi:oshi-core:6.10.0"
 
 	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
 	implementation "org.influxdb:influxdb-java:2.25"
@@ -74,7 +74,7 @@ dependencies {
 
 	implementation "org.influxdb:influxdb-java:2.25"
 
-	implementation "com.squareup.okhttp3:okhttp:5.1.0"
+	implementation "com.squareup.okhttp3:okhttp:5.3.2"
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
@@ -95,7 +95,7 @@ dependencies {
 	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.6"
 	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:12.1.6"
 
-	testImplementation "commons-io:commons-io:2.19.0"
+	testImplementation "commons-io:commons-io:2.21.0"
 
 	testImplementation project(':common').sourceSets.test.output
 }
