@@ -15,7 +15,7 @@ dependencies {
 	implementation "net.kieker-monitoring:kieker:1.15"
 
 	implementation "com.google.guava:guava:20.0"				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
-	implementation "com.rabbitmq:amqp-client:5.8.0"
+	implementation "com.rabbitmq:amqp-client:$libAmqpVersion"
 }
 
 
