@@ -11,7 +11,7 @@ distZip.enabled=true
 
 application {
     mainModule = 'kieker.tools.trace.analysis'
-    mainClass = mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
+    mainClass = 'kieker.tools.trace.analysis.TraceAnalysisToolMain'
     applicationDefaultJvmArgs = ['--add-reads', "kieker.analysis=ALL-UNNAMED",
                                  '--add-reads', "kieker.tools=ALL-UNNAMED",
                                  '--add-reads', "kieker.tools.trace.analysis=ALL-UNNAMED",
