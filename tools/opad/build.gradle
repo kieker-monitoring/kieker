@@ -41,3 +41,10 @@ dependencies {
 	testImplementation project(':common').sourceSets.test.output
 	testImplementation project(':tools').sourceSets.test.output
 }
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools.opad=ALL-UNNAMED",
+	]
+}
