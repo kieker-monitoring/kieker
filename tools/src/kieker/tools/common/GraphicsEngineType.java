@@ -13,4 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis;
+package kieker.tools.common;
+
+/**
+ * Types of trace analysis configurations.
+ *
+ * @author Yorrick Josuttis
+ */
+public enum GraphicsEngineType {
+	DOTPIC,
+	PLANTUML
+}

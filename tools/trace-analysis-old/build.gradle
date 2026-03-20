@@ -9,14 +9,13 @@ targetCompatibility = 17
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolNewMain'
+mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
 	implementation project(":common")
 	implementation project(":tools")
-	implementation project(":tools:trace-analysis")
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
@@ -27,6 +26,12 @@ dependencies {
 
 task uploadArchives {
 	println 'trace-analysis skipped'
+}
+
+task replaceHardCodedVersionNames() {
+	doLast {
+//		regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveFileName}")
+	}
 }
 
 eclipse {
@@ -42,3 +47,5 @@ eclipse {
 		}
 	}
 }
+
+compileJava.dependsOn replaceHardCodedVersionNames
