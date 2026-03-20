@@ -115,7 +115,7 @@ public class TraceReconstructionFilterTest extends AbstractKiekerTest {
 
 		final SystemModelRepository repository = new SystemModelRepository();
 
-		final TraceReconstructionStage filter = new TraceReconstructionStage(repository, TimeUnit.NANOSECONDS, true, Long.MAX_VALUE);
+		final TraceReconstructionStage filter = new TraceReconstructionStage(repository, TimeUnit.NANOSECONDS, true, false, Long.MAX_VALUE);
 
 		final Execution[] events = validExecutionTrace.getTraceAsSortedExecutionSet()
 				.toArray(new Execution[validExecutionTrace.getTraceAsSortedExecutionSet().size()]);
@@ -176,7 +176,7 @@ public class TraceReconstructionFilterTest extends AbstractKiekerTest {
 		// These are the trace representations we want to be reconstructed by the filter
 		final ExecutionTrace invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip(executionFactory);
 
-		final TraceReconstructionStage filter = new TraceReconstructionStage(systemEntityFactory, TimeUnit.NANOSECONDS, true, Long.MAX_VALUE);
+		final TraceReconstructionStage filter = new TraceReconstructionStage(systemEntityFactory, TimeUnit.NANOSECONDS, true, false, Long.MAX_VALUE);
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
