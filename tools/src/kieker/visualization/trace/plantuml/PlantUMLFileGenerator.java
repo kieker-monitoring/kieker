@@ -19,9 +19,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,11 +92,13 @@ public class PlantUMLFileGenerator extends AbstractConsumerStage<File> {
 			final byte[] imageBytes = generateImage(pumlSource, format.getFileFormat());
 			final File outputFile = new File(file.getAbsolutePath().replaceAll("\\.puml$", format.getExtension()));
 			try (final var fos = Files.newOutputStream(outputFile.toPath())) {
+
 				fos.write(imageBytes);
 			}
 			return outputFile;
 		} catch (OutOfMemoryError e) {
-			LOGGER.warn("OutOfMemoryError generating {} for {} (we skip those large files)", format.getExtension(), file.getName());
+			LOGGER.warn("OutOfMemoryError generating {} for {} (we skip those large files)", format.getExtension(),
+					file.getName());
 			return null;
 		} catch (IOException e) {
 			LOGGER.warn("Failed to generate {} for {}: {}", format.getExtension(), file.getName(), e.getMessage());
@@ -114,29 +121,81 @@ public class PlantUMLFileGenerator extends AbstractConsumerStage<File> {
 		}
 	}
 
-	/**
-	 * Merge all generated PDF files into a single PDF.
-	 */
 	private void mergePdfFiles() {
-		try (final PDDocument mergedDoc = new PDDocument()) {
-			// Load all PDFs and import their pages
-			for (final File pdfFile : generatedPdfFiles) {
-				try (final PDDocument part = PDDocument.load(pdfFile)) {
-					for (int i = 0; i < part.getNumberOfPages(); i++) {
-						mergedDoc.addPage(part.getPage(i));
-					}
-				}
+		// if only one PDF was generated, no merge needed
+		if (generatedPdfFiles.size() <= 1) {
+			return;
+		}
+
+		// filter out non-existing files and sort by name for deterministic merge order
+		final List<File> sources = generatedPdfFiles.stream()
+				.filter(f -> f != null && f.exists())
+				.sorted(Comparator.comparing(File::getName))
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		// if after filtering we have at most one file, no merge needed
+		if (sources.size() <= 1) {
+			return;
+		}
+
+		final File first = sources.get(0);
+		final File outputFile = computeMergedOutputFile(first);
+		final File tmpFile = new File(outputFile.getAbsolutePath() + ".tmp");
+
+		// safety: if outputFile somehow appears in sources, filter it out
+		sources.removeIf(f -> sameFile(f, outputFile) || sameFile(f, tmpFile));
+
+		if (sources.size() <= 1) {
+			return;
+		}
+
+		try {
+			Files.deleteIfExists(tmpFile.toPath());
+
+			final PDFMergerUtility merger = new PDFMergerUtility();
+			merger.setDestinationFileName(tmpFile.getAbsolutePath());
+
+			for (final File src : sources) {
+				merger.addSource(src);
 			}
 
-			// Save merged PDF
-			final String outputPath = generatedPdfFiles.get(0).getAbsolutePath()
-					.replaceAll("-\\d+\\.pdf$", "s.pdf");
-			mergedDoc.save(outputPath);
-			LOGGER.info("Merged {} PDF files into: {}", generatedPdfFiles.size(), outputPath);
+			// tempfile-based approach using no main-memory; since there is no restricted
+			// size it is safer for large PDFs
+			merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
 
-		} catch (IOException e) {
-			LOGGER.error("Failed to merge PDF files: {}", e.getMessage());
+			Files.move(tmpFile.toPath(), outputFile.toPath(),
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.ATOMIC_MOVE);
+
+			LOGGER.info("Merged {} PDF files into: {}", sources.size(), outputFile.getAbsolutePath());
+		} catch (final IOException e) {
+			LOGGER.error("Failed to merge PDF files", e);
 		}
+	}
+
+	private static boolean sameFile(final File a, final File b) {
+		try {
+			return a.getCanonicalFile().equals(b.getCanonicalFile());
+		} catch (final IOException e) {
+			// as a fallback, compare absolute paths
+			return a.getAbsolutePath().equals(b.getAbsolutePath());
+		}
+	}
+
+	private static File computeMergedOutputFile(final File firstSource) {
+		final String abs = firstSource.getAbsolutePath();
+
+		// foo-<fileCount>.pdf -> foos.pdf
+		final String stripped = abs.replaceAll("-\\d+\\.pdf$", "s.pdf");
+		if (!stripped.equals(abs)) {
+			return new File(stripped);
+		}
+
+		// everything else: never write into the same file -> -merged.pdf
+		if (abs.toLowerCase().endsWith(".pdf")) {
+			return new File(abs.substring(0, abs.length() - 4) + "-merged.pdf");
+		}
+		return new File(abs + "-merged.pdf");
 	}
 
 	/**
