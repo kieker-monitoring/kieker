@@ -91,9 +91,9 @@ dependencies {
 	// this project depends on the tests of common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':common', configuration: 'testArchives')
 
-	testImplementation "org.eclipse.jetty:jetty-server:12.1.7"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.7"
-	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:12.1.7"
+	testImplementation "org.eclipse.jetty:jetty-server:12.1.8"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-webapp:12.1.8"
+	testImplementation "org.eclipse.jetty.ee10:jetty-ee10-apache-jsp:12.1.8"
 
 	testImplementation "commons-io:commons-io:2.21.0"
 
