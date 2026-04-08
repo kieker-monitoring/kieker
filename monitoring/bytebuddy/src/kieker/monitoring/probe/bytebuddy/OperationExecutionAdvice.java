@@ -33,18 +33,31 @@ import net.bytebuddy.asm.Advice;
  */
 public class OperationExecutionAdvice {
 
+	public static class StaticInitAdvice {
+		@Advice.OnMethodExit
+		public static void exit(
+				@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
+				@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
+				@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY,
+				@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
+				@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
+
+			if (CTRLINST == null) {
+				CTRLINST = MonitoringController.getInstance();
+				TIME = CTRLINST.getTimeSource();
+				CFREGISTRY = ControlFlowRegistry.INSTANCE;
+				VMNAME = CTRLINST.getHostname();
+				SESSIONREGISTRY = SessionRegistry.INSTANCE;
+			}
+		}
+	}
+
 	@Advice.OnMethodEnter
 	public static OperationStartData enter(
 			@Advice.Origin final String operationSignature,
-			@Advice.FieldValue(value = "CTRLINST", readOnly = false) IMonitoringController CTRLINST,
-			@Advice.FieldValue(value = "TIME", readOnly = false) ITimeSource TIME,
-			@Advice.FieldValue(value = "CFREGISTRY", readOnly = false) ControlFlowRegistry CFREGISTRY) {
-		if (CTRLINST == null) {
-			CTRLINST = MonitoringController.getInstance();
-			TIME = CTRLINST.getTimeSource();
-			CFREGISTRY = ControlFlowRegistry.INSTANCE;
-		}
-
+			@Advice.FieldValue(value = "CTRLINST", readOnly = true) IMonitoringController CTRLINST,
+			@Advice.FieldValue(value = "TIME", readOnly = true) ITimeSource TIME,
+			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) ControlFlowRegistry CFREGISTRY) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
@@ -84,9 +97,9 @@ public class OperationExecutionAdvice {
 			@Advice.Origin final String operationSignature,
 			@Advice.FieldValue(value = "CTRLINST", readOnly = true) final IMonitoringController CTRLINST,
 			@Advice.FieldValue(value = "TIME", readOnly = true) final ITimeSource TIME,
-			@Advice.FieldValue(value = "VMNAME", readOnly = false) String VMNAME,
+			@Advice.FieldValue(value = "VMNAME", readOnly = true) String VMNAME,
 			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) final ControlFlowRegistry CFREGISTRY,
-			@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = false) SessionRegistry SESSIONREGISTRY) {
+			@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = true) SessionRegistry SESSIONREGISTRY) {
 		if (startData == null) {
 			return;
 		}
@@ -96,11 +109,6 @@ public class OperationExecutionAdvice {
 		}
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
-		}
-
-		if (VMNAME == null) {
-			VMNAME = CTRLINST.getHostname();
-			SESSIONREGISTRY = SessionRegistry.INSTANCE;
 		}
 
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();

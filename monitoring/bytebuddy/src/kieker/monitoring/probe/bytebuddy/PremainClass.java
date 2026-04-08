@@ -34,12 +34,14 @@ import kieker.monitoring.util.KiekerPatternUtil;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.AgentBuilder.Identified.Extendable;
+import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional.Valuable;
 import net.bytebuddy.matcher.ElementMatcher;
+import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
 /**
@@ -104,22 +106,11 @@ public class PremainClass {
 							}
 							return included && !excluded;
 						}
-					}).transform(new AgentBuilder.Transformer.ForAdvice().advice(new ElementMatcher<MethodDescription>() {
-
-						@Override
-						public boolean matches(final MethodDescription target) {
-							if (target.isMethod()) {
-								// TODO: Here, we would need the signature. This would require building it from
-								// target and target.getType
-								// So for now, just instrument every method (and type is checked before already)
-								// KiekerPatternUtil.classIsContained(patternObjects, target.getName())
-								return true;
-							} else {
-								return true;
-							}
-						}
-
-					}, OperationExecutionAdvice.class.getName()));
+					}).transform((builder, typeDescription, classLoader, module, protectionDomain) -> builder
+							.visit(Advice.to(OperationExecutionAdvice.class)
+									.on(ElementMatchers.isMethod()))
+							.visit(Advice.to(OperationExecutionAdvice.StaticInitAdvice.class)
+									.on(ElementMatchers.isTypeInitializer())));
 			addFields(basicAgentBuilder).installOn(inst);
 		} else {
 			LOGGER.error("Environment variable " + InstrumentationEnvironmentVariables.KIEKER_SIGNATURES_INCLUDE + " not defined - not instrumenting anything!");
