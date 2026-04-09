@@ -55,9 +55,9 @@ public class OperationExecutionAdvice {
 	@Advice.OnMethodEnter
 	public static OperationStartData enter(
 			@Advice.Origin final String operationSignature,
-			@Advice.FieldValue(value = "CTRLINST", readOnly = true) IMonitoringController CTRLINST,
-			@Advice.FieldValue(value = "TIME", readOnly = true) ITimeSource TIME,
-			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) ControlFlowRegistry CFREGISTRY) {
+			@Advice.FieldValue(value = "CTRLINST", readOnly = true) final IMonitoringController CTRLINST,
+			@Advice.FieldValue(value = "TIME", readOnly = true) final ITimeSource TIME,
+			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) final ControlFlowRegistry CFREGISTRY) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
@@ -97,9 +97,9 @@ public class OperationExecutionAdvice {
 			@Advice.Origin final String operationSignature,
 			@Advice.FieldValue(value = "CTRLINST", readOnly = true) final IMonitoringController CTRLINST,
 			@Advice.FieldValue(value = "TIME", readOnly = true) final ITimeSource TIME,
-			@Advice.FieldValue(value = "VMNAME", readOnly = true) String VMNAME,
+			@Advice.FieldValue(value = "VMNAME", readOnly = true) final String VMNAME,
 			@Advice.FieldValue(value = "CFREGISTRY", readOnly = true) final ControlFlowRegistry CFREGISTRY,
-			@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = true) SessionRegistry SESSIONREGISTRY) {
+			@Advice.FieldValue(value = "SESSIONREGISTRY", readOnly = true) final SessionRegistry SESSIONREGISTRY) {
 		if (startData == null) {
 			return;
 		}
