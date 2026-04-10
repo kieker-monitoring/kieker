@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis;
+package kieker.tools.common;
 
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
