@@ -9,7 +9,15 @@ targetCompatibility = 17
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
+application {
+    mainModule = 'kieker.tools.trace.analysis'
+    mainClass = 'kieker.tools.trace.analysis.TraceAnalysisToolMain'
+    applicationDefaultJvmArgs = ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+                                 '--add-reads', "kieker.tools=ALL-UNNAMED",
+                                 '--add-reads', "kieker.tools.trace.analysis=ALL-UNNAMED",
+                                 '--add-opens', "kieker.tools.trace.analysis/kieker.tools.trace.analysis=ALL-UNNAMED",
+    ]
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
@@ -49,3 +57,10 @@ eclipse {
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools.trace.analysis=ALL-UNNAMED",
+	]
+}
