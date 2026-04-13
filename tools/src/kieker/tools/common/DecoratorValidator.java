@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis;
+package kieker.tools.common;
 
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
