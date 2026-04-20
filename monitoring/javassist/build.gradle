@@ -30,7 +30,7 @@ dependencies {
 	implementation project(':common')
 	implementation project(':monitoring:core')
 
-	implementation 'org.javassist:javassist:3.30.2-GA'
+	implementation 'org.javassist:javassist:3.31.0-GA'
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
