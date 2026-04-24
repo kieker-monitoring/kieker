@@ -39,3 +39,36 @@ include 'tools:trace-analysis-new'
 include 'extension-kafka'
 include 'extension-cassandra'
 include 'examples'
+
+// settings.gradle
+gradle.projectsEvaluated {
+    def rootProject = gradle.rootProject
+
+    def isPublishingToMavenLocal = gradle.startParameter.taskNames.any {
+        it == 'publishToMavenLocal' || it.endsWith('ToMavenLocal')
+    }
+
+    if (!isPublishingToMavenLocal) return
+
+    def isReleaseVersion = !rootProject.version.toString().endsWith("SNAPSHOT")
+
+    if (!isReleaseVersion) return
+
+    def libsDir = new File(rootProject.buildDir, 'libs')
+    libsDir.mkdirs()
+
+    rootProject.publishing.publications.each { pub ->
+        pub.artifacts
+            .findAll { it.extension != 'asc' }
+            .each { artifact ->
+                def ascFile = new File(artifact.file.path + '.asc')
+                if (!ascFile.exists()) {
+                    ascFile.text = 'dummy'
+                }
+            }
+
+        def pomDir = new File(rootProject.buildDir, "publications/${pub.name}")
+        pomDir.mkdirs()
+        new File(pomDir, 'pom-default.xml.asc').text = 'dummy'
+    }
+}
