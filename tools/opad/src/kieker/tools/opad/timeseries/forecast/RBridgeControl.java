@@ -20,7 +20,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.math.R.RserveSession;
 import org.math.R.Rsession;
+import org.math.R.Rsession.RException;
 import org.rosuda.REngine.REXPDouble;
 import org.rosuda.REngine.REXPLogical;
 import org.rosuda.REngine.REXPMismatchException;
@@ -46,7 +48,7 @@ public final class RBridgeControl {
 	protected RBridgeControl() {
 		final OutputStream out = new OutputStream2StandardLog(); // NOPMD
 		try {
-			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
+			this.rCon = RserveSession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
 		} catch (final UnsupportedEncodingException e) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error(e.toString(), e);
@@ -84,6 +86,10 @@ public final class RBridgeControl {
 		} catch (final REXPMismatchException exc) {
 			if (LOGGER.isErrorEnabled()) {
 				RBridgeControl.LOGGER.error("Error R expr.: {} Cause: {}", input, exc.getMessage(), exc);
+			}
+		} catch (final RException exc) {
+			if (LOGGER.isErrorEnabled()) {
+				RBridgeControl.LOGGER.error("Error R excp.: {} Cause: {}", input, exc.getMessage(), exc);
 			}
 		}
 
