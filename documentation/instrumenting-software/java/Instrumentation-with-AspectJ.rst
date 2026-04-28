@@ -16,7 +16,7 @@ weaving, and adding Kieker to the  SuT start.
 Downloading Kieker AspectJ Agent
 ~~~~~~~~~~~~~~~~~~
 
-To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.2/kieker-2.0.2-aspectj.jar`
+To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.3/kieker-2.0.3-aspectj.jar`
 
 Configuring the AspectJ weaving
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +50,7 @@ To add Kieker to the SuT start, the ``aop.xml`` location needs to be specified a
 .. code-block:: bash
 
   java -Dorg.aspectj.weaver.loadtime.configuration=file:custom-aop.xml \
-       -javaagent:benchmark/kieker-2.0.2-aspectj.jar \
+       -javaagent:benchmark/kieker-2.0.3-aspectj.jar \
        -jar sut.jar
 
 Please note that Kieker relies on a logging backend that is compatible with log4j; if you don't have any in your project, please download wget https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.9/slf4j-simple-2.0.9.jar and change the start like follows:
@@ -58,14 +58,14 @@ Please note that Kieker relies on a logging backend that is compatible with log4
 .. code-block:: bash
 
   java -Dorg.aspectj.weaver.loadtime.configuration=file:custom-aop.xml \
-       -javaagent:benchmark/kieker-2.0.2-aspectj.jar \
+       -javaagent:benchmark/kieker-2.0.3-aspectj.jar \
        -cp sut.jar:slf4j-simple-2.0.9.jar
        my.application.Main
 
 References
 ----------
 
-- `AspectJ probes <http://api.kieker-monitoring.org/2.0.2/>`_
+- `AspectJ probes <http://api.kieker-monitoring.org/2.0.3/>`_
 
 
 

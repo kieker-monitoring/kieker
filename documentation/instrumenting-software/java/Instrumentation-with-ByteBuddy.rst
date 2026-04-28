@@ -18,7 +18,7 @@ the ByteBuddy weaving, and adding Kieker to the  SuT start.
 Downloading Kieker ByteBuddy Agent
 ~~~~~~~~~~~~~~~~~~~~
 
-To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.2/kieker-2.0.2-bytebuddy.jar`
+To download the agent, execute `wget https://repo1.maven.org/maven2/net/kieker-monitoring/kieker/2.0.3/kieker-2.0.3-bytebuddy.jar`
 
 Configuring the ByteBuddy Weaving
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,21 +32,21 @@ To add Kieker to the SuT start, the javaagent needs to be specified, for example
 
 .. code-block:: bash
 
-    java -javaagent:benchmark/kieker-2.0.2-bytebuddy.jar \
+    java -javaagent:benchmark/kieker-2.0.3-bytebuddy.jar \
          -jar sut.jar
 
 Please note that Kieker relies on a logging backend that is compatible with log4j; if you don't have any in your project, please download wget https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.9/slf4j-simple-2.0.9.jar and change the start like follows:
 
 .. code-block:: bash
 
-    java -javaagent:benchmark/kieker-2.0.2-bytebuddy.jar \
+    java -javaagent:benchmark/kieker-2.0.3-bytebuddy.jar \
          -cp sut.jar:slf4j-simple-2.0.9.jar \
          my.application.Main
 
 References
 ----------
 
-- `AspectJ probes <http://api.kieker-monitoring.org/2.0.2/>`_
+- `AspectJ probes <http://api.kieker-monitoring.org/2.0.3/>`_
 
 
 
