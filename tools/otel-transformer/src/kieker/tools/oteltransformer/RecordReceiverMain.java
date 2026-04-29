@@ -23,6 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.common.AbstractService;
+import kieker.tools.oteltransformer.receiver.OtlpReceiverStageConfiguration;
 
 /**
  * Receives Kieker records, to later on pass them to OpenTelemetry (like the MooBench record receiver).
@@ -30,7 +31,7 @@ import kieker.tools.common.AbstractService;
  * @author David Georg Reichelt, Reiner Jung
  *
  */
-public final class RecordReceiverMain extends AbstractService<OpenTelemetryExportConfiguration, Settings> {
+public final class RecordReceiverMain extends AbstractService<teetime.framework.Configuration, Settings> {
 
 	private final Settings parameter = new Settings();
 
@@ -47,14 +48,24 @@ public final class RecordReceiverMain extends AbstractService<OpenTelemetryExpor
 	}
 
 	@Override
-	protected OpenTelemetryExportConfiguration createTeetimeConfiguration() throws ConfigurationException {
-		final Configuration configuration;
-		if (parameter.getKiekerMonitoringProperties() != null) {
-			configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
+	protected teetime.framework.Configuration createTeetimeConfiguration() throws ConfigurationException {
+		if (parameter.getStandard() == Settings.ReceivingStandard.KIEKER) {
+			final Configuration configuration;
+			if (parameter.getKiekerMonitoringProperties() != null) {
+				configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
+			} else {
+				configuration = ConfigurationFactory.createDefaultConfiguration();
+			}
+			return new OpenTelemetryExportConfiguration(parameter.getListenPort(), 8192, configuration);
 		} else {
-			configuration = ConfigurationFactory.createDefaultConfiguration();
+			final Configuration configuration;
+			if (parameter.getKiekerMonitoringProperties() != null) {
+				configuration = ConfigurationFactory.createConfigurationFromFile(parameter.getKiekerMonitoringProperties());
+			} else {
+				configuration = ConfigurationFactory.createDefaultConfiguration();
+			}
+			return new OtlpReceiverStageConfiguration(parameter.getListenPort(), configuration);
 		}
-		return new OpenTelemetryExportConfiguration(parameter.getListenPort(), 8192, configuration);
 	}
 
 	@Override

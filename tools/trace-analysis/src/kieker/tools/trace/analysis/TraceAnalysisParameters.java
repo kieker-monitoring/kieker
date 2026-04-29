@@ -120,6 +120,9 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 
 	@Parameter(names = "--ignore-invalid-traces", description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;
+	
+	@Parameter(names = "--asynchronousTrace", description = "If selected, the trace is considered asynchronous (allowing import of OpenTelemetry traces)")
+	private boolean asynchronousTrace;
 
 	@Parameter(names = "--repair-event-based-traces",
 			description = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.")
@@ -274,9 +277,13 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	public List<Long> getFilterTraces() {
 		return this.filterTraces;
 	}
-
+	
 	public boolean isIgnoreInvalidTraces() {
 		return this.ignoreInvalidTraces;
+	}
+	
+	public boolean isAsynchronousTrace() {
+		return asynchronousTrace;
 	}
 
 	public boolean isRepairEventBasedTraces() {

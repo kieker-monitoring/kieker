@@ -184,7 +184,7 @@ public class SessionReconstructionFilterTest {
 		StageTester.test(executionsRecordTransformationFilter).and().send(records).to(executionsRecordTransformationFilter.getInputPort()).and().receive(executions)
 				.from(executionsRecordTransformationFilter.getOutputPort()).start();
 
-		final TraceReconstructionStage traceReconstructionFilter = new TraceReconstructionStage(repository, TimeUnit.MILLISECONDS, false, Long.MAX_VALUE);
+		final TraceReconstructionStage traceReconstructionFilter = new TraceReconstructionStage(repository, TimeUnit.MILLISECONDS, false, false, Long.MAX_VALUE);
 
 		final List<ExecutionTrace> executionTraces = new ArrayList<>();
 		StageTester.test(traceReconstructionFilter).and().send(executions).to(traceReconstructionFilter.getInputPort()).and().receive(executionTraces)
