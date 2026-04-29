@@ -150,3 +150,7 @@ eclipse {
 		}
 	}
 }
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.monitoring.core=ALL-UNNAMED"]
+}

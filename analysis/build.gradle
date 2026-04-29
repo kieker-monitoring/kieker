@@ -55,6 +55,9 @@ dependencies {
 
 	implementation "ch.qos.logback:logback-classic:$libLogbackVersion"
 	implementation "org.slf4j:slf4j-api:$libSlf4jApiVersion"
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.0'
+
 
 	api "javax.xml.bind:jaxb-api:2.3.1"
 
@@ -120,4 +123,8 @@ eclipse {
 		}
 		containsTestFixtures = true
 	}
+}
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED"]
 }

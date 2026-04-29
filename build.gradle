@@ -920,6 +920,7 @@ task springJar(type: Jar, dependsOn: springSubprojects.tasks["build"], group: "b
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   archiveClassifier = 'sources'
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   from mainSubprojects.collect { project -> project.sourceSets.main.allJava }
 }
 

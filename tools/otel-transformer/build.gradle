@@ -24,3 +24,10 @@ dependencies {
 	implementation "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryJavaVersion}"
 	implementation "io.opentelemetry:opentelemetry-exporter-zipkin:${opentelemetryJavaVersion}"
 }
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools.oteltransformer=ALL-UNNAMED",
+	]
+}

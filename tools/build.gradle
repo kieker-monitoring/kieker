@@ -97,3 +97,9 @@ eclipse {
 		containsTestFixtures = true
 	}
 }
+
+tasks.named("compileJava") {
+	options.compilerArgs += ['--add-reads', "kieker.analysis=ALL-UNNAMED",
+							 '--add-reads', "kieker.tools=ALL-UNNAMED"
+	]
+}
