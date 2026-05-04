@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2022 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2026 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,14 @@ import kieker.tools.common.TraceAnalysisParameters;
 import kieker.tools.settings.converters.DateConverter;
 
 /**
- * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
- * monitoring data that comes from the instrumented system, or from a file that contains Kieker monitoring data. The
- * Kieker TraceAnalysisTool can produce output such as sequence diagrams, dependency graphs on demand. Alternatively it
- * can be used continuously for online performance analysis, anomaly detection or live visualization of system behavior.
+ * This is the main class to start the Kieker TraceAnalysisTool - the model
+ * synthesis and analysis tool to process the
+ * monitoring data that comes from the instrumented system, or from a file that
+ * contains Kieker monitoring data. The
+ * Kieker TraceAnalysisTool can produce output such as sequence diagrams,
+ * dependency graphs on demand. Alternatively it
+ * can be used continuously for online performance analysis, anomaly detection
+ * or live visualization of system behavior.
  *
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
  * @author Reiner Jung -- ported to new APIs
@@ -59,17 +63,19 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 * Configure and execute the analysis.
 	 *
 	 * @param args
-	 *            arguments
+	 *             arguments
 	 */
 	public static void main(final String... args) {
-		System.exit(new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisParameters())); // NOPMD
+		System.exit(new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args,
+				new TraceAnalysisParameters())); // NOPMD
 	}
 
 	/**
-	 * Run the application without calling exit. This is glue code for the TraceAnalysisGUI.
+	 * Run the application without calling exit. This is glue code for the
+	 * TraceAnalysisGUI.
 	 *
 	 * @param args
-	 *            arguments
+	 *             arguments
 	 */
 	public static void runEmbedded(final String... args) {
 		new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisParameters());
@@ -81,11 +87,13 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		if (this.settings.getIgnoreExecutionsBeforeDate() != null) {
-			this.logger.info("Ignoring records before {} ({})", dateFormat.format(this.settings.getIgnoreExecutionsBeforeDate()),
+			this.logger.info("Ignoring records before {} ({})",
+					dateFormat.format(this.settings.getIgnoreExecutionsBeforeDate()),
 					this.settings.getIgnoreExecutionsBeforeDate());
 		}
 		if (this.settings.getIgnoreExecutionsAfterDate() != null) {
-			this.logger.info("Ignoring records after {} ({})", dateFormat.format(this.settings.getIgnoreExecutionsAfterDate()),
+			this.logger.info("Ignoring records after {} ({})",
+					dateFormat.format(this.settings.getIgnoreExecutionsAfterDate()),
 					this.settings.getIgnoreExecutionsAfterDate());
 		}
 
@@ -107,7 +115,8 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	}
 
 	@Override
-	protected boolean checkConfiguration(final kieker.common.configuration.Configuration configuration, final JCommander commander) {
+	protected boolean checkConfiguration(final kieker.common.configuration.Configuration configuration,
+			final JCommander commander) {
 		return true;
 	}
 
@@ -137,7 +146,8 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 * @return true if not both trace features have been requested
 	 */
 	private boolean selectOrFilterTraces() {
-		if (this.checkNotEmpty(this.settings.getSelectTraces()) && this.checkNotEmpty(this.settings.getFilterTraces())) {
+		if (this.checkNotEmpty(this.settings.getSelectTraces())
+				&& this.checkNotEmpty(this.settings.getFilterTraces())) {
 			this.logger.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
 		} else if (this.settings.getSelectTraces() != null) {
@@ -148,12 +158,14 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				}
 				this.logger.info("{} trace{} selected", numSelectedTraces, numSelectedTraces > 1 ? "s" : ""); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				this.logger.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
+				this.logger.error("Failed to parse list of trace IDs: {}",
+						this.settings.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		} else if (this.settings.getFilterTraces() != null) {
 			this.settings.setInvertTraceIdFilter(true);
-			final String[] traceIdList = this.settings.getFilterTraces().toArray(new String[this.settings.getFilterTraces().size()]);
+			final String[] traceIdList = this.settings.getFilterTraces()
+					.toArray(new String[this.settings.getFilterTraces().size()]);
 
 			final int numSelectedTraces = traceIdList.length;
 			try {
@@ -162,7 +174,8 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				}
 				this.logger.info("{} trace{} filtered", numSelectedTraces, numSelectedTraces > 1 ? "s" : ""); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				this.logger.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
+				this.logger.error("Failed to parse list of trace IDs: {}",
+						this.settings.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		}
@@ -171,10 +184,13 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	}
 
 	/**
-	 * Returns if the specified input directories {@link #inputDirs} exist and that each one is a monitoring log. If
-	 * this is not the case for one of the directories, an error message is printed to stderr.
+	 * Returns if the specified input directories {@link #inputDirs} exist and that
+	 * each one is a monitoring log. If
+	 * this is not the case for one of the directories, an error message is printed
+	 * to stderr.
 	 *
-	 * @return true if {@link #inputDirs} exist and are Kieker directories; false otherwise
+	 * @return true if {@link #inputDirs} exist and are Kieker directories; false
+	 *         otherwise
 	 */
 	private boolean checkInputDirs(final JCommander commander) {
 		if (this.settings.getInputDirs() == null) {
@@ -189,13 +205,16 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 					return false;
 				}
 				if (!inputDir.isDirectory() && !inputDir.getAbsolutePath().endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					this.logger.error("The specified input directory '{}' is neither a directory nor a zip file", inputDir.getCanonicalPath());
+					this.logger.error("The specified input directory '{}' is neither a directory nor a zip file",
+							inputDir.getCanonicalPath());
 					return false;
 				}
-				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
+				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for
+				// legacy reasons
 				if (inputDir.isDirectory()) { // only check for dirs
-					final File[] mapFiles = { new File(inputDir.getAbsolutePath() + File.separatorChar + FSUtil.MAP_FILENAME),
-						new File(inputDir.getAbsolutePath() + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+					final File[] mapFiles = {
+							new File(inputDir.getAbsolutePath() + File.separatorChar + FSUtil.MAP_FILENAME),
+							new File(inputDir.getAbsolutePath() + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
 					boolean mapFileExists = false;
 					for (final File potentialMapFile : mapFiles) {
 						if (potentialMapFile.isFile()) {
@@ -204,7 +223,8 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 						}
 					}
 					if (!mapFileExists) {
-						this.logger.error("The specified input directory '{}' is not a kieker log directory", inputDir.getCanonicalPath());
+						this.logger.error("The specified input directory '{}' is not a kieker log directory",
+								inputDir.getCanonicalPath());
 						return false;
 					}
 				}

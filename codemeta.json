@@ -6,7 +6,7 @@
     "dateModified": "2025-09-04",
     "issueTracker": "https://github.com/kieker-monitoring/kieker/issues",
     "name": "Kieker",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "Application-level monitoring and dynamic analysis of software systems are a basis for various tasks in software engineering research, such as performance evaluation and reverse engineering. The Kieker framework provides monitoring, analysis, and visualization support for these purposes.",
     "referencePublication": "https://doi.org/10.1145/3680256.3721972",
     "programmingLanguage": [

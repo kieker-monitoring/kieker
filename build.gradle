@@ -623,9 +623,9 @@ task updateLicenseHeaderYear() {
   doLast {
     FileTree tree = fileTree(dir: '.', include: '**/*.java')
     tree.each { File file ->
-      regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2022 Kieker Project')
+      regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2026 Kieker Project')
     }
-    regexpReplaceInFiles(project.file("common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2022 Kieker Project')
+    regexpReplaceInFiles(project.file("common/src/kieker/common/util/Version.java"), '20\\d\\d Kieker Project', '2026 Kieker Project')
   }
 }
 
@@ -1150,33 +1150,6 @@ distribute.mustRunAfter enableRTests
 //signing.password=XXX
 //signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
 //
-
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-signing {
-  required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-  sign configurations.archives
-}
-
-
-// This is necessary for the RC call, since in the regular non-RC stage, no signatory is configured in Jenkins, but for release-versions, Gradle still requires .asc files
-task createDummyAscFiles {
-  doLast {
-    if (isReleaseVersion) {
-      file('build/libs').listFiles().each { file ->
-        if (file.name.endsWith('.jar')) {
-          new File(file.path + '.asc').text = 'dummy'
-        }
-      }
-      println 'Created build/: ' + new File('build/').mkdir()
-      println 'Created build/publications/: ' + new File('build/publications/').mkdir()
-      println 'Created build/publications/mavenJava/: ' + new File('build/publications/mavenJava/').mkdir()
-      new File('build/publications/mavenJava/pom-default.xml.asc').text = 'dummy'
-    }
-  }
-}
-
-publishToMavenLocal.dependsOn createDummyAscFiles
-
 
 publishing {
   publications {

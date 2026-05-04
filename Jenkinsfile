@@ -144,7 +144,7 @@ pipeline {
 
         stage('Distribution Build') {
           steps {
-            sh './gradlew -x test -x signMavenJavaPublication -x signArchives build publishToMavenLocal distribute'
+            sh './gradlew -x test -x signMavenJavaPublication build publishToMavenLocal distribute'
             sh 'bin/dev/assemble-tools.sh'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
@@ -192,7 +192,7 @@ pipeline {
             }
           }
           steps {
-            sh './gradlew -x signMavenJavaPublication -x signArchives build publishToMavenLocal'
+            sh './gradlew -x signMavenJavaPublication build publishToMavenLocal'
             unstash 'distributions'
             sh 'bin/dev/release-check-extended.sh'
           }
@@ -272,7 +272,7 @@ pipeline {
                 passwordVariable: 'kiekerMavenPassword'
               )
             ]) {
-              sh './gradlew -x signMavenJavaPublication -x signArchives publish'
+              sh './gradlew -x signMavenJavaPublication publish'
             }
           }
           post {
