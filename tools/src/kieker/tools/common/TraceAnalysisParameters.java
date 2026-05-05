@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis;
+package kieker.tools.common;
 
 import java.io.File;
 import java.lang.reflect.Field;
