@@ -53,7 +53,7 @@ dependencies {
   bytebuddyJarConfig "net.bytebuddy:byte-buddy:$libBytebuddyVersion"
   bytebuddyJarConfig "commons-io:commons-io:2.21.0"
 
-  javassistJarConfig "org.javassist:javassist:3.30.2-GA"
+  javassistJarConfig "org.javassist:javassist:$libJavassistVersion"
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
