@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -47,6 +48,7 @@ import teetime.framework.AbstractConsumerStage;
  * given graph.
  *
  * @author Holger Knoche
+ * @author Yorrick Josuttis
  *
  * @since 1.6
  */
@@ -59,7 +61,7 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new ConcurrentHashMap<>();
 
 	private final String outputPathName;
-	private final String outputFileName;
+	private final String outputFileNamePrefix;
 	private final boolean includeWeights;
 	private final boolean useShortLabels;
 	private final boolean plotLoops;
@@ -77,8 +79,8 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 *
 	 * @param outputPathName
 	 *            base path name for the output directory
-	 * @param outputFileName
-	 *            filename to be used within the directory
+	 * @param outputFileNamePrefix
+	 *            a file-name-prefix prepend to the filename
 	 * @param includeWeights
 	 *            include weights in plotting
 	 * @param useShortLabels
@@ -86,12 +88,12 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	 * @param plotLoops
 	 *            plot loops
 	 */
-	public GraphWriterPlugin(final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean useShortLabels,
+	public GraphWriterPlugin(final String outputPathName, final String outputFileNamePrefix, final boolean includeWeights, final boolean useShortLabels,
 			final boolean plotLoops) {
 		super();
 
 		this.outputPathName = outputPathName;
-		this.outputFileName = outputFileName;
+		this.outputFileNamePrefix = outputFileNamePrefix;
 		this.includeWeights = includeWeights;
 		this.useShortLabels = useShortLabels;
 		this.plotLoops = plotLoops;
@@ -121,11 +123,12 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	}
 
 	private String getOutputFileName(final AbstractGraphFormatter<?> formatter) {
-		if (this.outputFileName.length() == 0) { // outputFileName cannot be null
-			return formatter.getDefaultFileName();
-		} else {
-			return this.outputFileName;
+		final String defaultName = formatter.getDefaultFileName();
+		final String fileNamePrefix = Objects.toString(this.outputFileNamePrefix, "");
+		if (fileNamePrefix.isEmpty()) {
+			return defaultName;
 		}
+		return fileNamePrefix + defaultName;
 	}
 
 	/**

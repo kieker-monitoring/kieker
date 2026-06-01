@@ -50,4 +50,7 @@ kieker-examples/analysis/trace-analysis/kieker.log
 *.iml
 *.iws
 
+# Visual Studio Code
+.vscode/
+
 **/output-html/**

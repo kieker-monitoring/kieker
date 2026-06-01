@@ -22,8 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+
+import kieker.tools.common.TraceAnalysisParameters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +85,7 @@ import teetime.stage.basic.merger.Merger;
  * Central teetime pipe and filter configuration for trace analysis.
  *
  * @author Reiner Jung
+ * @author Yorrick Josuttis
  * @since 1.15
  *
  */
@@ -111,7 +116,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 	private final TraceEventRecords2ExecutionAndMessageTraceStage traceEventRecords2ExecutionAndMessageTraceStage;
 
 	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
-		final String pathPrefix = this.computePrefix(parameters);
+		final String outputPath = (parameters.getOutputDir() != null) ? parameters.getOutputDir().toString() + File.separator : "";
+		final String filePrefix = (parameters.getPrefix() != null) ? parameters.getPrefix() : "";
+		final String pathPrefix = outputPath + filePrefix;
 
 		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -137,7 +144,9 @@ public class TraceAnalysisConfiguration extends Configuration {
 		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
 		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
 
-		final TraceIdFilter traceIdFilter = new TraceIdFilter(parameters.getSelectedTraces().isEmpty(), parameters.getSelectedTraces());
+		final List<Long> select = parameters.getSelectTraces();
+		final Set<Long> selectedTraces = (select == null) ? new TreeSet<>() : new TreeSet<>(select);
+		final TraceIdFilter traceIdFilter = new TraceIdFilter(selectedTraces.isEmpty(), selectedTraces);
 
 		final DynamicEventDispatcher dispatcher = new DynamicEventDispatcher(null, false, true, false);
 		final IEventMatcher<? extends IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
@@ -160,7 +169,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		validTracesDistributor.declareActive();
 
 		this.traceEventRecords2ExecutionAndMessageTraceStage = new TraceEventRecords2ExecutionAndMessageTraceStage(
-				systemRepository, false, false, parameters.isIgnoreAssumedCalls());
+				systemRepository, true, true, parameters.isIgnoreAssumedCalls());
 
 		this.validEventRecordTraceCounter = new ValidEventRecordTraceCounter();
 		this.invalidEventRecordTraceCounter = new InvalidEventRecordTraceCounter(parameters.isIgnoreInvalidTraces());
@@ -260,27 +269,27 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 		if (parameters.getPlotDeploymentComponentDependencyGraph() != null) {
 			this.createPlotDeploymentComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentComponentDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotAssemblyComponentDependencyGraph() != null) {
 			this.createPlotAssemblyComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyComponentDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.isPlotContainerDependencyGraph()) {
-			this.createPlotContainerDependencyGraph(systemRepository, messageTraceDistributor, pathPrefix, "", true, parameters.isShortLabels(),
+			this.createPlotContainerDependencyGraph(systemRepository, messageTraceDistributor, outputPath, filePrefix, true, parameters.isShortLabels(),
 					parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotDeploymentOperationDependencyGraph() != null) {
 			this.createPlotDeploymentOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentOperationDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.getPlotAssemblyOperationDependencyGraph() != null) {
 			this.createPlotAssemblyOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyOperationDependencyGraph(),
-					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+					outputPath, filePrefix, true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
 		}
 
 		if (parameters.isPlotCallTrees()) {
@@ -438,20 +447,6 @@ public class TraceAnalysisConfiguration extends Configuration {
 				TraceAnalysisConfiguration.LOGGER
 						.error(String.format("Error initializing %s cause %s", InvalidExecutionTraceWriterSink.class, e.getLocalizedMessage()));
 			}
-		}
-	}
-
-	private String computePrefix(final TraceAnalysisParameters parameters) {
-		if (parameters.getOutputDir() != null) {
-			if (parameters.getPrefix() != null) {
-				return parameters.getOutputDir() + File.separator + parameters.getPrefix();
-			} else {
-				return parameters.getOutputDir() + File.separator;
-			}
-		} else if (parameters.getPrefix() != null) {
-			return parameters.getPrefix();
-		} else {
-			return "";
 		}
 	}
 

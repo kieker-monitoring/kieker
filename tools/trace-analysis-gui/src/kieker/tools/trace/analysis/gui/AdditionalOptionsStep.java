@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-import kieker.tools.trace.analysis.StringConstants;
+import kieker.tools.common.StringConstants;
 
 /**
  * @author Nils Christian Ehmke
