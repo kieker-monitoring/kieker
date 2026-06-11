@@ -42,14 +42,17 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 
 /**
- * Plugin providing the creation of calling trees both for individual traces and an aggregated form multiple traces.
+ * Plugin providing the creation of calling trees both for individual traces and
+ * an aggregated form multiple traces.
  *
  * @param <T>
  *
  * @author Andre van Hoorn
+ * @author Yorrick Josuttis
  *
  * @since 1.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";
@@ -58,9 +61,9 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 * @param configuration
-	 *            The configuration for this component.
+	 *                       The configuration for this component.
 	 * @param projectContext
-	 *            The project context for this component.
+	 *                       The project context for this component.
 	 */
 	public AbstractCallTreeFilter(final SystemModelRepository repository) {
 		super(repository);
@@ -133,9 +136,9 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Add a node label.
 	 *
 	 * @param node
-	 *            the node
+	 *                    the node
 	 * @param shortLabels
-	 *            selects whether short or long labels should be produced
+	 *                    selects whether short or long labels should be produced
 	 * @return the label string
 	 */
 	@SuppressWarnings("unchecked")
@@ -157,15 +160,15 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Traverse tree recursively and generate dot code for edges.
 	 *
 	 * @param node
-	 *            The root node to start with.
+	 *                    The root node to start with.
 	 * @param nodeIds
-	 *            The map containing the node IDs.
+	 *                    The map containing the node IDs.
 	 * @param nextNodeId
-	 *            The counter for the IDs of the nodes.
+	 *                    The counter for the IDs of the nodes.
 	 * @param ps
-	 *            The stream in which the dot code will be written.
+	 *                    The stream in which the dot code will be written.
 	 * @param shortLabels
-	 *            Determines whether to use short labels or not.
+	 *                    Determines whether to use short labels or not.
 	 */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> node,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps,
@@ -189,8 +192,10 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		// ensure a deterministic order in n.getChildEdges()
 		// final List<WeightedDirectedCallTreeEdge<?>> sortedChildren;
 		// sortedChildren = n.getChildEdges();
-		// sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
-		// final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new CallTreeEdgeComparator();
+		// sortedChildren = new
+		// ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
+		// final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new
+		// CallTreeEdgeComparator();
 		// Collections.sort(sortedChildren, comparator);
 
 		// n.getChildEdges() are in a non-deterministic order
@@ -204,15 +209,15 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Traverse tree recursively and generate dot code for vertices.
 	 *
 	 * @param n
-	 *            The root node.
+	 *                       The root node.
 	 * @param eoiCounter
-	 *            The counter for the execution order index.
+	 *                       The counter for the execution order index.
 	 * @param nodeIds
-	 *            (read-only access) The map containing the node IDs.
+	 *                       (read-only access) The map containing the node IDs.
 	 * @param ps
-	 *            The stream on which the generated code will be printed.
+	 *                       The stream on which the generated code will be printed.
 	 * @param includeWeights
-	 *            Determines whether to include weights or not.
+	 *                       Determines whether to include weights or not.
 	 */
 	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final AtomicInteger eoiCounter,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
@@ -244,20 +249,24 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * This method converts the given tree completely into dot code.
 	 *
 	 * @param root
-	 *            The root of the tree.
+	 *                       The root of the tree.
 	 * @param ps
-	 *            The stream in which the dot code will be written.
+	 *                       The stream in which the dot code will be written.
 	 * @param includeWeights
-	 *            Determines whether to include weights or not.
+	 *                       Determines whether to include weights or not.
 	 * @param includeEois
-	 *            Determines whether to include the execution order indices or not.
+	 *                       Determines whether to include the execution order
+	 *                       indices or not.
 	 * @param shortLabels
-	 *            Determines whether to use short labels or not.
+	 *                       Determines whether to use short labels or not.
+	 * @param format
+	 *                       The output format strategy
 	 */
 	private static void dotFromCallingTree(final AbstractCallTreeNode<?> root, final PrintStream ps,
-			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) {
+			final boolean includeWeights, final boolean includeEois, final boolean shortLabels,
+			final GraphFormat format) {
 		// preamble:
-		ps.println("digraph G {");
+		format.writePreamble(ps);
 		final StringBuilder edgestringBuilder = new StringBuilder();
 
 		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<>(); // NOPMD (not synchronized)
@@ -268,30 +277,59 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		AbstractCallTreeFilter.dotVerticesFromSubTree(root, eoiCounter, nodeIds, ps, includeWeights);
 
 		ps.println(edgestringBuilder.toString());
-		ps.println("}");
+		format.writeEpilogue(ps);
 	}
 
 	/**
 	 * This method saves the given tree as valid dot code into the given file.
 	 *
 	 * @param root
-	 *            The root of the tree.
+	 *                       The root of the tree.
 	 * @param outputFn
-	 *            The file in which the code will be written.
+	 *                       The file in which the code will be written.
 	 * @param includeWeights
-	 *            Determines whether to include weights or not.
+	 *                       Determines whether to include weights or not.
 	 * @param includeEois
-	 *            Determines whether to include the execution order indices or not.
+	 *                       Determines whether to include the execution order
+	 *                       indices or not.
 	 * @param shortLabels
-	 *            Determines whether to use short labels or not.
+	 *                       Determines whether to use short labels or not.
 	 * @throws IOException
-	 *             on IO error
+	 *                     on IO error
 	 */
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels)
 			throws IOException {
+		saveTreeToDotFile(root, outputFn, includeWeights, includeEois, shortLabels, GraphFormat.DOT);
+	}
+
+	/**
+	 * This method saves the given tree as valid code into the given file using the
+	 * specified format.
+	 * 
+	 * @author Yorrick Josuttis
+	 *
+	 * @param root
+	 *                       The root of the tree.
+	 * @param outputFn
+	 *                       The file in which the code will be written.
+	 * @param includeWeights
+	 *                       Determines whether to include weights or not.
+	 * @param includeEois
+	 *                       Determines whether to include the execution order
+	 *                       indices or not.
+	 * @param shortLabels
+	 *                       Determines whether to use short labels or not.
+	 * @param format
+	 *                       The output format strategy
+	 * @throws IOException
+	 *                     on IO error
+	 */
+	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
+			final boolean includeWeights, final boolean includeEois, final boolean shortLabels,
+			final GraphFormat format) throws IOException {
 		try (final PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn)), false, ENCODING)) {
-			AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
+			AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels, format);
 		}
 	}
 
@@ -299,16 +337,17 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Adds the given trace to the given tree.
 	 *
 	 * @param root
-	 *            The root of the call tree.
+	 *                    The root of the call tree.
 	 * @param trace
-	 *            The trace to add.
+	 *                    The trace to add.
 	 * @param pairFactory
-	 *            The factory creating the necessary pairs for the tree.
+	 *                    The factory creating the necessary pairs for the tree.
 	 * @param aggregated
-	 *            Determines whether the tree is aggregated or not.
+	 *                    Determines whether the tree is aggregated or not.
 	 *
 	 * @throws TraceProcessingException
-	 *             If the message type is not supported or the trace is somehow invalid.
+	 *                                  If the message type is not supported or the
+	 *                                  trace is somehow invalid.
 	 *
 	 * @param <T>
 	 *            The type of the tree.
@@ -348,23 +387,24 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * Write dot info for message trace.
 	 *
 	 * @param <T>
-	 *            type of trace
+	 *                       type of trace
 	 *
 	 * @param root
-	 *            root
+	 *                       root
 	 * @param pairFactory
-	 *            factory to create pairs
+	 *                       factory to create pairs
 	 * @param msgTrace
-	 *            message trace
+	 *                       message trace
 	 * @param outputFilename
-	 *            output file
+	 *                       output file
 	 * @param includeWeights
-	 *            weights
+	 *                       weights
 	 * @param shortLabels
-	 *            flag for short labels
+	 *                       flag for short labels
 	 *
 	 * @throws TraceProcessingException
-	 *             when there is a processing error with the trace
+	 *                                  when there is a processing error with the
+	 *                                  trace
 	 * @throws IOException
 	 */
 	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
@@ -373,6 +413,42 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			throws TraceProcessingException, IOException {
 		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
+	}
+
+	/**
+	 * Write dot info for message trace.
+	 * 
+	 * @author Yorrick Josuttis
+	 *
+	 * @param <T>
+	 *                       type of trace
+	 *
+	 * @param root
+	 *                       root
+	 * @param pairFactory
+	 *                       factory to create pairs
+	 * @param msgTrace
+	 *                       message trace
+	 * @param outputFilename
+	 *                       output file
+	 * @param includeWeights
+	 *                       weights
+	 * @param shortLabels
+	 *                       flag for short labels
+	 * @param format
+	 *                       The output format strategy
+	 *
+	 * @throws TraceProcessingException
+	 *                                  when there is a processing error with the
+	 *                                  trace
+	 * @throws IOException
+	 */
+	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
+			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
+			final boolean includeWeights, final boolean shortLabels, final GraphFormat format)
+			throws TraceProcessingException, IOException {
+		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels, format); // includeEois
 	}
 
 	/**
@@ -389,7 +465,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		 * This method creates an actual pair using the given call message.
 		 *
 		 * @param callMsg
-		 *            The call message containing the necessary information to create the pair.
+		 *                The call message containing the necessary information to
+		 *                create the pair.
 		 *
 		 * @return The actual pair.
 		 *

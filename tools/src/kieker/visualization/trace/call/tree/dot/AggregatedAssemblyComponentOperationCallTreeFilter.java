@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace.call.tree;
+package kieker.visualization.trace.call.tree.dot;
 
 import kieker.model.repository.AbstractRepository;
 import kieker.model.repository.AssemblyComponentOperationPairFactory;
@@ -26,6 +26,10 @@ import kieker.model.system.model.SynchronousCallMessage;
 import kieker.model.system.model.util.AssemblyComponentOperationPair;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeFilter;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeNode;
+import kieker.visualization.trace.call.tree.AbstractCallTreeNode;
+import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
 
 /**
  * @author Andre van Hoorn
@@ -43,7 +47,8 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter
 	 * @param dotOutputFile
 	 *
 	 */
-	public AggregatedAssemblyComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
+	public AggregatedAssemblyComponentOperationCallTreeFilter(final SystemModelRepository repository,
+			final boolean includeWeights, final boolean shortLabels,
 			final String dotOutputFile) {
 		super(repository, includeWeights, shortLabels, dotOutputFile);
 

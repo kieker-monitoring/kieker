@@ -1,0 +1,143 @@
+/***************************************************************************
+ * Copyright 2026 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+package kieker.visualization.trace.call.tree.plantuml;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
+import kieker.analysis.plugin.trace.AbstractMessageTraceProcessingFilter;
+import kieker.model.repository.AbstractRepository;
+import kieker.model.repository.AllocationComponentOperationPairFactory;
+import kieker.model.repository.SystemModelRepository;
+import kieker.model.system.model.AllocationComponent;
+import kieker.model.system.model.MessageTrace;
+import kieker.model.system.model.Operation;
+import kieker.model.system.model.SynchronousCallMessage;
+import kieker.model.system.model.util.AllocationComponentOperationPair;
+import kieker.tools.trace.analysis.filter.traceReconstruction.TraceProcessingException;
+import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
+import kieker.visualization.trace.call.tree.AbstractCallTreeFilter;
+import kieker.visualization.trace.call.tree.GraphFormat;
+import kieker.visualization.trace.call.tree.TraceCallTreeNode;
+
+import teetime.framework.OutputPort;
+
+/**
+ * PlantUML variant of
+ * {@link kieker.visualization.trace.call.tree.dot.TraceCallTreeFilter}.
+ *
+ * @author Yorrick Josuttis
+ */
+public class PlantUMLTraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
+    /** This is the name of the property determining the output file name. */
+    public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+    /**
+     * This is the name of the property determining whether to use short labels or
+     * not.
+     */
+    public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
+    /** This is the default used output file name. */
+    public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.puml";
+    /** This is the default value whether to use short labels or not. */
+    public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
+
+    private final String dotOutputFn;
+    private final boolean shortLabels;
+
+    private final OutputPort<File> outputPort = this.createOutputPort();
+
+    /**
+     * Creates a new instance of this class using the given parameters.
+     * 
+     * @param repository
+     *                    system model repository
+     * @param shortLabels
+     *                    use short labels
+     * @param dotOutputFn
+     *                    output file name
+     */
+    public PlantUMLTraceCallTreeFilter(final SystemModelRepository repository, final boolean shortLabels,
+            final String dotOutputFn) {
+        super(repository);
+
+        // Initialize the fields based on the given parameters. */
+        this.shortLabels = shortLabels;
+        this.dotOutputFn = dotOutputFn;
+    }
+
+    @Override
+    public void printStatusMessage() {
+        synchronized (this) {
+            super.printStatusMessage();
+            final int numPlots = this.getSuccessCount();
+            final long lastSuccessTracesId = this.getLastTraceIdSuccess();
+            if (this.logger.isDebugEnabled()) {
+                String callTreeOrCallTrees = "";
+                String fileOrFiles = "";
+                if (numPlots <= 1) {
+                    callTreeOrCallTrees = "call tree";
+                    fileOrFiles = "file";
+                } else {
+                    callTreeOrCallTrees = "call trees";
+                    fileOrFiles = "files";
+                }
+                this.logger.debug(
+                        "Wrote " + numPlots + " " + callTreeOrCallTrees + " to " + fileOrFiles + " with name pattern '" // NOCS
+                                + this.dotOutputFn + "-<traceId>.dot'");
+                this.logger.debug("Dot files can be converted using the dot tool");
+                this.logger.debug("Example: dot -T svg " + this.dotOutputFn + "-"
+                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+                        + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+            }
+        }
+    }
+
+    @Override
+    protected void execute(final MessageTrace mt) throws Exception {
+        try {
+            final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractRepository.ROOT_ELEMENT_ID,
+                    AllocationComponentOperationPairFactory.ROOT_PAIR,
+                    true, mt,
+                    NoOriginRetentionPolicy.createInstance()); // rootNode
+            final String fileName = this.dotOutputFn + "-" + mt.getTraceId() + ".puml";
+            AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, (final SynchronousCallMessage callMsg) -> {
+                final AllocationComponent allocationComponent = callMsg.getReceivingExecution()
+                        .getAllocationComponent();
+                final Operation op = callMsg.getReceivingExecution().getOperation();
+                final AllocationComponentOperationPair destination = PlantUMLTraceCallTreeFilter.this
+                        .getSystemModelRepository().getAllocationPairFactory()
+                        .getPairInstanceByPair(allocationComponent, op); // will never be null!
+                return destination;
+            }, mt, fileName, false, PlantUMLTraceCallTreeFilter.this.shortLabels, GraphFormat.PLANTUML); // no weights
+            this.outputPort.send(new File(fileName));
+            PlantUMLTraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
+        } catch (final TraceProcessingException ex) {
+            PlantUMLTraceCallTreeFilter.this.reportError(mt.getTraceId());
+            this.logger.error("TraceProcessingException", ex);
+        } catch (final FileNotFoundException ex) {
+            PlantUMLTraceCallTreeFilter.this.reportError(mt.getTraceId());
+            this.logger.error("File not found", ex);
+        } catch (final UnsupportedEncodingException ex) {
+            PlantUMLTraceCallTreeFilter.this.reportError(mt.getTraceId());
+            this.logger.error("Encoding not supported", ex);
+        }
+    }
+
+    public OutputPort<File> getOutputPort() {
+        return this.outputPort;
+    }
+}

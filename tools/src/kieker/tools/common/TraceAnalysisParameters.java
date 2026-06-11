@@ -33,6 +33,7 @@ import kieker.tools.settings.converters.DateConverter;
 
 /**
  * @author Reiner Jung
+ * @author Yorrick Josuttis
  *
  * @since 1.15
  */
@@ -44,7 +45,8 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = { "-d", "--debug" }, description = "prints additional debug information")
 	private boolean debug;
 
-	@Parameter(names = { "-h", "--help" }, help = true, description = "prints the usage information for the tool, including available options")
+	@Parameter(names = { "-h",
+			"--help" }, help = true, description = "prints the usage information for the tool, including available options")
 	private boolean help;
 
 	@Parameter(names = { "-i", "--inputdirs" }, variableArity = true, description = "Log directories to read data from")
@@ -56,40 +58,46 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = { "-p", "--output-filename-prefix" }, description = "Prefix for output filenames")
 	private String prefix;
 
-	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams (.pic)")
+	@Parameter(names = "--graphics-engine", description = "Choose graphics engine")
+	private GraphicsEngineType graphicsEngine;
+
+	@Parameter(names = "--png", description = "Generate PNG images (only for PlantUML graphics engine)")
+	private boolean png;
+
+	@Parameter(names = "--svg", description = "Generate SVG images (only for PlantUML graphics engine)")
+	private boolean svg;
+
+	@Parameter(names = "--pdf", description = "Generate PDF documents (only for PlantUML graphics engine)")
+	private boolean pdf;
+
+	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams")
 	private boolean plotDeploymentSequenceDiagrams;
 
-	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams (.pic)")
+	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams")
 	private boolean plotAssemblySequenceDiagrams;
 
-	@Parameter(names = "--plot-Deployment-Component-Dependency-Graph", validateWith = DecoratorValidator.class,
-			description = "Generate and store a deployment-level component dependency graph (.dot)")
+	@Parameter(names = "--plot-Deployment-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level component dependency graph")
 	private List<String> plotDeploymentComponentDependencyGraph;
 
-	@Parameter(names = "--plot-Assembly-Component-Dependency-Graph", validateWith = DecoratorValidator.class,
-			description = "Generate and store an assembly-level component dependency graph (.dot)")
+	@Parameter(names = "--plot-Assembly-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level component dependency graph")
 	private List<String> plotAssemblyComponentDependencyGraph;
 
-	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph (.dot file)")
+	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph")
 	private boolean plotContainerDependencyGraph;
 
-	@Parameter(names = "--plot-Deployment-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class,
-			description = "Generate and store a deployment-level operation dependency graph (.dot)")
+	@Parameter(names = "--plot-Deployment-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level operation dependency graph")
 	private List<String> plotDeploymentOperationDependencyGraph;
 
-	@Parameter(names = "--plot-Assembly-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class,
-			description = "Generate and store an assembly-level operation dependency graph (.dot)")
+	@Parameter(names = "--plot-Assembly-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level operation dependency graph")
 	private List<String> plotAssemblyOperationDependencyGraph;
 
-	@Parameter(names = "--plot-Aggregated-Deployment-Call-Tree",
-			description = "Generate and store an aggregated deployment-level call tree (.dot)")
+	@Parameter(names = "--plot-Aggregated-Deployment-Call-Tree", description = "Generate and store an aggregated deployment-level call tree")
 	private boolean plotAggregatedDeploymentCallTree;
 
-	@Parameter(names = "--plot-Aggregated-Assembly-Call-Tree",
-			description = "Generate and store an aggregated assembly-level call tree (.dot)")
+	@Parameter(names = "--plot-Aggregated-Assembly-Call-Tree", description = "Generate and store an aggregated assembly-level call tree")
 	private boolean plotAggregatedAssemblyCallTree;
 
-	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces (.dot)")
+	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces")
 	private boolean plotCallTrees;
 
 	@Parameter(names = "--print-Message-Traces", description = "Save message trace representations of valid traces (.txt)")
@@ -110,35 +118,27 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = "--print-Assembly-Equivalence-Classes", description = "Output an overview about the assembly-level trace equivalence classes")
 	private boolean printAssemblyEquivalenceClasses;
 
-	@Parameter(names = "--select-traces", variableArity = true,
-			description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
+	@Parameter(names = "--select-traces", variableArity = true, description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
 	private List<Long> selectTraces;
 
-	@Parameter(names = "--filter-traces", variableArity = true,
-			description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
+	@Parameter(names = "--filter-traces", variableArity = true, description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
 	private List<Long> filterTraces;
 
 	@Parameter(names = "--ignore-invalid-traces", description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;
 
-	@Parameter(names = "--repair-event-based-traces",
-			description = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.")
+	@Parameter(names = "--repair-event-based-traces", description = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.")
 	private boolean repairEventBasedTraces;
 
 	// "duration in ms"
-	@Parameter(names = "--max-trace-duration",
-			description = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).")
+	@Parameter(names = "--max-trace-duration", description = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).")
 	private Long maxTraceDurationMillis;
 
 	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
-	@Parameter(names = "--ignore-executions-before-date",
-			description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.",
-			converter = DateConverter.class)
+	@Parameter(names = "--ignore-executions-before-date", description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.", converter = DateConverter.class)
 	private Long ignoreExecutionsBeforeDate;
 
-	@Parameter(names = "--ignore-executions-after-date",
-			description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.",
-			converter = DateConverter.class)
+	@Parameter(names = "--ignore-executions-after-date", description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.", converter = DateConverter.class)
 	private Long ignoreExecutionsAfterDate;
 
 	@Parameter(names = "--short-labels", description = "If selected, abbreviated labels (e.g., package names) are used in the visualizations.")
@@ -154,14 +154,12 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	private Integer readBufferSize;
 
 	// COLORING_FILE_OPTION_NAME
-	@Parameter(names = "--traceColoring",
-			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
-					+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
+	@Parameter(names = "--traceColoring", description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
+			+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
 	private File traceColoringFile;
 
 	// DESCRIPTIONS_FILE_OPTION_NAME
-	@Parameter(names = "--addDescriptions",
-			description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
+	@Parameter(names = "--addDescriptions", description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
 	private File addDescriptions;
 
 	/** derived settings. */
@@ -201,6 +199,22 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 
 	public String getPrefix() {
 		return this.prefix;
+	}
+
+	public GraphicsEngineType getGraphicsEngineType() {
+		return this.graphicsEngine;
+	}
+
+	public boolean isPng() {
+		return this.png;
+	}
+
+	public boolean isSvg() {
+		return this.svg;
+	}
+
+	public boolean isPdf() {
+		return this.pdf;
 	}
 
 	public boolean isPlotDeploymentSequenceDiagrams() {
@@ -296,7 +310,8 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	}
 
 	/**
-	 * @return returns the ignore execution before date value, if none is specified created default value.
+	 * @return returns the ignore execution before date value, if none is specified
+	 *         created default value.
 	 */
 	public Long getIgnoreExecutionsBeforeDate() {
 		return this.ignoreExecutionsBeforeDate;
@@ -307,7 +322,8 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	}
 
 	/**
-	 * @return returns the ignore execution after date value, if none is specified created default value.
+	 * @return returns the ignore execution after date value, if none is specified
+	 *         created default value.
 	 */
 	public Long getIgnoreExecutionsAfterDate() {
 		return this.ignoreExecutionsAfterDate;
@@ -354,7 +370,7 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	 * This method dumps the configuration on the screen.
 	 *
 	 * @param logger
-	 *            the output logger
+	 *               the output logger
 	 */
 	public void dumpConfiguration(final Logger logger) {
 		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
