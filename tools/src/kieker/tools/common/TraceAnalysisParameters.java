@@ -59,7 +59,7 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	private String prefix;
 
 	@Parameter(names = "--graphics-engine", description = "Choose graphics engine")
-	private GraphicsEngineType graphicsEngine;
+	private GraphicsEngineType graphicsEngine = GraphicsEngineType.DOTPIC;
 
 	@Parameter(names = "--png", description = "Generate PNG images (only for PlantUML graphics engine)")
 	private boolean png;
