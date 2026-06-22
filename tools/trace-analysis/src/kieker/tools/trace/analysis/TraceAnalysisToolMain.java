@@ -32,16 +32,11 @@ import kieker.tools.common.GraphicsEngineType;
 import kieker.tools.common.TraceAnalysisParameters;
 
 /**
- * This is the main class to start the Kieker TraceAnalysisTool - the model
- * synthesis and analysis
- * tool to process the monitoring data that comes from the instrumented system,
- * or from a file that
- * contains Kieker monitoring data. The Kieker TraceAnalysisTool can produce
- * output such as
- * sequence diagrams, dependency graphs on demand. Alternatively it can be used
- * continuously for
- * online performance analysis, anomaly detection or live visualization of
- * system behavior.
+ * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis
+ * tool to process the monitoring data that comes from the instrumented system, or from a file that
+ * contains Kieker monitoring data. The Kieker TraceAnalysisTool can produce output such as
+ * sequence diagrams, dependency graphs on demand. Alternatively it can be used continuously for
+ * online performance analysis, anomaly detection or live visualization of system behavior.
  *
  * This is the trace analysis main class built upon TeeTime.
  *
@@ -49,8 +44,7 @@ import kieker.tools.common.TraceAnalysisParameters;
  * @author Yorrick Josuttis
  * @since 1.15
  */
-public class TraceAnalysisToolMain
-		extends AbstractService<AbstractTraceAnalysisConfiguration, TraceAnalysisParameters> {
+public class TraceAnalysisToolMain extends AbstractService<AbstractTraceAnalysisConfiguration, TraceAnalysisParameters> {
 
 	private final SystemModelRepository systemRepository = new SystemModelRepository();
 
@@ -64,7 +58,7 @@ public class TraceAnalysisToolMain
 	 * Configure and execute the TCP Kieker data collector.
 	 *
 	 * @param args
-	 *             arguments are ignored
+	 *            arguments are ignored
 	 */
 	public static void main(final String[] args) {
 		final TraceAnalysisToolMain tool = new TraceAnalysisToolMain();
@@ -80,10 +74,8 @@ public class TraceAnalysisToolMain
 					if (tool.teetimeConfiguration.getTraceReconstructionStage() != null) {
 						tool.teetimeConfiguration.getTraceReconstructionStage().printStatusMessage();
 					}
-					final ValidEventRecordTraceCounter validTraceCounter = tool.teetimeConfiguration
-							.getValidEventRecordTraceCounter();
-					final InvalidEventRecordTraceCounter invalidTraceCounter = tool.teetimeConfiguration
-							.getInvalidEventRecordTraceCounter();
+					final ValidEventRecordTraceCounter validTraceCounter = tool.teetimeConfiguration.getValidEventRecordTraceCounter();
+					final InvalidEventRecordTraceCounter invalidTraceCounter = tool.teetimeConfiguration.getInvalidEventRecordTraceCounter();
 					if ((validTraceCounter != null) && tool.logger.isDebugEnabled()) {
 						tool.logger.debug("");
 						tool.logger.debug("#");
@@ -94,13 +86,11 @@ public class TraceAnalysisToolMain
 								total, validTraceCounter.getSuccessCount(), invalidTraceCounter.getErrorCount());
 					}
 					if (tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage() != null) {
-						tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage()
-								.printStatusMessage();
+						tool.teetimeConfiguration.getTraceEventRecords2ExecutionAndMessageTraceStage().printStatusMessage();
 					}
 				} catch (final IOException e) {
 					if (tool.logger.isErrorEnabled()) {
-						tool.logger.error("Cannot save system model in {}: {}", systemModelPath.toString(),
-								e.getLocalizedMessage());
+						tool.logger.error("Cannot save system model in {}: {}", systemModelPath.toString(), e.getLocalizedMessage());
 					}
 				}
 			} catch (final IOException e1) {

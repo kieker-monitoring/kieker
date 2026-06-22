@@ -27,8 +27,7 @@ import kieker.tools.trace.analysis.filter.traceReconstruction.TraceProcessingExc
 import teetime.framework.OutputPort;
 
 /**
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
+ * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
  *
  * @param <T>
  *
@@ -51,16 +50,15 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 * @param repository
-	 *                       system model repository
+	 *            system model repository
 	 * @param includeWeights
-	 *                       include weights ingraph
+	 *            include weights ingraph
 	 * @param shortLabels
-	 *                       use short labels
+	 *            use short labels
 	 * @param dotOutputFile
-	 *                       output file name
+	 *            output file name
 	 */
-	public AbstractAggregatedCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
-			final boolean shortLabels,
+	public AbstractAggregatedCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
 			final String dotOutputFile) {
 		this(repository, includeWeights, shortLabels, dotOutputFile, GraphFormat.DOT);
 	}
@@ -69,15 +67,15 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 * @param repository
-	 *                       system model repository
+	 *            system model repository
 	 * @param includeWeights
-	 *                       include weights ingraph
+	 *            include weights ingraph
 	 * @param shortLabels
-	 *                       use short labels
+	 *            use short labels
 	 * @param dotOutputFile
-	 *                       output file name
+	 *            output file name
 	 * @param format
-	 *                       the output format strategy
+	 *            the output format strategy
 	 */
 	public AbstractAggregatedCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
 			final boolean shortLabels,
@@ -99,7 +97,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * Sets the root of the call tree.
 	 *
 	 * @param root
-	 *             The new root.
+	 *            The new root.
 	 */
 	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		synchronized (this) {
@@ -108,12 +106,11 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * This method tries to convert the current tree into the specified file as a
-	 * valid dot file, which can later be
+	 * This method tries to convert the current tree into the specified file as a valid dot file, which can later be
 	 * transformed into a visual representation by dot itself.
 	 *
 	 * @throws IOException
-	 *                     If something went wrong during the converting.
+	 *             If something went wrong during the converting.
 	 */
 	public void saveTreeToDotFile() throws IOException {
 		saveTreeToDotFile(this.format);
@@ -124,9 +121,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 * the given format.
 	 *
 	 * @param outputFormat
-	 *                     the output format strategy
+	 *             the output format strategy
 	 * @throws IOException
-	 *                     If something went wrong during the converting.
+	 *             If something went wrong during the converting.
 	 */
 	protected void saveTreeToDotFile(final GraphFormat outputFormat) throws IOException {
 		final File outputFile = new File(this.dotOutputFile);
@@ -182,12 +179,10 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * HACK. Inheriting classes should implement this method to deliver the actual
-	 * pair.
+	 * HACK. Inheriting classes should implement this method to deliver the actual pair.
 	 *
 	 * @param callMsg
-	 *                The call message which contains the information necessary to
-	 *                create the pair.
+	 *            The call message which contains the information necessary to create the pair.
 	 *
 	 * @return The actual pair.
 	 */

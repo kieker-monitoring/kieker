@@ -35,29 +35,26 @@ import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
  *
  * @since 1.1
  */
-public class AggregatedAllocationComponentOperationCallTreeFilter
-		extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
+public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 * @param repository
-	 *                       system model repository
+	 *            system model repository
 	 * @param includeWeights
-	 *                       include weights ingraph
+	 *            include weights ingraph
 	 * @param shortLabels
-	 *                       use short labels
+	 *            use short labels
 	 * @param dotOutputFile
-	 *                       output file name
+	 *            output file name
 	 */
-	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository,
-			final boolean includeWeights,
+	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
 			final boolean shortLabels, final String dotOutputFile) {
 		super(repository, includeWeights, shortLabels, dotOutputFile);
 
 		this.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null,
-				NoOriginRetentionPolicy.createInstance()));
+				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
 	}
 
 	@Override
@@ -75,18 +72,15 @@ public class AggregatedAllocationComponentOperationCallTreeFilter
  *
  * @since 1.1
  */
-class AggregatedAllocationComponentOperationCallTreeNode
-		extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
+class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
-	public AggregatedAllocationComponentOperationCallTreeNode(final int id,
-			final AllocationComponentOperationPair entity, final boolean rootNode,
+	public AggregatedAllocationComponentOperationCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode,
 			final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final AllocationComponentOperationPair dstObj,
-			final MessageTrace origin,
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final AllocationComponentOperationPair dstObj, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
 		final AllocationComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
@@ -96,8 +90,7 @@ class AggregatedAllocationComponentOperationCallTreeNode
 			originPolicy.handleOrigin(e, origin);
 			originPolicy.handleOrigin(n, origin);
 		} else {
-			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin,
-					originPolicy); // !
+			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !
 			// rootNode
 			e = new WeightedDirectedCallTreeEdge<>(this, n, origin, originPolicy);
 			this.childMap.put(destination.getId(), e);

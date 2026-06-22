@@ -41,17 +41,13 @@ import kieker.visualization.trace.call.tree.TraceCallTreeNode;
  * this plugin is not delegated in any way.
  *
  * @author Andre van Hoorn
- * @author Yorrick Josuttis -- fixed checkstyle issues
  *
  * @since 1.1
  */
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	/** This is the name of the property determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
-	/**
-	 * This is the name of the property determining whether to use short labels or
-	 * not.
-	 */
+	/** This is the name of the property determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
 	/** This is the default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
@@ -65,8 +61,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 */
-	public TraceCallTreeFilter(final SystemModelRepository repository, final boolean shortLabels,
-			final String dotOutputFn) {
+	public TraceCallTreeFilter(final SystemModelRepository repository, final boolean shortLabels, final String dotOutputFn) {
 		super(repository);
 
 		// Initialize the fields based on the given parameters. */
@@ -81,21 +76,10 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			final int numPlots = this.getSuccessCount();
 			final long lastSuccessTracesId = this.getLastTraceIdSuccess();
 			if (this.logger.isDebugEnabled()) {
-				String callTreeOrCallTrees = "";
-				String fileOrFiles = "";
-				if (numPlots <= 1) {
-					callTreeOrCallTrees = "call tree";
-					fileOrFiles = "file";
-				} else {
-					callTreeOrCallTrees = "call trees";
-					fileOrFiles = "files";
-				}
-				this.logger.debug(
-						"Wrote " + numPlots + " " + callTreeOrCallTrees + " to " + fileOrFiles + " with name pattern '" // NOCS
-								+ this.dotOutputFn + "-<traceId>.dot'");
+				this.logger.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
+						+ this.dotOutputFn + "-<traceId>.dot'");
 				this.logger.debug("Dot files can be converted using the dot tool");
-				this.logger.debug("Example: dot -T svg " + this.dotOutputFn + "-"
-						+ ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+				this.logger.debug("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
 						+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
 			}
 		}
@@ -104,25 +88,20 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	@Override
 	protected void execute(final MessageTrace mt) throws Exception {
 		try {
-			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractRepository.ROOT_ELEMENT_ID,
-					AllocationComponentOperationPairFactory.ROOT_PAIR,
+			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
 					true, mt,
 					NoOriginRetentionPolicy.createInstance()); // rootNode
-			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode,
-					new IPairFactory<AllocationComponentOperationPair>() {
+			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
-						@Override
-						public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
-							final AllocationComponent allocationComponent = callMsg.getReceivingExecution()
-									.getAllocationComponent();
-							final Operation op = callMsg.getReceivingExecution().getOperation();
-							final AllocationComponentOperationPair destination = TraceCallTreeFilter.this
-									.getSystemModelRepository().getAllocationPairFactory()
-									.getPairInstanceByPair(allocationComponent, op); // will never be null!
-							return destination;
-						}
-					}, mt, TraceCallTreeFilter.this.dotOutputFn + "-" + mt.getTraceId() + ".dot", false,
-					TraceCallTreeFilter.this.shortLabels); // no weights
+				@Override
+				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
+					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
+					final Operation op = callMsg.getReceivingExecution().getOperation();
+					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemModelRepository().getAllocationPairFactory()
+							.getPairInstanceByPair(allocationComponent, op); // will never be null!
+					return destination;
+				}
+			}, mt, TraceCallTreeFilter.this.dotOutputFn + "-" + mt.getTraceId() + ".dot", false, TraceCallTreeFilter.this.shortLabels); // no weights
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());

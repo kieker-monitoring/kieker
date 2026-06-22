@@ -47,8 +47,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter
 	 * @param dotOutputFile
 	 *
 	 */
-	public AggregatedAssemblyComponentOperationCallTreeFilter(final SystemModelRepository repository,
-			final boolean includeWeights, final boolean shortLabels,
+	public AggregatedAssemblyComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
 			final String dotOutputFile) {
 		super(repository, includeWeights, shortLabels, dotOutputFile);
 

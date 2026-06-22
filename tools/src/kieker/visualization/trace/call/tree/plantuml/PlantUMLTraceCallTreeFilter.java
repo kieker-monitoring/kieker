@@ -86,18 +86,8 @@ public class PlantUMLTraceCallTreeFilter extends AbstractMessageTraceProcessingF
             final int numPlots = this.getSuccessCount();
             final long lastSuccessTracesId = this.getLastTraceIdSuccess();
             if (this.logger.isDebugEnabled()) {
-                String callTreeOrCallTrees = "";
-                String fileOrFiles = "";
-                if (numPlots <= 1) {
-                    callTreeOrCallTrees = "call tree";
-                    fileOrFiles = "file";
-                } else {
-                    callTreeOrCallTrees = "call trees";
-                    fileOrFiles = "files";
-                }
-                this.logger.debug(
-                        "Wrote " + numPlots + " " + callTreeOrCallTrees + " to " + fileOrFiles + " with name pattern '" // NOCS
-                                + this.dotOutputFn + "-<traceId>.dot'");
+                this.logger.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
+                        + this.dotOutputFn + "-<traceId>.dot'");
                 this.logger.debug("Dot files can be converted using the dot tool");
                 this.logger.debug("Example: dot -T svg " + this.dotOutputFn + "-"
                         + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS

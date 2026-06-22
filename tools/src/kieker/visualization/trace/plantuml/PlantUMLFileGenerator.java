@@ -42,8 +42,6 @@ import teetime.framework.AbstractConsumerStage;
  */
 public class PlantUMLFileGenerator extends AbstractConsumerStage<File> {
 
-    private static final int MAX_PUML_CHARS_FOR_PDF = 500_000;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(PlantUMLFileGenerator.class);
 
     private final boolean generatePNG;
@@ -79,21 +77,11 @@ public class PlantUMLFileGenerator extends AbstractConsumerStage<File> {
             this.generate(OutputFormat.SVG, pumlSource, file);
         }
         if (this.generatePDF) {
-            if (isTooLargeForPdfGeneration(pumlSource)) {
-                LOGGER.warn("Skipping PDF generation for {} since the PlantUML source is too large ({} chars)",
-                        file.getName(), pumlSource.length());
-                return;
-            } else {
-                final File pdfFile = this.generate(OutputFormat.PDF, pumlSource, file);
-                if (pdfFile != null) {
-                    generatedPdfFiles.add(pdfFile);
-                }
+            final File pdfFile = this.generate(OutputFormat.PDF, pumlSource, file);
+            if (pdfFile != null) {
+                generatedPdfFiles.add(pdfFile);
             }
         }
-    }
-
-    private boolean isTooLargeForPdfGeneration(final String pumlSource) {
-        return pumlSource.length() > MAX_PUML_CHARS_FOR_PDF;
     }
 
     private File generate(final OutputFormat format, final String pumlSource, final File file) {
