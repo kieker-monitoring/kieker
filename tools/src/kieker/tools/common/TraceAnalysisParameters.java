@@ -117,33 +117,33 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = "--print-Assembly-Equivalence-Classes", description = "Output an overview about the assembly-level trace equivalence classes")
 	private boolean printAssemblyEquivalenceClasses;
 
-	@Parameter(names = "--select-traces", variableArity = true, 
+	@Parameter(names = "--select-traces", variableArity = true,
 			description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
 	private List<Long> selectTraces;
 
-	@Parameter(names = "--filter-traces", variableArity = true, 
+	@Parameter(names = "--filter-traces", variableArity = true,
 			description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
 	private List<Long> filterTraces;
 
 	@Parameter(names = "--ignore-invalid-traces", description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;
 
-	@Parameter(names = "--repair-event-based-traces", 
+	@Parameter(names = "--repair-event-based-traces",
 			description = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.")
 	private boolean repairEventBasedTraces;
 
 	// "duration in ms"
-	@Parameter(names = "--max-trace-duration", 
+	@Parameter(names = "--max-trace-duration",
 			description = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).")
 	private Long maxTraceDurationMillis;
 
 	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
-	@Parameter(names = "--ignore-executions-before-date", 
+	@Parameter(names = "--ignore-executions-before-date",
 			description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.", 
 			converter = DateConverter.class)
 	private Long ignoreExecutionsBeforeDate;
 
-	@Parameter(names = "--ignore-executions-after-date", 
+	@Parameter(names = "--ignore-executions-after-date",
 			description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.", 
 			converter = DateConverter.class)
 	private Long ignoreExecutionsAfterDate;
@@ -161,13 +161,13 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	private Integer readBufferSize;
 
 	// COLORING_FILE_OPTION_NAME
-	@Parameter(names = "--traceColoring", 
+	@Parameter(names = "--traceColoring",
 			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
 					+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
 	private File traceColoringFile;
 
 	// DESCRIPTIONS_FILE_OPTION_NAME
-	@Parameter(names = "--addDescriptions", 
+	@Parameter(names = "--addDescriptions",
 			description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
 	private File addDescriptions;
 
