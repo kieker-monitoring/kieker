@@ -25,7 +25,7 @@ import kieker.visualization.trace.call.tree.dot.AggregatedAllocationComponentOpe
  * 
  * @author Yorrick Josuttis
  */
-public class AggregatedAllocationComponentOperationCallTreeFilterFactory {
+public final class AggregatedAllocationComponentOperationCallTreeFilterFactory {
 
     private AggregatedAllocationComponentOperationCallTreeFilterFactory() {
         // factory class

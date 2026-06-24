@@ -25,7 +25,7 @@ import kieker.visualization.trace.call.tree.dot.AggregatedAssemblyComponentOpera
  * 
  * @author Yorrick Josuttis
  */
-public class AggregatedAssemblyComponentOperationCallTreeFilterFactory {
+public final class AggregatedAssemblyComponentOperationCallTreeFilterFactory {
 
     private AggregatedAssemblyComponentOperationCallTreeFilterFactory() {
         // factory class

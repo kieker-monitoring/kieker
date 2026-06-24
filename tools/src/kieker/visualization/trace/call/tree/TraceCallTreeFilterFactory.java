@@ -24,7 +24,7 @@ import kieker.visualization.trace.call.tree.plantuml.PlantUMLTraceCallTreeFilter
  * 
  * @author Yorrick Josuttis
  */
-public class TraceCallTreeFilterFactory {
+public final class TraceCallTreeFilterFactory {
 
     private TraceCallTreeFilterFactory() {
         // factory class
