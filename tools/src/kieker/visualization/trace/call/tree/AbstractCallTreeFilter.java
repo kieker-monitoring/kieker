@@ -47,7 +47,7 @@ import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
  * @param <T>
  *
  * @author Andre van Hoorn
- * @author Yorrick Josuttis
+ * @author Yorrick Josuttis -- plantuml support
  *
  * @since 1.1
  */

@@ -27,6 +27,9 @@ import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.visualization.trace.GraphWriterPlugin;
 import kieker.visualization.trace.SequenceDiagramFilter;
 import kieker.visualization.trace.SequenceDiagramFilter.SDModes;
+import kieker.visualization.trace.call.tree.AggregatedAllocationComponentOperationCallTreeFilterFactory;
+import kieker.visualization.trace.call.tree.AggregatedAssemblyComponentOperationCallTreeFilterFactory;
+import kieker.visualization.trace.call.tree.TraceCallTreeFilterFactory;
 import kieker.visualization.trace.call.tree.dot.AggregatedAllocationComponentOperationCallTreeFilter;
 import kieker.visualization.trace.call.tree.dot.AggregatedAssemblyComponentOperationCallTreeFilter;
 import kieker.visualization.trace.call.tree.dot.TraceCallTreeFilter;
@@ -146,7 +149,8 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 	protected void createTraceCallTreeFilter(final SystemModelRepository systemRepository,
 			final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean shortLabels) {
-		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(systemRepository, shortLabels,
+		final TraceCallTreeFilter componentPlotTraceCallTrees = 
+		TraceCallTreeFilterFactory.createDotFilter(systemRepository, shortLabels,
 				pathPrefix + AbstractTraceAnalysisConfiguration.CALL_TREE_FN_PREFIX);
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotTraceCallTrees.getInputPort());
 	}
@@ -155,8 +159,8 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 	protected void createPlotAggregatedDeploymentCallTree(final SystemModelRepository systemRepository,
 			final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
-		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
-				systemRepository, includeWeights, shortLabels,
+		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = 
+		AggregatedAllocationComponentOperationCallTreeFilterFactory.createDotFilter(systemRepository, includeWeights, shortLabels,
 				pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAggregatedCallTree.getInputPort());
 	}
@@ -165,8 +169,8 @@ public class TraceAnalysisConfiguration extends AbstractTraceAnalysisConfigurati
 	protected void createAggrAssemblyCompOpCallTreeFilter(final SystemModelRepository systemRepository,
 			final Distributor<MessageTrace> messageTraceDistributor,
 			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
-		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(
-				systemRepository, includeWeights, shortLabels,
+		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = 
+		AggregatedAssemblyComponentOperationCallTreeFilterFactory.createDotFilter(systemRepository, includeWeights, shortLabels,
 				pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
 		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAssemblyCallTree.getInputPort());
 	}

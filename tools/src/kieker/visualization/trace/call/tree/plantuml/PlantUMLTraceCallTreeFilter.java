@@ -87,11 +87,8 @@ public class PlantUMLTraceCallTreeFilter extends AbstractMessageTraceProcessingF
             final long lastSuccessTracesId = this.getLastTraceIdSuccess();
             if (this.logger.isDebugEnabled()) {
                 this.logger.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
-                        + this.dotOutputFn + "-<traceId>.dot'");
-                this.logger.debug("Dot files can be converted using the dot tool");
-                this.logger.debug("Example: dot -T svg " + this.dotOutputFn + "-"
-                        + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
-                        + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+                        + this.dotOutputFn + "-<traceId>.puml'");
+                this.logger.debug("PlantUML files can be converted using the PlantUMLFileGenerator");
             }
         }
     }

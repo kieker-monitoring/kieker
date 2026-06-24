@@ -28,10 +28,12 @@ import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepos
 import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeFilter;
 import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeNode;
 import kieker.visualization.trace.call.tree.AbstractCallTreeNode;
+import kieker.visualization.trace.call.tree.GraphFormat;
 import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
 
 /**
  * @author Andre van Hoorn
+ * @author Yorrick Josuttis -- plantuml support
  *
  * @since 1.1
  */
@@ -48,10 +50,12 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	 *            use short labels
 	 * @param dotOutputFile
 	 *            output file name
+     * @param format
+     *            output format, either DOT or PLANTUML
 	 */
 	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
-			final boolean shortLabels, final String dotOutputFile) {
-		super(repository, includeWeights, shortLabels, dotOutputFile);
+			final boolean shortLabels, final String dotOutputFile, final GraphFormat format) {
+		super(repository, includeWeights, shortLabels, dotOutputFile, format);
 
 		this.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));

@@ -139,12 +139,12 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 
 	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
 	@Parameter(names = "--ignore-executions-before-date",
-			description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.", 
+			description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.",
 			converter = DateConverter.class)
 	private Long ignoreExecutionsBeforeDate;
 
 	@Parameter(names = "--ignore-executions-after-date",
-			description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.", 
+			description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.",
 			converter = DateConverter.class)
 	private Long ignoreExecutionsAfterDate;
 
