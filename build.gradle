@@ -16,7 +16,7 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'jacoco'
-	id "com.diffplug.spotless" version "8.4.0"
+	id "com.diffplug.spotless" version "8.4.0" apply false
 }
 
 configurations {
@@ -25,18 +25,6 @@ configurations {
 	aspectJarConfig
 	bytebuddyJarConfig
 	javassistJarConfig
-}
-
-spotless {
-	format 'misc', {
-		// define the files to apply `misc` to
-		target '*.gradle', '*.md', '.gitignore'
-
-		// define the steps to apply to those files
-		trimTrailingWhitespace()
-		leadingSpacesToTabs()
-		endWithNewline()
-	}
 }
 
 dependencies {
@@ -105,13 +93,26 @@ allprojects {
 				url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
 		}
 	}
+
+	apply plugin: "com.diffplug.spotless"
+
+	spotless {
+		format 'misc', {
+			// define the files to apply `misc` to
+			target '*.gradle', '*.md', '.gitignore'
+
+			// define the steps to apply to those files
+			trimTrailingWhitespace()
+			leadingSpacesToTabs()
+			endWithNewline()
+		}
+	}
 }
 
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'signing'
 	apply plugin: 'jacoco'
-	apply plugin: 'com.diffplug.spotless'
 	apply plugin: 'maven-publish'
 
 	sourceCompatibility = sourceVersion
@@ -264,18 +265,6 @@ subprojects {
 			xml.required = true
 			csv.required = false
 			html.required = true
-		}
-	}
-
-	spotless {
-		format 'misc', {
-			// define the files to apply `misc` to
-			target '*.gradle', '*.md', '.gitignore'
-
-			// define the steps to apply to those files
-			trimTrailingWhitespace()
-			leadingSpacesToTabs()
-			endWithNewline()
 		}
 	}
 
