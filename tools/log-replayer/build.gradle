@@ -17,10 +17,10 @@ dependencies {
 	implementation project(":tools")
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	testImplementation project(':common').sourceSets.test.output
-	testImplementation project(':monitoring').sourceSets.test.output
-	testImplementation project(':analysis').sourceSets.test.output
-	testImplementation project(':tools').sourceSets.test.output
+	testImplementation project.project(':common').sourceSets.test.output
+	testImplementation project.project(':monitoring').sourceSets.test.output
+	testImplementation project.project(':analysis').sourceSets.test.output
+	testImplementation project.project(':tools').sourceSets.test.output
 
 	testImplementation "org.junit.jupiter:junit-jupiter:${libJunitJupiterVersion}"
 }
