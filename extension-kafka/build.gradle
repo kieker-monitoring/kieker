@@ -2,9 +2,6 @@ plugins {
 	id 'java-library'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
-
 // In this section you declare where to find the dependencies of your project
 repositories {
 	// Use mavenCentral for resolving your dependencies.
