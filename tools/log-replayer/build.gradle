@@ -13,6 +13,10 @@ application {
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
 	implementation project(":tools")
 	implementation "com.beust:jcommander:${jcommanderVersion}"
@@ -23,6 +27,7 @@ dependencies {
 	testImplementation project.project(':tools').sourceSets.test.output
 
 	testImplementation "org.junit.jupiter:junit-jupiter:${libJunitJupiterVersion}"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 task uploadArchives {
