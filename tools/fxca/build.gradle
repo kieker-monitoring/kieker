@@ -4,8 +4,6 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
@@ -23,13 +21,15 @@ repositories {
 //archiveVersion.set('')
 //}
 
-mainClassName = 'kieker.tools.fxca.FxcaMain'
+application {
+    mainClass = 'kieker.tools.fxca.FxcaMain'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 jar {
 	manifest {
-		attributes "Main-Class": mainClassName
+		attributes "Main-Class": "kieker.tools.fxca.FxcaMain"
 	}
 }
 

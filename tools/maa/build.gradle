@@ -3,13 +3,13 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.maa.ModelArchitectureAnalysisMain'
+application {
+    mainClass = 'kieker.tools.maa.ModelArchitectureAnalysisMain'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 

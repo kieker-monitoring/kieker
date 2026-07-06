@@ -28,7 +28,9 @@ version = ''
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
+}
 
 jar {
 	manifest {

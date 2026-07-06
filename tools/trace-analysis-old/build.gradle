@@ -3,13 +3,13 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
+application {
+    mainClass = 'kieker.tools.trace.analysis.TraceAnalysisToolMain'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 

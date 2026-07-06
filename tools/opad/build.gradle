@@ -13,8 +13,6 @@ project.artifacts {
 }
 
 // Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.
-sourceCompatibility = 17
-targetCompatibility = 17
 
 repositories {
 	maven {

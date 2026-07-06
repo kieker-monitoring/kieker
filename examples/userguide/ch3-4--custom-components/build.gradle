@@ -23,7 +23,9 @@ distTar.enabled=false
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
-mainClassName = 'kieker.examples.userguide.ch3and4bookstore.Starter'
+application {
+    mainClass = 'kieker.examples.userguide.ch3and4bookstore.Starter'
+}
 
 jar {
 	manifest {

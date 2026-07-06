@@ -143,8 +143,6 @@ task iajc(dependsOn: classes) {
 		ant.iajc(
 			XlintFile: 'aspectjXlint.properties',
 			X: 'joinpoints:synchronization',
-			source: sourceCompatibility,
-			target: targetCompatibility,
 			debug: 'true',
 			destdir: sourceSets.main.output.classesDir) {
 			classpath {

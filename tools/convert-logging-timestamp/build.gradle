@@ -3,13 +3,13 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
+application {
+    mainClass = 'kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
