@@ -13,6 +13,10 @@ application {
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
 	implementation project(':common')
 	implementation project(':analysis')
@@ -34,6 +38,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
 	testImplementation "org.junit.jupiter:junit-jupiter-api:${libJunitJupiterVersion}"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${libJunitJupiterVersion}"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
 	testImplementation project (path: ':common', configuration: 'testArchives')
 	testImplementation project (path: ':tools', configuration: 'testArchives')
