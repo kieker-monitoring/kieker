@@ -14,7 +14,7 @@ application {
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
 dependencies {
