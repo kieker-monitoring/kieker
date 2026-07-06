@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
  */
 public class ZeroTimer extends AbstractTimeSource {
 
-	protected ZeroTimer(final Configuration configuration) {
+	public ZeroTimer(final Configuration configuration) {
 		super(configuration);
 	}
 
