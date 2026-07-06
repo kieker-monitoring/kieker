@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
+	mainClass = 'kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

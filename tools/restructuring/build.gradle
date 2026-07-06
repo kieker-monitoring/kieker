@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.restructuring.RestructuringMain'
+	mainClass = 'kieker.tools.restructuring.RestructuringMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

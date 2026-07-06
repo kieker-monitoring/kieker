@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.cmi.CheckModelIntegrityMain'
+	mainClass = 'kieker.tools.cmi.CheckModelIntegrityMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

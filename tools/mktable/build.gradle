@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.mktable.MakeTableMain'
+	mainClass = 'kieker.tools.mktable.MakeTableMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

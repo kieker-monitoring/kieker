@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.mvis.ModelVisualizationMain'
+	mainClass = 'kieker.tools.mvis.ModelVisualizationMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

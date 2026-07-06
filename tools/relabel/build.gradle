@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.relabel.RelabelSourceMain'
+	mainClass = 'kieker.tools.relabel.RelabelSourceMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

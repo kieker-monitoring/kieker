@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.sar.StaticArchitectureRecoveryMain'
+	mainClass = 'kieker.tools.sar.StaticArchitectureRecoveryMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

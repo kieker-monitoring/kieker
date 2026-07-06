@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.resource.monitor.ResourceMonitorMain'
+	mainClass = 'kieker.tools.resource.monitor.ResourceMonitorMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

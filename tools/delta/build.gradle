@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.delta.DeltaMain'
+	mainClass = 'kieker.tools.delta.DeltaMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.mop.ModelOperationMain'
+	mainClass = 'kieker.tools.mop.ModelOperationMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

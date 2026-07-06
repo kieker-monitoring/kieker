@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.log.replayer.ReplayerMain'
+	mainClass = 'kieker.tools.log.replayer.ReplayerMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

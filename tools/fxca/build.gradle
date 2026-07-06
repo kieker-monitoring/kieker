@@ -22,7 +22,7 @@ repositories {
 //}
 
 application {
-    mainClass = 'kieker.tools.fxca.FxcaMain'
+	mainClass = 'kieker.tools.fxca.FxcaMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

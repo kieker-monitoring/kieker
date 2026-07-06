@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.trace.analysis.TraceAnalysisToolMain'
+	mainClass = 'kieker.tools.trace.analysis.TraceAnalysisToolMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

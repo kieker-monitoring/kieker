@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.mt.ManipulateTablesMain'
+	mainClass = 'kieker.tools.mt.ManipulateTablesMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

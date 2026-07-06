@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.collector.CollectorMain'
+	mainClass = 'kieker.tools.collector.CollectorMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

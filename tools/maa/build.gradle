@@ -8,7 +8,7 @@ distTar.enabled=false
 distZip.enabled=true
 
 application {
-    mainClass = 'kieker.tools.maa.ModelArchitectureAnalysisMain'
+	mainClass = 'kieker.tools.maa.ModelArchitectureAnalysisMain'
 }
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
