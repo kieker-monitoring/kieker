@@ -118,12 +118,12 @@ subprojects {
 	apply plugin: 'maven-publish'
 
 
-  plugins.withType(JavaPlugin) {
-    java {
-      sourceCompatibility = sourceVersion
-      targetCompatibility = targetVersion
-    }
-  }
+plugins.withType(JavaPlugin) {
+	java {
+	sourceCompatibility = sourceVersion
+	targetCompatibility = targetVersion
+	}
+}
 
 	// Encoding should be UTF-8
 	compileJava.options.encoding = 'UTF-8'
@@ -695,15 +695,15 @@ task apidoc(type: Javadoc) {
 }
 
 ext.sharedManifest = {
-  attributes(
-      "Specification-Title": kiekerName,
-      "Specification-Version": kiekerVersion,
-      "Specification-Vendor": kiekerCopyright,
-      "Implementation-Title": kiekerName,
-      "Implementation-Version": kiekerVersion + " (" + today() + ")",
-      "Implementation-Vendor": kiekerCopyright,
-      "kieker" // The section name
-  )
+attributes(
+	"Specification-Title": kiekerName,
+	"Specification-Version": kiekerVersion,
+	"Specification-Vendor": kiekerCopyright,
+	"Implementation-Title": kiekerName,
+	"Implementation-Version": kiekerVersion + " (" + today() + ")",
+	"Implementation-Vendor": kiekerCopyright,
+	"kieker" // The section name
+)
 }
 
 def allArtifacts = {
@@ -786,7 +786,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-  manifest(sharedManifest)
+manifest(sharedManifest)
 }
 
 /** Kieker jar with emf libraries. */
@@ -809,7 +809,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
 		include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
 	}
 
-  manifest(sharedManifest)
+manifest(sharedManifest)
 
 }
 
@@ -832,24 +832,24 @@ task aspectJJar(type: Jar, dependsOn: aspectJSubprojects.tasks["build"], group: 
 
 	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
-  manifest {
-    project.configure(delegate, sharedManifest)
-    attributes(
-        "Can-Redefine-Classes": 'true',
-        "Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
-    )
-    attributes(
-        "Specification-Title": "AspectJ Weaver Classes",
-        "Specification-Version": aspectjVersion,
-        "Specification-Vendor": "aspectj.org",
-        "Implementation-Title": "org.aspectj.weaver",
-        "Implementation-Version": aspectjVersion,
-        "Implementation-Vendor": "aspectj.org",
-        "Can-Redefine-Classes": "true",
-        "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
-        "org/aspectj/weaver/" // The section name
-    )
-  }
+manifest {
+	project.configure(delegate, sharedManifest)
+	attributes(
+		"Can-Redefine-Classes": 'true',
+		"Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
+	)
+	attributes(
+		"Specification-Title": "AspectJ Weaver Classes",
+		"Specification-Version": aspectjVersion,
+		"Specification-Vendor": "aspectj.org",
+		"Implementation-Title": "org.aspectj.weaver",
+		"Implementation-Version": aspectjVersion,
+		"Implementation-Vendor": "aspectj.org",
+		"Can-Redefine-Classes": "true",
+		"Premain-Class": "org.aspectj.weaver.loadtime.Agent",
+		"org/aspectj/weaver/" // The section name
+	)
+}
 }
 
 /** Kieker jar with bytebuddy tooling. */
@@ -866,14 +866,14 @@ task bytebuddyJar(type: Jar, dependsOn: bytebuddySubprojects.tasks["build"], gro
 	from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 	from configurations.bytebuddyJarConfig.asFileTree.files.collect { zipTree(it) }
 
-  manifest {
-    project.configure(delegate, sharedManifest)
-    attributes(
-        "Can-Redefine-Classes": "true",
-        "Can-Retransform-Classes": "true",
-      "Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
-    )
-  }
+manifest {
+	project.configure(delegate, sharedManifest)
+	attributes(
+		"Can-Redefine-Classes": "true",
+		"Can-Retransform-Classes": "true",
+	"Premain-Class": "kieker.monitoring.probe.bytebuddy.PremainClass"
+	)
+}
 }
 
 /** Kieker jar with javassist tooling. */
