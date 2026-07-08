@@ -22,7 +22,9 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplication'
+tasks.named('jar') {
+    archiveBaseName = 'BookstoreApplication'
+}
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
