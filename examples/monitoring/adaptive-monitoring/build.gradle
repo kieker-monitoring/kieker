@@ -38,7 +38,7 @@ jar {
 }
 
 task runMonitoring(type: JavaExec) {
-	main = mainClassName
+	main = application.mainClass
 	classpath = sourceSets.main.runtimeClasspath
 	
 	// The path to the javaagent file might be replaced by ${System.properties['user.home']}/.m2/repository/net/monitoring/kieker/${kiekerVersion}/kieker-${kiekerVersion}-aspectj.jar if the jar is in the local maven repository
