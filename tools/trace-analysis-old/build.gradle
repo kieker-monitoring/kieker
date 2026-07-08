@@ -14,7 +14,7 @@ application {
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 test {
-    failOnNoDiscoveredTests = false
+	failOnNoDiscoveredTests = false
 }
 
 dependencies {
