@@ -48,14 +48,13 @@ public final class PlantUMLUtils {
 
         try (final InputStream is = PlantUMLSequenceDiagramFilter.class.getClassLoader()
                 .getResourceAsStream(PLANTUML_PREAMBLE_PATH)) {
-            try (final BufferedReader br = new BufferedReader(new InputStreamReader(is, ENCODING))) {
-                String line = br.readLine();
-                while (line != null) {
-                    sb.append(line).append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                error = false;
+            final BufferedReader br = new BufferedReader(new InputStreamReader(is, ENCODING));
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line).append(System.lineSeparator());
+                line = br.readLine();
             }
+            error = false;
         } catch (final IOException exc) {
             LOGGER.error("Could not read PlantUML preamble from resource: {}", PLANTUML_PREAMBLE_PATH, exc);
         } finally {
@@ -207,7 +206,7 @@ public final class PlantUMLUtils {
         for (int i = 0; i < names.length; i++) {
             // replace backslash with double backslash to avoid PlantUML parsing issues
             if (names[i] == null) {
-                sb.append(" ");
+                sb.append(' ');
             } else {
                 sb.append(names[i].replace("\\", "\\\\"));
             }

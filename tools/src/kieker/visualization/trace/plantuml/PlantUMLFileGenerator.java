@@ -23,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +140,7 @@ public class PlantUMLFileGenerator extends AbstractConsumerStage<File> {
 
             // tempfile-based approach using no main-memory; since there is no restricted
             // size it is safer for large PDFs
-            merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
+            merger.mergeDocuments(IOUtils.createTempFileOnlyStreamCache());
 
             Files.move(tmpFile.toPath(), outputFile.toPath(),
                     StandardCopyOption.REPLACE_EXISTING,

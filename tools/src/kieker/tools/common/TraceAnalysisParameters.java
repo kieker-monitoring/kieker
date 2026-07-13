@@ -69,34 +69,34 @@ public final class TraceAnalysisParameters { // NOPMD configuration class
 	@Parameter(names = "--pdf", description = "Generate PDF documents (only for PlantUML graphics engine)")
 	private boolean pdf;
 
-	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams")
+	@Parameter(names = "--plot-Deployment-Sequence-Diagrams", description = "Generate and store deployment-level sequence diagrams (.pic or .puml)")
 	private boolean plotDeploymentSequenceDiagrams;
 
-	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams")
+	@Parameter(names = "--plot-Assembly-Sequence-Diagrams", description = "Generate and store assembly-level sequence diagrams (.pic or .puml)")
 	private boolean plotAssemblySequenceDiagrams;
 
-	@Parameter(names = "--plot-Deployment-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level component dependency graph")
+	@Parameter(names = "--plot-Deployment-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level component dependency graph (.dot or .puml)")
 	private List<String> plotDeploymentComponentDependencyGraph;
 
-	@Parameter(names = "--plot-Assembly-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level component dependency graph")
+	@Parameter(names = "--plot-Assembly-Component-Dependency-Graph", validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level component dependency graph (.dot or .puml)")
 	private List<String> plotAssemblyComponentDependencyGraph;
 
-	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph")
+	@Parameter(names = "--plot-Container-Dependency-Graph", description = "Generate and store a container dependency graph (.dot or .puml)")
 	private boolean plotContainerDependencyGraph;
 
-	@Parameter(names = "--plot-Deployment-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level operation dependency graph")
+	@Parameter(names = "--plot-Deployment-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store a deployment-level operation dependency graph (.dot or .puml)")
 	private List<String> plotDeploymentOperationDependencyGraph;
 
-	@Parameter(names = "--plot-Assembly-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level operation dependency graph")
+	@Parameter(names = "--plot-Assembly-Operation-Dependency-Graph", variableArity = true, validateWith = DecoratorValidator.class, description = "Generate and store an assembly-level operation dependency graph (.dot or .puml)")
 	private List<String> plotAssemblyOperationDependencyGraph;
 
-	@Parameter(names = "--plot-Aggregated-Deployment-Call-Tree", description = "Generate and store an aggregated deployment-level call tree")
+	@Parameter(names = "--plot-Aggregated-Deployment-Call-Tree", description = "Generate and store an aggregated deployment-level call tree (.dot or .puml)")
 	private boolean plotAggregatedDeploymentCallTree;
 
-	@Parameter(names = "--plot-Aggregated-Assembly-Call-Tree", description = "Generate and store an aggregated assembly-level call tree")
+	@Parameter(names = "--plot-Aggregated-Assembly-Call-Tree", description = "Generate and store an aggregated assembly-level call tree (.dot or .puml)")
 	private boolean plotAggregatedAssemblyCallTree;
 
-	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces")
+	@Parameter(names = "--plot-Call-Trees", description = "Generate and store call trees for the selected traces (.dot or .puml)")
 	private boolean plotCallTrees;
 
 	@Parameter(names = "--print-Message-Traces", description = "Save message trace representations of valid traces (.txt)")

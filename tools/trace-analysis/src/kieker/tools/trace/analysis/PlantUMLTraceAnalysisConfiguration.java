@@ -26,7 +26,6 @@ import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.visualization.trace.SequenceDiagramFilter.SDModes;
 import kieker.visualization.trace.call.tree.AggregatedAllocationComponentOperationCallTreeFilterFactory;
 import kieker.visualization.trace.call.tree.AggregatedAssemblyComponentOperationCallTreeFilterFactory;
-import kieker.visualization.trace.call.tree.TraceCallTreeFilterFactory;
 import kieker.visualization.trace.call.tree.dot.AggregatedAllocationComponentOperationCallTreeFilter;
 import kieker.visualization.trace.call.tree.dot.AggregatedAssemblyComponentOperationCallTreeFilter;
 import kieker.visualization.trace.call.tree.plantuml.PlantUMLTraceCallTreeFilter;
@@ -159,8 +158,8 @@ public class PlantUMLTraceAnalysisConfiguration extends AbstractTraceAnalysisCon
     protected void createTraceCallTreeFilter(final SystemModelRepository systemRepository,
             final Distributor<MessageTrace> messageTraceDistributor,
             final String pathPrefix, final boolean shortLabels) {
-        final PlantUMLTraceCallTreeFilter componentPlotTraceCallTrees = TraceCallTreeFilterFactory.createPlantUMLFilter(systemRepository, shortLabels,
-                pathPrefix + AbstractTraceAnalysisConfiguration.CALL_TREE_FN_PREFIX);
+        final PlantUMLTraceCallTreeFilter componentPlotTraceCallTrees = new PlantUMLTraceCallTreeFilter(systemRepository, shortLabels,
+            pathPrefix + AbstractTraceAnalysisConfiguration.CALL_TREE_FN_PREFIX);
         final PlantUMLFileGenerator fileGenerator = new PlantUMLFileGenerator(this.parameters);
         this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotTraceCallTrees.getInputPort());
         this.connectPorts(componentPlotTraceCallTrees.getOutputPort(), fileGenerator.getInputPort());
