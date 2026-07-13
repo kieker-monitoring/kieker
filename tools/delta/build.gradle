@@ -25,12 +25,12 @@ dependencies {
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore:2.42.0"
 	implementation "org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.40.0"
 
-	implementation "org.csveed:csveed:0.8.3"
+	implementation "org.csveed:csveed:0.9.0"
 
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.21.2"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.1"
 
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.5"
-	implementation "com.sun.xml.bind:jaxb-impl:4.0.7"
+	implementation "com.sun.xml.bind:jaxb-impl:4.0.9"
 	implementation "org.apache.commons:commons-compress:1.28.0"
 
 	implementation "com.beust:jcommander:${jcommanderVersion}"
