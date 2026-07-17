@@ -56,7 +56,7 @@ task replaceHardCodedVersionNames() {
 
 // bookstore
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
-	buildFile = 'userguide/bookstore-application/build.gradle'
+	dir = file('userguide/bookstore-application')
 	tasks = ['jar']
 }
 
@@ -69,7 +69,7 @@ task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootPro
 }
 
 task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh2Instr') {
-	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	dir = file('userguide/ch2--manual-instrumentation/')
 	tasks = ['jar']
 }
 
@@ -82,7 +82,7 @@ task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject
 }
 
 task buildStandaloneExamplesUserguideCh34(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh34') {
-	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
+	dir = file('userguide/ch3-4--custom-components/')
 	tasks = ['jar']
 }
 
@@ -95,7 +95,7 @@ task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.
 }
 
 task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh5') {
-	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	dir = file('userguide/ch5--trace-monitoring-aspectj/')
 	tasks = ['jar']
 }
 
@@ -111,7 +111,7 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 }
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
-	buildFile = 'userguide/appendix-JMS/build.gradle'
+	dir = file('userguide/appendix-JMS/')
 	tasks = ['jar']
 }
 
@@ -127,7 +127,7 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 }
 
 task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
-	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	dir = file('userguide/appendix-AMQP/build.gradle')
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
@@ -143,7 +143,7 @@ task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [ro
 }
 
 task buildStandaloneExamplesUserguideAppendixKafka(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixKafka') {
-	buildFile = 'userguide/appendix-Kafka/build.gradle'
+	dir = file('userguide/appendix-Kafka/')
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
@@ -167,7 +167,7 @@ task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsO
 }
 
 task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn: [ copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE, copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE ]) {
-	buildFile = 'JavaEEServletContainerExample/build.gradle'
+	dir = file('JavaEEServletContainerExample/')
 	tasks = ['buildExample']
 }
 
@@ -185,7 +185,7 @@ task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject
 }
 
 task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringJVM') {
-	buildFile = 'monitoring/sampler-jvm/build.gradle'
+	dir = file('monitoring/sampler-jvm/')
 	tasks = ['jar']
 }
 
@@ -201,7 +201,7 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 }
 
 task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSpring') {
-	buildFile = 'monitoring/probe-spring/build.gradle'
+	dir = file('monitoring/probe-spring/')
 	tasks = ['jar']
 }
 
@@ -214,7 +214,7 @@ task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProj
 }
 
 task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringManual') {
-	buildFile = 'monitoring/probe-manual/build.gradle'
+	dir = file('monitoring/probe-manual/build.gradle')
 	tasks = ['jar']
 }
 
@@ -226,7 +226,7 @@ task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootPro
 }
 
 task buildStandaloneExamplesMonitoringAspectJ(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAspectJ') {
-	buildFile = 'monitoring/probe-aspectj/build.gradle'
+	dir = file('monitoring/probe-aspectj/')
 	tasks = ['jar']
 }
 
@@ -238,7 +238,7 @@ task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootPr
 }
 
 task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAdaptive') {
-	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
+	dir = file('monitoring/adaptive-monitoring/')
 	tasks = ['jar']
 }
 
@@ -252,7 +252,7 @@ task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [root
 }
 
 task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringTimesource') {
-	buildFile = 'monitoring/custom-timesource/build.gradle'
+	dir = file('monitoring/custom-timesource/')
 	tasks = ['jar']
 }
 
@@ -264,7 +264,7 @@ task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [roo
 }
 
 task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisTraceAnalysis']) {
-	buildFile = 'analysis/trace-analysis/build.gradle'
+	dir = file('analysis/trace-analysis/')
 	tasks = ['jar']
 }
 
@@ -287,43 +287,43 @@ task cleanStandaloneExamples(dependsOn: [
 }
 
 task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
-	buildFile = 'userguide/bookstore-application/build.gradle'
+	dir = file('userguide/bookstore-application/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/bookstore-application/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh2Instr(type: GradleBuild) {
-	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	dir = file('userguide/ch2--manual-instrumentation/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/ch2--manual-instrumentation/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh34(type: GradleBuild) {
-	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
+	dir = file('userguide/ch3-4--custom-components/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/ch3-4--custom-components/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
-	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	dir = file('userguide/ch5--trace-monitoring-aspectj/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/ch5--trace-monitoring-aspectj/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
-	buildFile = 'userguide/appendix-JMS/build.gradle'
+	dir = file('userguide/appendix-JMS/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/appendix-JMS/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
-	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	dir = file('userguide/appendix-AMQP/')
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
-	buildFile = 'JavaEEServletContainerExample/build.gradle'
+	dir = file('JavaEEServletContainerExample/')
 	tasks = ['clean']
 	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
 	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
@@ -331,43 +331,43 @@ task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 }
 
 task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
-	buildFile = 'monitoring/sampler-jvm/build.gradle'
+	dir = file('monitoring/sampler-jvm/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/sampler-jvm/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringSpring(type: GradleBuild) {
-	buildFile = 'monitoring/probe-spring/build.gradle'
+	dir = file('monitoring/probe-spring/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/probe-spring/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringManual(type: GradleBuild) {
-	buildFile = 'monitoring/probe-manual/build.gradle'
+	dir = file('monitoring/probe-manual/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/probe-manual/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringAspectJ(type: GradleBuild) {
-	buildFile = 'monitoring/probe-aspectj/build.gradle'
+	dir = file('monitoring/probe-aspectj/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/probe-aspectj/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringAdaptive(type: GradleBuild) {
-	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
+	dir = file('monitoring/adaptive-monitoring/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/adaptive-monitoring/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
-	buildFile = 'monitoring/custom-timesource/build.gradle'
+	dir = file('monitoring/custom-timesource/')
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/custom-timesource/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild) {
-	buildFile = 'analysis/trace-analysis/build.gradle'
+	dir = file('analysis/trace-analysis/')
 	tasks = ['clean']
 	delete fileTree(dir: 'analysis/trace-analysis/lib', include: '*.jar')
 }

@@ -3,26 +3,31 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.log.replayer.ReplayerMain'
+application {
+	mainClass = 'kieker.tools.log.replayer.ReplayerMain'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
+
+test {
+	useJUnitPlatform()
+}
 
 dependencies {
 	implementation project(":tools")
 	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	testImplementation project(':common').sourceSets.test.output
-	testImplementation project(':monitoring').sourceSets.test.output
-	testImplementation project(':analysis').sourceSets.test.output
-	testImplementation project(':tools').sourceSets.test.output
+	testImplementation project.project(':common').sourceSets.test.output
+	testImplementation project.project(':monitoring').sourceSets.test.output
+	testImplementation project.project(':analysis').sourceSets.test.output
+	testImplementation project.project(':tools').sourceSets.test.output
 
 	testImplementation "org.junit.jupiter:junit-jupiter:${libJunitJupiterVersion}"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 task uploadArchives {

@@ -13,8 +13,6 @@ project.artifacts {
 }
 
 // Since the analysis component requires JRE 11, this "tools component" requires JRE 11, too.
-sourceCompatibility = 17
-targetCompatibility = 17
 
 repositories {
 	maven {
@@ -38,6 +36,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.rosuda.REngine/REngine
 	implementation "org.rosuda.REngine:REngine:2.1.0"
 
-	testImplementation project(':common').sourceSets.test.output
-	testImplementation project(':tools').sourceSets.test.output
+	testImplementation project.project(':common').sourceSets.test.output
+	testImplementation project.project(':tools').sourceSets.test.output
 }

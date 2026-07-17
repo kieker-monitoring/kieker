@@ -24,7 +24,9 @@ version = ''
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.oshi.MonitoringStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.oshi.MonitoringStarter'
+}
 
 jar {
 	manifest {
