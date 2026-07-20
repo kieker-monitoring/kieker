@@ -47,19 +47,19 @@ public enum GraphFormat {
     },
 
     /**
-     * PlantUML format (wraps DOT in @startuml/@enduml).
+     * PlantUML format (wraps DOT in @startdot/@enddot).
      */
     PLANTUML(".puml") {
         @Override
         public void writePreamble(final PrintStream ps) {
-            ps.println(PlantUMLUtils.START_PUML + System.lineSeparator());
+            ps.println(PlantUMLUtils.START_DOT + System.lineSeparator());
             ps.println("digraph G {");
         }
 
         @Override
         public void writeEpilogue(final PrintStream ps) {
             ps.println("}");
-            ps.println(PlantUMLUtils.END_PUML + System.lineSeparator());
+            ps.println(PlantUMLUtils.END_DOT + System.lineSeparator());
         }
 
         @Override

@@ -36,6 +36,9 @@ public final class PlantUMLUtils {
     public static final String START_PUML = "@startuml";
     public static final String END_PUML = "@enduml";
 
+    public static final String START_DOT = "@startdot";
+    public static final String END_DOT = "@enddot";
+
     public static final String PLANTUML_PREAMBLE;
 
     private static final String PLANTUML_PREAMBLE_PATH = "sequence-preamble.puml";

@@ -158,9 +158,9 @@ public class PlantUMLGraphWriterPlugin extends AbstractConsumerStage<AbstractGra
         final String fileName = (this.outputPathName + File.separator + this.getOutputFileName(graphFormatter))
                 .replaceAll("\\.dot$", ".puml");
         final StringBuilder sb = new StringBuilder();
-        sb.append(PlantUMLUtils.START_PUML).append(System.lineSeparator())
+        sb.append(PlantUMLUtils.START_DOT).append(System.lineSeparator())
                 .append(specification).append(System.lineSeparator())
-                .append(PlantUMLUtils.END_PUML);
+                .append(PlantUMLUtils.END_DOT);
         final String pumlSource = sb.toString();
 
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
