@@ -2,8 +2,6 @@ plugins {
 	id 'application'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 repositories {
 	mavenLocal()
@@ -40,7 +38,9 @@ version = ''
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources' ]
 
-mainClassName = 'kieker.examples.monitoring.spring.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.spring.BookstoreStarter'
+}
 
 jar {
 	manifest {

@@ -23,7 +23,9 @@ version = ''
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.aspectj.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.aspectj.BookstoreStarter'
+}
 
 jar {
 	manifest {

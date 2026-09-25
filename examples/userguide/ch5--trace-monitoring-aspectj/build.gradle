@@ -24,7 +24,9 @@ version = ''
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
-mainClassName = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+}
 
 jar {
 	manifest {
