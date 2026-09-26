@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace.call.tree;
+package kieker.visualization.trace.call.tree.dot;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +29,9 @@ import kieker.model.system.model.SynchronousCallMessage;
 import kieker.model.system.model.util.AllocationComponentOperationPair;
 import kieker.tools.trace.analysis.filter.traceReconstruction.TraceProcessingException;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
+import kieker.visualization.trace.call.tree.AbstractCallTreeFilter;
 import kieker.visualization.trace.call.tree.AbstractCallTreeFilter.IPairFactory;
+import kieker.visualization.trace.call.tree.TraceCallTreeNode;
 
 /**
  * Plugin providing the creation of calling trees both for individual traces
