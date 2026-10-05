@@ -8,11 +8,19 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v6
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Synchronize SE GitLab
+
+      - name: Push to openCode
+        env:
+          ACCESS_TOKEN_OPENCODE: ${{ secrets.ACCESS_TOKEN_OPENCODE }}
+          USERNAME_OPENCODE: ${{ secrets.USERNAME_OPENCODE }}
+          GIT_REPO_OPENCODE: "https://gitlab.opencode.de/sh/fdm-sh/kieker.git"
         run: |
-          git remote add mirror https://oauth2:${{ secrets.SE_GIT_MIRROR }}@git.se.informatik.uni-kiel.de/kieker/kieker.git
-          git push mirror main --force
+          git remote add opencode https://${USERNAME_OPENCODE}:${ACCESS_TOKEN_OPENCODE}@${GIT_REPO_OPENCODE}
+          
+          # Force push all branches and tags to the GitLab repository
+          git push opencode main --force
