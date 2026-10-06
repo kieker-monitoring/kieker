@@ -18,7 +18,7 @@ jobs:
         env:
           ACCESS_TOKEN_OPENCODE: ${{ secrets.ACCESS_TOKEN_OPENCODE }}
           USERNAME_OPENCODE: ${{ secrets.USERNAME_OPENCODE }}
-          GIT_REPO_OPENCODE: "https://gitlab.opencode.de/sh/fdm-sh/kieker.git"
+          GIT_REPO_OPENCODE: "gitlab.opencode.de/sh/fdm-sh/kieker.git"
         run: |
           git remote add opencode https://${USERNAME_OPENCODE}:${ACCESS_TOKEN_OPENCODE}@${GIT_REPO_OPENCODE}
           
