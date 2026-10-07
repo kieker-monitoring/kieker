@@ -13,9 +13,6 @@ plugins {
 	id("io.freefair.aspectj.post-compile-weaving") version "9.5.0"
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
-
 // The following lines are necessay to create a test jar
 project.configurations {
 	testArchives.extendsFrom (testCompile)
@@ -96,7 +93,7 @@ dependencies {
 
 	testImplementation "commons-io:commons-io:2.22.0"
 
-	testImplementation project(':common').sourceSets.test.output
+	testImplementation project.project(':common').sourceSets.test.output
 
 	integrationTestImplementation "junit:junit:$libJunitVersion"
 }
@@ -146,8 +143,6 @@ task iajc(dependsOn: classes) {
 		ant.iajc(
 			XlintFile: 'aspectjXlint.properties',
 			X: 'joinpoints:synchronization',
-			source: sourceCompatibility,
-			target: targetCompatibility,
 			debug: 'true',
 			destdir: sourceSets.main.output.classesDir) {
 			classpath {

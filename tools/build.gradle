@@ -4,9 +4,6 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
-
 // The following lines are necessay to create a test jar
 project.configurations {
 	testArchives.extendsFrom (testCompile)
@@ -43,8 +40,8 @@ dependencies {
 
 	testImplementation "junit:junit:$libJunitVersion"
 
-	testImplementation project(':common').sourceSets.test.output
-	testImplementation project(':analysis').sourceSets.test.output
+	testImplementation project.project(':common').sourceSets.test.output
+	testImplementation project.project(':analysis').sourceSets.test.output
 }
 
 // publishing

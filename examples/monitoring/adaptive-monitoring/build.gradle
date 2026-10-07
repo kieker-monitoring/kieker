@@ -21,23 +21,24 @@ dependencies {
 
 distTar.enabled=false
 
-// Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
+}
 
 jar {
+	archiveBaseName = 'BookstoreApplication'
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runMonitoring(type: JavaExec) {
-	main = mainClassName
+	main = application.mainClass
 	classpath = sourceSets.main.runtimeClasspath
 	
 	// The path to the javaagent file might be replaced by ${System.properties['user.home']}/.m2/repository/net/monitoring/kieker/${kiekerVersion}/kieker-${kiekerVersion}-aspectj.jar if the jar is in the local maven repository
