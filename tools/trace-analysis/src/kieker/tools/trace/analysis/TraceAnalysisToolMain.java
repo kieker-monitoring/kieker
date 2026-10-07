@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.model.repository.SystemModelRepository;
 import kieker.tools.common.AbstractService;
+import kieker.tools.common.GraphicsEngineType;
 import kieker.tools.common.TraceAnalysisParameters;
 
 /**
@@ -40,13 +41,14 @@ import kieker.tools.common.TraceAnalysisParameters;
  * This is the trace analysis main class built upon TeeTime.
  *
  * @author Reiner Jung
+ * @author Yorrick Josuttis
  * @since 1.15
  */
-public class TraceAnalysisToolMain extends AbstractService<TraceAnalysisConfiguration, TraceAnalysisParameters> {
+public class TraceAnalysisToolMain extends AbstractService<AbstractTraceAnalysisConfiguration, TraceAnalysisParameters> {
 
 	private final SystemModelRepository systemRepository = new SystemModelRepository();
 
-	private TraceAnalysisConfiguration teetimeConfiguration;
+	private AbstractTraceAnalysisConfiguration teetimeConfiguration;
 
 	public TraceAnalysisToolMain() {
 		// Nothing to do here
@@ -107,8 +109,20 @@ public class TraceAnalysisToolMain extends AbstractService<TraceAnalysisConfigur
 	}
 
 	@Override
-	protected TraceAnalysisConfiguration createTeetimeConfiguration() throws ConfigurationException {
-		this.teetimeConfiguration = new TraceAnalysisConfiguration(this.settings, this.systemRepository);
+	protected AbstractTraceAnalysisConfiguration createTeetimeConfiguration() throws ConfigurationException {
+		switch (this.settings.getGraphicsEngineType()) {
+			case PLANTUML:
+				this.teetimeConfiguration = TraceAnalysisConfigurationFactory
+						.create(GraphicsEngineType.PLANTUML, this.settings, this.systemRepository);
+				break;
+			case DOTPIC:
+				this.teetimeConfiguration = TraceAnalysisConfigurationFactory
+						.create(GraphicsEngineType.DOTPIC, this.settings, this.systemRepository);
+				break;
+			default:
+				throw new ConfigurationException(
+						"Unknown configuration type: " + this.settings.getGraphicsEngineType());
+		}
 		return this.teetimeConfiguration;
 	}
 

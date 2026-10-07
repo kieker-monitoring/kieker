@@ -1,0 +1,13 @@
+skinparam style strictuml
+hide footbox
+
+skinparam sequence {
+    ActorBorderColor black
+    ActorBackgroundColor white
+    
+    ParticipantBorderColor black
+    ParticipantBackgroundColor white
+    
+    LifeLineBorderColor black
+    LifeLineBackgroundColor white
+}
