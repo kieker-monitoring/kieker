@@ -5,8 +5,47 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
-* 2.0.3 (April 28, 2026)
 
+* 2.0.4 (November 4, 2026)
+- Feature updates
+  - Add ZeroTimer by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/3115
+  - [GH-31] Added a mirroring workflow by @shinhyungyang in https://github.com/kieker-monitoring/kieker/pull/3048
+  - [GH-31] Repository mirroring by @shinhyungyang in https://github.com/kieker-monitoring/kieker/pull/3148
+  - [GH-40] Update gradle wrapper to 8.14.5 by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/3117
+- Minor fixes
+  - [GH-41] Fix indent with tabs by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/3119
+- Refactoring
+  - [GH-21] Refactorization of new Trace-Analysis: fix compatibility by @YorrickJosuttis in https://github.com/kieker-monitoring/kieker/pull/3090
+- Dependency updates
+  - Bump org.javassist:javassist from 3.30.2-GA to 3.31.0-GA by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3087
+  - Bump io.freefair.gradle:aspectj-plugin from 9.2.0 to 9.4.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3088
+  - Bump org.jgrapht:jgrapht-core from 1.5.2 to 1.5.3 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3085
+  - Bump org.junit.jupiter:junit-jupiter-engine from 6.0.3 to 6.1.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3094
+  - Bump org.ow2.asm:asm from 9.9.1 to 9.10.1 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3093
+  - Bump org.eclipse.jetty.ee10:jetty-ee10-webapp from 12.1.8 to 12.1.10 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3103
+  - Bump org.apache.kafka:kafka-clients from 4.2.0 to 4.3.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3107
+  - Bump com.sun.xml.bind:jaxb-impl from 4.0.7 to 4.0.9 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3104
+  - Bump commons-io:commons-io from 2.21.0 to 2.22.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3111
+  - Bump com.rabbitmq:amqp-client from 5.29.0 to 5.33.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3114
+  - Bump net.sourceforge.plantuml:plantuml from 1.2025.2 to 1.2026.6 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3106
+  - Bump com.squareup.okhttp3:okhttp from 5.3.2 to 5.4.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3113
+  - Constructor should be public by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/3120
+  - Bump com.rabbitmq:amqp-client from 5.33.0 to 5.33.1 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3123
+  - Bump org.csveed:csveed from 0.8.3 to 0.9.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3122
+  - Bump io.freefair.aspectj.post-compile-weaving from 9.2.0 to 9.5.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3121
+  - Bump com.diffplug.spotless from 8.4.0 to 8.8.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3125
+  - Bump com.fasterxml.jackson.core:jackson-databind from 2.21.2 to 2.22.1 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3127
+  - Bump org.apache.kafka:kafka-clients from 4.3.0 to 4.3.1 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3126
+  - Bump com.rabbitmq:amqp-client from 5.33.1 to 5.34.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3131
+  - Bump nz.ac.waikato.cms.weka:weka-stable from 3.8.6 to 3.8.7 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3132
+  - Bump com.github.oshi:oshi-core from 6.11.1 to 7.4.3 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3136
+  - Bump org.objenesis:objenesis from 3.5 to 3.6 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3137
+  - Bump com.diffplug.spotless from 8.8.0 to 8.9.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3135
+  - Bump org.apache.commons:commons-collections4 from 4.5.0 to 4.6.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3138
+  - Bump com.diffplug.spotless from 8.9.0 to 8.10.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3141
+  - Bump org.eclipse.emf:org.eclipse.emf.ecore.xmi from 2.40.0 to 2.41.0 by @dependabot[bot] in https://github.com/kieker-monitoring/kieker/pull/3144
+
+* 2.0.3 (April 28, 2026)
 - GH-7 Unique Jersey Version by @DaGeRe in https://github.com/kieker-monitoring/kieker/pull/2880
 - GH-15 JUnit 5.13.1 by @shinhyungyang in https://github.com/kieker-monitoring/kieker/pull/2945
 - JDK supports
