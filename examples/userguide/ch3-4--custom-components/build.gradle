@@ -29,11 +29,11 @@ application {
 
 jar {
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runMonitoringAndAnalysis(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 }
