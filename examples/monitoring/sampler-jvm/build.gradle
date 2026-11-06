@@ -22,22 +22,25 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'JVMMonitoring'
+
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.jvm.MonitoringStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.jvm.MonitoringStarter'
+}
 
 jar {
+	archiveBaseName = 'JVMMonitoring'
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runMonitoring(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs']
 }

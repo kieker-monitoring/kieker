@@ -18,22 +18,24 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'OshiMonitoring'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.oshi.MonitoringStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.oshi.MonitoringStarter'
+}
 
 jar {
+	archiveBaseName = 'OshiMonitoring'
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runMonitoring(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=monitoring-logs']
 }

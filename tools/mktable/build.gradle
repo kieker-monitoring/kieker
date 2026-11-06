@@ -3,13 +3,13 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
-targetCompatibility = 17
 
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.mktable.MakeTableMain'
+application {
+	mainClass = 'kieker.tools.mktable.MakeTableMain'
+}
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 

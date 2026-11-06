@@ -18,29 +18,31 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplication'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
-mainClassName = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+}
 
 jar {
+	archiveBaseName = 'BookstoreApplication'
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runExampleOperationExecutions(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
 	jvmArgs = ["-javaagent:lib/kieker-${kiekerVersion}-aspectj.jar"]
 }
 
 task runExampleFlowEvents(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
 	jvmArgs = ["-javaagent:lib/kieker-${kiekerVersion}-aspectj.jar",
@@ -52,7 +54,7 @@ task runExampleFlowEvents(type: JavaExec) {
 
 
 task runHostnameRewriter(type: JavaExec) {
-	main = 'kieker.examples.userguide.ch5bookstore.BookstoreHostnameRewriter'
+	mainClass = 'kieker.examples.userguide.ch5bookstore.BookstoreHostnameRewriter'
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
 }
