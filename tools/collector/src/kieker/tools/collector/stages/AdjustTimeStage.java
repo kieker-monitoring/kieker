@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages;
+package kieker.tools.collector.stages;
 
 import java.util.Date;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.log.replayer.stages.time.adjuster.ITimeAdjuster;
-
+import kieker.tools.collector.stages.time.adjuster.ITimeAdjuster;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 

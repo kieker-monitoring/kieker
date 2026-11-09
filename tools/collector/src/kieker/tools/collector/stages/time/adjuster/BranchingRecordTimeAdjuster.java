@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages.time.adjuster;
+package kieker.tools.collector.stages.time.adjuster;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.BranchingRecord;
