@@ -35,6 +35,26 @@ function extract_archive_to {
 	fi
 }
 
+function check_dot_isomorphic {
+	file1=$1
+	file2=$2
+	pip3 install --user networkx
+	python3 -c "
+import sys, re, networkx as nx
+def parse(f):
+    c = open(f).read()
+    G = nx.MultiDiGraph()
+    for m in re.finditer(r'(\d+)\s*\[\s*label\s*=\s*[\"\x27](.*?)(?<!\\\\)[\"\x27]', c):
+        G.add_node(m.group(1), label=m.group(2))
+    for m in re.finditer(r'(\d+)\s*->\s*(\d+)', c):
+        G.add_edge(m.group(1), m.group(2))
+    return G
+if nx.is_isomorphic(parse(sys.argv[1]), parse(sys.argv[2]), node_match=lambda n1,n2: n1['label']==n2['label']):
+    exit(0)
+else: 
+    exit(1)" $file1 $file2
+}
+
 function check_bin_archive {
 	if [ -z "$1" ]; then
 		error "No source archive provided"
@@ -105,14 +125,14 @@ function check_bin_archive {
 		    exit 1;
 		else
 		    # Note that this is a hack because sometimes the line order differs
-		    (cat "$f" | sort) > left.tmp
-		    (cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
+		    cat "$f" > left.tmp
+		    cat "${REFERENCE_OUTPUT_DIR}/$f" > right.tmp
 		    if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
 			# only the basic test already performed because the assignment to classes is not deterministic
 		        information "OK"
 		        continue;
 		    fi
-		    if ! diff left.tmp right.tmp; then
+		    if ! check_dot_isomorphic left.tmp right.tmp; then
 		        error "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
 		        exit 1
 		    else
