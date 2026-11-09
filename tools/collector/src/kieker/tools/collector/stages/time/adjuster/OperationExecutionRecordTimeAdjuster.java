@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages.time.adjuster;
+package kieker.tools.collector.stages.time.adjuster;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  *
  * @author Reiner Jung
  * @since 2.0.0
  */
-public interface ITimeAdjuster {
+public class OperationExecutionRecordTimeAdjuster implements ITimeAdjuster {
 
-	/**
-	 * Modify time values in a specific {@link MonitoringRecord} type.
-	 *
-	 * @param record
-	 *            record
-	 * @param timeDelta
-	 *            time delta to be added
-	 */
-	void apply(IMonitoringRecord record, long timeDelta);
+	@Override
+	public void apply(final IMonitoringRecord record, final long timeDelta) {
+		if (record instanceof OperationExecutionRecord) {
+			final OperationExecutionRecord operation = (OperationExecutionRecord) record;
+			operation.setTin(operation.getTin() + timeDelta);
+			operation.setTout(operation.getTout() + timeDelta);
+		}
+	}
+
 }

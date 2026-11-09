@@ -15,12 +15,30 @@
  ***************************************************************************/
 package kieker.tools.collector;
 
+import java.io.File;
+import java.io.IOException;
+
 import kieker.analysis.generic.sink.DataSink;
+import kieker.analysis.generic.time.TimestampFilter;
+import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.collector.stages.AdjustTimeStage;
+import kieker.tools.collector.stages.ReplayControlStage;
+import kieker.tools.collector.stages.time.adjuster.BranchingRecordTimeAdjuster;
+import kieker.tools.collector.stages.time.adjuster.FlowEventTimeAdjuster;
+import kieker.tools.collector.stages.time.adjuster.OperationExecutionRecordTimeAdjuster;
 import kieker.analysis.generic.source.ISourceCompositeStage;
 import kieker.common.exception.ConfigurationException;
+import kieker.tools.common.CommonConfigurationKeys;
+import kieker.tools.source.LogsReaderCompositeStage;
 import kieker.tools.source.SourceStageFactory;
 
+import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
+import teetime.framework.OutputPort;
+import teetime.stage.Counter;
+
 
 /**
  * Analysis configuration for the data collector.
@@ -32,8 +50,11 @@ import teetime.framework.Configuration;
  */
 public class CollectorConfiguration extends Configuration {
 
+	final String SOURCE_STAGE = LogsReaderCompositeStage.class.getCanonicalName();
+
 	private final DataSink consumer;
 	private final ISourceCompositeStage sourceStage;
+	private final Counter<IMonitoringRecord> counter;
 
 	/**
 	 * Configure analysis.
@@ -42,21 +63,66 @@ public class CollectorConfiguration extends Configuration {
 	 *            configuration for the collector
 	 * @throws ConfigurationException
 	 *             on configuration error
+	 * @throws IOException
+	 *             on io errors reading files
 	 */
-	public CollectorConfiguration(final kieker.common.configuration.Configuration configuration)
-			throws ConfigurationException {
+	public CollectorConfiguration(final Settings settings)
+			throws ConfigurationException, IOException {
+		final kieker.common.configuration.Configuration configuration;
+		configuration = ConfigurationFactory.createConfigurationFromFile(settings.getKiekerMonitoringProperties());
+		if (settings.getDataLocation() != null) {
+			configuration.setProperty(CommonConfigurationKeys.SOURCE_STAGE, SOURCE_STAGE);
+			String filenames = "";
+			for (File f : settings.getDataLocation()) {
+				if (filenames.isEmpty()) {
+					filenames = f.getCanonicalPath();
+				} else {
+					filenames += ":" + f.getCanonicalPath();
+				}
+			}
+			configuration.setProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, filenames);
+		}
+
+		configuration.setProperty(ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP, settings.isTimeRelative());
+
+
 		this.sourceStage = SourceStageFactory.createSourceCompositeStage(configuration);
+		OutputPort<IMonitoringRecord> outputPort = this.sourceStage.getOutputPort();
+
+		if ((settings.getIgnoreBeforeDate() != null) || (settings.getIgnoreAfterDate() != null)) {
+			final long ignoreBeforeDate = settings.getIgnoreBeforeDate() != null ? settings.getIgnoreBeforeDate() : Long.MIN_VALUE; // NOCS
+			final long ignoreAfterDate = settings.getIgnoreAfterDate() != null ? settings.getIgnoreAfterDate() : Long.MAX_VALUE; // NOCS
+			final TimestampFilter timestampFilter = new TimestampFilter(ignoreBeforeDate, ignoreAfterDate);
+			this.connectPorts(outputPort, timestampFilter.getMonitoringRecordsCombinedInputPort());
+			outputPort = timestampFilter.getRecordsWithinTimePeriodOutputPort();
+		}
+
+		if (settings.isTimeRelative()) {
+			final AdjustTimeStage rewriteTime = new AdjustTimeStage(new FlowEventTimeAdjuster(), new OperationExecutionRecordTimeAdjuster(),
+					new BranchingRecordTimeAdjuster());
+			this.connectPorts(outputPort, rewriteTime.getInputPort());
+			outputPort = rewriteTime.getOutputPort();
+		}
+
+		if (!settings.isNoDelay()) {
+			final ReplayControlStage delayStage = new ReplayControlStage(1000 * 1000, settings.getDelayFactor(),
+					settings.getShowRecordCount());
+			this.connectPorts(outputPort, delayStage.getInputPort());
+			outputPort = delayStage.getOutputPort();
+		}
+
+		this.counter = new Counter<>();
+		this.connectPorts(outputPort, this.counter.getInputPort());
 
 		this.consumer = new DataSink(configuration);
-
-		this.connectPorts(this.sourceStage.getOutputPort(), this.consumer.getInputPort());
-	}
-
-	public DataSink getCounter() {
-		return this.consumer;
+		this.connectPorts(this.counter.getOutputPort(), this.consumer.getInputPort());
 	}
 
 	public ISourceCompositeStage getSourceStage() {
 		return this.sourceStage;
+	}
+
+	public Counter<IMonitoringRecord> getCounter() {
+		return this.counter;
 	}
 }
