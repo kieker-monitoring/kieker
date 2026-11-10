@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages.time.adjuster;
+package kieker.tools.collector.stages;
 
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.BranchingRecord;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- *
- * @author Reiner Jung
- * @since 2.0.0
- */
-public class BranchingRecordTimeAdjuster implements ITimeAdjuster {
+class ReplayControlStageTest { // NOCS, NOPMD test class
 
-	@Override
-	public void apply(final IMonitoringRecord record, final long timeDelta) {
-		if (record instanceof BranchingRecord) {
-			final BranchingRecord branchingRecord = (BranchingRecord) record;
-			branchingRecord.setTimestamp(branchingRecord.getTimestamp() + timeDelta);
-		}
+	@BeforeEach
+	public void setUp() throws Exception {
+		// nothing to be done here for now
+	}
+
+	@Test
+	public void testNoDelaySet() {
+		Assertions.fail("Not yet implemented");
+	}
+
+	@Test
+	public void testDoubleDelaySet() {
+		Assertions.fail("Not yet implemented");
 	}
 
 }

@@ -23,13 +23,17 @@ package kieker.tools.common;
  * @since 1.15
  *
  */
-public final class CommonConfigurationKeys {
+public class CommonConfigurationKeys {
 	public static final String PREFIX = "kieker.tools.";
 
 	public static final String SOURCE_STAGE = CommonConfigurationKeys.PREFIX + "source";
+	
+	public static final String DEBUG = CommonConfigurationKeys.PREFIX + "debug";
+	
+	public static final String VERBOSE = CommonConfigurationKeys.PREFIX + "verbose";
 
 	/** do not instantiate factory. */
-	private CommonConfigurationKeys() {
+	protected CommonConfigurationKeys() {
 		// factory class constructor
 	}
 
