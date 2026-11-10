@@ -19,6 +19,7 @@ import java.util.Date;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.collector.stages.time.adjuster.ITimeAdjuster;
+
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 

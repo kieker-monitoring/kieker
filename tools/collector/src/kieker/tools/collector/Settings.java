@@ -44,8 +44,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		"--no-delay" }, required = false, description = "Read and send events as fast as possible.")
 	private boolean noDelay;
 
-	@Parameter(names = { "-d",
-		"--delay" }, required = false, description = "Delay factor. Default is 1 = realtime, 2 = twice the speed/half of the delay.")
+	@Parameter(names = { "-D", "--delay" }, required = false, description = "Delay factor. Default is 1 = realtime, 2 = twice the speed/half of the delay.")
 	private Long delayFactor;
 
 	@Parameter(names = { "-s",
@@ -58,7 +57,7 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 
 	@Parameter(names = { "-r",
 		"--time-rewrite" }, required = false, description = "Set event timestamps relative to present time.")
-	private boolean timeRelative; // NOPMD pmd thinks this is not used, but this is not the case.
+	private boolean timeRewrite; // NOPMD pmd thinks this is not used, but this is not the case.
 
 	@Parameter(names = { "-bd", "--ignore-records-before-date" }, required = false,
 			description = "Records logged before this date (UTC timezone) are ignored (disabled by default) yyyyMMdd-HHmmss",
@@ -90,8 +89,8 @@ public class Settings { // NOCS, NOPMD does not need a constructor
 		return this.showRecordCount;
 	}
 
-	public boolean isTimeRelative() {
-		return this.timeRelative;
+	public boolean isTimeRewrite() {
+		return this.timeRewrite;
 	}
 
 	public Long getIgnoreBeforeDate() {
