@@ -19,7 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -101,15 +103,12 @@ public class CollectorConfiguration extends Configuration {
 		
 		if (settings.getDataLocation() != null) {
 			configuration.setProperty(CommonConfigurationKeys.SOURCE_STAGE, SOURCE_STAGE);
-			String filenames = "";
+			String[] filenames = new String[settings.getDataLocation().size()];
+			int i = 0;
 			for (File f : settings.getDataLocation()) {
-				if (filenames.isEmpty()) {
-					filenames = f.getCanonicalPath();
-				} else {
-					filenames += File.pathSeparator + f.getCanonicalPath();
-				}
+				filenames[i++] = f.getCanonicalPath();
 			}
-			configuration.setProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, filenames);
+			configuration.setStringArrayProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, filenames);
 		}
 
 		Boolean timeRewrite = configuration.getBooleanProperty(CollectorConfigurationKeys.TIME_REWRITE);
