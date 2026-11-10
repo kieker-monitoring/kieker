@@ -20,9 +20,12 @@ if [ $? -eq 0 ]; then
   docker run -u `id -u` --rm -v `pwd`:/opt/kieker kieker/kieker-build:temurin17 /bin/sh -c "\
     cd /opt/kieker;\
     export GRADLE_USER_HOME=/opt/kieker;\
+    ./gradlew clean &&\
     ./gradlew compileJava compileTestJava &&\
     ./gradlew check &&\
-    ./gradlew build distribute"
+    ./gradlew build distribute &&\
+    bin/dev/release-check-extended.sh
+"
 else
   echo "You are not in the docker group."
 fi

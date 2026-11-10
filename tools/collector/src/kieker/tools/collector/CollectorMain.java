@@ -23,13 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.PathConverter;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.AbstractService;
-import kieker.tools.common.CommonConfigurationKeys;
 import kieker.tools.common.ParameterEvaluationUtils;
 
 /**
@@ -45,7 +42,7 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 	private static final Logger LOGGER = LoggerFactory.getLogger(CollectorMain.class);
 
 	private CollectorConfiguration configuration;
-	private final Settings parameter = new Settings();
+	private final Settings settings = new Settings();
 
 	/**
 	 * This is a simple main class which does not need to be instantiated.
@@ -77,7 +74,7 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 	 * @return returns exit code
 	 */
 	public int run(final String title, final String label, final String[] args) {
-		final int result = super.run(title, label, args, this.parameter);
+		final int result = super.run(title, label, args, this.settings);
 		if ((this.configuration != null) && LOGGER.isInfoEnabled()) {
 			CollectorMain.LOGGER.info("Records send {}", this.configuration.getCounter().getNumElementsPassed());
 		}
@@ -87,7 +84,7 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 	@Override
 	protected CollectorConfiguration createTeetimeConfiguration() throws ConfigurationException {
 		try {
-			return new CollectorConfiguration(this.parameter);
+			return new CollectorConfiguration(this.settings);
 		} catch (IOException e) {
 			throw new ConfigurationException(e);
 		}
@@ -95,8 +92,8 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		boolean worked = ParameterEvaluationUtils.isFileReadable(this.parameter.getKiekerMonitoringProperties().toFile(), "Configuration File", commander);
-		for (final File file : this.parameter.getDataLocation()) {
+		boolean worked = ParameterEvaluationUtils.isFileReadable(this.settings.getKiekerMonitoringProperties().toFile(), "Configuration File", commander);
+		for (final File file : this.settings.getDataLocation()) {
 			worked &= ParameterEvaluationUtils.checkDirectory(file, "Input Kieker directory",
 					commander);
 		}
@@ -105,12 +102,12 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 
 	@Override
 	protected Path getConfigurationPath() {
-		return this.parameter.getKiekerMonitoringProperties();
+		return this.settings.getKiekerMonitoringProperties();
 	}
 
 	@Override
-	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-		configuration.getStringProperty(CommonConfigurationKeys.SOURCE_STAGE);
+	protected boolean checkConfiguration(final Configuration localConfiguration, final JCommander commander) {
+		localConfiguration.getStringProperty(CollectorConfigurationKeys.SOURCE_STAGE);
 		return true;
 	}
 
