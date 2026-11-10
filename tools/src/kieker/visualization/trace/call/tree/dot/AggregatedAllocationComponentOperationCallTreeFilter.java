@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace.call.tree;
+package kieker.visualization.trace.call.tree.dot;
 
 import kieker.model.repository.AllocationComponentOperationPairFactory;
 import kieker.model.repository.SystemModelRepository;
@@ -25,9 +25,15 @@ import kieker.model.system.model.util.AllocationComponentOperationPair;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeFilter;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeNode;
+import kieker.visualization.trace.call.tree.AbstractCallTreeNode;
+import kieker.visualization.trace.call.tree.GraphFormat;
+import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
 
 /**
  * @author Andre van Hoorn
+ * @author Yorrick Josuttis -- plantuml support
  *
  * @since 1.1
  */
@@ -44,10 +50,12 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	 *            use short labels
 	 * @param dotOutputFile
 	 *            output file name
+     * @param format
+     *            output format, either DOT or PLANTUML
 	 */
 	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
-			final boolean shortLabels, final String dotOutputFile) {
-		super(repository, includeWeights, shortLabels, dotOutputFile);
+			final boolean shortLabels, final String dotOutputFile, final GraphFormat format) {
+		super(repository, includeWeights, shortLabels, dotOutputFile, format);
 
 		this.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
