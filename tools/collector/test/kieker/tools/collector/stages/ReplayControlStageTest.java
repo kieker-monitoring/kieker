@@ -13,24 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages.time.adjuster;
+package kieker.tools.collector.stages;
 
-import kieker.common.record.IMonitoringRecord;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-/**
- *
- * @author Reiner Jung
- * @since 2.0.0
- */
-public interface ITimeAdjuster {
+class ReplayControlStageTest { // NOCS, NOPMD test class
 
-	/**
-	 * Modify time values in a specific {@link MonitoringRecord} type.
-	 *
-	 * @param record
-	 *            record
-	 * @param timeDelta
-	 *            time delta to be added
-	 */
-	void apply(IMonitoringRecord record, long timeDelta);
+	@BeforeEach
+	public void setUp() throws Exception {
+		// nothing to be done here for now
+	}
+
+	@Disabled
+	@Test
+	public void testNoDelaySet() {
+		Assertions.fail("Not yet implemented");
+	}
+
+	@Disabled
+	@Test
+	public void testDoubleDelaySet() {
+		Assertions.fail("Not yet implemented");
+	}
+
 }

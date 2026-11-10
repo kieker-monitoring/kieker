@@ -13,30 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.log.replayer.stages;
+package kieker.tools.collector.stages.time.adjuster;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 
-class ReplayControlStageTest { // NOCS, NOPMD test class
+/**
+ *
+ * @author Reiner Jung
+ * @since 2.0.0
+ */
+public class OperationExecutionRecordTimeAdjuster implements ITimeAdjuster {
 
-	@BeforeEach
-	public void setUp() throws Exception {
-		// nothing to be done here for now
-	}
-
-	@Disabled
-	@Test
-	public void testNoDelaySet() {
-		Assertions.fail("Not yet implemented");
-	}
-
-	@Disabled
-	@Test
-	public void testDoubleDelaySet() {
-		Assertions.fail("Not yet implemented");
+	@Override
+	public void apply(final IMonitoringRecord record, final long timeDelta) {
+		if (record instanceof OperationExecutionRecord) {
+			final OperationExecutionRecord operation = (OperationExecutionRecord) record;
+			operation.setTin(operation.getTin() + timeDelta);
+			operation.setTout(operation.getTout() + timeDelta);
+		}
 	}
 
 }

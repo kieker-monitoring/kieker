@@ -18,7 +18,7 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 	id 'jacoco'
-	id "com.diffplug.spotless" version "8.9.0" apply false
+	id "com.diffplug.spotless" version "8.10.0" apply false
 }
 
 configurations {
@@ -33,9 +33,9 @@ dependencies {
 	resultJar "org.slf4j:slf4j-api:${libSlf4jApiVersion}"
 	resultJar "org.jctools:jctools-core:${libJctoolsVersion}"
 
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.common:2.45.0'
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.40.0'
-	emfJarConfig 'org.eclipse.emf:org.eclipse.emf.ecore:2.42.0'
+	emfJarConfig "org.eclipse.emf:org.eclipse.emf.common:2.45.0"
+	emfJarConfig "org.eclipse.emf:org.eclipse.emf.ecore.xmi:${libEMFEcoreXmiVersion}"
+	emfJarConfig "org.eclipse.emf:org.eclipse.emf.ecore:2.42.0"
 
 	aspectJarConfig "org.aspectj:aspectjweaver:${aspectjVersion}"
 	aspectJarConfig "com.rabbitmq:amqp-client:5.34.0"
@@ -479,7 +479,6 @@ def checkSubprojects = [
 	project(':tools:dar'),
 	project(':tools:delta'),
 	project(':tools:fxca'),
-	project(':tools:log-replayer'),
 	project(':tools:maa'),
 	project(':tools:mktable'),
 	project(':tools:mop'),
@@ -961,7 +960,6 @@ def tools = [
 	'dar',
 	'delta',
 	'fxca',
-	'log-replayer',
 	'maa',
 	'mktable',
 	'mop',
@@ -1044,7 +1042,6 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
 	':tools:dar:distZip',
 	':tools:delta:distZip',
 	':tools:fxca:distZip',
-	':tools:log-replayer:distZip',
 	':tools:maa:distZip',
 	':tools:mktable:distZip',
 	':tools:mop:distZip',

@@ -15,16 +15,18 @@
  ***************************************************************************/
 package kieker.tools.collector;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.PathConverter;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.AbstractService;
-import kieker.tools.common.CommonConfigurationKeys;
 import kieker.tools.common.ParameterEvaluationUtils;
 
 /**
@@ -35,11 +37,12 @@ import kieker.tools.common.ParameterEvaluationUtils;
  *
  * @since 1.16
  */
-public final class CollectorMain extends AbstractService<CollectorConfiguration, CollectorMain> {
+public final class CollectorMain extends AbstractService<CollectorConfiguration, Settings> {
 
-	@Parameter(names = { "-c",
-		"--configuration" }, required = true, description = "Configuration file.", converter = PathConverter.class)
-	private Path configurationPath;
+	private static final Logger LOGGER = LoggerFactory.getLogger(CollectorMain.class);
+
+	private CollectorConfiguration configuration;
+	private final Settings settings = new Settings();
 
 	/**
 	 * This is a simple main class which does not need to be instantiated.
@@ -56,27 +59,55 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 	 */
 	public static void main(final String[] args) {
 		final CollectorMain collector = new CollectorMain();
-		System.exit(collector.run("Collector", "collector", args, collector));
+		System.exit(collector.run("Collector", "collector", args));
+	}
+
+	/**
+	 * Runner method.
+	 *
+	 * @param title
+	 *            application title
+	 * @param label
+	 *            logging label
+	 * @param args
+	 *            command line arguments
+	 * @return returns exit code
+	 */
+	public int run(final String title, final String label, final String[] args) {
+		final int result = super.run(title, label, args, this.settings);
+		if ((this.configuration != null) && LOGGER.isInfoEnabled()) {
+			CollectorMain.LOGGER.info("Records send {}", this.configuration.getCounter().getNumElementsPassed());
+		}
+		return result;
 	}
 
 	@Override
 	protected CollectorConfiguration createTeetimeConfiguration() throws ConfigurationException {
-		return new CollectorConfiguration(this.kiekerConfiguration);
+		try {
+			return new CollectorConfiguration(this.settings);
+		} catch (IOException e) {
+			throw new ConfigurationException(e);
+		}
 	}
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return ParameterEvaluationUtils.isFileReadable(this.configurationPath.toFile(), "Configuration File", commander);
+		boolean worked = ParameterEvaluationUtils.isFileReadable(this.settings.getKiekerMonitoringProperties().toFile(), "Configuration File", commander);
+		for (final File file : this.settings.getDataLocation()) {
+			worked &= ParameterEvaluationUtils.checkDirectory(file, "Input Kieker directory",
+					commander);
+		}
+		return worked;
 	}
 
 	@Override
 	protected Path getConfigurationPath() {
-		return this.configurationPath;
+		return this.settings.getKiekerMonitoringProperties();
 	}
 
 	@Override
-	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-		configuration.getStringProperty(CommonConfigurationKeys.SOURCE_STAGE);
+	protected boolean checkConfiguration(final Configuration localConfiguration, final JCommander commander) {
+		localConfiguration.getStringProperty(CollectorConfigurationKeys.SOURCE_STAGE);
 		return true;
 	}
 
