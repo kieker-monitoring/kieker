@@ -106,7 +106,7 @@ public class CollectorConfiguration extends Configuration {
 				if (filenames.isEmpty()) {
 					filenames = f.getCanonicalPath();
 				} else {
-					filenames += ":" + f.getCanonicalPath();
+					filenames += File.pathSeparator + f.getCanonicalPath();
 				}
 			}
 			configuration.setProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, filenames);
