@@ -19,9 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -103,7 +101,7 @@ public class CollectorConfiguration extends Configuration {
 		
 		if (settings.getDataLocation() != null) {
 			configuration.setProperty(CommonConfigurationKeys.SOURCE_STAGE, SOURCE_STAGE);
-			String[] filenames = new String[settings.getDataLocation().size()];
+			final String[] filenames = new String[settings.getDataLocation().size()];
 			int i = 0;
 			for (File f : settings.getDataLocation()) {
 				filenames[i++] = f.getCanonicalPath();
