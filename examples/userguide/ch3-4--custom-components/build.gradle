@@ -23,15 +23,17 @@ distTar.enabled=false
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
-mainClassName = 'kieker.examples.userguide.ch3and4bookstore.Starter'
+application {
+    mainClass = 'kieker.examples.userguide.ch3and4bookstore.Starter'
+}
 
 jar {
 	manifest {
-		attributes 'Main-Class': mainClassName
+		attributes 'Main-Class': application.mainClass.get()
 	}
 }
 
 task runMonitoringAndAnalysis(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 }

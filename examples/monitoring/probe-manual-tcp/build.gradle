@@ -22,22 +22,24 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.manual.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.monitoring.manual.BookstoreStarter'
+}
 
 jar {
+	archiveBaseName = 'BookstoreApplication'
         manifest {
-                attributes 'Main-Class': mainClassName
+                attributes 'Main-Class': application.mainClass.get()
         }
 }
 
 task runMonitoring(type: JavaExec) {
-	main = mainClassName
+	mainClass = application.mainClass.get()
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.configuration=kieker.logging.tcp.properties']
 }

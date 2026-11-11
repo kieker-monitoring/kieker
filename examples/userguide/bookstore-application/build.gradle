@@ -13,16 +13,18 @@ dependencies {
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
-mainClassName = 'kieker.examples.userguide.ch2bookstore.BookstoreStarter'
+application {
+    mainClass = 'kieker.examples.userguide.ch2bookstore.BookstoreStarter'
+}
 
 jar {
+	archiveBaseName = 'BookstoreApplication'
     manifest {
-        attributes 'Main-Class': mainClassName
+        attributes 'Main-Class': application.mainClass.get()
     }
 }

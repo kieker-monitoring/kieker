@@ -17,6 +17,7 @@ package kieker.tools.collector.stages;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class ReplayControlStageTest { // NOCS, NOPMD test class
@@ -26,11 +27,13 @@ class ReplayControlStageTest { // NOCS, NOPMD test class
 		// nothing to be done here for now
 	}
 
+	@Disabled
 	@Test
 	public void testNoDelaySet() {
 		Assertions.fail("Not yet implemented");
 	}
 
+	@Disabled
 	@Test
 	public void testDoubleDelaySet() {
 		Assertions.fail("Not yet implemented");
