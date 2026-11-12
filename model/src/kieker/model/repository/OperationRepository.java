@@ -31,7 +31,9 @@ import kieker.model.system.model.Operation;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class OperationRepository extends AbstractRepository {
 	public static final Signature ROOT_SIGNATURE = new Signature(SystemModelRepository.ROOT_NODE_LABEL, new String[] {},
 			"<>", new String[] {});

@@ -1,0 +1,104 @@
+@startuml
+abstract class AbstractMessage {
+  int id
+  Signature signature
+}
+AbstractMessage --> ComponentType : componentType
+abstract class AbstractSession {
+  String sessionId
+  long startTime
+  long endTime
+  ISessionState state
+}
+AbstractSession *--> " * " AbstractTrace : containedTraces
+abstract class AbstractTrace
+AbstractTrace --> TraceInformation : traceInformation
+
+class TraceInformation
+
+class AllocationComponent {
+  int id
+}
+AllocationComponent --> AssemblyComponent : assemblyComponent
+AllocationComponent --> ExecutionContainer : executionContainer
+
+class AssemblyComponent {
+  int id
+  String name
+}
+AssemblyComponent --> ComponentType : type
+
+class "Operation"
+
+ComponentType *--> "*" Operation : operations
+class ComponentType {
+  int id
+  String packageName
+  String typeName
+}
+
+class Execution {
+  long traceId
+  String sessionId
+  int eoi
+  int ess
+  long tin
+  long tout
+}
+Execution --> Operation : operation
+Execution --> AllocationComponent : allocationComponent
+
+class ExecutionContainer {
+  int id
+  String name
+}
+ExecutionContainer --> ExecutionContainer : parent
+ExecutionContainer *--> " * " ExecutionContainer : childContainers
+
+class ExecutionTrace {
+  int minEoi = -1
+  int maxEoi = -1
+  long minTin = -1
+  long maxTout = -1
+  int maxEss = -1
+}
+ExecutionTrace --|> AbstractTrace
+ExecutionTrace *--> " * " Execution : trace
+ExecutionTrace *--> " * " Execution : unmodifiableExecutions
+ExecutionTrace --> MessageTrace : messageTraceReference
+
+class ExecutionTraceBasedSession
+
+ExecutionTraceBasedSession --|> AbstractSession
+
+class InvalidExecutionTrace
+InvalidExecutionTrace --> ExecutionTrace : invalidExecutionTraceArtifacts
+
+class MessageTrace {
+  long startTimestamp
+  long endTimestamp
+}
+MessageTrace --|> AbstractTrace
+MessageTrace *--> " * " AbstractMessage : messages
+
+class MessageTraceBasedSession
+MessageTraceBasedSession --|> AbstractSession
+
+class Operation {
+  int id
+  Signature signature
+}
+Operation --> ComponentType : componentType
+
+RootAssemblyComponent --|> AssemblyComponent
+RootExecutionContainer --|> ExecutionContainer
+
+SynchronousCallMessage --|> AbstractMessage
+SynchronousReplyMessage --|> AbstractMessage
+
+class TraceInformation {
+  long traceId
+  String sessionId
+}
+
+@enduml

@@ -20,6 +20,7 @@ package kieker.model.system.model;
  *
  * @since 1.15
  */
+@Deprecated
 public final class ModelFactory {
 
 	/** Label for the root node in graphs. */

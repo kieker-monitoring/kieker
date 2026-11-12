@@ -29,7 +29,9 @@ import kieker.model.system.model.ComponentType;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class TypeRepository extends AbstractRepository {
 
 	/** This constant represents the root component. */

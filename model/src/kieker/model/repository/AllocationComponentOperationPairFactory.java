@@ -29,7 +29,9 @@ import kieker.model.system.model.util.AllocationComponentOperationPair;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class AllocationComponentOperationPairFactory extends AbstractRepository {
 	public static final AllocationComponentOperationPair ROOT_PAIR = new AllocationComponentOperationPair(
 			AbstractRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,

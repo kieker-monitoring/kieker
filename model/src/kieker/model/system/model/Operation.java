@@ -27,6 +27,7 @@ import kieker.model.repository.AbstractRepository;
  *
  * @since 1.1
  */
+@Deprecated
 public class Operation { // NOPMD DataClass
 
 	/** The ID for the root operation. */

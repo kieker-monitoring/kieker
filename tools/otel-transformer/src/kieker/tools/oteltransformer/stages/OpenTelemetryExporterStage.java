@@ -17,6 +17,7 @@
 package kieker.tools.oteltransformer.stages;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
@@ -25,9 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.util.signature.ClassOperationSignaturePair;
-import kieker.model.system.model.Execution;
-import kieker.model.system.model.ExecutionTrace;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -50,7 +48,7 @@ import teetime.framework.AbstractConsumerStage;
  * 
  * @author DaGeRe
  */
-public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionTrace> {
+public class OpenTelemetryExporterStage extends AbstractConsumerStage<List<OTelExecution>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenTelemetryExporterStage.class);
 
@@ -160,14 +158,12 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 	}
 
 	@Override
-	protected void execute(final ExecutionTrace trace) throws Exception {
+	protected void execute(final List<OTelExecution> trace) throws Exception {
 		final Tracer tracer = tracerProvider.get("kieker-import");
 
-		for (final Execution execution : trace.getTraceAsSortedExecutionSet()) {
-			final String fullClassname = execution.getOperation().getComponentType().getFullQualifiedName().intern();
-
-			final String operationSignature = ClassOperationSignaturePair.createOperationSignatureString(fullClassname,
-					execution.getOperation().getSignature());
+		for (final OTelExecution execution : trace) {
+			final String fullClassname = execution.getClassSignature();
+			final String operationSignature = execution.getOperationSignature();
 
 			final SpanBuilder spanBuilder1 = tracer.spanBuilder(operationSignature);
 			final SpanBuilder spanBuilder = spanBuilder1.setStartTimestamp(execution.getTin(), TimeUnit.NANOSECONDS);
@@ -198,11 +194,11 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 		}
 	}
 
-	private Span createSpan(final Execution execution, final String fullClassname, final SpanBuilder spanBuilder) {
+	private Span createSpan(final OTelExecution execution, final String fullClassname, final SpanBuilder spanBuilder) {
 		final Span span = spanBuilder.startSpan();
 
 		try (Scope scope = span.makeCurrent()) {
-			final String serviceName = execution.getAllocationComponent().getExecutionContainer().getName();
+			final String serviceName = execution.getHostname();
 			span.setAttribute("service.name", serviceName);
 			String serviceInstanceId = serviceIndexMap.get(serviceName);
 			if (serviceInstanceId == null) {
@@ -211,7 +207,7 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			}
 			span.setAttribute("service.instance.id", serviceInstanceId);
 			span.setAttribute("code.namespace", fullClassname);
-			span.setAttribute("code.function", execution.getOperation().getSignature().getName());
+			span.setAttribute("code.function", this.extractOperationName(execution.getOperationSignature()));
 			span.setAttribute("telemetry.sdk.language", "java");
 			if (explorVizTokenValue != null) {
 				span.setAttribute("explorviz.token.id", explorVizTokenValue);
@@ -223,5 +219,10 @@ public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionT
 			span.end(execution.getTout(), TimeUnit.NANOSECONDS);
 		}
 		return span;
+	}
+	
+	private String extractOperationName(String operationSignature) {
+		// TODO extract operation name of signature
+		return "NAME";
 	}
 }

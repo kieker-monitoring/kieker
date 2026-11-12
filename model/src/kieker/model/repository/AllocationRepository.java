@@ -29,7 +29,9 @@ import kieker.model.system.model.ExecutionContainer;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class AllocationRepository extends AbstractRepository {
 	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT = new AllocationComponent(
 			SystemModelRepository.ROOT_ELEMENT_ID, AssemblyRepository.ROOT_ASSEMBLY_COMPONENT,

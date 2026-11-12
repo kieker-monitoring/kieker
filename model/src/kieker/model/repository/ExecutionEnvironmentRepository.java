@@ -28,7 +28,9 @@ import kieker.model.system.model.RootExecutionContainer;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class ExecutionEnvironmentRepository extends AbstractRepository {
 
 	/** The root execution container. */

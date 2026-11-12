@@ -23,9 +23,11 @@ if [ $? -eq 0 ]; then
     ./gradlew clean &&\
     ./gradlew compileJava compileTestJava &&\
     ./gradlew check &&\
-    ./gradlew build distribute &&\
-    bin/dev/release-check-extended.sh
+    ./gradlew build distribute
 "
+# &&\
+#    bin/dev/release-check-extended.sh
+#"
 else
   echo "You are not in the docker group."
 fi

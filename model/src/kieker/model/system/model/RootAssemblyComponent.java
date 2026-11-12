@@ -28,6 +28,7 @@ import kieker.model.repository.TypeRepository;
  * @since 1.6
  *
  */
+@Deprecated
 public class RootAssemblyComponent extends AssemblyComponent {
 
 	/**

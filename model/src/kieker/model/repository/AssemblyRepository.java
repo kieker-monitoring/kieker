@@ -29,7 +29,9 @@ import kieker.model.system.model.RootAssemblyComponent;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class AssemblyRepository extends AbstractRepository {
 
 	/** This constant represents the root assembly component. */

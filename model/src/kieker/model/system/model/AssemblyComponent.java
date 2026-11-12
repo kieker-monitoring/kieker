@@ -22,6 +22,7 @@ package kieker.model.system.model;
  *
  * @since 1.1
  */
+@Deprecated
 public class AssemblyComponent implements ISystemModelElement {
 	private final int id;
 	private final String name;

@@ -22,7 +22,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public abstract class AbstractRepository { // NOPMD (abstract without abstract)
 
 	/** This constant represents the ID of the root element. */

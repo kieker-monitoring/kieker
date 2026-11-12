@@ -29,7 +29,9 @@ import kieker.model.system.model.util.AssemblyComponentOperationPair;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 2.0.0
  */
+@Deprecated
 public class AssemblyComponentOperationPairFactory extends AbstractRepository {
 	public static final AssemblyComponentOperationPair ROOT_PAIR = new AssemblyComponentOperationPair(
 			AbstractRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,

@@ -26,6 +26,7 @@ import kieker.model.repository.SystemModelRepository;
  *
  * @since 1.6
  */
+@Deprecated
 public class RootExecutionContainer extends ExecutionContainer {
 
 	/**

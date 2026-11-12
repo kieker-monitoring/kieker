@@ -27,6 +27,7 @@ import java.util.Collections;
  *
  * @since 1.1
  */
+@Deprecated
 public class ComponentType { // NOPMD DataClass
 
 	private final int id;
