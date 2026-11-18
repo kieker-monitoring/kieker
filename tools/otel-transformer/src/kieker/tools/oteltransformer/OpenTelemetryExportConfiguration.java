@@ -67,7 +67,7 @@ public class OpenTelemetryExportConfiguration extends Configuration {
 
 		this.connectPorts(counter.getRelayedEventsOutputPort(), eventDispatcher.getInputPort());
 		this.connectPorts(flowEventMatcher.getOutputPort(), flowTraceCollector.getInputPort());
-		this.connectPorts(flowTraceCollector.getOuputPort(), merger.getNewInputPort());
+		this.connectPorts(flowTraceCollector.getOutputPort(), merger.getNewInputPort());
 		
 		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(),
 				operationExecutionTraceCollector.getInputPort());

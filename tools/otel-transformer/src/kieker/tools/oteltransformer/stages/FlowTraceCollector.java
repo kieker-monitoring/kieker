@@ -91,7 +91,7 @@ public class FlowTraceCollector extends AbstractConsumerStage<IFlowRecord> {
 		}
 	}
 
-	public OutputPort<List<OTelExecution>> getOuputPort() {
+	public OutputPort<List<OTelExecution>> getOutputPort() {
 		return this.outputPort;
 	}
 }
