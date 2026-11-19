@@ -22,5 +22,7 @@ dependencies {
 	implementation "io.opentelemetry:opentelemetry-api:${opentelemetryJavaVersion}"
 	implementation "io.opentelemetry:opentelemetry-sdk:${opentelemetryJavaVersion}"
 	implementation "io.opentelemetry:opentelemetry-exporter-otlp:${opentelemetryJavaVersion}"
-	implementation "io.opentelemetry:opentelemetry-exporter-zipkin:${opentelemetryJavaVersion}"
+	implementation "io.opentelemetry.semconv:opentelemetry-semconv:${opentelemetrySemconvVersion}"
+
+	testImplementation "de.cau.cs.se.teetime:teetime:${libTeetimeVersion}:test"
 }
