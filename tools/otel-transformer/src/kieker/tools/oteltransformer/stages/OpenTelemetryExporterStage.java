@@ -16,212 +16,167 @@
 
 package kieker.tools.oteltransformer.stages;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.util.signature.ClassOperationSignaturePair;
-import kieker.model.system.model.Execution;
 import kieker.model.system.model.ExecutionTrace;
 
-import io.opentelemetry.api.common.AttributeKey;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.SpanBuilder;
-import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.context.Context;
-import io.opentelemetry.context.Scope;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
+import io.opentelemetry.sdk.common.CompletableResultCode;
+import io.opentelemetry.sdk.common.export.MemoryMode;
+import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * A stage for exporting Kieker traces to OpenTelemetry.
- * 
+ * A stage for exporting Kieker traces to an OpenTelemetry backend via OTLP.
+ *
  * @author DaGeRe
+ * @author Malte Hansen
  */
 public class OpenTelemetryExporterStage extends AbstractConsumerStage<ExecutionTrace> {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(OpenTelemetryExporterStage.class);
-
-	public enum ExportType {
-		GRPC, ZIPKIN;
-	}
 
 	public static final String PREFIX = OpenTelemetryExporterStage.class.getName() + ".";
 
 	/**
-	 * The type of the export, currently supported: Zipkin and GRPC.
+	 * The OTLP transport protocol: <code>grpc</code> (default) or <code>http/protobuf</code>.
 	 */
 	public static final String EXPORT_TYPE = PREFIX + "ExportType";
 
 	/**
-	 * Value of the ExplorViz token (if required).
-	 */
-	public static final String EXPLORVIZ_TOKEN_VALUE = PREFIX + "ExplorVizTokenValue";
-
-	/**
-	 * Secret of ExplorViz (if required).
-	 */
-	public static final String EXPLORVIZ_TOKEN_SECRET = PREFIX + "ExplorVizTokenSecret";
-
-	/**
-	 * The url, for example http://localhost:417/
+	 * The base URL of the OTLP endpoint, by default http://localhost:4317 for gRPC and http://localhost:4318 for HTTP.
 	 */
 	public static final String EXPORT_URL = PREFIX + "ExportURL";
+
+	/**
+	 * The service name used for the spans of all hosts. By default, the Kieker hostname is used as service name.
+	 */
+	public static final String SERVICE_NAME = PREFIX + "ServiceName";
+
+	/**
+	 * Additional attributes for the resource of every span, in the form <code>key1=value1,key2=value2</code>.
+	 */
+	public static final String RESOURCE_ATTRIBUTES = PREFIX + "ResourceAttributes";
+
+	/**
+	 * Headers sent with every export request, in the form <code>key1=value1,key2=value2</code>.
+	 */
+	public static final String HEADERS = PREFIX + "Headers";
+
+	/**
+	 * A namespace that is hashed into the trace IDs, to keep traces of unrelated logs with equal Kieker trace IDs apart.
+	 */
+	public static final String TRACE_ID_NAMESPACE = PREFIX + "TraceIdNamespace";
+
+	/**
+	 * The unit of the Kieker timestamps, as name of a {@link TimeUnit}. By default, nanoseconds.
+	 */
+	public static final String TIME_UNIT = PREFIX + "TimeUnit";
+
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
-	private int lastEss;
-	private final Stack<Span> lastSpan = new Stack<>();
-	private final SdkTracerProvider tracerProvider;
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenTelemetryExporterStage.class);
 
-	private final ExportType exportType;
-	private final String exportUrl;
+	/** The default batch size and export timeout of the OpenTelemetry SDK. */
+	private static final int MAX_BATCH_SIZE = 512;
+	private static final long EXPORT_TIMEOUT_SECONDS = 10;
 
-	private final String explorVizTokenValue;
-	private final String explorVizTokenSecret;
+	private final SpanExporter spanExporter;
+	private final ExecutionTraceSpanConverter converter;
+	private final List<SpanData> pendingSpans = new ArrayList<>();
 
-	private int spanIndex = 0;
-	private int serviceIndex = 0;
-	private final Map<String, String> serviceIndexMap = new HashMap<>();
-
+	/**
+	 * Creates a stage that is configured by the given Kieker configuration, with the standard OpenTelemetry environment
+	 * variables as fallback.
+	 *
+	 * @param configuration
+	 *            the Kieker configuration
+	 */
 	public OpenTelemetryExporterStage(final Configuration configuration) {
-		this(configuration.getStringProperty(EXPORT_TYPE),
-				configuration.getStringProperty(EXPORT_URL),
-				"kieker-data",
-				configuration.getStringProperty(EXPLORVIZ_TOKEN_VALUE),
-				configuration.getStringProperty(EXPLORVIZ_TOKEN_SECRET));
+		this(ExporterSettings.create(configuration));
 	}
 
-	public OpenTelemetryExporterStage(final String typeParameter, final String url, final String serviceName, final String explorVizTokenValue,
-			final String explorVizTokenSecret) {
-		if ("GRPC".equals(typeParameter) || typeParameter == null || typeParameter.isEmpty()) {
-			exportType = ExportType.GRPC;
-		} else if ("zipkin".equals(typeParameter)) {
-			exportType = ExportType.ZIPKIN;
-		} else {
-			throw new RuntimeException("Please specifiy accepted " + EXPORT_TYPE + " parameter, was " + typeParameter);
-		}
-
-		if (url == null) {
-			if (exportType.equals(ExportType.GRPC)) {
-				exportUrl = "http://localhost:4317";
-			} else if (exportType.equals(ExportType.ZIPKIN)) {
-				exportUrl = "http://localhost:9411/api/v2/";
-			} else {
-				exportUrl = null;
-			}
-		} else {
-			exportUrl = url;
-		}
-		tracerProvider = createTracerProvider("kieker-data");
-		this.explorVizTokenValue = explorVizTokenValue;
-		this.explorVizTokenSecret = explorVizTokenSecret;
+	/**
+	 * Creates a stage that exports via OTLP as specified by the given settings.
+	 *
+	 * @param settings
+	 *            the settings of the exporter
+	 */
+	public OpenTelemetryExporterStage(final ExporterSettings settings) {
+		this(settings, OpenTelemetryExporterStage.createSpanExporter(settings));
+		final String protocol = settings.getProtocol().getName();
+		final String endpoint = settings.getEndpoint();
+		LOGGER.info("Exporting spans via {} to {}", protocol, endpoint);
 	}
 
-	private SdkTracerProvider createTracerProvider(final String serviceName) {
-		final Resource resource = Resource.getDefault().merge(
-				Resource.create(Attributes.builder().put(AttributeKey.stringKey("service.name"), serviceName).build()));
-
-		final SpanExporter spanExporter = getSpanExporter();
-
-		final SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().setResource(resource)
-				.addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build()).build();
-
-		OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider).buildAndRegisterGlobal();
-
-		return sdkTracerProvider;
+	/**
+	 * Creates a stage that hands its spans to the given exporter. The stage shuts the exporter down when it terminates.
+	 *
+	 * @param settings
+	 *            the settings of the exporter; protocol, endpoint, and headers are not used
+	 * @param spanExporter
+	 *            the exporter receiving the spans
+	 */
+	public OpenTelemetryExporterStage(final ExporterSettings settings, final SpanExporter spanExporter) {
+		super();
+		this.converter = new ExecutionTraceSpanConverter(settings);
+		this.spanExporter = spanExporter;
 	}
 
-	private SpanExporter getSpanExporter() {
-		final SpanExporter spanExporter;
-		switch (exportType) {
-		case ZIPKIN:
-			spanExporter = ZipkinSpanExporter.builder().setEndpoint(exportUrl).build();
-			break;
+	private static SpanExporter createSpanExporter(final ExporterSettings settings) {
+		// The stage may hand over the next batch while a timed out export is still in progress, which the default memory
+		// mode of the OTLP exporters does not allow.
+		switch (settings.getProtocol()) {
 		case GRPC:
-			spanExporter = OtlpGrpcSpanExporter.builder().setEndpoint(exportUrl).build();
-			break;
+			final OtlpGrpcSpanExporterBuilder grpcBuilder = OtlpGrpcSpanExporter.builder().setEndpoint(settings.getEndpoint())
+					.setMemoryMode(MemoryMode.IMMUTABLE_DATA);
+			settings.getHeaders().forEach(grpcBuilder::addHeader);
+			return grpcBuilder.build();
+		case HTTP_PROTOBUF:
+			final OtlpHttpSpanExporterBuilder httpBuilder = OtlpHttpSpanExporter.builder().setEndpoint(settings.getEndpoint())
+					.setMemoryMode(MemoryMode.IMMUTABLE_DATA);
+			settings.getHeaders().forEach(httpBuilder::addHeader);
+			return httpBuilder.build();
 		default:
-			throw new RuntimeException("Unsupported span exporter");
+			throw new IllegalArgumentException("Unsupported protocol " + settings.getProtocol());
 		}
-		return spanExporter;
 	}
 
 	@Override
 	protected void execute(final ExecutionTrace trace) throws Exception {
-		final Tracer tracer = tracerProvider.get("kieker-import");
-
-		for (final Execution execution : trace.getTraceAsSortedExecutionSet()) {
-			final String fullClassname = execution.getOperation().getComponentType().getFullQualifiedName().intern();
-
-			final String operationSignature = ClassOperationSignaturePair.createOperationSignatureString(fullClassname,
-					execution.getOperation().getSignature());
-
-			final SpanBuilder spanBuilder1 = tracer.spanBuilder(operationSignature);
-			final SpanBuilder spanBuilder = spanBuilder1.setStartTimestamp(execution.getTin(), TimeUnit.NANOSECONDS);
-			if (lastSpan != null && execution.getEss() > 0) {
-
-				LOGGER.debug("Parent: " + execution.getEss() + " " + execution.getEoi());
-
-				spanBuilder.setParent(Context.current().with(lastSpan.peek()));
-			} else {
-				LOGGER.info("Root span");
-			}
-
-			final Span span = createSpan(execution, fullClassname, spanBuilder);
-
-			LOGGER.debug("Spans added: " + ++spanIndex);
-
-			if (execution.getEss() >= lastEss) {
-				lastEss++;
-				lastSpan.add(span);
-			} else if (execution.getEss() == lastEss) {
-				lastSpan.pop();
-				lastSpan.add(span);
-			} else {
-				lastEss--;
-				lastSpan.pop();
-				lastSpan.add(span);
-			}
+		this.pendingSpans.addAll(this.converter.convert(trace));
+		while (this.pendingSpans.size() >= MAX_BATCH_SIZE) {
+			this.exportBatch(MAX_BATCH_SIZE);
 		}
 	}
 
-	private Span createSpan(final Execution execution, final String fullClassname, final SpanBuilder spanBuilder) {
-		final Span span = spanBuilder.startSpan();
-
-		try (Scope scope = span.makeCurrent()) {
-			final String serviceName = execution.getAllocationComponent().getExecutionContainer().getName();
-			span.setAttribute("service.name", serviceName);
-			String serviceInstanceId = serviceIndexMap.get(serviceName);
-			if (serviceInstanceId == null) {
-				serviceInstanceId = Integer.toString(serviceIndex++);
-				serviceIndexMap.put(serviceName, serviceInstanceId);
-			}
-			span.setAttribute("service.instance.id", serviceInstanceId);
-			span.setAttribute("code.namespace", fullClassname);
-			span.setAttribute("code.function", execution.getOperation().getSignature().getName());
-			span.setAttribute("telemetry.sdk.language", "java");
-			if (explorVizTokenValue != null) {
-				span.setAttribute("explorviz.token.id", explorVizTokenValue);
-			}
-			if (explorVizTokenSecret != null) {
-				span.setAttribute("explorviz.token.secret", explorVizTokenSecret);
-			}
-		} finally {
-			span.end(execution.getTout(), TimeUnit.NANOSECONDS);
+	@Override
+	protected void onTerminating() {
+		if (!this.pendingSpans.isEmpty()) {
+			this.exportBatch(this.pendingSpans.size());
 		}
-		return span;
+		if (!this.spanExporter.shutdown().join(EXPORT_TIMEOUT_SECONDS, TimeUnit.SECONDS).isSuccess()) {
+			LOGGER.warn("The span exporter did not shut down cleanly");
+		}
+		super.onTerminating();
+	}
+
+	private void exportBatch(final int size) {
+		final List<SpanData> head = this.pendingSpans.subList(0, size);
+		final CompletableResultCode result = this.spanExporter.export(new ArrayList<>(head)).join(EXPORT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+		head.clear();
+		if (!result.isSuccess()) {
+			final Throwable cause = result.getFailureThrowable();
+			LOGGER.error("Export of {} spans failed or timed out, these spans are lost", size, cause);
+		}
 	}
 }
