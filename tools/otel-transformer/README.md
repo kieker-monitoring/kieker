@@ -64,7 +64,7 @@ The following table gives an overview on how core span properties are computed f
 
 Trace and span IDs are derived hashes: exporting the same Kieker trace again results in the same
 OpenTelemetry trace.
-Logs of unrelated runs can contain equal Kieker trace IDs; use a different `TraceIdNamespace`
+Traces of unrelated runs can contain equal Kieker trace IDs; use a different `TraceIdNamespace`
 per run to keep their traces apart.
 
 | Span attribute               | Value                                                                                   |
