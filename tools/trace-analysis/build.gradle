@@ -22,6 +22,8 @@ dependencies {
 	testImplementation project(':common').sourceSets.test.output
 	testImplementation project(':analysis').sourceSets.test.output
 	testImplementation project(':tools').sourceSets.test.output
+
+	implementation 'net.sourceforge.plantuml:plantuml:1.2026.6'
 }
 
 task uploadArchives {
