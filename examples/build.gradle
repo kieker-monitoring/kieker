@@ -127,7 +127,7 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 }
 
 task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
-	dir = file('userguide/appendix-AMQP/build.gradle')
+	dir = file('userguide/appendix-AMQP/')
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
@@ -214,7 +214,7 @@ task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProj
 }
 
 task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringManual') {
-	dir = file('monitoring/probe-manual/build.gradle')
+	dir = file('monitoring/probe-manual/')
 	tasks = ['jar']
 }
 
