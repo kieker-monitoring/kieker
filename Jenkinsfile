@@ -32,7 +32,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:temurin17'
-          alwaysPull false
+          alwaysPull true
           args env.DOCKER_ARGS
         }
       }
@@ -162,6 +162,7 @@ pipeline {
           agent {
             docker {
               image 'kieker/kieker-build:temurin17'
+              alwaysPull true
               args env.DOCKER_ARGS
             }
           }
@@ -180,6 +181,7 @@ pipeline {
           agent {
             docker {
               image 'kieker/kieker-build:temurin17'
+              alwaysPull true
               args env.DOCKER_ARGS
             }
           }
@@ -209,6 +211,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:temurin17'
+          alwaysPull true
           args env.DOCKER_ARGS
         }
       }
@@ -260,6 +263,7 @@ pipeline {
           agent {
             docker {
               image 'kieker/kieker-build:temurin17'
+              alwaysPull true
               args env.DOCKER_ARGS
             }
           }
@@ -293,6 +297,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:temurin17'
+          alwaysPull true
           args env.DOCKER_ARGS
         }
       }
