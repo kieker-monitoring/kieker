@@ -4,12 +4,12 @@ Kieker Tools
 ============
 
 All tools can be found in the binary bundle
-``(kieker-2.0.4-binaries.zip``) in the ``tools`` directory. The
+``(kieker-2.0.5-SNAPSHOT-binaries.zip``) in the ``tools`` directory. The
 ``tools`` directory contains a set of tools prepacked as tar and zip
 archives. Each archive contains one tool with all its libraries and
 start scripts. The start scripts are located in the ``bin`` directory
 and the libraries in the ``lib`` directory. In the tool root directory,
-e.g.,\ ``trace-analysis-1.14``, you can find a ``log4j.cfg`` file, used
+e.g.,\ ``trace-analysis-2.0.5-SNAPSHOT``, you can find a ``log4j.cfg`` file, used
 to configure the logging output for your tool. The ``bin`` directory
 contains two scripts one named after the tool usable in Linux, FreeBSD,
 MacOS, etc. and one with ``.bat`` extension for Windows.
