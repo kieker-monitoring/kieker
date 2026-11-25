@@ -1061,6 +1061,9 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
 
 	compression = Compression.GZIP
 	archiveExtension = 'tar.gz'
+
+	// Gradle 9 fix: preserve original filesystem permissions
+	useFileSystemPermissions()
 }
 
 /** collect all sources. */
