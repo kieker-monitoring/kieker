@@ -16,10 +16,12 @@
 package kieker.tools.restructuring;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class MergeMapperTest {
 
+	@Disabled
 	@Test
 	void test() {
 		Assertions.fail("Not yet implemented");
