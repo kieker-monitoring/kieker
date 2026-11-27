@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.visualization.trace.call.tree;
+package kieker.visualization.trace.call.tree.dot;
 
 import kieker.model.repository.AbstractRepository;
 import kieker.model.repository.AssemblyComponentOperationPairFactory;
@@ -26,10 +26,16 @@ import kieker.model.system.model.SynchronousCallMessage;
 import kieker.model.system.model.util.AssemblyComponentOperationPair;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeFilter;
+import kieker.visualization.trace.call.tree.AbstractAggregatedCallTreeNode;
+import kieker.visualization.trace.call.tree.AbstractCallTreeNode;
+import kieker.visualization.trace.call.tree.GraphFormat;
+import kieker.visualization.trace.call.tree.WeightedDirectedCallTreeEdge;
 
 /**
  * @author Andre van Hoorn
- *         ~/Projects/Kieker/kieker/
+ * @author Yorrick Josuttis -- plantuml support
+ *
  * @since 1.1
  */
 public class AggregatedAssemblyComponentOperationCallTreeFilter
@@ -41,11 +47,12 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter
 	 * @param includeWeights
 	 * @param shortLabels
 	 * @param dotOutputFile
+	 * @param format
 	 *
 	 */
 	public AggregatedAssemblyComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights, final boolean shortLabels,
-			final String dotOutputFile) {
-		super(repository, includeWeights, shortLabels, dotOutputFile);
+			final String dotOutputFile, final GraphFormat format) {
+		super(repository, includeWeights, shortLabels, dotOutputFile, format);
 
 		final AggregatedAssemblyComponentOperationCallTreeNode root = new AggregatedAssemblyComponentOperationCallTreeNode(
 				AbstractRepository.ROOT_ELEMENT_ID, AssemblyComponentOperationPairFactory.ROOT_PAIR, true,
